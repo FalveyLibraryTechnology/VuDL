@@ -1,12 +1,13 @@
+import Job from './Job';
+
 class Category {
-  jobs: Array<object> = [];
-  job: string;
+  jobs: Array<Job> = [];
+  name: string;
   glob = require("glob")
 
     constructor(dir) {
-        let job = this.job;
-        let name = this.basename(dir);
-        this.jobs.forEach(element => this.glob("#{dir}/*"), new Job(job));  
+        this.name = this.basename(dir);
+        this.jobs = this.glob.sync(dir + "/*/").map(function(dir: string){ return new Job(dir)});  
     }
 
     ini() {
@@ -24,8 +25,7 @@ class Category {
     }
 
     raw() {
-      this.jobs.map(function (job) {return this.job.raw()});
-
+      return { category: this.name, jobs: this.jobs.map(function (job: Job) {return job.raw()}) };
     }
 
     targetCollectionId() {
@@ -36,3 +36,5 @@ class Category {
       return path.split('/').reverse()[0];
    }
 }
+
+export default Category;

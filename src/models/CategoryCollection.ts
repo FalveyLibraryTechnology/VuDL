@@ -1,3 +1,5 @@
+import Category from './Category';
+
 class CategoryCollection {
   dir: string;
   glob = require("glob")
@@ -5,11 +7,11 @@ class CategoryCollection {
   
   constructor(dir) {
     this.dir = dir;
-    this.categories.forEach(element => this.glob("#{dir}/*"), new Category(dir));
+    this.categories = this.glob.sync(dir + "/*").map(function(dir) { return new Category(dir); });
   }
 
   raw() {
-    this.categories.map(function (category) {return this.category.raw()});
+    return this.categories.map(function (category: Category) {return category.raw()});
   }
 }
 

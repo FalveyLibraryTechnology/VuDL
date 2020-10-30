@@ -34,3 +34,5 @@ class Job {
       return path.split('/').reverse()[0];
    }
 }
+
+export default Job;
