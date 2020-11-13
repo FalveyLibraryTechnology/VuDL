@@ -3,7 +3,7 @@ import Job from './Job';
 class Category {
   jobs: Array<Job> = [];
   name: string;
-  glob = require("glob")
+  glob = require("glob");
 
     constructor(dir) {
         this.name = this.basename(dir);
