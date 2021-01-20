@@ -16,12 +16,21 @@ class ImageFile {
 
     derivative(size) {
         var deriv = this.derivativePath(size);
-        let fs = require('fs'), filename = deriv;
-        var path = require('path');
+        var Jimp = require('jimp');
+        var image = Jimp.read(this.filename);
+        var constraint = this.constraintForSize(size);
 
-         if (fs.existsSync(filename)) {
-             var dir = path.basename(filename);
-         }
+        if (image.columns > constraint || image.rows > constraint) {
+            try {
+                image.resize(256, 256); // resize
+                image.quality(60); // set JPEG quality
+                image.greyscale(); // set greyscale
+                image.write(deriv); // save
+            } catch (error) {
+                console.error(error);
+            };
+            return deriv;
+        }
      }
 
     derivativePath(size, extension = "jpg") {
@@ -32,6 +41,12 @@ class ImageFile {
     }
 
     ocr() {
+        var txt = this.derivativePath('OCR-DIRTY', 'txt');
+        let fs = require('fs');
+        var tesseract = require("node-tesseract-ocr");
+        if (fs.existsSync(txt)){
+            var path = this.basename(txt);
+        }
 
     }
 
