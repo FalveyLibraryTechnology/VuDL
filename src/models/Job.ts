@@ -1,9 +1,11 @@
 class Job {
   dir: string;
+  name: string;
 
     constructor(dir) {
       this.dir = dir;
-      let name = this.basename(dir);
+      this.name = this.basename(dir);
+      //this.name = dir;
     }
 
     ingest() {
@@ -11,7 +13,7 @@ class Job {
     }
 
     raw() {
-      return name;
+      return this.name;
     }
 
     makeDerivatives() {
@@ -31,7 +33,7 @@ class Job {
     }
 
     basename(path) {
-      return path.split('/').reverse()[0];
+      return path.replace(/\/$/, "").split('/').reverse()[0];
    }
 }
 

@@ -25,7 +25,7 @@ class DocumentOrder {
     }
 
     basename(path) {
-        return path.split('/').reverse()[0];
+        return path.replace(/\/$/, "").split('/').reverse()[0];
      }
 }
 
