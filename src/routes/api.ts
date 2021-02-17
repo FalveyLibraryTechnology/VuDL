@@ -22,7 +22,7 @@ router.get("/:category", function(req, res, next) {
     res.send(JSON.stringify(category.raw()));
 });
 
-router.get("/:job", function(req, res, next) {
+router.get("/:category/:job", function(req, res, next) {
     var job = new Job(holdingArea() + req.params.job);
     res.send(JSON.stringify(job.metadata));
 });

@@ -12,12 +12,6 @@ var apiRouter = require("./dist/routes/api");
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'src/views'));
-app.set('view engine', 'jade');
-//app.set('view engine', 'jsx');
-//app.engine('jsx', require('express-react-views').createEngine());
-
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
