@@ -85,3 +85,5 @@ class JobMetadata {
     }
 
 }
+
+export default JobMetadata;

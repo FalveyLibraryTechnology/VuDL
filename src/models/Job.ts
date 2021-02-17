@@ -1,3 +1,5 @@
+import JobMetadata from './JobMetadata';
+
 class Job {
   dir: string;
   name: string;
@@ -9,7 +11,8 @@ class Job {
     }
 
     ingest() {
-
+      var metadata = new JobMetadata(this);
+      var lockfile = metadata.ingestLockfile(this);
     }
 
     raw() {
@@ -28,7 +31,8 @@ class Job {
 
     }
 
-    metadata() {
+    metadata(raw) {
+      return new JobMetadata(this);
         
     }
 

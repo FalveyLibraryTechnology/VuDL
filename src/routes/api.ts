@@ -24,7 +24,7 @@ router.get("/:category", function(req, res, next) {
 
 router.get("/:job", function(req, res, next) {
     var job = new Job(holdingArea() + req.params.job);
-    //res.send(JSON.stringify(job.metadata.raw()));
+    res.send(JSON.stringify(job.metadata));
 });
 
 module.exports = router;
