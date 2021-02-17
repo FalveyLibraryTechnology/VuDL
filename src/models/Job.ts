@@ -24,6 +24,12 @@ class Job {
     }
 
     config() {
+      const Config = require('./Config');
+      const object = Config.getInstance(); 
+      console.log(object.message);   // Prints out: 'I am an instance'
+      object.message = 'Foo Bar';    // Overwrite message property
+      const instance = Config.getInstance();
+      console.log(instance.message); // Prints out: 'Foo Bar' 
 
     }
 

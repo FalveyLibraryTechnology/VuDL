@@ -1,7 +1,15 @@
 class Config {
+    private static instance: PrivateConfig;
 
     constructor() {
-        return this.ini();
+        throw new Error('Use Singleton.getInstance()');
+    }
+
+    static getInstance() {
+        if (!Config.instance) {
+            Config.instance = new PrivateConfig();
+        }
+        return Config.instance;
     }
 
     ini() {
