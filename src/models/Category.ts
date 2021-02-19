@@ -7,7 +7,7 @@ class Category {
 
     constructor(dir) {
         this.name = this.basename(dir);
-        this.jobs = this.glob.sync(dir + "/*/").map(function(dir: string){ return new Job(dir)});  
+        this.jobs = this.glob.sync(dir + "/*/").map(function(dir: string){ return new Job(dir)});
     }
 
     ini() {

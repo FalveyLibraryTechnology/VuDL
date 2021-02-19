@@ -1,10 +1,12 @@
 class SolrIndexer{
 
-    constructor(pid) {
-        //T
+    constructor() {
+        // TODO: Config
+        // TODO: Make Fedora connection
     }
 
-    getFields(pid){
+    getFields(pid: string) {
+        // TODO: Use Fedora to get data
         let fields: any = {
             id: pid
         };
