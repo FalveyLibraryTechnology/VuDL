@@ -16,13 +16,14 @@ class SolrIndexer {
 
         // Massage data
         let fields: any = {};
+        // TODO: Pull from config
+        let fieldMap = {
+            "dc:identifier": "id",
+            "dc:title": "title",
+        };
         for (let field of dc.children) {
-            // TODO: Abstract to key-value map
-            if (field.name == "dc:title") {
-                fields.title = field.value;
-            }
-            if (field.name == "dc:identifier") {
-                fields.id = field.value;
+            if (typeof fieldMap[field.name] != "undefined") {
+                fields[fieldMap[field.name]] = field.value;
             }
         }
 
