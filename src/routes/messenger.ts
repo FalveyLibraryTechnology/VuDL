@@ -5,7 +5,11 @@ var router = express.Router();
 
 router.get("/solrindex/:pid", function(req, res, next) {
     var indexer = new SolrIndexer();
-    res.send(JSON.stringify(indexer.getFields(req.params.pid)));
+    indexer
+        .getFields(req.params.pid) // Promise
+        .then(function messengerDC(dc) {
+            res.send(JSON.stringify(dc));
+        })
 });
 
 module.exports = router;
