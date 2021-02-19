@@ -7,19 +7,13 @@ class Fedora {
         this.baseUrl = "http://vua6743.villanova.edu:8089/rest/";
     }
 
-    getDC(pid) {
+    async getDC(pid) {
         console.log("Fedora::getDC");
-        return new Promise((done, fail) => {
-            http.get(
-                this.baseUrl + pid + "/DC",
-                function rawDC(err, res) {
-                    // TODO: Error
-                    // TODO: Massage????
-                    console.log("Fedora::then");
-                    done(res.body);
-                }
-            );
-        });
+        var res = await http("get", this.baseUrl + pid + "/DC");
+        // TODO: Error
+        // TODO: Massage????
+        console.log("Fedora::then");
+        return res.body;
     }
 }
 

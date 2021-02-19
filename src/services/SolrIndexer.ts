@@ -9,15 +9,11 @@ class SolrIndexer {
         this.fedora = new Fedora();
     }
 
-    getFields(pid: string) {
+    async getFields(pid: string) {
         // TODO: Use Fedora to get data
-        return new Promise((done, fail) => {
-            this.fedora.getDC(pid)
-                .then(function getFieldsDC(dc) {
-                    console.log("SI:then");
-                    done(dc);
-                });
-        });
+        let dc = this.fedora.getDC(pid);
+        console.log("SI:then");
+        return dc;
     }
 }
 
