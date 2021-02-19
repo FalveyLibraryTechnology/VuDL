@@ -1,5 +1,3 @@
-# VuDLPrepJS
-
 # Dependencies
 install node, install typescript
 
