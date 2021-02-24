@@ -16,6 +16,7 @@ class SolrIndexer {
     async getFields(pid: string): Promise<SolrFields> {
         // Use Fedora to get data
         // TODO: type
+        // TODO: catch failure
         let dc = await this.fedora.getDC(pid);
 
         // Massage data
