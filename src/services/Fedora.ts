@@ -47,7 +47,7 @@ class Fedora {
             password: "fedoraAdmin",
         };
 
-        return http("get", url, null, headers);
+        return http(method, url, null, headers);
     }
 
     /**
