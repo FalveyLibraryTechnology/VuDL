@@ -54,10 +54,22 @@ class SolrIndexer {
                     fields.format = field.value;
                     break;
                 default:
-                    if (typeof fieldMap[field.name] != "undefined") {
-                        fields[fieldMap[field.name]] = field.value; 
+                    let mapped = fieldMap[field.name];
+                    if (typeof mapped == "undefined") {
+                        console.error("No map for field: " + field.name);
+                        break;
                     }
-                    break;
+                    switch (typeof fields[mapped]) {
+                        case "undefined": // No value yet
+                            fields[mapped] = field.value;
+                            break;
+                        case "string": // Convert from single to multi-value
+                            fields[mapped] = [fields[mapped], field.value];
+                            break;
+                        case "object": // Array
+                            fields[mapped].push(field.value);
+                            break;
+                    }
             }
     }
 
