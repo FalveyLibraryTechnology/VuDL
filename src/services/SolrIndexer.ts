@@ -1,5 +1,9 @@
 import Fedora from './Fedora';
 
+interface SolrFields {
+    [key: string]: string;
+}
+
 class SolrIndexer {
     fedora: Fedora;
 
@@ -9,9 +13,10 @@ class SolrIndexer {
         this.fedora = new Fedora();
     }
 
-    async getFields(pid: string) {
+    async getFields(pid: string): Promise<SolrFields> {
         // Use Fedora to get data
         // TODO: type
+        // TODO: catch failure
         let dc = await this.fedora.getDC(pid);
 
         // Massage data
