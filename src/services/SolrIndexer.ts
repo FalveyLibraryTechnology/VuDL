@@ -21,15 +21,45 @@ class SolrIndexer {
 
         // Massage data
         let fields: any = {};
+
+        // TODO: Pull from config
+        let fieldMap = {
+            "dc:identifier": "id",
+            "dc:title": "title",
+            "dc:subject": "subject"
+        };
+
+
         for (let field of dc.children) {
-            // TODO: Abstract to key-value map
-            if (field.name == "dc:title") {
-                fields.title = field.value;
+            switch (field.name) {
+                case "dc:date":
+                    fields.date = field.value;
+                    break;
+                case "dc:creator":
+                    fields.creator = field.value;
+                    break;
+                case "dc:language":
+                    fields.language = field.value;
+                    break;
+                case "dc:relation":
+                    fields.relation = field.value;
+                    break;
+                case "dc:source":
+                    fields.source = field.value;
+                    break;
+                case "dc:collection":
+                    fields.collection = field.value;
+                    break;
+                case "dc:format":
+                    fields.format = field.value;
+                    break;
+                default:
+                    if (typeof fieldMap[field.name] != "undefined") {
+                        fields[fieldMap[field.name]] = field.value; 
+                    }
+                    break;
             }
-            if (field.name == "dc:identifier") {
-                fields.id = field.value;
-            }
-        }
+    }
 
         return fields;
     }
