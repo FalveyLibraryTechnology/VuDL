@@ -7,7 +7,7 @@ router.get("/solrindex/:pid", async function(req, res, next) {
     var indexer = new SolrIndexer();
     var fedoraFields = await indexer.getFields(req.params.pid);
 
-    res.send(JSON.stringify(fedoraFields));
+    res.send(JSON.stringify(fedoraFields, null, "\t"));
 });
 
 module.exports = router;
