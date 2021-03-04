@@ -36,27 +36,40 @@ class Fedora {
     protected _request(
         method: string = "get",
         _path: string = "/",
-        data: object = null
+        data: object = null,
+        _options: object = {}
     ): Promise<NeedleResponse> {
         let path = _path[0] == "/" ? _path.slice(1) : _path;
         let url = this.baseUrl + "/" + path;
 
         // TODO: Config
-        const headers = {
+        const auth = {
             username: "fedoraAdmin", // Basic Auth
             password: "fedoraAdmin",
         };
+        let options = Object.assign({}, auth, _options);
 
-        return http(method, url, null, headers);
+        return http(method, url, data, options);
     }
 
     /**
      * Get datastream from Fedora
      */
-    async getDatastream(pid, datastream): Promise<any> {
+    async getDatastream(pid, datastream, parse = false): Promise<any> {
         try {
-            let res = await this._request("get", pid + "/" + datastream);
-            return res.body;
+            let res = await this._request(
+                "get",
+                pid + "/" + datastream,
+                null, // Data
+                { // Options
+                    parse_response: parse,
+                }
+            );
+
+            if (parse) {
+                return res.body;
+            }
+            return res.body.toString(); // Buffer to string
         } catch (e) {
             console.log("Fedora::getDatastream '" + datastream + "' failed", e);
         }
@@ -68,7 +81,7 @@ class Fedora {
      * Cast to DC type
      */
     async getDC(pid): Promise<DC> {
-        return <DC> (<unknown> this.getDatastream(pid, "DC"));
+        return <DC> (<unknown> this.getDatastream(pid, "DC", true));
     }
 }
 
