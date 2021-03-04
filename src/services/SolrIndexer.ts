@@ -1,4 +1,6 @@
-import Fedora from './Fedora';
+import Fedora from "./Fedora";
+import { DOMParser } from "xmldom";
+const xpath = require("xpath");
 
 interface SolrFields {
     [key: string]: string;
@@ -17,20 +19,35 @@ class SolrIndexer {
         // Use Fedora to get data
         // TODO: type
         // TODO: catch failure
-        let dc = await this.fedora.getDC(pid);
+        // TODO: Launch promises together, Promise.all()
+        const DC = await this.fedora.getDC(pid);
+        const RELS = await this.fedora.getDatastream(pid, "RELS-EXT");
+
+        let xmlParser = new DOMParser();
+        let RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
+        let rdfXPath = xpath.useNamespaces({
+            rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+            "fedora-model": "info:fedora/fedora-system:def/model#",
+        });
 
         // Massage data
-        let fields: any = {};
+        let fields: any = {
+            modeltype_str_mv: rdfXPath(
+                "//fedora-model:hasModel/@rdf:resource",
+                RELS_XML
+            ).map((resource) => {
+                return resource.nodeValue.substr("info:fedora/".length);
+            }),
+        };
 
         // TODO: Pull from config
         let fieldMap = {
             "dc:identifier": "id",
             "dc:title": "title",
-            "dc:subject": "subject"
+            "dc:subject": "subject",
         };
 
-
-        for (let field of dc.children) {
+        for (let field of DC.children) {
             switch (field.name) {
                 case "dc:date":
                     fields.date = field.value;
@@ -71,7 +88,7 @@ class SolrIndexer {
                             break;
                     }
             }
-    }
+        }
 
         return fields;
     }
