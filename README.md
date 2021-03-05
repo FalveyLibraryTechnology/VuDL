@@ -1,6 +1,9 @@
 # Dependencies
 install node, install typescript
 
+# Install type definitions for node
+npm install -g npm
+
 # In the root directory, build the typescript code:
 
 tsc
