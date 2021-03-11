@@ -11,9 +11,8 @@ class Category {
     }
 
     ini() {
-        let fs = require('fs'), ini = require('ini');
-        let config = ini.parse(fs.readFileSync("#{dir}\batch-params.ini", 'utf-8'))
-        return config;
+      let fs = require('fs'), ini = require('ini');
+      return fs.readFileSync("C:\holdingarea\batch-params.ini", 'utf-8');
     }
 
     supportsOcr() {

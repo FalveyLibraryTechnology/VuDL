@@ -1,24 +1,20 @@
 import PageOrder from './PageOrder';
-import DocumentOrder from './DocumentOrder'
+import DocumentOrder from './DocumentOrder';
+import Job from './Job';
 
 class JobMetadata {
-    job: string;
+    job: Job;
     _order: PageOrder = null;
     _documents: DocumentOrder = null
+    published: boolean = false;
 
     constructor(job) {
         this.job = job;
         let fs = require('fs'), filename = job.dir + '/job.json';
         if (fs.existsSync(filename)) {
             var json = fs.readFileSync(filename);
-            return json;
-        } else {
-            return JSON.parse(json);
+            this.raw = JSON.parse(json);            
         }
-    }
-
-    raw() {
-        
     }
 
     dc(job) {
@@ -29,13 +25,17 @@ class JobMetadata {
         }
     }
 
-    derivativeLockfile(job) {
-        return job.dir + '/derivatives.lock';
+    derivativeLockfile() {
+        return this.job.dir + '/derivatives.lock';
     }
 
     derivativeStatus() {
-        let status = [];
-
+        let status = {
+            expected: 10,
+            processed: 0,
+            building: false
+        };
+        return status;
     }
 
     ingestLockfile(job) {
@@ -76,12 +76,33 @@ class JobMetadata {
         this._documents = DocumentOrder.fromRaw(data);
     }
 
+    get raw() {
+        return {
+            order: this.order.raw(),
+            published: this.published  
+        };
+    }
+
+    set raw(data) {
+        //TO DO: set raw data
+    }
+
     save() {
 
     }
 
-    status() {
-
+    get status() {
+        return {
+            derivatives: this.derivativeStatus()
+        };
+        /*return {derivatives: this.derivativeStatus,
+            minutes_since_upload: ((Time.new - upload_time) / 60).floor,
+            file_problems: file_problems,
+            published: raw[:published],
+            ingesting: File.exist?(ingest_lockfile),
+            documents: this.documents.list.length,
+            audio: audio.list.length,
+            ingest_info: ingest_info } */
     }
 
 }

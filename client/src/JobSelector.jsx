@@ -6,24 +6,24 @@ class JobSelector extends React.Component{
         this.state = {active: true, data: []};
     }
 
-    hide() {
+    hide = () => {
         var newState = this.state;
         newState.active = false;
         this.setState(newState);
     }
 
-    show() {
+    show = () => {
         this.setState({active: true, data: []});
         this.componentDidMount();
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         this.props.app.getJSON(this.props.url, null, function (data) {
             this.setState({active: true, data: data});
         }.bind(this));
     }
 
-    render() {
+    render = () => {
         var categories = [];
         var empty_categories = [];
         for (var i in this.state.data) {
@@ -50,26 +50,26 @@ class Category extends React.Component{
         this.state = {open: this.checkStorage()};
     }
 
-    checkStorage() {
+    checkStorage = () => {
         return typeof(window.sessionStorage) !== "undefined"
             ? "true" === window.sessionStorage.getItem("open-" + this.props.data.category)
             : false;
     }
 
-    setStorage(isOpen) {
+    setStorage = (isOpen) => {
         if (typeof(window.sessionStorage) !== "undefined") {
             window.sessionStorage.setItem("open-" + this.props.data.category, isOpen ? "true" : "false")
         }
     }
 
-    toggle(e) {
+    toggle = (e) => {
         e.preventDefault();
         e.stopPropagation();
         this.setStorage(!this.state.open);
         this.setState({open: !this.state.open});
     }
 
-    render() {
+    render = () => {
         var header = this.props.data.jobs.length
             ? <h2><a href="#" onClick={this.toggle}>{(this.state.open ? '[ - ]' : '[+]') + ' ' + this.props.data.category}</a></h2>
             : <h2>{this.props.data.category + ' [no jobs]'}</h2>
@@ -86,7 +86,7 @@ class Category extends React.Component{
 };
 
 class JobList extends React.Component{
-    render() {
+    render = () => {
         var jobs = this.props.data.map(function (job) {
             return (
                 <Job app={this.props.app} category={this.props.category} onJobSelect={this.props.onJobSelect} key={this.props.category + '|' + job}>{job}</Job>
@@ -104,11 +104,11 @@ class Job extends React.Component{
         this.state = {};
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         this.updateStatus();
     }
 
-    handleClick(clickWarning) {
+    handleClick = (clickWarning) => {
         if (clickWarning) {
             if (!window.confirm(clickWarning)) {
                 return;
@@ -117,25 +117,25 @@ class Job extends React.Component{
         this.props.onJobSelect(this.props.category, this.props.children);
     }
 
-    getDerivUrl() {
+    getDerivUrl = () => {
         return this.props.app.getJobUrl(
             this.props.category, this.props.children, '/derivatives'
         );
     }
 
-    getIngestUrl() {
+    getIngestUrl = () => {
         return this.props.app.getJobUrl(
             this.props.category, this.props.children, '/ingest'
         );
     }
 
-    getStatusUrl() {
+    getStatusUrl = () => {
         return this.props.app.getJobUrl(
             this.props.category, this.props.children, '/status'
         );
     }
 
-    buildDerivatives(e) {
+    buildDerivatives = (e) => {
         e.preventDefault();
         e.stopPropagation();
         this.props.app.ajax({
@@ -147,7 +147,7 @@ class Job extends React.Component{
         });
     }
 
-    ingest(e) {
+    ingest = (e) => {
         e.preventDefault();
         e.stopPropagation();
         if (!window.confirm("Are you sure? This will put a load on the server!")) {
@@ -162,7 +162,7 @@ class Job extends React.Component{
         });
     }
 
-    updateStatus(e) {
+    updateStatus = (e) => {
         if (typeof e !== 'undefined') {
             e.stopPropagation();
         }
@@ -209,7 +209,7 @@ class Job extends React.Component{
         return years + " years old";
     }
 
-    render() {
+    render = () => {
         var clickable = false;
         var clickWarning = false;
         var action = '';

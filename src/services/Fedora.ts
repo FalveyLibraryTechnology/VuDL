@@ -1,4 +1,5 @@
 import { IncomingMessage } from "http";
+import Config from '../models/Config';
 const http = require("needle");
 
 interface NeedleResponse extends IncomingMessage {
@@ -26,8 +27,8 @@ class Fedora {
     baseUrl: string;
 
     constructor() {
-        // TODO: Config
-        this.baseUrl = "http://vua6743.villanova.edu:8089/rest";
+        let config = Config.getInstance();
+        this.baseUrl = config.restBaseUrl();
     }
 
     /**

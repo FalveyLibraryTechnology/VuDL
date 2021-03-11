@@ -1,4 +1,5 @@
 import AudioOrder from './AudioOrder'
+import Config from './Config';
 
 class AudioFile {
     filename: string;
@@ -19,7 +20,8 @@ class AudioFile {
      }
 
      config() {
-
+        let config = Config.getInstance();
+        return config.restBaseUrl();
      }
 
      derivative(extension) {
