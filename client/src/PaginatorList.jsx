@@ -2,20 +2,25 @@ var React = require('react');
 var Thumbnail = require('./Thumbnail');
 
 class PaginatorList extends React.Component{
+    constructor(props) {
+        super(props);
+        this.thumbs = [];
+    }
+
     scrollTo = (thumb) => {
         var listOffset =
-            this.refs.pageList.offsetTop +
-            (this.refs.thumb0.refs.wrapper.offsetTop - this.refs.pageList.offsetTop);
-        this.refs.pageList.scrollTop = thumb.offsetTop - listOffset;
+            this.pageList.offsetTop +
+            (this.thumbs[0].wrapper.offsetTop - this.pageList.offsetTop);
+        this.pageList.scrollTop = thumb.offsetTop - listOffset;
     }
 
     render = () => {
         var pages = [];
         for (var i = 0; i < this.props.pageCount; i++) {
-            pages[i] = <Thumbnail ref={"thumb" + i} list={this} selected={i === this.props.paginator.state.currentPage} paginator={this.props.paginator} key={i} number={i} />;
+            pages[i] = <Thumbnail ref={(t) => { this.thumbs[i] = t;}} list={this} selected={i === this.props.paginator.state.currentPage} paginator={this.props.paginator} key={i} number={i} />;
         };
         return (
-            <div ref="pageList" className="pageList">{pages}</div>
+            <div ref={(p) => { this.pageList = p; }} className="pageList">{pages}</div>
         );
     }
 };

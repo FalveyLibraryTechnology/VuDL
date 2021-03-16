@@ -12,7 +12,7 @@ class PaginatorControls extends React.Component{
         if (typeof useMagic === 'undefined') {
             useMagic = true;
         }
-        var label = this.refs.labelInput.value;
+        var label = this.labelInput.value;
         return (label.length === 0 && useMagic)
             ? this.props.paginator.getLabel(this.props.paginator.state.currentPage)
             : label;
@@ -65,7 +65,7 @@ class PaginatorControls extends React.Component{
             <div className="controls">
                 <div className="group">
                     <div className="status"></div>
-                    <input type="text" value={this.props.paginator.getLabel(this.props.paginator.state.currentPage, false)} ref="labelInput" id="page" onChange={this.updateCurrentPageLabel} />
+                    <input type="text" value={this.props.paginator.getLabel(this.props.paginator.state.currentPage, false)} ref={(l) => { this.labelInput = l; }} id="page" onChange={this.updateCurrentPageLabel} />
                     <button onClick={this.props.paginator.prevPage}>Prev</button>
                     <button onClick={function() { this.approveCurrentPageLabel(); this.props.paginator.nextPage(); }.bind(this)}>Next</button>
                 </div>
