@@ -25,11 +25,11 @@ class JobMetadata {
         }
     }
 
-    derivativeLockfile() {
+    get derivativeLockfile() {
         return this.job.dir + '/derivatives.lock';
     }
 
-    derivativeStatus() {
+    get derivativeStatus() {
         let status = {
             expected: 10,
             processed: 0,
@@ -42,16 +42,22 @@ class JobMetadata {
         return job.dir + '/ingest.lock';
     }
 
-    uploadTime() {
-
+    get uploadTime() {
+        // TODO: populate with real data
+        return 0;
     }
 
-    fileProblems() {
-
+    get fileProblems() {
+        // TODO: populate with real data
+        return {
+            added: 0,
+            deleted: 0
+        };
     }
 
-    ingestInfo() {
-
+    get ingestInfo() {
+        // TODO: populate with real data
+        return '';
     }
 
     get order() {
@@ -93,16 +99,15 @@ class JobMetadata {
 
     get status() {
         return {
-            derivatives: this.derivativeStatus()
+            derivatives: this.derivativeStatus,
+            // TODO: minutes_since_upload: ((Time.new - upload_time) / 60).floor,
+            file_problems: this.fileProblems,
+            published: this.raw.published,
+            // TODO: ingesting: File.exist?(ingest_lockfile),
+            // TODO: documents: this.documents.list.length,
+            // TODO: audio: audio.list.length,
+            ingest_info: this.ingestInfo
         };
-        /*return {derivatives: this.derivativeStatus,
-            minutes_since_upload: ((Time.new - upload_time) / 60).floor,
-            file_problems: file_problems,
-            published: raw[:published],
-            ingesting: File.exist?(ingest_lockfile),
-            documents: this.documents.list.length,
-            audio: audio.list.length,
-            ingest_info: ingest_info } */
     }
 
 }
