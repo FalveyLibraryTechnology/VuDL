@@ -1,0 +1,136 @@
+p {
+  padding: 0 12px;
+  width: 100%;
+  margin-bottom: 9px;
+}
+.controls {
+  margin-top: 0px;
+  padding: 0 8px;
+}
+.top {
+  position: absolute;
+  top: 41px;
+  right: 8px;
+}
+.top button { margin: 0 2px; }
+
+input, .status { float: left; }
+input, button, .status {
+  box-sizing: border-box;
+  height: 26px;
+}
+input {
+  margin-right: 4px;
+  padding: 0 2px;
+}
+.status {
+  padding: 0;
+  padding-top: 5px;
+}
+.group input[type="text"] {
+  height: auto;
+  margin-right: 3px;
+  padding: 6px;
+  border: 1px solid #53626f;
+  border-radius: 2px;
+}
+
+.group {
+  display: block;
+  margin: 4px 2px;
+  margin-left: 0;
+  overflow: hidden;
+}
+.group button {
+  margin: 0;
+  border-right: 1px solid #ececec;
+  color: #fff;
+  border-radius: 0;
+}
+.group input[type="text"] + button,
+.group button:first-child { border-radius: 4px 0 0 4px; }
+.group button:last-child {
+  border-right-width: 0;
+  border-radius: 0 4px 4px 0;
+}
+.toggles, .toggles + button {
+  display: inline-block;
+  margin-top: 0;
+  margin-right: 4px;
+  vertical-align: top;
+}
+.toggles button, .toggles + button {
+  padding: 7px 40px 5px;
+  background-color: #7f8c8d;
+  border-color: #34495e;
+}
+
+.group#prefixes button { width: 25%; }
+.group#labels button { width: 16.66%; }
+.group#suffixes button { width: 25%; }
+
+.pageList {
+  overflow: auto;
+  height: 600px;
+  margin-top: .5rem;
+  margin-left: 8px;
+  padding: 4px;
+  border: 1px solid #c1c1c1;
+  background-color: #fff;
+  border-radius: 6px 0 0 6px;
+}
+.thumbnail {
+  position: relative;
+  float: left;
+  width: 125px;
+  margin: 2px;
+  padding: 4px;
+  background: #e1e1e1;
+  font-weight: 400;
+  text-align: center;
+  cursor: pointer;
+  word-break: break-all;
+}
+.thumbnail .ratio {
+  position: relative;
+  width: 100%;
+  margin-bottom: 4px;
+  padding-bottom: 100%;
+}
+.thumbnail.selected {
+  background: #51aded;
+  color: #fff;
+}
+.thumbnail .content {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 0;
+  height: 100%;
+}
+.thumbnail .img-helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+.thumbnail img {
+  vertical-align: middle;
+}
+.thumbnail .label { min-height: 2.6em; }
+.thumbnail .label.magic { font-style: italic; }
+.thumbnail .number {
+  position: absolute;
+  display: table;
+  top: 0;
+  left: 0;
+  padding: 2px;
+  font-size: 10px;
+  background: #fff;
+  color: #000;
+}
+.preview, #zoomy { text-align: center; }
+#zoomy {
+    width: 100%;
+    height: 600px;
+}
+#zoomyStatus { text-align: center; }
