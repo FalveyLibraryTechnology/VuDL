@@ -22,8 +22,8 @@ class Job {
     }
 
     makeDerivatives() {
-      var status = this.metadata.derivativeStatus();
-      var lockfile = this.metadata.derivativeLockfile();
+      var status = this.metadata.derivativeStatus;
+      var lockfile = this.metadata.derivativeLockfile;
 
       if (status.expected > status.processed && fileExists(lockfile)){
         closeSync(openSync(lockfile, 'w'));
