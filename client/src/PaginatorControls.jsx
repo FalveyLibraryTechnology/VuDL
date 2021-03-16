@@ -1,4 +1,3 @@
-import $ from 'jquery';
 var React = require('react');
 var PaginatorControlGroup = require('./PaginatorControlGroup');
 var ZoomToggleButton = require('./ZoomToggleButton');
@@ -12,7 +11,7 @@ class PaginatorControls extends React.Component{
         if (typeof useMagic === 'undefined') {
             useMagic = true;
         }
-        var label = $(this.refs.labelInput).val();
+        var label = this.refs.labelInput.value;
         return (label.length === 0 && useMagic)
             ? this.props.paginator.getLabel(this.props.paginator.state.currentPage)
             : label;

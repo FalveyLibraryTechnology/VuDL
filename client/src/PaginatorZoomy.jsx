@@ -1,4 +1,3 @@
-import $ from 'jquery';
 var React = require('react');
 
 class PaginatorZoomy extends React.Component{
@@ -13,7 +12,7 @@ class PaginatorZoomy extends React.Component{
             function() {
                 this.Zoomy.resize();
                 this.Zoomy.center();
-                $(this.refs.status).hide();
+                this.refs.status.className = "hidden";
             }.bind(this)
         );
     }
