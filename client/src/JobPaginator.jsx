@@ -9,7 +9,7 @@ class JobPaginator extends React.Component{
         this.state = {active: false, currentPage: 0, zoom: false, order: []};
     }
 
-    getImageUrl(imageNumber, size) {
+    getImageUrl = (imageNumber, size) => {
         if (typeof this.state.order[imageNumber] === 'undefined') {
             return false;
         }
@@ -17,11 +17,11 @@ class JobPaginator extends React.Component{
         return this.props.app.getImageUrl(this.state.category, this.state.job, this.filename, size);
     }
 
-    getStatusUrl() {
+    getStatusUrl = () => {
         return this.props.app.getJobUrl(this.state.category, this.state.job, '/status');
     }
 
-    getLabel(imageNumber, useMagic) {
+    getLabel = (imageNumber, useMagic) => {
         useMagic = (typeof useMagic === 'undefined') ? true : useMagic;
         var label = (typeof this.state.order[imageNumber] === 'undefined')
             ? null : this.state.order[imageNumber]['label'];
@@ -34,10 +34,10 @@ class JobPaginator extends React.Component{
         return label;
     }
 
-    setLabel(imageNumber, text) {
+    setLabel = (imageNumber, text) => {
         this.magicLabelCache = [];  // clear label cache whenever there is a change
         var newState = this.state;
-        if (text !== null && text.length == 0) {
+        if (text !== null && text.length === 0) {
             text = null;
         }
         if (typeof newState.order[imageNumber] === "undefined") {
@@ -48,7 +48,7 @@ class JobPaginator extends React.Component{
         dispatchEvent(new Event('Prep.editted'));
     }
 
-    autonumberFollowingPages() {
+    autonumberFollowingPages = () => {
         var pages = this.state.order.length - (this.state.currentPage + 1);
         var affected = pages - this.countMagicLabels(this.state.currentPage + 1);
         if (affected > 0) {
@@ -62,7 +62,7 @@ class JobPaginator extends React.Component{
         }
     }
 
-    countMagicLabels(startAt) {
+    countMagicLabels = (startAt) => {
         var count = 0;
         for (var i = startAt; i < this.state.order.length; i++) {
             if (null === this.getLabel(i, false)) {
@@ -72,7 +72,7 @@ class JobPaginator extends React.Component{
         return count;
     }
 
-    deletePage() {
+    deletePage = () => {
         if (this.state.order.length < 2) {
             alert('You cannot delete the last page in a job.');
             return;
@@ -97,7 +97,7 @@ class JobPaginator extends React.Component{
         });
     }
 
-    loadJob(category, job) {
+    loadJob = (category, job) => {
         var promise = new Promise(function(resolve, reject) {
             this.props.app.getJSON(this.props.app.getJobUrl(category, job, ''), null, function (data, status) {
                 resolve(data);
@@ -138,7 +138,7 @@ class JobPaginator extends React.Component{
         }.bind(this));
     }
 
-    findNewPagePosition(page, list) {
+    findNewPagePosition = (page, list) => {
         for (var i = 0; i < list.length; i++) {
             if (list[i].filename >= page) {
                 return i;
@@ -147,7 +147,7 @@ class JobPaginator extends React.Component{
         return i;
     }
 
-    addPages(pages) {
+    addPages = (pages) => {
         var newState = this.state;
         for (var i = 0; i < pages.length; i++) {
             newState.order.splice(
@@ -159,12 +159,12 @@ class JobPaginator extends React.Component{
         this.setState(newState);
     }
 
-    removePages(pages) {
+    removePages = (pages) => {
         var newOrder = [];
         for (var i = 0; i < this.state.order.length; i++) {
             var include = true;
             for (var j = 0; j < pages.length; j++) {
-                if (this.state.order[i].filename == pages[j]) {
+                if (this.state.order[i].filename === pages[j]) {
                     include = false;
                     break;
                 }
@@ -178,7 +178,7 @@ class JobPaginator extends React.Component{
         this.setState(newState);
     }
 
-    setPage(p) {
+    setPage = (p) => {
         if (p >= 0 && p < this.state.order.length) {
             var newState = this.state;
             newState.currentPage = p;
@@ -186,15 +186,15 @@ class JobPaginator extends React.Component{
         }
     }
 
-    nextPage() {
+    nextPage = () => {
         this.setPage(this.state.currentPage + 1);
     }
 
-    prevPage() {
+    prevPage = () => {
         this.setPage(this.state.currentPage - 1);
     }
 
-    saveMagicLabels() {
+    saveMagicLabels = () => {
         for (var i = 0; i < this.state.order.length; i++) {
             if (null === this.getLabel(i, false)) {
                 this.setLabel(i, this.getLabel(i));
@@ -202,13 +202,13 @@ class JobPaginator extends React.Component{
         }
     }
 
-    confirmSavedMagicLabels(count) {
+    confirmSavedMagicLabels = (count) => {
         var msg = "You will be saving " + count + " unreviewed, auto-generated"
             + " label(s). Are you sure?";
         return window.confirm(msg);
     }
 
-    save(publish) {
+    save = (publish) => {
         var count = this.countMagicLabels(0);
         if (count > 0 && !this.confirmSavedMagicLabels(count)) {
             return;
@@ -220,21 +220,22 @@ class JobPaginator extends React.Component{
             if (publish) {
                 this.props.app.getJSON(this.getStatusUrl(), null, function (data) {
                     resolve(data);
-                }.bind(this));
+                });
             } else {
                 resolve(null);
             }
         }.bind(this));
         promise.then(function(data) {
             if (publish) {
+                var msg;
                 if (data.derivatives.expected > data.derivatives.processed) {
-                    var msg = "Derivative images have not been generated yet. Please"
+                    msg = "Derivative images have not been generated yet. Please"
                         + " go back to the main menu and hit the \"build\" button"
                         + " for this job before publishing it.";
                     alert(msg);
                     return;
                 }
-                var msg = "Are you sure you wish to publish this job? You will not be able"
+                msg = "Are you sure you wish to publish this job? You will not be able"
                     + " to make any further edits."
                 if (!window.confirm(msg)) {
                     return;
@@ -255,13 +256,13 @@ class JobPaginator extends React.Component{
         }.bind(this));
     }
 
-    toggleZoom() {
+    toggleZoom = () => {
         this.newState = this.state;
         this.newState.zoom = !this.newState.zoom;
         this.setState(this.newState);
     }
 
-    render() {
+    render = () => {
         var preview = this.state.zoom
             ? <PaginatorZoomy img={this.getImageUrl(this.state.currentPage, 'large')} />
             : <PaginatorPreview img={this.getImageUrl(this.state.currentPage, 'medium')} />
@@ -281,9 +282,9 @@ class JobPaginator extends React.Component{
 };
 
 class PaginatorPreview extends React.Component{
-    render() {
+    render = () => {
         var img = this.props.img
-            ? <img src={this.props.img} />
+            ? <img src={this.props.img} alt="" />
             : '';
         return (
             <div className="preview">
@@ -294,12 +295,12 @@ class PaginatorPreview extends React.Component{
 };
 
 class PaginatorZoomy extends React.Component{
-    componentDidMount() {
+    componentDidMount = () => {
         this.Zoomy.init(document.getElementById('zoomy'));
         this.componentDidUpdate();
     }
 
-    componentDidUpdate() {
+    componentDidUpdate = () => {
         this.Zoomy.load(
             this.props.img,
             function() {
@@ -310,7 +311,7 @@ class PaginatorZoomy extends React.Component{
         );
     }
 
-    render() {
+    render = () => {
         return (
             <div>
                 <div ref="status" id="zoomyStatus">Loading...</div>
@@ -321,51 +322,51 @@ class PaginatorZoomy extends React.Component{
 };
 
 class PaginatorControls extends React.Component{
-    approveCurrentPageLabel() {
+    approveCurrentPageLabel = () => {
         this.setLabel(this.getLabel(true));
     }
 
-    getLabel(useMagic) {
+    getLabel = (useMagic) => {
         if (typeof useMagic === 'undefined') {
             useMagic = true;
         }
         var label = $(this.refs.labelInput).val();
-        return (label.length == 0 && useMagic)
+        return (label.length === 0 && useMagic)
             ? this.props.paginator.getLabel(this.props.paginator.state.currentPage)
             : label;
     }
 
-    setLabel(label) {
+    setLabel = (label) => {
         this.props.paginator.setLabel(this.props.paginator.state.currentPage, label);
     }
 
-    setLabelPrefix(str) {
+    setLabelPrefix = (str) => {
         this.setLabel(
             this.MagicLabeler.replaceLabelPart(this.getLabel(), 'prefix', str, true)
         );
     }
 
-    setLabelBody(str) {
+    setLabelBody = (str) => {
         this.setLabel(
             this.MagicLabeler.replaceLabelPart(this.getLabel(), 'label', str)
         );
     }
 
-    setLabelSuffix(str) {
+    setLabelSuffix = (str) => {
         this.setLabel(
             this.MagicLabeler.replaceLabelPart(this.getLabel(), 'suffix', str, true)
         );
     }
 
-    toggleBrackets() {
+    toggleBrackets = () => {
         this.setLabel(this.MagicLabeler.toggleBrackets(this.getLabel()));
     }
 
-    toggleCase() {
+    toggleCase = () => {
         this.setLabel(this.MagicLabeler.toggleCase(this.getLabel()));
     }
 
-    toggleRoman() {
+    toggleRoman = () => {
         var label = this.MagicLabeler.toggleRoman(this.getLabel());
         if (label === false) {
             return alert("Roman numeral toggle not supported for this label.");
@@ -373,11 +374,11 @@ class PaginatorControls extends React.Component{
         this.setLabel(label);
     }
 
-    updateCurrentPageLabel() {
+    updateCurrentPageLabel = () => {
         this.setLabel(this.getLabel(false));
     }
 
-    render() {
+    render = () => {
         return (
             <div className="controls">
                 <div className="group">
@@ -407,7 +408,7 @@ class PaginatorControls extends React.Component{
 };
 
 class PaginatorControlGroup extends React.Component{
-    render() {
+    render = () => {
         var buttons = this.props.children.map(function (item) {
             var callback = function() {
                 this.props.callback(item);
@@ -423,14 +424,14 @@ class PaginatorControlGroup extends React.Component{
 };
 
 class PaginatorList extends React.Component{
-    scrollTo(thumb) {
+    scrollTo = (thumb) => {
         var listOffset =
             this.refs.pageList.offsetTop +
             (this.refs.thumb0.refs.wrapper.offsetTop - this.refs.pageList.offsetTop);
         this.refs.pageList.scrollTop = thumb.offsetTop - listOffset;
     }
 
-    render() {
+    render = () => {
         var pages = [];
         for (var i = 0; i < this.props.pageCount; i++) {
             pages[i] = <Thumbnail ref={"thumb" + i} list={this} selected={i === this.props.paginator.state.currentPage} paginator={this.props.paginator} key={i} number={i} />;
@@ -442,17 +443,17 @@ class PaginatorList extends React.Component{
 };
 
 class Thumbnail extends React.Component{
-    selectPage() {
+    selectPage = () => {
         this.props.paginator.setPage(this.props.number);
     }
 
-    componentDidUpdate() {
+    componentDidUpdate = () => {
         if (this.props.selected) {
             this.props.list.scrollTo(this.refs.wrapper);
         }
     }
 
-    render() {
+    render = () => {
         var label = this.props.paginator.getLabel(this.props.number);
         // check for magic labels:
         var labelClass = 'label' +
@@ -463,7 +464,7 @@ class Thumbnail extends React.Component{
               <div className="ratio">
                 <div className="content">
                   <span className="img-helper"></span>
-                  <img src={this.props.paginator.getImageUrl(this.props.number, 'thumb')} />
+                  <img alt="" src={this.props.paginator.getImageUrl(this.props.number, 'thumb')} />
                 </div>
               </div>
               <div className="number">{this.props.number + 1}</div>
@@ -474,12 +475,11 @@ class Thumbnail extends React.Component{
 };
 
 class ZoomToggleButton extends React.Component{
-    render() {
+    render = () => {
         return (
             <button onClick={this.props.paginator.toggleZoom}>{this.props.paginator.state.zoom ? 'Turn Zoom Off' : 'Turn Zoom On'}</button>
         );
     }
 };
 
-//module.exports = JobPaginator;
 export default JobPaginator;
