@@ -175,35 +175,35 @@ class Job extends React.Component{
     }
 
     getAgeString(minutes) {
-        if (1 == minutes) {
+        if (1 === minutes) {
             return "1 minute old";
         }
         if (minutes < 60) {
             return minutes + " minutes old";
         }
         var hours = Math.floor(minutes / 60);
-        if (1 == hours) {
+        if (1 === hours) {
             return "1 hour old";
         }
         if (hours < 24) {
             return hours + " hours old";
         }
         var days = Math.floor(hours / 24);
-        if (1 == days) {
+        if (1 === days) {
             return "1 day old";
         }
         if (days < 7) {
             return days + " days old";
         }
         var weeks = Math.floor(days / 7);
-        if (1 == weeks) {
+        if (1 === weeks) {
             return "1 week old";
         }
         if (weeks < 52) {
             return weeks + " weeks old";
         }
         var years = Math.floor(weeks / 52);
-        if (1 == years) {
+        if (1 === years) {
             return "1 year old";
         }
         return years + " years old";
@@ -234,7 +234,7 @@ class Job extends React.Component{
                 if (this.state.minutes_since_upload < 10) {
                     var minutes = this.state.minutes_since_upload;
                     clickWarning = "This job was updated " + minutes + " minute"
-                        + (minutes != 1 ? 's' : '') + " ago. Please do not edit it"
+                        + (minutes !== 1 ? 's' : '') + " ago. Please do not edit it"
                         + " unless you are sure all uploads have fully completed.";
                 }
                 if (this.state.published) {
@@ -242,15 +242,14 @@ class Job extends React.Component{
                         statusText.push('ingesting now; cannot be edited');
                     } else {
                         statusText.push('queued for ingestion; cannot be edited');
-                        action = <a href="#" onClick={this.ingest}>[ingest now]</a>
+                        action = <button onClick={this.ingest}>ingest now</button>
                     }
                 } else if (this.state.derivatives.expected === this.state.derivatives.processed) {
                     statusText.push('ready');
                     clickable = true;
                 } else {
-                    var build = '';
                     if (!this.state.derivatives.building) {
-                        action = <a href="#" onClick={this.buildDerivatives}>[build derivatives]</a>
+                        action = <button onClick={this.buildDerivatives}>build derivatives</button>
                     }
                     var percentDone = (100 * (this.state.derivatives.processed / this.state.derivatives.expected));
                     statusText.push('derivatives: ' + percentDone.toFixed(2) + '% built');
