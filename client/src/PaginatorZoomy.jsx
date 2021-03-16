@@ -2,6 +2,11 @@ var React = require('react');
 var Zoomy = require('./Zoomy');
 
 class PaginatorZoomy extends React.Component{
+    constructor(props) {
+        super(props);
+        this.status = React.createRef();
+    }
+
     componentDidMount = () => {
         Zoomy.init(document.getElementById('zoomy'));
         this.componentDidUpdate();
@@ -21,7 +26,7 @@ class PaginatorZoomy extends React.Component{
     render = () => {
         return (
             <div>
-                <div ref={(s) => {this.status = s;}} id="zoomyStatus">Loading...</div>
+                <div ref={this.status} id="zoomyStatus">Loading...</div>
                 <canvas id="zoomy"></canvas>
             </div>
         );
