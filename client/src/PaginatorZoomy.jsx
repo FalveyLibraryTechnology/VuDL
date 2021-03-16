@@ -1,18 +1,19 @@
 var React = require('react');
+var Zoomy = require('./Zoomy');
 
 class PaginatorZoomy extends React.Component{
     componentDidMount = () => {
-        this.Zoomy.init(document.getElementById('zoomy'));
+        Zoomy.init(document.getElementById('zoomy'));
         this.componentDidUpdate();
     }
 
     componentDidUpdate = () => {
-        this.Zoomy.load(
+        Zoomy.load(
             this.props.img,
             function() {
-                this.Zoomy.resize();
-                this.Zoomy.center();
-                this.refs.status.className = "hidden";
+                Zoomy.resize();
+                Zoomy.center();
+                this.status.className = "hidden";
             }.bind(this)
         );
     }
@@ -20,7 +21,7 @@ class PaginatorZoomy extends React.Component{
     render = () => {
         return (
             <div>
-                <div ref="status" id="zoomyStatus">Loading...</div>
+                <div ref={(s) => {this.status = s;}} id="zoomyStatus">Loading...</div>
                 <canvas id="zoomy"></canvas>
             </div>
         );
