@@ -6,8 +6,8 @@ var JobSelector = require('./JobSelector');
 
 class VuDLPrep extends React.Component{
     activateJobSelector = () => {
-        this.refs.paginator.setState(this.refs.paginator.getInitialState());
-        this.refs.selector.show();
+        this.paginator.setState(this.paginator.getInitialState());
+        this.selector.show();
     }
 
     getImageUrl = (category, job, filename, size) => {
@@ -23,8 +23,8 @@ class VuDLPrep extends React.Component{
     }
 
     selectJob = (category, job) => {
-        this.refs.selector.hide();
-        this.refs.paginator.loadJob(category, job);
+        this.selector.hide();
+        this.paginator.loadJob(category, job);
     }
 
     ajax = (params) => {
@@ -42,7 +42,7 @@ class VuDLPrep extends React.Component{
           success: success
         });
     }
-// <JobPaginator app={this} ref="paginator" />
+// <JobPaginator app={this} ref={(p) => { this.paginator = p; }} />
     render = () => {
         var logout = this.props.logoutUrl
             ? <div className="logout"><a href={this.props.logoutUrl} className="button">Log Out</a></div>
@@ -50,7 +50,7 @@ class VuDLPrep extends React.Component{
         return (
             <div>
                 {logout}
-                <JobSelector app={this} ref="selector" onJobSelect={this.selectJob} url={this.props.url} />
+                <JobSelector app={this} ref={(s) => { this.selector = s; }} onJobSelect={this.selectJob} url={this.props.url} />
             </div>
         );
     }
