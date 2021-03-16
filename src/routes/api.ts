@@ -1,12 +1,13 @@
 import CategoryCollection from '../models/CategoryCollection';
 import Category from '../models/Category';
+import Config from '../models/Config';
 import Job from '../models/Job';
 
 var express = require("express");
 var router = express.Router();
 
 function holdingArea(): string {
-    return "C:/holdingarea/";
+    return Config.getInstance().holdingArea();
 }
 
 router.get("/", function(req, res, next) {
