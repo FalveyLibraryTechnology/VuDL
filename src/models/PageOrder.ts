@@ -9,7 +9,12 @@ class PageOrder {
 
     static fromJob(job) {
         var glob = require("glob");
-        var pages = glob.sync(job.dir + ".TI*").map(function(tiff: string){ return new Page(this.basename(tiff), null) });
+        var files = glob.sync(job.dir + "/*.TI*", { nocase: true });
+        // TODO: can we rewrite this as a map() for better efficiency?
+        var pages = [];
+        for (let i = 0; i < files.length; i++) {
+            pages[i] = new Page(this.basename(files[i]), null);
+        }
         return new PageOrder(pages);
     }
 
@@ -18,12 +23,11 @@ class PageOrder {
         return new PageOrder(pages);
     }
 
-    raw() {
+    get raw() {
         return this.pages.map(function(page: Page){ return page.raw() });
-
     }
 
-    basename(path) {
+    static basename(path) {
         return path.replace(/\/$/, "").split('/').reverse()[0];
      }
 }

@@ -30,6 +30,7 @@ class JobMetadata {
     }
 
     get derivativeStatus() {
+        // TODO: populate with real data
         let status = {
             expected: 10,
             processed: 0,
@@ -84,7 +85,7 @@ class JobMetadata {
 
     get raw() {
         return {
-            order: this.order.raw(),
+            order: this.order.raw,
             published: this.published  
         };
     }
