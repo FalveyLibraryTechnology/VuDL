@@ -1,4 +1,5 @@
 var React = require('react');
+var MagicLabeler = require('./MagicLabeler');
 var PaginatorControls = require('./PaginatorControls');
 var PaginatorList = require('./PaginatorList');
 var PaginatorPreview = require('./PaginatorPreview');
@@ -29,7 +30,7 @@ class JobPaginator extends React.Component{
             ? null : this.state.order[imageNumber]['label'];
         if (useMagic && null === label) {
             if (typeof this.magicLabelCache[imageNumber] === 'undefined') {
-                this.magicLabelCache[imageNumber] = this.MagicLabeler.getLabel(imageNumber, this.getLabel);
+                this.magicLabelCache[imageNumber] = MagicLabeler.getLabel(imageNumber, this.getLabel);
             }
             return this.magicLabelCache[imageNumber];
         }

@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 var React = require('react');
 var JobSelector = require('./JobSelector');
-//var JobPaginator = require('./JobPaginator')
+var JobPaginator = require('./JobPaginator');
 
 class VuDLPrep extends React.Component{
     activateJobSelector = () => {
@@ -42,7 +42,6 @@ class VuDLPrep extends React.Component{
           success: success
         });
     }
-// <JobPaginator app={this} ref={(p) => { this.paginator = p; }} />
     render = () => {
         var logout = this.props.logoutUrl
             ? <div className="logout"><a href={this.props.logoutUrl} className="button">Log Out</a></div>
@@ -51,6 +50,7 @@ class VuDLPrep extends React.Component{
             <div>
                 {logout}
                 <JobSelector app={this} ref={(s) => { this.selector = s; }} onJobSelect={this.selectJob} url={this.props.url} />
+                <JobPaginator app={this} ref={(p) => { this.paginator = p; }} />
             </div>
         );
     }

@@ -1,4 +1,5 @@
 var React = require('react');
+var MagicLabeler = require('./MagicLabeler');
 var PaginatorControlGroup = require('./PaginatorControlGroup');
 var ZoomToggleButton = require('./ZoomToggleButton');
 
@@ -23,32 +24,32 @@ class PaginatorControls extends React.Component{
 
     setLabelPrefix = (str) => {
         this.setLabel(
-            this.MagicLabeler.replaceLabelPart(this.getLabel(), 'prefix', str, true)
+            MagicLabeler.replaceLabelPart(this.getLabel(), 'prefix', str, true)
         );
     }
 
     setLabelBody = (str) => {
         this.setLabel(
-            this.MagicLabeler.replaceLabelPart(this.getLabel(), 'label', str)
+            MagicLabeler.replaceLabelPart(this.getLabel(), 'label', str)
         );
     }
 
     setLabelSuffix = (str) => {
         this.setLabel(
-            this.MagicLabeler.replaceLabelPart(this.getLabel(), 'suffix', str, true)
+            MagicLabeler.replaceLabelPart(this.getLabel(), 'suffix', str, true)
         );
     }
 
     toggleBrackets = () => {
-        this.setLabel(this.MagicLabeler.toggleBrackets(this.getLabel()));
+        this.setLabel(MagicLabeler.toggleBrackets(this.getLabel()));
     }
 
     toggleCase = () => {
-        this.setLabel(this.MagicLabeler.toggleCase(this.getLabel()));
+        this.setLabel(MagicLabeler.toggleCase(this.getLabel()));
     }
 
     toggleRoman = () => {
-        var label = this.MagicLabeler.toggleRoman(this.getLabel());
+        var label = MagicLabeler.toggleRoman(this.getLabel());
         if (label === false) {
             return alert("Roman numeral toggle not supported for this label.");
         }
@@ -73,9 +74,9 @@ class PaginatorControls extends React.Component{
                     <button className="primary" onClick={function() { this.approveCurrentPageLabel(); this.props.paginator.save(false); }.bind(this)}>Save</button>
                     <button className="primary" onClick={function() { this.approveCurrentPageLabel(); this.props.paginator.save(true); }.bind(this)}>Save and Publish</button>
                 </div>
-                <PaginatorControlGroup callback={this.setLabelPrefix} label="prefixes">{this.MagicLabeler.prefixes}</PaginatorControlGroup>
-                <PaginatorControlGroup callback={this.setLabelBody}   label="labels"  >{this.MagicLabeler.labels}</PaginatorControlGroup>
-                <PaginatorControlGroup callback={this.setLabelSuffix} label="suffixes">{this.MagicLabeler.suffixes}</PaginatorControlGroup>
+                <PaginatorControlGroup callback={this.setLabelPrefix} label="prefixes">{MagicLabeler.prefixes}</PaginatorControlGroup>
+                <PaginatorControlGroup callback={this.setLabelBody}   label="labels"  >{MagicLabeler.labels}</PaginatorControlGroup>
+                <PaginatorControlGroup callback={this.setLabelSuffix} label="suffixes">{MagicLabeler.suffixes}</PaginatorControlGroup>
                 <div className="toggles group">
                     <button onClick={this.toggleBrackets} title="Toggle Brackets">[ ]</button>
                     <button onClick={this.toggleCase} title="Toggle Case"><i className="fa fa-text-height"></i></button>
