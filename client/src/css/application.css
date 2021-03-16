@@ -1,0 +1,66 @@
+body {
+  background: #ececec;
+  font-size: 14px;
+  font-family: "Roboto", Arial;
+  font-weight: 500;
+  overflow-x: hidden;
+}
+
+.hidden { display: none; }
+
+#jobSelector { margin-left: 1rem; }
+
+h2 {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+h2 a {
+  font-size: 1.6rem;
+  color: #008AED;
+}
+h2 a span {
+  font-family: "Roboto Mono";
+}
+
+button, .button {
+  box-sizing: border-box;
+  height: auto;
+  margin: 0 2px;
+  padding: 7px 10px 5px;
+  border: 0;
+  border-bottom: 2px solid #15181C;
+  vertical-align: bottom;
+  background-color: #53626f;
+  cursor: pointer;
+  color: #fff !important;
+  border-radius: 5px;
+  outline: none;
+}
+button:active,
+.button:active { border-bottom-width: 1px; }
+button.active,
+.button.active {
+  background-color: #3498db;
+  border-color: #275575;
+}
+button.primary,
+.button.primary {
+  background-color: #27ae60;
+  border-color: #13562F;
+  color: #fff;
+}
+
+button.danger {
+  background-color: red;
+  margin-left: 20px;
+}
+
+.logout {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+}
+.logout .button {
+  background: #1abc9c;
+  border-color: #16a085;
+}
