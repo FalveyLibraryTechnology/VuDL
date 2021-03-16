@@ -34,7 +34,8 @@ class JobPaginator extends React.Component{
             }
             return this.magicLabelCache[imageNumber];
         }
-        return label;
+        // Always return a string, even if the internal value is null:
+        return null === label ? '' : label;
     }
 
     setLabel = (imageNumber, text) => {

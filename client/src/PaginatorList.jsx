@@ -16,7 +16,7 @@ class PaginatorList extends React.Component{
 
     render = () => {
         var pages = [];
-        for (var i = 0; i < this.props.pageCount; i++) {
+        for (let i = 0; i < this.props.pageCount; i++) {
             pages[i] = <Thumbnail ref={(t) => { this.thumbs[i] = t;}} list={this} selected={i === this.props.paginator.state.currentPage} paginator={this.props.paginator} key={i} number={i} />;
         };
         return (
