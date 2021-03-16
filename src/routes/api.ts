@@ -7,6 +7,7 @@ var express = require("express");
 var router = express.Router();
 
 function getJobFromRequest(req): Job {
+    // TODO: sanitize parameters!
     return new Job(holdingArea() + req.params.category + '/' + req.params.job);
 }
 
