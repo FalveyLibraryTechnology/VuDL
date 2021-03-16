@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import './css/application.css';
+import '../node_modules/@fortawesome/fontawesome-free/css/all.css';
 import VuDLPrep from './VuDLPrep';
 import * as serviceWorker from './serviceWorker';
 
