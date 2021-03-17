@@ -1,13 +1,18 @@
 var React = require('react');
 
 class Thumbnail extends React.Component{
+    constructor(props) {
+        super(props);
+        this.wrapper = React.createRef();
+    }
+
     selectPage = () => {
         this.props.paginator.setPage(this.props.number);
     }
 
     componentDidUpdate = () => {
         if (this.props.selected) {
-            this.props.list.scrollTo(this.refs.wrapper);
+            this.props.list.scrollTo(this.wrapper);
         }
     }
 
@@ -18,7 +23,7 @@ class Thumbnail extends React.Component{
             (null === this.props.paginator.getLabel(this.props.number, false) ? ' magic' : '');
         var myClass = 'thumbnail' + (this.props.selected ? ' selected' : '');
         return (
-            <div onClick={this.selectPage} className={myClass} ref="wrapper">
+            <div onClick={this.selectPage} className={myClass} ref={this.wrapper}>
               <div className="ratio">
                 <div className="content">
                   <span className="img-helper"></span>
