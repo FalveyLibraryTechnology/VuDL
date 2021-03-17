@@ -25,7 +25,7 @@ class Job {
       var status = this.metadata.derivativeStatus;
       var lockfile = this.metadata.derivativeLockfile;
 
-      if (status.expected > status.processed && fileExists(lockfile)){
+      if (status.expected > status.processed && !fileExists(lockfile)){
         closeSync(openSync(lockfile, 'w'));
         const q = new Queue("vudl");
         q.add('derivatives', {dir: this.dir});
