@@ -4,11 +4,11 @@ install node, install typescript
 # Install type definitions for node
 npm install -g npm
 
-# In the root directory, build the typescript code:
+# In the api directory, build the typescript code:
 
 tsc
 
-# In the root directory, start the expressjs server with the following:
+# In the api directory, start the expressjs server with the following:
 
 npm install (only need to run this once)
 
