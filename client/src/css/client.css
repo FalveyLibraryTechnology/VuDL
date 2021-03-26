@@ -15,10 +15,6 @@ p {
 .top button { margin: 0 2px; }
 
 input, .status { float: left; }
-input, button, .status {
-  box-sizing: border-box;
-  height: 26px;
-}
 input {
   margin-right: 4px;
   padding: 0 2px;
@@ -60,7 +56,7 @@ input {
   vertical-align: top;
 }
 .toggles button, .toggles + button {
-  padding: 7px 40px 5px;
+  padding: 5px 40px;
   background-color: #7f8c8d;
   border-color: #34495e;
 }
