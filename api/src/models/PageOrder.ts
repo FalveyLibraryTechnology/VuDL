@@ -9,7 +9,15 @@ class PageOrder {
 
     static fromJob(job) {
         var glob = require("glob");
-        var files = glob.sync(job.dir + "/*.TI*", { nocase: true });
+        var pattern = job.dir + "/*.TI*";
+        var options: any = { nocase: true };
+        // Special case for Windows -- we need to account for drive letters:
+        var colonIndex = pattern.indexOf(':');
+        if (colonIndex > -1) {
+            options.root = pattern.substring(0, colonIndex + 2);
+            pattern = pattern.substring(colonIndex + 1);
+        }
+        var files = glob.sync(pattern, options);
         // TODO: can we rewrite this as a map() for better efficiency?
         var pages = [];
         for (let i = 0; i < files.length; i++) {

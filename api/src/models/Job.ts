@@ -1,5 +1,6 @@
 import { fstat, openSync, closeSync, existsSync as fileExists } from 'fs';
 import JobMetadata from './JobMetadata';
+import ImageFile from './ImageFile';
 import { Queue } from 'bullmq';
 
 class Job {
@@ -19,6 +20,10 @@ class Job {
 
     raw() {
       return this.name;
+    }
+
+    getImage(fileName: string) {
+      return new ImageFile(this.dir + "/" + fileName);
     }
 
     makeDerivatives() {

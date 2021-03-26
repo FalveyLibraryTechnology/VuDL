@@ -43,4 +43,30 @@ router.put("/:category/:job/derivatives", function(req, res, next) {
     res.send(JSON.stringify( { status: 'ok' } ));
 });
 
+router.put("/:category/:job/ingest", function(req, res, next) {
+    getJobFromRequest(req).ingest();
+    res.send(JSON.stringify( { status: 'ok' } ));
+});
+
+router.put("/:category/:job", function(req, res, next) {
+    //res.send(JSON.stringify(getJobFromRequest(req).metadata.upda));
+    //res.send(JSON.stringify( { status: 'ok' } ));
+});
+
+router.get("/:category/:job/:image/:size", async function(req, res, next) {
+    //TO DO
+    //Sanitize incoming parameters
+    let legalSizes: object = {
+        thumb: "THUMBNAIL",
+        medium: "MEDIUM",
+        large: "LARGE"
+    };
+    let image: string = req.params.image;
+    let size: string = req.params.size;
+    let job = getJobFromRequest(req);
+    let deriv = await job.getImage(image).derivative(typeof legalSizes[size] === "undefined" ? "THUMBNAIL" : legalSizes[size]);
+    console.log(deriv);
+    res.sendFile(deriv);
+});
+
 module.exports = router;
