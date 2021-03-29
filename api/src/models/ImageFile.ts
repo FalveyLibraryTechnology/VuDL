@@ -2,26 +2,21 @@ import { constants } from "node:buffer";
 
 class ImageFile {
     filename: string;
-    sizes: Array<Object> = [{
-     "LARGE": 3000,
-     "MEDIUM": 640, 
-     "THUMBNAIL": 120
-    }];
+    sizes: Object = {
+        "LARGE": 3000,
+        "MEDIUM": 640,
+        "THUMBNAIL": 120
+    };
 
     constructor(filename) {
         this.filename = filename;
     }
 
     constraintForSize(size) {
-        console.log(this.sizes);
-        console.log(size);
-
-        var foundValue = this.sizes.filter(obj=>obj[0]===size);
-        console.log(foundValue);
-
-        if (this.sizes.includes(size)) {
-            return size;
+        if (size in this.sizes) {
+            return this.sizes[size];
         } else {
+            console.error("Invalid image size: " + size);
             return 1;
         }
     }

@@ -64,7 +64,7 @@ router.get("/:category/:job/:image/:size", async function(req, res, next) {
     let image: string = req.params.image;
     let size: string = req.params.size;
     let job = getJobFromRequest(req);
-    let deriv = await job.getImage(image).derivative(typeof legalSizes[size] === "undefined" ? "THUMBNAIL" : legalSizes[size]);
+    let deriv = await job.getImage(image).derivative(legalSizes[size] ?? "THUMBNAIL");
     console.log(deriv);
     res.sendFile(deriv);
 });
