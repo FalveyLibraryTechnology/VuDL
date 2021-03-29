@@ -39,6 +39,9 @@ class ImageFile {
             } catch (error) {
                 console.error(error);
             };
+        } else {
+            // Image source smaller than derivative size
+            await image.writeAsync(deriv); // save
         }
         return deriv;
      }
