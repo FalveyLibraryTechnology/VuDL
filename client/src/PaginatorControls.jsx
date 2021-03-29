@@ -80,9 +80,9 @@ class PaginatorControls extends React.Component{
                 <div className="toggles group">
                     <button onClick={this.toggleBrackets} title="Toggle Brackets">[ ]</button>
                     <button onClick={this.toggleCase} title="Toggle Case"><i className="fa fa-text-height"></i></button>
-                    <button onClick={this.toggleRoman} title="Toggle Roman Numerals">4<i className="fa fa-fw fa-arrows-h"></i>IV</button>
+                    <button onClick={this.toggleRoman} title="Toggle Roman Numerals">4<i className="fa fa-fw fa-arrows-alt-h"></i>IV</button>
                 </div>
-                <button onClick={this.props.paginator.autonumberFollowingPages} title="Autonumber Following Pages"><i className="fa fa-sort-numeric-asc"></i></button>
+                <button onClick={this.props.paginator.autonumberFollowingPages} title="Autonumber Following Pages"><i className="fa fa-sort-numeric-down"></i></button>
                 <button className="danger" onClick={this.props.paginator.deletePage} title="Delete Current Page"><i className="fa fa-fw fa-trash"></i> Delete Current Page</button>
             </div>
         );

@@ -15,10 +15,6 @@ p {
 .top button { margin: 0 2px; }
 
 input, .status { float: left; }
-input, button, .status {
-  box-sizing: border-box;
-  height: 26px;
-}
 input {
   margin-right: 4px;
   padding: 0 2px;
@@ -59,10 +55,17 @@ input {
   margin-right: 4px;
   vertical-align: top;
 }
-.toggles button, .toggles + button {
-  padding: 7px 40px 5px;
+.toggles button,
+.toggles + button {
+  padding: 5px 40px;
   background-color: #7f8c8d;
   border-color: #34495e;
+}
+.toggles button:hover,
+.toggles + button:hover,
+.toggles button:focus,
+.toggles + button:focus {
+  background-color: #53626f;
 }
 
 .group#prefixes button { width: 25%; }
