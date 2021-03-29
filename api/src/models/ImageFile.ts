@@ -22,22 +22,30 @@ class ImageFile {
     }
 
     async derivative(size) {
-        var deriv = this.derivativePath(size);
-        var Jimp = require('jimp');
-        var image = await Jimp.read(this.filename);
-        var constraint = this.constraintForSize(size);
+        let deriv = this.derivativePath(size);
+
+        // Return existing derivative
+        let fs = require("fs");
+        if (fs.existsSync(deriv)) {
+            return deriv;
+        }
+
+        // Create derivative
+        let Jimp = require('jimp');
+        let image = await Jimp.read(this.filename);
+        let constraint = this.constraintForSize(size);
 
         console.log(constraint);
 
         if (image.bitmap.width > constraint || image.bitmap.height > constraint) {
             try {
+                console.log("make derivative", constraint, deriv);
                 image.scaleToFit(constraint, constraint); // resize to pixel sizes?
                 image.quality(90); // set JPEG quality
                 //image.greyscale(); // set greyscale
                 await image.writeAsync(deriv); // save
-                console.log("resize", constraint, deriv);
             } catch (error) {
-                console.error(error);
+                console.error("resize error: " + error);
             };
         } else {
             // Image source smaller than derivative size
