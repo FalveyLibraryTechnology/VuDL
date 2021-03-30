@@ -112,9 +112,9 @@ var Zoomy = {
             ydiff *=  ratio;
             break;
           default: // On left side
-            var xtemp = xdiff;
+            var xtemp2 = xdiff;
             xdiff = ydiff * -ratio;
-            ydiff = xtemp * ratio;
+            ydiff = xtemp2 * ratio;
             break;
         }
       }
@@ -162,7 +162,7 @@ var Zoomy = {
 
     // Minimap
     if(!this.showMinimap) return;
-    if(this.minimap == null) {
+    if(this.minimap === null) {
       this.minimap = this.initMinimap();
     }
     this.context.drawImage(
@@ -271,14 +271,14 @@ var Zoomy = {
     this.image.maxY = Math.max(yDiff, 0);
     this.enforceBounds();
     var rotation = this.image.angle / Math.HALF_PI;
-    this.image.transX = rotation == 2
+    this.image.transX = rotation === 2
       ? -this.image.width
-      : rotation == 3
+      : rotation === 3
         ? -this.image.height
         : 0;
-    this.image.transY = rotation == 1
+    this.image.transY = rotation === 1
       ? -this.image.width
-      : rotation == 2
+      : rotation === 2
         ? -this.image.height
         : 0;
   },

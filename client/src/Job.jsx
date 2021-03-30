@@ -117,7 +117,7 @@ class Job extends React.Component{
         var action = '';
         var statusText = [];
         var ingestInfo = '';
-        if (typeof this.state.ingest_info !== "undefined") { 
+        if (typeof this.state.ingest_info !== "undefined") {
             ingestInfo = this.state.ingest_info;
         }
         if (typeof this.state.derivatives !== 'undefined') {
@@ -162,7 +162,7 @@ class Job extends React.Component{
             statusText.push('loading...');
         }
         var link = clickable
-            ? <a onClick={function () { this.handleClick(clickWarning); }.bind(this)} href="#">{this.props.children}</a>
+            ? <button className="btn-link" onClick={function () { this.handleClick(clickWarning); }.bind(this)}>{this.props.children}</button>
             : <span>{this.props.children}</span>;
         return (
             <li>

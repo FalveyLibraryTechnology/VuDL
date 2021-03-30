@@ -13,7 +13,7 @@ var MagicLabeler = {
         // Try roman numerals as a last resort.
         try {
             var arabic = RomanNumerals.toArabic(prior);
-            var isUpper = (prior == prior.toUpperCase());
+            var isUpper = (prior === prior.toUpperCase());
             if (arabic > 0) {
                 var newLabel = RomanNumerals.toRoman(arabic + delta);
                 if (!isUpper) {
@@ -39,21 +39,21 @@ var MagicLabeler = {
             } else {
                 priorLabel['brackets'] = bracketStatus;
             }
-            if (priorLabel['suffix'] == ', recto' && !skipSuffixCheck) {
+            if (priorLabel['suffix'] === ', recto' && !skipSuffixCheck) {
                 priorLabel['suffix'] = ', verso';
                 return this.assemblePageLabel(priorLabel);
             }
-            if (priorLabel['suffix'] == ', front' && !skipSuffixCheck) {
+            if (priorLabel['suffix'] === ', front' && !skipSuffixCheck) {
                 priorLabel['suffix'] = ', back';
                 return this.assemblePageLabel(priorLabel);
             }
 
             var numericLabel = this.adjustNumericLabel(priorLabel['label'], 1);
             if (false !== numericLabel) {
-                if (priorLabel['suffix'] == ', verso' && !skipSuffixCheck) {
+                if (priorLabel['suffix'] === ', verso' && !skipSuffixCheck) {
                     priorLabel['suffix'] = ', recto';
                 }
-                if (priorLabel['suffix'] == ', back' && !skipSuffixCheck) {
+                if (priorLabel['suffix'] === ', back' && !skipSuffixCheck) {
                     priorLabel['suffix'] = ', front';
                 }
                 priorLabel['label'] = numericLabel;
@@ -84,24 +84,24 @@ var MagicLabeler = {
 
     parsePageLabel: function(text) {
         var brackets = false;
-        text = new String(text);
-        if (text.substring(0, 1) == '[' && text.substring(text.length - 1, text.length) == ']') {
+        text = String(text);
+        if (text.substring(0, 1) === '[' && text.substring(text.length - 1, text.length) === ']') {
             text = text.substring(1, text.length - 1);
             brackets = true;
         }
         var prefix = '';
-        for (var i = 0; i < this.prefixes.length; i++) {
+        for (let i = 0; i < this.prefixes.length; i++) {
             var currentPrefix = this.prefixes[i];
-            if (text.substring(0, currentPrefix.length) == currentPrefix) {
+            if (text.substring(0, currentPrefix.length) === currentPrefix) {
                 prefix = currentPrefix;
                 text = text.substring(currentPrefix.length);
                 break;
             }
         }
         var suffix = '';
-        for (var i = 0; i < this.suffixes.length; i++) {
+        for (let i = 0; i < this.suffixes.length; i++) {
             var currentSuffix = this.suffixes[i];
-            if (text.substring(text.length - currentSuffix.length) == currentSuffix) {
+            if (text.substring(text.length - currentSuffix.length) === currentSuffix) {
                 suffix = currentSuffix;
                 text = text.substring(0, text.length - currentSuffix.length);
                 break;
@@ -121,7 +121,7 @@ var MagicLabeler = {
             allowToggle = false;
         }
         var parts = this.parsePageLabel(label);
-        parts[part] = (parts[part] == replacement && allowToggle)
+        parts[part] = (parts[part] === replacement && allowToggle)
             ? '' :  replacement;
         return this.assemblePageLabel(parts);
     },
