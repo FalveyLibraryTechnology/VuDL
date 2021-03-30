@@ -2,48 +2,54 @@ import { constants } from "node:buffer";
 
 class ImageFile {
     filename: string;
-    sizes: Array<Object> = [{
-     "LARGE": 3000,
-     "MEDIUM": 640, 
-     "THUMBNAIL": 120
-    }];
+    sizes: Object = {
+        "LARGE": 3000,
+        "MEDIUM": 640,
+        "THUMBNAIL": 120
+    };
 
     constructor(filename) {
         this.filename = filename;
     }
 
     constraintForSize(size) {
-        console.log(this.sizes);
-        console.log(size);
-
-        var foundValue = this.sizes.filter(obj=>obj[0]===size);
-        console.log(foundValue);
-
-        if (this.sizes.includes(size)) {
-            return size;
+        if (size in this.sizes) {
+            return this.sizes[size];
         } else {
+            console.error("Invalid image size: " + size);
             return 1;
         }
     }
 
     async derivative(size) {
-        var deriv = this.derivativePath(size);
-        var Jimp = require('jimp');
-        var image = await Jimp.read(this.filename);
-        var constraint = this.constraintForSize(size);
+        let deriv = this.derivativePath(size);
+
+        // Return existing derivative
+        let fs = require("fs");
+        if (fs.existsSync(deriv)) {
+            return deriv;
+        }
+
+        // Create derivative
+        let Jimp = require('jimp');
+        let image = await Jimp.read(this.filename);
+        let constraint = this.constraintForSize(size);
 
         console.log(constraint);
 
         if (image.bitmap.width > constraint || image.bitmap.height > constraint) {
             try {
+                console.log("make derivative", constraint, deriv);
                 image.scaleToFit(constraint, constraint); // resize to pixel sizes?
                 image.quality(90); // set JPEG quality
                 //image.greyscale(); // set greyscale
                 await image.writeAsync(deriv); // save
-                console.log("resize", constraint, deriv);
             } catch (error) {
-                console.error(error);
+                console.error("resize error: " + error);
             };
+        } else {
+            // Image source smaller than derivative size
+            await image.writeAsync(deriv); // save
         }
         return deriv;
      }
