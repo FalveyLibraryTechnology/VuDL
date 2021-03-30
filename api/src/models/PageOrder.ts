@@ -9,7 +9,7 @@ class PageOrder {
 
     static fromJob(job) {
         var glob = require("glob");
-        var pattern = job.dir + "/*.TI*";
+        var pattern = job.dir + "/*.TI{F,FF}";
         var options: any = { nocase: true };
         // Special case for Windows -- we need to account for drive letters:
         var colonIndex = pattern.indexOf(':');
