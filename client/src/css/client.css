@@ -85,7 +85,10 @@ input {
 .thumbnail {
   position: relative;
   float: left;
+  display: flex;
+  align-items: center;
   width: 125px;
+  height: 202px;
   margin: 2px;
   padding: 4px;
   background: #e1e1e1;
@@ -94,32 +97,19 @@ input {
   cursor: pointer;
   word-break: break-all;
 }
-.thumbnail .ratio {
-  position: relative;
+.thumbnail img {
+  display: block;
   width: 100%;
-  margin-bottom: 4px;
-  padding-bottom: 100%;
+  object-fit: contain;
 }
-.thumbnail.selected {
-  background: #51aded;
-  color: #fff;
-}
-.thumbnail .content {
+
+.thumbnail .label {
   position: absolute;
   left: 0;
-  width: 100%;
-  top: 0;
-  height: 100%;
+  right: 0;
+  bottom: 0.25em;
+  line-height: 1.15;
 }
-.thumbnail .img-helper {
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-}
-.thumbnail img {
-  vertical-align: middle;
-}
-.thumbnail .label { min-height: 2.6em; }
 .thumbnail .label.magic { font-style: italic; }
 .thumbnail .number {
   position: absolute;
