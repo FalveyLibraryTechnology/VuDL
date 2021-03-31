@@ -165,7 +165,7 @@ class Job extends React.Component{
         // TODO: react-router
         let hashurl = "#/" + this.props.category + "/" + this.props.children;
         var link = clickable
-            ? <a href="{hashurl}" onClick={function () { this.handleClick(clickWarning); }.bind(this)}>{this.props.children}</a>
+            ? <a href={hashurl} onClick={function () { this.handleClick(clickWarning); }.bind(this)}>{this.props.children}</a>
             : <span>{this.props.children}</span>;
         return (
             <li>
