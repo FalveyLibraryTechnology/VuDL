@@ -55,11 +55,24 @@ class VuDLPrep extends React.Component{
         return (
             <div>
                 {logout}
-                <JobSelector app={this} ref={(s) => { this.selector = s; }} onJobSelect={this.selectJob} url={this.props.url} />
-                <JobPaginator app={this} ref={(p) => { this.paginator = p; }} />
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path="/">
+                            <JobSelector app={this} ref={(s) => { this.selector = s; }} onJobSelect={this.selectJob} url={this.props.url} />
+                        </Route>
+                        <Route path="/:category/:job">
+                            <JobPaginatorHook app={this}/>
+                        </Route>
+                    </Switch>
+                </BrowserRouter>
             </div>
         );
     }
 };
+
+function JobPaginatorHook({ app }) {
+    let { category, job } = useParams();
+    return <JobPaginator app={app} category={category} job={job} />
+}
 
 export default VuDLPrep;

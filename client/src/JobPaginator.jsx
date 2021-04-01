@@ -268,6 +268,10 @@ class JobPaginator extends React.Component{
         this.setState(this.newState);
     }
 
+    componentDidMount = () => {
+        this.loadJob(this.props.category, this.props.job);
+    }
+
     render = () => {
         var preview = this.state.zoom
             ? <PaginatorZoomy img={this.getImageUrl(this.state.currentPage, 'large')} />
