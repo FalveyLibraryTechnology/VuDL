@@ -1,9 +1,11 @@
-var React = require('react');
-var MagicLabeler = require('./MagicLabeler');
-var PaginatorControls = require('./PaginatorControls');
-var PaginatorList = require('./PaginatorList');
-var PaginatorPreview = require('./PaginatorPreview');
-var PaginatorZoomy = require('./PaginatorZoomy');
+import React from 'react';
+import { useParams } from "react-router-dom";
+
+import MagicLabeler from './MagicLabeler';
+import PaginatorControls from './PaginatorControls';
+import PaginatorList from './PaginatorList';
+import PaginatorPreview from './PaginatorPreview';
+import PaginatorZoomy from './PaginatorZoomy';
 
 class JobPaginator extends React.Component{
     constructor(props) {
@@ -285,4 +287,4 @@ class JobPaginator extends React.Component{
     }
 };
 
-module.exports = JobPaginator;
+export default JobPaginator;

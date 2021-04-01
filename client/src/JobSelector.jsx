@@ -1,5 +1,5 @@
-var React = require('react');
-var Category = require('./Category');
+import React from 'react';
+import Category from './Category';
 
 class JobSelector extends React.Component{
     constructor(props) {
@@ -45,4 +45,4 @@ class JobSelector extends React.Component{
     }
 };
 
-module.exports = JobSelector;
+export default JobSelector;

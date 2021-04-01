@@ -1,8 +1,14 @@
 import $ from 'jquery';
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  useParams
+} from "react-router-dom";
 
-var React = require('react');
-var JobSelector = require('./JobSelector');
-var JobPaginator = require('./JobPaginator');
+import React from 'react';
+import JobSelector from './JobSelector';
+import JobPaginator from './JobPaginator';
 
 class VuDLPrep extends React.Component{
     activateJobSelector = () => {
