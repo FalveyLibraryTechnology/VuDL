@@ -31,7 +31,7 @@ class Category extends React.Component{
             ? <h2><a href="#" onClick={this.toggle}>{(this.state.open ? '[ - ]' : '[+]') + ' ' + this.props.data.category}</a></h2>
             : <h2>{this.props.data.category + ' [no jobs]'}</h2>
         var joblist = this.state.open
-            ? <JobList app={this.props.app} onJobSelect={this.props.onJobSelect} category={this.props.data.category} data={this.props.data.jobs} />
+            ? <JobList app={this.props.app} category={this.props.data.category} data={this.props.data.jobs} />
             : '';
         return (
             <div className="jobCategory">

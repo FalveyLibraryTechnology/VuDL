@@ -11,6 +11,7 @@ import JobSelector from './JobSelector';
 import JobPaginator from './JobPaginator';
 
 class VuDLPrep extends React.Component{
+    // TODO: Remove
     activateJobSelector = () => {
         this.paginator.setState(this.paginator.getInitialState());
         this.selector.show();
@@ -28,11 +29,6 @@ class VuDLPrep extends React.Component{
             + encodeURIComponent(job) + extra;
     }
 
-    selectJob = (category, job) => {
-        this.selector.hide();
-        this.paginator.loadJob(category, job);
-    }
-
     ajax = (params) => {
         params.beforeSend = function (xhr) {
             xhr.setRequestHeader('Authorization', 'Token ' + this.props.token);
@@ -40,6 +36,7 @@ class VuDLPrep extends React.Component{
         $.ajax(params);
     }
 
+    // TODO: Why does this one need url when getJobUrl and getImageUrl don't?
     getJSON = (url, data, success) => {
         this.ajax({
           dataType: "json",
@@ -58,7 +55,7 @@ class VuDLPrep extends React.Component{
                 <BrowserRouter>
                     <Switch>
                         <Route exact path="/">
-                            <JobSelector app={this} ref={(s) => { this.selector = s; }} onJobSelect={this.selectJob} url={this.props.url} />
+                            <JobSelector app={this} ref={(s) => { this.selector = s; }} url={this.props.url} />
                         </Route>
                         <Route path="/:category/:job">
                             <JobPaginatorHook app={this}/>

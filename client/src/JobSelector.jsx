@@ -29,7 +29,7 @@ class JobSelector extends React.Component{
         var empty_categories = [];
         for (var i in this.state.data) {
             var category = this.state.data[i];
-            var element = <Category app={this.props.app} onJobSelect={this.props.onJobSelect} key={category.category} data={category} />
+            var element = <Category app={this.props.app} key={category.category} data={category} />
             if (category.jobs.length > 0) {
                 categories[categories.length] = element;
             } else {
