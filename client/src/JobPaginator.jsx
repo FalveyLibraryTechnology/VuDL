@@ -6,7 +6,7 @@ var PaginatorPreview = require('./PaginatorPreview');
 var PaginatorZoomy = require('./PaginatorZoomy');
 
 class JobPaginator extends React.Component{
-    varructor(props) {
+    constructor(props) {
         super(props);
         this.magicLabelCache = [];
         this.state = {active: false, currentPage: 0, zoom: false, order: []};
