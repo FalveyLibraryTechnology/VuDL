@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from "react-router-dom";
+var React = require('react');
+var { Link } = require("react-router-dom");
 
 class Job extends React.Component{
     constructor(props) {
@@ -176,4 +176,4 @@ class Job extends React.Component{
     }
 };
 
-export default Job;
+module.exports = Job;

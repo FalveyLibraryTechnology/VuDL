@@ -1,5 +1,5 @@
-import React from 'react';
-import Job from './Job';
+var React = require('react');
+var Job = require('./Job');
 
 class JobList extends React.Component{
     render = () => {
@@ -14,4 +14,4 @@ class JobList extends React.Component{
     }
 };
 
-export default JobList;
+module.exports = JobList;

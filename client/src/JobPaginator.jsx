@@ -1,13 +1,12 @@
-import React from 'react';
-
-import MagicLabeler from './MagicLabeler';
-import PaginatorControls from './PaginatorControls';
-import PaginatorList from './PaginatorList';
-import PaginatorPreview from './PaginatorPreview';
-import PaginatorZoomy from './PaginatorZoomy';
+var React = require('react');
+var MagicLabeler = require('./MagicLabeler');
+var PaginatorControls = require('./PaginatorControls');
+var PaginatorList = require('./PaginatorList');
+var PaginatorPreview = require('./PaginatorPreview');
+var PaginatorZoomy = require('./PaginatorZoomy');
 
 class JobPaginator extends React.Component{
-    constructor(props) {
+    varructor(props) {
         super(props);
         this.magicLabelCache = [];
         this.state = {active: false, currentPage: 0, zoom: false, order: []};
@@ -126,7 +125,7 @@ class JobPaginator extends React.Component{
                 var msg = '';
                 if (status.file_problems.deleted.length > 0) {
                     msg += status.file_problems.deleted.length
-                        + " file(s) have been removed from the job since the last edit.\n"
+                        + " file(s) have been removed = require(the job since the last edit.\n)"
                     this.removePages(status.file_problems.deleted);
                 }
                 if (status.file_problems.added.length > 0) {
@@ -290,4 +289,4 @@ class JobPaginator extends React.Component{
     }
 };
 
-export default JobPaginator;
+module.exports = JobPaginator;

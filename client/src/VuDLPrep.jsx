@@ -6,9 +6,9 @@ import {
   useParams
 } from "react-router-dom";
 
-import React from 'react';
-import JobSelector from './JobSelector';
-import JobPaginator from './JobPaginator';
+var React = require('react');
+var JobSelector = require('./JobSelector');
+var JobPaginator = require('./JobPaginator');
 
 class VuDLPrep extends React.Component{
     // TODO: Remove
