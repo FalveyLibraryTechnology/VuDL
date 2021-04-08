@@ -18,7 +18,7 @@ class PaginatorZoomy extends React.Component{
             function() {
                 Zoomy.resize();
                 Zoomy.center();
-                this.status.className = "hidden";
+                this.status.current.className = "hidden";
             }.bind(this)
         );
     }
