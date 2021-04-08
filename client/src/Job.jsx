@@ -160,6 +160,7 @@ class Job extends React.Component{
         } else {
             statusText.push('loading...');
         }
+
         var link = clickable
             ? <Link to={`/paginate/${this.props.category}/${this.props.children}`}
                     onClick={function (e) { return this.handleClick(e, clickWarning); }.bind(this)}>{this.props.children}</Link>
