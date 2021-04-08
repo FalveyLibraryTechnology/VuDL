@@ -125,7 +125,7 @@ class JobPaginator extends React.Component{
                 var msg = '';
                 if (status.file_problems.deleted.length > 0) {
                     msg += status.file_problems.deleted.length
-                        + " file(s) have been removed from the job since the last edit.\n"
+                        + " file(s) have been removed = require(the job since the last edit.\n)"
                     this.removePages(status.file_problems.deleted);
                 }
                 if (status.file_problems.added.length > 0) {
@@ -264,6 +264,10 @@ class JobPaginator extends React.Component{
         this.newState = this.state;
         this.newState.zoom = !this.newState.zoom;
         this.setState(this.newState);
+    }
+
+    componentDidMount = () => {
+        this.loadJob(this.props.category, this.props.job);
     }
 
     render = () => {
