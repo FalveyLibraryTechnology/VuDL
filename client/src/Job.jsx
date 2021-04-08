@@ -161,8 +161,6 @@ class Job extends React.Component{
             statusText.push('loading...');
         }
 
-        // TODO: react-router
-        let hashurl = "#/" + this.props.category + "/" + this.props.children;
         var link = clickable
             ? <Link to={`/paginate/${this.props.category}/${this.props.children}`}
                     onClick={function (e) { return this.handleClick(e, clickWarning); }.bind(this)}>{this.props.children}</Link>
