@@ -35,8 +35,6 @@ class ImageFile {
         let image = await Jimp.read(this.filename);
         let constraint = this.constraintForSize(size);
 
-        console.log(constraint);
-
         if (image.bitmap.width > constraint || image.bitmap.height > constraint) {
             try {
                 console.log("make derivative", constraint, deriv);
