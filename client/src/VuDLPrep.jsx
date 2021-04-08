@@ -1,10 +1,17 @@
 import $ from 'jquery';
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  useParams
+} from "react-router-dom";
 
 var React = require('react');
 var JobSelector = require('./JobSelector');
 var JobPaginator = require('./JobPaginator');
 
 class VuDLPrep extends React.Component{
+    // TODO: Remove
     activateJobSelector = () => {
         this.paginator.setState(this.paginator.getInitialState());
         this.selector.show();
@@ -22,11 +29,6 @@ class VuDLPrep extends React.Component{
             + encodeURIComponent(job) + extra;
     }
 
-    selectJob = (category, job) => {
-        this.selector.hide();
-        this.paginator.loadJob(category, job);
-    }
-
     ajax = (params) => {
         params.beforeSend = function (xhr) {
             xhr.setRequestHeader('Authorization', 'Token ' + this.props.token);
@@ -34,6 +36,7 @@ class VuDLPrep extends React.Component{
         $.ajax(params);
     }
 
+    // TODO: Why does this one need url when getJobUrl and getImageUrl don't?
     getJSON = (url, data, success) => {
         this.ajax({
           dataType: "json",
@@ -49,11 +52,24 @@ class VuDLPrep extends React.Component{
         return (
             <div>
                 {logout}
-                <JobSelector app={this} ref={(s) => { this.selector = s; }} onJobSelect={this.selectJob} url={this.props.url} />
-                <JobPaginator app={this} ref={(p) => { this.paginator = p; }} />
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path="/">
+                            <JobSelector app={this} ref={(s) => { this.selector = s; }} url={this.props.url} />
+                        </Route>
+                        <Route path="/paginate/:category/:job">
+                            <JobPaginatorHook app={this}/>
+                        </Route>
+                    </Switch>
+                </BrowserRouter>
             </div>
         );
     }
 };
+
+function JobPaginatorHook({ app }) {
+    let { category, job } = useParams();
+    return <JobPaginator app={app} category={category} job={job} />
+}
 
 export default VuDLPrep;

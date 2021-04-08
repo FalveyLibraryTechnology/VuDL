@@ -1,4 +1,5 @@
 var React = require('react');
+var { Link } = require("react-router-dom");
 
 class Job extends React.Component{
     constructor(props) {
@@ -10,13 +11,11 @@ class Job extends React.Component{
         this.updateStatus();
     }
 
-    handleClick = (clickWarning) => {
-        if (clickWarning) {
-            if (!window.confirm(clickWarning)) {
-                return;
-            }
+    handleClick = (e, clickWarning) => {
+        if (clickWarning && !window.confirm(clickWarning)) {
+            e.preventDefault();
+            return false;
         }
-        this.props.onJobSelect(this.props.category, this.props.children);
     }
 
     getDerivUrl = () => {
@@ -117,7 +116,7 @@ class Job extends React.Component{
         var action = '';
         var statusText = [];
         var ingestInfo = '';
-        if (typeof this.state.ingest_info !== "undefined") { 
+        if (typeof this.state.ingest_info !== "undefined") {
             ingestInfo = this.state.ingest_info;
         }
         if (typeof this.state.derivatives !== 'undefined') {
@@ -162,7 +161,8 @@ class Job extends React.Component{
             statusText.push('loading...');
         }
         var link = clickable
-            ? <a onClick={function () { this.handleClick(clickWarning); }.bind(this)} href="#">{this.props.children}</a>
+            ? <Link to={`/paginate/${this.props.category}/${this.props.children}`}
+                    onClick={function (e) { return this.handleClick(e, clickWarning); }.bind(this)}>{this.props.children}</Link>
             : <span>{this.props.children}</span>;
         return (
             <li>
