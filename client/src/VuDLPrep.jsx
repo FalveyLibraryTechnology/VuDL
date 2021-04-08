@@ -57,7 +57,7 @@ class VuDLPrep extends React.Component{
                         <Route exact path="/">
                             <JobSelector app={this} ref={(s) => { this.selector = s; }} url={this.props.url} />
                         </Route>
-                        <Route path="/:category/:job">
+                        <Route path="/paginate/:category/:job">
                             <JobPaginatorHook app={this}/>
                         </Route>
                     </Switch>
