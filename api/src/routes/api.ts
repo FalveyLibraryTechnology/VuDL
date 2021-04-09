@@ -49,8 +49,9 @@ router.put("/:category/:job/ingest", function(req, res, next) {
 });
 
 router.put("/:category/:job", function(req, res, next) {
-    //res.send(JSON.stringify(getJobFromRequest(req).metadata.upda));
-    //res.send(JSON.stringify( { status: 'ok' } ));
+    let job = getJobFromRequest(req);
+    job.metadata.validate(job, req.params);
+    res.send(JSON.stringify( { status: 'ok' } ));
 });
 
 router.get("/:category/:job/:image/:size", async function(req, res, next) {
@@ -65,8 +66,20 @@ router.get("/:category/:job/:image/:size", async function(req, res, next) {
     let size: string = req.params.size;
     let job = getJobFromRequest(req);
     let deriv = await job.getImage(image).derivative(legalSizes[size] ?? "THUMBNAIL");
-    console.log(deriv);
     res.sendFile(deriv);
 });
+
+router.delete("/:category/:job/:image/*"), async function(req, res, next) {
+    //return ImageFile.delete();
+    let image: string = req.params.image;
+    let job = getJobFromRequest(req);
+    let imageObj = job.getImage(image);
+    if (imageObj !== null) {
+        imageObj.delete();
+        res.send(JSON.stringify( { status: 'ok' } ));
+    } else {
+        res.send(JSON.stringify( { status: 'image missing' } ));
+    }
+}
 
 module.exports = router;

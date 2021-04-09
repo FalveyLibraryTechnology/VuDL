@@ -1,4 +1,5 @@
 import { constants } from "node:buffer";
+import { stringify } from "node:querystring";
 
 class ImageFile {
     filename: string;
@@ -7,6 +8,7 @@ class ImageFile {
         "MEDIUM": 640,
         "THUMBNAIL": 120
     };
+    sizeArray: Array<string> = ["LARGE","MEDIUM","THUMBNAIL"];
 
     constructor(filename) {
         this.filename = filename;
@@ -35,14 +37,11 @@ class ImageFile {
         let image = await Jimp.read(this.filename);
         let constraint = this.constraintForSize(size);
 
-        console.log(constraint);
-
         if (image.bitmap.width > constraint || image.bitmap.height > constraint) {
             try {
                 console.log("make derivative", constraint, deriv);
                 image.scaleToFit(constraint, constraint); // resize to pixel sizes?
                 image.quality(90); // set JPEG quality
-                //image.greyscale(); // set greyscale
                 await image.writeAsync(deriv); // save
             } catch (error) {
                 console.error("resize error: " + error);
@@ -62,7 +61,8 @@ class ImageFile {
     }
 
     ocr() {
-        var txt = this.derivativePath('OCR-DIRTY', 'txt');
+        //TO DO: update the following (derivativepath requires size now)
+        var txt = this.derivativePath('OCR-DIRTY', 'txt'); 
         let fs = require('fs');
         var tesseract = require("node-tesseract-ocr");
         if (fs.existsSync(txt)){
@@ -79,8 +79,18 @@ class ImageFile {
 
     }
 
-    delete() {
-
+    public delete() {
+        let fs = require("fs");
+        for (let size in this.sizeArray) {
+            let path = this.derivativePath(size, "jpg");
+            if (fs.existsSync(path)) {
+                try {
+                    fs.unlinkSync(path);
+                } catch(err) {
+                    console.error(err);
+                }
+            }
+        };
     }
 
     basename(path) {
