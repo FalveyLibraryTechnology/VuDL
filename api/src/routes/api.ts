@@ -70,7 +70,8 @@ router.get("/:category/:job/:image/:size", async function(req, res, next) {
 });
 
 router.delete("/:category/:job/:image/*"), async function(req, res, next) {
-    //return ImageFile.delete();
+    //TO DO
+    //Sanitize incoming parameters
     let image: string = req.params.image;
     let job = getJobFromRequest(req);
     let imageObj = job.getImage(image);
@@ -78,7 +79,7 @@ router.delete("/:category/:job/:image/*"), async function(req, res, next) {
         imageObj.delete();
         res.send(JSON.stringify( { status: 'ok' } ));
     } else {
-        res.send(JSON.stringify( { status: 'image missing' } ));
+        res.status(404).send("image missing");
     }
 }
 
