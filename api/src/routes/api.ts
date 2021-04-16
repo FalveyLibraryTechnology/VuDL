@@ -79,7 +79,7 @@ router.delete("/:category/:job/:image/*"), async function(req, res, next) {
         imageObj.delete();
         res.send(JSON.stringify( { status: 'ok' } ));
     } else {
-        res.status(404).send("image missing");
+        res.status(404).send(JSON.stringify( { status: 'image missing' } ));
     }
 }
 

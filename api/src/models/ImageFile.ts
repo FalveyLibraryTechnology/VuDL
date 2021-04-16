@@ -8,7 +8,6 @@ class ImageFile {
         "MEDIUM": 640,
         "THUMBNAIL": 120
     };
-    sizeArray: Array<string> = ["LARGE","MEDIUM","THUMBNAIL"];
 
     constructor(filename) {
         this.filename = filename;
@@ -61,7 +60,7 @@ class ImageFile {
     }
 
     ocr() {
-        //TO DO: update the following (derivativepath requires size now)
+        //TODO: update the following (derivativepath requires size now)
         var txt = this.derivativePath('OCR-DIRTY', 'txt'); 
         let fs = require('fs');
         var tesseract = require("node-tesseract-ocr");
@@ -81,11 +80,15 @@ class ImageFile {
 
     public delete() {
         let fs = require("fs");
-        for (let size in this.sizeArray) {
-            let path = this.derivativePath(size, "jpg");
-            if (fs.existsSync(path)) {
+        let files: Array<string> = [];
+        for (let size in Object.keys(this.sizes)) {
+            files.push(this.derivativePath(size, "jpg"));
+            files.push(this.derivativePath(size, "png"));
+            files.push(this.derivativePath(size, "tiff"));
+            files.push(this.derivativePath(size, "txt"));
+            if (fs.existsSync(files)) {
                 try {
-                    fs.unlinkSync(path);
+                    fs.unlinkSync(files);
                 } catch(err) {
                     console.error(err);
                 }
