@@ -1,5 +1,14 @@
 {
   "name": "vudlprepjs",
   "version": "0.0.0",
-  "private": true
+  "private": true,
+  "scripts": {
+    "api": "node api/bin/www",
+    "client": "cd client && npm run start",
+    "queue": "node api/worker-start.js",
+    "start": "concurrently -c 'green,cyan,gray' npm:api npm:client npm:queue"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.2"
+  }
 }
