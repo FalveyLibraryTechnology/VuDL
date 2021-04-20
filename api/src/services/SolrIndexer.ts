@@ -1,4 +1,5 @@
 import Fedora from "./Fedora";
+import HierarchyCollector from "./HierarchyCollector";
 import { DOMParser } from "xmldom";
 const xpath = require("xpath");
 
@@ -22,13 +23,16 @@ class SolrIndexer {
         // TODO: Launch promises together, Promise.all()
         const DC = await this.fedora.getDC(pid);
         const RELS = await this.fedora.getDatastream(pid, "RELS-EXT");
-
         let xmlParser = new DOMParser();
         let RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
         let rdfXPath = xpath.useNamespaces({
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
             "fedora-model": "info:fedora/fedora-system:def/model#",
         });
+
+        // Collect hierarchy data
+        let hierarchyCollector = new HierarchyCollector(this.fedora);
+        let hierarchyCollection = await hierarchyCollector.getHierarchy(pid);
 
         // Massage data
         let fields: any = {
@@ -38,6 +42,7 @@ class SolrIndexer {
             ).map((resource) => {
                 return resource.nodeValue.substr("info:fedora/".length);
             }),
+            hierarchy_all_parents_str_mv: hierarchyCollection.getAllParents()
         };
 
         // TODO: Pull from config
