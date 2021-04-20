@@ -25,6 +25,7 @@ interface DC {
 
 class Fedora {
     baseUrl: string;
+    cache: any = {};
 
     constructor() {
         let config = Config.getInstance();
@@ -49,7 +50,6 @@ class Fedora {
             password: "fedoraAdmin",
         };
         let options = Object.assign({}, auth, _options);
-
         return http(method, url, data, options);
     }
 
@@ -57,23 +57,28 @@ class Fedora {
      * Get datastream from Fedora
      */
     async getDatastream(pid, datastream, parse = false): Promise<any> {
-        try {
-            let res = await this._request(
-                "get",
-                pid + "/" + datastream,
-                null, // Data
-                { // Options
-                    parse_response: parse,
-                }
-            );
-
-            if (parse) {
-                return res.body;
-            }
-            return res.body.toString(); // Buffer to string
-        } catch (e) {
-            console.log("Fedora::getDatastream '" + datastream + "' failed", e);
+        if (typeof this.cache[pid] === "undefined") {
+            this.cache[pid] = {};
         }
+        if (typeof this.cache[pid][datastream] === "undefined") {
+            try {
+                let res = await this._request(
+                    "get",
+                    pid + "/" + datastream,
+                    null, // Data
+                    { // Options
+                        parse_response: parse,
+                    }
+                );
+
+                this.cache[pid][datastream] = parse
+                    ? res.body
+                    : res.body.toString(); // Buffer to string
+            } catch (e) {
+                console.log("Fedora::getDatastream '" + datastream + "' failed", e);
+            }
+        }
+        return this.cache[pid][datastream];
     }
 
     /**
