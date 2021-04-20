@@ -56,7 +56,7 @@ class ImageFile {
         var path = require('path');
         var dir = path.dirname(this.filename);
         var filename = this.basename(this.filename);
-        return dir + "/" + filename + "." + size + "." + extension.toLowerCase();
+        return dir + "/" + filename + "/" + size + "/" + extension.toLowerCase();
     }
 
     ocr() {
@@ -71,21 +71,50 @@ class ImageFile {
     }
 
     ocrDerivative() {
-
+        let fs = require("fs");
+        let png = this.derivativePath('ocr/pngs', 'png');
+        let { exec } = require("child_process");
+        if (fs.existsSync(png)) {
+            let tc_cmd = "#{config['textcleaner_path']} #{config['textcleaner_switches']} #{derivative('LARGE')} #{png}"
+            exec(tc_cmd, (error, stdout, stderr) => {
+                if (error) {
+                    console.log(`error: ${error.message}`);
+                    return;
+                }
+                if (stderr) {
+                    console.log(`stderr: ${stderr}`);
+                    return;
+                }
+                console.log(`stdout: ${stdout}`)
+            });
+        }
     }
 
     ocrProperties() {
-
+        let fs = require("fs");
+        var path = require('path');
+        let file = this.derivativePath('ocr/pngs', 'png');
+        let dir = path.dirname(file);
+        let content = 'tessedit_char_whitelist ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!\'"()&$%-+=[]?<>' + "\xE2\x80\x9C\xE2\x80\x9D\xE2\x80\x98\xE2\x80\x99";
+        if (fs.existsSync(file)) {
+            fs.writeFile(dir + '/ocr/tesseract.config', content, err => {
+                if (err) {
+                  console.error(err)
+                  return
+                }
+                //file written successfully
+              })
+        }
     }
 
     public delete() {
         let fs = require("fs");
+        if (fs.existsSync(this.filename)) {
+            fs.unlinkSync(this.filename);
+        }
         let files: Array<string> = [];
         for (let size in Object.keys(this.sizes)) {
             files.push(this.derivativePath(size, "jpg"));
-            files.push(this.derivativePath(size, "png"));
-            files.push(this.derivativePath(size, "tiff"));
-            files.push(this.derivativePath(size, "txt"));
             if (fs.existsSync(files)) {
                 try {
                     fs.unlinkSync(files);
