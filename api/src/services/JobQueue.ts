@@ -23,7 +23,7 @@ class JobQueue {
             return await this.workers[job.name].run(job);
         });
 
-        console.log("> JobQueue started.\n")
+        console.log("JobQueue started")
     }
 }
 
