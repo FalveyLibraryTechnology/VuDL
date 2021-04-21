@@ -12,15 +12,26 @@ class HierarchyCollector {
     }
 
     async getHierarchy(pid): Promise<FedoraData> {
+        // Use Fedora to get data
+        // TODO: type
+        // TODO: catch failure
+        // TODO: Launch promises together, Promise.all()
         const DC = await this.fedora.getDC(pid);
         const RELS = await this.fedora.getDatastream(pid, "RELS-EXT");
         let xmlParser = new DOMParser();
         let RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
         let rdfXPath = xpath.useNamespaces({
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+            "fedora-model": "info:fedora/fedora-system:def/model#",
             "fedora-rels-ext": "info:fedora/fedora-system:def/relations-external#",
         });
-        let result = new FedoraData(pid, DC.children);
+        let models = rdfXPath(
+            "//fedora-model:hasModel/@rdf:resource",
+            RELS_XML
+        ).map((resource) => {
+            return resource.nodeValue.substr("info:fedora/".length);
+        });
+        let result = new FedoraData(pid, models, DC.children);
         let parentList = rdfXPath(
             "//fedora-rels-ext:isMemberOf/@rdf:resource",
             RELS_XML

@@ -1,11 +1,13 @@
 class FedoraData {
-    public pid: string;
     // TODO: better typing
     public allMetadata: Array<any>;
+    public models: Array<string>;
+    public pid: string;
     parents: Array<FedoraData> = [];
 
-    constructor (pid: string, dc_data: Array<any>) {
+    constructor (pid: string, models: Array<string>, dc_data: Array<any>) {
         this.pid = pid;
+        this.models = models;
         this.allMetadata = dc_data;
     }
 
