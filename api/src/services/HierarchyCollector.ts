@@ -15,6 +15,30 @@ class HierarchyCollector {
         this.hierarchyTops = hierarchyTops;
     }
 
+    protected extractRelations(RELS: string) {
+        let xmlParser = new DOMParser();
+        let RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
+        let rdfXPath = xpath.useNamespaces({
+            rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        });
+        let relations: any = {};
+        rdfXPath(
+            '//rdf:Description/*', RELS_XML
+        ).forEach((relation) => {
+            let values = rdfXPath('text()', relation);
+            if (values.length === 0) {
+                values = rdfXPath('./@rdf:resource', relation);
+            }
+            if (values.length > 0) {
+                if (typeof relations[relation.nodeName] === "undefined") {
+                    relations[relation.nodeName] = [];
+                }
+                relations[relation.nodeName].push(values[0].nodeValue);
+            }
+        });
+        return relations;
+    }
+
     async getHierarchy(pid): Promise<FedoraData> {
         // Use Fedora to get data
         // TODO: type
@@ -22,33 +46,11 @@ class HierarchyCollector {
         // TODO: Launch promises together, Promise.all()
         const DC = await this.fedora.getDC(pid);
         const RELS = await this.fedora.getDatastream(pid, "RELS-EXT");
-        let xmlParser = new DOMParser();
-        let RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
-        let rdfXPath = xpath.useNamespaces({
-            rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-            "fedora-model": "info:fedora/fedora-system:def/model#",
-            "fedora-rels-ext": "info:fedora/fedora-system:def/relations-external#",
-            "vudl-rel": "http://vudl.org/relationships#",
-        });
-        let models = rdfXPath(
-            "//fedora-model:hasModel/@rdf:resource",
-            RELS_XML
-        ).map((resource) => {
-            return resource.nodeValue.substr("info:fedora/".length);
-        });
-        let sequences = rdfXPath(
-            '//vudl-rel:sequence/text()', RELS_XML
-        ).map((sequence) => {
-            return sequence.nodeValue;
-        });
-        let result = new FedoraData(pid, models, sequences, DC.children);
-        let parentList = rdfXPath(
-            "//fedora-rels-ext:isMemberOf/@rdf:resource",
-            RELS_XML
-        );
+        let relations = this.extractRelations(RELS);
+        let result = new FedoraData(pid, relations, DC.children);
         // Create promises to retrieve parents asynchronously...
-        let promises = parentList.map(async (resource) => {
-            let parentPid = resource.nodeValue.substr("info:fedora/".length);
+        let promises = (relations.isMemberOf ?? []).map(async (resource) => {
+            let parentPid = resource.substr("info:fedora/".length);
             if (!this.hierarchyTops.includes(parentPid)) {
                 let parent = await this.getHierarchy(parentPid);
                 result.addParent(parent);
