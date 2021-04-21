@@ -71,10 +71,12 @@ class SolrIndexer {
         }
         if (hierarchyParents.length > 0) {
             fields.hierarchy_first_parent_id_str = hierarchyParents[0].pid;
+            fields.hierarchy_browse = [];
             fields.hierarchy_parent_id = [];
             fields.hierarchy_parent_title = [];
             for (let parent of hierarchyParents) {
                 if (!fields.hierarchy_parent_id.includes(parent.pid)) {
+                    fields.hierarchy_browse.push(parent.title + "{{{_ID_}}}" + parent.pid);
                     fields.hierarchy_parent_id.push(parent.pid);
                     fields.hierarchy_parent_title.push(parent.title);
                 }
