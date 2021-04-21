@@ -28,6 +28,7 @@ class HierarchyCollector {
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
             "fedora-model": "info:fedora/fedora-system:def/model#",
             "fedora-rels-ext": "info:fedora/fedora-system:def/relations-external#",
+            "vudl-rel": "http://vudl.org/relationships#",
         });
         let models = rdfXPath(
             "//fedora-model:hasModel/@rdf:resource",
@@ -35,7 +36,12 @@ class HierarchyCollector {
         ).map((resource) => {
             return resource.nodeValue.substr("info:fedora/".length);
         });
-        let result = new FedoraData(pid, models, DC.children);
+        let sequences = rdfXPath(
+            '//vudl-rel:sequence', RELS_XML
+        ).map((sequence) => {
+            return sequence.nodeValue;
+        });
+        let result = new FedoraData(pid, models, sequences, DC.children);
         let parentList = rdfXPath(
             "//fedora-rels-ext:isMemberOf/@rdf:resource",
             RELS_XML

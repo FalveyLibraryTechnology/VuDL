@@ -21,11 +21,26 @@ class SolrIndexer {
         // Collect hierarchy data
         let fedoraData = await this.hierarchyCollector.getHierarchy(pid);
 
-        // Massage data
+        // Start with basic data:
         let fields: any = {
             modeltype_str_mv: fedoraData.models,
+            hierarchytype: null,
             hierarchy_all_parents_str_mv: fedoraData.getAllParents()
         };
+
+        // Is this a hierarchy?
+        if (fedoraData.models.includes('vudl-system:FolderCollection')) {
+            fields.is_hierarchy_id = fedoraData.pid;
+            fields.is_hierarchy_title = fedoraData.title;
+        }
+
+        for (let sequence of fedoraData.sequences) {
+            let sequence_str = 'TODO';
+            let dynamic_sequence_field_name = 'sequence_' + sequence_str + '_str';
+            fields[dynamic_sequence_field_name] = 'TODO';
+        }
+
+        fields.has_order_str = 'TODO';
 
         // TODO: Pull from config
         let fieldMap = {
