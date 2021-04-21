@@ -83,6 +83,7 @@ class SolrIndexer {
             }
         }
         if (hierarchySequences.length > 0) {
+            // TODO: populate hierarchy_sequence_sort_str
             fields.hierarchy_sequence = hierarchySequences;
         }
 
