@@ -17,6 +17,24 @@ class FedoraData {
         this.parents.push(parent);
     }
 
+    getAllHierarchyTops(): Array<FedoraData> {
+        // If we have no parents, we ARE the top:
+        if (this.parents.length === 0) {
+            return [this];
+        }
+
+        // Otherwise, let's collect data from our parents:
+        let tops: Array<FedoraData> = [];
+        for (let parent of this.parents) {
+            for (let top of parent.getAllHierarchyTops()) {
+                if (!tops.includes(top)) {
+                    tops.push(top);
+                }
+            }
+        }
+        return tops;
+    }
+
     getAllParents(): Array<string> {
         let results = [];
         this.parents.forEach((parent) => {

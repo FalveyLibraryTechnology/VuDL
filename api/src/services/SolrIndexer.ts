@@ -44,12 +44,9 @@ class SolrIndexer {
         fields.has_order_str = 'TODO';
 
         // Process parent data:
-        let hierarchyTops: Array<FedoraData> = [];
         let hierarchyParents: Array<FedoraData> = [];
         let hierarchySequences: Array<string> = [];
         for (let parent of fedoraData.parents) {
-            // TODO: fill in hierarchyTops.
-
             // If the object is a Data, the parentPID is the Resource it belongs
             // to (skip the List object):
             if (fedoraData.models.includes('vudl-system:DataModel')) {
@@ -61,7 +58,10 @@ class SolrIndexer {
 
             // TODO: fill in hierarchySequences.
         }
+        var hierarchyTops: Array<FedoraData> = fedoraData.getAllHierarchyTops();
         if (hierarchyTops.length > 0) {
+            fields.hierarchy_top_id = [];
+            fields.hierarchy_top_title = [];
             for (let top of hierarchyTops) {
                 if (!fields.hierarchy_top_id.includes(top.pid)) {
                     fields.hierarchy_top_id.push(top.pid);
