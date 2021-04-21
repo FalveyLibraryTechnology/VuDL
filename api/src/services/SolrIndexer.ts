@@ -1,4 +1,5 @@
 import Fedora from "./Fedora";
+import FedoraData from "../models/FedoraData";
 import HierarchyCollector from "./HierarchyCollector";
 const xpath = require("xpath");
 
@@ -34,13 +35,54 @@ class SolrIndexer {
             fields.is_hierarchy_title = fedoraData.title;
         }
 
+        // Add sequence/order data:
         for (let sequence of fedoraData.sequences) {
             let sequence_str = 'TODO';
             let dynamic_sequence_field_name = 'sequence_' + sequence_str + '_str';
             fields[dynamic_sequence_field_name] = 'TODO';
         }
-
         fields.has_order_str = 'TODO';
+
+        // Process parent data:
+        let hierarchyTops: Array<FedoraData> = [];
+        let hierarchyParents: Array<FedoraData> = [];
+        let hierarchySequences: Array<string> = [];
+        for (let parent of fedoraData.parents) {
+            // TODO: fill in hierarchyTops.
+
+            // If the object is a Data, the parentPID is the Resource it belongs
+            // to (skip the List object):
+            if (fedoraData.models.includes('vudl-system:DataModel')) {
+                hierarchyParents = hierarchyParents.concat(parent.parents);
+            } else {
+                // ...else it is the immediate parent (Folder most likely):
+                hierarchyParents.push(parent);
+            }
+
+            // TODO: fill in hierarchySequences.
+        }
+        if (hierarchyTops.length > 0) {
+            for (let top of hierarchyTops) {
+                if (!fields.hierarchy_top_id.includes(top.pid)) {
+                    fields.hierarchy_top_id.push(top.pid);
+                    fields.hierarchy_top_title.push(top.title);
+                }
+            }
+        }
+        if (hierarchyParents.length > 0) {
+            fields.hierarchy_first_parent_id_str = hierarchyParents[0].pid;
+            fields.hierarchy_parent_id = [];
+            fields.hierarchy_parent_title = [];
+            for (let parent of hierarchyParents) {
+                if (!fields.hierarchy_parent_id.includes(parent.pid)) {
+                    fields.hierarchy_parent_id.push(parent.pid);
+                    fields.hierarchy_parent_title.push(parent.title);
+                }
+            }
+        }
+        if (hierarchySequences.length > 0) {
+            fields.hierarchy_sequence = hierarchySequences;
+        }
 
         // TODO: Pull from config
         let fieldMap = {
