@@ -1,5 +1,5 @@
 import Fedora from "./Fedora";
-import HierarchyCollection from "./HierarchyCollection";
+import FedoraData from "./FedoraData";
 import { DOMParser } from "xmldom";
 import { resourceLimits } from "node:worker_threads";
 const xpath = require("xpath");
@@ -11,7 +11,7 @@ class HierarchyCollector {
         this.fedora = fedora;
     }
 
-    async getHierarchy(pid): Promise<HierarchyCollection> {
+    async getHierarchy(pid): Promise<FedoraData> {
         const DC = await this.fedora.getDC(pid);
         const RELS = await this.fedora.getDatastream(pid, "RELS-EXT");
         let xmlParser = new DOMParser();
@@ -26,7 +26,7 @@ class HierarchyCollector {
                 title = field.value;
             }
         };
-        let result = new HierarchyCollection(pid, title);
+        let result = new FedoraData(pid, title);
         let parentList = rdfXPath(
             "//fedora-rels-ext:isMemberOf/@rdf:resource",
             RELS_XML

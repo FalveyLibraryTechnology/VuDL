@@ -1,14 +1,14 @@
-class HierarchyCollection {
+class FedoraData {
     public pid: string;
     public title: string;
-    parents: Array<HierarchyCollection> = [];
+    parents: Array<FedoraData> = [];
 
     constructor (pid: string, title: string) {
         this.pid = pid;
         this.title = title;
     }
 
-    addParent(parent: HierarchyCollection): void {
+    addParent(parent: FedoraData): void {
         this.parents.push(parent);
     }
 
@@ -26,4 +26,4 @@ class HierarchyCollection {
     }
 }
 
-export default HierarchyCollection;
+export default FedoraData;

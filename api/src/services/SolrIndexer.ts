@@ -32,7 +32,7 @@ class SolrIndexer {
 
         // Collect hierarchy data
         let hierarchyCollector = new HierarchyCollector(this.fedora);
-        let hierarchyCollection = await hierarchyCollector.getHierarchy(pid);
+        let fedoraData = await hierarchyCollector.getHierarchy(pid);
 
         // Massage data
         let fields: any = {
@@ -42,7 +42,7 @@ class SolrIndexer {
             ).map((resource) => {
                 return resource.nodeValue.substr("info:fedora/".length);
             }),
-            hierarchy_all_parents_str_mv: hierarchyCollection.getAllParents()
+            hierarchy_all_parents_str_mv: fedoraData.getAllParents()
         };
 
         // TODO: Pull from config
