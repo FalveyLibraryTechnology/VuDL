@@ -6,9 +6,13 @@ const xpath = require("xpath");
 
 class HierarchyCollector {
     fedora: Fedora;
+    // PIDs that define the top of a hierarchy. Typically this
+    // includes the overall top PID, plus the top public PID.
+    hierarchyTops: Array<string>;
 
-    constructor(fedora: Fedora) {
+    constructor(fedora: Fedora, hierarchyTops: Array<string>) {
         this.fedora = fedora;
+        this.hierarchyTops = hierarchyTops;
     }
 
     async getHierarchy(pid): Promise<FedoraData> {
@@ -38,8 +42,11 @@ class HierarchyCollector {
         );
         // Create promises to retrieve parents asynchronously...
         let promises = parentList.map(async (resource) => {
-            let parent = await this.getHierarchy(resource.nodeValue.substr("info:fedora/".length));
-            result.addParent(parent);
+            let parentPid = resource.nodeValue.substr("info:fedora/".length);
+            if (!this.hierarchyTops.includes(parentPid)) {
+                let parent = await this.getHierarchy(parentPid);
+                result.addParent(parent);
+            }
         });
         // Now wait for the promises to complete before we return results, so
         // nothing happens out of order.

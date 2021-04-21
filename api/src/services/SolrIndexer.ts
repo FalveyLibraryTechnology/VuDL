@@ -7,18 +7,19 @@ interface SolrFields {
 }
 
 class SolrIndexer {
-    fedora: Fedora;
+    hierarchyCollector: HierarchyCollector;
 
     constructor() {
-        // TODO: Config
         // Make Fedora connection
-        this.fedora = new Fedora();
+        let fedora = new Fedora();
+        // TODO: make configurable
+        let topPids = ["vudl:1", "vudl:3"];
+        this.hierarchyCollector = new HierarchyCollector(fedora, topPids);
     }
 
     async getFields(pid: string): Promise<SolrFields> {
         // Collect hierarchy data
-        let hierarchyCollector = new HierarchyCollector(this.fedora);
-        let fedoraData = await hierarchyCollector.getHierarchy(pid);
+        let fedoraData = await this.hierarchyCollector.getHierarchy(pid);
 
         // Massage data
         let fields: any = {
