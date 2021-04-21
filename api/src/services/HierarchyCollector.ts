@@ -20,13 +20,7 @@ class HierarchyCollector {
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
             "fedora-rels-ext": "info:fedora/fedora-system:def/relations-external#",
         });
-        let title = "";
-        for (let field of DC.children) {
-            if (field.name === 'dc:title') {
-                title = field.value;
-            }
-        };
-        let result = new FedoraData(pid, title);
+        let result = new FedoraData(pid, DC.children);
         let parentList = rdfXPath(
             "//fedora-rels-ext:isMemberOf/@rdf:resource",
             RELS_XML

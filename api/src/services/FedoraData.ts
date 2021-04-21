@@ -1,11 +1,12 @@
 class FedoraData {
     public pid: string;
-    public title: string;
+    // TODO: better typing
+    public allMetadata: Array<any>;
     parents: Array<FedoraData> = [];
 
-    constructor (pid: string, title: string) {
+    constructor (pid: string, dc_data: Array<any>) {
         this.pid = pid;
-        this.title = title;
+        this.allMetadata = dc_data;
     }
 
     addParent(parent: FedoraData): void {
@@ -23,6 +24,15 @@ class FedoraData {
             });
         });
         return results;
+    }
+
+    get title() {
+        for (let field of this.allMetadata) {
+            if (field.name === 'dc:title') {
+                return field.value;
+            }
+        };
+        return '';
     }
 }
 

@@ -21,7 +21,6 @@ class SolrIndexer {
         // TODO: type
         // TODO: catch failure
         // TODO: Launch promises together, Promise.all()
-        const DC = await this.fedora.getDC(pid);
         const RELS = await this.fedora.getDatastream(pid, "RELS-EXT");
         let xmlParser = new DOMParser();
         let RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
@@ -52,7 +51,7 @@ class SolrIndexer {
             "dc:subject": "subject",
         };
 
-        for (let field of DC.children) {
+        for (let field of fedoraData.allMetadata) {
             switch (field.name) {
                 case "dc:date":
                     fields.date = field.value;
