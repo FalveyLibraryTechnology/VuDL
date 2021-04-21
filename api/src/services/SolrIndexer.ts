@@ -18,6 +18,12 @@ class SolrIndexer {
         this.hierarchyCollector = new HierarchyCollector(fedora, topPids);
     }
 
+    protected padNumber(num: string) {
+        // Yes, I wrote a left_pad function.
+        let paddedNumber = "0000000000" + num;
+        return paddedNumber.substr(paddedNumber.length - 10);
+    }
+
     async getFields(pid: string): Promise<SolrFields> {
         // Collect hierarchy data
         let fedoraData = await this.hierarchyCollector.getHierarchy(pid);
@@ -37,9 +43,11 @@ class SolrIndexer {
 
         // Add sequence/order data:
         for (let sequence of fedoraData.sequences) {
-            let sequence_str = 'TODO';
+            let seqPid: string, seqNum: string;
+            [seqPid, seqNum] = sequence.split('#', 2);
+            let sequence_str = seqPid.replace(":", "_");
             let dynamic_sequence_field_name = 'sequence_' + sequence_str + '_str';
-            fields[dynamic_sequence_field_name] = 'TODO';
+            fields[dynamic_sequence_field_name] = this.padNumber(seqNum);
         }
         fields.has_order_str = 'TODO';
 

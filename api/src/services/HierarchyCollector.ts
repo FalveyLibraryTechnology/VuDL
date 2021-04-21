@@ -37,7 +37,7 @@ class HierarchyCollector {
             return resource.nodeValue.substr("info:fedora/".length);
         });
         let sequences = rdfXPath(
-            '//vudl-rel:sequence', RELS_XML
+            '//vudl-rel:sequence/text()', RELS_XML
         ).map((sequence) => {
             return sequence.nodeValue;
         });
