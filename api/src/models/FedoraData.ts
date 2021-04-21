@@ -10,7 +10,7 @@ class FedoraData {
         this.pid = pid;
         this.models = models;
         this.sequences = sequences;
-        this.allMetadata = dc_data;
+        this.allMetadata = dc_data ?? [];
     }
 
     addParent(parent: FedoraData): void {
