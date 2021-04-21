@@ -1,5 +1,5 @@
 import Fedora from "./Fedora";
-import FedoraData from "./FedoraData";
+import FedoraData from "../models/FedoraData";
 import { DOMParser } from "xmldom";
 import { resourceLimits } from "node:worker_threads";
 const xpath = require("xpath");
