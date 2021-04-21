@@ -137,6 +137,25 @@ class SolrIndexer {
             }
         }
 
+        // TODO: add generic relsext.* fields, based on this:
+        /*
+        <xsl:for-each select="foxml:datastream/foxml:datastreamVersion[last()]/foxml:xmlContent//rdf:Description/*">
+            <field>
+                <xsl:attribute name="name">
+                    <xsl:value-of select="concat('relsext.', local-name())"/>
+                </xsl:attribute>
+                <xsl:choose>
+                <xsl:when test="string-length(text())">
+                    <xsl:value-of select="text()"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="./@rdf:resource"/>
+                </xsl:otherwise>
+                </xsl:choose>
+            </field>
+        </xsl:for-each>
+        */
+
         return fields;
     }
 }
