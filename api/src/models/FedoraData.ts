@@ -1,14 +1,17 @@
 class FedoraData {
-    // TODO: better typing
-    public allMetadata: Array<any>;
+    public metadata: {[key: string]: Array<string>};
     public pid: string;
     public relations: {[key: string]: Array<string>};
     parents: Array<FedoraData> = [];
 
-    constructor (pid: string, relations: {[key: string]: Array<string>}, dc_data: Array<any>) {
+    constructor (
+        pid: string,
+        relations: {[key: string]: Array<string>},
+        metadata: {[key: string]: Array<string>}
+    ) {
         this.pid = pid;
         this.relations = relations;
-        this.allMetadata = dc_data ?? [];
+        this.metadata = metadata;
     }
 
     addParent(parent: FedoraData): void {
@@ -58,12 +61,8 @@ class FedoraData {
     }
 
     get title() {
-        for (let field of this.allMetadata) {
-            if (field.name === 'dc:title') {
-                return field.value;
-            }
-        };
-        return '';
+        return typeof(this.metadata['dc:title']) !== "undefined"
+            ? this.metadata['dc:title'][0] : '';
     }
 }
 

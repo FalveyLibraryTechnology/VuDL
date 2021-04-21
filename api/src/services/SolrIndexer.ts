@@ -30,6 +30,7 @@ class SolrIndexer {
 
         // Start with basic data:
         let fields: any = {
+            id: pid,
             modeltype_str_mv: fedoraData.models,
             hierarchytype: null,
             hierarchy_all_parents_str_mv: fedoraData.getAllParents()
@@ -95,56 +96,60 @@ class SolrIndexer {
             fields.hierarchy_sequence = hierarchySequences;
         }
 
-        // TODO: Pull from config
-        let fieldMap = {
-            "dc:identifier": "id",
-            "dc:title": "title",
-            "dc:subject": "subject",
-        };
+        // Load all the Dublin Core data:
+        for (let field in fedoraData.metadata) {
+            fields[field.replace(':', '.')] = fedoraData.metadata[field];
+        }
 
-        for (let field of fedoraData.allMetadata) {
-            switch (field.name) {
-                case "dc:date":
-                    fields.date = field.value;
-                    break;
-                case "dc:creator":
-                    fields.creator = field.value;
-                    break;
-                case "dc:language":
-                    fields.language = field.value;
-                    break;
-                case "dc:relation":
-                    fields.relation = field.value;
-                    break;
-                case "dc:source":
-                    fields.source = field.value;
-                    break;
-                case "dc:collection":
-                    fields.collection = field.value;
-                    break;
-                case "dc:format":
-                    fields.format = field.value;
-                    break;
-                default:
-                    let mapped = fieldMap[field.name];
-                    if (typeof mapped == "undefined") {
-                        console.error("No map for field: " + field.name);
-                        break;
-                    }
-                    switch (typeof fields[mapped]) {
-                        case "undefined": // No value yet
-                            fields[mapped] = field.value;
-                            break;
-                        case "string": // Convert from single to multi-value
-                            fields[mapped] = [fields[mapped], field.value];
-                            break;
-                        case "object": // Array
-                            fields[mapped].push(field.value);
-                            break;
-                    }
+        // This map copies existing values as-is to other fields:
+        let copyFields = {
+            "author": "dc.creator",
+            "author2": "dc.contributor",
+            "description": "dc.description",
+            "format": "dc.format",
+            "publisher": "dc.publisher",
+            "publisher_str_mv": "dc.publisher",
+            "series": "dc.relation",
+            "topic": "dc.subject",
+            "topic_str_mv": "dc.subject",
+        };
+        for (let field in copyFields) {
+            if (typeof fields[copyFields[field]] !== "undefined") {
+                fields[field] = fields[copyFields[field]];
             }
         }
 
+        // This map copies the first value from existing fields to
+        // new fields:
+        let firstOnlyFields = {
+            "dc_date_str": "dc.date",
+            "dc_relation_str": "dc.relation",
+            "dc_title_str": "dc.title",
+            "publishDate": "dc.date",
+            "publishDateSort": "dc.date",
+            "title": "dc.title",
+            "title_full": "dc.title",
+            "title_short": "dc.title",
+            "title_sort": "dc.title",
+        };
+        for (let field in firstOnlyFields) {
+            if (typeof fields[firstOnlyFields[field]] !== "undefined") {
+                fields[field] = fields[firstOnlyFields[field]][0];
+            }
+        }
+
+        // This map copies all values AFTER the first to new fields:
+        let secondaryValueFields = {
+            "title_alt": "dc.title",
+        };
+        for (let field in secondaryValueFields) {
+            if (typeof fields[secondaryValueFields[field]] !== "undefined"
+                && fields[secondaryValueFields[field]].length > 1
+            ) {
+                fields[field] = fields[secondaryValueFields[field]].slice(1);
+            }
+        }
+    
         for (let field in fedoraData.relations) {
             fields["relsext." + field] = fedoraData.relations[field];
         }

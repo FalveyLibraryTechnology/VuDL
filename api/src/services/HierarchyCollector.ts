@@ -14,6 +14,17 @@ class HierarchyCollector {
         this.hierarchyTops = hierarchyTops;
     }
 
+    protected extractMetadata(DC: any): {[key: string]: Array<string>} {
+        let metadata: {[key: string]: Array<string>} = {};
+        DC.children.forEach((field) => {
+            if (typeof metadata[field.name] === "undefined") {
+                metadata[field.name] = [];
+            }
+            metadata[field.name].push(field.value);
+        });
+        return metadata;
+    }
+
     protected extractRelations(RELS: string): {[key: string]: Array<string>} {
         let xmlParser = new DOMParser();
         let RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
@@ -45,10 +56,11 @@ class HierarchyCollector {
         // TODO: Launch promises together, Promise.all()
         const DC = await this.fedora.getDC(pid);
         const RELS = await this.fedora.getDatastream(pid, "RELS-EXT");
-        let relations = this.extractRelations(RELS);
-        let result = new FedoraData(pid, relations, DC.children);
+        let result = new FedoraData(
+            pid, this.extractRelations(RELS), this.extractMetadata(DC)
+        );
         // Create promises to retrieve parents asynchronously...
-        let promises = (relations.isMemberOf ?? []).map(async (resource) => {
+        let promises = (result.relations.isMemberOf ?? []).map(async (resource) => {
             let parentPid = resource.substr("info:fedora/".length);
             if (!this.hierarchyTops.includes(parentPid)) {
                 let parent = await this.getHierarchy(parentPid);
