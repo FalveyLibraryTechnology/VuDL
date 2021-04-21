@@ -2,10 +2,10 @@ class FedoraData {
     // TODO: better typing
     public allMetadata: Array<any>;
     public pid: string;
-    public relations: any;
+    public relations: {[key: string]: Array<string>};
     parents: Array<FedoraData> = [];
 
-    constructor (pid: string, relations: any, dc_data: Array<any>) {
+    constructor (pid: string, relations: {[key: string]: Array<string>}, dc_data: Array<any>) {
         this.pid = pid;
         this.relations = relations;
         this.allMetadata = dc_data ?? [];

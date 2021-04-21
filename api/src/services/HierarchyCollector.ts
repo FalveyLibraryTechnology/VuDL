@@ -14,13 +14,13 @@ class HierarchyCollector {
         this.hierarchyTops = hierarchyTops;
     }
 
-    protected extractRelations(RELS: string) {
+    protected extractRelations(RELS: string): {[key: string]: Array<string>} {
         let xmlParser = new DOMParser();
         let RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
         let rdfXPath = xpath.useNamespaces({
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         });
-        let relations: any = {};
+        let relations: {[key: string]: Array<string>} = {};
         rdfXPath(
             '//rdf:Description/*', RELS_XML
         ).forEach((relation) => {
