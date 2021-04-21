@@ -1,5 +1,6 @@
 import { constants } from "node:buffer";
 import { stringify } from "node:querystring";
+import Config from './Config';
 
 class ImageFile {
     filename: string;
@@ -12,6 +13,11 @@ class ImageFile {
     constructor(filename) {
         this.filename = filename;
     }
+
+    config() {
+        let config = Config.getInstance();
+        return config;
+     }
 
     constraintForSize(size) {
         if (size in this.sizes) {
@@ -56,7 +62,7 @@ class ImageFile {
         var path = require('path');
         var dir = path.dirname(this.filename);
         var filename = this.basename(this.filename);
-        return dir + "/" + filename + "/" + size + "/" + extension.toLowerCase();
+        return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
     ocr() {
@@ -74,29 +80,33 @@ class ImageFile {
         let fs = require("fs");
         let png = this.derivativePath('ocr/pngs', 'png');
         let { exec } = require("child_process");
-        if (fs.existsSync(png)) {
-            let tc_cmd = "#{config['textcleaner_path']} #{config['textcleaner_switches']} #{derivative('LARGE')} #{png}"
+        if (!fs.existsSync(png)) {
+            let tc_cmd = this.config().textcleanerPath() + this.config().textcleanerSwitches() + this.derivative('LARGE') + png;
             exec(tc_cmd, (error, stdout, stderr) => {
                 if (error) {
                     console.log(`error: ${error.message}`);
                     return;
-                }
+                } 
                 if (stderr) {
                     console.log(`stderr: ${stderr}`);
                     return;
                 }
+                if (!fs.existsSync(png)) {
+                    console.log ("Problem running textcleaner");
+                }
                 console.log(`stdout: ${stdout}`)
             });
         }
+        return png;
     }
 
     ocrProperties() {
         let fs = require("fs");
         var path = require('path');
-        let file = this.derivativePath('ocr/pngs', 'png');
+        let file = path.dirname(this.filename) + '/ocr/tesseract.config';
         let dir = path.dirname(file);
         let content = 'tessedit_char_whitelist ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!\'"()&$%-+=[]?<>' + "\xE2\x80\x9C\xE2\x80\x9D\xE2\x80\x98\xE2\x80\x99";
-        if (fs.existsSync(file)) {
+        if (!fs.existsSync(file)) {
             fs.writeFile(dir + '/ocr/tesseract.config', content, err => {
                 if (err) {
                   console.error(err)
@@ -105,6 +115,7 @@ class ImageFile {
                 //file written successfully
               })
         }
+        return file;
     }
 
     public delete() {
@@ -115,6 +126,8 @@ class ImageFile {
         let files: Array<string> = [];
         for (let size in Object.keys(this.sizes)) {
             files.push(this.derivativePath(size, "jpg"));
+            files.push(this.derivativePath('ocr/pngs', 'png'));
+            files.push(this.derivativePath('OCR-DIRTY', 'txt'));
             if (fs.existsSync(files)) {
                 try {
                     fs.unlinkSync(files);
