@@ -4,7 +4,7 @@ import HierarchyCollector from "./HierarchyCollector";
 const xpath = require("xpath");
 
 interface SolrFields {
-    [key: string]: string;
+    [key: string]: string | Array<string>;
 }
 
 class SolrIndexer {
@@ -29,7 +29,7 @@ class SolrIndexer {
         let fedoraData = await this.hierarchyCollector.getHierarchy(pid);
 
         // Start with basic data:
-        let fields: any = {
+        let fields: SolrFields = {
             id: pid,
             modeltype_str_mv: fedoraData.models,
             hierarchytype: null,
