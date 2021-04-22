@@ -12,10 +12,6 @@ interface Attributes {
     [key: string]: string;
 }
 
-interface JSON {
-    [key: string]: string | JSON;
-}
-
 interface DC {
     name: string;
     value: string;
