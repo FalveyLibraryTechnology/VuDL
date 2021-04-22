@@ -82,7 +82,7 @@ class ImageFile {
                     console.log(`stderr: ${stderr}`);
                 }
                 if (!fs.existsSync(txt)) {
-                    console.log("Problem running textcleaner");
+                    throw ("Problem running tesseract");
                 }
                 console.log(`stdout: ${stdout}`)
             });
@@ -106,7 +106,7 @@ class ImageFile {
                     console.log(`stderr: ${stderr}`);
                 }
                 if (!fs.existsSync(png)) {
-                    console.log("Problem running textcleaner");
+                    throw ("Problem running textcleaner");
                 }
                 console.log(`stdout: ${stdout}`)
             });
