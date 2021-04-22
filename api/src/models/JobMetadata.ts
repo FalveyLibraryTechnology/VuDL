@@ -43,10 +43,6 @@ class JobMetadata {
         return job.dir + '/ingest.lock';
     }
 
-    validate(job, params) {
-
-    }
-
     get uploadTime() {
         // TODO: populate with real data
         return 0;

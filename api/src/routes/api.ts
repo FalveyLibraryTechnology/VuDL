@@ -23,7 +23,7 @@ router.get("/", function(req, res, next) {
 });
 
 router.get("/:category", function(req, res, next) {
-    //TO DO
+    //TODO
     //Sanitize incoming parameters
     //404 error for non-existent catgeory (if holding area + category is not a directory)
     var category = new Category(holdingArea() + req.params.category);
@@ -50,12 +50,13 @@ router.put("/:category/:job/ingest", function(req, res, next) {
 
 router.put("/:category/:job", function(req, res, next) {
     let job = getJobFromRequest(req);
-    job.metadata.validate(job, req.params);
+    //TODO
+    //job.metadata.validate(job, req.params);
     res.send(JSON.stringify( { status: 'ok' } ));
 });
 
 router.get("/:category/:job/:image/:size", async function(req, res, next) {
-    //TO DO
+    //TODO
     //Sanitize incoming parameters
     let legalSizes: object = {
         thumb: "THUMBNAIL",
@@ -70,7 +71,7 @@ router.get("/:category/:job/:image/:size", async function(req, res, next) {
 });
 
 router.delete("/:category/:job/:image/*"), async function(req, res, next) {
-    //TO DO
+    //TODO
     //Sanitize incoming parameters
     let image: string = req.params.image;
     let job = getJobFromRequest(req);
