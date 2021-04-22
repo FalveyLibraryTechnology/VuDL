@@ -36,14 +36,16 @@ class HierarchyCollector {
             '//rdf:Description/*', RELS_XML
         ).forEach((relation) => {
             let values = rdfXPath('text()', relation);
+            // If there's a namespace on the node name, strip it:
+            let nodeName = relation.nodeName.split(':').pop();
             if (values.length === 0) {
                 values = rdfXPath('./@rdf:resource', relation);
             }
             if (values.length > 0) {
-                if (typeof relations[relation.nodeName] === "undefined") {
-                    relations[relation.nodeName] = [];
+                if (typeof relations[nodeName] === "undefined") {
+                    relations[nodeName] = [];
                 }
-                relations[relation.nodeName].push(values[0].nodeValue);
+                relations[nodeName].push(values[0].nodeValue);
             }
         });
         return relations;
