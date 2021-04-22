@@ -65,34 +65,52 @@ class ImageFile {
         return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
-    ocr() {
+    async ocr() {
         //TODO: update the following (derivativepath requires size now)
         var txt = this.derivativePath('OCR-DIRTY', 'txt'); 
         let fs = require('fs');
-        var tesseract = require("node-tesseract-ocr");
-        if (fs.existsSync(txt)){
+        let { exec } = require("child_process");
+        let deriv = await this.ocrDerivative();
+        if (!fs.existsSync(txt)){
             var path = this.basename(txt);
+            let ts_cmd = this.config().tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
+            exec(ts_cmd, (error, stdout, stderr) => {
+                if (error) {
+                    throw `error: ${error.message}`;
+                    return;
+                } 
+                if (stderr) {
+                    throw `stderr: ${stderr}`;
+                    return;
+                }
+                if (!fs.existsSync(txt)) {
+                    throw "Problem running textcleaner";
+                }
+                console.log(`stdout: ${stdout}`)
+            });
+
         }
 
     }
 
-    ocrDerivative() {
+    async ocrDerivative() {
         let fs = require("fs");
         let png = this.derivativePath('ocr/pngs', 'png');
         let { exec } = require("child_process");
+        let deriv = await this.derivative('LARGE');
         if (!fs.existsSync(png)) {
-            let tc_cmd = this.config().textcleanerPath() + this.config().textcleanerSwitches() + this.derivative('LARGE') + png;
+            let tc_cmd = this.config().textcleanerPath() + " " + this.config().textcleanerSwitches() + " " + deriv + " " + png;
             exec(tc_cmd, (error, stdout, stderr) => {
                 if (error) {
-                    console.log(`error: ${error.message}`);
+                    throw `error: ${error.message}`;
                     return;
                 } 
                 if (stderr) {
-                    console.log(`stderr: ${stderr}`);
+                    throw `stderr: ${stderr}`;
                     return;
                 }
                 if (!fs.existsSync(png)) {
-                    console.log ("Problem running textcleaner");
+                    throw "Problem running textcleaner";
                 }
                 console.log(`stdout: ${stdout}`)
             });
