@@ -11,4 +11,8 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'VuDLPrep' });
 });
 
+router.get("/favicon.ico", async function(req, res, next) {
+    res.status(404).send("go away");
+});
+
 module.exports = router;

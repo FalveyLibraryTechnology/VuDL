@@ -1,5 +1,35 @@
 {
   "name": "vudlprepjs",
   "version": "0.0.0",
-  "private": true
+  "private": true,
+  "comments": {
+    "dev": "tsc can't be bundled into concurrently because it suppresses the logs of other processes. Still needs to be run separately.",
+    "api:wsl/queue:wsl": "These are for Chris since WSL causes listening weirdness in nodemon."
+  },
+  "scripts": {
+    "api": "node api/bin/www",
+    "api:dev": "nodemon --watch api/dist api/bin/www",
+    "api:wsl": "nodemon --legacy-watch api/bin/www",
+    "api:build": "cd api && tsc",
+    "api:watch": "cd api && tsc --watch",
+
+    "client": "cd client && npm run start",
+    "client:build": "cd client && npm run build",
+
+    "queue": "node api/worker-start.js",
+    "queue:dev": "nodemon --watch api/dist/jobs api/worker-start.js",
+    "queue:wsl": "nodemon --legacy-watch api/worker-start.js",
+
+    "backend": "concurrently npm:api npm:queue",
+    "backend:dev": "concurrently npm:api:dev npm:queue:dev",
+    "backend:wsl": "concurrently npm:api:wsl npm:queue:wsl",
+
+    "build": "concurrently npm:api:build npm:client:build",
+    "dev": "concurrently -c 'cyan,green,gray' npm:client npm:api:dev npm:queue:dev",
+    "start": "concurrently -c 'cyan,green,gray' npm:client npm:api npm:queue"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.2",
+    "nodemon": "^2.0.7"
+  }
 }
