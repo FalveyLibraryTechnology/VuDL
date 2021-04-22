@@ -8,7 +8,7 @@
   },
   "scripts": {
     "api": "node api/bin/www",
-    "api:hot": "nodemon --watch api/dist api/bin/www",
+    "api:dev": "nodemon --watch api/dist api/bin/www",
     "api:wsl": "nodemon --legacy-watch api/bin/www",
     "api:build": "cd api && tsc",
     "api:watch": "cd api && tsc --watch",
@@ -21,11 +21,11 @@
     "queue:wsl": "nodemon --legacy-watch api/worker-start.js",
 
     "backend": "concurrently npm:api npm:queue",
-    "backend:dev": "concurrently npm:api:hot npm:queue:dev",
+    "backend:dev": "concurrently npm:api:dev npm:queue:dev",
     "backend:wsl": "concurrently npm:api:wsl npm:queue:wsl",
 
     "build": "concurrently npm:api:build npm:client:build",
-    "dev": "concurrently -c 'cyan,green,gray' npm:client npm:api:hot npm:queue:dev",
+    "dev": "concurrently -c 'cyan,green,gray' npm:client npm:api:dev npm:queue:dev",
     "start": "concurrently -c 'cyan,green,gray' npm:client npm:api npm:queue"
   },
   "devDependencies": {
