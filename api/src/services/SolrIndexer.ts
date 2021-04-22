@@ -98,20 +98,21 @@ class SolrIndexer {
 
         // Load all the Dublin Core data:
         for (let field in fedoraData.metadata) {
-            fields[field.replace(':', '.')] = fedoraData.metadata[field];
+            let fieldName = field.replace(':', '.') + '_txt_mv';
+            fields[fieldName] = fedoraData.metadata[field];
         }
 
         // This map copies existing values as-is to other fields:
         let copyFields = {
-            "author": "dc.creator",
-            "author2": "dc.contributor",
-            "description": "dc.description",
-            "format": "dc.format",
-            "publisher": "dc.publisher",
-            "publisher_str_mv": "dc.publisher",
-            "series": "dc.relation",
-            "topic": "dc.subject",
-            "topic_str_mv": "dc.subject",
+            "author": "dc.creator_txt_mv",
+            "author2": "dc.contributor_txt_mv",
+            "description": "dc.description_txt_mv",
+            "format": "dc.format_txt_mv",
+            "publisher": "dc.publisher_txt_mv",
+            "publisher_str_mv": "dc.publisher_txt_mv",
+            "series": "dc.relation_txt_mv",
+            "topic": "dc.subject_txt_mv",
+            "topic_str_mv": "dc.subject_txt_mv",
         };
         for (let field in copyFields) {
             if (typeof fields[copyFields[field]] !== "undefined") {
@@ -122,15 +123,15 @@ class SolrIndexer {
         // This map copies the first value from existing fields to
         // new fields:
         let firstOnlyFields = {
-            "dc_date_str": "dc.date",
-            "dc_relation_str": "dc.relation",
-            "dc_title_str": "dc.title",
-            "publishDate": "dc.date",
-            "publishDateSort": "dc.date",
-            "title": "dc.title",
-            "title_full": "dc.title",
-            "title_short": "dc.title",
-            "title_sort": "dc.title",
+            "dc_date_str": "dc.date_txt_mv",
+            "dc_relation_str": "dc.relation_txt_mv",
+            "dc_title_str": "dc.title_txt_mv",
+            "publishDate": "dc.date_txt_mv",
+            "publishDateSort": "dc.date_txt_mv",
+            "title": "dc.title_txt_mv",
+            "title_full": "dc.title_txt_mv",
+            "title_short": "dc.title_txt_mv",
+            "title_sort": "dc.title_txt_mv",
         };
         for (let field in firstOnlyFields) {
             if (typeof fields[firstOnlyFields[field]] !== "undefined") {
@@ -140,7 +141,7 @@ class SolrIndexer {
 
         // This map copies all values AFTER the first to new fields:
         let secondaryValueFields = {
-            "title_alt": "dc.title",
+            "title_alt": "dc.title_txt_mv",
         };
         for (let field in secondaryValueFields) {
             if (typeof fields[secondaryValueFields[field]] !== "undefined"
@@ -151,7 +152,8 @@ class SolrIndexer {
         }
     
         for (let field in fedoraData.relations) {
-            fields["relsext." + field] = fedoraData.relations[field];
+            let fieldName = "relsext." + field + "_txt_mv";
+            fields[fieldName] = fedoraData.relations[field];
         }
 
         return fields;
