@@ -76,15 +76,13 @@ class ImageFile {
             let ts_cmd = this.config().tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             exec(ts_cmd, (error, stdout, stderr) => {
                 if (error) {
-                    throw `error: ${error.message}`;
-                    return;
+                    throw `error: ${error.message + " " + stderr}`;
                 } 
                 if (stderr) {
-                    throw `stderr: ${stderr}`;
-                    return;
+                    console.log(`stderr: ${stderr}`);
                 }
                 if (!fs.existsSync(txt)) {
-                    throw "Problem running textcleaner";
+                    console.log("Problem running textcleaner");
                 }
                 console.log(`stdout: ${stdout}`)
             });
@@ -102,15 +100,13 @@ class ImageFile {
             let tc_cmd = this.config().textcleanerPath() + " " + this.config().textcleanerSwitches() + " " + deriv + " " + png;
             exec(tc_cmd, (error, stdout, stderr) => {
                 if (error) {
-                    throw `error: ${error.message}`;
-                    return;
+                    throw `error: ${error.message + " " + stderr}`;
                 } 
                 if (stderr) {
-                    throw `stderr: ${stderr}`;
-                    return;
+                    console.log(`stderr: ${stderr}`);
                 }
                 if (!fs.existsSync(png)) {
-                    throw "Problem running textcleaner";
+                    console.log("Problem running textcleaner");
                 }
                 console.log(`stdout: ${stdout}`)
             });
@@ -125,10 +121,9 @@ class ImageFile {
         let dir = path.dirname(file);
         let content = 'tessedit_char_whitelist ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!\'"()&$%-+=[]?<>' + "\xE2\x80\x9C\xE2\x80\x9D\xE2\x80\x98\xE2\x80\x99";
         if (!fs.existsSync(file)) {
-            fs.writeFile(dir + '/ocr/tesseract.config', content, err => {
+            fs.writeFile(file, content, err => {
                 if (err) {
-                  console.error(err)
-                  return
+                  throw err;
                 }
                 //file written successfully
               })
