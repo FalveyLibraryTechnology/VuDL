@@ -2,16 +2,19 @@ class FedoraData {
     public metadata: {[key: string]: Array<string>};
     public pid: string;
     public relations: {[key: string]: Array<string>};
+    public fedoraDetails: {[key: string]: Array<string>};
     parents: Array<FedoraData> = [];
 
     constructor (
         pid: string,
         relations: {[key: string]: Array<string>},
-        metadata: {[key: string]: Array<string>}
+        metadata: {[key: string]: Array<string>},
+        fedoraDetails: {[key: string]: Array<string>}
     ) {
         this.pid = pid;
         this.relations = relations;
         this.metadata = metadata;
+        this.fedoraDetails = fedoraDetails;
     }
 
     addParent(parent: FedoraData): void {

@@ -156,6 +156,11 @@ class SolrIndexer {
             fields[fieldName] = fedoraData.relations[field];
         }
 
+        for (let field in fedoraData.fedoraDetails) {
+            let fieldName = "fgs." + field + "_txt_mv";
+            fields[fieldName] = fedoraData.fedoraDetails[field];
+        }
+
         return fields;
     }
 }

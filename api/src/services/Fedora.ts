@@ -50,6 +50,38 @@ class Fedora {
     }
 
     /**
+     * Get RDF about a PID in Fedora
+     *
+     * @param pid PID to look up
+     */
+    async getRdf(pid: string, parse = false): Promise<any> {
+        if (typeof this.cache[pid] === "undefined") {
+            this.cache[pid] = {};
+        }
+        if (typeof this.cache[pid]["__rdf"] === "undefined") {
+            try {
+                let res = await this._request(
+                    "get",
+                    pid,
+                    null, // Data
+                    { // Options
+                        parse_response: parse,
+                        headers: { 'Accept' : 'application/rdf+xml' }
+                    }
+                );
+
+                this.cache[pid]["__rdf"] = parse
+                    ? res.body
+                    : res.body.toString(); // Buffer to string
+            } catch (e) {
+                console.log(e);
+                throw "RDF retrieval failed for " + pid;
+            }
+        }
+        return this.cache[pid]["__rdf"];
+    }
+
+    /**
      * Get datastream from Fedora
      */
     async getDatastream(pid, datastream, parse = false): Promise<any> {
