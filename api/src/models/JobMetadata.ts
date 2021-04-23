@@ -91,7 +91,7 @@ class JobMetadata {
     }
 
     set raw(data) {
-        //TO DO: set raw data
+        //TODO: set raw data
     }
 
     save() {

@@ -23,7 +23,7 @@ router.get("/", function(req, res, next) {
 });
 
 router.get("/:category", function(req, res, next) {
-    //TO DO
+    //TODO
     //Sanitize incoming parameters
     //404 error for non-existent catgeory (if holding area + category is not a directory)
     var category = new Category(holdingArea() + req.params.category);
@@ -49,12 +49,14 @@ router.put("/:category/:job/ingest", function(req, res, next) {
 });
 
 router.put("/:category/:job", function(req, res, next) {
-    //res.json(getJobFromRequest(req).metadata.upda);
-    //res.json( { status: 'ok' } );
+    let job = getJobFromRequest(req);
+    //TODO
+    //job.metadata.validate(job, req.params);
+    res.json( { status: 'ok' } );
 });
 
 router.get("/:category/:job/:image/:size", async function(req, res, next) {
-    //TO DO
+    //TODO
     //Sanitize incoming parameters
     let legalSizes: object = {
         thumb: "THUMBNAIL",
@@ -65,8 +67,21 @@ router.get("/:category/:job/:image/:size", async function(req, res, next) {
     let size: string = req.params.size;
     let job = getJobFromRequest(req);
     let deriv = await job.getImage(image).derivative(legalSizes[size] ?? "THUMBNAIL");
-    console.log(deriv);
     res.sendFile(deriv);
 });
+
+router.delete("/:category/:job/:image/*"), async function(req, res, next) {
+    //TODO
+    //Sanitize incoming parameters
+    let image: string = req.params.image;
+    let job = getJobFromRequest(req);
+    let imageObj = job.getImage(image);
+    if (imageObj !== null) {
+        imageObj.delete();
+        res.json( { status: 'ok' } );
+    } else {
+        res.status(404).json( { status: 'image missing' } );
+    }
+}
 
 module.exports = router;
