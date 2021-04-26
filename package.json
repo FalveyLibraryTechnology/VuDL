@@ -26,16 +26,20 @@
 
     "build": "concurrently npm:api:build npm:client:build",
     "dev": "concurrently -c 'cyan,green,gray' npm:client npm:api:dev npm:queue:dev",
-    "lint": "eslint api/app.js api/src client/src",
+    "lint": "eslint api/*.js api/src/ client/src/ --ext .ts,.js,.jsx",
     "start": "concurrently -c 'cyan,green,gray' npm:client npm:api npm:queue"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "concurrently": "^6.0.2",
-    "eslint": "^7.24.0",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jsdoc": "^32.3.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
     "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
     "typescript": "^4.2.4"
   }
 }
