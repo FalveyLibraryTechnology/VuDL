@@ -8,18 +8,18 @@ class PageOrder {
     }
 
     static fromJob(job) {
-        var glob = require("glob");
-        var pattern = job.dir + "/*.TI{F,FF}";
-        var options: any = { nocase: true };
+        const glob = require("glob");
+        let pattern = job.dir + "/*.TI{F,FF}";
+        const options: any = { nocase: true };
         // Special case for Windows -- we need to account for drive letters:
-        var colonIndex = pattern.indexOf(':');
+        const colonIndex = pattern.indexOf(':');
         if (colonIndex > -1) {
             options.root = pattern.substring(0, colonIndex + 2);
             pattern = pattern.substring(colonIndex + 1);
         }
-        var files = glob.sync(pattern, options);
+        const files = glob.sync(pattern, options);
         // TODO: can we rewrite this as a map() for better efficiency?
-        var pages = [];
+        const pages = [];
         for (let i = 0; i < files.length; i++) {
             pages[i] = new Page(this.basename(files[i]), null);
         }
@@ -27,7 +27,7 @@ class PageOrder {
     }
 
     static fromRaw(raw) {
-        var pages = raw.map(function(page: string){ return Page.fromRaw(page) });
+        const pages = raw.map(function(page: string){ return Page.fromRaw(page) });
         return new PageOrder(pages);
     }
 

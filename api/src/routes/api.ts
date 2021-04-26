@@ -3,22 +3,28 @@ import Category from '../models/Category';
 import Config from '../models/Config';
 import Job from '../models/Job';
 
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
+/**
+ * @param req
+ */
 function getJobFromRequest(req): Job {
     // TODO: sanitize parameters!
     return new Job(holdingArea() + req.params.category + '/' + req.params.job);
 }
 
+/**
+ *
+ */
 function holdingArea(): string {
-    var holdingArea = Config.getInstance().holdingArea();
+    const holdingArea = Config.getInstance().holdingArea();
     return (holdingArea.endsWith('/'))
         ? holdingArea : holdingArea + '/';
 }
 
 router.get("/", function(req, res, next) {
-    var categoryCollection = new CategoryCollection(holdingArea());
+    const categoryCollection = new CategoryCollection(holdingArea());
     res.send(JSON.stringify(categoryCollection.raw()));
 });
 
@@ -26,7 +32,7 @@ router.get("/:category", function(req, res, next) {
     //TODO
     //Sanitize incoming parameters
     //404 error for non-existent catgeory (if holding area + category is not a directory)
-    var category = new Category(holdingArea() + req.params.category);
+    const category = new Category(holdingArea() + req.params.category);
     res.send(JSON.stringify(category.raw()));
 });
 
@@ -49,7 +55,7 @@ router.put("/:category/:job/ingest", function(req, res, next) {
 });
 
 router.put("/:category/:job", function(req, res, next) {
-    let job = getJobFromRequest(req);
+    const job = getJobFromRequest(req);
     //TODO
     //job.metadata.validate(job, req.params);
     res.send(JSON.stringify( { status: 'ok' } ));
@@ -58,24 +64,24 @@ router.put("/:category/:job", function(req, res, next) {
 router.get("/:category/:job/:image/:size", async function(req, res, next) {
     //TODO
     //Sanitize incoming parameters
-    let legalSizes: object = {
+    const legalSizes: object = {
         thumb: "THUMBNAIL",
         medium: "MEDIUM",
         large: "LARGE"
     };
-    let image: string = req.params.image;
-    let size: string = req.params.size;
-    let job = getJobFromRequest(req);
-    let deriv = await job.getImage(image).derivative(legalSizes[size] ?? "THUMBNAIL");
+    const image: string = req.params.image;
+    const size: string = req.params.size;
+    const job = getJobFromRequest(req);
+    const deriv = await job.getImage(image).derivative(legalSizes[size] ?? "THUMBNAIL");
     res.sendFile(deriv);
 });
 
 router.delete("/:category/:job/:image/*"), async function(req, res, next) {
     //TODO
     //Sanitize incoming parameters
-    let image: string = req.params.image;
-    let job = getJobFromRequest(req);
-    let imageObj = job.getImage(image);
+    const image: string = req.params.image;
+    const job = getJobFromRequest(req);
+    const imageObj = job.getImage(image);
     if (imageObj !== null) {
         imageObj.delete();
         res.send(JSON.stringify( { status: 'ok' } ));

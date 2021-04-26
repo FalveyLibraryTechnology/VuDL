@@ -4,8 +4,8 @@ class PrivateConfig {
     }
 
     ini() {
-        let fs = require('fs'), ini = require('ini');
-        let config = ini.parse(fs.readFileSync(__dirname.replace(/\\/g, "/") + "/../../vudl.ini", 'utf-8'));
+        const fs = require('fs'), ini = require('ini');
+        const config = ini.parse(fs.readFileSync(__dirname.replace(/\\/g, "/") + "/../../vudl.ini", 'utf-8'));
         return config;
     }
 

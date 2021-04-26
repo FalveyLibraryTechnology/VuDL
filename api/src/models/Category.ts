@@ -11,7 +11,7 @@ class Category {
     }
 
     ini() {
-      let fs = require('fs'), ini = require('ini');
+      const fs = require('fs'), ini = require('ini');
       return fs.readFileSync("C:\holdingarea\batch-params.ini", 'utf-8');
     }
 

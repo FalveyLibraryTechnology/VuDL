@@ -14,8 +14,8 @@ class Job {
     }
 
     ingest() {
-      var metadata = new JobMetadata(this);
-      var lockfile = metadata.ingestLockfile(this);
+      const metadata = new JobMetadata(this);
+      const lockfile = metadata.ingestLockfile(this);
     }
 
     raw() {
@@ -27,8 +27,8 @@ class Job {
     }
 
     makeDerivatives() {
-      var status = this.metadata.derivativeStatus;
-      var lockfile = this.metadata.derivativeLockfile;
+      const status = this.metadata.derivativeStatus;
+      const lockfile = this.metadata.derivativeLockfile;
 
       if (status.expected > status.processed && !fileExists(lockfile)){
         closeSync(openSync(lockfile, 'w'));

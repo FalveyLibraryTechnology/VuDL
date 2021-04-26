@@ -25,9 +25,9 @@ class FedoraData {
         }
 
         // Otherwise, let's collect data from our parents:
-        let tops: Array<FedoraData> = [];
-        for (let parent of this.parents) {
-            for (let top of parent.getAllHierarchyTops()) {
+        const tops: Array<FedoraData> = [];
+        for (const parent of this.parents) {
+            for (const top of parent.getAllHierarchyTops()) {
                 if (!tops.includes(top)) {
                     tops.push(top);
                 }
@@ -37,9 +37,9 @@ class FedoraData {
     }
 
     getAllParents(): Array<string> {
-        let results = [];
+        const results = [];
         this.parents.forEach((parent) => {
-            let parentPids = [parent.pid].concat(parent.getAllParents());
+            const parentPids = [parent.pid].concat(parent.getAllParents());
             parentPids.forEach((pid) => {
                 if (!results.includes(pid)) {
                     results.push(pid);

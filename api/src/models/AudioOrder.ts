@@ -8,14 +8,14 @@ class AudioOrder {
     }
 
     static fromJob(job) {
-        var glob = require("glob");
-        var list = glob.sync(job.dir + ".flac").map(function(flac: string){ return new AudioFile(this.basename(flac), job.dir)});
+        const glob = require("glob");
+        const list = glob.sync(job.dir + ".flac").map(function(flac: string){ return new AudioFile(this.basename(flac), job.dir)});
         return new AudioOrder(list);
 
     }
 
     static fromRaw(raw) {
-        var list = raw.map(function(list: string){ return AudioFile.fromRaw(list) });
+        const list = raw.map(function(list: string){ return AudioFile.fromRaw(list) });
         return new AudioOrder(list);
 
     }

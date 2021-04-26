@@ -24,33 +24,42 @@ class Fedora {
     cache: any = {};
 
     constructor() {
-        let config = Config.getInstance();
+        const config = Config.getInstance();
         this.baseUrl = config.restBaseUrl();
     }
 
     /**
      * Make authenticated request to Fedora
+     *
+     * @param method
+     * @param _path
+     * @param data
+     * @param _options
      */
     protected _request(
-        method: string = "get",
-        _path: string = "/",
+        method = "get",
+        _path = "/",
         data: object = null,
         _options: object = {}
     ): Promise<NeedleResponse> {
-        let path = _path[0] == "/" ? _path.slice(1) : _path;
-        let url = this.baseUrl + "/" + path;
+        const path = _path[0] == "/" ? _path.slice(1) : _path;
+        const url = this.baseUrl + "/" + path;
 
         // TODO: Config
         const auth = {
             username: "fedoraAdmin", // Basic Auth
             password: "fedoraAdmin",
         };
-        let options = Object.assign({}, auth, _options);
+        const options = Object.assign({}, auth, _options);
         return http(method, url, data, options);
     }
 
     /**
      * Get datastream from Fedora
+     *
+     * @param pid
+     * @param datastream
+     * @param parse
      */
     async getDatastream(pid, datastream, parse = false): Promise<any> {
         if (typeof this.cache[pid] === "undefined") {
@@ -58,7 +67,7 @@ class Fedora {
         }
         if (typeof this.cache[pid][datastream] === "undefined") {
             try {
-                let res = await this._request(
+                const res = await this._request(
                     "get",
                     pid + "/" + datastream,
                     null, // Data
@@ -81,6 +90,8 @@ class Fedora {
      * Get DC datastream from Fedora
      *
      * Cast to DC type
+     *
+     * @param pid
      */
     async getDC(pid): Promise<DC> {
         return <DC> (<unknown> this.getDatastream(pid, "DC", true));

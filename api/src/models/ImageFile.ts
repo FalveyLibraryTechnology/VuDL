@@ -15,7 +15,7 @@ class ImageFile {
     }
 
     config() {
-        let config = Config.getInstance();
+        const config = Config.getInstance();
         return config;
      }
 
@@ -29,18 +29,18 @@ class ImageFile {
     }
 
     async derivative(size) {
-        let deriv = this.derivativePath(size);
+        const deriv = this.derivativePath(size);
 
         // Return existing derivative
-        let fs = require("fs");
+        const fs = require("fs");
         if (fs.existsSync(deriv)) {
             return deriv;
         }
 
         // Create derivative
-        let Jimp = require('jimp');
-        let image = await Jimp.read(this.filename);
-        let constraint = this.constraintForSize(size);
+        const Jimp = require('jimp');
+        const image = await Jimp.read(this.filename);
+        const constraint = this.constraintForSize(size);
 
         if (image.bitmap.width > constraint || image.bitmap.height > constraint) {
             try {
@@ -50,7 +50,7 @@ class ImageFile {
                 await image.writeAsync(deriv); // save
             } catch (error) {
                 console.error("resize error: " + error);
-            };
+            }
         } else {
             // Image source smaller than derivative size
             await image.writeAsync(deriv); // save
@@ -59,21 +59,21 @@ class ImageFile {
      }
 
     derivativePath(size, extension = "jpg") {
-        var path = require('path');
-        var dir = path.dirname(this.filename);
-        var filename = this.basename(this.filename);
+        const path = require('path');
+        const dir = path.dirname(this.filename);
+        const filename = this.basename(this.filename);
         return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
     async ocr() {
         //TODO: update the following (derivativepath requires size now)
-        var txt = this.derivativePath('OCR-DIRTY', 'txt'); 
-        let fs = require('fs');
-        let { exec } = require("child_process");
-        let deriv = await this.ocrDerivative();
+        const txt = this.derivativePath('OCR-DIRTY', 'txt'); 
+        const fs = require('fs');
+        const { exec } = require("child_process");
+        const deriv = await this.ocrDerivative();
         if (!fs.existsSync(txt)){
-            var path = this.basename(txt);
-            let ts_cmd = this.config().tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
+            const path = this.basename(txt);
+            const ts_cmd = this.config().tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             exec(ts_cmd, (error, stdout, stderr) => {
                 if (error) {
                     throw `error: ${error.message + " " + stderr}`;
@@ -92,12 +92,12 @@ class ImageFile {
     }
 
     async ocrDerivative() {
-        let fs = require("fs");
-        let png = this.derivativePath('ocr/pngs', 'png');
-        let { exec } = require("child_process");
-        let deriv = await this.derivative('LARGE');
+        const fs = require("fs");
+        const png = this.derivativePath('ocr/pngs', 'png');
+        const { exec } = require("child_process");
+        const deriv = await this.derivative('LARGE');
         if (!fs.existsSync(png)) {
-            let tc_cmd = this.config().textcleanerPath() + " " + this.config().textcleanerSwitches() + " " + deriv + " " + png;
+            const tc_cmd = this.config().textcleanerPath() + " " + this.config().textcleanerSwitches() + " " + deriv + " " + png;
             exec(tc_cmd, (error, stdout, stderr) => {
                 if (error) {
                     throw `error: ${error.message + " " + stderr}`;
@@ -115,11 +115,11 @@ class ImageFile {
     }
 
     ocrProperties() {
-        let fs = require("fs");
-        var path = require('path');
-        let file = path.dirname(this.filename) + '/ocr/tesseract.config';
-        let dir = path.dirname(file);
-        let content = 'tessedit_char_whitelist ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!\'"()&$%-+=[]?<>' + "\xE2\x80\x9C\xE2\x80\x9D\xE2\x80\x98\xE2\x80\x99";
+        const fs = require("fs");
+        const path = require('path');
+        const file = path.dirname(this.filename) + '/ocr/tesseract.config';
+        const dir = path.dirname(file);
+        const content = 'tessedit_char_whitelist ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!\'"()&$%-+=[]?<>' + "\xE2\x80\x9C\xE2\x80\x9D\xE2\x80\x98\xE2\x80\x99";
         if (!fs.existsSync(file)) {
             fs.writeFile(file, content, err => {
                 if (err) {
@@ -132,12 +132,12 @@ class ImageFile {
     }
 
     public delete() {
-        let fs = require("fs");
+        const fs = require("fs");
         if (fs.existsSync(this.filename)) {
             fs.unlinkSync(this.filename);
         }
-        let files: Array<string> = [];
-        for (let size in Object.keys(this.sizes)) {
+        const files: Array<string> = [];
+        for (const size in Object.keys(this.sizes)) {
             files.push(this.derivativePath(size, "jpg"));
             files.push(this.derivativePath('ocr/pngs', 'png'));
             files.push(this.derivativePath('OCR-DIRTY', 'txt'));
@@ -148,7 +148,7 @@ class ImageFile {
                     console.error(err);
                 }
             }
-        };
+        }
     }
 
     basename(path) {

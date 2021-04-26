@@ -10,14 +10,14 @@ class Derivative {
         console.log(": build derivatives: " + job.data.dir);
 
         // For each page
-        let order = PageOrder.fromJob(job.data);
-        let generatingPromises = [];
+        const order = PageOrder.fromJob(job.data);
+        const generatingPromises = [];
         order.raw.forEach(page => {
             // For each size
-            let image = new ImageFile(`${job.data.dir}/${page.filename}`);
-            for (let size in image.sizes) {
+            const image = new ImageFile(`${job.data.dir}/${page.filename}`);
+            for (const size in image.sizes) {
                 // Check and generate
-                let p = image.derivative(size);
+                const p = image.derivative(size);
                 generatingPromises.push(p);
             }
         });
@@ -28,7 +28,7 @@ class Derivative {
                 // Delete lock file
                 try {
                     console.log(": build derivatives done");
-                    let metadata = new JobMetadata(job.data);
+                    const metadata = new JobMetadata(job.data);
                     fs.unlinkSync(metadata.derivativeLockfile);
                 } catch(e) {
                     console.error("lock file not deleted: " + job.data.dir);

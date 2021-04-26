@@ -6,20 +6,20 @@ class JobMetadata {
     job: Job;
     _order: PageOrder = null;
     _documents: DocumentOrder = null
-    published: boolean = false;
+    published = false;
 
     constructor(job) {
         this.job = job;
-        let fs = require('fs'), filename = job.dir + '/job.json';
+        const fs = require('fs'), filename = job.dir + '/job.json';
         if (fs.existsSync(filename)) {
-            var json = fs.readFileSync(filename);
+            const json = fs.readFileSync(filename);
             this.raw = JSON.parse(json);            
         }
     }
 
     dc(job) {
         this.job = job;
-        let fs = require('fs'), filename = job.dir + '/dc.xml';
+        const fs = require('fs'), filename = job.dir + '/dc.xml';
         if (fs.existsSync(filename)) {
             return fs.readFileSync(filename);
         }
@@ -31,7 +31,7 @@ class JobMetadata {
 
     get derivativeStatus() {
         // TODO: populate with real data
-        let status = {
+        const status = {
             expected: 10,
             processed: 0,
             building: false

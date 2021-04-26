@@ -8,14 +8,14 @@ class DocumentOrder {
     }
 
     static fromJob(job) {
-        var glob = require("glob");
-        var list = glob.sync(job.dir + ".PDF").map(function(pdf: string){ return new DocumentFile(this.basename(pdf), "PDF")});
+        const glob = require("glob");
+        const list = glob.sync(job.dir + ".PDF").map(function(pdf: string){ return new DocumentFile(this.basename(pdf), "PDF")});
         return new DocumentOrder(list);
 
     }
 
     static fromRaw(raw) {
-        var list = raw.map(function(list: string){ return DocumentFile.fromRaw(list) });
+        const list = raw.map(function(list: string){ return DocumentFile.fromRaw(list) });
         return new DocumentOrder(list);
 
     }

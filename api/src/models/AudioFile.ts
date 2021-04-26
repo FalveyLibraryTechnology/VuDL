@@ -20,18 +20,18 @@ class AudioFile {
      }
 
      config() {
-        let config = Config.getInstance();
+        const config = Config.getInstance();
         return config.restBaseUrl();
      }
 
      derivative(extension) {
-         var deriv = this.derivativePath(extension);
-         let fs = require('fs'), filename = deriv;
-         var path = require('path');
-         var ffmpeg = require('fluent-ffmpeg');
+         const deriv = this.derivativePath(extension);
+         const fs = require('fs'), filename = deriv;
+         const path = require('path');
+         const ffmpeg = require('fluent-ffmpeg');
          var command = ffmpeg();
          if (fs.existsSync(filename)) {
-             var dir = path.basename(filename);
+             const dir = path.basename(filename);
              var command = ffmpeg()
 
          }
@@ -47,7 +47,7 @@ class AudioFile {
     }
 
      derivativePath(extension = "flac") {
-         var filename = this.basename(this.filename);
+         const filename = this.basename(this.filename);
          return this.dir + "/" + filename + "." + extension.toLowerCase();
 
      }
