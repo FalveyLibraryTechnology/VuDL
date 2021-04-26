@@ -42,10 +42,7 @@ class ImageFile {
         const image = await Jimp.read(this.filename);
         const constraint = this.constraintForSize(size);
 
-        if (
-            image.bitmap.width > constraint ||
-            image.bitmap.height > constraint
-        ) {
+        if (image.bitmap.width > constraint || image.bitmap.height > constraint) {
             try {
                 console.log("make derivative", constraint, deriv);
                 image.scaleToFit(constraint, constraint); // resize to pixel sizes?
@@ -65,17 +62,7 @@ class ImageFile {
         const path = require("path");
         const dir = path.dirname(this.filename);
         const filename = this.basename(this.filename);
-        return (
-            dir +
-            "/" +
-            filename +
-            "/" +
-            size +
-            "/" +
-            filename +
-            "." +
-            extension.toLowerCase()
-        );
+        return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
     async ocr() {
@@ -87,13 +74,7 @@ class ImageFile {
         if (!fs.existsSync(txt)) {
             const path = this.basename(txt);
             const ts_cmd =
-                this.config().tesseractPath() +
-                " " +
-                deriv +
-                " " +
-                txt.slice(0, -4) +
-                " " +
-                this.ocrProperties();
+                this.config().tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             exec(ts_cmd, (error, stdout, stderr) => {
                 if (error) {
                     throw `error: ${error.message + " " + stderr}`;
@@ -116,13 +97,7 @@ class ImageFile {
         const deriv = await this.derivative("LARGE");
         if (!fs.existsSync(png)) {
             const tc_cmd =
-                this.config().textcleanerPath() +
-                " " +
-                this.config().textcleanerSwitches() +
-                " " +
-                deriv +
-                " " +
-                png;
+                this.config().textcleanerPath() + " " + this.config().textcleanerSwitches() + " " + deriv + " " + png;
             exec(tc_cmd, (error, stdout, stderr) => {
                 if (error) {
                     throw `error: ${error.message + " " + stderr}`;

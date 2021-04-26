@@ -4,11 +4,7 @@ class FedoraData {
     public relations: { [key: string]: Array<string> };
     parents: Array<FedoraData> = [];
 
-    constructor(
-        pid: string,
-        relations: { [key: string]: Array<string> },
-        metadata: { [key: string]: Array<string> }
-    ) {
+    constructor(pid: string, relations: { [key: string]: Array<string> }, metadata: { [key: string]: Array<string> }) {
         this.pid = pid;
         this.relations = relations;
         this.metadata = metadata;
@@ -61,9 +57,7 @@ class FedoraData {
     }
 
     get title() {
-        return typeof this.metadata["dc:title"] !== "undefined"
-            ? this.metadata["dc:title"][0]
-            : "";
+        return typeof this.metadata["dc:title"] !== "undefined" ? this.metadata["dc:title"][0] : "";
     }
 }
 

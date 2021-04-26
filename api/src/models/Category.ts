@@ -19,17 +19,11 @@ class Category {
     }
 
     supportsOcr() {
-        return (
-            this.ini["ocr"]["ocr"] &&
-            this.ini["ocr"]["ocr"].tr(" '\"", "") != "false"
-        );
+        return this.ini["ocr"]["ocr"] && this.ini["ocr"]["ocr"].tr(" '\"", "") != "false";
     }
 
     supportsPdfGeneration() {
-        return (
-            this.ini["pdf"]["generate"] &&
-            this.ini["pdf"]["generate"].tr(" '\"", "") != "false"
-        );
+        return this.ini["pdf"]["generate"] && this.ini["pdf"]["generate"].tr(" '\"", "") != "false";
     }
 
     raw() {

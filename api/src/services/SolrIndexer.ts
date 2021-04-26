@@ -47,8 +47,7 @@ class SolrIndexer {
             let seqPid: string, seqNum: string;
             [seqPid, seqNum] = sequence.split("#", 2);
             const sequence_str = seqPid.replace(":", "_");
-            const dynamic_sequence_field_name =
-                "sequence_" + sequence_str + "_str";
+            const dynamic_sequence_field_name = "sequence_" + sequence_str + "_str";
             fields[dynamic_sequence_field_name] = this.padNumber(seqNum);
         }
         fields.has_order_str = "TODO";
@@ -86,9 +85,7 @@ class SolrIndexer {
             fields.hierarchy_parent_title = [];
             for (const parent of hierarchyParents) {
                 if (!fields.hierarchy_parent_id.includes(parent.pid)) {
-                    fields.hierarchy_browse.push(
-                        parent.title + "{{{_ID_}}}" + parent.pid
-                    );
+                    fields.hierarchy_browse.push(parent.title + "{{{_ID_}}}" + parent.pid);
                     fields.hierarchy_parent_id.push(parent.pid);
                     fields.hierarchy_parent_title.push(parent.title);
                 }

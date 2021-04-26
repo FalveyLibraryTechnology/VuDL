@@ -82,14 +82,8 @@ var Zoomy = {
         var aspectRatio = this.image.width / this.image.height;
         var size = 150;
         var mm = {
-            width:
-                this.image.width > this.image.height
-                    ? size
-                    : size * aspectRatio,
-            height:
-                this.image.height > this.image.width
-                    ? size
-                    : size / aspectRatio,
+            width: this.image.width > this.image.height ? size : size * aspectRatio,
+            height: this.image.height > this.image.width ? size : size / aspectRatio,
             size: size,
         };
         if (this.image.sideways) {
@@ -184,13 +178,7 @@ var Zoomy = {
         this.context.translate(this.image.x, this.image.y);
         this.context.rotate(this.image.angle);
         this.context.translate(this.image.transX, this.image.transY);
-        this.context.drawImage(
-            this.image.content,
-            0,
-            0,
-            this.image.rwidth,
-            this.image.rheight
-        );
+        this.context.drawImage(this.image.content, 0, 0, this.image.rwidth, this.image.rheight);
         this.context.restore();
 
         // Minimap
@@ -249,12 +237,7 @@ var Zoomy = {
         };
         this.context.save();
         this.context.strokeStyle = "#00F";
-        this.context.strokeRect(
-            this.minimap.rect.x,
-            this.minimap.rect.y,
-            this.minimap.rect.w,
-            this.minimap.rect.h
-        );
+        this.context.strokeRect(this.minimap.rect.x, this.minimap.rect.y, this.minimap.rect.w, this.minimap.rect.h);
         this.context.restore();
     },
     center: function () {
@@ -273,36 +256,25 @@ var Zoomy = {
     },
     turnLeft: function () {
         var newx = this.width / 2 + (this.image.y - this.height / 2);
-        var newy =
-            this.height / 2 +
-            (this.width / 2 - this.image.x - this.image.width);
+        var newy = this.height / 2 + (this.width / 2 - this.image.x - this.image.width);
         this.image.x = newx;
         this.image.y = newy;
 
-        this.image.angle =
-            (this.image.angle + Math.PI + Math.HALF_PI) % Math.TWO_PI;
-        this.image.width = [
-            this.image.height,
-            (this.image.height = this.image.width),
-        ][0];
+        this.image.angle = (this.image.angle + Math.PI + Math.HALF_PI) % Math.TWO_PI;
+        this.image.width = [this.image.height, (this.image.height = this.image.width)][0];
         this.image.sideways = !this.image.sideways;
 
         this.rebound();
         this.draw();
     },
     turnRight: function () {
-        var newx =
-            this.width / 2 +
-            (this.height / 2 - this.image.y - this.image.height);
+        var newx = this.width / 2 + (this.height / 2 - this.image.y - this.image.height);
         var newy = this.height / 2 + (this.image.x - this.width / 2);
         this.image.x = newx;
         this.image.y = newy;
 
         this.image.angle = (this.image.angle + Math.HALF_PI) % Math.TWO_PI;
-        this.image.width = [
-            this.image.height,
-            (this.image.height = this.image.width),
-        ][0];
+        this.image.width = [this.image.height, (this.image.height = this.image.width)][0];
         this.image.sideways = !this.image.sideways;
 
         this.rebound();
@@ -317,18 +289,8 @@ var Zoomy = {
         this.image.maxY = Math.max(yDiff, 0);
         this.enforceBounds();
         var rotation = this.image.angle / Math.HALF_PI;
-        this.image.transX =
-            rotation === 2
-                ? -this.image.width
-                : rotation === 3
-                ? -this.image.height
-                : 0;
-        this.image.transY =
-            rotation === 1
-                ? -this.image.width
-                : rotation === 2
-                ? -this.image.height
-                : 0;
+        this.image.transX = rotation === 2 ? -this.image.width : rotation === 3 ? -this.image.height : 0;
+        this.image.transY = rotation === 1 ? -this.image.width : rotation === 2 ? -this.image.height : 0;
     },
     enforceBounds: function () {
         if (this.image.x < this.image.minX) this.image.x = this.image.minX;
@@ -372,14 +334,8 @@ var Zoomy = {
             this.image.rheight = newHeight;
         }
 
-        this.image.x -= Math.floor(
-            ((mousex - this.image.x) / this.image.width) *
-                (newWidth - this.image.width)
-        );
-        this.image.y -= Math.floor(
-            ((mousey - this.image.y) / this.image.height) *
-                (newHeight - this.image.height)
-        );
+        this.image.x -= Math.floor(((mousex - this.image.x) / this.image.width) * (newWidth - this.image.width));
+        this.image.y -= Math.floor(((mousey - this.image.y) / this.image.height) * (newHeight - this.image.height));
 
         this.image.width = newWidth;
         this.image.height = newHeight;

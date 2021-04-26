@@ -56,21 +56,15 @@ class HierarchyCollector {
         // TODO: Launch promises together, Promise.all()
         const DC = await this.fedora.getDC(pid);
         const RELS = await this.fedora.getDatastream(pid, "RELS-EXT");
-        const result = new FedoraData(
-            pid,
-            this.extractRelations(RELS),
-            this.extractMetadata(DC)
-        );
+        const result = new FedoraData(pid, this.extractRelations(RELS), this.extractMetadata(DC));
         // Create promises to retrieve parents asynchronously...
-        const promises = (result.relations.isMemberOf ?? []).map(
-            async (resource) => {
-                const parentPid = resource.substr("info:fedora/".length);
-                if (!this.hierarchyTops.includes(parentPid)) {
-                    const parent = await this.getHierarchy(parentPid);
-                    result.addParent(parent);
-                }
+        const promises = (result.relations.isMemberOf ?? []).map(async (resource) => {
+            const parentPid = resource.substr("info:fedora/".length);
+            if (!this.hierarchyTops.includes(parentPid)) {
+                const parent = await this.getHierarchy(parentPid);
+                result.addParent(parent);
             }
-        );
+        });
         // Now wait for the promises to complete before we return results, so
         // nothing happens out of order.
         await Promise.all(promises);

@@ -2,14 +2,7 @@ var RomanNumerals = require("roman-numerals");
 
 var MagicLabeler = {
     prefixes: ["Front ", "Inside front ", "Rear ", "Inside rear "],
-    labels: [
-        "Blank",
-        "cover",
-        "fly leaf",
-        "pastedown",
-        "Frontispiece",
-        "Plate",
-    ],
+    labels: ["Blank", "cover", "fly leaf", "pastedown", "Frontispiece", "Plate"],
     suffixes: [", recto", ", verso", ", front", ", back"],
 
     adjustNumericLabel: function (prior, delta) {
@@ -92,10 +85,7 @@ var MagicLabeler = {
     parsePageLabel: function (text) {
         var brackets = false;
         text = String(text);
-        if (
-            text.substring(0, 1) === "[" &&
-            text.substring(text.length - 1, text.length) === "]"
-        ) {
+        if (text.substring(0, 1) === "[" && text.substring(text.length - 1, text.length) === "]") {
             text = text.substring(1, text.length - 1);
             brackets = true;
         }
@@ -111,10 +101,7 @@ var MagicLabeler = {
         var suffix = "";
         for (let i = 0; i < this.suffixes.length; i++) {
             var currentSuffix = this.suffixes[i];
-            if (
-                text.substring(text.length - currentSuffix.length) ===
-                currentSuffix
-            ) {
+            if (text.substring(text.length - currentSuffix.length) === currentSuffix) {
                 suffix = currentSuffix;
                 text = text.substring(0, text.length - currentSuffix.length);
                 break;
@@ -134,8 +121,7 @@ var MagicLabeler = {
             allowToggle = false;
         }
         var parts = this.parsePageLabel(label);
-        parts[part] =
-            parts[part] === replacement && allowToggle ? "" : replacement;
+        parts[part] = parts[part] === replacement && allowToggle ? "" : replacement;
         return this.assemblePageLabel(parts);
     },
 
@@ -146,9 +132,7 @@ var MagicLabeler = {
     },
 
     toggleCase: function (label) {
-        return label === label.toLowerCase()
-            ? label.toUpperCase()
-            : label.toLowerCase();
+        return label === label.toLowerCase() ? label.toUpperCase() : label.toLowerCase();
     },
 
     toggleRoman: function (text) {

@@ -77,14 +77,9 @@ class Fedora {
                     }
                 );
 
-                this.cache[pid][datastream] = parse
-                    ? res.body
-                    : res.body.toString(); // Buffer to string
+                this.cache[pid][datastream] = parse ? res.body : res.body.toString(); // Buffer to string
             } catch (e) {
-                console.log(
-                    "Fedora::getDatastream '" + datastream + "' failed",
-                    e
-                );
+                console.log("Fedora::getDatastream '" + datastream + "' failed", e);
             }
         }
         return this.cache[pid][datastream];
