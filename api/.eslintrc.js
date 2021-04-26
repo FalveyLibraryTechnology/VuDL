@@ -6,6 +6,6 @@ module.exports = {
     "jsdoc",
   ],
   extends: [
-    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended"
   ]
 };

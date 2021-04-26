@@ -4,11 +4,11 @@ module.exports = {
     node: true
   },
   parserOptions: {
-    ecmaVersion: 6,
+    ecmaVersion: 2020,
     sourceType: "module",
   },
   extends: [
     "eslint:recommended",
-    // "plugin:prettier/recommended"
+    "plugin:prettier/recommended"
   ]
 };

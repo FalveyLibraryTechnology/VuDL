@@ -7,7 +7,7 @@ module.exports = {
     "react"
   ],
   extends: [
-    "plugin:react/recommended",
+    "plugin:react/recommended"
   ],
   settings: {
     react: {
