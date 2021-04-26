@@ -8,11 +8,11 @@ class DocumentFile {
     }
 
     static fromRaw(raw) {
-        return new raw['filename'], raw['label'];
+        return new raw["filename"](), raw["label"];
     }
 
     raw() {
-        return {filename: this.filename, label: this.label}
+        return { filename: this.filename, label: this.label };
     }
 }
 

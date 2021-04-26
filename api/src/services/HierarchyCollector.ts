@@ -14,8 +14,8 @@ class HierarchyCollector {
         this.hierarchyTops = hierarchyTops;
     }
 
-    protected extractMetadata(DC: any): {[key: string]: Array<string>} {
-        const metadata: {[key: string]: Array<string>} = {};
+    protected extractMetadata(DC: any): { [key: string]: Array<string> } {
+        const metadata: { [key: string]: Array<string> } = {};
         DC.children.forEach((field) => {
             if (typeof metadata[field.name] === "undefined") {
                 metadata[field.name] = [];
@@ -25,21 +25,19 @@ class HierarchyCollector {
         return metadata;
     }
 
-    protected extractRelations(RELS: string): {[key: string]: Array<string>} {
+    protected extractRelations(RELS: string): { [key: string]: Array<string> } {
         const xmlParser = new DOMParser();
         const RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
         const rdfXPath = xpath.useNamespaces({
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         });
-        const relations: {[key: string]: Array<string>} = {};
-        rdfXPath(
-            '//rdf:Description/*', RELS_XML
-        ).forEach((relation) => {
-            let values = rdfXPath('text()', relation);
+        const relations: { [key: string]: Array<string> } = {};
+        rdfXPath("//rdf:Description/*", RELS_XML).forEach((relation) => {
+            let values = rdfXPath("text()", relation);
             // If there's a namespace on the node name, strip it:
-            const nodeName = relation.nodeName.split(':').pop();
+            const nodeName = relation.nodeName.split(":").pop();
             if (values.length === 0) {
-                values = rdfXPath('./@rdf:resource', relation);
+                values = rdfXPath("./@rdf:resource", relation);
             }
             if (values.length > 0) {
                 if (typeof relations[nodeName] === "undefined") {
@@ -59,16 +57,20 @@ class HierarchyCollector {
         const DC = await this.fedora.getDC(pid);
         const RELS = await this.fedora.getDatastream(pid, "RELS-EXT");
         const result = new FedoraData(
-            pid, this.extractRelations(RELS), this.extractMetadata(DC)
+            pid,
+            this.extractRelations(RELS),
+            this.extractMetadata(DC)
         );
         // Create promises to retrieve parents asynchronously...
-        const promises = (result.relations.isMemberOf ?? []).map(async (resource) => {
-            const parentPid = resource.substr("info:fedora/".length);
-            if (!this.hierarchyTops.includes(parentPid)) {
-                const parent = await this.getHierarchy(parentPid);
-                result.addParent(parent);
+        const promises = (result.relations.isMemberOf ?? []).map(
+            async (resource) => {
+                const parentPid = resource.substr("info:fedora/".length);
+                if (!this.hierarchyTops.includes(parentPid)) {
+                    const parent = await this.getHierarchy(parentPid);
+                    result.addParent(parent);
+                }
             }
-        });
+        );
         // Now wait for the promises to complete before we return results, so
         // nothing happens out of order.
         await Promise.all(promises);

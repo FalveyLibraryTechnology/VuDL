@@ -1,32 +1,34 @@
-import PageOrder from './PageOrder';
-import DocumentOrder from './DocumentOrder';
-import Job from './Job';
+import PageOrder from "./PageOrder";
+import DocumentOrder from "./DocumentOrder";
+import Job from "./Job";
 
 class JobMetadata {
     job: Job;
     _order: PageOrder = null;
-    _documents: DocumentOrder = null
+    _documents: DocumentOrder = null;
     published = false;
 
     constructor(job) {
         this.job = job;
-        const fs = require('fs'), filename = job.dir + '/job.json';
+        const fs = require("fs"),
+            filename = job.dir + "/job.json";
         if (fs.existsSync(filename)) {
             const json = fs.readFileSync(filename);
-            this.raw = JSON.parse(json);            
+            this.raw = JSON.parse(json);
         }
     }
 
     dc(job) {
         this.job = job;
-        const fs = require('fs'), filename = job.dir + '/dc.xml';
+        const fs = require("fs"),
+            filename = job.dir + "/dc.xml";
         if (fs.existsSync(filename)) {
             return fs.readFileSync(filename);
         }
     }
 
     get derivativeLockfile() {
-        return this.job.dir + '/derivatives.lock';
+        return this.job.dir + "/derivatives.lock";
     }
 
     get derivativeStatus() {
@@ -34,13 +36,13 @@ class JobMetadata {
         const status = {
             expected: 10,
             processed: 0,
-            building: false
+            building: false,
         };
         return status;
     }
 
     ingestLockfile(job) {
-        return job.dir + '/ingest.lock';
+        return job.dir + "/ingest.lock";
     }
 
     get uploadTime() {
@@ -52,13 +54,13 @@ class JobMetadata {
         // TODO: populate with real data
         return {
             added: 0,
-            deleted: 0
+            deleted: 0,
         };
     }
 
     get ingestInfo() {
         // TODO: populate with real data
-        return '';
+        return "";
     }
 
     get order() {
@@ -86,7 +88,7 @@ class JobMetadata {
     get raw() {
         return {
             order: this.order.raw,
-            published: this.published  
+            published: this.published,
         };
     }
 
@@ -94,9 +96,7 @@ class JobMetadata {
         //TODO: set raw data
     }
 
-    save() {
-
-    }
+    save() {}
 
     get status() {
         return {
@@ -107,10 +107,9 @@ class JobMetadata {
             // TODO: ingesting: File.exist?(ingest_lockfile),
             // TODO: documents: this.documents.list.length,
             // TODO: audio: audio.list.length,
-            ingest_info: this.ingestInfo
+            ingest_info: this.ingestInfo,
         };
     }
-
 }
 
 export default JobMetadata;

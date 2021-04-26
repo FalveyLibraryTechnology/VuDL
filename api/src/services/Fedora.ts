@@ -1,5 +1,5 @@
 import { IncomingMessage } from "http";
-import Config from '../models/Config';
+import Config from "../models/Config";
 const http = require("needle");
 
 interface NeedleResponse extends IncomingMessage {
@@ -71,7 +71,8 @@ class Fedora {
                     "get",
                     pid + "/" + datastream,
                     null, // Data
-                    { // Options
+                    {
+                        // Options
                         parse_response: parse,
                     }
                 );
@@ -80,7 +81,10 @@ class Fedora {
                     ? res.body
                     : res.body.toString(); // Buffer to string
             } catch (e) {
-                console.log("Fedora::getDatastream '" + datastream + "' failed", e);
+                console.log(
+                    "Fedora::getDatastream '" + datastream + "' failed",
+                    e
+                );
             }
         }
         return this.cache[pid][datastream];
@@ -94,7 +98,7 @@ class Fedora {
      * @param pid
      */
     async getDC(pid): Promise<DC> {
-        return <DC> (<unknown> this.getDatastream(pid, "DC", true));
+        return <DC>(<unknown>this.getDatastream(pid, "DC", true));
     }
 }
 

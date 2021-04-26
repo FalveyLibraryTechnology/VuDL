@@ -1,4 +1,4 @@
-import DocumentFile from './DocumentFile'
+import DocumentFile from "./DocumentFile";
 
 class DocumentOrder {
     list: Array<object> = [];
@@ -9,24 +9,28 @@ class DocumentOrder {
 
     static fromJob(job) {
         const glob = require("glob");
-        const list = glob.sync(job.dir + ".PDF").map(function(pdf: string){ return new DocumentFile(this.basename(pdf), "PDF")});
+        const list = glob.sync(job.dir + ".PDF").map(function (pdf: string) {
+            return new DocumentFile(this.basename(pdf), "PDF");
+        });
         return new DocumentOrder(list);
-
     }
 
     static fromRaw(raw) {
-        const list = raw.map(function(list: string){ return DocumentFile.fromRaw(list) });
+        const list = raw.map(function (list: string) {
+            return DocumentFile.fromRaw(list);
+        });
         return new DocumentOrder(list);
-
     }
 
     raw() {
-        return this.list.map(function(documentfile: DocumentFile) { return documentfile.raw() });
+        return this.list.map(function (documentfile: DocumentFile) {
+            return documentfile.raw();
+        });
     }
 
     basename(path) {
-        return path.replace(/\/$/, "").split('/').reverse()[0];
-     }
+        return path.replace(/\/$/, "").split("/").reverse()[0];
+    }
 }
 
 export default DocumentOrder;

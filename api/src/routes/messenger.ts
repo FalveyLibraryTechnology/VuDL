@@ -1,9 +1,9 @@
-import SolrIndexer from '../services/SolrIndexer';
+import SolrIndexer from "../services/SolrIndexer";
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-router.get("/solrindex/:pid", async function(req, res, next) {
+router.get("/solrindex/:pid", async function (req, res, next) {
     const indexer = new SolrIndexer();
     const fedoraFields = await indexer.getFields(req.params.pid);
 

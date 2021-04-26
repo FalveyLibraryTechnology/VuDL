@@ -1,10 +1,10 @@
-import PrivateConfig from './PrivateConfig';
+import PrivateConfig from "./PrivateConfig";
 
 class Config {
     private static instance: PrivateConfig;
 
     constructor() {
-        throw new Error('Use Singleton.getInstance()');
+        throw new Error("Use Singleton.getInstance()");
     }
 
     public static getInstance() {
@@ -13,7 +13,6 @@ class Config {
         }
         return Config.instance;
     }
-    
 }
 
 export default Config;

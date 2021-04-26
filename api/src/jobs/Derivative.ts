@@ -1,8 +1,8 @@
-const fs = require('fs');
+const fs = require("fs");
 
-import ImageFile from '../models/ImageFile';
-import JobMetadata from '../models/JobMetadata';
-import PageOrder from '../models/PageOrder';
+import ImageFile from "../models/ImageFile";
+import JobMetadata from "../models/JobMetadata";
+import PageOrder from "../models/PageOrder";
 
 // TODO: Abstract Job?
 class Derivative {
@@ -12,7 +12,7 @@ class Derivative {
         // For each page
         const order = PageOrder.fromJob(job.data);
         const generatingPromises = [];
-        order.raw.forEach(page => {
+        order.raw.forEach((page) => {
             // For each size
             const image = new ImageFile(`${job.data.dir}/${page.filename}`);
             for (const size in image.sizes) {
@@ -23,17 +23,16 @@ class Derivative {
         });
 
         // Wait for all image generation
-        Promise.all(generatingPromises)
-            .then(() => {
-                // Delete lock file
-                try {
-                    console.log(": build derivatives done");
-                    const metadata = new JobMetadata(job.data);
-                    fs.unlinkSync(metadata.derivativeLockfile);
-                } catch(e) {
-                    console.error("lock file not deleted: " + job.data.dir);
-                }
-            });
+        Promise.all(generatingPromises).then(() => {
+            // Delete lock file
+            try {
+                console.log(": build derivatives done");
+                const metadata = new JobMetadata(job.data);
+                fs.unlinkSync(metadata.derivativeLockfile);
+            } catch (e) {
+                console.error("lock file not deleted: " + job.data.dir);
+            }
+        });
     }
 }
 
