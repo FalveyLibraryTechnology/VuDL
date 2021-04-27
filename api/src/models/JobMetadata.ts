@@ -1,12 +1,16 @@
 import PageOrder from './PageOrder';
 import DocumentOrder from './DocumentOrder';
+import AudioOrder from './AudioOrder';
 import Job from './Job';
 
 class JobMetadata {
     job: Job;
+    _filename: string;
     _order: PageOrder = null;
-    _documents: DocumentOrder = null
-    published: boolean = false;
+    _documents: DocumentOrder = null;
+    _audio: AudioOrder = null;
+    _published: Boolean = false;
+    published: Boolean = false;
 
     constructor(job) {
         this.job = job;
@@ -25,6 +29,22 @@ class JobMetadata {
         }
     }
 
+    ingestLockfile(job) {
+        return job.dir + '/ingest.lock';
+    }
+
+    get raw() {
+        return {
+            order: this.order.raw,
+            published: this.published === true
+        };
+    }
+
+    set raw(data) {
+        this._order = PageOrder.fromRaw(data);
+        this._published = true;
+    }
+
     get derivativeLockfile() {
         return this.job.dir + '/derivatives.lock';
     }
@@ -37,10 +57,6 @@ class JobMetadata {
             building: false
         };
         return status;
-    }
-
-    ingestLockfile(job) {
-        return job.dir + '/ingest.lock';
     }
 
     get uploadTime() {
@@ -83,30 +99,33 @@ class JobMetadata {
         this._documents = DocumentOrder.fromRaw(data);
     }
 
-    get raw() {
-        return {
-            order: this.order.raw,
-            published: this.published  
-        };
+    get audio() {
+        if (this._audio === null) {
+            this._audio = AudioOrder.fromJob(this._audio);
+        }
+        return this._audio;
     }
 
-    set raw(data) {
-        //TODO: set raw data
+    set audio(data) {
+        this._audio = AudioOrder.fromRaw(data);
     }
 
     save() {
-
+        let fs = require('fs');
+        let filename = this.job.dir + '/job.json'
+        fs.writeFile(filename, JSON.stringify(this.raw));
     }
 
     get status() {
+        let fs = require('fs');
         return {
             derivatives: this.derivativeStatus,
             // TODO: minutes_since_upload: ((Time.new - upload_time) / 60).floor,
             file_problems: this.fileProblems,
             published: this.raw.published,
-            // TODO: ingesting: File.exist?(ingest_lockfile),
-            // TODO: documents: this.documents.list.length,
-            // TODO: audio: audio.list.length,
+            ingesting: fs.existsSync(this.ingestLockfile(this.job)),
+            documents: this.documents.list.length,
+            audio: this.audio.list.length,
             ingest_info: this.ingestInfo
         };
     }
