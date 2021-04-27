@@ -1,6 +1,6 @@
 /* eslint @typescript-eslint/no-var-requires: "off"
    ------
-   Only appies to Typescript files */
+   Only applies to Typescript files */
 
 const createError = require("http-errors");
 const express = require("express");
