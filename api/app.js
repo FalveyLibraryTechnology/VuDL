@@ -1,15 +1,19 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var cors = require("cors");
+/* eslint @typescript-eslint/no-var-requires: "off"
+   ------
+   Only appies to Typescript files */
 
-var indexRouter = require("./dist/routes/index");
-var apiRouter = require("./dist/routes/api");
-var messengerRouter = require("./dist/routes/messenger");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const cors = require("cors");
 
-var app = express();
+const indexRouter = require("./dist/routes/index");
+const apiRouter = require("./dist/routes/api");
+const messengerRouter = require("./dist/routes/messenger");
+
+const app = express();
 
 app.use(cors());
 app.use(logger("dev"));
@@ -28,7 +32,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};

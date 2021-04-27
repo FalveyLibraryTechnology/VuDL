@@ -3,13 +3,14 @@ import { Worker } from "bullmq";
 
 // TODO: Maybe don't load all of them?
 import Derivative from "../jobs/Derivative";
+import QueueJob from "../jobs/QueueJobInterface";
 
 class JobQueue {
     // TODO: Type
-    workers: any = {};
+    workers: { [key: string]: QueueJob } = {};
     manager: Worker;
 
-    start() {
+    start(): void {
         // TODO: Maybe don't load all of them?
         this.workers.derivatives = new Derivative();
 

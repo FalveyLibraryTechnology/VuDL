@@ -1,25 +1,32 @@
-import { constants } from "node:buffer";
-import { stringify } from "node:querystring";
+import fs = require("fs");
+import Jimp = require("jimp");
+import path = require("path");
+
+import { exec } from "child_process";
+// import { constants } from "node:buffer";
+// import { stringify } from "node:querystring";
+
 import Config from "./Config";
+import PrivateConfig from "./PrivateConfig";
 
 class ImageFile {
     filename: string;
-    sizes: Object = {
+    sizes: Record<string, number> = {
         LARGE: 3000,
         MEDIUM: 640,
         THUMBNAIL: 120,
     };
 
-    constructor(filename) {
+    constructor(filename: string) {
         this.filename = filename;
     }
 
-    config() {
+    config(): PrivateConfig {
         const config = Config.getInstance();
         return config;
     }
 
-    constraintForSize(size) {
+    constraintForSize(size: string): number {
         if (size in this.sizes) {
             return this.sizes[size];
         } else {
@@ -28,17 +35,15 @@ class ImageFile {
         }
     }
 
-    async derivative(size) {
+    async derivative(size: string): Promise<string> {
         const deriv = this.derivativePath(size);
 
         // Return existing derivative
-        const fs = require("fs");
         if (fs.existsSync(deriv)) {
             return deriv;
         }
 
         // Create derivative
-        const Jimp = require("jimp");
         const image = await Jimp.read(this.filename);
         const constraint = this.constraintForSize(size);
 
@@ -58,21 +63,18 @@ class ImageFile {
         return deriv;
     }
 
-    derivativePath(size, extension = "jpg") {
-        const path = require("path");
+    derivativePath(size: string, extension = "jpg"): string {
         const dir = path.dirname(this.filename);
         const filename = this.basename(this.filename);
         return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
-    async ocr() {
+    async ocr(): Promise<void> {
         //TODO: update the following (derivativepath requires size now)
         const txt = this.derivativePath("OCR-DIRTY", "txt");
-        const fs = require("fs");
-        const { exec } = require("child_process");
         const deriv = await this.ocrDerivative();
         if (!fs.existsSync(txt)) {
-            const path = this.basename(txt);
+            // const path = this.basename(txt);
             const ts_cmd =
                 this.config().tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             exec(ts_cmd, (error, stdout, stderr) => {
@@ -90,10 +92,8 @@ class ImageFile {
         }
     }
 
-    async ocrDerivative() {
-        const fs = require("fs");
+    async ocrDerivative(): Promise<string> {
         const png = this.derivativePath("ocr/pngs", "png");
-        const { exec } = require("child_process");
         const deriv = await this.derivative("LARGE");
         if (!fs.existsSync(png)) {
             const tc_cmd =
@@ -114,11 +114,9 @@ class ImageFile {
         return png;
     }
 
-    ocrProperties() {
-        const fs = require("fs");
-        const path = require("path");
+    ocrProperties(): string {
         const file = path.dirname(this.filename) + "/ocr/tesseract.config";
-        const dir = path.dirname(file);
+        // const dir = path.dirname(file);
         const content =
             "tessedit_char_whitelist ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!'\"()&$%-+=[]?<>" +
             "\xE2\x80\x9C\xE2\x80\x9D\xE2\x80\x98\xE2\x80\x99";
@@ -133,8 +131,7 @@ class ImageFile {
         return file;
     }
 
-    public delete() {
-        const fs = require("fs");
+    public delete(): void {
         if (fs.existsSync(this.filename)) {
             fs.unlinkSync(this.filename);
         }
@@ -153,7 +150,7 @@ class ImageFile {
         }
     }
 
-    basename(path) {
+    basename(path: string): string {
         return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }

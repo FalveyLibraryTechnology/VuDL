@@ -1,10 +1,10 @@
 class FedoraData {
-    public metadata: { [key: string]: Array<string> };
+    public metadata: Record<string, string>;
     public pid: string;
-    public relations: { [key: string]: Array<string> };
+    public relations: Record<string, string>;
     parents: Array<FedoraData> = [];
 
-    constructor(pid: string, relations: { [key: string]: Array<string> }, metadata: { [key: string]: Array<string> }) {
+    constructor(pid: string, relations: Record<string, string>, metadata: Record<string, string>) {
         this.pid = pid;
         this.relations = relations;
         this.metadata = metadata;
@@ -45,18 +45,18 @@ class FedoraData {
         return results;
     }
 
-    get models() {
+    get models(): Array<string> {
         // Strip off "info:fedora/" prefix:
         return (this.relations.hasModel ?? []).map((model) => {
             return model.substr("info:fedora/".length);
         });
     }
 
-    get sequences() {
+    get sequences(): Array<string> {
         return this.relations.sequence ?? [];
     }
 
-    get title() {
+    get title(): string {
         return typeof this.metadata["dc:title"] !== "undefined" ? this.metadata["dc:title"][0] : "";
     }
 }

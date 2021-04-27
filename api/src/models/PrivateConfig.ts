@@ -1,77 +1,79 @@
+import fs = require("fs");
+import ini = require("ini"); // returns <any>
+
 class PrivateConfig {
     constructor() {
         //this.message = 'I am an instance';
     }
 
-    ini() {
-        const fs = require("fs"),
-            ini = require("ini");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ini(): any {
         const config = ini.parse(fs.readFileSync(__dirname.replace(/\\/g, "/") + "/../../vudl.ini", "utf-8"));
         return config;
     }
 
-    fedoraHostUrl() {
+    fedoraHostUrl(): string {
         return this.ini()["fedora_host"];
     }
 
-    fedoraApiUrl() {
+    fedoraApiUrl(): string {
         return this.ini()["fedora_api"];
     }
 
-    fedoraUsername() {
+    fedoraUsername(): string {
         return this.ini()["fedora_username"];
     }
 
-    fedoraPassword() {
+    fedoraPassword(): string {
         return this.ini()["fedora_password"];
     }
 
-    fedoraPidNameSpace() {
+    fedoraPidNameSpace(): string {
         return this.ini()["fedora_pid_namespace"];
     }
 
-    solrQueryUrl() {
+    solrQueryUrl(): string {
         return this.ini()["solr_query_url"];
     }
 
-    tesseractPath() {
+    tesseractPath(): string {
         return this.ini()["tesseract_path"];
     }
 
-    vufindUrl() {
+    vufindUrl(): string {
         return this.ini()["vufind_url"];
     }
 
-    pdfDirectory() {
+    pdfDirectory(): string {
         return this.ini()["pdf_directory"];
     }
 
-    textcleanerPath() {
+    textcleanerPath(): string {
         return this.ini()["textcleaner_path"];
     }
 
-    textcleanerSwitches() {
+    textcleanerSwitches(): string {
         return this.ini()["textcleaner_switches"];
     }
 
-    holdingArea() {
+    holdingArea(): string {
         return this.ini()["holding_area_path"];
     }
 
-    processedAreaPath() {
+    processedAreaPath(): string {
         return this.ini()["processed_area_path"];
     }
 
-    restBaseUrl() {
+    restBaseUrl(): string {
         return this.ini()["base_url"];
     }
 
-    requireLogin() {
+    requireLogin(): string {
         return this.ini()["require_login"];
     }
 
-    userWhitelist() {
-        this.ini()["user_whitelist"];
+    userWhitelist(): string {
+        return this.ini()["user_whitelist"];
     }
 }
 

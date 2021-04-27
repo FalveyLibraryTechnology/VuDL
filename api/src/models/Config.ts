@@ -7,7 +7,7 @@ class Config {
         throw new Error("Use Singleton.getInstance()");
     }
 
-    public static getInstance() {
+    public static getInstance(): PrivateConfig {
         if (!Config.instance) {
             Config.instance = new PrivateConfig();
         }

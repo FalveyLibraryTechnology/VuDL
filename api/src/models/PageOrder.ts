@@ -1,16 +1,18 @@
-import Page from "./Page";
+import glob = require("glob");
+
+import Job from "./Job";
+import { Page, PageRaw } from "./Page";
 
 class PageOrder {
-    pages: Array<object> = [];
+    pages: Array<Page> = [];
 
-    constructor(pages) {
+    constructor(pages: Array<Page>) {
         this.pages = pages;
     }
 
-    static fromJob(job) {
-        const glob = require("glob");
+    static fromJob(job: Job): PageOrder {
         let pattern = job.dir + "/*.TI{F,FF}";
-        const options: any = { nocase: true };
+        const options: Record<string, unknown> = { nocase: true };
         // Special case for Windows -- we need to account for drive letters:
         const colonIndex = pattern.indexOf(":");
         if (colonIndex > -1) {
@@ -26,20 +28,20 @@ class PageOrder {
         return new PageOrder(pages);
     }
 
-    static fromRaw(raw) {
-        const pages = raw.map(function (page: string) {
+    static fromRaw(raw: Array<PageRaw>): PageOrder {
+        const pages = raw.map(function (page: PageRaw) {
             return Page.fromRaw(page);
         });
         return new PageOrder(pages);
     }
 
-    get raw() {
+    get raw(): Array<PageRaw> {
         return this.pages.map(function (page: Page) {
             return page.raw();
         });
     }
 
-    static basename(path) {
+    static basename(path: string): string {
         return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }

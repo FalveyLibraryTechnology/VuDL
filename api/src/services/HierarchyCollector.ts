@@ -1,7 +1,7 @@
-import Fedora from "./Fedora";
+import { DC, Fedora } from "./Fedora";
 import FedoraData from "../models/FedoraData";
 import { DOMParser } from "xmldom";
-const xpath = require("xpath");
+import xpath = require("xpath");
 
 class HierarchyCollector {
     fedora: Fedora;
@@ -14,9 +14,9 @@ class HierarchyCollector {
         this.hierarchyTops = hierarchyTops;
     }
 
-    protected extractMetadata(DC: any): { [key: string]: Array<string> } {
+    protected extractMetadata(dc: DC): { [key: string]: Array<string> } {
         const metadata: { [key: string]: Array<string> } = {};
-        DC.children.forEach((field) => {
+        dc.children.forEach((field) => {
             if (typeof metadata[field.name] === "undefined") {
                 metadata[field.name] = [];
             }
@@ -49,7 +49,7 @@ class HierarchyCollector {
         return relations;
     }
 
-    async getHierarchy(pid): Promise<FedoraData> {
+    async getHierarchy(pid: string): Promise<FedoraData> {
         // Use Fedora to get data
         // TODO: type
         // TODO: catch failure

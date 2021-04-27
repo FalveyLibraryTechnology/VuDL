@@ -1,6 +1,14 @@
+import fs = require("fs");
+
+import { PageRaw } from "./Page";
 import PageOrder from "./PageOrder";
 import DocumentOrder from "./DocumentOrder";
 import Job from "./Job";
+
+interface JobMetadataRaw {
+    order: Array<PageRaw>;
+    published: boolean;
+}
 
 class JobMetadata {
     job: Job;
@@ -8,30 +16,28 @@ class JobMetadata {
     _documents: DocumentOrder = null;
     published = false;
 
-    constructor(job) {
+    constructor(job: Job) {
         this.job = job;
-        const fs = require("fs"),
-            filename = job.dir + "/job.json";
+        const filename = job.dir + "/job.json";
         if (fs.existsSync(filename)) {
             const json = fs.readFileSync(filename);
             this.raw = JSON.parse(json);
         }
     }
 
-    dc(job) {
+    dc(job: Job): Buffer {
         this.job = job;
-        const fs = require("fs"),
-            filename = job.dir + "/dc.xml";
+        const filename = job.dir + "/dc.xml";
         if (fs.existsSync(filename)) {
             return fs.readFileSync(filename);
         }
     }
 
-    get derivativeLockfile() {
+    get derivativeLockfile(): string {
         return this.job.dir + "/derivatives.lock";
     }
 
-    get derivativeStatus() {
+    get derivativeStatus(): Record<string, number | boolean> {
         // TODO: populate with real data
         const status = {
             expected: 10,
@@ -41,16 +47,16 @@ class JobMetadata {
         return status;
     }
 
-    ingestLockfile(job) {
+    ingestLockfile(job: Job): string {
         return job.dir + "/ingest.lock";
     }
 
-    get uploadTime() {
+    get uploadTime(): number {
         // TODO: populate with real data
         return 0;
     }
 
-    get fileProblems() {
+    get fileProblems(): Record<string, number> {
         // TODO: populate with real data
         return {
             added: 0,
@@ -58,47 +64,57 @@ class JobMetadata {
         };
     }
 
-    get ingestInfo() {
+    get ingestInfo(): string {
         // TODO: populate with real data
         return "";
     }
 
-    get order() {
+    get order(): PageOrder {
         if (this._order === null) {
             this._order = PageOrder.fromJob(this.job);
         }
         return this._order;
     }
 
-    set order(data) {
+    set order(order: PageOrder) {
+        this._order = order;
+    }
+
+    setOrderFromRaw(data: Array<PageRaw>): void {
         this._order = PageOrder.fromRaw(data);
     }
 
-    get documents() {
+    get documents(): DocumentOrder {
         if (this._documents === null) {
             this._documents = DocumentOrder.fromJob(this._documents);
         }
         return this._documents;
     }
 
-    set documents(data) {
+    set documents(documents: DocumentOrder) {
+        this._documents = documents;
+    }
+
+    setDocumentsFromRaw(data: Array<string>): void {
         this._documents = DocumentOrder.fromRaw(data);
     }
 
-    get raw() {
+    get raw(): JobMetadataRaw {
         return {
             order: this.order.raw,
             published: this.published,
         };
     }
 
-    set raw(data) {
-        //TODO: set raw data
+    set raw(data: JobMetadataRaw) {
+        // TODO: set raw data
     }
 
-    save() {}
+    save(): void {
+        // TODO
+    }
 
-    get status() {
+    get status(): Record<string, unknown> {
         return {
             derivatives: this.derivativeStatus,
             // TODO: minutes_since_upload: ((Time.new - upload_time) / 60).floor,

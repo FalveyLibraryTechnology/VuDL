@@ -1,4 +1,7 @@
-import AudioOrder from "./AudioOrder";
+// import ffmpeg = require("fluent-ffmpeg");
+import fs = require("fs");
+// import path = require("path");
+
 import Config from "./Config";
 
 class AudioFile {
@@ -6,51 +9,47 @@ class AudioFile {
     extensions: Array<string> = ["OGG", "MP3"];
     dir: string;
 
-    constructor(filename, dir) {
+    constructor(filename: string, dir: string) {
         this.filename = filename;
         this.dir = dir;
     }
 
-    constraintForExtensions(extension) {
+    constraintForExtensions(extension: string): string | number {
         if (this.extensions.includes(extension)) {
             return extension;
         } else {
-            return 1;
+            return 1; // TODO
         }
     }
 
-    config() {
+    config(): string {
         const config = Config.getInstance();
         return config.restBaseUrl();
     }
 
-    derivative(extension) {
+    derivative(extension: string): void {
+        // TODO
         const deriv = this.derivativePath(extension);
-        const fs = require("fs"),
-            filename = deriv;
-        const path = require("path");
-        const ffmpeg = require("fluent-ffmpeg");
-        var command = ffmpeg();
-        if (fs.existsSync(filename)) {
-            const dir = path.basename(filename);
-            var command = ffmpeg();
+        // const command = ffmpeg();
+        if (fs.existsSync(deriv)) {
+            //     const dir = path.basename(deriv);
         }
     }
 
-    static fromRaw(raw) {
-        return new raw["filename"](), raw["label"];
+    static fromRaw(raw: Record<string, string>): AudioFile {
+        return new AudioFile(raw.filename, raw.label);
     }
 
-    raw() {
+    raw(): Record<string, string> {
         return { filename: this.filename };
     }
 
-    derivativePath(extension = "flac") {
+    derivativePath(extension = "flac"): string {
         const filename = this.basename(this.filename);
         return this.dir + "/" + filename + "." + extension.toLowerCase();
     }
 
-    basename(path) {
+    basename(path: string): string {
         return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }

@@ -1,34 +1,36 @@
+import glob = require("glob");
+
 import AudioFile from "./AudioFile";
+import Job from "./Job";
 
 class AudioOrder {
-    list: Array<object> = [];
+    list: Array<AudioFile> = [];
 
-    constructor(list) {
+    constructor(list: Array<AudioFile>) {
         this.list = list;
     }
 
-    static fromJob(job) {
-        const glob = require("glob");
+    static fromJob(job: Job): AudioOrder {
         const list = glob.sync(job.dir + ".flac").map(function (flac: string) {
             return new AudioFile(this.basename(flac), job.dir);
         });
         return new AudioOrder(list);
     }
 
-    static fromRaw(raw) {
-        const list = raw.map(function (list: string) {
+    static fromRaw(raw: Array<Record<string, string>>): AudioOrder {
+        const list = raw.map(function (list) {
             return AudioFile.fromRaw(list);
         });
         return new AudioOrder(list);
     }
 
-    raw() {
+    raw(): Array<Record<string, string>> {
         return this.list.map(function (audiofile: AudioFile) {
             return audiofile.raw();
         });
     }
 
-    basename(path) {
+    basename(path: string): string {
         return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }

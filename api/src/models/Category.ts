@@ -1,32 +1,37 @@
+import fs = require("fs");
+import glob = require("glob");
+
 import Job from "./Job";
 
-class Category {
+export class CategoryRaw {
+    category: string;
+    jobs: Array<string>;
+}
+
+export default class Category {
     jobs: Array<Job> = [];
     name: string;
-    glob = require("glob");
 
-    constructor(dir) {
+    constructor(dir: string) {
         this.name = this.basename(dir);
-        this.jobs = this.glob.sync(dir + "/*/").map(function (dir: string) {
+        this.jobs = glob.sync(dir + "/*/").map(function (dir: string) {
             return new Job(dir);
         });
     }
 
-    ini() {
-        const fs = require("fs"),
-            ini = require("ini");
+    ini(): string {
         return fs.readFileSync("C:holdingarea\batch-params.ini", "utf-8");
     }
 
-    supportsOcr() {
+    supportsOcr(): boolean {
         return this.ini["ocr"]["ocr"] && this.ini["ocr"]["ocr"].tr(" '\"", "") != "false";
     }
 
-    supportsPdfGeneration() {
+    supportsPdfGeneration(): boolean {
         return this.ini["pdf"]["generate"] && this.ini["pdf"]["generate"].tr(" '\"", "") != "false";
     }
 
-    raw() {
+    raw(): CategoryRaw {
         return {
             category: this.name,
             jobs: this.jobs.map(function (job: Job) {
@@ -35,13 +40,11 @@ class Category {
         };
     }
 
-    targetCollectionId() {
+    targetCollectionId(): string {
         return this.ini["collection"]["destination"];
     }
 
-    basename(path) {
+    basename(path: string): string {
         return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }
-
-export default Category;

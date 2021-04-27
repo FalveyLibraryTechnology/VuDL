@@ -1,12 +1,14 @@
-const fs = require("fs");
+import { Job } from "bullmq";
+import fs = require("fs");
 
 import ImageFile from "../models/ImageFile";
 import JobMetadata from "../models/JobMetadata";
 import PageOrder from "../models/PageOrder";
+import QueueJob from "./QueueJobInterface";
 
 // TODO: Abstract Job?
-class Derivative {
-    async run(job) {
+class Derivative implements QueueJob {
+    async run(job: Job): Promise<void> {
         console.log(": build derivatives: " + job.data.dir);
 
         // For each page

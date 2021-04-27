@@ -1,7 +1,6 @@
 import Fedora from "./Fedora";
 import FedoraData from "../models/FedoraData";
 import HierarchyCollector from "./HierarchyCollector";
-const xpath = require("xpath");
 
 interface SolrFields {
     [key: string]: string | Array<string>;
@@ -18,7 +17,7 @@ class SolrIndexer {
         this.hierarchyCollector = new HierarchyCollector(fedora, topPids);
     }
 
-    protected padNumber(num: string) {
+    protected padNumber(num: string): string {
         // Yes, I wrote a left_pad function.
         const paddedNumber = "0000000000" + num;
         return paddedNumber.substr(paddedNumber.length - 10);
@@ -44,8 +43,7 @@ class SolrIndexer {
 
         // Add sequence/order data:
         for (const sequence of fedoraData.sequences) {
-            let seqPid: string, seqNum: string;
-            [seqPid, seqNum] = sequence.split("#", 2);
+            const [seqPid, seqNum] = sequence.split("#", 2);
             const sequence_str = seqPid.replace(":", "_");
             const dynamic_sequence_field_name = "sequence_" + sequence_str + "_str";
             fields[dynamic_sequence_field_name] = this.padNumber(seqNum);

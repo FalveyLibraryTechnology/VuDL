@@ -3,11 +3,13 @@ import Category from "../models/Category";
 import Config from "../models/Config";
 import Job from "../models/Job";
 
-const express = require("express");
+import express = require("express");
 const router = express.Router();
 
 /**
- * @param req
+ * Create job from req
+ *
+ * @param req Request, needs category and job GET parameters
  */
 function getJobFromRequest(req): Job {
     // TODO: sanitize parameters!
@@ -15,19 +17,19 @@ function getJobFromRequest(req): Job {
 }
 
 /**
- *
+ * Returns the path to the holding area
  */
 function holdingArea(): string {
     const holdingArea = Config.getInstance().holdingArea();
     return holdingArea.endsWith("/") ? holdingArea : holdingArea + "/";
 }
 
-router.get("/", function (req, res, next) {
+router.get("/", function (req, res) {
     const categoryCollection = new CategoryCollection(holdingArea());
     res.send(JSON.stringify(categoryCollection.raw()));
 });
 
-router.get("/:category", function (req, res, next) {
+router.get("/:category", function (req, res) {
     //TODO
     //Sanitize incoming parameters
     //404 error for non-existent catgeory (if holding area + category is not a directory)
@@ -35,35 +37,35 @@ router.get("/:category", function (req, res, next) {
     res.send(JSON.stringify(category.raw()));
 });
 
-router.get("/:category/:job", function (req, res, next) {
+router.get("/:category/:job", function (req, res) {
     res.send(JSON.stringify(getJobFromRequest(req).metadata.raw));
 });
 
-router.get("/:category/:job/status", function (req, res, next) {
+router.get("/:category/:job/status", function (req, res) {
     res.send(JSON.stringify(getJobFromRequest(req).metadata.status));
 });
 
-router.put("/:category/:job/derivatives", function (req, res, next) {
+router.put("/:category/:job/derivatives", function (req, res) {
     getJobFromRequest(req).makeDerivatives();
     res.send(JSON.stringify({ status: "ok" }));
 });
 
-router.put("/:category/:job/ingest", function (req, res, next) {
+router.put("/:category/:job/ingest", function (req, res) {
     getJobFromRequest(req).ingest();
     res.send(JSON.stringify({ status: "ok" }));
 });
 
-router.put("/:category/:job", function (req, res, next) {
-    const job = getJobFromRequest(req);
-    //TODO
-    //job.metadata.validate(job, req.params);
+router.put("/:category/:job", function (req, res) {
+    // TODO
+    // const job = getJobFromRequest(req);
+    // job.metadata.validate(job, req.params);
     res.send(JSON.stringify({ status: "ok" }));
 });
 
-router.get("/:category/:job/:image/:size", async function (req, res, next) {
+router.get("/:category/:job/:image/:size", async function (req, res) {
     //TODO
     //Sanitize incoming parameters
-    const legalSizes: object = {
+    const legalSizes: Record<string, unknown> = {
         thumb: "THUMBNAIL",
         medium: "MEDIUM",
         large: "LARGE",
@@ -76,7 +78,7 @@ router.get("/:category/:job/:image/:size", async function (req, res, next) {
 });
 
 router.delete("/:category/:job/:image/*"),
-    async function (req, res, next) {
+    async function (req, res) {
         //TODO
         //Sanitize incoming parameters
         const image: string = req.params.image;

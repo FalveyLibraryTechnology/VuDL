@@ -1,9 +1,9 @@
 import { IncomingMessage } from "http";
 import Config from "../models/Config";
-const http = require("needle");
+import http = require("needle");
 
 interface NeedleResponse extends IncomingMessage {
-    body: any;
+    body: any; // eslint-disable-line @typescript-eslint/no-explicit-any
     raw: Buffer;
     bytes: number;
 }
@@ -12,16 +12,16 @@ interface Attributes {
     [key: string]: string;
 }
 
-interface DC {
+export interface DC {
     name: string;
     value: string;
     attributes: Attributes;
     children: Array<DC>;
 }
 
-class Fedora {
+export default class Fedora {
     baseUrl: string;
-    cache: any = {};
+    cache: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
     constructor() {
         const config = Config.getInstance();
@@ -31,16 +31,16 @@ class Fedora {
     /**
      * Make authenticated request to Fedora
      *
-     * @param method
-     * @param _path
-     * @param data
-     * @param _options
+     * @param method Request method
+     * @param _path URL
+     * @param data POST data
+     * @param _options Additional needle options
      */
     protected _request(
         method = "get",
         _path = "/",
-        data: object = null,
-        _options: object = {}
+        data: Record<string, unknown> = null,
+        _options: Record<string, unknown> = {}
     ): Promise<NeedleResponse> {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
         const url = this.baseUrl + "/" + path;
@@ -57,11 +57,12 @@ class Fedora {
     /**
      * Get datastream from Fedora
      *
-     * @param pid
-     * @param datastream
-     * @param parse
+     * @param pid Record id
+     * @param datastream Which stream to request
+     * @param parse Parse JSON (true) or return raw (false, default)
      */
-    async getDatastream(pid, datastream, parse = false): Promise<any> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async getDatastream(pid: string, datastream: string, parse = false): Promise<any> {
         if (typeof this.cache[pid] === "undefined") {
             this.cache[pid] = {};
         }
@@ -90,11 +91,9 @@ class Fedora {
      *
      * Cast to DC type
      *
-     * @param pid
+     * @param pid Record id
      */
-    async getDC(pid): Promise<DC> {
+    async getDC(pid: string): Promise<DC> {
         return <DC>(<unknown>this.getDatastream(pid, "DC", true));
     }
 }
-
-export default Fedora;
