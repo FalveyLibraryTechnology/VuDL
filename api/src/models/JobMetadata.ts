@@ -9,7 +9,6 @@ class JobMetadata {
     _order: PageOrder = null;
     _documents: DocumentOrder = null;
     _audio: AudioOrder = null;
-    _published: Boolean = false;
     published: Boolean = false;
 
     constructor(job) {
@@ -29,20 +28,20 @@ class JobMetadata {
         }
     }
 
-    ingestLockfile(job) {
-        return job.dir + '/ingest.lock';
+    ingestLockfile() {
+        return this.job.dir + '/ingest.lock';
     }
 
     get raw() {
         return {
             order: this.order.raw,
-            published: this.published === true
+            published: this.published
         };
     }
 
     set raw(data) {
         this._order = PageOrder.fromRaw(data);
-        this._published = true;
+        this.published = true;
     }
 
     get derivativeLockfile() {
@@ -90,7 +89,7 @@ class JobMetadata {
 
     get documents() {
         if (this._documents === null) {
-            this._documents = DocumentOrder.fromJob(this._documents);
+            this._documents = DocumentOrder.fromJob(this.job);
         }
         return this._documents;
     }
@@ -101,7 +100,7 @@ class JobMetadata {
 
     get audio() {
         if (this._audio === null) {
-            this._audio = AudioOrder.fromJob(this._audio);
+            this._audio = AudioOrder.fromJob(this.job);
         }
         return this._audio;
     }
@@ -112,8 +111,8 @@ class JobMetadata {
 
     save() {
         let fs = require('fs');
-        let filename = this.job.dir + '/job.json'
-        fs.writeFile(filename, JSON.stringify(this.raw));
+        this._filename = this.job.dir + '/job.json'
+        fs.writeFile(this._filename, JSON.stringify(this.raw));
     }
 
     get status() {
@@ -123,7 +122,7 @@ class JobMetadata {
             // TODO: minutes_since_upload: ((Time.new - upload_time) / 60).floor,
             file_problems: this.fileProblems,
             published: this.raw.published,
-            ingesting: fs.existsSync(this.ingestLockfile(this.job)),
+            ingesting: fs.existsSync(this.ingestLockfile()),
             documents: this.documents.list.length,
             audio: this.audio.list.length,
             ingest_info: this.ingestInfo

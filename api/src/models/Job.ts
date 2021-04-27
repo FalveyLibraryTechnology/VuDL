@@ -15,7 +15,7 @@ class Job {
 
     ingest() {
       var metadata = new JobMetadata(this);
-      var lockfile = metadata.ingestLockfile(this);
+      var lockfile = metadata.ingestLockfile();
     }
 
     raw() {
