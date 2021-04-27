@@ -15,7 +15,7 @@ var Zoomy = {
         window.addEventListener("touchmove", Zoomy.mouseHandle, false);
         window.addEventListener(
             "mouseup",
-            function (e) {
+            function (/*event*/) {
                 Zoomy.mouse = undefined;
                 Zoomy.mouseDown = false;
                 Zoomy.mouseOnMap = null;
@@ -24,7 +24,7 @@ var Zoomy = {
         );
         window.addEventListener(
             "touchend",
-            function (e) {
+            function (/*event*/) {
                 Zoomy.mouse = undefined;
                 Zoomy.mouseDown = false;
                 Zoomy.mouseOnMap = null;
@@ -33,31 +33,31 @@ var Zoomy = {
         );
         this.canvas.addEventListener(
             "mousedown",
-            function (e) {
+            function (/*event*/) {
                 Zoomy.mouseDown = true;
             },
             false
         );
         this.canvas.addEventListener(
             "touchstart",
-            function (e) {
+            function (/*event*/) {
                 Zoomy.mouseDown = true;
             },
             false
         );
         this.canvas.addEventListener(
             "mousewheel",
-            function (e) {
-                e.preventDefault();
-                Zoomy.zoom(e);
+            function (event) {
+                event.preventDefault();
+                Zoomy.zoom(event);
             },
             false
         );
         this.canvas.addEventListener(
             "wheel",
-            function (e) {
-                e.preventDefault();
-                Zoomy.zoom(e);
+            function (event) {
+                event.preventDefault();
+                Zoomy.zoom(event);
             },
             false
         );

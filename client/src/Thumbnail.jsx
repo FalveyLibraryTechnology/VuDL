@@ -1,35 +1,44 @@
-var React = require('react');
+import React from "react";
+import PropTypes from "prop-types";
 
-class Thumbnail extends React.Component{
+const PaginatorList = require("./PaginatorList");
+
+class Thumbnail extends React.Component {
     constructor(props) {
         super(props);
         this.wrapper = React.createRef();
     }
 
-    selectPage = () => {
+    selectPage() {
         this.props.paginator.setPage(this.props.number);
     }
 
-    componentDidUpdate = () => {
+    componentDidUpdate() {
         if (this.props.selected) {
             this.props.list.scrollTo(this.wrapper);
         }
     }
 
-    render = () => {
+    render() {
         var label = this.props.paginator.getLabel(this.props.number);
         // check for magic labels:
-        var labelClass = 'label' +
-            (null === this.props.paginator.getLabel(this.props.number, false) ? ' magic' : '');
-        var myClass = 'thumbnail' + (this.props.selected ? ' selected' : '');
+        var labelClass = "label" + (null === this.props.paginator.getLabel(this.props.number, false) ? " magic" : "");
+        var myClass = "thumbnail" + (this.props.selected ? " selected" : "");
         return (
             <div onClick={this.selectPage} className={myClass} ref={this.wrapper}>
-              <img alt="" src={this.props.paginator.getImageUrl(this.props.number, 'thumb')} />
-              <div className="number">{this.props.number + 1}</div>
-              <div className={labelClass}>{label}</div>
+                <img alt="" src={this.props.paginator.getImageUrl(this.props.number, "thumb")} />
+                <div className="number">{this.props.number + 1}</div>
+                <div className={labelClass}>{label}</div>
             </div>
         );
     }
+}
+
+Thumbnail.propTypes = {
+    list: PropTypes.instanceOf(PaginatorList),
+    number: PropTypes.number,
+    paginator: PropTypes.instanceOf(PaginatorList),
+    selected: PropTypes.boolean,
 };
 
 module.exports = Thumbnail;
