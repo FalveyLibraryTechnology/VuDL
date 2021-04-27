@@ -13,6 +13,7 @@ class JobMetadata {
 
     constructor(job) {
         this.job = job;
+        this._filename = this.job.dir + '/job.json'
         let fs = require('fs'), filename = job.dir + '/job.json';
         if (fs.existsSync(filename)) {
             var json = fs.readFileSync(filename);
@@ -111,7 +112,6 @@ class JobMetadata {
 
     save() {
         let fs = require('fs');
-        this._filename = this.job.dir + '/job.json'
         fs.writeFile(this._filename, JSON.stringify(this.raw));
     }
 
