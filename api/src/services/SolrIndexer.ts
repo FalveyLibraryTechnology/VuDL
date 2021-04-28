@@ -9,6 +9,9 @@ interface SolrFields {
 
 class SolrIndexer {
     hierarchyCollector: HierarchyCollector;
+    // TODO: make configurable
+    institution: string = "Villanova University";
+    collection: string = "Digital Library";
 
     constructor() {
         // Make Fedora connection
@@ -31,9 +34,12 @@ class SolrIndexer {
         // Start with basic data:
         let fields: SolrFields = {
             id: pid,
+            record_format: "vudl",
+            institution: this.institution,
+            collection: this.collection,
             modeltype_str_mv: fedoraData.models,
             datastream_str_mv: fedoraData.fedoraDatastreams,
-            hierarchytype: null,
+            hierarchytype: "",
             hierarchy_all_parents_str_mv: fedoraData.getAllParents()
         };
 
@@ -44,14 +50,15 @@ class SolrIndexer {
         }
 
         // Add sequence/order data:
+        let sequenceIndex = {};
         for (let sequence of fedoraData.sequences) {
             let seqPid: string, seqNum: string;
             [seqPid, seqNum] = sequence.split('#', 2);
+            sequenceIndex[seqPid] = seqNum;
             let sequence_str = seqPid.replace(":", "_");
             let dynamic_sequence_field_name = 'sequence_' + sequence_str + '_str';
             fields[dynamic_sequence_field_name] = this.padNumber(seqNum);
         }
-        fields.has_order_str = 'TODO';
 
         // Process parent data:
         let hierarchyParents: Array<FedoraData> = [];
@@ -60,13 +67,15 @@ class SolrIndexer {
             // If the object is a Data, the parentPID is the Resource it belongs
             // to (skip the List object):
             if (fedoraData.models.includes('vudl-system:DataModel')) {
-                hierarchyParents = hierarchyParents.concat(parent.parents);
+                for (const grandParent of parent.parents) {
+                    hierarchyParents.push(grandParent);
+                    hierarchySequences.push(this.padNumber(sequenceIndex[grandParent.pid] ?? 0))
+                }
             } else {
                 // ...else it is the immediate parent (Folder most likely):
                 hierarchyParents.push(parent);
+                hierarchySequences.push(this.padNumber(sequenceIndex[parent.pid] ?? 0))
             }
-
-            // TODO: fill in hierarchySequences.
         }
         var hierarchyTops: Array<FedoraData> = fedoraData.getAllHierarchyTops();
         if (hierarchyTops.length > 0) {
@@ -80,7 +89,10 @@ class SolrIndexer {
             }
         }
         if (hierarchyParents.length > 0) {
-            fields.hierarchy_first_parent_id_str = hierarchyParents[0].pid;
+            // This is what we are collapsing on:
+            fields.hierarchy_first_parent_id_str
+                = fedoraData.models.includes('vudl-system:DataModel')
+                ? hierarchyParents[0].pid : pid;
             fields.hierarchy_browse = [];
             fields.hierarchy_parent_id = [];
             fields.hierarchy_parent_title = [];
@@ -93,7 +105,7 @@ class SolrIndexer {
             }
         }
         if (hierarchySequences.length > 0) {
-            // TODO: populate hierarchy_sequence_sort_str
+            fields.hierarchy_sequence_sort_str = hierarchySequences[0] ?? this.padNumber(0);
             fields.hierarchy_sequence = hierarchySequences;
         }
 
@@ -107,12 +119,14 @@ class SolrIndexer {
         let copyFields = {
             "author": "dc.creator_txt_mv",
             "author2": "dc.contributor_txt_mv",
+            "dc_source_str_mv": "dc.source_txt_mv",
             "description": "dc.description_txt_mv",
             "format": "dc.format_txt_mv",
             "publisher": "dc.publisher_txt_mv",
             "publisher_str_mv": "dc.publisher_txt_mv",
             "series": "dc.relation_txt_mv",
             "topic": "dc.subject_txt_mv",
+            "topic_facet": "dc.subject_txt_mv",
             "topic_str_mv": "dc.subject_txt_mv",
         };
         for (let field in copyFields) {
@@ -124,11 +138,10 @@ class SolrIndexer {
         // This map copies the first value from existing fields to
         // new fields:
         let firstOnlyFields = {
+            "author_sort": "dc.creator_txt_mv",
             "dc_date_str": "dc.date_txt_mv",
             "dc_relation_str": "dc.relation_txt_mv",
             "dc_title_str": "dc.title_txt_mv",
-            "publishDate": "dc.date_txt_mv",
-            "publishDateSort": "dc.date_txt_mv",
             "title": "dc.title_txt_mv",
             "title_full": "dc.title_txt_mv",
             "title_short": "dc.title_txt_mv",
@@ -151,16 +164,64 @@ class SolrIndexer {
                 fields[field] = fields[secondaryValueFields[field]].slice(1);
             }
         }
-    
+
+        // If this is a data model, we want to pull the date from its parent.
+        const dateString = fedoraData.models.includes("vudl-system:DataModel")
+            ? this.hierarchyParents[0].metadata[date][0] ?? ""
+            : fields['dc.date_txt_mv'][0] ?? "";
+        const strippedDate = dateString.substr(0, 4);
+        // TODO: configurable date cut-off?
+        if (parseInt(strippedDate) > 1000) {
+            fields.publishDate = strippedDate;
+            fields.publishDateSort = strippedDate;
+            // TODO: fields.normalized_sort_date = this.normalizeSortDate(dateString);
+        }
+
+        // TODO: configurable/complete language map:
+        const languageMap = { "en" : "English" };
+        if (typeof fields["dc.language_txt_mv"] !== "undefined") {
+            fields.language = fields["dc.language_txt_mv"].map( (lang) => {
+                return languageMap[lang] ?? lang;
+            });
+        }
+
+        if (typeof fields["title"] !== "undefined") {
+            // TODO: configurable article list:
+            const articles = ["a ", "an ", "the "];
+            let sortTitle = fields["title"].toLowerCase();
+            for (const article of articles) {
+                if (sortTitle.substr(0, article.length) === article) {
+                    sortTitle = sortTitle.substr(article.length);
+                    break;
+                }
+            }
+            fields.title_sort = sortTitle.trim();
+            if (!fedoraData.models.includes("vudl-system:DataModel")) {
+                fields.collection_title_sort_str = fields.title_sort;
+            }
+        }
+
         for (let field in fedoraData.relations) {
             let fieldName = "relsext." + field + "_txt_mv";
             fields[fieldName] = fedoraData.relations[field];
         }
 
+        fields.has_order_str
+            = (fields["relsext.sortOn_txt_mv"][0] ?? 'title') === 'custom'
+            ? 'yes' : 'no';
+
         for (let field in fedoraData.fedoraDetails) {
             let fieldName = "fgs." + field + "_txt_mv";
             fields[fieldName] = fedoraData.fedoraDetails[field];
         }
+
+        // TODO: fields[license.mdRef]
+        // TODO: fields[agent.name]
+        // TODO: fields.has_thumbnail
+        // TODO: fields.THUMBNAIL_contentDigest_type
+        // TODO: fields.THUMBNAIL_contentDigest_digest
+        // TODO: fields.THUMBNAIL_contentLocation_type
+        // TODO: fields.THUMBNAIL_contentLocation_ref
 
         return fields;
     }
