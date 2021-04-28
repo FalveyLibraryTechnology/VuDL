@@ -1,13 +1,14 @@
-var React = require("react");
-import PropTypes from "prop-types";
+const React = require("react");
+const PropTypes = require("prop-types");
 
-var JobList = require("./JobList");
+const JobList = require("./JobList");
 const VuDLPrep = require("./VuDLPrep");
 
 class Category extends React.Component {
     constructor(props) {
         super(props);
         this.state = { open: this.checkStorage() };
+        this.toggle = this.toggle.bind(this);
     }
 
     checkStorage() {
@@ -55,7 +56,7 @@ class Category extends React.Component {
 }
 
 Category.propTypes = {
-    app: PropTypes.instanceOf(VuDLPrep),
+    app: PropTypes.shape({ type: PropTypes.oneOf([VuDLPrep]) }),
     data: PropTypes.exact({
         category: PropTypes.string,
         jobs: PropTypes.arrayOf(PropTypes.string),

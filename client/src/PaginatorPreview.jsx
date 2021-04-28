@@ -1,5 +1,5 @@
-var React = require("react");
-import PropTypes from "prop-types";
+const React = require("react");
+const PropTypes = require("prop-types");
 
 class PaginatorPreview extends React.Component {
     render() {
@@ -9,7 +9,7 @@ class PaginatorPreview extends React.Component {
 }
 
 PaginatorPreview.propTypes = {
-    img: PropTypes.string,
+    img: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };
 
 module.exports = PaginatorPreview;

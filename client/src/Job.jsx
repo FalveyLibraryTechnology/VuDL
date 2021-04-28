@@ -1,6 +1,6 @@
 const React = require("react");
 const { Link } = require("react-router-dom");
-import PropTypes from "prop-types";
+const PropTypes = require("prop-types");
 
 const VuDLPrep = require("./VuDLPrep");
 
@@ -198,7 +198,7 @@ class Job extends React.Component {
 }
 
 Job.propTypes = {
-    app: PropTypes.instanceOf(VuDLPrep),
+    app: PropTypes.shape({ type: PropTypes.oneOf([VuDLPrep]) }),
     category: PropTypes.string,
     children: PropTypes.string,
 };

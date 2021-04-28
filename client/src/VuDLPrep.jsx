@@ -1,10 +1,10 @@
-import $ from "jquery";
-import React from "react";
-import { BrowserRouter, Switch, Route, useParams } from "react-router-dom";
-import PropTypes from "prop-types";
+const $ = require("jquery");
+const React = require("react");
+const { BrowserRouter, Switch, Route, useParams } = require("react-router-dom");
+const PropTypes = require("prop-types");
 
-var JobSelector = require("./JobSelector");
-var JobPaginator = require("./JobPaginator");
+const JobSelector = require("./JobSelector");
+const JobPaginator = require("./JobPaginator");
 
 class VuDLPrep extends React.Component {
     // TODO: Remove
@@ -77,7 +77,7 @@ function JobPaginatorHook({ app }) {
 }
 
 JobPaginatorHook.propTypes = {
-    app: PropTypes.instanceOf(VuDLPrep),
+    app: PropTypes.shape({ type: PropTypes.oneOf([VuDLPrep]) }),
 };
 
 VuDLPrep.propTypes = {
@@ -86,4 +86,4 @@ VuDLPrep.propTypes = {
     url: PropTypes.string,
 };
 
-export default VuDLPrep;
+module.exports = VuDLPrep;

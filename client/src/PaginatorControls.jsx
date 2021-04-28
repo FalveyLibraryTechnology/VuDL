@@ -1,5 +1,5 @@
 const React = require("react");
-import PropTypes from "prop-types";
+const PropTypes = require("prop-types");
 
 const JobPaginator = require("./JobPaginator");
 const MagicLabeler = require("./MagicLabeler");
@@ -7,6 +7,20 @@ const PaginatorControlGroup = require("./PaginatorControlGroup");
 const ZoomToggleButton = require("./ZoomToggleButton");
 
 class PaginatorControls extends React.Component {
+    constructor(props) {
+        super(props);
+        // TODO: Why do we have to do this now?
+        this.getLabel = this.getLabel.bind(this);
+        this.setLabel = this.setLabel.bind(this);
+        this.setLabelPrefix = this.setLabelPrefix.bind(this);
+        this.setLabelBody = this.setLabelBody.bind(this);
+        this.setLabelSuffix = this.setLabelSuffix.bind(this);
+        this.toggleBrackets = this.toggleBrackets.bind(this);
+        this.toggleCase = this.toggleCase.bind(this);
+        this.toggleRoman = this.toggleRoman.bind(this);
+        this.updateCurrentPageLabel = this.updateCurrentPageLabel.bind(this);
+    }
+
     approveCurrentPageLabel() {
         this.setLabel(this.getLabel(true));
     }
@@ -134,7 +148,7 @@ class PaginatorControls extends React.Component {
 }
 
 PaginatorControls.propTypes = {
-    paginator: PropTypes.instanceOf(JobPaginator),
+    paginator: PropTypes.shape({ type: PropTypes.oneOf([JobPaginator]) }),
 };
 
 module.exports = PaginatorControls;

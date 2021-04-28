@@ -1,7 +1,7 @@
-var React = require("react");
-import PropTypes from "prop-types";
+const React = require("react");
+const PropTypes = require("prop-types");
 
-var Zoomy = require("./Zoomy");
+const Zoomy = require("./Zoomy");
 
 class PaginatorZoomy extends React.Component {
     constructor(props) {

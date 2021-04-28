@@ -1,5 +1,5 @@
 const React = require("react");
-import PropTypes from "prop-types";
+const PropTypes = require("prop-types");
 
 const Job = require("./Job");
 const VuDLPrep = require("./VuDLPrep");
@@ -20,7 +20,7 @@ class JobList extends React.Component {
 }
 
 JobList.propTypes = {
-    app: PropTypes.instanceOf(VuDLPrep),
+    app: PropTypes.shape({ type: PropTypes.oneOf([VuDLPrep]) }),
     category: PropTypes.string,
     data: PropTypes.arrayOf(PropTypes.string),
 };

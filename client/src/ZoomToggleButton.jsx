@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+const React = require("react");
+const PropTypes = require("prop-types");
 
 const PaginatorControls = require("./JobPaginator");
 
@@ -14,7 +14,7 @@ class ZoomToggleButton extends React.Component {
 }
 
 ZoomToggleButton.propTypes = {
-    paginator: PropTypes.instanceOf(PaginatorControls),
+    paginator: PropTypes.shape({ type: PropTypes.oneOf([PaginatorControls]) }),
 };
 
 module.exports = ZoomToggleButton;

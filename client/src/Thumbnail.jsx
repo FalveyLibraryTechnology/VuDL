@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+const React = require("react");
+const PropTypes = require("prop-types");
 
 const PaginatorList = require("./PaginatorList");
 
@@ -7,6 +7,7 @@ class Thumbnail extends React.Component {
     constructor(props) {
         super(props);
         this.wrapper = React.createRef();
+        this.selectPage = this.selectPage.bind(this);
     }
 
     selectPage() {
@@ -35,10 +36,11 @@ class Thumbnail extends React.Component {
 }
 
 Thumbnail.propTypes = {
-    list: PropTypes.instanceOf(PaginatorList),
+    // TODO: list and paginator?
+    list: PropTypes.shape({ type: PropTypes.oneOf([PaginatorList]) }),
     number: PropTypes.number,
-    paginator: PropTypes.instanceOf(PaginatorList),
-    selected: PropTypes.boolean,
+    paginator: PropTypes.shape({ type: PropTypes.oneOf([PaginatorList]) }),
+    selected: PropTypes.bool,
 };
 
 module.exports = Thumbnail;

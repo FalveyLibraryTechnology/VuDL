@@ -1,5 +1,5 @@
 const React = require("react");
-import PropTypes from "prop-types";
+const PropTypes = require("prop-types");
 
 const MagicLabeler = require("./MagicLabeler");
 const PaginatorControls = require("./PaginatorControls");
@@ -13,6 +13,8 @@ class JobPaginator extends React.Component {
         super(props);
         this.magicLabelCache = [];
         this.state = { active: false, currentPage: 0, zoom: false, order: [] };
+        this.getLabel = this.getLabel.bind(this);
+        this.toggleZoom = this.toggleZoom.bind(this);
     }
 
     getImageUrl(imageNumber, size) {
@@ -221,7 +223,7 @@ class JobPaginator extends React.Component {
     }
 
     confirmSavedMagicLabels(count) {
-        var msg = "You will be saving " + count + " unreviewed, auto-generated" + " label(s). Are you sure?";
+        const msg = "You will be saving " + count + " unreviewed, auto-generated label(s). Are you sure?";
         return window.confirm(msg);
     }
 
@@ -315,7 +317,7 @@ class JobPaginator extends React.Component {
 }
 
 JobPaginator.propTypes = {
-    app: PropTypes.instanceOf(VuDLPrep),
+    app: PropTypes.shape({ type: PropTypes.oneOf([VuDLPrep]) }),
     category: PropTypes.string,
     job: PropTypes.string,
 };
