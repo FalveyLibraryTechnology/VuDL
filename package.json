@@ -28,6 +28,7 @@
 
     "build": "concurrently npm:api:build npm:client:build",
     "dev": "concurrently -c 'cyan,green,gray' npm:client npm:api:dev npm:queue:dev",
+    "format": "prettier --check --write api/*.js api/src/ client/src/",
     "lint": "eslint api/*.js api/src/ client/src/ --ext .ts,.js,.jsx",
     "start": "concurrently -c 'cyan,green,gray' npm:client npm:api npm:queue"
   },
