@@ -19,7 +19,7 @@ function holdingArea(): string {
 
 router.get("/", function(req, res, next) {
     var categoryCollection = new CategoryCollection(holdingArea());
-    res.send(JSON.stringify(categoryCollection.raw()));
+    res.json(categoryCollection.raw());
 });
 
 router.get("/:category", function(req, res, next) {
@@ -27,32 +27,32 @@ router.get("/:category", function(req, res, next) {
     //Sanitize incoming parameters
     //404 error for non-existent catgeory (if holding area + category is not a directory)
     var category = new Category(holdingArea() + req.params.category);
-    res.send(JSON.stringify(category.raw()));
+    res.json(category.raw());
 });
 
 router.get("/:category/:job", function(req, res, next) {
-    res.send(JSON.stringify(getJobFromRequest(req).metadata.raw));
+    res.json(getJobFromRequest(req).metadata.raw);
 });
 
 router.get("/:category/:job/status", function(req, res, next) {
-    res.send(JSON.stringify(getJobFromRequest(req).metadata.status));
+    res.json(getJobFromRequest(req).metadata.status);
 });
 
 router.put("/:category/:job/derivatives", function(req, res, next) {
     getJobFromRequest(req).makeDerivatives();
-    res.send(JSON.stringify( { status: 'ok' } ));
+    res.json( { status: 'ok' } );
 });
 
 router.put("/:category/:job/ingest", function(req, res, next) {
     getJobFromRequest(req).ingest();
-    res.send(JSON.stringify( { status: 'ok' } ));
+    res.json( { status: 'ok' } );
 });
 
 router.put("/:category/:job", function(req, res, next) {
     let job = getJobFromRequest(req);
     //TODO
     //job.metadata.validate(job, req.params);
-    res.send(JSON.stringify( { status: 'ok' } ));
+    res.json( { status: 'ok' } );
 });
 
 router.get("/:category/:job/:image/:size", async function(req, res, next) {
@@ -78,9 +78,9 @@ router.delete("/:category/:job/:image/*"), async function(req, res, next) {
     let imageObj = job.getImage(image);
     if (imageObj !== null) {
         imageObj.delete();
-        res.send(JSON.stringify( { status: 'ok' } ));
+        res.json( { status: 'ok' } );
     } else {
-        res.status(404).send(JSON.stringify( { status: 'image missing' } ));
+        res.status(404).json( { status: 'image missing' } );
     }
 }
 
