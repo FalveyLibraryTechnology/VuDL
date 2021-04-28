@@ -71,6 +71,19 @@ class HierarchyCollector {
         );
     }
 
+    protected extractFedoraDatastreams(RDF: string): Array<string> {
+        let xmlParser = new DOMParser();
+        let RDF_XML = xmlParser.parseFromString(RDF, "text/xml");
+        return this.extractRDFXML(
+            RDF_XML,
+            {
+                'rdf': "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                'ldp': "http://www.w3.org/ns/ldp#",
+            },
+            '//ldp:contains'
+        )['contains'] ?? [];
+    }
+
     async getHierarchy(pid, fetchRdf: boolean = true): Promise<FedoraData> {
         // Use Fedora to get data
         // TODO: type
@@ -84,7 +97,8 @@ class HierarchyCollector {
         const RDF = fetchRdf ? await this.fedora.getRdf(pid) : null;
         let result = new FedoraData(
             pid, this.extractRelations(RELS), this.extractMetadata(DC),
-            fetchRdf ? this.extractFedoraDetails(RDF) : {}
+            fetchRdf ? this.extractFedoraDetails(RDF) : {},
+            fetchRdf ? this.extractFedoraDatastreams(RDF) : []
         );
         // Create promises to retrieve parents asynchronously...
         let promises = (result.relations.isMemberOf ?? []).map(async (resource) => {

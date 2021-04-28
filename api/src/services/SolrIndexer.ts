@@ -32,6 +32,7 @@ class SolrIndexer {
         let fields: SolrFields = {
             id: pid,
             modeltype_str_mv: fedoraData.models,
+            datastream_str_mv: fedoraData.fedoraDatastreams,
             hierarchytype: null,
             hierarchy_all_parents_str_mv: fedoraData.getAllParents()
         };
