@@ -16,8 +16,9 @@ class Job {
     }
 
     ingest(): void {
+        // TODO
         // const metadata = new JobMetadata(this);
-        // const lockfile = metadata.ingestLockfile(this);
+        // const lockfile = metadata.ingestLockfile();
     }
 
     raw(): string {
@@ -41,7 +42,7 @@ class Job {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     config(): any {
-        // any from "ini" library
+        // any returned from "ini" library
         const config = Config.getInstance();
         console.log(config.message); // Prints out: 'I am an instance'
         config.message = "Foo Bar"; // Overwrite message property

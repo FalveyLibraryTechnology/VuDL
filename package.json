@@ -8,6 +8,7 @@
   },
   "scripts": {
     "api": "node api/bin/www",
+    "api:lint": "eslint api/*.js api/src/ --ext .ts,.js,.jsx",
     "api:dev": "nodemon --watch api/dist api/bin/www",
     "api:wsl": "nodemon --legacy-watch api/bin/www",
     "api:build": "cd api && tsc",
@@ -15,6 +16,7 @@
 
     "client": "cd client && npm run start",
     "client:build": "cd client && npm run build",
+    "client:lint": "eslint client/src/ --ext .ts,.js,.jsx",
 
     "queue": "node api/worker-start.js",
     "queue:dev": "nodemon --watch api/dist/jobs api/worker-start.js",
