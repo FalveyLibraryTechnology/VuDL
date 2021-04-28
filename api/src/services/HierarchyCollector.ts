@@ -14,7 +14,7 @@ class HierarchyCollector {
         this.hierarchyTops = hierarchyTops;
     }
 
-    protected extractMetadata(dc: DC): { [key: string]: Array<string> } {
+    protected extractMetadata(dc: DC): Record<string, Array<string>> {
         const metadata: { [key: string]: Array<string> } = {};
         dc.children.forEach((field) => {
             if (typeof metadata[field.name] === "undefined") {
@@ -25,19 +25,19 @@ class HierarchyCollector {
         return metadata;
     }
 
-    protected extractRelations(RELS: string): { [key: string]: Array<string> } {
+    protected extractRelations(RELS: string): Record<string, Array<string>> {
         const xmlParser = new DOMParser();
         const RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
         const rdfXPath = xpath.useNamespaces({
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         });
-        const relations: { [key: string]: Array<string> } = {};
-        rdfXPath("//rdf:Description/*", RELS_XML).forEach((relation) => {
-            let values = rdfXPath("text()", relation);
+        const relations: Record<string, Array<string>> = {};
+        rdfXPath("//rdf:Description/*", RELS_XML).forEach((relation: Node) => {
+            let values = rdfXPath("text()", relation) as Array<Node>;
             // If there's a namespace on the node name, strip it:
             const nodeName = relation.nodeName.split(":").pop();
             if (values.length === 0) {
-                values = rdfXPath("./@rdf:resource", relation);
+                values = rdfXPath("./@rdf:resource", relation) as Array<Node>;
             }
             if (values.length > 0) {
                 if (typeof relations[nodeName] === "undefined") {

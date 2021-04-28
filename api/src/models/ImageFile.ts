@@ -133,17 +133,16 @@ class ImageFile {
     }
 
     public delete(): void {
-        if (fs.existsSync(this.filename)) {
-            fs.unlinkSync(this.filename);
-        }
-        const files: Array<string> = [];
+        const files: Array<string> = [this.filename];
         for (const size in Object.keys(this.sizes)) {
             files.push(this.derivativePath(size, "jpg"));
             files.push(this.derivativePath("ocr/pngs", "png"));
             files.push(this.derivativePath("OCR-DIRTY", "txt"));
-            if (fs.existsSync(files)) {
+        }
+        for (const file of files) {
+            if (fs.existsSync(file)) {
                 try {
-                    fs.unlinkSync(files);
+                    fs.unlinkSync(file);
                 } catch (err) {
                     console.error(err);
                 }

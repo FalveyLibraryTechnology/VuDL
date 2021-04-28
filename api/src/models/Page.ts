@@ -3,7 +3,7 @@ export interface PageRaw {
     label: string;
 }
 
-export default class Page {
+export class Page {
     filename: string;
     label: string;
 
@@ -20,3 +20,5 @@ export default class Page {
         return { filename: this.filename, label: this.label };
     }
 }
+
+export default Page;

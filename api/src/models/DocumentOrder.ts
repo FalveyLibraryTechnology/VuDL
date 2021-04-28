@@ -17,8 +17,8 @@ class DocumentOrder {
         return new DocumentOrder(list);
     }
 
-    static fromRaw(raw: Array<string>): DocumentOrder {
-        const list = raw.map(function (list: string) {
+    static fromRaw(raw: Array<DocumentFileRaw>): DocumentOrder {
+        const list = raw.map(function (list) {
             return DocumentFile.fromRaw(list);
         });
         return new DocumentOrder(list);

@@ -8,7 +8,7 @@ export class CategoryRaw {
     jobs: Array<string>;
 }
 
-export default class Category {
+export class Category {
     jobs: Array<Job> = [];
     name: string;
 
@@ -48,3 +48,5 @@ export default class Category {
         return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }
+
+export default Category;

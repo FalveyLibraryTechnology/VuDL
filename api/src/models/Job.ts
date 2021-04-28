@@ -42,11 +42,12 @@ class Job {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     config(): any {
+        // TODO: This is just a test, right?
         // any returned from "ini" library
-        const config = Config.getInstance();
+        const config = Config.getInstance().ini();
         console.log(config.message); // Prints out: 'I am an instance'
         config.message = "Foo Bar"; // Overwrite message property
-        const instance = config.getInstance();
+        const instance = config.getInstance().ini();
         console.log(instance.message); // Prints out: 'Foo Bar'
         return instance;
     }

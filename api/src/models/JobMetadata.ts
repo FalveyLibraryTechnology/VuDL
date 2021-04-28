@@ -1,6 +1,7 @@
 import fs = require("fs");
 
 import AudioOrder from "./AudioOrder";
+import { DocumentFileRaw } from "./DocumentFile";
 import DocumentOrder from "./DocumentOrder";
 import Job from "./Job";
 import { PageRaw } from "./Page";
@@ -92,6 +93,10 @@ class JobMetadata {
     }
 
     set order(order: PageOrder) {
+        this._order = order;
+    }
+
+    setOrderFromRaw(data: Array<PageRaw>) {
         this._order = PageOrder.fromRaw(data);
     }
 
@@ -106,7 +111,7 @@ class JobMetadata {
         this._documents = documents;
     }
 
-    setDocumentsFromRaw(data: Array<string>): void {
+    setDocumentsFromRaw(data: Array<DocumentFileRaw>): void {
         this._documents = DocumentOrder.fromRaw(data);
     }
 
@@ -126,7 +131,7 @@ class JobMetadata {
     }
 
     save(): void {
-        fs.writeFile(this._filename, JSON.stringify(this.raw));
+        fs.writeFileSync(this._filename, JSON.stringify(this.raw), "utf-8");
     }
 
     get status(): Record<string, unknown> {

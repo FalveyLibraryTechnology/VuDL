@@ -1,10 +1,10 @@
 class FedoraData {
-    public metadata: Record<string, string>;
+    public metadata: Record<string, Array<string>>;
     public pid: string;
-    public relations: Record<string, string>;
+    public relations: Record<string, Array<string>>;
     parents: Array<FedoraData> = [];
 
-    constructor(pid: string, relations: Record<string, string>, metadata: Record<string, string>) {
+    constructor(pid: string, relations: Record<string, Array<string>>, metadata: Record<string, Array<string>>) {
         this.pid = pid;
         this.relations = relations;
         this.metadata = metadata;

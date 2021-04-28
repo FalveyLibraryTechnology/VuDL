@@ -19,7 +19,7 @@ export interface DC {
     children: Array<DC>;
 }
 
-export default class Fedora {
+export class Fedora {
     baseUrl: string;
     cache: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -97,3 +97,5 @@ export default class Fedora {
         return <DC>(<unknown>this.getDatastream(pid, "DC", true));
     }
 }
+
+export default Fedora;

@@ -3,7 +3,7 @@ export interface DocumentFileRaw {
     label: string;
 }
 
-export default class DocumentFile {
+export class DocumentFile {
     filename: string;
     label: string;
 
@@ -20,3 +20,5 @@ export default class DocumentFile {
         return { filename: this.filename, label: this.label };
     }
 }
+
+export default DocumentFile;
