@@ -61,7 +61,8 @@ class ImageFile {
     derivativePath(size, extension = "jpg") {
         var path = require('path');
         var dir = path.dirname(this.filename);
-        var filename = this.basename(this.filename);
+        const ext = this.filename.substr(this.filename.lastIndexOf('.'));
+        var filename = path.basename(this.filename, ext);
         return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
