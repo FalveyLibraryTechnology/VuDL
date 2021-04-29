@@ -1,7 +1,7 @@
-import Fedora from "./Fedora";
+import { DC, Fedora } from "./Fedora";
 import FedoraData from "../models/FedoraData";
 import { DOMParser } from "xmldom";
-const xpath = require("xpath");
+import xpath = require("xpath");
 
 class HierarchyCollector {
     fedora: Fedora;
@@ -14,9 +14,9 @@ class HierarchyCollector {
         this.hierarchyTops = hierarchyTops;
     }
 
-    protected extractMetadata(DC: any): {[key: string]: Array<string>} {
-        let metadata: {[key: string]: Array<string>} = {};
-        DC.children.forEach((field) => {
+    protected extractMetadata(dc: DC): Record<string, Array<string>> {
+        const metadata: { [key: string]: Array<string> } = {};
+        dc.children.forEach((field) => {
             if (typeof metadata[field.name] === "undefined") {
                 metadata[field.name] = [];
             }
@@ -26,14 +26,14 @@ class HierarchyCollector {
     }
 
     protected extractRDFXML(xml, namespaces, xpathQuery) {
-        let rdfXPath = xpath.useNamespaces(namespaces);
-        let relations: {[key: string]: Array<string>} = {};
-        rdfXPath(xpathQuery, xml).forEach((relation) => {
-            let values = rdfXPath('text()', relation);
+        const rdfXPath = xpath.useNamespaces(namespaces);
+        const relations: Record<string, Array<string>> = {};
+        rdfXPath(xpathQuery, xml).forEach((relation: Node) => {
+            let values = rdfXPath('text()', relation) as Array<Node>;
             // If there's a namespace on the node name, strip it:
-            let nodeName = relation.nodeName.split(':').pop();
+            const nodeName = relation.nodeName.split(":").pop();
             if (values.length === 0) {
-                values = rdfXPath('./@rdf:resource', relation);
+                values = rdfXPath("./@rdf:resource", relation) as Array<Node>;
             }
             if (values.length > 0) {
                 if (typeof relations[nodeName] === "undefined") {
@@ -84,7 +84,7 @@ class HierarchyCollector {
         )['contains'] ?? [];
     }
 
-    async getHierarchy(pid, fetchRdf: boolean = true): Promise<FedoraData> {
+    async getHierarchy(pid: string, fetchRdf = true): Promise<FedoraData> {
         // Use Fedora to get data
         // TODO: type
         // TODO: catch failure
@@ -95,17 +95,17 @@ class HierarchyCollector {
         // first object retrieved; so when we recurse higher into the tree,
         // we can skip fetching more RDF in order to save some time!
         const RDF = fetchRdf ? await this.fedora.getRdf(pid) : null;
-        let result = new FedoraData(
+        const result = new FedoraData(
             pid, this.extractRelations(RELS), this.extractMetadata(DC),
             fetchRdf ? this.extractFedoraDetails(RDF) : {},
             fetchRdf ? this.extractFedoraDatastreams(RDF) : []
         );
         // Create promises to retrieve parents asynchronously...
-        let promises = (result.relations.isMemberOf ?? []).map(async (resource) => {
-            let parentPid = resource.substr("info:fedora/".length);
+        const promises = (result.relations.isMemberOf ?? []).map(async (resource) => {
+            const parentPid = resource.substr("info:fedora/".length);
             if (!this.hierarchyTops.includes(parentPid)) {
                 // The "false" here skips RDF retrieval:
-                let parent = await this.getHierarchy(parentPid, false);
+                const parent = await this.getHierarchy(parentPid, false);
                 result.addParent(parent);
             }
         });

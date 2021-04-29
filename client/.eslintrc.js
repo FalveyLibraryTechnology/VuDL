@@ -1,6 +1,7 @@
 module.exports = {
     root: false,
     env: {
+        es2020: true,
         browser: true,
     },
     plugins: ["react"],

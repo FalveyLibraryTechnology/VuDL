@@ -1,76 +1,79 @@
+import fs = require("fs");
+import ini = require("ini"); // returns <any>
+
 class PrivateConfig {
     constructor() {
         //this.message = 'I am an instance';
     }
 
-    ini() {
-        let fs = require('fs'), ini = require('ini');
-        let config = ini.parse(fs.readFileSync(__dirname.replace(/\\/g, "/") + "/../../vudl.ini", 'utf-8'));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ini(): any {
+        const config = ini.parse(fs.readFileSync(__dirname.replace(/\\/g, "/") + "/../../vudl.ini", "utf-8"));
         return config;
     }
 
-    fedoraHostUrl() {
-        return this.ini()['fedora_host'];
+    fedoraHostUrl(): string {
+        return this.ini()["fedora_host"];
     }
 
-    fedoraApiUrl() {
-        return this.ini()['fedora_api'];
+    fedoraApiUrl(): string {
+        return this.ini()["fedora_api"];
     }
 
-    fedoraUsername() {
-        return this.ini()['fedora_username'];
+    fedoraUsername(): string {
+        return this.ini()["fedora_username"];
     }
 
-    fedoraPassword() {
-        return this.ini()['fedora_password'];
+    fedoraPassword(): string {
+        return this.ini()["fedora_password"];
     }
 
-    fedoraPidNameSpace() {
-        return this.ini()['fedora_pid_namespace'];
+    fedoraPidNameSpace(): string {
+        return this.ini()["fedora_pid_namespace"];
     }
 
-    solrQueryUrl() {
-        return this.ini()['solr_query_url'];
+    solrQueryUrl(): string {
+        return this.ini()["solr_query_url"];
     }
 
-    tesseractPath() {
-        return this.ini()['tesseract_path'];
+    tesseractPath(): string {
+        return this.ini()["tesseract_path"];
     }
 
-    vufindUrl() {
-        return this.ini()['vufind_url'];
+    vufindUrl(): string {
+        return this.ini()["vufind_url"];
     }
 
-    pdfDirectory() {
-        return this.ini()['pdf_directory'];
+    pdfDirectory(): string {
+        return this.ini()["pdf_directory"];
     }
 
-    textcleanerPath() {
-        return this.ini()['textcleaner_path'];
+    textcleanerPath(): string {
+        return this.ini()["textcleaner_path"];
     }
 
-    textcleanerSwitches() {
-        return this.ini()['textcleaner_switches'];
+    textcleanerSwitches(): string {
+        return this.ini()["textcleaner_switches"];
     }
 
-    holdingArea() {
-        return this.ini()['holding_area_path'];
+    holdingArea(): string {
+        return this.ini()["holding_area_path"];
     }
 
-    processedAreaPath() {
-        return this.ini()['processed_area_path'];
+    processedAreaPath(): string {
+        return this.ini()["processed_area_path"];
     }
 
-    restBaseUrl() {
-        return this.ini()['base_url'];
+    restBaseUrl(): string {
+        return this.ini()["base_url"];
     }
 
-    requireLogin() {
-        return this.ini()['require_login']
+    requireLogin(): string {
+        return this.ini()["require_login"];
     }
 
-    userWhitelist() {
-        this.ini()['user_whitelist']
+    userWhitelist(): string {
+        return this.ini()["user_whitelist"];
     }
 }
 

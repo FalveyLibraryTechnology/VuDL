@@ -1,33 +1,38 @@
-import AudioFile from './AudioFile'
+import glob = require("glob");
+
+import AudioFile from "./AudioFile";
+import Job from "./Job";
 
 class AudioOrder {
-    list: Array<object> = [];
+    list: Array<AudioFile> = [];
 
-    constructor(list) {
+    constructor(list: Array<AudioFile>) {
         this.list = list;
     }
 
-    static fromJob(job) {
-        var glob = require("glob");
-        var list = glob.sync(job.dir + ".flac").map(function(flac: string){ return new AudioFile(this.basename(flac), job.dir)});
+    static fromJob(job: Job): AudioOrder {
+        const list = glob.sync(job.dir + ".flac").map(function (flac: string) {
+            return new AudioFile(this.basename(flac), job.dir);
+        });
         return new AudioOrder(list);
-
     }
 
-    static fromRaw(raw) {
-        var list = raw.map(function(list: string){ return AudioFile.fromRaw(list) });
+    static fromRaw(raw: Array<Record<string, string>>): AudioOrder {
+        const list = raw.map(function (list) {
+            return AudioFile.fromRaw(list);
+        });
         return new AudioOrder(list);
-
     }
 
-    raw() {
-        return this.list.map(function(audiofile: AudioFile) { return audiofile.raw() });
+    raw(): Array<Record<string, string>> {
+        return this.list.map(function (audiofile: AudioFile) {
+            return audiofile.raw();
+        });
     }
 
-    basename(path) {
-        return path.replace(/\/$/, "").split('/').reverse()[0];
-     }
-
+    basename(path: string): string {
+        return path.replace(/\/$/, "").split("/").reverse()[0];
+    }
 }
 
 export default AudioOrder;

@@ -1,21 +1,23 @@
-var React = require('react');
-var Zoomy = require('./Zoomy');
+const React = require("react");
+const PropTypes = require("prop-types");
 
-class PaginatorZoomy extends React.Component{
+const Zoomy = require("./Zoomy");
+
+class PaginatorZoomy extends React.Component {
     constructor(props) {
         super(props);
         this.status = React.createRef();
     }
 
-    componentDidMount = () => {
-        Zoomy.init(document.getElementById('zoomy'));
+    componentDidMount() {
+        Zoomy.init(document.getElementById("zoomy"));
         this.componentDidUpdate();
     }
 
-    componentDidUpdate = () => {
+    componentDidUpdate() {
         Zoomy.load(
             this.props.img,
-            function() {
+            function () {
                 Zoomy.resize();
                 Zoomy.center();
                 this.status.current.className = "hidden";
@@ -23,14 +25,20 @@ class PaginatorZoomy extends React.Component{
         );
     }
 
-    render = () => {
+    render() {
         return (
             <div>
-                <div ref={this.status} id="zoomyStatus">Loading...</div>
+                <div ref={this.status} id="zoomyStatus">
+                    Loading...
+                </div>
                 <canvas id="zoomy"></canvas>
             </div>
         );
     }
+}
+
+PaginatorZoomy.propTypes = {
+    img: PropTypes.string,
 };
 
 module.exports = PaginatorZoomy;

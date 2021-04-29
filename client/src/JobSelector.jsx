@@ -1,35 +1,41 @@
-var React = require('react');
-var Category = require('./Category');
+const React = require("react");
+const PropTypes = require("prop-types");
 
-class JobSelector extends React.Component{
+const Category = require("./Category");
+
+class JobSelector extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {active: true, data: []};
+        this.state = { active: true, data: [] };
     }
 
-    hide = () => {
+    hide() {
         var newState = this.state;
         newState.active = false;
         this.setState(newState);
     }
 
-    show = () => {
-        this.setState({active: true, data: []});
+    show() {
+        this.setState({ active: true, data: [] });
         this.componentDidMount();
     }
 
-    componentDidMount = () => {
-        this.props.app.getJSON(this.props.url, null, function (data) {
-            this.setState({active: true, data: data});
-        }.bind(this));
+    componentDidMount() {
+        this.props.app.getJSON(
+            this.props.url,
+            null,
+            function (data) {
+                this.setState({ active: true, data: data });
+            }.bind(this)
+        );
     }
 
-    render = () => {
+    render() {
         var categories = [];
         var empty_categories = [];
         for (var i in this.state.data) {
             var category = this.state.data[i];
-            var element = <Category app={this.props.app} key={category.category} data={category} />
+            var element = <Category app={this.props.app} key={category.category} data={category} />;
             if (category.jobs.length > 0) {
                 categories[categories.length] = element;
             } else {
@@ -37,12 +43,19 @@ class JobSelector extends React.Component{
             }
         }
         return (
-            <div className={this.state.active ? '' : 'hidden'} id="jobSelector">
+            <div className={this.state.active ? "" : "hidden"} id="jobSelector">
                 {categories}
                 {empty_categories}
             </div>
         );
     }
+}
+
+JobSelector.propTypes = {
+    app: PropTypes.shape({
+        getJSON: PropTypes.func,
+    }),
+    url: PropTypes.string,
 };
 
 module.exports = JobSelector;

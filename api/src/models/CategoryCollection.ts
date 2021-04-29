@@ -1,18 +1,23 @@
-import Category from './Category';
+import glob = require("glob");
+
+import { Category, CategoryRaw } from "./Category";
 
 class CategoryCollection {
-  dir: string;
-  glob = require("glob")
-  categories: Array<object> = [];
-  
-  constructor(dir) {
-    this.dir = dir;
-    this.categories = this.glob.sync(dir + "/*").map(function(dir) { return new Category(dir); });
-  }
+    dir: string;
+    categories: Array<Category> = [];
 
-  raw() {
-    return this.categories.map(function (category: Category) {return category.raw()});
-  }
+    constructor(dir: string) {
+        this.dir = dir;
+        this.categories = glob.sync(dir + "/*").map(function (dir) {
+            return new Category(dir);
+        });
+    }
+
+    raw(): Array<CategoryRaw> {
+        return this.categories.map(function (category: Category) {
+            return category.raw();
+        });
+    }
 }
 
 export default CategoryCollection;

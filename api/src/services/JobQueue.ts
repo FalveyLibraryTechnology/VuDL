@@ -1,20 +1,21 @@
 // import { Queue } from 'bullmq';
-import { Worker } from 'bullmq';
+import { Worker } from "bullmq";
 
 // TODO: Maybe don't load all of them?
-import Derivative from '../jobs/Derivative';
+import Derivative from "../jobs/Derivative";
+import QueueJob from "../jobs/QueueJobInterface";
 
 class JobQueue {
     // TODO: Type
-    workers: any = {};
+    workers: { [key: string]: QueueJob } = {};
     manager: Worker;
 
-    start() {
+    start(): void {
         // TODO: Maybe don't load all of them?
         this.workers.derivatives = new Derivative();
 
-        this.manager = new Worker("vudl", async job => {
-            console.log("JOB: "+ job.name);
+        this.manager = new Worker("vudl", async (job) => {
+            console.log("JOB: " + job.name);
             if (typeof this.workers[job.name] === "undefined") {
                 console.error("Unidentified job from queue: " + job.name);
                 return "sadness";
@@ -23,7 +24,7 @@ class JobQueue {
             return await this.workers[job.name].run(job);
         });
 
-        console.log("JobQueue started")
+        console.log("JobQueue started");
     }
 }
 
