@@ -21,7 +21,7 @@ class SolrIndexer {
         this.hierarchyCollector = new HierarchyCollector(fedora, topPids);
     }
 
-    protected padNumber(num: string) {
+    protected padNumber(num: string): string {
         // Yes, I wrote a left_pad function.
         let paddedNumber = "0000000000" + num;
         return paddedNumber.substr(paddedNumber.length - 10);
@@ -42,6 +42,12 @@ class SolrIndexer {
             hierarchytype: "",
             hierarchy_all_parents_str_mv: fedoraData.getAllParents()
         };
+
+        // Load RELS-EXT data (some of this is used below):
+        for (let field in fedoraData.relations) {
+            let fieldName = "relsext." + field + "_txt_mv";
+            fields[fieldName] = fedoraData.relations[field];
+        }
 
         // Is this a hierarchy?
         if (fedoraData.models.includes('vudl-system:FolderCollection')) {
@@ -103,6 +109,16 @@ class SolrIndexer {
                     fields.hierarchy_parent_title.push(parent.title);
                 }
             }
+        } else {
+            // If no parents, we still need to include the current object as
+            // its own parent for field-collapsing purposes, and we can figure
+            // out which top-level container is in play using RELS data.
+            fields.hierarchy_first_parent_id_str = pid;
+            if (typeof fields["relsext.isMemberOf_txt_mv"] !== "undefined") {
+                fields.hierarchy_parent_id = fields["relsext.isMemberOf_txt_mv"];
+            }
+            fields.hierarchy_sequence = this.padNumber("0");
+            // TODO: is hierarchy_parent_title needed in this situation?
         }
         if (hierarchySequences.length > 0) {
             fields.hierarchy_sequence_sort_str = hierarchySequences[0] ?? this.padNumber(0);
@@ -199,11 +215,6 @@ class SolrIndexer {
             if (!fedoraData.models.includes("vudl-system:DataModel")) {
                 fields.collection_title_sort_str = fields.title_sort;
             }
-        }
-
-        for (let field in fedoraData.relations) {
-            let fieldName = "relsext." + field + "_txt_mv";
-            fields[fieldName] = fedoraData.relations[field];
         }
 
         fields.has_order_str
