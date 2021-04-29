@@ -42,7 +42,8 @@ class PaginatorList extends React.Component {
 }
 
 PaginatorList.propTypes = {
-    paginator: PropTypes.shape({ // JobPaginator
+    // JobPaginator
+    paginator: PropTypes.shape({
         state: PropTypes.shape({
             currentPage: PropTypes.number,
         }),
