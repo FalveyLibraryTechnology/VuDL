@@ -317,7 +317,7 @@ class JobPaginator extends React.Component {
 }
 
 JobPaginator.propTypes = {
-    app: PropTypes.shape({
+    app: PropTypes.shape({ // VuDLPrep
         activateJobSelector: PropTypes.func,
         ajax: PropTypes.func,
         getImageUrl: PropTypes.func,

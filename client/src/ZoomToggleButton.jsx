@@ -12,10 +12,10 @@ class ZoomToggleButton extends React.Component {
 }
 
 ZoomToggleButton.propTypes = {
-    paginator: PropTypes.shape({
+    paginator: PropTypes.shape({ // JobPaginator
         toggleZoom: PropTypes.func,
         state: PropTypes.shape({
-            zoom: PropTypes.func,
+            zoom: PropTypes.bool,
         }),
     }),
 };

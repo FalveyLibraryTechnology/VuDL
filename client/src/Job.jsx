@@ -198,7 +198,7 @@ class Job extends React.Component {
 }
 
 Job.propTypes = {
-    app: PropTypes.shape({
+    app: PropTypes.shape({ // VuDLPrep
         ajax: PropTypes.func,
         getJobUrl: PropTypes.func,
         getJSON: PropTypes.func,

@@ -37,7 +37,7 @@ Thumbnail.propTypes = {
     // TODO: list and paginator?
     list: PropTypes.shape({ scrollTo: PropTypes.func }),
     number: PropTypes.number,
-    paginator: PropTypes.shape({
+    paginator: PropTypes.shape({ // JobPaginator
         getLabel: PropTypes.func,
         getImageUrl: PropTypes.func,
         setPage: PropTypes.func,
