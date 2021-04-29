@@ -13,6 +13,7 @@ class JobPaginator extends React.Component {
         this.magicLabelCache = [];
         this.state = { active: false, currentPage: 0, zoom: false, order: [] };
         // BIND
+        this.autonumberFollowingPages = this.autonumberFollowingPages.bind(this);
         this.getLabel = this.getLabel.bind(this);
         this.toggleZoom = this.toggleZoom.bind(this);
     }
