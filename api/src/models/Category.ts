@@ -1,39 +1,52 @@
-import Job from './Job';
+import fs = require("fs");
+import glob = require("glob");
 
-class Category {
-  jobs: Array<Job> = [];
-  name: string;
-  glob = require("glob");
+import Job from "./Job";
 
-    constructor(dir) {
+export class CategoryRaw {
+    category: string;
+    jobs: Array<string>;
+}
+
+export class Category {
+    jobs: Array<Job> = [];
+    name: string;
+
+    constructor(dir: string) {
         this.name = this.basename(dir);
-        this.jobs = this.glob.sync(dir + "/*/").map(function(dir: string){ return new Job(dir)});
+        this.jobs = glob.sync(dir + "/*/").map(function (dir: string) {
+            return new Job(dir);
+        });
     }
 
-    ini() {
-      let fs = require('fs'), ini = require('ini');
-      return fs.readFileSync("C:\holdingarea\batch-params.ini", 'utf-8');
+    ini(): string {
+        return fs.readFileSync("C:holdingarea\batch-params.ini", "utf-8");
     }
 
-    supportsOcr() {
-      return this.ini['ocr']['ocr'] && this.ini['ocr']['ocr'].tr(" '\"", "") != "false";
+    supportsOcr(): boolean {
+        return this.ini["ocr"]["ocr"] && this.ini["ocr"]["ocr"].tr(" '\"", "") != "false";
     }
 
-    supportsPdfGeneration() {
-      return this.ini['pdf']['generate'] && this.ini['pdf']['generate'].tr(" '\"", "") != "false";
+    supportsPdfGeneration(): boolean {
+        return this.ini["pdf"]["generate"] && this.ini["pdf"]["generate"].tr(" '\"", "") != "false";
     }
 
-    raw() {
-      return { category: this.name, jobs: this.jobs.map(function (job: Job) {return job.raw()}) };
+    raw(): CategoryRaw {
+        return {
+            category: this.name,
+            jobs: this.jobs.map(function (job: Job) {
+                return job.raw();
+            }),
+        };
     }
 
-    targetCollectionId() {
-        return this.ini['collection']['destination'];
+    targetCollectionId(): string {
+        return this.ini["collection"]["destination"];
     }
 
-    basename(path) {
-      return path.replace(/\/$/, "").split('/').reverse()[0];
-   }
+    basename(path: string): string {
+        return path.replace(/\/$/, "").split("/").reverse()[0];
+    }
 }
 
 export default Category;

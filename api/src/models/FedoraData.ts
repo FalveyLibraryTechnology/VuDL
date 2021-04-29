@@ -1,14 +1,10 @@
 class FedoraData {
-    public metadata: {[key: string]: Array<string>};
+    public metadata: Record<string, Array<string>>;
     public pid: string;
-    public relations: {[key: string]: Array<string>};
+    public relations: Record<string, Array<string>>;
     parents: Array<FedoraData> = [];
 
-    constructor (
-        pid: string,
-        relations: {[key: string]: Array<string>},
-        metadata: {[key: string]: Array<string>}
-    ) {
+    constructor(pid: string, relations: Record<string, Array<string>>, metadata: Record<string, Array<string>>) {
         this.pid = pid;
         this.relations = relations;
         this.metadata = metadata;
@@ -25,9 +21,9 @@ class FedoraData {
         }
 
         // Otherwise, let's collect data from our parents:
-        let tops: Array<FedoraData> = [];
-        for (let parent of this.parents) {
-            for (let top of parent.getAllHierarchyTops()) {
+        const tops: Array<FedoraData> = [];
+        for (const parent of this.parents) {
+            for (const top of parent.getAllHierarchyTops()) {
                 if (!tops.includes(top)) {
                     tops.push(top);
                 }
@@ -37,9 +33,9 @@ class FedoraData {
     }
 
     getAllParents(): Array<string> {
-        let results = [];
+        const results = [];
         this.parents.forEach((parent) => {
-            let parentPids = [parent.pid].concat(parent.getAllParents());
+            const parentPids = [parent.pid].concat(parent.getAllParents());
             parentPids.forEach((pid) => {
                 if (!results.includes(pid)) {
                     results.push(pid);
@@ -49,20 +45,19 @@ class FedoraData {
         return results;
     }
 
-    get models() {
+    get models(): Array<string> {
         // Strip off "info:fedora/" prefix:
         return (this.relations.hasModel ?? []).map((model) => {
             return model.substr("info:fedora/".length);
         });
     }
 
-    get sequences() {
+    get sequences(): Array<string> {
         return this.relations.sequence ?? [];
     }
 
-    get title() {
-        return typeof(this.metadata['dc:title']) !== "undefined"
-            ? this.metadata['dc:title'][0] : '';
+    get title(): string {
+        return typeof this.metadata["dc:title"] !== "undefined" ? this.metadata["dc:title"][0] : "";
     }
 }
 

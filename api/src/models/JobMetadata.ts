@@ -1,7 +1,16 @@
-import PageOrder from './PageOrder';
-import DocumentOrder from './DocumentOrder';
-import AudioOrder from './AudioOrder';
-import Job from './Job';
+import fs = require("fs");
+
+import AudioOrder from "./AudioOrder";
+import { DocumentFileRaw } from "./DocumentFile";
+import DocumentOrder from "./DocumentOrder";
+import Job from "./Job";
+import { PageRaw } from "./Page";
+import PageOrder from "./PageOrder";
+
+interface JobMetadataRaw {
+    order: Array<PageRaw>;
+    published: boolean;
+}
 
 class JobMetadata {
     job: Job;
@@ -9,114 +18,123 @@ class JobMetadata {
     _order: PageOrder = null;
     _documents: DocumentOrder = null;
     _audio: AudioOrder = null;
-    published: Boolean = false;
+    published = false;
 
-    constructor(job) {
+    constructor(job: Job) {
         this.job = job;
-        this._filename = this.job.dir + '/job.json'
-        let fs = require('fs');
+        this._filename = this.job.dir + "/job.json";
         if (fs.existsSync(this._filename)) {
-            var json = fs.readFileSync(this._filename);
-            this.raw = JSON.parse(json);            
+            const json = fs.readFileSync(this._filename, "utf-8");
+            this.raw = JSON.parse(json);
         }
     }
 
-    dc(job) {
+    dc(job: Job): Buffer {
         this.job = job;
-        let fs = require('fs'), filename = job.dir + '/dc.xml';
+        const filename = job.dir + "/dc.xml";
         if (fs.existsSync(filename)) {
             return fs.readFileSync(filename);
         }
     }
 
-    ingestLockfile() {
-        return this.job.dir + '/ingest.lock';
+    ingestLockfile(): string {
+        return this.job.dir + "/ingest.lock";
     }
 
-    get raw() {
+    get raw(): JobMetadataRaw {
         return {
             order: this.order.raw,
-            published: this.published
+            published: this.published,
         };
     }
 
-    set raw(data) {
-        this._order = PageOrder.fromRaw(data);
-        this.published = true;
+    set raw(data: JobMetadataRaw) {
+        this._order = PageOrder.fromRaw(data.order);
+        this.published = data.published;
     }
 
-    get derivativeLockfile() {
-        return this.job.dir + '/derivatives.lock';
+    get derivativeLockfile(): string {
+        return this.job.dir + "/derivatives.lock";
     }
 
-    get derivativeStatus() {
+    get derivativeStatus(): Record<string, unknown> {
         // TODO: populate with real data
-        let status = {
+        const status = {
             expected: 10,
             processed: 0,
-            building: false
+            building: false,
         };
         return status;
     }
 
-    get uploadTime() {
+    get uploadTime(): number {
         // TODO: populate with real data
         return 0;
     }
 
-    get fileProblems() {
+    get fileProblems(): Record<string, number> {
         // TODO: populate with real data
         return {
             added: 0,
-            deleted: 0
+            deleted: 0,
         };
     }
 
-    get ingestInfo() {
+    get ingestInfo(): string {
         // TODO: populate with real data
-        return '';
+        return "";
     }
 
-    get order() {
+    get order(): PageOrder {
         if (this._order === null) {
             this._order = PageOrder.fromJob(this.job);
         }
         return this._order;
     }
 
-    set order(data) {
+    set order(order: PageOrder) {
+        this._order = order;
+    }
+
+    setOrderFromRaw(data: Array<PageRaw>) {
         this._order = PageOrder.fromRaw(data);
     }
 
-    get documents() {
+    get documents(): DocumentOrder {
         if (this._documents === null) {
             this._documents = DocumentOrder.fromJob(this.job);
         }
         return this._documents;
     }
 
-    set documents(data) {
+    set documents(documents: DocumentOrder) {
+        this._documents = documents;
+    }
+
+    setDocumentsFromRaw(data: Array<DocumentFileRaw>): void {
         this._documents = DocumentOrder.fromRaw(data);
     }
 
-    get audio() {
+    get audio(): AudioOrder {
         if (this._audio === null) {
             this._audio = AudioOrder.fromJob(this.job);
         }
         return this._audio;
     }
 
-    set audio(data) {
+    set audio(order: AudioOrder) {
+        this._audio = order;
+    }
+
+    setAudioFromRaw(data: Array<Record<string, string>>): void {
         this._audio = AudioOrder.fromRaw(data);
     }
 
-    save() {
-        let fs = require('fs');
-        fs.writeFile(this._filename, JSON.stringify(this.raw));
+    save(): void {
+        fs.writeFileSync(this._filename, JSON.stringify(this.raw), "utf-8");
     }
 
-    get status() {
-        let fs = require('fs');
+    get status(): Record<string, unknown> {
         return {
             derivatives: this.derivativeStatus,
             // TODO: minutes_since_upload: ((Time.new - upload_time) / 60).floor,
@@ -125,10 +143,9 @@ class JobMetadata {
             ingesting: fs.existsSync(this.ingestLockfile()),
             documents: this.documents.list.length,
             audio: this.audio.list.length,
-            ingest_info: this.ingestInfo
+            ingest_info: this.ingestInfo,
         };
     }
-
 }
 
 export default JobMetadata;
