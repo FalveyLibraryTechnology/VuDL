@@ -6,6 +6,8 @@ class Job extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+        // BIND
+        this.buildDerivatives = this.buildDerivatives.bind(this);
     }
 
     componentDidMount() {

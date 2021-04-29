@@ -272,9 +272,9 @@ class JobPaginator extends React.Component {
                     data: JSON.stringify({ order: this.state.order, published: publish }),
                     success: function () {
                         alert("Success!");
-                        this.props.app.activateJobSelector();
+                        window.location.assign("/"); // TODO: Route better?
                         dispatchEvent(new Event("Prep.saved"));
-                    }.bind(this),
+                    },
                     error: function () {
                         alert("Unable to save!");
                     },
