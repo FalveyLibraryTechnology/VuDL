@@ -1,7 +1,6 @@
 const React = require("react");
 const PropTypes = require("prop-types");
 
-const JobPaginator = require("./JobPaginator");
 const Thumbnail = require("./Thumbnail");
 
 class PaginatorList extends React.Component {
@@ -43,7 +42,11 @@ class PaginatorList extends React.Component {
 }
 
 PaginatorList.propTypes = {
-    paginator: PropTypes.shape({ type: PropTypes.oneOf([JobPaginator]) }),
+    paginator: PropTypes.shape({
+        state: PropTypes.shape({
+            currentPage: PropTypes.number,
+        }),
+    }),
     pageCount: PropTypes.number,
 };
 

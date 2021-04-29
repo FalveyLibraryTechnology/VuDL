@@ -1,8 +1,6 @@
 const React = require("react");
 const PropTypes = require("prop-types");
 
-const PaginatorControls = require("./JobPaginator");
-
 class ZoomToggleButton extends React.Component {
     render() {
         return (
@@ -14,7 +12,12 @@ class ZoomToggleButton extends React.Component {
 }
 
 ZoomToggleButton.propTypes = {
-    paginator: PropTypes.shape({ type: PropTypes.oneOf([PaginatorControls]) }),
+    paginator: PropTypes.shape({
+        toggleZoom: PropTypes.func,
+        state: PropTypes.shape({
+            zoom: PropTypes.func,
+        }),
+    }),
 };
 
 module.exports = ZoomToggleButton;

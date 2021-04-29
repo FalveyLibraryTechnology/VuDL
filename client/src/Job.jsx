@@ -2,8 +2,6 @@ const React = require("react");
 const { Link } = require("react-router-dom");
 const PropTypes = require("prop-types");
 
-const VuDLPrep = require("./VuDLPrep");
-
 class Job extends React.Component {
     constructor(props) {
         super(props);
@@ -198,7 +196,11 @@ class Job extends React.Component {
 }
 
 Job.propTypes = {
-    app: PropTypes.shape({ type: PropTypes.oneOf([VuDLPrep]) }),
+    app: PropTypes.shape({
+        ajax: PropTypes.func,
+        getJobUrl: PropTypes.func,
+        getJSON: PropTypes.func,
+    }),
     category: PropTypes.string,
     children: PropTypes.string,
 };

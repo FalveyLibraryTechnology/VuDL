@@ -6,13 +6,13 @@ const PaginatorControls = require("./PaginatorControls");
 const PaginatorList = require("./PaginatorList");
 const PaginatorPreview = require("./PaginatorPreview");
 const PaginatorZoomy = require("./PaginatorZoomy");
-const VuDLPrep = require("./VuDLPrep");
 
 class JobPaginator extends React.Component {
     constructor(props) {
         super(props);
         this.magicLabelCache = [];
         this.state = { active: false, currentPage: 0, zoom: false, order: [] };
+        // BIND
         this.getLabel = this.getLabel.bind(this);
         this.toggleZoom = this.toggleZoom.bind(this);
     }
@@ -317,7 +317,13 @@ class JobPaginator extends React.Component {
 }
 
 JobPaginator.propTypes = {
-    app: PropTypes.shape({ type: PropTypes.oneOf([VuDLPrep]) }),
+    app: PropTypes.shape({
+        activateJobSelector: PropTypes.func,
+        ajax: PropTypes.func,
+        getImageUrl: PropTypes.func,
+        getJobUrl: PropTypes.func,
+        getJSON: PropTypes.func,
+    }),
     category: PropTypes.string,
     job: PropTypes.string,
 };

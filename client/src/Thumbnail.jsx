@@ -1,8 +1,6 @@
 const React = require("react");
 const PropTypes = require("prop-types");
 
-const PaginatorList = require("./PaginatorList");
-
 class Thumbnail extends React.Component {
     constructor(props) {
         super(props);
@@ -37,9 +35,13 @@ class Thumbnail extends React.Component {
 
 Thumbnail.propTypes = {
     // TODO: list and paginator?
-    list: PropTypes.shape({ type: PropTypes.oneOf([PaginatorList]) }),
+    list: PropTypes.shape({ scrollTo: PropTypes.func }),
     number: PropTypes.number,
-    paginator: PropTypes.shape({ type: PropTypes.oneOf([PaginatorList]) }),
+    paginator: PropTypes.shape({
+        getLabel: PropTypes.func,
+        getImageUrl: PropTypes.func,
+        setPage: PropTypes.func,
+    }),
     selected: PropTypes.bool,
 };
 

@@ -1,7 +1,6 @@
 const React = require("react");
 const PropTypes = require("prop-types");
 
-const JobPaginator = require("./JobPaginator");
 const MagicLabeler = require("./MagicLabeler");
 const PaginatorControlGroup = require("./PaginatorControlGroup");
 const ZoomToggleButton = require("./ZoomToggleButton");
@@ -9,7 +8,10 @@ const ZoomToggleButton = require("./ZoomToggleButton");
 class PaginatorControls extends React.Component {
     constructor(props) {
         super(props);
-        // TODO: Why do we have to do this now?
+        // BIND
+        // This is not a problem for ES7+
+        // getLabel = (useMagic) => {
+        // TODO: Make compiler happy
         this.getLabel = this.getLabel.bind(this);
         this.setLabel = this.setLabel.bind(this);
         this.setLabelPrefix = this.setLabelPrefix.bind(this);
@@ -148,7 +150,18 @@ class PaginatorControls extends React.Component {
 }
 
 PaginatorControls.propTypes = {
-    paginator: PropTypes.shape({ type: PropTypes.oneOf([JobPaginator]) }),
+    paginator: PropTypes.shape({
+        autonumberFollowingPages: PropTypes.func,
+        deletePage: PropTypes.func,
+        getLabel: PropTypes.func,
+        nextPage: PropTypes.func,
+        prevPage: PropTypes.func,
+        save: PropTypes.func,
+        setLabel: PropTypes.func,
+        state: PropTypes.shape({
+            currentPage: PropTypes.number,
+        }),
+    }),
 };
 
 module.exports = PaginatorControls;

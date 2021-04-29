@@ -2,7 +2,6 @@ const React = require("react");
 const PropTypes = require("prop-types");
 
 const Category = require("./Category");
-const { VuDLPrep } = require("./VuDLPrep");
 
 class JobSelector extends React.Component {
     constructor(props) {
@@ -53,7 +52,9 @@ class JobSelector extends React.Component {
 }
 
 JobSelector.propTypes = {
-    app: PropTypes.shape({ type: PropTypes.oneOf([VuDLPrep]) }),
+    app: PropTypes.shape({
+        getJSON: PropTypes.func,
+    }),
     url: PropTypes.string,
 };
 
