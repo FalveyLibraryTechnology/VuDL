@@ -25,7 +25,11 @@ class HierarchyCollector {
         return metadata;
     }
 
-    protected extractRDFXML(xml, namespaces, xpathQuery) {
+    protected extractRDFXML(
+        xml: DOMParser.Dom,
+        namespaces: Record<string, string>,
+        xpathQuery: string
+    ): Record<string, Array<string>> {
         const rdfXPath = xpath.useNamespaces(namespaces);
         const relations: Record<string, Array<string>> = {};
         rdfXPath(xpathQuery, xml).forEach((relation: Node) => {

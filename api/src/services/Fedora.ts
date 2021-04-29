@@ -59,6 +59,7 @@ export class Fedora {
      *
      * @param pid PID to look up
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async getRdf(pid: string, parse = false): Promise<any> {
         if (typeof this.cache[pid] === "undefined") {
             this.cache[pid] = {};

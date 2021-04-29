@@ -96,7 +96,7 @@ class JobMetadata {
         this._order = order;
     }
 
-    setOrderFromRaw(data: Array<PageRaw>) {
+    setOrderFromRaw(data: Array<PageRaw>): void {
         this._order = PageOrder.fromRaw(data);
     }
 
