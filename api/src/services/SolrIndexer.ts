@@ -119,7 +119,7 @@ class SolrIndexer {
             // TODO: is hierarchy_parent_title needed in this situation?
         }
         if (hierarchySequences.length > 0) {
-            fields.hierarchy_sequence_sort_str = hierarchySequences[0] ?? this.padNumber(0);
+            fields.hierarchy_sequence_sort_str = hierarchySequences[0] ?? this.padNumber("0");
             fields.hierarchy_sequence = hierarchySequences;
         }
 
@@ -195,7 +195,7 @@ class SolrIndexer {
         // TODO: configurable/complete language map:
         const languageMap = { en: "English" };
         if (typeof fields["dc.language_txt_mv"] !== "undefined") {
-            fields.language = fields["dc.language_txt_mv"].map((lang) => {
+            fields.language = (fields["dc.language_txt_mv"] as Array<string>).map((lang) => {
                 return languageMap[lang] ?? lang;
             });
         }
@@ -203,7 +203,7 @@ class SolrIndexer {
         if (typeof fields["title"] !== "undefined") {
             // TODO: configurable article list:
             const articles = ["a ", "an ", "the "];
-            let sortTitle = fields["title"].toLowerCase();
+            let sortTitle = (fields["title"] as string).toLowerCase();
             for (const article of articles) {
                 if (sortTitle.substr(0, article.length) === article) {
                     sortTitle = sortTitle.substr(article.length);
