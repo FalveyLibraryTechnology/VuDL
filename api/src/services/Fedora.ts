@@ -65,19 +65,18 @@ export class Fedora {
         }
         if (typeof this.cache[pid]["__rdf"] === "undefined") {
             try {
-                let res = await this._request(
+                const res = await this._request(
                     "get",
                     pid,
                     null, // Data
-                    { // Options
+                    {
+                        // Options
                         parse_response: parse,
-                        headers: { 'Accept' : 'application/rdf+xml' }
+                        headers: { Accept: "application/rdf+xml" },
                     }
                 );
 
-                this.cache[pid]["__rdf"] = parse
-                    ? res.body
-                    : res.body.toString(); // Buffer to string
+                this.cache[pid]["__rdf"] = parse ? res.body : res.body.toString(); // Buffer to string
             } catch (e) {
                 console.log(e);
                 throw "RDF retrieval failed for " + pid;

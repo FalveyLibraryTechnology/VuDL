@@ -9,8 +9,8 @@ interface SolrFields {
 class SolrIndexer {
     hierarchyCollector: HierarchyCollector;
     // TODO: make configurable
-    institution: string = "Villanova University";
-    collection: string = "Digital Library";
+    institution = "Villanova University";
+    collection = "Digital Library";
 
     constructor() {
         // Make Fedora connection
@@ -43,8 +43,8 @@ class SolrIndexer {
         };
 
         // Load RELS-EXT data (some of this is used below):
-        for (let field in fedoraData.relations) {
-            let fieldName = "relsext." + field + "_txt_mv";
+        for (const field in fedoraData.relations) {
+            const fieldName = "relsext." + field + "_txt_mv";
             fields[fieldName] = fedoraData.relations[field];
         }
 
@@ -55,7 +55,7 @@ class SolrIndexer {
         }
 
         // Add sequence/order data:
-        let sequenceIndex = {};
+        const sequenceIndex = {};
         for (const sequence of fedoraData.sequences) {
             const [seqPid, seqNum] = sequence.split("#", 2);
             sequenceIndex[seqPid] = seqNum;
@@ -65,7 +65,7 @@ class SolrIndexer {
         }
 
         // Process parent data:
-        let hierarchyParents: Array<FedoraData> = [];
+        const hierarchyParents: Array<FedoraData> = [];
         const hierarchySequences: Array<string> = [];
         for (const parent of fedoraData.parents) {
             // If the object is a Data, the parentPID is the Resource it belongs
@@ -73,12 +73,12 @@ class SolrIndexer {
             if (fedoraData.models.includes("vudl-system:DataModel")) {
                 for (const grandParent of parent.parents) {
                     hierarchyParents.push(grandParent);
-                    hierarchySequences.push(this.padNumber(sequenceIndex[grandParent.pid] ?? 0))
+                    hierarchySequences.push(this.padNumber(sequenceIndex[grandParent.pid] ?? 0));
                 }
             } else {
                 // ...else it is the immediate parent (Folder most likely):
                 hierarchyParents.push(parent);
-                hierarchySequences.push(this.padNumber(sequenceIndex[parent.pid] ?? 0))
+                hierarchySequences.push(this.padNumber(sequenceIndex[parent.pid] ?? 0));
             }
         }
         const hierarchyTops: Array<FedoraData> = fedoraData.getAllHierarchyTops();
@@ -94,9 +94,9 @@ class SolrIndexer {
         }
         if (hierarchyParents.length > 0) {
             // This is what we are collapsing on:
-            fields.hierarchy_first_parent_id_str
-                = fedoraData.models.includes('vudl-system:DataModel')
-                ? hierarchyParents[0].pid : pid;
+            fields.hierarchy_first_parent_id_str = fedoraData.models.includes("vudl-system:DataModel")
+                ? hierarchyParents[0].pid
+                : pid;
             fields.hierarchy_browse = [];
             fields.hierarchy_parent_id = [];
             fields.hierarchy_parent_title = [];
@@ -182,8 +182,8 @@ class SolrIndexer {
 
         // If this is a data model, we want to pull the date from its parent.
         const dateString = fedoraData.models.includes("vudl-system:DataModel")
-            ? (hierarchyParents[0].metadata['dc:date'][0] ?? "")
-            : ((fields['dc.date_txt_mv'] ?? [])[0] ?? "");
+            ? hierarchyParents[0].metadata["dc:date"][0] ?? ""
+            : (fields["dc.date_txt_mv"] ?? [])[0] ?? "";
         const strippedDate = dateString.substr(0, 4);
         // TODO: configurable date cut-off?
         if (parseInt(strippedDate) > 1000) {
@@ -193,9 +193,9 @@ class SolrIndexer {
         }
 
         // TODO: configurable/complete language map:
-        const languageMap = { "en" : "English" };
+        const languageMap = { en: "English" };
         if (typeof fields["dc.language_txt_mv"] !== "undefined") {
-            fields.language = fields["dc.language_txt_mv"].map( (lang) => {
+            fields.language = fields["dc.language_txt_mv"].map((lang) => {
                 return languageMap[lang] ?? lang;
             });
         }
@@ -216,12 +216,10 @@ class SolrIndexer {
             }
         }
 
-        fields.has_order_str
-            = ((fields["relsext.sortOn_txt_mv"] ?? [])[0] ?? 'title') === 'custom'
-            ? 'yes' : 'no';
+        fields.has_order_str = ((fields["relsext.sortOn_txt_mv"] ?? [])[0] ?? "title") === "custom" ? "yes" : "no";
 
-        for (let field in fedoraData.fedoraDetails) {
-            let fieldName = "fgs." + field + "_txt_mv";
+        for (const field in fedoraData.fedoraDetails) {
+            const fieldName = "fgs." + field + "_txt_mv";
             fields[fieldName] = fedoraData.fedoraDetails[field];
         }
 

@@ -15,7 +15,7 @@ class HierarchyCollector {
     }
 
     protected extractMetadata(dc: DC): Record<string, Array<string>> {
-        const metadata: { [key: string]: Array<string> } = {};
+        const metadata: Record<string, Array<string>> = {};
         dc.children.forEach((field) => {
             if (typeof metadata[field.name] === "undefined") {
                 metadata[field.name] = [];
@@ -29,7 +29,7 @@ class HierarchyCollector {
         const rdfXPath = xpath.useNamespaces(namespaces);
         const relations: Record<string, Array<string>> = {};
         rdfXPath(xpathQuery, xml).forEach((relation: Node) => {
-            let values = rdfXPath('text()', relation) as Array<Node>;
+            let values = rdfXPath("text()", relation) as Array<Node>;
             // If there's a namespace on the node name, strip it:
             const nodeName = relation.nodeName.split(":").pop();
             if (values.length === 0) {
@@ -45,43 +45,45 @@ class HierarchyCollector {
         return relations;
     }
 
-    protected extractRelations(RELS: string): {[key: string]: Array<string>} {
-        let xmlParser = new DOMParser();
-        let RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
+    protected extractRelations(RELS: string): Record<string, Array<string>> {
+        const xmlParser = new DOMParser();
+        const RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
         return this.extractRDFXML(
             RELS_XML,
             {
                 rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
             },
-            '//rdf:Description/*'
+            "//rdf:Description/*"
         );
     }
 
-    protected extractFedoraDetails(RDF: string): {[key: string]: Array<string>} {
-        let xmlParser = new DOMParser();
-        let RDF_XML = xmlParser.parseFromString(RDF, "text/xml");
+    protected extractFedoraDetails(RDF: string): Record<string, Array<string>> {
+        const xmlParser = new DOMParser();
+        const RDF_XML = xmlParser.parseFromString(RDF, "text/xml");
         return this.extractRDFXML(
             RDF_XML,
             {
-                'rdf': "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                'fedora3-model': "info:fedora/fedora-system:def/model#",
-                'fedora3-view': "info:fedora/fedora-system:def/view#",
+                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                "fedora3-model": "info:fedora/fedora-system:def/model#",
+                "fedora3-view": "info:fedora/fedora-system:def/view#",
             },
-            '//rdf:Description/fedora3-model:*|//rdf:Description/fedora3-view:*'
+            "//rdf:Description/fedora3-model:*|//rdf:Description/fedora3-view:*"
         );
     }
 
     protected extractFedoraDatastreams(RDF: string): Array<string> {
-        let xmlParser = new DOMParser();
-        let RDF_XML = xmlParser.parseFromString(RDF, "text/xml");
-        return this.extractRDFXML(
-            RDF_XML,
-            {
-                'rdf': "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                'ldp': "http://www.w3.org/ns/ldp#",
-            },
-            '//ldp:contains'
-        )['contains'] ?? [];
+        const xmlParser = new DOMParser();
+        const RDF_XML = xmlParser.parseFromString(RDF, "text/xml");
+        return (
+            this.extractRDFXML(
+                RDF_XML,
+                {
+                    rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                    ldp: "http://www.w3.org/ns/ldp#",
+                },
+                "//ldp:contains"
+            )["contains"] ?? []
+        );
     }
 
     async getHierarchy(pid: string, fetchRdf = true): Promise<FedoraData> {
@@ -96,7 +98,9 @@ class HierarchyCollector {
         // we can skip fetching more RDF in order to save some time!
         const RDF = fetchRdf ? await this.fedora.getRdf(pid) : null;
         const result = new FedoraData(
-            pid, this.extractRelations(RELS), this.extractMetadata(DC),
+            pid,
+            this.extractRelations(RELS),
+            this.extractMetadata(DC),
             fetchRdf ? this.extractFedoraDetails(RDF) : {},
             fetchRdf ? this.extractFedoraDatastreams(RDF) : []
         );

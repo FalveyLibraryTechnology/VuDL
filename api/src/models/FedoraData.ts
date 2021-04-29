@@ -6,8 +6,13 @@ class FedoraData {
     private _fedoraDatastreams: Array<string>;
     parents: Array<FedoraData> = [];
 
-    constructor(pid: string, relations: Record<string, Array<string>>, metadata: Record<string, Array<string>>, fedoraDetails: Record<string, Array<string>>, fedoraDatastreams: Array<string>
-) {
+    constructor(
+        pid: string,
+        relations: Record<string, Array<string>>,
+        metadata: Record<string, Array<string>>,
+        fedoraDetails: Record<string, Array<string>>,
+        fedoraDatastreams: Array<string>
+    ) {
         this.pid = pid;
         this.relations = relations;
         this.metadata = metadata;
@@ -51,8 +56,8 @@ class FedoraData {
     }
 
     get fedoraDatastreams(): Array<string> {
-        return this._fedoraDatastreams.map( (ds) => {
-            return ds.split('/').pop();
+        return this._fedoraDatastreams.map((ds) => {
+            return ds.split("/").pop();
         });
     }
 
