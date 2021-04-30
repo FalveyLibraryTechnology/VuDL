@@ -150,7 +150,8 @@ class PaginatorControls extends React.Component {
 }
 
 PaginatorControls.propTypes = {
-    paginator: PropTypes.shape({ // JobPaginator
+    // JobPaginator
+    paginator: PropTypes.shape({
         autonumberFollowingPages: PropTypes.func,
         deletePage: PropTypes.func,
         getLabel: PropTypes.func,

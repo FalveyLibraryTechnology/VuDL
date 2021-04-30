@@ -34,10 +34,11 @@ class Thumbnail extends React.Component {
 }
 
 Thumbnail.propTypes = {
-    // TODO: list and paginator?
+    // JobList
     list: PropTypes.shape({ scrollTo: PropTypes.func }),
     number: PropTypes.number,
-    paginator: PropTypes.shape({ // JobPaginator
+    // JobPaginator
+    paginator: PropTypes.shape({
         getLabel: PropTypes.func,
         getImageUrl: PropTypes.func,
         setPage: PropTypes.func,
