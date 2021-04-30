@@ -113,7 +113,9 @@ class SolrIndexer {
             // out which top-level container is in play using RELS data.
             fields.hierarchy_first_parent_id_str = pid;
             if (typeof fields["relsext.isMemberOf_txt_mv"] !== "undefined") {
-                fields.hierarchy_parent_id = fields["relsext.isMemberOf_txt_mv"];
+                fields.hierarchy_parent_id = (fields["relsext.isMemberOf_txt_mv"] as Array<string>).map((id) => {
+                    return id.split("/").pop();
+                });
             }
             fields.hierarchy_sequence = this.padNumber("0");
             // TODO: is hierarchy_parent_title needed in this situation?
