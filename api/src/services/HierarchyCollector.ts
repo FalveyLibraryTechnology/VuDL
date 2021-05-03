@@ -78,7 +78,7 @@ class HierarchyCollector {
     protected extractFedoraDatastreams(RDF: string): Array<string> {
         const xmlParser = new DOMParser();
         const RDF_XML = xmlParser.parseFromString(RDF, "text/xml");
-        return (
+        const raw =
             this.extractRDFXML(
                 RDF_XML,
                 {
@@ -86,8 +86,26 @@ class HierarchyCollector {
                     ldp: "http://www.w3.org/ns/ldp#",
                 },
                 "//ldp:contains"
-            )["contains"] ?? []
-        );
+            )["contains"] ?? [];
+        return raw.map((ds) => {
+            return ds.split("/").pop();
+        });
+    }
+
+    protected extractLicense(XML: string): string {
+        const xmlParser = new DOMParser();
+        const parsedXml = xmlParser.parseFromString(XML, "text/xml");
+        const namespaces = {
+            rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+            METS: "http://www.loc.gov/METS/",
+            xlink: "http://www.w3.org/1999/xlink",
+        };
+        const rdfXPath = xpath.useNamespaces(namespaces);
+        let license = null;
+        rdfXPath("//@xlink:href", parsedXml).forEach((relation: Node) => {
+            license = relation.nodeValue;
+        });
+        return license;
     }
 
     async getHierarchy(pid: string, fetchRdf = true): Promise<FedoraData> {
@@ -101,12 +119,20 @@ class HierarchyCollector {
         // first object retrieved; so when we recurse higher into the tree,
         // we can skip fetching more RDF in order to save some time!
         const RDF = fetchRdf ? await this.fedora.getRdf(pid) : null;
+        const dataStreams = fetchRdf ? this.extractFedoraDatastreams(RDF) : [];
+        // Fetch license details if appropriate/available:
+        let license = null;
+        if (dataStreams.includes("LICENSE")) {
+            const licenseStream = await this.fedora.getDatastream(pid, "LICENSE");
+            license = this.extractLicense(licenseStream);
+        }
         const result = new FedoraData(
             pid,
             this.extractRelations(RELS),
             this.extractMetadata(DC),
             fetchRdf ? this.extractFedoraDetails(RDF) : {},
-            fetchRdf ? this.extractFedoraDatastreams(RDF) : []
+            dataStreams,
+            license
         );
         // Create promises to retrieve parents asynchronously...
         const promises = (result.relations.isMemberOf ?? []).map(async (resource) => {

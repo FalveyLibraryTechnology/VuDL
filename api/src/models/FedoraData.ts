@@ -3,7 +3,8 @@ class FedoraData {
     public pid: string;
     public relations: Record<string, Array<string>>;
     public fedoraDetails: Record<string, Array<string>>;
-    private _fedoraDatastreams: Array<string>;
+    public fedoraDatastreams: Array<string>;
+    public license: string;
     parents: Array<FedoraData> = [];
 
     constructor(
@@ -11,13 +12,15 @@ class FedoraData {
         relations: Record<string, Array<string>>,
         metadata: Record<string, Array<string>>,
         fedoraDetails: Record<string, Array<string>>,
-        fedoraDatastreams: Array<string>
+        fedoraDatastreams: Array<string>,
+        license: string
     ) {
         this.pid = pid;
         this.relations = relations;
         this.metadata = metadata;
         this.fedoraDetails = fedoraDetails;
-        this._fedoraDatastreams = fedoraDatastreams;
+        this.fedoraDatastreams = fedoraDatastreams;
+        this.license = license;
     }
 
     addParent(parent: FedoraData): void {
@@ -53,12 +56,6 @@ class FedoraData {
             });
         });
         return results;
-    }
-
-    get fedoraDatastreams(): Array<string> {
-        return this._fedoraDatastreams.map((ds) => {
-            return ds.split("/").pop();
-        });
     }
 
     get models(): Array<string> {

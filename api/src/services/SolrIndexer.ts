@@ -226,7 +226,12 @@ class SolrIndexer {
             fields[fieldName] = fedoraData.fedoraDetails[field];
         }
 
-        // TODO: fields[license.mdRef]
+        if (fedoraData.license !== null) {
+            fields["license.mdRef_str"] = fedoraData.license;
+        }
+        if ((fields["license.mdRef_str"] ?? null) === "http://digital.library.villanova.edu/copyright.html") {
+            fields.license_str = "protected";
+        }
         // TODO: fields[agent.name]
         // TODO: fields.has_thumbnail
         // TODO: fields.THUMBNAIL_contentDigest_type
