@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 'latest'
+          node-version: '15.x'
 
       - name: Install Dependencies
         run: |
