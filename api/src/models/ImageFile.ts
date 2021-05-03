@@ -1,4 +1,3 @@
-import fs = require("fs");
 import Jimp = require("jimp");
 import path = require("path");
 
@@ -8,6 +7,8 @@ import { exec } from "child_process";
 
 import Config from "./Config";
 import PrivateConfig from "./PrivateConfig";
+
+const fs = require('fs');
 
 class ImageFile {
     filename: string;
@@ -71,11 +72,9 @@ class ImageFile {
     }
 
     async ocr(): Promise<void> {
-        //TODO: update the following (derivativepath requires size now)
         const txt = this.derivativePath("OCR-DIRTY", "txt");
         const deriv = await this.ocrDerivative();
         if (!fs.existsSync(txt)) {
-            // const path = this.basename(txt);
             const ts_cmd =
                 this.config().tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             exec(ts_cmd, (error, stdout, stderr) => {

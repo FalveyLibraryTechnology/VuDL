@@ -4,6 +4,7 @@ import AudioOrder from "./AudioOrder";
 import { DocumentFileRaw } from "./DocumentFile";
 import DocumentOrder from "./DocumentOrder";
 import Job from "./Job";
+import Image from './ImageFile';
 import { PageRaw } from "./Page";
 import PageOrder from "./PageOrder";
 
@@ -14,6 +15,7 @@ interface JobMetadataRaw {
 
 class JobMetadata {
     job: Job;
+    page: PageRaw;
     _filename: string;
     _order: PageOrder = null;
     _documents: DocumentOrder = null;
@@ -58,31 +60,61 @@ class JobMetadata {
     }
 
     get derivativeStatus(): Record<string, unknown> {
-        // TODO: populate with real data
+        let lockfileExists: boolean = fs.existsSync(this.derivativeLockfile);
         const status = {
             expected: 10,
             processed: 0,
             building: false,
+            lockfileExists
         };
+        this.order.pages.forEach(element => {
+            let image: Image = new Image(this.job.dir + "/" + this.page.filename )
+            Object.keys(image.sizes).forEach(key => {
+                status.expected += 1;
+                if (fs.existsSync(image.derivativePath(key))) {
+                    status.processed += 1;
+                }
+            })
+        });
         return status;
     }
 
     get uploadTime(): number {
-        // TODO: populate with real data
-        return 0;
+        this.order.pages.forEach(element => {
+            let getFileUpdatedDate = (path: string = this.job.dir + "/" + this.page.filename) => {
+                let file = fs.statSync(path)
+                let dir = fs.statSync(this.job.dir)
+                if (file != null) {
+                    return file.mtime
+                } else {
+                    return dir.mtime;
+                }
+                
+            }
+            return getFileUpdatedDate();
+        });
+        return this.uploadTime;
     }
 
-    get fileProblems(): Record<string, number> {
-        // TODO: populate with real data
+    get fileProblems() {
+        let fromJson: Array<String> = this.order.raw.map(function(page: PageRaw){ return page.filename});
+        let fromFile: Array<String> = PageOrder.fromJob(this.job).raw.map(function(page: PageRaw){ return page.filename});
+
         return {
-            added: 0,
-            deleted: 0,
+            added: fromJson.filter(x => !fromFile.includes(x)) , //fromJson - fromFile
+            deleted: fromFile.filter(x => !fromJson.includes(x)) //fromFile - fromJson
         };
     }
 
-    get ingestInfo(): string {
-        // TODO: populate with real data
-        return "";
+    get ingestInfo() {
+        let readLastLines = require('read-last-lines');
+        let logfile: string = this.job.dir + "/ingest.log";
+        if (fs.existsSync(logfile)) {
+            return readLastLines.read(logfile, 1)
+                .then((lines) => console.log(lines));
+        } else {
+            return '';
+        }
     }
 
     get order(): PageOrder {
