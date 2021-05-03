@@ -1,3 +1,4 @@
+import DateSanitizer from "./DateSanitizer";
 import Fedora from "./Fedora";
 import FedoraData from "../models/FedoraData";
 import HierarchyCollector from "./HierarchyCollector";
@@ -191,7 +192,7 @@ class SolrIndexer {
         if (parseInt(strippedDate) > 1000) {
             fields.publishDate = strippedDate;
             fields.publishDateSort = strippedDate;
-            // TODO: fields.normalized_sort_date = this.normalizeSortDate(dateString);
+            fields.normalized_sort_date = DateSanitizer.sanitize(dateString);
         }
 
         // TODO: configurable/complete language map:
