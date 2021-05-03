@@ -4,9 +4,9 @@ name: Lint Pull Requests
 
 # Controls when the action will run. 
 on:
-  # Triggers the workflow on pull request events but only for the dev branch
+  # Triggers the workflow on pull request events
   pull_request:
-    branches: [ dev ]
+    types: [opened, edited]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -17,18 +17,19 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v2
+        
       - name: Setup Node
+        uses: actions/setup-node@v1
         with:
           node-version: 'latest'
 
-      # Runs a single command using the runners shell
       - name: Install Dependencies
         run: |
           npm install
           cd client && npm install
           cd api && npm install          
 
-      # Runs a set of commands using the runners shell
       - name: Lint
         run: npm run lint -- --fix
