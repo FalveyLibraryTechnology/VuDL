@@ -111,6 +111,19 @@ class HierarchyCollector {
         return license;
     }
 
+    protected extractAgents(xml: string): Record<string, Array<string>> {
+        const xmlParser = new DOMParser();
+        const RDF_XML = xmlParser.parseFromString(xml, "text/xml");
+        return this.extractRDFXML(
+            RDF_XML,
+            {
+                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                METS: "http://www.loc.gov/METS/",
+            },
+            "//METS:agent/*"
+        );
+    }
+
     async getHierarchy(pid: string, fetchRdf = true): Promise<FedoraData> {
         // Use Fedora to get data
         // TODO: type
@@ -129,13 +142,19 @@ class HierarchyCollector {
             const licenseStream = await this.fedora.getDatastream(pid, "LICENSE");
             license = this.extractLicense(licenseStream);
         }
+        let agents = {};
+        if (dataStreams.includes("AGENTS")) {
+            const agentsStream = await this.fedora.getDatastream(pid, "AGENTS");
+            agents = this.extractAgents(agentsStream);
+        }
         const result = new FedoraData(
             pid,
             this.extractRelations(RELS),
             this.extractMetadata(DC),
             fetchRdf ? this.extractFedoraDetails(RDF) : {},
             dataStreams,
-            license
+            license,
+            agents
         );
         // Create promises to retrieve parents asynchronously...
         const promises = (result.relations.isMemberOf ?? []).map(async (resource) => {

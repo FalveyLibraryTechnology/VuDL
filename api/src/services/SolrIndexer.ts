@@ -226,13 +226,17 @@ class SolrIndexer {
             fields[fieldName] = fedoraData.fedoraDetails[field];
         }
 
+        for (const field in fedoraData.agents) {
+            const fieldName = "agent." + field + "_txt_mv";
+            fields[fieldName] = fedoraData.agents[field];
+        }
+
         if (fedoraData.license !== null) {
             fields["license.mdRef_str"] = fedoraData.license;
         }
         if ((fields["license.mdRef_str"] ?? null) === "http://digital.library.villanova.edu/copyright.html") {
             fields.license_str = "protected";
         }
-        // TODO: fields[agent.name]
         fields.has_thumbnail_str = fedoraData.fedoraDatastreams.includes("THUMBNAIL") ? "true" : "false";
         if (fields.has_thumbnail_str === "true") {
             // TODO: fields.THUMBNAIL_contentDigest_type

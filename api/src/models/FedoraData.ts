@@ -5,6 +5,7 @@ class FedoraData {
     public fedoraDetails: Record<string, Array<string>>;
     public fedoraDatastreams: Array<string>;
     public license: string;
+    public agents: Record<string, Array<string>>;
     parents: Array<FedoraData> = [];
 
     constructor(
@@ -13,7 +14,8 @@ class FedoraData {
         metadata: Record<string, Array<string>>,
         fedoraDetails: Record<string, Array<string>>,
         fedoraDatastreams: Array<string>,
-        license: string
+        license: string,
+        agents: Record<string, Array<string>>,
     ) {
         this.pid = pid;
         this.relations = relations;
@@ -21,6 +23,7 @@ class FedoraData {
         this.fedoraDetails = fedoraDetails;
         this.fedoraDatastreams = fedoraDatastreams;
         this.license = license;
+        this.agents = agents;
     }
 
     addParent(parent: FedoraData): void {
