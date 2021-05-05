@@ -27,6 +27,110 @@ class SolrIndexer {
         return paddedNumber.substr(paddedNumber.length - 10);
     }
 
+    protected getLanguageMap(): Record<string, string> {
+        // TODO: make configurable
+        return {
+            ab: "Abkhazian",
+            af: "Afrikaans",
+            an: "Aragonese",
+            ar: "Arabic",
+            as: "Assamese",
+            az: "Azerbaijani",
+            be: "Belarusian",
+            bg: "Bulgarian",
+            bn: "Bengali",
+            bo: "Tibetan",
+            br: "Breton",
+            bs: "Bosnian",
+            ca: "Catalan / Valencian",
+            ce: "Chechen",
+            co: "Corsican",
+            cs: "Czech",
+            cu: "Church Slavic",
+            cy: "Welsh",
+            da: "Danish",
+            de: "German",
+            el: "Greek",
+            en: "English",
+            eo: "Esperanto",
+            es: "Spanish / Castilian",
+            et: "Estonian",
+            eu: "Basque",
+            fa: "Persian",
+            fi: "Finnish",
+            fj: "Fijian",
+            fo: "Faroese",
+            fr: "French",
+            fy: "Western Frisian",
+            ga: "Irish",
+            gd: "Gaelic / Scottish Gaelic",
+            gl: "Galician",
+            grc: "Ancient Greek",
+            gv: "Manx",
+            he: "Hebrew",
+            hi: "Hindi",
+            hr: "Croatian",
+            ht: "Haitian; Haitian Creole",
+            hu: "Hungarian",
+            hy: "Armenian",
+            id: "Indonesian",
+            is: "Icelandic",
+            it: "Italian",
+            ja: "Japanese",
+            jv: "Javanese",
+            ka: "Georgian",
+            kg: "Kongo",
+            ko: "Korean",
+            ku: "Kurdish",
+            kw: "Cornish",
+            ky: "Kirghiz",
+            la: "Latin",
+            lb: "Luxembourgish; Letzeburgesch",
+            li: "Limburgan; Limburger; Limburgish",
+            ln: "Lingala",
+            lt: "Lithuanian",
+            lv: "Latvian",
+            mg: "Malagasy",
+            mk: "Macedonian",
+            mn: "Mongolian",
+            mo: "Moldavian",
+            ms: "Malay",
+            mt: "Maltese",
+            my: "Burmese",
+            nb: "Norwegian (Bokmål)",
+            ne: "Nepali",
+            nl: "Dutch",
+            nn: "Norwegian (Nynorsk)",
+            no: "Norwegian",
+            oc: "Occitan (post 1500); Provençal",
+            pl: "Polish",
+            pt: "Portuguese",
+            rm: "Raeto-Romance",
+            ro: "Romanian",
+            ru: "Russian",
+            sc: "Sardinian",
+            se: "Northern Sami",
+            sk: "Slovak",
+            sl: "Slovenian",
+            so: "Somali",
+            sq: "Albanian",
+            sr: "Serbian",
+            sv: "Swedish",
+            sw: "Swahili",
+            tk: "Turkmen",
+            tr: "Turkish",
+            ty: "Tahitian",
+            uk: "Ukrainian",
+            ur: "Urdu",
+            uz: "Uzbek",
+            vi: "Vietnamese",
+            vo: "Volapuk",
+            yi: "Yiddish",
+            zh: "Chinese",
+            "pt-BR": "Portuguese (Brazilian)",
+        };
+    }
+
     async getFields(pid: string): Promise<SolrFields> {
         // Collect hierarchy data
         const fedoraData = await this.hierarchyCollector.getHierarchy(pid);
@@ -195,11 +299,9 @@ class SolrIndexer {
             fields.normalized_sort_date = DateSanitizer.sanitize(dateString);
         }
 
-        // TODO: configurable/complete language map:
-        const languageMap = { en: "English" };
         if (typeof fields["dc.language_txt_mv"] !== "undefined") {
             fields.language = (fields["dc.language_txt_mv"] as Array<string>).map((lang) => {
-                return languageMap[lang] ?? lang;
+                return this.getLanguageMap()[lang] ?? lang;
             });
         }
 
