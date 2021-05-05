@@ -233,11 +233,13 @@ class SolrIndexer {
             fields.license_str = "protected";
         }
         // TODO: fields[agent.name]
-        // TODO: fields.has_thumbnail
-        // TODO: fields.THUMBNAIL_contentDigest_type
-        // TODO: fields.THUMBNAIL_contentDigest_digest
-        // TODO: fields.THUMBNAIL_contentLocation_type
-        // TODO: fields.THUMBNAIL_contentLocation_ref
+        fields.has_thumbnail_str = fedoraData.fedoraDatastreams.includes("THUMBNAIL") ? "true" : "false";
+        if (fields.has_thumbnail_str === "true") {
+            // TODO: fields.THUMBNAIL_contentDigest_type
+            // TODO: fields.THUMBNAIL_contentDigest_digest
+            // TODO: fields.THUMBNAIL_contentLocation_type
+            // TODO: fields.THUMBNAIL_contentLocation_ref
+        }
 
         return fields;
     }
