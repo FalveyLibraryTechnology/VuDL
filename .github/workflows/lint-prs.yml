@@ -27,7 +27,7 @@ jobs:
       - name: Install api and client dependencies
         uses: bahmutov/npm-install@v1
         with:
-          install-command: npm install
+          install-command: npm ci
           working-directory: |
             api
             client
