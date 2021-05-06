@@ -19,6 +19,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: What's Going On?
+        run: |
+          pwd
+          ls
+
       - name: Install Dependencies
         run: |
           npm install
