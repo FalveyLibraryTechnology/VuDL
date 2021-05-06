@@ -33,4 +33,4 @@ jobs:
             client
 
       - name: Run eslint
-        run: npm run lint
+        run: npm run lint -- --fix
