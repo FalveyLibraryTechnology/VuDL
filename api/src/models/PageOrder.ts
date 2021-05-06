@@ -42,7 +42,11 @@ class PageOrder {
     }
 
     static basename(path: string): string {
-        return path.replace(/\/$/, "").split("/").reverse()[0];
+        return path
+            .replace(/\\/g, "/") // Windows to Unix
+            .replace(/\/$/, "") // Strip last slash
+            .split("/") // Split
+            .reverse()[0]; // Reverse and take new first
     }
 }
 
