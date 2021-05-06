@@ -21,6 +21,8 @@ jobs:
 
       - name: Install root dependencies
         uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
 
       - name: Install api and client dependencies
         uses: bahmutov/npm-install@v1
