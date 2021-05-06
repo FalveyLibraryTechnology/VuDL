@@ -1,8 +1,8 @@
-const React = require("react");
-const PropTypes = require("prop-types");
+import React from "react";
+import PropTypes from "prop-types";
 
-const Job = require("./Job");
-const VuDLPrep = require("./VuDLPrep");
+import Job from "./Job";
+import VuDLPrep from "./VuDLPrep";
 
 class JobList extends React.Component {
     render() {
@@ -25,4 +25,4 @@ JobList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.string),
 };
 
-module.exports = JobList;
+export default JobList;
