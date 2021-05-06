@@ -19,16 +19,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: What's Going On?
-        run: |
-          pwd
-          ls
+      - name: Install root dependencies
+        uses: bahmutov/npm-install@v1
 
-      - name: Install Dependencies
-        run: |
-          npm install
-          cd client && npm install
-          cd api && npm install
+      - name: Install api and client dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: |
+            api
+            client
 
       - name: Run eslint
         run: npm run lint
