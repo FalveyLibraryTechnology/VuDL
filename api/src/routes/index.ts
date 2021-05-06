@@ -1,13 +1,14 @@
 import express = require("express");
-const router = express.Router();
+var router = express.Router();
 
-router.use(function timeLog(req, res, next) {
+router.use
+(function timeLog(req, res, next) {
     console.log("Time: ", Date.now());
     next();
 });
 
 /* GET home page. */
-router.get("/", function (req, res) {
+router.get("/", function (req, res, next) {
     res.render("index", { title: "VuDLPrep" });
 });
 
