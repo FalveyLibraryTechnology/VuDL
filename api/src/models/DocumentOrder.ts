@@ -1,4 +1,5 @@
 import glob = require("glob");
+import path = require("path");
 
 import { DocumentFile, DocumentFileRaw } from "./DocumentFile";
 import Job from "./Job";
@@ -12,7 +13,7 @@ class DocumentOrder {
 
     static fromJob(job: Job): DocumentOrder {
         const list = glob.sync(job.dir + ".PDF").map(function (pdf: string) {
-            return new DocumentFile(this.basename(pdf), "PDF");
+            return new DocumentFile(path.basename(pdf), "PDF");
         });
         return new DocumentOrder(list);
     }
@@ -28,10 +29,6 @@ class DocumentOrder {
         return this.list.map(function (documentfile: DocumentFile) {
             return documentfile.raw();
         });
-    }
-
-    basename(path: string): string {
-        return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }
 

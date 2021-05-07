@@ -75,7 +75,7 @@ class ImageFile {
         const txt = this.derivativePath("OCR-DIRTY", "txt");
         const deriv = await this.ocrDerivative();
         if (!fs.existsSync(txt)) {
-            // const path = this.basename(txt);
+            // const path = path.basename(txt);
             const ts_cmd =
                 this.config().tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             exec(ts_cmd, (error, stdout, stderr) => {

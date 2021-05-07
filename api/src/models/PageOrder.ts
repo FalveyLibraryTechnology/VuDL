@@ -1,4 +1,5 @@
 import glob = require("glob");
+import path = require("path");
 
 import Job from "./Job";
 import { Page, PageRaw } from "./Page";
@@ -23,7 +24,7 @@ class PageOrder {
         // TODO: can we rewrite this as a map() for better efficiency?
         const pages = [];
         for (let i = 0; i < files.length; i++) {
-            pages[i] = new Page(this.basename(files[i]), null);
+            pages[i] = new Page(path.basename(files[i]), null);
         }
         return new PageOrder(pages);
     }
@@ -39,14 +40,6 @@ class PageOrder {
         return this.pages.map(function (page: Page) {
             return page.raw();
         });
-    }
-
-    static basename(path: string): string {
-        return path
-            .replace(/\\/g, "/") // Windows to Unix
-            .replace(/\/$/, "") // Strip last slash
-            .split("/") // Split
-            .reverse()[0]; // Reverse and take new first
     }
 }
 
