@@ -348,4 +348,4 @@ var Zoomy = {
     },
 };
 
-module.exports = Zoomy;
+export default Zoomy;

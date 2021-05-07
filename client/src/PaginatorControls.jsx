@@ -1,9 +1,9 @@
-const React = require("react");
-const PropTypes = require("prop-types");
+import React from "react";
+import PropTypes from "prop-types";
 
-const MagicLabeler = require("./MagicLabeler");
-const PaginatorControlGroup = require("./PaginatorControlGroup");
-const ZoomToggleButton = require("./ZoomToggleButton");
+import MagicLabeler from "./MagicLabeler";
+import PaginatorControlGroup from "./PaginatorControlGroup";
+import ZoomToggleButton from "./ZoomToggleButton";
 
 class PaginatorControls extends React.Component {
     constructor(props) {
@@ -165,4 +165,4 @@ PaginatorControls.propTypes = {
     }),
 };
 
-module.exports = PaginatorControls;
+export default PaginatorControls;

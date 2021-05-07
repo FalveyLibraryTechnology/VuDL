@@ -150,4 +150,4 @@ var MagicLabeler = {
     },
 };
 
-module.exports = MagicLabeler;
+export default MagicLabeler;

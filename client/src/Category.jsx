@@ -1,8 +1,8 @@
-const React = require("react");
-const PropTypes = require("prop-types");
+import React from "react";
+import PropTypes from "prop-types";
 
-const JobList = require("./JobList");
-const VuDLPrep = require("./VuDLPrep");
+import JobList from "./JobList";
+import VuDLPrep from "./VuDLPrep";
 
 class Category extends React.Component {
     constructor(props) {
@@ -63,4 +63,4 @@ Category.propTypes = {
     }),
 };
 
-module.exports = Category;
+export default Category;
