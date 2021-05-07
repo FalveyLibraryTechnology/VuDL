@@ -1,11 +1,11 @@
-const React = require("react");
-const PropTypes = require("prop-types");
+import React from "react";
+import PropTypes from "prop-types";
 
-const MagicLabeler = require("./MagicLabeler");
-const PaginatorControls = require("./PaginatorControls");
-const PaginatorList = require("./PaginatorList");
-const PaginatorPreview = require("./PaginatorPreview");
-const PaginatorZoomy = require("./PaginatorZoomy");
+import MagicLabeler from "./MagicLabeler";
+import PaginatorControls from "./PaginatorControls";
+import PaginatorList from "./PaginatorList";
+import PaginatorPreview from "./PaginatorPreview";
+import PaginatorZoomy from "./PaginatorZoomy";
 
 class JobPaginator extends React.Component {
     constructor(props) {
@@ -330,4 +330,4 @@ JobPaginator.propTypes = {
     job: PropTypes.string,
 };
 
-module.exports = JobPaginator;
+export default JobPaginator;

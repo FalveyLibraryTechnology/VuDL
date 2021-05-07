@@ -1,5 +1,5 @@
-const React = require("react");
-const PropTypes = require("prop-types");
+import React from "react";
+import PropTypes from "prop-types";
 
 class ZoomToggleButton extends React.Component {
     render() {
@@ -21,4 +21,4 @@ ZoomToggleButton.propTypes = {
     }),
 };
 
-module.exports = ZoomToggleButton;
+export default ZoomToggleButton;

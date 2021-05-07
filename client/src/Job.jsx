@@ -1,6 +1,6 @@
-const React = require("react");
-const { Link } = require("react-router-dom");
-const PropTypes = require("prop-types");
+import React from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 class Job extends React.Component {
     constructor(props) {
@@ -208,4 +208,4 @@ Job.propTypes = {
     children: PropTypes.string,
 };
 
-module.exports = Job;
+export default Job;

@@ -1,4 +1,5 @@
 import glob = require("glob");
+import path = require("path");
 
 import AudioFile from "./AudioFile";
 import Job from "./Job";
@@ -12,7 +13,7 @@ class AudioOrder {
 
     static fromJob(job: Job): AudioOrder {
         const list = glob.sync(job.dir + ".flac").map(function (flac: string) {
-            return new AudioFile(this.basename(flac), job.dir);
+            return new AudioFile(path.basename(flac), job.dir);
         });
         return new AudioOrder(list);
     }
@@ -28,10 +29,6 @@ class AudioOrder {
         return this.list.map(function (audiofile: AudioFile) {
             return audiofile.raw();
         });
-    }
-
-    basename(path: string): string {
-        return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }
 

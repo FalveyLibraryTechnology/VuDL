@@ -1,6 +1,6 @@
 // import ffmpeg = require("fluent-ffmpeg");
 import fs = require("fs");
-// import path = require("path");
+import path = require("path");
 
 import Config from "./Config";
 
@@ -45,12 +45,8 @@ class AudioFile {
     }
 
     derivativePath(extension = "flac"): string {
-        const filename = this.basename(this.filename);
+        const filename = path.basename(this.filename);
         return this.dir + "/" + filename + "." + extension.toLowerCase();
-    }
-
-    basename(path: string): string {
-        return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }
 
