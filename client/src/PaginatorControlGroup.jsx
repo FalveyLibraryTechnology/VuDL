@@ -1,5 +1,5 @@
-const React = require("react");
-const PropTypes = require("prop-types");
+import React from "react";
+import PropTypes from "prop-types";
 
 class PaginatorControlGroup extends React.Component {
     render() {
@@ -29,4 +29,4 @@ PaginatorControlGroup.propTypes = {
     label: PropTypes.string,
 };
 
-module.exports = PaginatorControlGroup;
+export default PaginatorControlGroup;

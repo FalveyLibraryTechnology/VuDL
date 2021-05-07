@@ -1,4 +1,5 @@
 import { openSync, closeSync, existsSync as fileExists } from "fs";
+import path = require("path");
 
 import Config from "./Config";
 import JobMetadata from "./JobMetadata";
@@ -12,7 +13,7 @@ class Job {
 
     constructor(dir: string) {
         this.dir = dir;
-        this.name = this.basename(dir);
+        this.name = path.basename(dir);
     }
 
     ingest(): void {
@@ -61,10 +62,6 @@ class Job {
             this._metadata = new JobMetadata(this);
         }
         return this._metadata;
-    }
-
-    basename(path: string): string {
-        return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }
 

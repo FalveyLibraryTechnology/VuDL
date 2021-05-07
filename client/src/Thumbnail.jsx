@@ -1,5 +1,5 @@
-const React = require("react");
-const PropTypes = require("prop-types");
+import React from "react";
+import PropTypes from "prop-types";
 
 class Thumbnail extends React.Component {
     constructor(props) {
@@ -46,4 +46,4 @@ Thumbnail.propTypes = {
     selected: PropTypes.bool,
 };
 
-module.exports = Thumbnail;
+export default Thumbnail;

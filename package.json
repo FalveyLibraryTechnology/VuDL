@@ -32,7 +32,7 @@
     "dev": "concurrently -c 'cyan,green,gray' npm:client npm:api:dev npm:queue:dev",
     "format": "prettier --check --write api/*.js api/src/ client/src/",
     "install-all": "concurrently npm:setup npm:api:setup npm:client:setup",
-    "lint": "eslint api/*.js api/src/ client/src/ --ext .ts,.js,.jsx",
+    "lint": "eslint api/*.js api/src/ client/src/ --ext .ts,.js,.jsx --max-warnings 0",
     "setup": "npm install",
     "start": "concurrently -c 'cyan,green,gray' npm:client npm:api npm:queue",
     "watch": "cd api && tsc --watch"
