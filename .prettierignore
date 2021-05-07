@@ -1,0 +1,3 @@
+# Ignore vender css
+client/src/css/justgrid.css
+client/src/css/normalize.css
