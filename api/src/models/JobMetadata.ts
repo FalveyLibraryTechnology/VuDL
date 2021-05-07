@@ -4,7 +4,7 @@ import AudioOrder from "./AudioOrder";
 import { DocumentFileRaw } from "./DocumentFile";
 import DocumentOrder from "./DocumentOrder";
 import Job from "./Job";
-import Image from './ImageFile';
+import Image from "./ImageFile";
 import { PageRaw } from "./Page";
 import PageOrder from "./PageOrder";
 
@@ -60,60 +60,67 @@ class JobMetadata {
     }
 
     get derivativeStatus(): Record<string, unknown> {
-        let lockfileExists: boolean = fs.existsSync(this.derivativeLockfile);
+        const lockfileExists: boolean = fs.existsSync(this.derivativeLockfile);
         const status = {
-            expected: 10,
+            expected: 0,
             processed: 0,
-            building: false,
-            lockfileExists
+            building: lockfileExists,
         };
-        this.order.pages.forEach(element => {
-            let image: Image = new Image(this.job.dir + "/" + this.page.filename )
-            Object.keys(image.sizes).forEach(key => {
+        this.order.pages.forEach((page) => {
+            const image: Image = new Image(this.job.dir + "/" + page.filename);
+            Object.keys(image.sizes).forEach((key) => {
                 status.expected += 1;
                 if (fs.existsSync(image.derivativePath(key))) {
                     status.processed += 1;
                 }
-            })
+            });
         });
         return status;
     }
 
     get uploadTime(): number {
-        this.order.pages.forEach(element => {
-            let getFileUpdatedDate = (path: string = this.job.dir + "/" + this.page.filename) => {
-                let file = fs.statSync(path)
-                let dir = fs.statSync(this.job.dir)
-                if (file != null) {
-                    return file.mtime
-                } else {
-                    return dir.mtime;
+        let mtime = 2000;
+        this.order.pages.forEach((page) => {
+            const path: string = this.job.dir + "/" + page.filename;
+            const file = fs.statSync(path);
+            const current = file.mtime.getTime();
+            
+            console.log(current);
+            if (current != null) {
+                if (current > mtime) {
+                    mtime = current;
                 }
-                
             }
-            return getFileUpdatedDate();
         });
-        return this.uploadTime;
+        if (mtime == 2000) {
+            const dir = fs.statSync(this.job.dir);
+            mtime = dir.mtime.getTime();
+            console.log(mtime);
+        }
+        return mtime;
     }
 
     get fileProblems() {
-        let fromJson: Array<String> = this.order.raw.map(function(page: PageRaw){ return page.filename});
-        let fromFile: Array<String> = PageOrder.fromJob(this.job).raw.map(function(page: PageRaw){ return page.filename});
+        const fromJson: Array<string> = this.order.raw.map(function (page: PageRaw) {
+            return page.filename;
+        });
+        const fromFile: Array<string> = PageOrder.fromJob(this.job).raw.map(function (page: PageRaw) {
+            return page.filename;
+        });
 
         return {
-            added: fromJson.filter(x => !fromFile.includes(x)) , //fromJson - fromFile
-            deleted: fromFile.filter(x => !fromJson.includes(x)) //fromFile - fromJson
+            added: fromJson.filter((x) => !fromFile.includes(x)), //fromJson - fromFile
+            deleted: fromFile.filter((x) => !fromJson.includes(x)), //fromFile - fromJson
         };
     }
 
-    get ingestInfo() {
-        let readLastLines = require('read-last-lines');
-        let logfile: string = this.job.dir + "/ingest.log";
+    async ingestInfo() {
+        const readLastLines = require("read-last-lines");
+        const logfile: string = this.job.dir + "/ingest.log";
         if (fs.existsSync(logfile)) {
-            return readLastLines.read(logfile, 1)
-                .then((lines) => console.log(lines));
+            await readLastLines.read(logfile, 1).then((lines) => console.log(lines));
         } else {
-            return '';
+            return "";
         }
     }
 

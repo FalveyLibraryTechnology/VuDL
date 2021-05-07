@@ -8,7 +8,7 @@ import { exec } from "child_process";
 import Config from "./Config";
 import PrivateConfig from "./PrivateConfig";
 
-const fs = require('fs');
+const fs = require("fs");
 
 class ImageFile {
     filename: string;
@@ -72,6 +72,7 @@ class ImageFile {
     }
 
     async ocr(): Promise<void> {
+        //TODO: Test for completeness
         const txt = this.derivativePath("OCR-DIRTY", "txt");
         const deriv = await this.ocrDerivative();
         if (!fs.existsSync(txt)) {
