@@ -16,6 +16,7 @@ const sess = {
     secret: "a tsp of vanilla makes hot cocoa better",
     resave: false,
     cookie: { secure: false },
+    saveUninitialized: false,
 };
 if (router.get("env") === "production") {
     router.set("trust proxy", 1); // trust first proxy
@@ -43,15 +44,11 @@ function getUserBy(key, val, done) {
 }
 
 passport.serializeUser(function (user, done) {
-    console.log("serializeUser", user);
     done(null, user.id);
 });
 
 passport.deserializeUser(function (id, done) {
-    getUserBy("id", id, function (err, user) {
-        console.log("deserializeUser", user);
-        done(err, user);
-    });
+    getUserBy("id", id, done);
 });
 
 passport.use(
@@ -89,12 +86,16 @@ router.get("/secret", authenticate, function (req, res) {
 });
 
 router.get("/login", function (req, res) {
-    res.send(`<a href="/api/confirm/${users[0].hash}">Login</a>`);
+    console.log(req.session.originalUrl);
+    res.send(`<ul>
+        <li><a href="/api/confirm/${users[0].hash}">Login</a></li>
+        <li><a href="/api/secret">Secret</a></li>
+    </ul>`);
 });
 
 router.get("/logout", authenticate, function (req, res) {
     req.logout();
-    res.redirect("/");
+    res.redirect("/api/login");
 });
 
 function getJobFromRequest(req): Job {
