@@ -66,6 +66,7 @@ function authenticate(req, res, next) {
         return next();
     }
     // Attempt sign in
+    req.session.originalUrl = req.originalUrl;
     const authMethod = passport.authenticate("hash", { failureRedirect: "/api/login" });
     if (req.header("X-API-Token")) {
         // we can switch tactics here
