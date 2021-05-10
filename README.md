@@ -1,6 +1,7 @@
 # Dependencies
 
 - Node (nvm recommended)
+- [Install Redis](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04) to support queue features
 - Type definitions for node (`npm install -g npm`)
 - Execute `npm run install-all` to install all node dependencies
 
