@@ -62,11 +62,7 @@ passport.use(
 );
 
 function authenticate(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
     // Attempt sign in
-    req.session.originalUrl = req.originalUrl;
     const authMethod = passport.authenticate("hash", { failureRedirect: "/api/login" });
     if (req.header("X-API-Token")) {
         // we can switch tactics here
@@ -74,27 +70,40 @@ function authenticate(req, res, next) {
     authMethod(req, res, next);
 }
 
+function requireAuth(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    // TODO: Check for API key header
+
+    // Take ye to login!
+    req.session.originalUrl = req.originalUrl;
+    console.log("< save login referral: " + req.originalUrl);
+    res.redirect("/api/login");
+}
+
 // Use passport.authenticate() as route middleware to authenticate the
 // request.  If authentication fails, the user will be redirected back to the
 // login page.  Otherwise, the primary route function function will be called,
 // which, in this example, will redirect the user to the home page.
 router.get("/confirm/:hash", authenticate, function (req, res) {
-    res.redirect("/api/secret");
+    console.log("> goto login referral: " + req.originalUrl);
+    res.redirect(req.session.originalUrl ?? "/api/secret");
+    req.session.originalUrl = null;
 });
 
-router.get("/secret", authenticate, function (req, res) {
+router.get("/secret", requireAuth, function (req, res) {
     res.json({ ...req.user });
 });
 
 router.get("/login", function (req, res) {
-    console.log(req.session.originalUrl);
     res.send(`<ul>
         <li><a href="/api/confirm/${users[0].hash}">Login</a></li>
         <li><a href="/api/secret">Secret</a></li>
     </ul>`);
 });
 
-router.get("/logout", authenticate, function (req, res) {
+router.get("/logout", requireAuth, function (req, res) {
     req.logout();
     res.redirect("/api/login");
 });
