@@ -19,18 +19,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install root dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
-
-      - name: Install api and client dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          install-command: npm ci
-          working-directory: |
-            api
-            client
+      - name: Install npm dependencies
+        run: npm run install-all
 
       - name: Run prettier
         run: npm run format
