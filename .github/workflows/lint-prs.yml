@@ -22,10 +22,7 @@ jobs:
           npm run setup
 
       - name: Run prettier
-        run: |
-          ls api
-          ls client
-          npm run format
+        run: npm run format -- --no-error-on-unmatched-pattern
 
       - name: Auto-commit fixes
         uses: EndBug/add-and-commit@v7
