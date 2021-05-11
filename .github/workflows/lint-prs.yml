@@ -6,10 +6,6 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: $GITHUB_WORKSPACE
 
     steps:
       - name: Setup Node
