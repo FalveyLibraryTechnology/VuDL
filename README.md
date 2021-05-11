@@ -4,7 +4,7 @@
 - [Install Redis](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04) to support queue features
 - Type definitions for node (`npm install -g npm`)
 - Execute `npm install` to install root node dependencies
-- Execute `npm run install-all` to install node dependencies in subdirectories
+- Execute `npm run setup` to install node dependencies in subdirectories
 
 # Set up configuration in the api directory
 
@@ -46,8 +46,7 @@ After a few moments, a new tab should automatically open in your browser pointin
 | build | build entire project for production |
 | dev | run api, client, and queue dev servers (auto-restart) |
 | format | format all code with [Prettier](https://prettier.io) |
-| install-all | concurrently npm:setup npm:api:setup npm:client:setup |
 | lint | report lint errors in all code |
-| setup | instal root npm dependencies |
+| setup | install subdirectory npm dependencies |
 | start | run api, client, and queue servers (production) |
 | watch | alias for api:watch |
