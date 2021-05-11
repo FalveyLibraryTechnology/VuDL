@@ -22,8 +22,10 @@ jobs:
           npm run setup
 
       - name: Run prettier
-        run: npm run format
-        working-directory: $GITHUB_WORKSPACE
+        run: |
+          pwd
+          ls
+          npm run format
 
       - name: Auto-commit fixes
         uses: EndBug/add-and-commit@v7
