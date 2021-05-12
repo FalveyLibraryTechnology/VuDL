@@ -247,7 +247,7 @@ class SolrIndexer {
         const copyFields = {
             author: "dc.creator_txt_mv",
             author2: "dc.contributor_txt_mv",
-            dc_collection_str_mv: "dc.collection_txt_mv",   // possibly unused
+            dc_collection_str_mv: "dc.collection_txt_mv", // possibly unused
             dc_source_str_mv: "dc.source_txt_mv",
             description: "dc.description_txt_mv",
             format: "dc.format_txt_mv",
