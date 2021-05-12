@@ -1,10 +1,10 @@
-const $ = require("jquery");
-const React = require("react");
-const { BrowserRouter, Switch, Route, useParams } = require("react-router-dom");
-const PropTypes = require("prop-types");
+import $ from "jquery";
+import React from "react";
+import { BrowserRouter, Switch, Route, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const JobSelector = require("./JobSelector");
-const JobPaginator = require("./JobPaginator");
+import JobSelector from "./JobSelector";
+import JobPaginator from "./JobPaginator";
 
 class VuDLPrep extends React.Component {
     // TODO: Remove
@@ -86,4 +86,4 @@ VuDLPrep.propTypes = {
     url: PropTypes.string,
 };
 
-module.exports = VuDLPrep;
+export default VuDLPrep;

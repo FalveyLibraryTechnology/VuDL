@@ -1,5 +1,6 @@
 import fs = require("fs");
 import glob = require("glob");
+import path = require("path");
 
 import Job from "./Job";
 
@@ -13,7 +14,7 @@ export class Category {
     name: string;
 
     constructor(dir: string) {
-        this.name = this.basename(dir);
+        this.name = path.basename(dir);
         this.jobs = glob.sync(dir + "/*/").map(function (dir: string) {
             return new Job(dir);
         });
@@ -42,10 +43,6 @@ export class Category {
 
     targetCollectionId(): string {
         return this.ini["collection"]["destination"];
-    }
-
-    basename(path: string): string {
-        return path.replace(/\/$/, "").split("/").reverse()[0];
     }
 }
 

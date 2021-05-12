@@ -1,7 +1,7 @@
-const React = require("react");
-const PropTypes = require("prop-types");
+import React from "react";
+import PropTypes from "prop-types";
 
-const Thumbnail = require("./Thumbnail");
+import Thumbnail from "./Thumbnail";
 
 class PaginatorList extends React.Component {
     constructor(props) {
@@ -51,4 +51,4 @@ PaginatorList.propTypes = {
     pageCount: PropTypes.number,
 };
 
-module.exports = PaginatorList;
+export default PaginatorList;
