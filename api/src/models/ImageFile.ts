@@ -8,7 +8,7 @@ import { exec } from "child_process";
 import Config from "./Config";
 import PrivateConfig from "./PrivateConfig";
 
-const fs = require("fs");
+import fs = require("fs");
 
 class ImageFile {
     filename: string;
