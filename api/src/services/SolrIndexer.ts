@@ -227,7 +227,7 @@ class SolrIndexer {
             // to look them up manually in Fedora. Perhaps this can be optimized or
             // simplified somehow...
             const titlePromises = (fields.hierarchy_parent_id as Array<string>).map(async (id) => {
-                const currentObject = await this.hierarchyCollector.getFedoraData(id);
+                const currentObject = await this.hierarchyCollector.getFedoraData(id, false);
                 return currentObject.title;
             });
             fields.hierarchy_parent_title = await Promise.all(titlePromises);
