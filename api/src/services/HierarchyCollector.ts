@@ -124,7 +124,7 @@ class HierarchyCollector {
         );
     }
 
-    async getHierarchy(pid: string, fetchRdf = true): Promise<FedoraData> {
+    async getFedoraData(pid: string, fetchRdf = true): Promise<FedoraData> {
         // Use Fedora to get data
         // TODO: type
         // TODO: catch failure
@@ -147,7 +147,7 @@ class HierarchyCollector {
             const agentsStream = await this.fedora.getDatastream(pid, "AGENTS");
             agents = this.extractAgents(agentsStream);
         }
-        const result = new FedoraData(
+        return new FedoraData(
             pid,
             this.extractRelations(RELS),
             this.extractMetadata(DC),
@@ -156,6 +156,10 @@ class HierarchyCollector {
             license,
             agents
         );
+    }
+
+    async getHierarchy(pid: string, fetchRdf = true): Promise<FedoraData> {
+        const result = await this.getFedoraData(pid, fetchRdf);
         // Create promises to retrieve parents asynchronously...
         const promises = (result.relations.isMemberOf ?? []).map(async (resource) => {
             const parentPid = resource.substr("info:fedora/".length);

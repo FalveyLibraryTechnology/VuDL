@@ -223,7 +223,14 @@ class SolrIndexer {
                 });
             }
             fields.hierarchy_sequence = this.padNumber("0");
-            // TODO: is hierarchy_parent_title needed in this situation?
+            // We don't have easy access to parent titles in this case, so we have
+            // to look them up manually in Fedora. Perhaps this can be optimized or
+            // simplified somehow...
+            const titlePromises = fields.hierarchy_parent_id.map(async (id) => {
+                const currentObject = await this.hierarchyCollector.getFedoraData(id);
+                return currentObject.title;
+            });
+            fields.hierarchy_parent_title = await Promise.all(titlePromises);
         }
         if (hierarchySequences.length > 0) {
             fields.hierarchy_sequence_sort_str = hierarchySequences[0] ?? this.padNumber("0");
