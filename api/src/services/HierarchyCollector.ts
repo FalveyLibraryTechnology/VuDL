@@ -147,6 +147,11 @@ class HierarchyCollector {
             const agentsStream = await this.fedora.getDatastream(pid, "AGENTS");
             agents = this.extractAgents(agentsStream);
         }
+        if (dataStreams.includes("THUMBNAIL")) {
+            const thumbRdf = await this.fedora.getRdf(pid + "/THUMBNAIL/fcr:metadata");
+            // TODO: finish implementing thumbnail logic here.
+            console.log(thumbRdf);
+        }
         return new FedoraData(
             pid,
             this.extractRelations(RELS),
