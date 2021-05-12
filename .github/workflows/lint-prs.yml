@@ -2,14 +2,11 @@ name: Lint Pull Requests
 
 on: [push, pull_request]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   lint:
     name: Lint
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Setup Node
         uses: actions/setup-node@v1
@@ -19,18 +16,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install root dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
-
-      - name: Install api and client dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          install-command: npm ci
-          working-directory: |
-            api
-            client
+      - name: Install npm dependencies
+        run: |
+          npm install
+          npm run setup
 
       - name: Run prettier
         run: npm run format
