@@ -15,7 +15,7 @@ class FedoraData {
         fedoraDetails: Record<string, Array<string>>,
         fedoraDatastreams: Array<string>,
         license: string,
-        agents: Record<string, Array<string>>,
+        agents: Record<string, Array<string>>
     ) {
         this.pid = pid;
         this.relations = relations;
