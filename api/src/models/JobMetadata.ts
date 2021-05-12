@@ -84,7 +84,7 @@ class JobMetadata {
             const path: string = this.job.dir + "/" + page.filename;
             const file = fs.statSync(path);
             const current = file.mtime.getTime();
-            
+
             console.log(current);
             if (current != null) {
                 if (current > mtime) {
