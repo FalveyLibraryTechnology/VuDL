@@ -1,8 +1,4 @@
 import express = require("express");
-import expressSession = require("express-session");
-import bodyParser = require("body-parser");
-import passport = require("passport");
-import hash = require("passport-hash");
 
 import CategoryCollection from "../models/CategoryCollection";
 import Category from "../models/Category";
@@ -10,84 +6,15 @@ import Config from "../models/Config";
 import Job from "../models/Job";
 
 const router = express.Router();
-
-// Express session settings
-const sess = {
-    secret: "a tsp of vanilla makes hot cocoa better",
-    resave: false,
-    cookie: { secure: false },
-    saveUninitialized: false,
-};
-if (router.get("env") === "production") {
-    router.set("trust proxy", 1); // trust first proxy
-    sess.cookie.secure = true; // serve secure cookies
-}
-
-// Passport dependencies and integration
-router.use(expressSession(sess));
-router.use(bodyParser.urlencoded({ extended: false }));
-router.use(passport.initialize());
-router.use(passport.session());
-
-const users = [
-    { id: 0, username: "chris", password: "air", hash: "V1StGXR8_Z5jdHi6B-myT" },
-    { id: 1, username: "geoff", password: "earth", hash: "CuhFfwkebs3RKr1Zo_Do_" },
-    { id: 3, username: "dkatz", password: "avatar", hash: "_HPZZ6uCouEU5jy-AYrDd" },
-];
-function getUserBy(key, val, done) {
-    for (let i = 0; i < users.length; i++) {
-        if (users[i][key] === val) {
-            return done(null, users[i]);
-        }
-    }
-    return done(null, null);
-}
-
-passport.serializeUser(function (user, done) {
-    done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-    getUserBy("id", id, done);
-});
-
-passport.use(
-    new hash.Strategy(function (hash, done) {
-        getUserBy("hash", hash, function (err, user) {
-            if (err) return done(err);
-            if (!user) return done(null, false, { message: "welp" });
-            done(null, user);
-        });
-    })
-);
-
-function authenticate(req, res, next) {
-    // Attempt sign in
-    const authMethod = passport.authenticate("hash", { failureRedirect: "/api/login" });
-    if (req.header("X-API-Token")) {
-        // we can switch tactics here
-    }
-    authMethod(req, res, next);
-}
-
-function requireAuth(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    // TODO: Check for API key header
-
-    // Take ye to login!
-    req.session.originalUrl = req.originalUrl;
-    console.log("< save login referral: " + req.originalUrl);
-    res.redirect("/api/login");
-}
+import { setupPassport, authenticate, requireAuth, users } from "./auth";
+setupPassport(router);
 
 // Use passport.authenticate() as route middleware to authenticate the
 // request.  If authentication fails, the user will be redirected back to the
 // login page.  Otherwise, the primary route function function will be called,
 // which, in this example, will redirect the user to the home page.
 router.get("/confirm/:hash", authenticate, function (req, res) {
-    console.log("> goto login referral: " + req.originalUrl);
+    console.log("> goto login referral: " + req.session.originalUrl);
     res.redirect(req.session.originalUrl ?? "/api/secret");
     req.session.originalUrl = null;
 });
