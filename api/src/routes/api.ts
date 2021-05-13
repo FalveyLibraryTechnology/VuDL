@@ -3,31 +3,25 @@ import express = require("express");
 import CategoryCollection from "../models/CategoryCollection";
 import Category from "../models/Category";
 import Config from "../models/Config";
-import { getUserBy } from "../services/Database";
+import { getUserBy, makeToken } from "../services/Database";
 import Job from "../models/Job";
 
 const router = express.Router();
-import { setupPassport, authenticate, requireAuth } from "./auth";
+import { setupPassport, requireAuth } from "./auth";
 setupPassport(router);
 
-// Use passport.authenticate() as route middleware to authenticate the
-// request.  If authentication fails, the user will be redirected back to the
-// login page.  Otherwise, the primary route function function will be called,
-// which, in this example, will redirect the user to the home page.
-router.get("/confirm/:hash", authenticate, function (req, res) {
-    console.log("> goto login referral: " + req.session.originalUrl);
-    res.redirect(req.session.originalUrl ?? "/api/secret");
-    req.session.originalUrl = null;
-});
-
-router.get("/secret", requireAuth, function (req, res) {
-    res.json({ ...req.user });
+router.get("/secret", requireAuth, async function (req, res) {
+    const token = await makeToken(req.user);
+    res.send(`<ul>
+        <li><a href="/api/token/mint">Mint</a></li>
+        <li><a href="/api/token/confirm/${token}">Confirm (${token})</a></li>
+    </ul>`);
 });
 
 router.get("/login", async function (req, res) {
     const user = await getUserBy("username", "chris");
     res.send(`<ul>
-        <li><a href="/api/confirm/${user.hash}">Login</a></li>
+        <li><a href="/api/user/confirm/${user.hash}">Login</a></li>
         <li><a href="/api/secret">Secret</a></li>
     </ul>`);
 });
