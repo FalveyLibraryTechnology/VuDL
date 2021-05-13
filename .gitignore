@@ -2,7 +2,7 @@
 client/build
 
 # data
-auth.db
+data/
 
 # Logs
 logs
