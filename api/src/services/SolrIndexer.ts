@@ -237,10 +237,12 @@ class SolrIndexer {
             fields.hierarchy_sequence = hierarchySequences;
         }
 
-        // Load all the Dublin Core data:
+        // Load all the Dublin Core data into dynamic fields AND allfields:
+        fields.allfields = [];
         for (const field in fedoraData.metadata) {
             const fieldName = field.replace(":", ".") + "_txt_mv";
             fields[fieldName] = fedoraData.metadata[field];
+            fields.allfields = fields.allfields.concat(fedoraData.metadata[field]);
         }
 
         // This map copies existing values as-is to other fields:
