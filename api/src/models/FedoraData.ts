@@ -86,6 +86,16 @@ class FedoraData {
         return this.extraDetails.fitsData.size[0] ?? null;
     }
 
+    get fullText(): Array<string> {
+        let fullText = [];
+        if (typeof this.extraDetails.fullText !== "undefined") {
+            for (const current in this.extraDetails.fullText) {
+                fullText = fullText.concat(this.extraDetails.fullText[current]);
+            }
+        }
+        return fullText;
+    }
+
     get imageHeight(): string {
         if (
             typeof this.extraDetails.fitsData === "undefined" ||

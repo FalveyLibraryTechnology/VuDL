@@ -187,6 +187,11 @@ class HierarchyCollector {
             const fitsXml = await this.fedora.getDatastream(pid, "MASTER-MD");
             extraDetails.fitsData = this.extractFitsData(fitsXml);
         }
+        extraDetails.fullText = {};
+        if (dataStreams.includes("OCR-DIRTY")) {
+            extraDetails.fullText.ocrDirty = [await this.fedora.getDatastream(pid, "OCR-DIRTY")];
+        }
+        // TODO: Tika extraction of PDF/DOC data
         return new FedoraData(
             pid,
             this.extractRelations(RELS),

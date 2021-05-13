@@ -368,6 +368,12 @@ class SolrIndexer {
             fields.mime_str_mv = fedoraData.mimetype;
         }
 
+        // Full text:
+        const fullText = fedoraData.fullText;
+        if (fullText.length > 0) {
+            fields.fulltext = fullText;
+        }
+
         return fields;
     }
 }
