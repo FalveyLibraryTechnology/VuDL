@@ -10,7 +10,8 @@ router.get("/solrindex/:pid", async function (req, res) {
         const fedoraFields = await indexer.getFields(req.params.pid);
         res.send(JSON.stringify(fedoraFields, null, "\t"));
     } catch (e) {
-        res.status(500).send(e);
+        console.log(e);
+        res.status(500).send(e.message);
     }
 });
 
@@ -20,7 +21,8 @@ router.post("/solrindex/:pid", async function (req, res) {
     try {
         fedoraFields = await indexer.getFields(req.params.pid);
     } catch (e) {
-        res.status(500).send(e);
+        console.log(e);
+        res.status(500).send(e.message);
         return;
     }
     const solr = new Solr();

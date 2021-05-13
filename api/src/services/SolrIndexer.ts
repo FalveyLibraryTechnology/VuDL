@@ -226,7 +226,7 @@ class SolrIndexer {
             // We don't have easy access to parent titles in this case, so we have
             // to look them up manually in Fedora. Perhaps this can be optimized or
             // simplified somehow...
-            const titlePromises = (fields.hierarchy_parent_id as Array<string>).map(async (id) => {
+            const titlePromises = ((fields.hierarchy_parent_id ?? []) as Array<string>).map(async (id) => {
                 const currentObject = await this.hierarchyCollector.getFedoraData(id, false);
                 return currentObject.title;
             });
