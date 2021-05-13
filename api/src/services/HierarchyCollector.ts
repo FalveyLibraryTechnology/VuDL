@@ -137,15 +137,14 @@ class HierarchyCollector {
         const RDF = fetchRdf ? await this.fedora.getRdf(pid) : null;
         const dataStreams = fetchRdf ? this.extractFedoraDatastreams(RDF) : [];
         // Fetch license details if appropriate/available:
-        let license = null;
+        let extraDetails: Record<string, Record<string, Array<string>>> = {};
         if (dataStreams.includes("LICENSE")) {
             const licenseStream = await this.fedora.getDatastream(pid, "LICENSE");
-            license = this.extractLicense(licenseStream);
+            extraDetails.license = { url: [this.extractLicense(licenseStream)] };
         }
-        let agents = {};
         if (dataStreams.includes("AGENTS")) {
             const agentsStream = await this.fedora.getDatastream(pid, "AGENTS");
-            agents = this.extractAgents(agentsStream);
+            extraDetails.agents = this.extractAgents(agentsStream);
         }
         if (dataStreams.includes("THUMBNAIL")) {
             const thumbRdf = await this.fedora.getRdf(pid + "/THUMBNAIL/fcr:metadata");
@@ -158,8 +157,7 @@ class HierarchyCollector {
             this.extractMetadata(DC),
             fetchRdf ? this.extractFedoraDetails(RDF) : {},
             dataStreams,
-            license,
-            agents
+            extraDetails
         );
     }
 

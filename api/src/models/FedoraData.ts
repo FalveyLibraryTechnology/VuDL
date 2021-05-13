@@ -4,9 +4,8 @@ class FedoraData {
     public relations: Record<string, Array<string>>;
     public fedoraDetails: Record<string, Array<string>>;
     public fedoraDatastreams: Array<string>;
-    public license: string;
-    public agents: Record<string, Array<string>>;
-    parents: Array<FedoraData> = [];
+    protected extraDetails: Record<string, Record<string, Array<string>>>;
+    protected parents: Array<FedoraData> = [];
 
     constructor(
         pid: string,
@@ -14,16 +13,14 @@ class FedoraData {
         metadata: Record<string, Array<string>>,
         fedoraDetails: Record<string, Array<string>>,
         fedoraDatastreams: Array<string>,
-        license: string,
-        agents: Record<string, Array<string>>
+        extraDetails: Record<string, Record<string, Array<string>>>
     ) {
         this.pid = pid;
         this.relations = relations;
         this.metadata = metadata;
         this.fedoraDetails = fedoraDetails;
         this.fedoraDatastreams = fedoraDatastreams;
-        this.license = license;
-        this.agents = agents;
+        this.extraDetails = extraDetails;
     }
 
     addParent(parent: FedoraData): void {
@@ -59,6 +56,16 @@ class FedoraData {
             });
         });
         return results;
+    }
+
+    get agents(): Record<string, Array<string>> {
+        return typeof this.extraDetails.agents === "undefined"
+            ? {} : this.extraDetails.agents;
+    }
+
+    get license(): string {
+        return typeof this.extraDetails.license === "undefined"
+            ? null : this.extraDetails.license.url[0];
     }
 
     get models(): Array<string> {
