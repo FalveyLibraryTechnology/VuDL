@@ -1,6 +1,9 @@
 # client production
 client/build
 
+# data
+auth.db
+
 # Logs
 logs
 *.log
