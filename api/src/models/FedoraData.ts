@@ -59,8 +59,10 @@ class FedoraData {
     }
 
     getThumbnailHash(type: string): string {
-        const hashes = typeof this.extraDetails.thumbnails === "undefined"
-            ? [] : this.extraDetails.thumbnails.hasMessageDigest ?? [];
+        const hashes =
+            typeof this.extraDetails.thumbnails === "undefined"
+                ? []
+                : this.extraDetails.thumbnails.hasMessageDigest ?? [];
         for (const hash of hashes) {
             const parts = hash.split(":");
             if ((parts[1] ?? "") === type && typeof parts[2] !== "undefined") {
@@ -71,13 +73,11 @@ class FedoraData {
     }
 
     get agents(): Record<string, Array<string>> {
-        return typeof this.extraDetails.agents === "undefined"
-            ? {} : this.extraDetails.agents;
+        return typeof this.extraDetails.agents === "undefined" ? {} : this.extraDetails.agents;
     }
 
     get license(): string {
-        return typeof this.extraDetails.license === "undefined"
-            ? null : this.extraDetails.license.url[0];
+        return typeof this.extraDetails.license === "undefined" ? null : this.extraDetails.license.url[0];
     }
 
     get models(): Array<string> {

@@ -150,7 +150,7 @@ class HierarchyCollector {
         const RDF = fetchRdf ? await this.fedora.getRdf(pid) : null;
         const dataStreams = fetchRdf ? this.extractFedoraDatastreams(RDF) : [];
         // Fetch license details if appropriate/available:
-        let extraDetails: Record<string, Record<string, Array<string>>> = {};
+        const extraDetails: Record<string, Record<string, Array<string>>> = {};
         if (dataStreams.includes("LICENSE")) {
             const licenseStream = await this.fedora.getDatastream(pid, "LICENSE");
             extraDetails.license = { url: [this.extractLicense(licenseStream)] };
