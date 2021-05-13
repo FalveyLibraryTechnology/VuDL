@@ -47,8 +47,8 @@ async function getDatabase(): Promise<Knex> {
     return db;
 }
 
-export async function getUserBy(key, val): Promise<User> {
-    let db = await getDatabase();
-    let users = await db<User>("users").where(key, val);
+export async function getUserBy(key: string, val: string | number): Promise<User> {
+    const db = await getDatabase();
+    const users = await db<User>("users").where(key, val);
     return users[0] ?? null;
 }

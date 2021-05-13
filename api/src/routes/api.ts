@@ -25,7 +25,7 @@ router.get("/secret", requireAuth, function (req, res) {
 });
 
 router.get("/login", async function (req, res) {
-    let user = await getUserBy("username", "chris");
+    const user = await getUserBy("username", "chris");
     res.send(`<ul>
         <li><a href="/api/confirm/${user.hash}">Login</a></li>
         <li><a href="/api/secret">Secret</a></li>

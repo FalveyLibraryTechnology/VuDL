@@ -1,3 +1,4 @@
+import { Request, Response, Router } from "express"; // Types
 import bodyParser = require("body-parser");
 import expressSession = require("express-session");
 import passport = require("passport");
@@ -5,7 +6,7 @@ import hash = require("passport-hash");
 
 import { getUserBy } from "../services/Database";
 
-export function setupPassport(router) {
+export function setupPassport(router: Router): void {
     // Express session settings
     const sess = {
         secret: "a tsp of vanilla makes hot cocoa better",
@@ -40,7 +41,7 @@ passport.use(
     })
 );
 
-export function authenticate(req, res, next) {
+export function authenticate(req: Request, res: Response, next?: (err?: Error) => void): void {
     // Attempt sign in
     const authMethod = passport.authenticate("hash", { failureRedirect: "/api/login" });
     if (req.header("X-API-Token")) {
@@ -49,7 +50,7 @@ export function authenticate(req, res, next) {
     authMethod(req, res, next);
 }
 
-export function requireAuth(req, res, next) {
+export function requireAuth(req: Request, res: Response, next?: (err?: Error) => void): void {
     if (req.isAuthenticated()) {
         return next();
     }
