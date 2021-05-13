@@ -3,10 +3,11 @@ import express = require("express");
 import CategoryCollection from "../models/CategoryCollection";
 import Category from "../models/Category";
 import Config from "../models/Config";
+import { getUserBy } from "../services/Database";
 import Job from "../models/Job";
 
 const router = express.Router();
-import { setupPassport, authenticate, requireAuth, users } from "./auth";
+import { setupPassport, authenticate, requireAuth } from "./auth";
 setupPassport(router);
 
 // Use passport.authenticate() as route middleware to authenticate the
@@ -23,9 +24,10 @@ router.get("/secret", requireAuth, function (req, res) {
     res.json({ ...req.user });
 });
 
-router.get("/login", function (req, res) {
+router.get("/login", async function (req, res) {
+    let user = await getUserBy('username', 'chris');
     res.send(`<ul>
-        <li><a href="/api/confirm/${users[0].hash}">Login</a></li>
+        <li><a href="/api/confirm/${user.hash}">Login</a></li>
         <li><a href="/api/secret">Secret</a></li>
     </ul>`);
 });

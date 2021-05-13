@@ -3,6 +3,8 @@ import expressSession = require("express-session");
 import passport = require("passport");
 import hash = require("passport-hash");
 
+import { getUserBy } from "../services/Database";
+
 export function setupPassport(router) {
     // Express session settings
     const sess = {
@@ -23,35 +25,18 @@ export function setupPassport(router) {
     router.use(passport.session());
 }
 
-export const users = [
-    { id: 0, username: "chris", password: "air", hash: "V1StGXR8_Z5jdHi6B-myT" },
-    { id: 1, username: "geoff", password: "earth", hash: "CuhFfwkebs3RKr1Zo_Do_" },
-    { id: 3, username: "dkatz", password: "avatar", hash: "_HPZZ6uCouEU5jy-AYrDd" },
-];
-function getUserBy(key, val, done) {
-    for (let i = 0; i < users.length; i++) {
-        if (users[i][key] === val) {
-            return done(null, users[i]);
-        }
-    }
-    return done(null, null);
-}
-
 passport.serializeUser(function (user, done) {
     done(null, user.id);
 });
 
-passport.deserializeUser(function (id, done) {
-    getUserBy("id", id, done);
+passport.deserializeUser(async function (id, done) {
+    done(null, await getUserBy("id", id));
 });
 
 passport.use(
-    new hash.Strategy(function (hash, done) {
-        getUserBy("hash", hash, function (err, user) {
-            if (err) return done(err);
-            if (!user) return done(null, false, { message: "welp" });
-            done(null, user);
-        });
+    new hash.Strategy(async function (hash, done) {
+        const user = await getUserBy("hash", hash);
+        done(null, user);
     })
 );
 
