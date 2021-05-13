@@ -169,6 +169,7 @@ class HierarchyCollector {
         // we can skip fetching more RDF in order to save some time!
         const RDF = fetchRdf ? await this.fedora.getRdf(pid) : null;
         const dataStreams = fetchRdf ? this.extractFedoraDatastreams(RDF) : [];
+        const relations = this.extractRelations(RELS);
         // Fetch license details if appropriate/available:
         const extraDetails: Record<string, Record<string, Array<string>>> = {};
         if (dataStreams.includes("LICENSE")) {
@@ -191,10 +192,13 @@ class HierarchyCollector {
         if (dataStreams.includes("OCR-DIRTY")) {
             extraDetails.fullText.ocrDirty = [await this.fedora.getDatastream(pid, "OCR-DIRTY")];
         }
-        // TODO: Tika extraction of PDF/DOC data
+        const models = relations.hasModel ?? [];
+        if (models.includes("info:fedora/vudl-system:DOCData") || models.includes("info:fedora/vudl-system:PDFData")) {
+            // TODO: Tika extraction of PDF/DOC data
+        }
         return new FedoraData(
             pid,
-            this.extractRelations(RELS),
+            relations,
             this.extractMetadata(DC),
             fetchRdf ? this.extractFedoraDetails(RDF) : {},
             dataStreams,
