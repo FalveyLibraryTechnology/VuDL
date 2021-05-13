@@ -124,6 +124,19 @@ class HierarchyCollector {
         );
     }
 
+    protected extractThumbnailDetails(xml: string): Record<string, Array<string>> {
+        const xmlParser = new DOMParser();
+        const RDF_XML = xmlParser.parseFromString(xml, "text/xml");
+        return this.extractRDFXML(
+            RDF_XML,
+            {
+                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                premis: "http://www.loc.gov/premis/rdf/v1#",
+            },
+            "//premis:*"
+        );
+    }
+
     async getFedoraData(pid: string, fetchRdf = true): Promise<FedoraData> {
         // Use Fedora to get data
         // TODO: type
@@ -148,8 +161,7 @@ class HierarchyCollector {
         }
         if (dataStreams.includes("THUMBNAIL")) {
             const thumbRdf = await this.fedora.getRdf(pid + "/THUMBNAIL/fcr:metadata");
-            // TODO: finish implementing thumbnail logic here.
-            console.log(thumbRdf);
+            extraDetails.thumbnails = this.extractThumbnailDetails(thumbRdf);
         }
         return new FedoraData(
             pid,

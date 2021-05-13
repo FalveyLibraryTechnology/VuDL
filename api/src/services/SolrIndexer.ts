@@ -351,10 +351,7 @@ class SolrIndexer {
         }
         fields.has_thumbnail_str = fedoraData.fedoraDatastreams.includes("THUMBNAIL") ? "true" : "false";
         if (fields.has_thumbnail_str === "true") {
-            // TODO: fields.THUMBNAIL_contentDigest_type
-            // TODO: fields.THUMBNAIL_contentDigest_digest
-            // TODO: fields.THUMBNAIL_contentLocation_type
-            // TODO: fields.THUMBNAIL_contentLocation_ref
+            fields.THUMBNAIL_contentDigest_digest_str = fedoraData.getThumbnailHash("md5");
         }
 
         return fields;

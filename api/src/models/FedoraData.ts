@@ -58,6 +58,18 @@ class FedoraData {
         return results;
     }
 
+    getThumbnailHash(type: string): string {
+        const hashes = typeof this.extraDetails.thumbnails === "undefined"
+            ? [] : this.extraDetails.thumbnails.hasMessageDigest ?? [];
+        for (const hash of hashes) {
+            const parts = hash.split(":");
+            if ((parts[1] ?? "") === type && typeof parts[2] !== "undefined") {
+                return parts[2];
+            }
+        }
+        return null;
+    }
+
     get agents(): Record<string, Array<string>> {
         return typeof this.extraDetails.agents === "undefined"
             ? {} : this.extraDetails.agents;
