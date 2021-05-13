@@ -124,6 +124,26 @@ class HierarchyCollector {
         );
     }
 
+    protected extractFitsData(xml: string): Record<string, Array<string>> {
+        const xmlParser = new DOMParser();
+        const RDF_XML = xmlParser.parseFromString(xml, "text/xml");
+        const namespaces = {
+            rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+            fits: "http://hul.harvard.edu/ois/xml/ns/fits/fits_output",
+        };
+        const details = this.extractRDFXML(
+            RDF_XML,
+            namespaces,
+            "//fits:fileinfo/fits:size|//fits:imageWidth|//fits:imageHeight"
+        );
+        details.mimetype = [];
+        const fitsXPath = xpath.useNamespaces(namespaces);
+        fitsXPath("//fits:identity/@mimetype", RDF_XML).forEach((relation: Node) => {
+            details.mimetype.push(relation.nodeValue);
+        });
+        return details;
+    }
+
     protected extractThumbnailDetails(xml: string): Record<string, Array<string>> {
         const xmlParser = new DOMParser();
         const RDF_XML = xmlParser.parseFromString(xml, "text/xml");
@@ -162,6 +182,10 @@ class HierarchyCollector {
         if (dataStreams.includes("THUMBNAIL")) {
             const thumbRdf = await this.fedora.getRdf(pid + "/THUMBNAIL/fcr:metadata");
             extraDetails.thumbnails = this.extractThumbnailDetails(thumbRdf);
+        }
+        if (dataStreams.includes("MASTER-MD")) {
+            const fitsXml = await this.fedora.getDatastream(pid, "MASTER-MD");
+            extraDetails.fitsData = this.extractFitsData(fitsXml);
         }
         return new FedoraData(
             pid,

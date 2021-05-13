@@ -76,8 +76,48 @@ class FedoraData {
         return typeof this.extraDetails.agents === "undefined" ? {} : this.extraDetails.agents;
     }
 
+    get fileSize(): string {
+        if (
+            typeof this.extraDetails.fitsData === "undefined" ||
+            typeof this.extraDetails.fitsData.size === "undefined"
+        ) {
+            return null;
+        }
+        return this.extraDetails.fitsData.size[0] ?? null;
+    }
+
+    get imageHeight(): string {
+        if (
+            typeof this.extraDetails.fitsData === "undefined" ||
+            typeof this.extraDetails.fitsData.imageHeight === "undefined"
+        ) {
+            return null;
+        }
+        return this.extraDetails.fitsData.imageHeight[0] ?? null;
+    }
+
+    get imageWidth(): string {
+        if (
+            typeof this.extraDetails.fitsData === "undefined" ||
+            typeof this.extraDetails.fitsData.imageWidth === "undefined"
+        ) {
+            return null;
+        }
+        return this.extraDetails.fitsData.imageWidth[0] ?? null;
+    }
+
     get license(): string {
         return typeof this.extraDetails.license === "undefined" ? null : this.extraDetails.license.url[0];
+    }
+
+    get mimetype(): Array<string> {
+        if (
+            typeof this.extraDetails.fitsData === "undefined" ||
+            typeof this.extraDetails.fitsData.mimetype === "undefined"
+        ) {
+            return [];
+        }
+        return this.extraDetails.fitsData.mimetype;
     }
 
     get models(): Array<string> {

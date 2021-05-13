@@ -354,6 +354,20 @@ class SolrIndexer {
             fields.THUMBNAIL_contentDigest_digest_str = fedoraData.getThumbnailHash("md5");
         }
 
+        // FITS details:
+        if (fedoraData.fileSize !== null) {
+            fields.sizebytes_str = fedoraData.fileSize;
+        }
+        if (fedoraData.imageHeight !== null) {
+            fields.height_str = fedoraData.imageHeight;
+        }
+        if (fedoraData.imageWidth !== null) {
+            fields.width_str = fedoraData.imageWidth;
+        }
+        if (fedoraData.mimetype.length > 0) {
+            fields.mime_str_mv = fedoraData.mimetype;
+        }
+
         return fields;
     }
 }
