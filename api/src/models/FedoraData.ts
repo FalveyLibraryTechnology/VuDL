@@ -4,8 +4,8 @@ class FedoraData {
     public relations: Record<string, Array<string>>;
     public fedoraDetails: Record<string, Array<string>>;
     public fedoraDatastreams: Array<string>;
+    public parents: Array<FedoraData> = [];
     protected extraDetails: Record<string, Record<string, Array<string>>>;
-    protected parents: Array<FedoraData> = [];
 
     constructor(
         pid: string,
