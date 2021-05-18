@@ -84,8 +84,8 @@ class JobMetadata {
         this.order.pages.forEach((page) => {
             const path: string = this.job.dir + "/" + page.filename;
             const file = fs.statSync(path);
-            const current = file.mtime.getTime() / 1000; 
-            
+            const current = file.mtime.getTime() / 1000;
+
             console.log(current);
             if (current != null) {
                 if (current > mtime) {
@@ -176,7 +176,7 @@ class JobMetadata {
     get status(): Record<string, unknown> {
         return {
             derivatives: this.derivativeStatus,
-            minutes_since_upload: Math.floor(((new Date().getTime() / 1000 - this.uploadTime) / 60)),
+            minutes_since_upload: Math.floor((new Date().getTime() / 1000 - this.uploadTime) / 60),
             file_problems: this.fileProblems,
             published: this.raw.published,
             ingesting: fs.existsSync(this.ingestLockfile()),
