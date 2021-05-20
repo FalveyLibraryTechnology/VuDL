@@ -4,15 +4,24 @@ import path = require("path");
 import Category from "../models/Category";
 import Job from "../models/Job";
 import QueueJobInterface from "./QueueJobInterface";
+import winston = require("winston");
 
 class IngestProcessor {
     protected job: Job;
     protected category: Category;
+    protected logger;
 
     constructor(dir: string) {
         this.job = new Job(dir);
         this.category = new Category(path.dirname(dir));
-        // TODO: create logger pointing at dir + "/ingest.log"
+        this.logger = winston.createLogger({
+            level: "info",
+            format: winston.format.simple(),
+            transports: [
+                new winston.transports.File({ filename: dir + "/ingest.log" }),
+                new winston.transports.Console(),
+            ],
+        });
     }
 
     addDatastreamsToPage(page, imageData) {
@@ -81,7 +90,7 @@ class IngestProcessor {
 
     run(): void {
         // TODO: do something
-        console.log("Hello, world! I'm the ingest processor.");
+        this.logger.info("Hello, world! I'm the ingest processor.");
     }
 }
 
