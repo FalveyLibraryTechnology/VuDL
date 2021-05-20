@@ -32,12 +32,10 @@ class JobMetadata {
         }
     }
 
-    dc(job: Job): Buffer {
-        this.job = job;
-        const filename = job.dir + "/dc.xml";
-        if (fs.existsSync(filename)) {
-            return fs.readFileSync(filename);
-        }
+    get dc(): Buffer {
+        const filename = this.job.dir + "/dc.xml";
+        return fs.existsSync(filename)
+            ? fs.readFileSync(filename) : null;
     }
 
     get ingestLockfile(): string {
@@ -87,7 +85,6 @@ class JobMetadata {
             const file = fs.statSync(path);
             const current = file.mtime.getTime() / 1000;
 
-            console.log(current);
             if (current != null) {
                 if (current > mtime) {
                     mtime = current;
@@ -97,7 +94,6 @@ class JobMetadata {
         if (mtime == undefined_time) {
             const dir = fs.statSync(this.job.dir);
             mtime = dir.mtime.getTime() / 1000;
-            console.log(mtime);
         }
         return mtime;
     }
