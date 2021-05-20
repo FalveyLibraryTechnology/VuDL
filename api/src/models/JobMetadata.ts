@@ -40,7 +40,7 @@ class JobMetadata {
         }
     }
 
-    ingestLockfile(): string {
+    get ingestLockfile(): string {
         return this.job.dir + "/ingest.lock";
     }
 
@@ -180,7 +180,7 @@ class JobMetadata {
             minutes_since_upload: Math.floor((new Date().getTime() / 1000 - this.uploadTime) / 60),
             file_problems: this.fileProblems,
             published: this.raw.published,
-            ingesting: fs.existsSync(this.ingestLockfile()),
+            ingesting: fs.existsSync(this.ingestLockfile),
             documents: this.documents.list.length,
             audio: this.audio.list.length,
             ingest_info: this.ingestInfo,
