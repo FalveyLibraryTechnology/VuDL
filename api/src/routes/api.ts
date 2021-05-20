@@ -48,10 +48,19 @@ router.put("/:category/:job/ingest", function (req, res) {
 });
 
 router.put("/:category/:job", function (req, res) {
-    // TODO: Save job
-    // const job = getJobFromRequest(req);
-    // job.metadata.validate(job, req.params);
-    res.json({ status: "ok" });
+    const job = getJobFromRequest(req);
+    const raw = req.body;
+    try {
+        job.metadata.raw = raw;
+        const problems = job.metadata.status.file_problems as Record<string, Array<string>>;
+        if (problems.added.length > 0 || problems.deleted.length > 0) {
+            throw "file problem found";
+        }
+        job.metadata.save();
+        res.json({ status: "ok" });
+    } catch (e) {
+        res.status(500).json({ status: "error saving job" });
+    }
 });
 
 router.get("/:category/:job/:image/:size", async function (req, res) {
