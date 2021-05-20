@@ -80,7 +80,8 @@ class JobMetadata {
     }
 
     get uploadTime(): number {
-        let mtime = 2000;
+        const undefined_time = 2000
+        let mtime = undefined_time;
         this.order.pages.forEach((page) => {
             const path: string = this.job.dir + "/" + page.filename;
             const file = fs.statSync(path);
@@ -93,7 +94,7 @@ class JobMetadata {
                 }
             }
         });
-        if (mtime == 2000) {
+        if (mtime == undefined_time) {
             const dir = fs.statSync(this.job.dir);
             mtime = dir.mtime.getTime() / 1000;
             console.log(mtime);
