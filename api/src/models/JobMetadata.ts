@@ -34,8 +34,7 @@ class JobMetadata {
 
     get dc(): Buffer {
         const filename = this.job.dir + "/dc.xml";
-        return fs.existsSync(filename)
-            ? fs.readFileSync(filename) : null;
+        return fs.existsSync(filename) ? fs.readFileSync(filename) : null;
     }
 
     get ingestLockfile(): string {
