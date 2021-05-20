@@ -4,8 +4,10 @@ import AudioOrder from "./AudioOrder";
 import { DocumentFileRaw } from "./DocumentFile";
 import DocumentOrder from "./DocumentOrder";
 import Job from "./Job";
+import Image from "./ImageFile";
 import { PageRaw } from "./Page";
 import PageOrder from "./PageOrder";
+import readLastLines = require("read-last-lines");
 
 interface JobMetadataRaw {
     order: Array<PageRaw>;
@@ -14,6 +16,7 @@ interface JobMetadataRaw {
 
 class JobMetadata {
     job: Job;
+    page: PageRaw;
     _filename: string;
     _order: PageOrder = null;
     _documents: DocumentOrder = null;
@@ -58,31 +61,68 @@ class JobMetadata {
     }
 
     get derivativeStatus(): Record<string, unknown> {
-        // TODO: populate with real data
+        const lockfileExists: boolean = fs.existsSync(this.derivativeLockfile);
         const status = {
-            expected: 10,
+            expected: 0,
             processed: 0,
-            building: false,
+            building: lockfileExists,
         };
+        this.order.pages.forEach((page) => {
+            const image: Image = new Image(this.job.dir + "/" + page.filename);
+            Object.keys(image.sizes).forEach((key) => {
+                status.expected += 1;
+                if (fs.existsSync(image.derivativePath(key))) {
+                    status.processed += 1;
+                }
+            });
+        });
         return status;
     }
 
     get uploadTime(): number {
-        // TODO: populate with real data
-        return 0;
+        const undefined_time = 2000;
+        let mtime = undefined_time;
+        this.order.pages.forEach((page) => {
+            const path: string = this.job.dir + "/" + page.filename;
+            const file = fs.statSync(path);
+            const current = file.mtime.getTime() / 1000;
+
+            console.log(current);
+            if (current != null) {
+                if (current > mtime) {
+                    mtime = current;
+                }
+            }
+        });
+        if (mtime == undefined_time) {
+            const dir = fs.statSync(this.job.dir);
+            mtime = dir.mtime.getTime() / 1000;
+            console.log(mtime);
+        }
+        return mtime;
     }
 
-    get fileProblems(): Record<string, number> {
-        // TODO: populate with real data
+    get fileProblems(): Record<string, Array<string>> {
+        const fromJson: Array<string> = this.order.raw.map(function (page: PageRaw) {
+            return page.filename;
+        });
+        const fromFile: Array<string> = PageOrder.fromJob(this.job).raw.map(function (page: PageRaw) {
+            return page.filename;
+        });
+
         return {
-            added: 0,
-            deleted: 0,
+            added: fromJson.filter((x) => !fromFile.includes(x)), //fromJson - fromFile
+            deleted: fromFile.filter((x) => !fromJson.includes(x)), //fromFile - fromJson
         };
     }
 
-    get ingestInfo(): string {
-        // TODO: populate with real data
-        return "";
+    async ingestInfo(): Promise<string> {
+        const logfile: string = this.job.dir + "/ingest.log";
+        if (fs.existsSync(logfile)) {
+            await readLastLines.read(logfile, 1).then((lines) => console.log(lines));
+        } else {
+            return "";
+        }
     }
 
     get order(): PageOrder {
@@ -137,7 +177,7 @@ class JobMetadata {
     get status(): Record<string, unknown> {
         return {
             derivatives: this.derivativeStatus,
-            // TODO: minutes_since_upload: ((Time.new - upload_time) / 60).floor,
+            minutes_since_upload: Math.floor((new Date().getTime() / 1000 - this.uploadTime) / 60),
             file_problems: this.fileProblems,
             published: this.raw.published,
             ingesting: fs.existsSync(this.ingestLockfile()),
