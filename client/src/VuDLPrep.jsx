@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Switch, Route, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 
+import AjaxHelper from "./AjaxHelper";
 import JobSelector from "./JobSelector";
 import JobPaginator from "./JobPaginator";
 
