@@ -21,7 +21,7 @@ class Job {
         if (this.metadata.published && !fileExists(lockfile)) {
             closeSync(openSync(lockfile, "w")); // touch
             const q = new Queue("vudl");
-            q.add("ingest", {dir: this.dir });
+            q.add("ingest", { dir: this.dir });
         }
     }
 
