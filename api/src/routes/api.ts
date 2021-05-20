@@ -54,9 +54,9 @@ router.put("/:category/:job", function (req, res) {
     try {
         job.metadata.raw = raw;
         const problems = job.metadata.status.file_problems as Record<string, Array<string>>;
-        if (problems.added.length > 0 || problems.deleted.length > 0 ) {
+        if (problems.added.length > 0 || problems.deleted.length > 0) {
             throw "file problem found";
-        } 
+        }
         job.metadata.save();
         res.json({ status: "ok" });
     } catch (e) {
