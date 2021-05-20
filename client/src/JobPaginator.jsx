@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import AjaxHelper from "./AjaxHelper";
 import MagicLabeler from "./MagicLabeler";
 import PaginatorControls from "./PaginatorControls";
 import PaginatorList from "./PaginatorList";
@@ -12,6 +13,7 @@ class JobPaginator extends React.Component {
         super(props);
         this.magicLabelCache = [];
         this.state = { active: false, currentPage: 0, zoom: false, order: [] };
+        this.ajax = AjaxHelper.getInstance();
         // BIND
         this.autonumberFollowingPages = this.autonumberFollowingPages.bind(this);
         this.getLabel = this.getLabel.bind(this);
@@ -23,11 +25,11 @@ class JobPaginator extends React.Component {
             return false;
         }
         this.filename = this.state.order[imageNumber].filename;
-        return this.props.app.getImageUrl(this.state.category, this.state.job, this.filename, size);
+        return this.ajax.getImageUrl(this.state.category, this.state.job, this.filename, size);
     }
 
     getStatusUrl() {
-        return this.props.app.getJobUrl(this.state.category, this.state.job, "/status");
+        return this.ajax.getJobUrl(this.state.category, this.state.job, "/status");
     }
 
     getLabel(imageNumber, useMagic) {
@@ -93,7 +95,7 @@ class JobPaginator extends React.Component {
         var imageUrl = this.getImageUrl(this.state.currentPage, "*");
         var parts = imageUrl.split("/");
         var imageFilename = parts[parts.length - 2];
-        this.props.app.ajax({
+        this.ajax.ajax({
             type: "DELETE",
             url: imageUrl,
             success: function () {
@@ -112,7 +114,7 @@ class JobPaginator extends React.Component {
     loadJob(category, job) {
         var promise = new Promise(
             function (resolve /*, reject*/) {
-                this.props.app.getJSON(this.props.app.getJobUrl(category, job, ""), null, function (data /*, status*/) {
+                this.ajax.getJSON(this.ajax.getJobUrl(category, job, ""), null, function (data /*, status*/) {
                     resolve(data);
                 });
             }.bind(this)
@@ -127,7 +129,7 @@ class JobPaginator extends React.Component {
                     this.setState(data);
                     return new Promise(
                         function (resolve /*, reject*/) {
-                            this.props.app.getJSON(this.getStatusUrl(), null, function (data) {
+                            this.ajax.getJSON(this.getStatusUrl(), null, function (data) {
                                 resolve(data);
                             });
                         }.bind(this)
@@ -239,7 +241,7 @@ class JobPaginator extends React.Component {
                 // If the user wants to publish, let's make sure all derivatives are
                 // ready! Otherwise we can resolve with no further actions.
                 if (publish) {
-                    this.props.app.getJSON(this.getStatusUrl(), null, function (data) {
+                    this.ajax.getJSON(this.getStatusUrl(), null, function (data) {
                         resolve(data);
                     });
                 } else {
@@ -266,9 +268,9 @@ class JobPaginator extends React.Component {
                         return;
                     }
                 }
-                this.props.app.ajax({
+                this.ajax.ajax({
                     type: "PUT",
-                    url: this.props.app.getJobUrl(this.state.category, this.state.job, ""),
+                    url: this.ajax.getJobUrl(this.state.category, this.state.job, ""),
                     contentType: "application/json",
                     data: JSON.stringify({ order: this.state.order, published: publish }),
                     success: function () {

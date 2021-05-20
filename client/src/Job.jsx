@@ -2,10 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
+import AjaxHelper from "./AjaxHelper";
+
 class Job extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.ajax = AjaxHelper.getInstance();
         // BIND
         this.buildDerivatives = this.buildDerivatives.bind(this);
     }
@@ -22,21 +25,21 @@ class Job extends React.Component {
     }
 
     getDerivUrl() {
-        return this.props.app.getJobUrl(this.props.category, this.props.children, "/derivatives");
+        return this.ajax.getJobUrl(this.props.category, this.props.children, "/derivatives");
     }
 
     getIngestUrl() {
-        return this.props.app.getJobUrl(this.props.category, this.props.children, "/ingest");
+        return this.ajax.getJobUrl(this.props.category, this.props.children, "/ingest");
     }
 
     getStatusUrl() {
-        return this.props.app.getJobUrl(this.props.category, this.props.children, "/status");
+        return this.ajax.getJobUrl(this.props.category, this.props.children, "/status");
     }
 
     buildDerivatives(e) {
         e.preventDefault();
         e.stopPropagation();
-        this.props.app.ajax({
+        this.ajax.ajax({
             type: "PUT",
             url: this.getDerivUrl(),
             contentType: "application/json",
@@ -53,7 +56,7 @@ class Job extends React.Component {
         if (!window.confirm("Are you sure? This will put a load on the server!")) {
             return;
         }
-        this.props.app.ajax({
+        this.ajax.ajax({
             type: "PUT",
             url: this.getIngestUrl(),
             contentType: "application/json",
@@ -68,7 +71,7 @@ class Job extends React.Component {
         if (typeof e !== "undefined") {
             e.stopPropagation();
         }
-        this.props.app.getJSON(
+        this.ajax.getJSON(
             this.getStatusUrl(),
             null,
             function (data) {
@@ -198,12 +201,6 @@ class Job extends React.Component {
 }
 
 Job.propTypes = {
-    // VuDLPrep
-    app: PropTypes.shape({
-        ajax: PropTypes.func,
-        getJobUrl: PropTypes.func,
-        getJSON: PropTypes.func,
-    }),
     category: PropTypes.string,
     children: PropTypes.string,
 };

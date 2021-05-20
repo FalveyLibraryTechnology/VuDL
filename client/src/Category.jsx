@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import JobList from "./JobList";
-import VuDLPrep from "./VuDLPrep";
 
 class Category extends React.Component {
     constructor(props) {
@@ -42,7 +41,7 @@ class Category extends React.Component {
             <h2>{this.props.data.category + " [no jobs]"}</h2>
         );
         var joblist = this.state.open ? (
-            <JobList app={this.props.app} category={this.props.data.category} data={this.props.data.jobs} />
+            <JobList category={this.props.data.category} data={this.props.data.jobs} />
         ) : (
             ""
         );
@@ -56,7 +55,6 @@ class Category extends React.Component {
 }
 
 Category.propTypes = {
-    app: PropTypes.shape({ type: PropTypes.oneOf([VuDLPrep]) }),
     data: PropTypes.exact({
         category: PropTypes.string,
         jobs: PropTypes.arrayOf(PropTypes.string),

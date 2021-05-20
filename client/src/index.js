@@ -8,9 +8,14 @@ import "../node_modules/@fortawesome/fontawesome-free/css/all.css";
 
 import VuDLPrep from "./VuDLPrep";
 
+import AjaxHelper from "./AjaxHelper";
+let ajax = AjaxHelper.getInstance();
+ajax.url = "http://localhost:9000/api"; // TODO: Config
+ajax.token = "passedToken";
+
 ReactDOM.render(
     <React.StrictMode>
-        <VuDLPrep url="http://localhost:9000/api" logoutUrl="" token="" />
+        <VuDLPrep />
     </React.StrictMode>,
     document.getElementById("root")
 );
