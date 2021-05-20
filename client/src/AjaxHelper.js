@@ -10,7 +10,7 @@ class AjaxHelperInstance {
         return this.url;
     }
     get logoutUrl() {
-        return this.url + "/api/logout";
+        return this.url + "/logout";
     }
 
     get token() {
