@@ -17,9 +17,12 @@ class Job {
     }
 
     ingest(): void {
-        // TODO
-        // const metadata = new JobMetadata(this);
-        // const lockfile = metadata.ingestLockfile();
+        const lockfile = this.metadata.ingestLockfile;
+        if (this.metadata.published && !fileExists(lockfile)) {
+            closeSync(openSync(lockfile, "w")); // touch
+            const q = new Queue("vudl");
+            q.add("ingest", {dir: this.dir });
+        }
     }
 
     raw(): string {
