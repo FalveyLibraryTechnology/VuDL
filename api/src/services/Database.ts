@@ -72,7 +72,7 @@ export async function getUserBy(key: string, val: string | number): Promise<User
     return users[0] ?? null;
 }
 
-export async function confirmToken(token: string): void {
+export async function confirmToken(token: string): Promise<boolean> {
     const db = await getDatabase();
     const rows = await db<Token>("tokens").where("token", token);
     const check = (rows ?? [null])[0];
@@ -83,7 +83,7 @@ export async function confirmToken(token: string): void {
     return true;
 }
 
-export async function makeToken(user: User): void {
+export async function makeToken(user: User): Promise<string> {
     if (user === null) {
         return null;
     }
