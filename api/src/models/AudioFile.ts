@@ -14,14 +14,6 @@ class AudioFile {
         this.dir = dir;
     }
 
-    constraintForExtensions(extension: string): string | number {
-        if (this.extensions.includes(extension)) {
-            return extension;
-        } else {
-            return 1; // TODO
-        }
-    }
-
     config(): string {
         const config = Config.getInstance();
         return config.restBaseUrl();
