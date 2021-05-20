@@ -14,7 +14,7 @@ router.get("/secret", requireAuth, async function (req, res) {
     const token = await makeToken(req.user);
     res.send(`<ul>
         <li><a href="/api/token/mint">Mint</a></li>
-        <li><a href="/api/token/confirm/${token}">Confirm (${token})</a></li>
+        <li><a href="/api/token/confirm/${token}">Confirm (<kbd>${token}</kbd>)</a></li>
     </ul>`);
 });
 
@@ -23,6 +23,7 @@ router.get("/login", async function (req, res) {
     res.send(`<ul>
         <li><a href="/api/user/confirm/${user.hash}">Login</a></li>
         <li><a href="/api/secret">Secret</a></li>
+        <li><a href="/api/logout">Logout</a></li>
     </ul>`);
 });
 
