@@ -50,7 +50,6 @@ router.put("/:category/:job/ingest", function (req, res) {
 router.put("/:category/:job", function (req, res) {
     const job = getJobFromRequest(req);
     const raw = req.body;
-    console.log("raw" + raw);
     try {
         job.metadata.raw = raw;
         const problems = job.metadata.status.file_problems as Record<string, Array<string>>;
