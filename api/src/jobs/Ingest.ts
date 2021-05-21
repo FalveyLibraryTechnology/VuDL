@@ -108,7 +108,7 @@ class IngestProcessor {
         this.logger.info(message);
         const params: DatastreamParameters = {
             mimeType: "text/xml",
-            logMessage: message
+            logMessage: message,
         };
         resource.modifyDatastream("DC", params, dc);
     }

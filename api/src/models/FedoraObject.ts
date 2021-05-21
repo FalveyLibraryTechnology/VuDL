@@ -1,13 +1,13 @@
 import fs = require("fs");
 
 export interface DatastreamParameters {
-    checksumType?: string,
-    controlGroup?: string,
-    dsLabel?: string,
-    dsState?: string,
-    mimeType?: string,
-    logMessage?: string,
-    versionable?: boolean,
+    checksumType?: string;
+    controlGroup?: string;
+    dsLabel?: string;
+    dsState?: string;
+    mimeType?: string;
+    logMessage?: string;
+    versionable?: boolean;
 }
 
 export class FedoraObject {
@@ -24,14 +24,10 @@ export class FedoraObject {
     }
 
     addDatastreamFromFile(filename: string, stream: string, mimeType: string) {
-        return this.addDatastreamFromString(
-            fs.readFileSync(filename).toString(),
-            stream,
-            mimeType
-        );
+        return this.addDatastreamFromString(fs.readFileSync(filename).toString(), stream, mimeType);
     }
 
-    addDatastreamFromString(contents: string, stream: string, mimeType: string, checksumType: string = "MD5") {
+    addDatastreamFromString(contents: string, stream: string, mimeType: string, checksumType = "MD5") {
         if (mimeType === "text/plain" && contents.length === 0) {
             contents = "\n"; // workaround for 500 error on empty OCR
         }
@@ -53,8 +49,8 @@ export class FedoraObject {
         this.addDatastream("MASTER-MD", params, this.fitsMasterMetadata());
     }
 
-    addRelationship(subject: string, predicate: string, obj: string, isLiteral: boolean = false, datatype: string = null) {
-        this.log("Adding relationship " + [subject, predicate, obj].join(' ') + " to " + this.pid);
+    addRelationship(subject: string, predicate: string, obj: string, isLiteral = false, datatype: string = null) {
+        this.log("Adding relationship " + [subject, predicate, obj].join(" ") + " to " + this.pid);
         // TODO
     }
 
@@ -76,12 +72,7 @@ export class FedoraObject {
     }
 
     addSortRelationship(sort) {
-        this.addRelationship(
-            "info:fedora/" + this.pid,
-            "http://vudl.org/relationships#sortOn",
-            sort,
-            true
-        )
+        this.addRelationship("info:fedora/" + this.pid, "http://vudl.org/relationships#sortOn", sort, true);
     }
 
     collectionIngest() {
