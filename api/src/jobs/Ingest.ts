@@ -5,6 +5,7 @@ import Category from "../models/Category";
 import { DatastreamParameters, FedoraObject } from "../models/FedoraObject";
 import ImageFile from "../models/ImageFile";
 import Job from "../models/Job";
+import Page from "../models/Page";
 import QueueJobInterface from "./QueueJobInterface";
 import winston = require("winston");
 
@@ -26,8 +27,16 @@ class IngestProcessor {
         });
     }
 
-    addDatastreamsToPage(page, imageData) {
-        // TODO
+    async addDatastreamsToPage(page: Page, imageData: FedoraObject): Promise<void> {
+        const image = new ImageFile(this.job.dir + "/" + page.filename);
+        imageData.addDatastreamFromFile(image.filename, "MASTER", "image/tiff");
+        imageData.addMasterMetadataDatastream();
+        for (const size in image.sizes) {
+            imageData.addDatastreamFromFile(await image.derivative(size), size, "image/jpeg");
+        }
+        if (this.category.supportsOcr) {
+            imageData.addDatastreamFromFile(await image.ocr(), "OCR-DIRTY", "text/plain");
+        }
     }
 
     addDatastreamsToDocument(document, documentData) {
@@ -43,13 +52,14 @@ class IngestProcessor {
         // TODO: Add OGG
     }
 
-    addPages(pageList) {
+    async addPages(pageList): Promise<void> {
         const order = this.job.metadata.order.pages;
         for (const i in order) {
             const page = order[i];
-            this.logger.info("Adding " + (parseInt(i) + 1) + " of " + order.length + " - " + page.filename);
-            const imageData = this.buildPage(pageList, page, i + 1);
-            this.addDatastreamsToPage(page, imageData);
+            const number = parseInt(i) + 1;
+            this.logger.info("Adding " + number + " of " + order.length + " - " + page.filename);
+            const imageData = this.buildPage(pageList, page, number);
+            await this.addDatastreamsToPage(page, imageData);
         }
     }
 
@@ -61,12 +71,36 @@ class IngestProcessor {
         // TODO
     }
 
-    buildPage(pageList, page, number) {
-        // TODO
+    buildPage(pageList: FedoraObject, page: Page, number: number): FedoraObject {
+        const imageData = new FedoraObject(FedoraObject.getNextPid());
+        imageData.setLogger(this.logger);
+        imageData.parentPid = pageList.pid;
+        imageData.modelType = "ImageData";
+        imageData.title = page.label;
+        this.logger.info("Creating Image Object " + imageData.pid);
+
+        imageData.coreIngest("I");
+        imageData.dataIngest();
+        imageData.imageDataIngest();
+
+        imageData.addSequenceRelationship(pageList.pid, number);
+
+        return imageData;
     }
 
     buildPageList(resource) {
-        // TODO
+        const pageList = new FedoraObject(FedoraObject.getNextPid());
+        pageList.setLogger(this.logger);
+        pageList.parentPid = resource.pid;
+        pageList.modelType = "ListCollection";
+        pageList.title = "Page List";
+        this.logger.info("Creating Page List Object " + pageList.pid);
+
+        pageList.coreIngest("I");
+        pageList.collectionIngest();
+        pageList.listCollectionIngest();
+
+        return pageList;
     }
 
     buildDocument(documentList, document, number) {
@@ -109,7 +143,7 @@ class IngestProcessor {
     finalizeTitle(resource) {
         const title = this.job.dir.substr(1).split("/").reverse().join("_");
         this.logger.info("Updating title to " + title);
-        // TODO: resource.modifyObject(title, null, null, "Set Label to ingest/process path", null);
+        resource.modifyObject(title, null, null, "Set Label to ingest/process path", null);
 
         const dc = resource.datastreamDissemination("DC");
         this.replaceDCMetadata(
@@ -149,7 +183,7 @@ class IngestProcessor {
         // (this was already a TODO in the Ruby code; low priority)
 
         if (this.job.metadata.order.pages.length > 0) {
-            this.addPages(this.buildPageList(resource));
+            await this.addPages(this.buildPageList(resource));
         }
 
         if (this.job.metadata.documents.list.length > 0 || this.category.supportsPdfGeneration) {
