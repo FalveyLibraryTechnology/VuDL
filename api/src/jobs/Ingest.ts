@@ -3,6 +3,7 @@ import fs = require("fs");
 import path = require("path");
 import Category from "../models/Category";
 import { DatastreamParameters, FedoraObject } from "../models/FedoraObject";
+import ImageFile from "../models/ImageFile";
 import Job from "../models/Job";
 import QueueJobInterface from "./QueueJobInterface";
 import winston = require("winston");
@@ -84,10 +85,24 @@ class IngestProcessor {
         // TODO
     }
 
-    buildResource(holdingArea): FedoraObject {
-        // TODO
-        const resource = new FedoraObject("FAKE");
+    async buildResource(holdingArea): Promise<FedoraObject> {
+        const resource = new FedoraObject(FedoraObject.getNextPid());
         resource.setLogger(this.logger);
+        resource.parentPid = holdingArea.pid;
+        resource.modelType = "ResourceCollection";
+        resource.title = "Incomplete... / Processing...";
+        this.logger.info("Creating Resource Object " + resource.pid);
+
+        resource.coreIngest("I");
+        resource.collectionIngest();
+        resource.resourceCollectionIngest();
+
+        // Attach thumbnail to resource:
+        if (this.job.metadata.order.pages.length > 0) {
+            const page = this.job.metadata.order.pages[0];
+            const image = new ImageFile(this.job.dir + "/" + page.filename);
+            resource.addDatastreamFromFile(await image.derivative("THUMBNAIL"), "THUMBNAIL", "image/jpeg");
+        }
         return resource;
     }
 
@@ -117,10 +132,10 @@ class IngestProcessor {
         // TODO
     }
 
-    run(): void {
+    async run(): Promise<void> {
         const startTime = Date.now();
         this.logger.info("Beginning ingest.");
-        this.logger.info("Target collection ID: " + this.category.targetCollectionId);
+        this.logger.info("Target col// TODOlection ID: " + this.category.targetCollectionId);
         const holdingArea = new FedoraObject(this.category.targetCollectionId);
         holdingArea.setLogger(this.logger);
         if (holdingArea.sort == "custom") {
@@ -128,7 +143,7 @@ class IngestProcessor {
             throw "TODO: implement custom sort support.";
         }
 
-        const resource = this.buildResource(holdingArea);
+        const resource = await this.buildResource(holdingArea);
 
         // TODO: deal with ordered collection sequence numbers, if needed
         // (this was already a TODO in the Ruby code; low priority)
@@ -160,7 +175,7 @@ class IngestProcessor {
 class Ingest implements QueueJobInterface {
     async run(job: QueueJob): Promise<void> {
         const handler = new IngestProcessor(job.data.dir);
-        handler.run();
+        await handler.run();
     }
 }
 

@@ -11,11 +11,24 @@ export interface DatastreamParameters {
 }
 
 export class FedoraObject {
+    public modelType: string;
     public pid: string;
+    public parentPid: string;
+    public title: string;
     protected logger;
 
     constructor(pid: string) {
         this.pid = pid;
+    }
+
+    static getNextPid() {
+        // TODO
+        return "FAKE";
+    }
+
+    get namespace(): string {
+        // TODO: make configurable, or eliminate if unneeded
+        return "vudl";
     }
 
     addDatastream(id: string, params: DatastreamParameters, data: string) {
@@ -80,9 +93,25 @@ export class FedoraObject {
         // TODO
     }
 
-    coreIngest() {
+    coreIngest(objectState: string) {
         this.log("Core ingest for " + this.pid);
-        // TODO
+        this.ingest(
+            this.title,
+            "info:fedora/fedora-system:FOXML-1.1",
+            "UTF-8",
+            this.namespace,
+            "diglibEditor",
+            this.title + " - ingest",
+            "false"
+        );
+        this.modifyObject(null, null, objectState, "Set initial state", null);
+        this.addModelRelationship("CoreModel");
+        this.addRelationship(
+            "info:fedora/" + this.pid,
+            "info:fedora/fedora-system:def/relations-external#isMemberOf",
+            "info:fedora/" + this.parentPid
+        );
+        // TODO: add PARENT-QUERY, PARENT-LIST-RAW and PARENT-LIST datastreams if needed (probably not).
     }
 
     dataIngest() {
@@ -111,7 +140,7 @@ export class FedoraObject {
         this.addModelRelationship("AudioData");
     }
 
-    ingest(label, format, encoding, namespace, ownerId, logMessage, ignoreMime, xml) {
+    ingest(label, format, encoding, namespace, ownerId, logMessage, ignoreMime, xml = null) {
         const targetPid = xml ? "new" : this.pid;
         this.log("Ingest for " + targetPid);
         // TODO
