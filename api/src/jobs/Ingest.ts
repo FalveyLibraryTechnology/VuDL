@@ -3,6 +3,7 @@ import fs = require("fs");
 import path = require("path");
 import AudioFile from "../models/AudioFile";
 import Category from "../models/Category";
+import Config from "../models/Config";
 import { DatastreamParameters, FedoraObject } from "../models/FedoraObject";
 import DocumentFile from "../models/DocumentFile";
 import ImageFile from "../models/ImageFile";
@@ -236,7 +237,23 @@ class IngestProcessor {
     }
 
     moveDirectory() {
-        // TODO
+        const basePath = Config.getInstance().processedAreaPath();
+        const currentTime = new Date();
+        const now = currentTime.toISOString().substr(0, 10);
+        let target = basePath + "/" + now + "/" + this.category.name + "/" + this.job.name;
+        if (fs.existsSync(target)) {
+            let i = 2;
+            while (fs.existsSync(target + "." + i)) {
+                i++;
+            }
+            target = target + "." + i;
+        }
+        this.logger.info("Moving " + this.job.dir + " to " + target);
+        // TODO: move the directory and clean up (original Ruby below):
+        //FileUtils.mkdir_p target unless File.exist?(target)
+        //FileUtils.mv Dir.glob("#{@job.dir}/*"), target
+        //FileUtils.rmdir @job.dir
+        //FileUtils.rm "#{target}/ingest.lock"
     }
 
     async run(): Promise<void> {
