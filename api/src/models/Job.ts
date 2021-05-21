@@ -56,8 +56,9 @@ class Job {
         return instance;
     }
 
-    generatePdf(): void {
+    generatePdf(): string {
         // TODO
+        return "TODO";
     }
 
     get metadata(): JobMetadata {

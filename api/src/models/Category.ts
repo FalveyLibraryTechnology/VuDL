@@ -31,11 +31,13 @@ export class Category {
     }
 
     get supportsOcr(): boolean {
-        return this.ini["ocr"]["ocr"] && this.ini["ocr"]["ocr"].tr(" '\"", "") != "false";
+        const setting = (this.ini.ocr ?? {}).ocr ?? false;
+        return typeof setting === "boolean" ? setting : setting === "true";
     }
 
     get supportsPdfGeneration(): boolean {
-        return this.ini["pdf"]["generate"] && this.ini["pdf"]["generate"].tr(" '\"", "") != "false";
+        const setting = (this.ini.pdf ?? {}).generate ?? false;
+        return typeof setting === "boolean" ? setting : setting === "true";
     }
 
     raw(): CategoryRaw {

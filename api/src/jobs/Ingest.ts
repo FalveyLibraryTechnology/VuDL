@@ -1,8 +1,10 @@
 import { Job as QueueJob } from "bullmq";
 import fs = require("fs");
 import path = require("path");
+import AudioFile from "../models/AudioFile";
 import Category from "../models/Category";
 import { DatastreamParameters, FedoraObject } from "../models/FedoraObject";
+import DocumentFile from "../models/DocumentFile";
 import ImageFile from "../models/ImageFile";
 import Job from "../models/Job";
 import Page from "../models/Page";
@@ -19,7 +21,10 @@ class IngestProcessor {
         this.category = new Category(path.dirname(dir));
         this.logger = winston.createLogger({
             level: "info",
-            format: winston.format.simple(),
+            format: winston.format.combine(
+                winston.format.timestamp(),
+                winston.format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
+            ),
             transports: [
                 new winston.transports.File({ filename: dir + "/ingest.log" }),
                 new winston.transports.Console(),
@@ -39,17 +44,19 @@ class IngestProcessor {
         }
     }
 
-    addDatastreamsToDocument(document, documentData) {
-        // TODO
+    addDatastreamsToDocument(document: DocumentFile, documentData: FedoraObject): void {
+        documentData.addDatastreamFromFile(this.job.dir + "/" + document.filename, "MASTER", "application/pdf");
+        documentData.addMasterMetadataDatastream();
     }
 
-    addDatastreamsToAudio(audio, audioData) {
+    addDatastreamsToAudio(audio: AudioFile, audioData: FedoraObject) {
         this.logger.info("Adding Flac");
-        // TODO: Add Flac
+        audioData.addDatastreamFromFile(this.job.dir + "/" + audio.filename, "MASTER", "audio/x-flac");
         this.logger.info("Adding MP3");
-        // TODO: Add MP3
+        audioData.addDatastreamFromFile(audio.derivative("MP3"), "MP3", "audio/mpeg");
         this.logger.info("Adding OGG");
-        // TODO: Add OGG
+        audioData.addDatastreamFromFile(audio.derivative("OGG"), "OGG", "audio/ogg");
+        audioData.addMasterMetadataDatastream();
     }
 
     async addPages(pageList): Promise<void> {
@@ -63,12 +70,30 @@ class IngestProcessor {
         }
     }
 
-    addDocuments(documentList) {
-        // TODO
+    addDocuments(documentList: FedoraObject): void {
+        let order = this.job.metadata.documents.list;
+        if (order.length == 0 && this.category.supportsPdfGeneration) {
+            this.logger.info("Generating PDF");
+            order = [new DocumentFile(path.basename(this.job.generatePdf()), "PDF")];
+        }
+        for (const i in order) {
+            const document = order[i];
+            const number = parseInt(i) + 1;
+            this.logger.info("Adding " + number + " of " + order.length + " - " + document.filename);
+            const data = this.buildDocument(documentList, document, number);
+            this.addDatastreamsToDocument(document, data);
+        }
     }
 
     addAudio(audioList) {
-        // TODO
+        const order = this.job.metadata.audio.list;
+        for (const i in order) {
+            const audio = order[i];
+            const number = parseInt(i) + 1;
+            this.logger.info("Adding " + number + " of " + order.length + " - " + audio.filename);
+            const audioData = this.buildAudio(audioList, audio, number);
+            this.addDatastreamsToAudio(audio, audioData);
+        }
     }
 
     buildPage(pageList: FedoraObject, page: Page, number: number): FedoraObject {
@@ -103,20 +128,68 @@ class IngestProcessor {
         return pageList;
     }
 
-    buildDocument(documentList, document, number) {
-        // TODO
+    buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): FedoraObject {
+        const documentData = new FedoraObject(FedoraObject.getNextPid());
+        documentData.setLogger(this.logger);
+        documentData.parentPid = documentList.pid;
+        documentData.modelType = "PDFData";
+        documentData.title = document.label;
+        this.logger.info("Creating Document Object " + documentData.pid);
+
+        documentData.coreIngest("I");
+        documentData.dataIngest();
+        documentData.documentDataIngest();
+
+        documentData.addSequenceRelationship(documentList.pid, number);
+
+        return documentData;
     }
 
-    buildDocumentList(resource) {
-        // TODO
+    buildDocumentList(resource: FedoraObject): FedoraObject {
+        const documentList = new FedoraObject(FedoraObject.getNextPid());
+        documentList.setLogger(this.logger);
+        documentList.parentPid = resource.pid;
+        documentList.modelType = "ListCollection";
+        documentList.title = "Document List";
+        this.logger.info("Creating Document List Object " + documentList.pid);
+
+        documentList.coreIngest("I");
+        documentList.collectionIngest();
+        documentList.listCollectionIngest();
+
+        return documentList;
     }
 
-    buildAudio(audioList, audio, number) {
-        // TODO
+    buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): FedoraObject {
+        const audioData = new FedoraObject(FedoraObject.getNextPid());
+        audioData.setLogger(this.logger);
+        audioData.parentPid = audioList.pid;
+        audioData.modelType = "AudioData";
+        audioData.title = audio.filename;
+        this.logger.info("Creating Audio Object " + audioData.pid);
+
+        audioData.coreIngest("I");
+        audioData.dataIngest();
+        audioData.audioDataIngest();
+
+        audioData.addSequenceRelationship(audioList.pid, number);
+
+        return audioData;
     }
 
-    buildAudioList(resource) {
-        // TODO
+    buildAudioList(resource: FedoraObject): FedoraObject {
+        const audioList = new FedoraObject(FedoraObject.getNextPid());
+        audioList.setLogger(this.logger);
+        audioList.parentPid = resource.pid;
+        audioList.modelType = "ListCollection";
+        audioList.title = "Audio List";
+        this.logger.info("Creating Audio List Object " + audioList.pid);
+
+        audioList.coreIngest("I");
+        audioList.collectionIngest();
+        audioList.listCollectionIngest();
+
+        return audioList;
     }
 
     async buildResource(holdingArea): Promise<FedoraObject> {
@@ -203,6 +276,7 @@ class IngestProcessor {
 
         const elapsed = (Date.now() - startTime) / 60000;
         this.logger.info("Done. Total time: " + elapsed + " minute(s).");
+        this.logger.close(); // Release file handle on log.
     }
 }
 
