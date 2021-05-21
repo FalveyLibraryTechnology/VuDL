@@ -26,9 +26,7 @@ export class Category {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     get ini(): any {
         const iniFile = this.dir + "/batch-params.ini";
-        const rawIni = fs.existsSync(iniFile)
-            ? fs.readFileSync(iniFile, "utf-8")
-            : "";
+        const rawIni = fs.existsSync(iniFile) ? fs.readFileSync(iniFile, "utf-8") : "";
         return ini.parse(rawIni);
     }
 
