@@ -2,7 +2,7 @@ import { Job as QueueJob } from "bullmq";
 import fs = require("fs");
 import path = require("path");
 import Category from "../models/Category";
-import FedoraObject from "../models/FedoraObject";
+import { DatastreamParameters, FedoraObject } from "../models/FedoraObject";
 import Job from "../models/Job";
 import QueueJobInterface from "./QueueJobInterface";
 import winston = require("winston");
@@ -84,8 +84,11 @@ class IngestProcessor {
         // TODO
     }
 
-    buildResource(holdingArea) {
+    buildResource(holdingArea): FedoraObject {
         // TODO
+        const resource = new FedoraObject("FAKE");
+        resource.setLogger(this.logger);
+        return resource;
     }
 
     finalizeTitle(resource) {
@@ -93,7 +96,7 @@ class IngestProcessor {
         this.logger.info("Updating title to " + title);
         // TODO: resource.modifyObject(title, null, null, "Set Label to ingest/process path", null);
 
-        const dc = ""; // TODO: resource.datastreamDissemination("DC");
+        const dc = resource.datastreamDissemination("DC");
         this.replaceDCMetadata(
             resource,
             dc.replace(/Incomplete... \/ Processing.../, title),
@@ -101,26 +104,13 @@ class IngestProcessor {
         );
     }
 
-    replaceDCMetadata(resource, dc, message) {
+    replaceDCMetadata(resource: FedoraObject, dc: string, message: string) {
         this.logger.info(message);
-        /* TODO:
-        resource.modifyDatastream(
-            "DC",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "text/xml",
-            message,
-            null,
-            null,
-            dc
-        );
-        */
+        const params: DatastreamParameters = {
+            mimeType: "text/xml",
+            logMessage: message
+        };
+        resource.modifyDatastream("DC", params, dc);
     }
 
     moveDirectory() {
@@ -132,6 +122,7 @@ class IngestProcessor {
         this.logger.info("Beginning ingest.");
         this.logger.info("Target collection ID: " + this.category.targetCollectionId);
         const holdingArea = new FedoraObject(this.category.targetCollectionId);
+        holdingArea.setLogger(this.logger);
         if (holdingArea.sort == "custom") {
             // This was already a TODO in the Ruby code; low priority:
             throw "TODO: implement custom sort support."
@@ -155,12 +146,9 @@ class IngestProcessor {
         }
 
         this.finalizeTitle(resource);
-
-        /* TODO: make this work
         if (this.job.metadata.dc.length > 0) {
             this.replaceDCMetadata(resource, this.job.metadata.dc, "Loading DC XML");
         }
-         */
 
         this.moveDirectory();
 
