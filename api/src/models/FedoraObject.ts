@@ -1,4 +1,5 @@
 import fs = require("fs");
+import winston = require("winston");
 
 export interface DatastreamParameters {
     checksumType?: string;
@@ -17,8 +18,9 @@ export class FedoraObject {
     public title: string;
     protected logger;
 
-    constructor(pid: string) {
+    constructor(pid: string, logger: winston.Logger = null) {
         this.pid = pid;
+        this.logger = logger;
     }
 
     static getNextPid(): string {
@@ -173,10 +175,6 @@ export class FedoraObject {
         if (this.logger) {
             this.logger.info(message);
         }
-    }
-
-    setLogger(logger): void {
-        this.logger = logger;
     }
 
     get sort(): string {

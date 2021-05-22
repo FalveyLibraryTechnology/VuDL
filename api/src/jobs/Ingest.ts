@@ -15,7 +15,7 @@ import winston = require("winston");
 class IngestProcessor {
     protected job: Job;
     protected category: Category;
-    protected logger;
+    protected logger: winston.Logger;
 
     constructor(dir: string) {
         this.job = new Job(dir);
@@ -98,8 +98,7 @@ class IngestProcessor {
     }
 
     buildPage(pageList: FedoraObject, page: Page, number: number): FedoraObject {
-        const imageData = new FedoraObject(FedoraObject.getNextPid());
-        imageData.setLogger(this.logger);
+        const imageData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         imageData.parentPid = pageList.pid;
         imageData.modelType = "ImageData";
         imageData.title = page.label;
@@ -115,8 +114,7 @@ class IngestProcessor {
     }
 
     buildPageList(resource) {
-        const pageList = new FedoraObject(FedoraObject.getNextPid());
-        pageList.setLogger(this.logger);
+        const pageList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         pageList.parentPid = resource.pid;
         pageList.modelType = "ListCollection";
         pageList.title = "Page List";
@@ -130,8 +128,7 @@ class IngestProcessor {
     }
 
     buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): FedoraObject {
-        const documentData = new FedoraObject(FedoraObject.getNextPid());
-        documentData.setLogger(this.logger);
+        const documentData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         documentData.parentPid = documentList.pid;
         documentData.modelType = "PDFData";
         documentData.title = document.label;
@@ -147,8 +144,7 @@ class IngestProcessor {
     }
 
     buildDocumentList(resource: FedoraObject): FedoraObject {
-        const documentList = new FedoraObject(FedoraObject.getNextPid());
-        documentList.setLogger(this.logger);
+        const documentList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         documentList.parentPid = resource.pid;
         documentList.modelType = "ListCollection";
         documentList.title = "Document List";
@@ -162,8 +158,7 @@ class IngestProcessor {
     }
 
     buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): FedoraObject {
-        const audioData = new FedoraObject(FedoraObject.getNextPid());
-        audioData.setLogger(this.logger);
+        const audioData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         audioData.parentPid = audioList.pid;
         audioData.modelType = "AudioData";
         audioData.title = audio.filename;
@@ -179,8 +174,7 @@ class IngestProcessor {
     }
 
     buildAudioList(resource: FedoraObject): FedoraObject {
-        const audioList = new FedoraObject(FedoraObject.getNextPid());
-        audioList.setLogger(this.logger);
+        const audioList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         audioList.parentPid = resource.pid;
         audioList.modelType = "ListCollection";
         audioList.title = "Audio List";
@@ -194,8 +188,7 @@ class IngestProcessor {
     }
 
     async buildResource(holdingArea): Promise<FedoraObject> {
-        const resource = new FedoraObject(FedoraObject.getNextPid());
-        resource.setLogger(this.logger);
+        const resource = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         resource.parentPid = holdingArea.pid;
         resource.modelType = "ResourceCollection";
         resource.title = "Incomplete... / Processing...";
@@ -259,9 +252,8 @@ class IngestProcessor {
     async run(): Promise<void> {
         const startTime = Date.now();
         this.logger.info("Beginning ingest.");
-        this.logger.info("Target col// TODOlection ID: " + this.category.targetCollectionId);
-        const holdingArea = new FedoraObject(this.category.targetCollectionId);
-        holdingArea.setLogger(this.logger);
+        this.logger.info("Target collection ID: " + this.category.targetCollectionId);
+        const holdingArea = new FedoraObject(this.category.targetCollectionId, this.logger);
         if (holdingArea.sort == "custom") {
             // This was already a TODO in the Ruby code; low priority:
             throw "TODO: implement custom sort support.";
