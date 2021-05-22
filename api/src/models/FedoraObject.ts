@@ -21,7 +21,7 @@ export class FedoraObject {
         this.pid = pid;
     }
 
-    static getNextPid() {
+    static getNextPid(): string {
         // TODO
         return "FAKE";
     }
@@ -31,16 +31,16 @@ export class FedoraObject {
         return "vudl";
     }
 
-    addDatastream(id: string, params: DatastreamParameters, data: string) {
+    addDatastream(id: string, params: DatastreamParameters, data: string): void {
         this.log("Adding datastream " + id + " to " + this.pid);
         // TODO: Add the datastream!
     }
 
-    addDatastreamFromFile(filename: string, stream: string, mimeType: string) {
+    addDatastreamFromFile(filename: string, stream: string, mimeType: string): void {
         return this.addDatastreamFromString(fs.readFileSync(filename).toString(), stream, mimeType);
     }
 
-    addDatastreamFromString(contents: string, stream: string, mimeType: string, checksumType = "MD5") {
+    addDatastreamFromString(contents: string, stream: string, mimeType: string, checksumType = "MD5"): void {
         if (mimeType === "text/plain" && contents.length === 0) {
             contents = "\n"; // workaround for 500 error on empty OCR
         }
@@ -56,18 +56,18 @@ export class FedoraObject {
         this.addDatastream(stream, params, contents);
     }
 
-    addMasterMetadataDatastream() {
+    addMasterMetadataDatastream(): void {
         // TODO: fill in appropriate params
         const params = {};
         this.addDatastream("MASTER-MD", params, this.fitsMasterMetadata());
     }
 
-    addRelationship(subject: string, predicate: string, obj: string, isLiteral = false, datatype: string = null) {
+    addRelationship(subject: string, predicate: string, obj: string, isLiteral = false, datatype: string = null): void {
         this.log("Adding relationship " + [subject, predicate, obj].join(" ") + " to " + this.pid);
         // TODO
     }
 
-    addModelRelationship(model) {
+    addModelRelationship(model: string): void {
         this.addRelationship(
             "info:fedora/" + this.pid,
             "info:fedora/fedora-system:def/model#hasModel",
@@ -75,7 +75,7 @@ export class FedoraObject {
         );
     }
 
-    addSequenceRelationship(parentPid, position) {
+    addSequenceRelationship(parentPid: string, position: number): void {
         this.addRelationship(
             "info:fedora/" + this.pid,
             "http://vudl.org/relationships#sequence",
@@ -84,16 +84,16 @@ export class FedoraObject {
         );
     }
 
-    addSortRelationship(sort) {
+    addSortRelationship(sort: string): void {
         this.addRelationship("info:fedora/" + this.pid, "http://vudl.org/relationships#sortOn", sort, true);
     }
 
-    collectionIngest() {
+    collectionIngest(): void {
         this.log("Collection ingest for " + this.pid);
         // TODO
     }
 
-    coreIngest(objectState: string) {
+    coreIngest(objectState: string): void {
         this.log("Core ingest for " + this.pid);
         this.ingest(
             this.title,
@@ -114,11 +114,11 @@ export class FedoraObject {
         // TODO: add PARENT-QUERY, PARENT-LIST-RAW and PARENT-LIST datastreams if needed (probably not).
     }
 
-    dataIngest() {
+    dataIngest(): void {
         this.addModelRelationship("DataModel");
     }
 
-    datastreamDissemination(datastream, asOfDataTime = null, download = null): string {
+    datastreamDissemination(datastream: string, asOfDataTime = null, download = null): string {
         // TODO
         return "TODO";
     }
@@ -128,15 +128,15 @@ export class FedoraObject {
         return "TODO";
     }
 
-    imageDataIngest() {
+    imageDataIngest(): void {
         this.addModelRelationship("ImageData");
     }
 
-    documentDataIngest() {
+    documentDataIngest(): void {
         this.addModelRelationship("PDFData");
     }
 
-    audioDataIngest() {
+    audioDataIngest(): void {
         this.addModelRelationship("AudioData");
     }
 
@@ -146,22 +146,22 @@ export class FedoraObject {
         // TODO
     }
 
-    listCollectionIngest() {
+    listCollectionIngest(): void {
         this.addModelRelationship("ListCollection");
         this.addSortRelationship("custom");
     }
 
-    modifyDatastream(id, params, data) {
+    modifyDatastream(id: string, params: DatastreamParameters, data: string): void {
         this.log("Updating datastream " + id + " on " + this.pid);
         // TODO
     }
 
-    modifyObject(label, ownerId, state, logMessage, lastModifiedDate) {
+    modifyObject(label, ownerId, state, logMessage: string, lastModifiedDate): void {
         this.log("Modifying " + this.pid);
         // TODO
     }
 
-    resourceCollectionIngest() {
+    resourceCollectionIngest(): void {
         this.log("Resource collection ingest for " + this.pid);
         this.addModelRelationship("ResourceCollection");
         this.addSortRelationship("title");
@@ -169,13 +169,13 @@ export class FedoraObject {
         // here; perhaps this should be revisited in the future.
     }
 
-    log(message: string) {
+    log(message: string): void {
         if (this.logger) {
             this.logger.info(message);
         }
     }
 
-    setLogger(logger) {
+    setLogger(logger): void {
         this.logger = logger;
     }
 
