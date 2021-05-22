@@ -1,5 +1,6 @@
 import fs = require("fs");
 import winston = require("winston");
+import Fedora from "../services/Fedora";
 
 export interface DatastreamParameters {
     checksumType?: string;
@@ -28,10 +29,12 @@ export class FedoraObject {
     public pid: string;
     public parentPid: string;
     public title: string;
-    protected logger;
+    protected fedora: Fedora;
+    protected logger: winston.Logger;
 
     constructor(pid: string, logger: winston.Logger = null) {
         this.pid = pid;
+        this.fedora = new Fedora();
         this.logger = logger;
     }
 
@@ -46,9 +49,9 @@ export class FedoraObject {
     }
 
     addDatastream(id: string, params: DatastreamParameters, data: string): void {
-        this.log("Adding datastream " + id + " to " + this.pid);
+        this.log("Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes");
         // TODO: Add the datastream!
-        console.log("TODO - use these:", id, params, data);
+        console.log("TODO - use these:", params);
     }
 
     addDatastreamFromFile(filename: string, stream: string, mimeType: string): void {
@@ -72,8 +75,15 @@ export class FedoraObject {
     }
 
     addMasterMetadataDatastream(): void {
-        // TODO: fill in appropriate params
-        const params = {};
+        const params = {
+            controlGroup: "M",
+            dsLabel: this.pid.replace(":", "_") + "_MASTER-MD",
+            versionable: false,
+            dsState: "A",
+            checksumType: "DISABLED",
+            mimeType: "text/xml",
+            logMessage: "Initial Ingest addDatastream - MASTER-MD",
+        };
         this.addDatastream("MASTER-MD", params, this.fitsMasterMetadata());
     }
 
@@ -106,7 +116,8 @@ export class FedoraObject {
 
     collectionIngest(): void {
         this.log("Collection ingest for " + this.pid);
-        // TODO
+        this.addModelRelationship("CollectionModel");
+        // TODO: add MEMBER-QUERY and MEMBER-LIST-RAW datastreams if needed (probably not)
     }
 
     coreIngest(objectState: string): void {
@@ -137,10 +148,8 @@ export class FedoraObject {
         this.addModelRelationship("DataModel");
     }
 
-    datastreamDissemination(datastream: string, asOfDataTime = null, download = null): string {
-        // TODO
-        console.log("TODO - use these:", datastream, asOfDataTime, download);
-        return "TODO";
+    async datastreamDissemination(datastream: string): Promise<string> {
+        return this.fedora.getDatastream(this.pid, datastream) as Promise<string>;
     }
 
     fitsMasterMetadata(): string {
@@ -173,9 +182,9 @@ export class FedoraObject {
     }
 
     modifyDatastream(id: string, params: DatastreamParameters, data: string): void {
-        this.log("Updating datastream " + id + " on " + this.pid);
+        this.log("Updating datastream " + id + " on " + this.pid + " with " + data.length + " bytes");
         // TODO
-        console.log("TODO - use these:", params, data);
+        console.log("TODO - use these:", params);
     }
 
     modifyObject(params: ObjectParameters): void {

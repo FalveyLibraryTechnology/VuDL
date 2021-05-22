@@ -207,12 +207,16 @@ class IngestProcessor {
         return resource;
     }
 
-    finalizeTitle(resource) {
+    async finalizeTitle(resource) {
         const title = this.job.dir.substr(1).split("/").reverse().join("_");
         this.logger.info("Updating title to " + title);
-        resource.modifyObject(title, null, null, "Set Label to ingest/process path", null);
+        resource.modifyObject({
+            label: title,
+            logMessage: "Set Label to ingest/process path",
+        });
 
-        const dc = resource.datastreamDissemination("DC");
+        const dc = await resource.datastreamDissemination("DC");
+        // TODO: validate that dc is actually valid Dublin Core XML!
         this.replaceDCMetadata(
             resource,
             dc.replace(/Incomplete... \/ Processing.../, title),
@@ -249,7 +253,7 @@ class IngestProcessor {
         //FileUtils.rm "#{target}/ingest.lock"
     }
 
-    async run(): Promise<void> {
+    async doIngest(): Promise<void> {
         const startTime = Date.now();
         this.logger.info("Beginning ingest.");
         this.logger.info("Target collection ID: " + this.category.targetCollectionId);
@@ -276,7 +280,7 @@ class IngestProcessor {
             this.addAudio(this.buildAudioList(resource));
         }
 
-        this.finalizeTitle(resource);
+        await this.finalizeTitle(resource);
         if (this.job.metadata.dc.length > 0) {
             this.replaceDCMetadata(resource, this.job.metadata.dc, "Loading DC XML");
         }
@@ -285,6 +289,14 @@ class IngestProcessor {
 
         const elapsed = (Date.now() - startTime) / 60000;
         this.logger.info("Done. Total time: " + elapsed + " minute(s).");
+    }
+
+    async run(): Promise<void> {
+        try {
+            await this.doIngest();
+        } catch (e) {
+            this.logger.error("Unexpected problem: " + e.message);
+        }
         this.logger.close(); // Release file handle on log.
     }
 }
