@@ -11,6 +11,18 @@ export interface DatastreamParameters {
     versionable?: boolean;
 }
 
+export interface ObjectParameters {
+    label?: string;
+    format?: string;
+    encoding?: string;
+    namespace?: string;
+    ownerId?: string;
+    logMessage?: string;
+    ignoreMime?: boolean;
+    lastModifiedDate?: string;
+    state?: string;
+}
+
 export class FedoraObject {
     public modelType: string;
     public pid: string;
@@ -36,6 +48,7 @@ export class FedoraObject {
     addDatastream(id: string, params: DatastreamParameters, data: string): void {
         this.log("Adding datastream " + id + " to " + this.pid);
         // TODO: Add the datastream!
+        console.log("TODO - use these:", id, params, data);
     }
 
     addDatastreamFromFile(filename: string, stream: string, mimeType: string): void {
@@ -67,6 +80,7 @@ export class FedoraObject {
     addRelationship(subject: string, predicate: string, obj: string, isLiteral = false, datatype: string = null): void {
         this.log("Adding relationship " + [subject, predicate, obj].join(" ") + " to " + this.pid);
         // TODO
+        console.log("TODO - use these:", isLiteral, datatype);
     }
 
     addModelRelationship(model: string): void {
@@ -97,16 +111,19 @@ export class FedoraObject {
 
     coreIngest(objectState: string): void {
         this.log("Core ingest for " + this.pid);
-        this.ingest(
-            this.title,
-            "info:fedora/fedora-system:FOXML-1.1",
-            "UTF-8",
-            this.namespace,
-            "diglibEditor",
-            this.title + " - ingest",
-            "false"
-        );
-        this.modifyObject(null, null, objectState, "Set initial state", null);
+        this.ingest({
+            label: this.title,
+            format: "info:fedora/fedora-system:FOXML-1.1",
+            encoding: "UTF-8",
+            namespace: this.namespace,
+            ownerId: "diglibEditor",
+            logMessage: this.title + " - ingest",
+            ignoreMime: false,
+        });
+        this.modifyObject({
+            state: objectState,
+            logMessage: "Set initial state",
+        });
         this.addModelRelationship("CoreModel");
         this.addRelationship(
             "info:fedora/" + this.pid,
@@ -122,6 +139,7 @@ export class FedoraObject {
 
     datastreamDissemination(datastream: string, asOfDataTime = null, download = null): string {
         // TODO
+        console.log("TODO - use these:", datastream, asOfDataTime, download);
         return "TODO";
     }
 
@@ -142,10 +160,11 @@ export class FedoraObject {
         this.addModelRelationship("AudioData");
     }
 
-    ingest(label, format, encoding, namespace, ownerId, logMessage, ignoreMime, xml = null) {
+    ingest(params: ObjectParameters, xml: string = null): void {
         const targetPid = xml ? "new" : this.pid;
         this.log("Ingest for " + targetPid);
         // TODO
+        console.log("TODO - use these:", params);
     }
 
     listCollectionIngest(): void {
@@ -156,11 +175,13 @@ export class FedoraObject {
     modifyDatastream(id: string, params: DatastreamParameters, data: string): void {
         this.log("Updating datastream " + id + " on " + this.pid);
         // TODO
+        console.log("TODO - use these:", params, data);
     }
 
-    modifyObject(label, ownerId, state, logMessage: string, lastModifiedDate): void {
+    modifyObject(params: ObjectParameters): void {
         this.log("Modifying " + this.pid);
         // TODO
+        console.log("TODO - use these:", params);
     }
 
     resourceCollectionIngest(): void {
