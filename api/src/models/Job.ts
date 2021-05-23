@@ -1,7 +1,7 @@
 import { openSync, closeSync, existsSync as fileExists } from "fs";
 import path = require("path");
 
-import Config from "./Config";
+// TODO: reintroduce config when needed: import Config from "./Config";
 import JobMetadata from "./JobMetadata";
 import ImageFile from "./ImageFile";
 import { Queue } from "bullmq";
@@ -39,18 +39,6 @@ class Job {
             const q = new Queue("vudl");
             q.add("derivatives", { dir: this.dir });
         }
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    config(): any {
-        // TODO: This is just a test, right?
-        // any returned from "ini" library
-        const config = Config.getInstance().ini();
-        console.log(config.message); // Prints out: 'I am an instance'
-        config.message = "Foo Bar"; // Overwrite message property
-        const instance = config.getInstance().ini();
-        console.log(instance.message); // Prints out: 'Foo Bar'
-        return instance;
     }
 
     generatePdf(): void {
