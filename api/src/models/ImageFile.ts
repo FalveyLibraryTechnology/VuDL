@@ -65,7 +65,7 @@ class ImageFile {
         return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
-    async ocr(): Promise<void> {
+    async ocr(): Promise<string> {
         //TODO: Test for completeness
         const txt = this.derivativePath("OCR-DIRTY", "txt");
         const deriv = await this.ocrDerivative();
@@ -85,7 +85,9 @@ class ImageFile {
                 }
                 console.log(`stdout: ${stdout}`);
             });
+            return "TODO -- write text file";
         }
+        return fs.readFileSync(txt, "utf-8");
     }
 
     async ocrDerivative(): Promise<string> {

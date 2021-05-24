@@ -7,7 +7,6 @@ import Job from "./Job";
 import Image from "./ImageFile";
 import { PageRaw } from "./Page";
 import PageOrder from "./PageOrder";
-import readLastLines = require("read-last-lines");
 
 interface JobMetadataRaw {
     order: Array<PageRaw>;
@@ -32,15 +31,12 @@ class JobMetadata {
         }
     }
 
-    dc(job: Job): Buffer {
-        this.job = job;
-        const filename = job.dir + "/dc.xml";
-        if (fs.existsSync(filename)) {
-            return fs.readFileSync(filename);
-        }
+    get dc(): string {
+        const filename = this.job.dir + "/dc.xml";
+        return fs.existsSync(filename) ? fs.readFileSync(filename).toString() : "";
     }
 
-    ingestLockfile(): string {
+    get ingestLockfile(): string {
         return this.job.dir + "/ingest.lock";
     }
 
@@ -87,7 +83,6 @@ class JobMetadata {
             const file = fs.statSync(path);
             const current = file.mtime.getTime() / 1000;
 
-            console.log(current);
             if (current != null) {
                 if (current > mtime) {
                     mtime = current;
@@ -97,7 +92,6 @@ class JobMetadata {
         if (mtime == undefined_time) {
             const dir = fs.statSync(this.job.dir);
             mtime = dir.mtime.getTime() / 1000;
-            console.log(mtime);
         }
         return mtime;
     }
@@ -116,13 +110,9 @@ class JobMetadata {
         };
     }
 
-    async ingestInfo(): Promise<string> {
+    get ingestInfo(): string {
         const logfile: string = this.job.dir + "/ingest.log";
-        if (fs.existsSync(logfile)) {
-            await readLastLines.read(logfile, 1).then((lines) => console.log(lines));
-        } else {
-            return "";
-        }
+        return fs.existsSync(logfile) ? fs.readFileSync(logfile, "utf-8").split("\n").filter(Boolean).pop() : "";
     }
 
     get order(): PageOrder {
@@ -180,7 +170,7 @@ class JobMetadata {
             minutes_since_upload: Math.floor((new Date().getTime() / 1000 - this.uploadTime) / 60),
             file_problems: this.fileProblems,
             published: this.raw.published,
-            ingesting: fs.existsSync(this.ingestLockfile()),
+            ingesting: fs.existsSync(this.ingestLockfile),
             documents: this.documents.list.length,
             audio: this.audio.list.length,
             ingest_info: this.ingestInfo,

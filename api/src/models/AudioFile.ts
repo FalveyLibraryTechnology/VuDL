@@ -14,13 +14,14 @@ class AudioFile {
         this.dir = dir;
     }
 
-    derivative(extension: string): void {
+    derivative(extension: string): string {
         // TODO
         const deriv = this.derivativePath(extension);
         // const command = ffmpeg();
         if (fs.existsSync(deriv)) {
             //     const dir = path.basename(deriv);
         }
+        return "TODO";
     }
 
     static fromRaw(raw: Record<string, string>): AudioFile {
