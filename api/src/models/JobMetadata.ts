@@ -7,7 +7,6 @@ import Job from "./Job";
 import Image from "./ImageFile";
 import { PageRaw } from "./Page";
 import PageOrder from "./PageOrder";
-import readLastLines = require("read-last-lines");
 
 interface JobMetadataRaw {
     order: Array<PageRaw>;
@@ -111,13 +110,9 @@ class JobMetadata {
         };
     }
 
-    async ingestInfo(): Promise<string> {
+    get ingestInfo(): string {
         const logfile: string = this.job.dir + "/ingest.log";
-        if (fs.existsSync(logfile)) {
-            await readLastLines.read(logfile, 1).then((lines) => console.log(lines));
-        } else {
-            return "";
-        }
+        return fs.existsSync(logfile) ? fs.readFileSync(logfile, "utf-8").split("\n").filter(Boolean).pop() : "";
     }
 
     get order(): PageOrder {
