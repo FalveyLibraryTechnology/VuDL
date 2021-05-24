@@ -2,7 +2,7 @@
 import fs = require("fs");
 import path = require("path");
 
-import Config from "./Config";
+// TODO: reintroduce config when needed: import Config from "./Config";
 
 class AudioFile {
     filename: string;
@@ -12,11 +12,6 @@ class AudioFile {
     constructor(filename: string, dir: string) {
         this.filename = filename;
         this.dir = dir;
-    }
-
-    config(): string {
-        const config = Config.getInstance();
-        return config.restBaseUrl();
     }
 
     derivative(extension: string): string {

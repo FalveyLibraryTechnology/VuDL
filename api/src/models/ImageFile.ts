@@ -6,7 +6,6 @@ import { exec } from "child_process";
 // import { stringify } from "node:querystring";
 
 import Config from "./Config";
-import PrivateConfig from "./PrivateConfig";
 
 import fs = require("fs");
 
@@ -20,11 +19,6 @@ class ImageFile {
 
     constructor(filename: string) {
         this.filename = filename;
-    }
-
-    config(): PrivateConfig {
-        const config = Config.getInstance();
-        return config;
     }
 
     constraintForSize(size: string): number {
@@ -77,8 +71,8 @@ class ImageFile {
         const deriv = await this.ocrDerivative();
         if (!fs.existsSync(txt)) {
             // const path = path.basename(txt);
-            const ts_cmd =
-                this.config().tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
+            const config = Config.getInstance();
+            const ts_cmd = config.tesseractPath + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             exec(ts_cmd, (error, stdout, stderr) => {
                 if (error) {
                     throw `error: ${error.message + " " + stderr}`;
@@ -100,8 +94,8 @@ class ImageFile {
         const png = this.derivativePath("ocr/pngs", "png");
         const deriv = await this.derivative("LARGE");
         if (!fs.existsSync(png)) {
-            const tc_cmd =
-                this.config().textcleanerPath() + " " + this.config().textcleanerSwitches() + " " + deriv + " " + png;
+            const config = Config.getInstance();
+            const tc_cmd = config.textcleanerPath + " " + config.textcleanerSwitches + " " + deriv + " " + png;
             exec(tc_cmd, (error, stdout, stderr) => {
                 if (error) {
                     throw `error: ${error.message + " " + stderr}`;

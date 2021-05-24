@@ -1,79 +1,76 @@
-import fs = require("fs");
-import ini = require("ini"); // returns <any>
-
 class PrivateConfig {
-    constructor() {
-        //this.message = 'I am an instance';
+    protected ini;
+
+    constructor(ini: Record<string, string>) {
+        this.ini = ini;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ini(): any {
-        const config = ini.parse(fs.readFileSync(__dirname.replace(/\\/g, "/") + "/../../vudl.ini", "utf-8"));
-        return config;
+    get fedoraHostUrl(): string {
+        // TODO: not used -- do we need this?
+        return this.ini["fedora_host"];
     }
 
-    fedoraHostUrl(): string {
-        return this.ini()["fedora_host"];
+    get fedoraApiUrl(): string {
+        // TODO: not used -- do we need this? How does it differ from restBaseUrl() below?
+        return this.ini["fedora_api"];
     }
 
-    fedoraApiUrl(): string {
-        return this.ini()["fedora_api"];
+    get fedoraUsername(): string {
+        return this.ini["fedora_username"];
     }
 
-    fedoraUsername(): string {
-        return this.ini()["fedora_username"];
+    get fedoraPassword(): string {
+        return this.ini["fedora_password"];
     }
 
-    fedoraPassword(): string {
-        return this.ini()["fedora_password"];
+    get fedoraPidNameSpace(): string {
+        return this.ini["fedora_pid_namespace"];
     }
 
-    fedoraPidNameSpace(): string {
-        return this.ini()["fedora_pid_namespace"];
+    get solrQueryUrl(): string {
+        return this.ini["solr_query_url"];
     }
 
-    solrQueryUrl(): string {
-        return this.ini()["solr_query_url"];
+    get tesseractPath(): string {
+        return this.ini["tesseract_path"];
     }
 
-    tesseractPath(): string {
-        return this.ini()["tesseract_path"];
+    get vufindUrl(): string {
+        return this.ini["vufind_url"];
     }
 
-    vufindUrl(): string {
-        return this.ini()["vufind_url"];
+    get pdfDirectory(): string {
+        return this.ini["pdf_directory"];
     }
 
-    pdfDirectory(): string {
-        return this.ini()["pdf_directory"];
+    get textcleanerPath(): string {
+        return this.ini["textcleaner_path"];
     }
 
-    textcleanerPath(): string {
-        return this.ini()["textcleaner_path"];
+    get textcleanerSwitches(): string {
+        return this.ini["textcleaner_switches"];
     }
 
-    textcleanerSwitches(): string {
-        return this.ini()["textcleaner_switches"];
+    get holdingArea(): string {
+        return this.ini["holding_area_path"];
     }
 
-    holdingArea(): string {
-        return this.ini()["holding_area_path"];
+    get processedAreaPath(): string {
+        return this.ini["processed_area_path"];
     }
 
-    processedAreaPath(): string {
-        return this.ini()["processed_area_path"];
+    get restBaseUrl(): string {
+        return this.ini["base_url"];
     }
 
-    restBaseUrl(): string {
-        return this.ini()["base_url"];
+    get requireLogin(): string {
+        // TODO: do we need this, or will authentication be handled differently in future?
+        return this.ini["require_login"];
     }
 
-    requireLogin(): string {
-        return this.ini()["require_login"];
-    }
-
-    userWhitelist(): string {
-        return this.ini()["user_whitelist"];
+    get userWhitelist(): string {
+        // TODO: do we need this, or will authentication be handled differently in future?
+        return this.ini["user_whitelist"];
     }
 }
 
