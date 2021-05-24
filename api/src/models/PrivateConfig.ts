@@ -5,67 +5,71 @@ class PrivateConfig {
         this.ini = ini;
     }
 
-    fedoraHostUrl(): string {
+    get fedoraHostUrl(): string {
+        // TODO: not used -- do we need this?
         return this.ini["fedora_host"];
     }
 
-    fedoraApiUrl(): string {
+    get fedoraApiUrl(): string {
+        // TODO: not used -- do we need this? How does it differ from restBaseUrl() below?
         return this.ini["fedora_api"];
     }
 
-    fedoraUsername(): string {
+    get fedoraUsername(): string {
         return this.ini["fedora_username"];
     }
 
-    fedoraPassword(): string {
+    get fedoraPassword(): string {
         return this.ini["fedora_password"];
     }
 
-    fedoraPidNameSpace(): string {
+    get fedoraPidNameSpace(): string {
         return this.ini["fedora_pid_namespace"];
     }
 
-    solrQueryUrl(): string {
+    get solrQueryUrl(): string {
         return this.ini["solr_query_url"];
     }
 
-    tesseractPath(): string {
+    get tesseractPath(): string {
         return this.ini["tesseract_path"];
     }
 
-    vufindUrl(): string {
+    get vufindUrl(): string {
         return this.ini["vufind_url"];
     }
 
-    pdfDirectory(): string {
+    get pdfDirectory(): string {
         return this.ini["pdf_directory"];
     }
 
-    textcleanerPath(): string {
+    get textcleanerPath(): string {
         return this.ini["textcleaner_path"];
     }
 
-    textcleanerSwitches(): string {
+    get textcleanerSwitches(): string {
         return this.ini["textcleaner_switches"];
     }
 
-    holdingArea(): string {
+    get holdingArea(): string {
         return this.ini["holding_area_path"];
     }
 
-    processedAreaPath(): string {
+    get processedAreaPath(): string {
         return this.ini["processed_area_path"];
     }
 
-    restBaseUrl(): string {
+    get restBaseUrl(): string {
         return this.ini["base_url"];
     }
 
-    requireLogin(): string {
+    get requireLogin(): string {
+        // TODO: do we need this, or will authentication be handled differently in future?
         return this.ini["require_login"];
     }
 
-    userWhitelist(): string {
+    get userWhitelist(): string {
+        // TODO: do we need this, or will authentication be handled differently in future?
         return this.ini["user_whitelist"];
     }
 }

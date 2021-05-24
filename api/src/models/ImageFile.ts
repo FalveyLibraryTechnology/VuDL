@@ -72,7 +72,7 @@ class ImageFile {
         if (!fs.existsSync(txt)) {
             // const path = path.basename(txt);
             const config = Config.getInstance();
-            const ts_cmd = config.tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
+            const ts_cmd = config.tesseractPath + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             exec(ts_cmd, (error, stdout, stderr) => {
                 if (error) {
                     throw `error: ${error.message + " " + stderr}`;
@@ -93,7 +93,7 @@ class ImageFile {
         const deriv = await this.derivative("LARGE");
         if (!fs.existsSync(png)) {
             const config = Config.getInstance();
-            const tc_cmd = config.textcleanerPath() + " " + config.textcleanerSwitches() + " " + deriv + " " + png;
+            const tc_cmd = config.textcleanerPath + " " + config.textcleanerSwitches + " " + deriv + " " + png;
             exec(tc_cmd, (error, stdout, stderr) => {
                 if (error) {
                     throw `error: ${error.message + " " + stderr}`;
