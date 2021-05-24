@@ -11,6 +11,8 @@ class Job extends React.Component {
         this.ajax = AjaxHelper.getInstance();
         // BIND
         this.buildDerivatives = this.buildDerivatives.bind(this);
+        this.ingest = this.ingest.bind(this);
+        this.updateStatus = this.updateStatus.bind(this);
     }
 
     componentDidMount() {

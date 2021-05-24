@@ -1,4 +1,3 @@
-import fs = require("fs");
 import Jimp = require("jimp");
 import path = require("path");
 
@@ -8,6 +7,8 @@ import { exec } from "child_process";
 
 import Config from "./Config";
 import PrivateConfig from "./PrivateConfig";
+
+import fs = require("fs");
 
 class ImageFile {
     filename: string;
@@ -70,8 +71,8 @@ class ImageFile {
         return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
-    async ocr(): Promise<void> {
-        //TODO: update the following (derivativepath requires size now)
+    async ocr(): Promise<string> {
+        //TODO: Test for completeness
         const txt = this.derivativePath("OCR-DIRTY", "txt");
         const deriv = await this.ocrDerivative();
         if (!fs.existsSync(txt)) {
@@ -90,7 +91,9 @@ class ImageFile {
                 }
                 console.log(`stdout: ${stdout}`);
             });
+            return "TODO -- write text file";
         }
+        return fs.readFileSync(txt, "utf-8");
     }
 
     async ocrDerivative(): Promise<string> {

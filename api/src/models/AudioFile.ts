@@ -14,26 +14,19 @@ class AudioFile {
         this.dir = dir;
     }
 
-    constraintForExtensions(extension: string): string | number {
-        if (this.extensions.includes(extension)) {
-            return extension;
-        } else {
-            return 1; // TODO
-        }
-    }
-
     config(): string {
         const config = Config.getInstance();
         return config.restBaseUrl();
     }
 
-    derivative(extension: string): void {
+    derivative(extension: string): string {
         // TODO
         const deriv = this.derivativePath(extension);
         // const command = ffmpeg();
         if (fs.existsSync(deriv)) {
             //     const dir = path.basename(deriv);
         }
+        return "TODO";
     }
 
     static fromRaw(raw: Record<string, string>): AudioFile {
