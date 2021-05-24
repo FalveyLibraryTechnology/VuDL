@@ -234,7 +234,7 @@ class IngestProcessor {
     }
 
     moveDirectory() {
-        const basePath = Config.getInstance().processedAreaPath();
+        const basePath = Config.getInstance().processedAreaPath;
         const currentTime = new Date();
         const now = currentTime.toISOString().substr(0, 10);
         let target = basePath + "/" + now + "/" + this.category.name + "/" + this.job.name;
