@@ -48,7 +48,7 @@ class AudioFile {
     }
 
     derivativePath(extension = "flac"): string {
-        const filename = path.basename(this.filename, '.*');
+        const filename = path.basename(this.filename, ".*");
         return this.dir + "/" + filename + "." + extension.toLowerCase();
     }
 }
