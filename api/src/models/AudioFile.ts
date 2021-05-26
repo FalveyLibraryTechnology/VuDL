@@ -1,7 +1,7 @@
 import fs = require("fs");
 import path = require("path");
 import Config from "./Config";
-const { execSync } = require("child_process");
+import { execSync } from "child_process" 
 
 class AudioFile {
     filename: string;
