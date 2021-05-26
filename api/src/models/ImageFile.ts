@@ -146,10 +146,6 @@ class ImageFile {
             }
         }
     }
-
-    basename(path: string): string {
-        return path.replace(/\/$/, "").split("/").reverse()[0];
-    }
 }
 
 export default ImageFile;
