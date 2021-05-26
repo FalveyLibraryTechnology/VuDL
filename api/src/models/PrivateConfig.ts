@@ -31,6 +31,10 @@ class PrivateConfig {
         return this.ini["solr_query_url"];
     }
 
+    get ffmpegPath(): string {
+        return this.ini["ffmpeg_path"];
+    }
+
     get tesseractPath(): string {
         return this.ini["tesseract_path"];
     }

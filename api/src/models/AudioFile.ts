@@ -1,8 +1,7 @@
-// import ffmpeg = require("fluent-ffmpeg");
 import fs = require("fs");
 import path = require("path");
-
-// TODO: reintroduce config when needed: import Config from "./Config";
+import Config from "./Config";
+const { execSync } = require("child_process");
 
 class AudioFile {
     filename: string;
@@ -14,14 +13,30 @@ class AudioFile {
         this.dir = dir;
     }
 
+    ffmpeg(): string {
+        const ffmpeg_path = Config.getInstance().ffmpegPath;
+        return ffmpeg_path;
+    }
+
     derivative(extension: string): string {
-        // TODO
         const deriv = this.derivativePath(extension);
-        // const command = ffmpeg();
-        if (fs.existsSync(deriv)) {
-            //     const dir = path.basename(deriv);
+        if (!fs.existsSync(deriv)) {
+            const dir = path.dirname(deriv);
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir, { recursive: true });
+            }
+            if (this.extensions.includes(extension)) {
+                if (fs.existsSync(this.ffmpeg())) {
+                    const ffmpegCommand = this.ffmpeg() + " -i " + this.dir + "/" + this.filename + " " + deriv;
+                    try {
+                        execSync(ffmpegCommand);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+            }
         }
-        return "TODO";
+        return deriv;
     }
 
     static fromRaw(raw: Record<string, string>): AudioFile {
@@ -33,7 +48,7 @@ class AudioFile {
     }
 
     derivativePath(extension = "flac"): string {
-        const filename = path.basename(this.filename);
+        const filename = path.basename(this.filename, '.*');
         return this.dir + "/" + filename + "." + extension.toLowerCase();
     }
 }
