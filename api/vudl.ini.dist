@@ -10,11 +10,9 @@ solr_query_url = "http://myserver:8983/solr/core/query"
 # Settings for Tesseract OCR
 tesseract_path = "/usr/local/bin/tesseract"
 
-# This setting lists characters that may be included in OCR output. To use this
-# setting with Tesseract 4+, you need to add "-oem 0" to the tesseract_path
-# setting above to put Tesseract into legacy mode. This is not recommended.
-# (In other words, this setting is recommended only for Tesseract 3).
-#tesseract_allowed_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!'\"()&$%-+=[]?<>“”‘’"
+# This setting lists characters that may be included in OCR output. Leave the
+# the setting commented out for unfiltered output.
+#tesseract_allowed_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!'\"()&$%-+=[]?<>“”‘’—"
 
 # Settings for ocrmypdf (omit setting to skip this step if you aren't using it)
 #ocrmypdf_path = /usr/local/bin/ocrmypdf

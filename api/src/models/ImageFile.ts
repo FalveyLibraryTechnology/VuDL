@@ -63,6 +63,18 @@ class ImageFile {
         return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
+    protected filterIllegalCharacters(txt): void {
+        const allowedChars = Config.getInstance().tesseractAllowedChars;
+        // Only filter if we have a non-empty setting:
+        if (allowedChars) {
+            const content = fs.readFileSync(txt);
+            const regexpStr = "[^" + allowedChars.replace(/[-[\]{}()*+?.,\\^$|]/g, "\\$&") + "\\s]";
+            const regexp = new RegExp(regexpStr, 'g');
+            const filteredTxt = content.toString().replace(regexp, "");
+            fs.writeFileSync(txt, filteredTxt);
+        }
+    }
+
     async ocr(): Promise<string> {
         const txt = this.derivativePath("OCR-DIRTY", "txt");
         if (!fs.existsSync(txt)) {
@@ -77,6 +89,7 @@ class ImageFile {
             if (!fs.existsSync(txt)) {
                 throw "Problem running tesseract";
             }
+            this.filterIllegalCharacters(txt);
         }
         return txt;
     }
@@ -105,8 +118,11 @@ class ImageFile {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
-        const allowedChars = Config.getInstance().tesseractAllowedChars;
-        const content = allowedChars ? "tessedit_char_whitelist " + allowedChars : "";
+        // For Tesseract 3, we used to write the tessedit_char_whitelist setting here,
+        // but we now handle that differently due to changes in Tesseract 4. This method
+        // is being retained in case we need a place to customize other config settings
+        // in the future, but for now it is just writing an empty file.
+        const content = "";
         if (!fs.existsSync(file)) {
             fs.writeFileSync(file, content);
         }
