@@ -63,7 +63,7 @@ class ImageFile {
         return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
-    protected filterIllegalCharacters(txt): void {
+    protected filterIllegalCharacters(txt: string): void {
         const allowedChars = Config.getInstance().tesseractAllowedChars;
         // Only filter if we have a non-empty setting:
         if (allowedChars) {
