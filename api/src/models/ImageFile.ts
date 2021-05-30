@@ -69,7 +69,7 @@ class ImageFile {
         if (allowedChars) {
             const content = fs.readFileSync(txt);
             const regexpStr = "[^" + allowedChars.replace(/[-[\]{}()*+?.,\\^$|]/g, "\\$&") + "\\s]";
-            const regexp = new RegExp(regexpStr, 'g');
+            const regexp = new RegExp(regexpStr, "g");
             const filteredTxt = content.toString().replace(regexp, "");
             fs.writeFileSync(txt, filteredTxt);
         }
