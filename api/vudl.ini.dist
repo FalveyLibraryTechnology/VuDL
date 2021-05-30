@@ -11,7 +11,7 @@ solr_query_url = "http://myserver:8983/solr/core/query"
 tesseract_path = "/usr/local/bin/tesseract"
 
 # This setting lists characters that may be included in OCR output. Leave the
-# the setting commented out for unfiltered output.
+# setting commented out for unfiltered output.
 #tesseract_allowed_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!'\"()&$%-+=[]?<>“”‘’—"
 
 # Settings for ocrmypdf (omit setting to skip this step if you aren't using it)
