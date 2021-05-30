@@ -105,16 +105,10 @@ class ImageFile {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
-        const content =
-            "tessedit_char_whitelist ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!'\"()&$%-+=[]?<>" +
-            "\xE2\x80\x9C\xE2\x80\x9D\xE2\x80\x98\xE2\x80\x99";
+        const allowedChars = Config.getInstance().tesseractAllowedChars;
+        const content = allowedChars ? "tessedit_char_whitelist " + allowedChars : "";
         if (!fs.existsSync(file)) {
-            fs.writeFile(file, content, (err) => {
-                if (err) {
-                    throw err;
-                }
-                // file written successfully
-            });
+            fs.writeFileSync(file, content);
         }
         return file;
     }

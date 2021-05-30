@@ -35,6 +35,10 @@ class PrivateConfig {
         return this.ini["tesseract_path"];
     }
 
+    get tesseractAllowedChars(): string {
+        return this.ini["tesseract_allowed_characters"];
+    }
+
     get vufindUrl(): string {
         return this.ini["vufind_url"];
     }
