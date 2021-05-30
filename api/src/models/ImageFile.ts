@@ -1,9 +1,7 @@
 import Jimp = require("jimp");
 import path = require("path");
 
-import { exec } from "child_process";
-// import { constants } from "node:buffer";
-// import { stringify } from "node:querystring";
+import { execSync } from "child_process";
 
 import Config from "./Config";
 
@@ -66,55 +64,47 @@ class ImageFile {
     }
 
     async ocr(): Promise<string> {
-        //TODO: Test for completeness
         const txt = this.derivativePath("OCR-DIRTY", "txt");
-        const deriv = await this.ocrDerivative();
         if (!fs.existsSync(txt)) {
-            // const path = path.basename(txt);
+            const txtPath = path.dirname(txt);
+            if (!fs.existsSync(txtPath)) {
+                fs.mkdirSync(txtPath, { recursive: true });
+            }
+            const deriv = await this.ocrDerivative();
             const config = Config.getInstance();
             const ts_cmd = config.tesseractPath + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
-            exec(ts_cmd, (error, stdout, stderr) => {
-                if (error) {
-                    throw `error: ${error.message + " " + stderr}`;
-                }
-                if (stderr) {
-                    console.log(`stderr: ${stderr}`);
-                }
-                if (!fs.existsSync(txt)) {
-                    throw "Problem running tesseract";
-                }
-                console.log(`stdout: ${stdout}`);
-            });
-            return "TODO -- write text file";
+            execSync(ts_cmd);
+            if (!fs.existsSync(txt)) {
+                throw "Problem running tesseract";
+            }
         }
-        return fs.readFileSync(txt, "utf-8");
+        return txt;
     }
 
     async ocrDerivative(): Promise<string> {
         const png = this.derivativePath("ocr/pngs", "png");
-        const deriv = await this.derivative("LARGE");
         if (!fs.existsSync(png)) {
+            const pngPath = path.dirname(png);
+            if (!fs.existsSync(pngPath)) {
+                fs.mkdirSync(pngPath, { recursive: true });
+            }
             const config = Config.getInstance();
+            const deriv = await this.derivative("LARGE");
             const tc_cmd = config.textcleanerPath + " " + config.textcleanerSwitches + " " + deriv + " " + png;
-            exec(tc_cmd, (error, stdout, stderr) => {
-                if (error) {
-                    throw `error: ${error.message + " " + stderr}`;
-                }
-                if (stderr) {
-                    console.log(`stderr: ${stderr}`);
-                }
-                if (!fs.existsSync(png)) {
-                    throw "Problem running textcleaner";
-                }
-                console.log(`stdout: ${stdout}`);
-            });
+            execSync(tc_cmd);
+            if (!fs.existsSync(png)) {
+                throw "Problem running textcleaner";
+            }
         }
         return png;
     }
 
     ocrProperties(): string {
         const file = path.dirname(this.filename) + "/ocr/tesseract.config";
-        // const dir = path.dirname(file);
+        const dir = path.dirname(file);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
         const content =
             "tessedit_char_whitelist ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!'\"()&$%-+=[]?<>" +
             "\xE2\x80\x9C\xE2\x80\x9D\xE2\x80\x98\xE2\x80\x99";
@@ -123,7 +113,7 @@ class ImageFile {
                 if (err) {
                     throw err;
                 }
-                //file written successfully
+                // file written successfully
             });
         }
         return file;
