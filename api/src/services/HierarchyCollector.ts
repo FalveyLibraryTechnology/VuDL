@@ -2,6 +2,7 @@ import { DC, Fedora } from "./Fedora";
 import FedoraData from "../models/FedoraData";
 import { DOMParser } from "xmldom";
 import xpath = require("xpath");
+import TikaExtractor from "./TikaExtractor";
 
 class HierarchyCollector {
     fedora: Fedora;
@@ -194,7 +195,8 @@ class HierarchyCollector {
         }
         const models = relations.hasModel ?? [];
         if (models.includes("info:fedora/vudl-system:DOCData") || models.includes("info:fedora/vudl-system:PDFData")) {
-            // TODO: Tika extraction of PDF/DOC data
+            const extractor = new TikaExtractor(await this.fedora.getDatastream(pid, "MASTER"));
+            extraDetails.fullText.fromDocument = [extractor.extractText()];
         }
         return new FedoraData(
             pid,
