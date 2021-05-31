@@ -93,7 +93,10 @@ class FedoraData {
                 fullText = fullText.concat(this.extraDetails.fullText[current]);
             }
         }
-        return fullText;
+        return fullText.map((str) => {
+            // Normalize whitespace:
+            return str.replace(/\s+/g, " ");
+        });
     }
 
     get imageHeight(): string {

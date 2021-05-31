@@ -17,8 +17,8 @@ class TikaExtractor {
         const javaPath = Config.getInstance().javaPath;
         const tikaPath = Config.getInstance().tikaPath;
         const tikaCommand = javaPath + " -jar " + tikaPath + " --text -eUTF8 " + this.filename;
-        const result = execSync(tikaCommand).toString().replace(/\s+/g, " ");
-        fs.rmSync(this.filename);   // clean up temp file; we're done now!
+        const result = execSync(tikaCommand).toString();
+        fs.rmSync(this.filename); // clean up temp file; we're done now!
         return result;
     }
 }

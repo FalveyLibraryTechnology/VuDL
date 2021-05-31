@@ -119,7 +119,11 @@ export class Fedora {
      * @param datastream Which stream to request
      * @param parse Parse JSON (true) or return raw (false, default)
      */
-    async getDatastream(pid: string, datastream: string, requestOptions = { parse_response: false }): Promise<NeedleResponse> {
+    async getDatastream(
+        pid: string,
+        datastream: string,
+        requestOptions = { parse_response: false }
+    ): Promise<NeedleResponse> {
         return await this._request(
             "get",
             pid + "/" + datastream,
