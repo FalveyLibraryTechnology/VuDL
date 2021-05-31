@@ -59,31 +59,21 @@ export class Fedora {
      *
      * @param pid PID to look up
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async getRdf(pid: string, parse = false): Promise<any> {
-        if (typeof this.cache[pid] === "undefined") {
-            this.cache[pid] = {};
-        }
-        if (typeof this.cache[pid]["__rdf"] === "undefined") {
-            try {
-                const res = await this._request(
-                    "get",
-                    pid,
-                    null, // Data
-                    {
-                        // Options
-                        parse_response: parse,
-                        headers: { Accept: "application/rdf+xml" },
-                    }
-                );
-
-                this.cache[pid]["__rdf"] = parse ? res.body : res.body.toString(); // Buffer to string
-            } catch (e) {
-                console.log(e);
-                throw "RDF retrieval failed for " + pid;
+    async getRdf(pid: string, allowCaching = true): Promise<string> {
+        const cacheKey = "RDF";
+        let data = allowCaching ? this.getCache(pid, cacheKey) : null;
+        if (!data) {
+            const options = {
+                parse_response: false,
+                headers: { Accept: "application/rdf+xml" },
+            };
+            const result = await this._request("get", pid, null, options);
+            data = result.body.toString();
+            if (allowCaching) {
+                this.setCache(pid, cacheKey, data);
             }
         }
-        return this.cache[pid]["__rdf"];
+        return data;
     }
 
     protected getCache(pid: string, key: string): string {
