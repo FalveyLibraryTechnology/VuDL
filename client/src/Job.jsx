@@ -8,6 +8,8 @@ class Job extends React.Component {
         this.state = {};
         // BIND
         this.buildDerivatives = this.buildDerivatives.bind(this);
+        this.ingest = this.ingest.bind(this);
+        this.updateStatus = this.updateStatus.bind(this);
     }
 
     componentDidMount() {

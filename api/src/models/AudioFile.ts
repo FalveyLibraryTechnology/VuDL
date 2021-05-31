@@ -2,7 +2,7 @@
 import fs = require("fs");
 import path = require("path");
 
-import Config from "./Config";
+// TODO: reintroduce config when needed: import Config from "./Config";
 
 class AudioFile {
     filename: string;
@@ -14,26 +14,14 @@ class AudioFile {
         this.dir = dir;
     }
 
-    constraintForExtensions(extension: string): string | number {
-        if (this.extensions.includes(extension)) {
-            return extension;
-        } else {
-            return 1; // TODO
-        }
-    }
-
-    config(): string {
-        const config = Config.getInstance();
-        return config.restBaseUrl();
-    }
-
-    derivative(extension: string): void {
+    derivative(extension: string): string {
         // TODO
         const deriv = this.derivativePath(extension);
         // const command = ffmpeg();
         if (fs.existsSync(deriv)) {
             //     const dir = path.basename(deriv);
         }
+        return "TODO";
     }
 
     static fromRaw(raw: Record<string, string>): AudioFile {

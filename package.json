@@ -23,11 +23,9 @@
     "queue": "node api/worker-start.js",
     "queue:dev": "nodemon --watch api/dist/jobs api/worker-start.js",
     "queue:wsl": "nodemon --legacy-watch api/worker-start.js",
-
     "backend": "concurrently npm:api npm:queue",
     "backend:dev": "concurrently npm:api:dev npm:queue:dev",
     "backend:wsl": "concurrently npm:api:wsl npm:queue:wsl",
-
     "build": "concurrently npm:api:build npm:client:build",
     "dev": "concurrently -c 'cyan,green,gray' npm:client npm:api:dev npm:queue:dev",
     "format": "prettier --check --write api/*.js api/src/** client/src/**",

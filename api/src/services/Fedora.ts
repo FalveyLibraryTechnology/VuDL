@@ -25,7 +25,7 @@ export class Fedora {
 
     constructor() {
         const config = Config.getInstance();
-        this.baseUrl = config.restBaseUrl();
+        this.baseUrl = config.restBaseUrl;
     }
 
     /**

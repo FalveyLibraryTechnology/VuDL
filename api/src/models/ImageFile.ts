@@ -1,4 +1,3 @@
-import fs = require("fs");
 import Jimp = require("jimp");
 import path = require("path");
 
@@ -7,7 +6,8 @@ import { exec } from "child_process";
 // import { stringify } from "node:querystring";
 
 import Config from "./Config";
-import PrivateConfig from "./PrivateConfig";
+
+import fs = require("fs");
 
 class ImageFile {
     filename: string;
@@ -19,11 +19,6 @@ class ImageFile {
 
     constructor(filename: string) {
         this.filename = filename;
-    }
-
-    config(): PrivateConfig {
-        const config = Config.getInstance();
-        return config;
     }
 
     constraintForSize(size: string): number {
@@ -70,14 +65,14 @@ class ImageFile {
         return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
     }
 
-    async ocr(): Promise<void> {
-        //TODO: update the following (derivativepath requires size now)
+    async ocr(): Promise<string> {
+        //TODO: Test for completeness
         const txt = this.derivativePath("OCR-DIRTY", "txt");
         const deriv = await this.ocrDerivative();
         if (!fs.existsSync(txt)) {
             // const path = path.basename(txt);
-            const ts_cmd =
-                this.config().tesseractPath() + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
+            const config = Config.getInstance();
+            const ts_cmd = config.tesseractPath + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             exec(ts_cmd, (error, stdout, stderr) => {
                 if (error) {
                     throw `error: ${error.message + " " + stderr}`;
@@ -90,15 +85,17 @@ class ImageFile {
                 }
                 console.log(`stdout: ${stdout}`);
             });
+            return "TODO -- write text file";
         }
+        return fs.readFileSync(txt, "utf-8");
     }
 
     async ocrDerivative(): Promise<string> {
         const png = this.derivativePath("ocr/pngs", "png");
         const deriv = await this.derivative("LARGE");
         if (!fs.existsSync(png)) {
-            const tc_cmd =
-                this.config().textcleanerPath() + " " + this.config().textcleanerSwitches() + " " + deriv + " " + png;
+            const config = Config.getInstance();
+            const tc_cmd = config.textcleanerPath + " " + config.textcleanerSwitches + " " + deriv + " " + png;
             exec(tc_cmd, (error, stdout, stderr) => {
                 if (error) {
                     throw `error: ${error.message + " " + stderr}`;
