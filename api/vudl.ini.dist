@@ -25,6 +25,12 @@ pdf_directory = "/tmp/"
 # Settings for FFmpeg
 #ffmpeg_path = /usr/bin/ffmpeg
 
+# JVM to use for running Java apps (used for Tika)
+java_path = java
+
+# Settings for Tika (used for text extraction during Solr indexing)
+tika_path = /opt/tika/tika.jar
+
 # Settings for the textcleaner OCR preparation script. It can be downloaded
 # from http://www.fmwconcepts.com/imagemagick/textcleaner/index.php
 textcleaner_path = "/usr/local/bin/textcleaner"
