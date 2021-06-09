@@ -21,11 +21,9 @@ class PageOrder {
             pattern = pattern.substring(colonIndex + 1);
         }
         const files = glob.sync(pattern, options);
-        // TODO: can we rewrite this as a map() for better efficiency?
-        const pages = [];
-        for (let i = 0; i < files.length; i++) {
-            pages[i] = new Page(path.basename(files[i]), null);
-        }
+        const pages = files.map((file) => {
+            return new Page(path.basename(file), null);
+        });
         return new PageOrder(pages);
     }
 
