@@ -74,9 +74,13 @@ class IngestProcessor {
     async addDocuments(documentList: FedoraObject): Promise<void> {
         let order = this.job.metadata.documents.list;
         if (order.length == 0 && this.category.supportsPdfGeneration) {
-            this.logger.info("Generating PDF");
-            const pdf = await this.job.generatePdf();
-            order = [new DocumentFile(path.basename(pdf), "PDF")];
+            if (this.job.metadata.order.pages.length < 1) {
+                this.logger.info("Skipping PDF generation; no pages found.");
+            } else {
+                this.logger.info("Generating PDF");
+                const pdf = await this.job.generatePdf();
+                order = [new DocumentFile(path.basename(pdf), "PDF")];
+            }
         }
         for (const i in order) {
             const document = order[i];
