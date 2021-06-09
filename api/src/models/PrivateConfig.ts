@@ -75,6 +75,14 @@ class PrivateConfig {
         return this.ini["base_url"];
     }
 
+    get javaPath(): string {
+        return this.ini["java_path"] ?? "java";
+    }
+
+    get tikaPath(): string {
+        return this.ini["tika_path"];
+    }
+
     get requireLogin(): string {
         // TODO: do we need this, or will authentication be handled differently in future?
         return this.ini["require_login"];

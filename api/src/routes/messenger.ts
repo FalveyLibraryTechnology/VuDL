@@ -6,14 +6,25 @@ const router = express.Router();
 
 router.get("/solrindex/:pid", async function (req, res) {
     const indexer = new SolrIndexer();
-    const fedoraFields = await indexer.getFields(req.params.pid);
-
-    res.send(JSON.stringify(fedoraFields, null, "\t"));
+    try {
+        const fedoraFields = await indexer.getFields(req.params.pid);
+        res.send(JSON.stringify(fedoraFields, null, "\t"));
+    } catch (e) {
+        console.log(e);
+        res.status(500).send(e.message);
+    }
 });
 
 router.post("/solrindex/:pid", async function (req, res) {
     const indexer = new SolrIndexer();
-    const fedoraFields = await indexer.getFields(req.params.pid);
+    let fedoraFields = null;
+    try {
+        fedoraFields = await indexer.getFields(req.params.pid);
+    } catch (e) {
+        console.log(e);
+        res.status(500).send(e.message);
+        return;
+    }
     const solr = new Solr();
     // TODO: make core name configurable
     const result = await solr.indexRecord("biblio", fedoraFields);

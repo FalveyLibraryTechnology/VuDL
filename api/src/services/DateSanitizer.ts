@@ -1,0 +1,109 @@
+import checkdate = require("locutus/php/datetime/checkdate");
+import dateFormat = require("locutus/php/datetime/date");
+import strtotime = require("locutus/php/datetime/strtotime");
+
+export default class DateSanitizer {
+    static runTests(): void {
+        // TODO: move this to a real test suite
+        const tests = [
+            "",
+            "n.d.",
+            "n. d.",
+            "February 29, 2008",
+            "February 29, 2009",
+            "01 June 1467",
+            "1872",
+            "[1872]",
+            "1872&1873",
+            "1888-01",
+            "1888-28",
+            "1888-05-12",
+            "1888-05-99",
+            "1888/05/12",
+            "1888--05--12",
+        ];
+        for (const date of tests) {
+            console.log(date, DateSanitizer.sanitize(date));
+        }
+    }
+
+    static sanitize(_date: string): string {
+        // Strip brackets; we'll assume guesses are correct.
+        let date = _date.replace(/\[|\]/g, "");
+
+        // Special case -- first four characters are not a year:
+        if (!date.match(/^[0-9]{4}/)) {
+            // 'n.d.' means no date known -- give up!
+            if (date.match(/n\.?\s*d\.?/)) {
+                return null;
+            }
+
+            // strtotime can only handle a limited range of dates; let's extract
+            // a year from the string and temporarily replace it with a known
+            // good year; we'll swap it back after the conversion.
+            const yearMatches = date.match(/[0-9]{4}/);
+            const year = (yearMatches ?? [])[0] ?? false;
+            if (year) {
+                date = date.replace(year, "2000");
+            }
+            try {
+                const time = strtotime(date);
+                if (time) {
+                    date = dateFormat("Y-m-d", time);
+                    if (year) {
+                        date = date.replace("2000", year);
+                    }
+                } else {
+                    return null;
+                }
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // If we've gotten this far, we at least know that we have a valid year.
+        const year = date.substr(0, 4);
+
+        // Let's get rid of punctuation and normalize separators:
+        date = date.replace(/[. ?]/g, "").replace(/\/|--|0-/g, "-");
+
+        // If multiple dates are &'ed together, take just the first:
+        date = date.split("&")[0].trim();
+
+        // Default to January 1 if no month/day present:
+        let month, day;
+        if (date.length < 5) {
+            month = day = "01";
+        } else {
+            // If we have year + month, parse that out:
+            if (date.length < 8) {
+                day = "01";
+                const matches = date.match(/^[0-9]{4}-([0-9]{1,2})/);
+                if (matches && typeof matches[1] !== "undefined") {
+                    month = ("0" + matches[1]).substr(-2);
+                } else {
+                    month = "01";
+                }
+            } else {
+                // If we have year + month + day, parse that out:
+                const matches = date.match(/^[0-9]{4}-([0-9]{1,2})-([0-9]{1,2})/);
+                if (matches && typeof matches[2] !== "undefined") {
+                    month = ("0" + matches[1]).substr(-2);
+                    day = ("0" + matches[2]).substr(-2);
+                } else {
+                    month = day = "01";
+                }
+            }
+        }
+
+        // Make sure month/day/year combination is legal. Make it legal if it isn't.
+        if (!checkdate(month, day, year)) {
+            day = "01";
+            if (!checkdate(month, day, year)) {
+                month = "01";
+            }
+        }
+
+        return year + "-" + month + "-" + day + "T00:00:00Z";
+    }
+}
