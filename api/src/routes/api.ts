@@ -38,7 +38,7 @@ function getJobFromRequest(req): Job {
 }
 
 function holdingArea(): string {
-    const holdingArea = Config.getInstance().holdingArea();
+    const holdingArea = Config.getInstance().holdingArea;
     return holdingArea.endsWith("/") ? holdingArea : holdingArea + "/";
 }
 
