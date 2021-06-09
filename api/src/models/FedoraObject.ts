@@ -149,7 +149,7 @@ export class FedoraObject {
     }
 
     async datastreamDissemination(datastream: string): Promise<string> {
-        return this.fedora.getDatastream(this.pid, datastream) as Promise<string>;
+        return this.fedora.getDatastreamAsString(this.pid, datastream);
     }
 
     fitsMasterMetadata(): string {

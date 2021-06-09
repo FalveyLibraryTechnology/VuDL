@@ -71,11 +71,12 @@ class IngestProcessor {
         }
     }
 
-    addDocuments(documentList: FedoraObject): void {
+    async addDocuments(documentList: FedoraObject): Promise<void> {
         let order = this.job.metadata.documents.list;
         if (order.length == 0 && this.category.supportsPdfGeneration) {
             this.logger.info("Generating PDF");
-            order = [new DocumentFile(path.basename(this.job.generatePdf()), "PDF")];
+            const pdf = await this.job.generatePdf();
+            order = [new DocumentFile(path.basename(pdf), "PDF")];
         }
         for (const i in order) {
             const document = order[i];
@@ -234,7 +235,7 @@ class IngestProcessor {
     }
 
     moveDirectory() {
-        const basePath = Config.getInstance().processedAreaPath();
+        const basePath = Config.getInstance().processedAreaPath;
         const currentTime = new Date();
         const now = currentTime.toISOString().substr(0, 10);
         let target = basePath + "/" + now + "/" + this.category.name + "/" + this.job.name;
@@ -273,7 +274,7 @@ class IngestProcessor {
         }
 
         if (this.job.metadata.documents.list.length > 0 || this.category.supportsPdfGeneration) {
-            this.addDocuments(this.buildDocumentList(resource));
+            await this.addDocuments(this.buildDocumentList(resource));
         }
 
         if (this.job.metadata.audio.list.length > 0) {
@@ -295,6 +296,7 @@ class IngestProcessor {
         try {
             await this.doIngest();
         } catch (e) {
+            console.trace(e.message);
             this.logger.error("Unexpected problem: " + e.message);
         }
         this.logger.close(); // Release file handle on log.
