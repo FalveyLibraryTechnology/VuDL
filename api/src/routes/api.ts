@@ -7,7 +7,7 @@ import { getUserBy, makeToken } from "../services/Database";
 import Job from "../models/Job";
 
 const router = express.Router();
-import { allow, setupPassport, requireAuth, requireToken } from "./auth";
+import { /* allow, */ setupPassport, requireAuth, requireToken } from "./auth";
 setupPassport(router);
 
 router.get("/secret", requireAuth, async function (req, res) {

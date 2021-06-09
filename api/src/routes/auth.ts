@@ -60,7 +60,7 @@ export function authenticate(req: Request, res: Response, next?: NextFunction): 
 }
 
 export function allow(...permits: Array<string>): RequestHandler {
-    let handlers: Array<PermissionHandler> = [];
+    const handlers: Array<PermissionHandler> = [];
     console.log(permits);
     return function (req: Request, res: Response, next?: NextFunction): void {
         const permitted = handlers.reduce(
@@ -115,7 +115,7 @@ export function setupPassport(router: Router): void {
             return next();
         }
         console.log(`${req.originalUrl} (Session: ${req.sessionID})`);
-        for (let key in req.session) {
+        for (const key in req.session) {
             if (key == "cookie") {
                 continue;
             }

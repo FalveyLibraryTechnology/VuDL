@@ -8,7 +8,6 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const path = require("path");
 const logger = require("morgan");
-const cors = require("cors");
 
 const indexRouter = require("./dist/routes/index");
 const apiRouter = require("./dist/routes/api");
@@ -21,13 +20,12 @@ const ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:9000"];
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
-// app.use(logger("dev"));
+app.use(logger("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Session/Credential CrossSite permissions
-// app.use(cors());
 app.use(function (req, res, next) {
     if (ALLOWED_ORIGINS.indexOf(req.headers.origin) > -1) {
         res.set("Access-Control-Allow-Credentials", "true");

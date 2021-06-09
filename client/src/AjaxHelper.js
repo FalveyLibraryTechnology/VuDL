@@ -4,6 +4,8 @@ class AjaxHelperInstance {
     constructor() {
         this.url = null;
         this._token = sessionStorage.getItem("token") ?? null;
+        // Bind
+        this.handle4xx = this.handle4xx.bind(this);
     }
 
     get apiUrl() {
@@ -72,7 +74,7 @@ class AjaxHelperInstance {
         return this.token;
     }
 
-    handle4xx = (res) => {
+    handle4xx(res) {
         const { status } = res;
         // Unauthorized: Needs login
         if (status === 401) {
@@ -82,7 +84,7 @@ class AjaxHelperInstance {
         if (status === 403) {
             // Pass
         }
-    };
+    }
 
     ajax(params) {
         this.prevAjaxParams = params;
@@ -108,8 +110,6 @@ class AjaxHelperInstance {
 }
 
 class AjaxHelper {
-    static instance;
-
     constructor() {
         throw new Error("Use AjaxHelper.getInstance()");
     }
