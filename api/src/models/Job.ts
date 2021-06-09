@@ -2,7 +2,6 @@ import { createWriteStream, openSync, closeSync, existsSync as fileExists, statS
 import PDFDocument = require("pdfkit");
 import path = require("path");
 
-// TODO: reintroduce config when needed: import Config from "./Config";
 import Config from "./Config";
 import { execSync } from "child_process";
 import JobMetadata from "./JobMetadata";
