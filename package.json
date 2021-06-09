@@ -9,19 +9,17 @@
   "scripts": {
     "api": "node api/bin/www",
     "api:build": "cd api && tsc",
-    "api:dev": "nodemon --watch api/dist api/bin/www",
+    "api:dev": "nodemon --watch api/**/*.js --watch api/**/*.ejs api/bin/www",
     "api:lint": "eslint api/*.js api/src/ --ext .ts,.js,.jsx",
     "api:setup": "cd api && npm ci",
     "api:watch": "cd api && tsc --watch",
     "api:wsl": "nodemon --legacy-watch api/bin/www",
-
     "client": "cd client && npm run start",
     "client:build": "cd client && npm run build",
     "client:lint": "eslint client/src/ --ext .ts,.js,.jsx",
     "client:setup": "cd client && npm ci",
-
     "queue": "node api/worker-start.js",
-    "queue:dev": "nodemon --watch api/dist/jobs api/worker-start.js",
+    "queue:dev": "nodemon --watch api/**/*.js api/worker-start.js",
     "queue:wsl": "nodemon --legacy-watch api/worker-start.js",
     "backend": "concurrently npm:api npm:queue",
     "backend:dev": "concurrently npm:api:dev npm:queue:dev",

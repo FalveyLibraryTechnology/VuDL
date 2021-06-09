@@ -30,7 +30,7 @@ async function createDatabase(db): Promise<void> {
     await db.schema.dropTableIfExists("tokens");
     await db.schema.createTable("tokens", (table) => {
         table.string("token").primary();
-        table.timestamp("created_at").defaultTo(Date.now());
+        table.timestamp("created_at").notNullable();
         table.integer("user_id").unsigned().references("users.id");
     });
     const users = [
@@ -93,7 +93,10 @@ export async function makeToken(user: User): Promise<string> {
     }
     const db = await getDatabase();
     const token = nanoid();
-    await db("tokens").where("user_id", user.id).delete();
-    await db("tokens").insert({ token, user_id: user.id });
+    await db("tokens").insert({
+        token,
+        user_id: user.id,
+        created_at: Date.now(),
+    });
     return token;
 }

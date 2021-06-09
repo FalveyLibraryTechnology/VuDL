@@ -114,7 +114,7 @@ class JobPaginator extends React.Component {
     loadJob(category, job) {
         var promise = new Promise(
             function (resolve /*, reject*/) {
-                this.ajax.getJSON(this.ajax.getJobUrl(category, job, ""), null, function (data /*, status*/) {
+                this.ajax.getJSON(this.ajax.getJobUrl(category, job), null, function (data) {
                     resolve(data);
                 });
             }.bind(this)

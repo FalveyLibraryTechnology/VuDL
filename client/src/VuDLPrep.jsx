@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import AjaxHelper from "./AjaxHelper";
 import JobSelector from "./JobSelector";
 import JobPaginator from "./JobPaginator";
+import LogoutButton from "./LogoutButton";
 
 class VuDLPrep extends React.Component {
     constructor(props) {
@@ -13,18 +14,18 @@ class VuDLPrep extends React.Component {
     }
 
     render() {
-        var logout = this.ajax.logoutUrl ? (
-            <div className="logout">
-                <a href={this.ajax.logoutUrl} className="button">
-                    Log Out
-                </a>
-            </div>
-        ) : (
-            ""
-        );
+        // const login = (
+        //     <div className="logout">
+        //         <a href={this.ajax.loginUrl + "?then=" + location.href} className="button">
+        //             Log In (TEST)
+        //         </a>
+        //     </div>
+        // );
         return (
             <div>
-                {logout}
+                <div className="logout">
+                    <LogoutButton />
+                </div>
                 <BrowserRouter>
                     <Switch>
                         <Route exact path="/">

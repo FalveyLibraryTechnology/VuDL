@@ -24,7 +24,7 @@ class JobSelector extends React.Component {
 
     componentDidMount() {
         this.ajax.getJSON(
-            this.ajax.rootURL,
+            this.ajax.apiUrl,
             null,
             function (data) {
                 this.setState({ active: true, data: data });

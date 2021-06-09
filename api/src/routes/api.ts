@@ -7,7 +7,7 @@ import { getUserBy, makeToken } from "../services/Database";
 import Job from "../models/Job";
 
 const router = express.Router();
-import { setupPassport, requireAuth } from "./auth";
+import { allow, setupPassport, requireAuth, requireToken } from "./auth";
 setupPassport(router);
 
 router.get("/secret", requireAuth, async function (req, res) {
@@ -15,21 +15,25 @@ router.get("/secret", requireAuth, async function (req, res) {
     res.send(`<ul>
         <li><a href="/api/token/mint">Mint</a></li>
         <li><a href="/api/token/confirm/${token}">Confirm (<kbd>${token}</kbd>)</a></li>
-    </ul>`);
-});
-
-router.get("/login", async function (req, res) {
-    const user = await getUserBy("username", "chris");
-    res.send(`<ul>
-        <li><a href="/api/user/confirm/${user.hash}">Login</a></li>
-        <li><a href="/api/secret">Secret</a></li>
         <li><a href="/api/logout">Logout</a></li>
     </ul>`);
 });
 
-router.get("/logout", requireAuth, function (req, res) {
+router.get("/login", async function (req, res) {
+    if (req.query.referer ?? false) {
+        req.session.referer = req.query.referer;
+    }
+    const user = await getUserBy("username", "chris");
+    res.render("login-test", { user });
+    // res.send(`<ul>
+    //     <li><a href="/api/user/confirm/${user.hash}">Login</a></li>
+    //     <li><a href="/api/secret">Secret</a></li>
+    // </ul>`);
+});
+
+router.get("/logout", function (req, res) {
     req.logout();
-    res.redirect("/api/login");
+    res.redirect("http://localhost:3000");
 });
 
 function getJobFromRequest(req): Job {
@@ -55,7 +59,7 @@ router.get("/:category", function (req, res) {
     res.json(category.raw());
 });
 
-router.get("/:category/:job", function (req, res) {
+router.get("/:category/:job", requireToken, function (req, res) {
     res.json(getJobFromRequest(req).metadata.raw);
 });
 

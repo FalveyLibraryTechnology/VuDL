@@ -3,31 +3,92 @@ import $ from "jquery";
 class AjaxHelperInstance {
     constructor() {
         this.url = null;
-        this._token = null;
+        this._token = sessionStorage.getItem("token") ?? null;
     }
 
-    get rootURL() {
+    get apiUrl() {
         return this.url;
+    }
+    get loginUrl() {
+        return this.url + "/login";
     }
     get logoutUrl() {
         return this.url + "/logout";
     }
 
+    get testLoginAsChris() {
+        console.warn("DEBUG LOGIN CODE BEING USED");
+        return this.url + "/user/confirm/V1StGXR8_Z5jdHi6B-myT";
+    }
+
+    isLoggedIn() {
+        return this.token !== null;
+    }
+
     get token() {
-        return this._token || "getFromCookies"; // TODO
+        return this._token || null; // TODO
     }
     set token(t) {
+        sessionStorage.setItem("token", t);
         this._token = t;
     }
 
-    ajax(params) {
+    addCredentials(params) {
+        const credentials = {
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true,
+            },
+        };
+
+        // Add Token
         params.beforeSend = function (xhr) {
             xhr.setRequestHeader("Authorization", "Token " + this.token);
-        };
-        $.ajax(params);
+        }.bind(this);
+
+        return Object.assign({}, params, credentials);
     }
 
-    // TODO: Why does this one need url when getJobUrl and getImageUrl don't?
+    refreshToken() {
+        if (!this.token) {
+            $.ajax(
+                this.addCredentials({
+                    dataType: "json",
+                    url: this.apiUrl + "/token/mint",
+                })
+            )
+                .done((token) => {
+                    this.token = token;
+                    if (this.prevAjaxParams) {
+                        this.ajax(this.prevAjaxParams).done(() => {
+                            this.prevAjaxParams = null;
+                        });
+                    }
+                })
+                .fail(() => {
+                    window.location.href = this.loginUrl + "?referer=" + encodeURIComponent(window.location.href);
+                });
+        }
+        return this.token;
+    }
+
+    handle4xx = (res) => {
+        const { status } = res;
+        // Unauthorized: Needs login
+        if (status === 401) {
+            this.refreshToken();
+        }
+        // Forbidden: Insufficient permissions
+        if (status === 403) {
+            // Pass
+        }
+    };
+
+    ajax(params) {
+        this.prevAjaxParams = params;
+        return $.ajax(this.addCredentials(params)).catch(this.handle4xx);
+    }
+
     getJSON(url = this.url, data, success) {
         this.ajax({
             dataType: "json",
@@ -37,7 +98,7 @@ class AjaxHelperInstance {
         });
     }
 
-    getJobUrl(category, job, extra) {
+    getJobUrl(category, job, extra = "") {
         return this.url + "/" + encodeURIComponent(category) + "/" + encodeURIComponent(job) + extra;
     }
 
