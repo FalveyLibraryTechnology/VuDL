@@ -1,3 +1,4 @@
+import Config from "../models/Config";
 import Solr from "../services/Solr";
 import SolrIndexer from "../services/SolrIndexer";
 
@@ -26,9 +27,10 @@ router.post("/solrindex/:pid", async function (req, res) {
         return;
     }
     const solr = new Solr();
-    // TODO: make core name configurable
-    const result = await solr.indexRecord("biblio", fedoraFields);
-    res.status(result.statusCode).send(result.statusCode === 200 ? "ok" : result.body.error.msg ?? "error");
+    const result = await solr.indexRecord(Config.getInstance().solrCore, fedoraFields);
+    res.status(result.statusCode).send(
+        result.statusCode === 200 ? "ok" : ((result.body ?? {}).error ?? {}).msg ?? "error"
+    );
 });
 
 module.exports = router;

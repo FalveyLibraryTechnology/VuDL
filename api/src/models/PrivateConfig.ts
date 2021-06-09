@@ -83,6 +83,14 @@ class PrivateConfig {
         return this.ini["tika_path"];
     }
 
+    get solrCore(): string {
+        return this.ini["solr_core"] ?? "biblio";
+    }
+
+    get solrUrl(): string {
+        return this.ini["solr_url"] ?? "http://localhost:8983/solr";
+    }
+
     get requireLogin(): string {
         // TODO: do we need this, or will authentication be handled differently in future?
         return this.ini["require_login"];
