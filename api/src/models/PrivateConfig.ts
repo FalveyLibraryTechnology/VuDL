@@ -55,6 +55,10 @@ class PrivateConfig {
         return this.ini["holding_area_path"];
     }
 
+    get ocrmypdfPath(): string {
+        return this.ini["ocrmypdf_path"];
+    }
+
     get processedAreaPath(): string {
         return this.ini["processed_area_path"];
     }
