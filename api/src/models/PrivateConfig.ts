@@ -31,8 +31,16 @@ class PrivateConfig {
         return this.ini["solr_query_url"];
     }
 
+    get ffmpegPath(): string {
+        return this.ini["ffmpeg_path"];
+    }
+
     get tesseractPath(): string {
         return this.ini["tesseract_path"];
+    }
+
+    get tesseractAllowedChars(): string {
+        return this.ini["tesseract_allowed_characters"];
     }
 
     get vufindUrl(): string {
@@ -53,6 +61,10 @@ class PrivateConfig {
 
     get holdingArea(): string {
         return this.ini["holding_area_path"];
+    }
+
+    get ocrmypdfPath(): string {
+        return this.ini["ocrmypdf_path"];
     }
 
     get processedAreaPath(): string {
