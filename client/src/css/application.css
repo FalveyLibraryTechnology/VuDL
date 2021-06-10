@@ -1,5 +1,5 @@
 body {
-    background: #fafafa;
+    background: #fafbfc;
     font-size: 14px;
     font-family: "Roboto", Arial;
     font-weight: 500;
@@ -32,11 +32,13 @@ li {
 
 button,
 .button {
+    display: inline-block;
     margin: 0 2px;
     padding: 4px 10px;
     border: 0;
     color: #fff;
     line-height: 1.5;
+    text-decoration: none;
     background-color: #485a6c;
     cursor: pointer;
     border-radius: 5px;

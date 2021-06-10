@@ -16,13 +16,20 @@ p {
     margin: 0 2px;
 }
 
-input,
+.controls input,
 .status {
     float: left;
+    margin-right: 4px;
 }
 input {
-    margin-right: 4px;
-    padding: 0 2px;
+    padding: 2px;
+    border: 1px solid #6a737d;
+    border-radius: 4px;
+}
+input:focus {
+    border-color: #2188ff;
+    outline-color: #2188ff;
+    box-shadow: 0 0 0 4px #c8e1ff;
 }
 .status {
     padding: 0;
@@ -34,6 +41,24 @@ input {
     padding: 6px;
     border: 1px solid #53626f;
     border-radius: 2px;
+}
+
+form {
+    max-width: 28rem;
+    margin: auto;
+    padding: 1rem;
+}
+label {
+    display: block;
+    margin: 1rem 0;
+    padding: 0 4px;
+}
+label input {
+    display: block;
+    width: 100%;
+    margin: 6px 0;
+    padding: 0.5rem 0.75rem;
+    font: inherit;
 }
 
 .group {

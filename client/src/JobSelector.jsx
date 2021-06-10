@@ -2,11 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Category from "./Category";
+import AjaxHelper from "./AjaxHelper";
 
 class JobSelector extends React.Component {
     constructor(props) {
         super(props);
         this.state = { active: true, data: [] };
+        this.ajax = AjaxHelper.getInstance();
     }
 
     hide() {
@@ -21,8 +23,8 @@ class JobSelector extends React.Component {
     }
 
     componentDidMount() {
-        this.props.app.getJSON(
-            this.props.url,
+        this.ajax.getJSON(
+            this.ajax.apiUrl,
             null,
             function (data) {
                 this.setState({ active: true, data: data });
@@ -35,7 +37,7 @@ class JobSelector extends React.Component {
         var empty_categories = [];
         for (var i in this.state.data) {
             var category = this.state.data[i];
-            var element = <Category app={this.props.app} key={category.category} data={category} />;
+            var element = <Category key={category.category} data={category} />;
             if (category.jobs.length > 0) {
                 categories[categories.length] = element;
             } else {
@@ -55,7 +57,6 @@ JobSelector.propTypes = {
     app: PropTypes.shape({
         getJSON: PropTypes.func,
     }),
-    url: PropTypes.string,
 };
 
 export default JobSelector;
