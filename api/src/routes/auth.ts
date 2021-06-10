@@ -13,12 +13,6 @@ import { getUserBy, confirmToken, makeToken } from "../services/Database";
 interface NextFunction {
     (err?: Error): void;
 }
-interface PermissionHandler {
-    (req: Request): boolean;
-}
-interface RequestHandler {
-    (req: Request, res: Response, next: NextFunction): void;
-}
 
 passport.serializeUser(function (user, done) {
     done(null, user.id);
