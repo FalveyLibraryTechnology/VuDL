@@ -56,3 +56,7 @@ require_login = true
 # to "*" to allow all users). See also config/initializers/omniauth.rb for
 # authentication settings.
 user_whitelist = "*"
+
+# Allowed origins, IPs, and addresses for CORS
+allowed_origins[] = http://localhost:3000 # api
+allowed_origins[] = http://localhost:9000 # client

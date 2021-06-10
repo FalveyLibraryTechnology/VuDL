@@ -12,9 +12,9 @@ const logger = require("morgan");
 const indexRouter = require("./dist/routes/index");
 const apiRouter = require("./dist/routes/api");
 const messengerRouter = require("./dist/routes/messenger");
+const Config = require("./dist/models/Config").default;
 
 const app = express();
-const ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:9000"];
 
 // Configure view engine to render EJS templates.
 app.set("views", __dirname + "/views");
@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Session/Credential CrossSite permissions
 app.use(function (req, res, next) {
-    if (ALLOWED_ORIGINS.indexOf(req.headers.origin) > -1) {
+    if (Config.getInstance().allowedOrigins.indexOf(req.headers.origin) > -1) {
         res.set("Access-Control-Allow-Credentials", "true");
         res.set("Access-Control-Allow-Headers", "Authorization");
         res.set("Access-Control-Allow-Origin", req.headers.origin);
