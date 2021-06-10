@@ -99,7 +99,9 @@ router.get("/:category/:job/:image/:size", requireToken, async function (req, re
     res.sendFile(deriv);
 });
 
-router.delete("/:category/:job/:image/*"), requireToken, async function (req, res) {
+router.delete("/:category/:job/:image/*"),
+    requireToken,
+    async function (req, res) {
         //TODO
         //Sanitize incoming parameters
         const image: string = req.params.image;

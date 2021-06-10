@@ -76,9 +76,7 @@ export function allow(...permits: Array<string>): RequestHandler {
 
 export async function requireToken(req: Request, res: Response, next?: NextFunction): Promise<void> {
     // Check for API key header
-    const userToken = req.header("Authorization")
-        ? req.header("Authorization").slice(6)
-        : req.session.token ?? null; // Get from session
+    const userToken = req.header("Authorization") ? req.header("Authorization").slice(6) : req.session.token ?? null; // Get from session
 
     console.log("Token", userToken);
     if (await confirmToken(userToken)) {
