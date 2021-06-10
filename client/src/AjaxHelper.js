@@ -18,6 +18,7 @@ class AjaxHelperInstance {
         return this.url + "/logout";
     }
 
+    // TODO: Future-proof
     get testLoginAsChris() {
         console.warn("DEBUG LOGIN CODE BEING USED");
         return this.url + "/user/confirm/V1StGXR8_Z5jdHi6B-myT";
