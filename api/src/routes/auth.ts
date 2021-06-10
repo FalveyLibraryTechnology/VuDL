@@ -1,19 +1,8 @@
 /**
- * TODO
- * - Roles: Paginator or by user
- * - User list and API list, both with permissions
- * - API endpoint to mint keys with set permissions
- *     - Accessible to users
- *     - Can mint keys at user level or below
- *
- * - React
- *     > Is there an API key?
- *         > Stored in React (TODO: review)
- *         ? GET parameter
- *         ? Header (X-API-Key)
- *     > No?
- *         > Ask to mint key
- *         > 401? Redirect to login endpoint (with redirect)
+ * TODO: Multiple levels of permission
+ * - Mint keys at user level or below
+ * - Allow different levels in one easy function
+ * - Three easy payments of $19.95
  */
 import { Request, Response, Router } from "express"; // Types
 import passport = require("passport");
@@ -59,21 +48,6 @@ export function authenticate(req: Request, res: Response, next?: NextFunction): 
     authMethod(req, res, next);
 }
 
-export function allow(...permits: Array<string>): RequestHandler {
-    const handlers: Array<PermissionHandler> = [];
-    console.log(permits);
-    return function (req: Request, res: Response, next?: NextFunction): void {
-        const permitted = handlers.reduce(
-            (isGood: boolean, handler: PermissionHandler) => isGood && handler(req),
-            true
-        );
-        if (permitted) {
-            return next();
-        }
-        res.redirect("/api/login");
-    };
-}
-
 export async function requireToken(req: Request, res: Response, next?: NextFunction): Promise<void> {
     // Check for API key header
     const userToken = req.header("Authorization") ? req.header("Authorization").slice(6) : req.session.token ?? null; // Get from session
@@ -104,9 +78,22 @@ export function setupPassport(router: Router): void {
             if (key == "cookie") {
                 continue;
             }
-            // console.log("@", key, req.session[key]);
         }
         next();
+    });
+
+    router.get("/login", async function (req, res) {
+        if (req.query.referer ?? false) {
+            req.session.referer = req.query.referer;
+        }
+        const user = await getUserBy("username", "chris");
+        res.render("login-test", { user });
+    });
+
+    router.get("/logout", function (req, res) {
+        req.logout();
+        // TODO: Config
+        res.redirect("http://localhost:3000");
     });
 
     // Use passport.authenticate() as route middleware to authenticate the
@@ -116,7 +103,8 @@ export function setupPassport(router: Router): void {
     router.get("/user/confirm/:hash", authenticate, function (req: Request, res: Response) {
         const referral = req.query.referer ?? req.session.referer;
         console.log("> goto login referral: " + referral);
-        res.redirect(referral ?? "/api/secret");
+        // TODO: Config
+        res.redirect(referral ?? "http://localhost:3000");
         req.session.referer = null;
     });
 

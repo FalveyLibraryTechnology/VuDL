@@ -1,4 +1,5 @@
 import fs = require("fs");
+import path = require("path");
 import { Knex, knex } from "knex";
 import { nanoid } from "nanoid";
 
@@ -61,6 +62,10 @@ async function getDatabase(): Promise<Knex> {
         db = await knex(config);
 
         if (REBUILD_DB || !fs.existsSync(dbFilename)) {
+            const dataDir = path.dirname(dbFilename);
+            if (!fs.existsSync(dataDir)) {
+                fs.mkdirSync(dataDir);
+            }
             await createDatabase(db);
         }
 

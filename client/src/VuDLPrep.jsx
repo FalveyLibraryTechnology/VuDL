@@ -14,13 +14,6 @@ class VuDLPrep extends React.Component {
     }
 
     render() {
-        // const login = (
-        //     <div className="logout">
-        //         <a href={this.ajax.loginUrl + "?then=" + location.href} className="button">
-        //             Log In (TEST)
-        //         </a>
-        //     </div>
-        // );
         return (
             <div>
                 <div className="logout">

@@ -3,29 +3,11 @@ import express = require("express");
 import CategoryCollection from "../models/CategoryCollection";
 import Category from "../models/Category";
 import Config from "../models/Config";
-import { getUserBy, makeToken } from "../services/Database";
 import Job from "../models/Job";
 
 const router = express.Router();
-import { /* allow, */ setupPassport, requireToken } from "./auth";
+import { setupPassport, requireToken } from "./auth";
 setupPassport(router);
-
-router.get("/login", async function (req, res) {
-    if (req.query.referer ?? false) {
-        req.session.referer = req.query.referer;
-    }
-    const user = await getUserBy("username", "chris");
-    res.render("login-test", { user });
-    // res.send(`<ul>
-    //     <li><a href="/api/user/confirm/${user.hash}">Login</a></li>
-    //     <li><a href="/api/secret">Secret</a></li>
-    // </ul>`);
-});
-
-router.get("/logout", function (req, res) {
-    req.logout();
-    res.redirect("http://localhost:3000");
-});
 
 function getJobFromRequest(req): Job {
     // TODO: sanitize parameters!
