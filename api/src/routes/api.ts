@@ -7,17 +7,8 @@ import { getUserBy, makeToken } from "../services/Database";
 import Job from "../models/Job";
 
 const router = express.Router();
-import { /* allow, */ setupPassport, requireAuth, requireToken } from "./auth";
+import { /* allow, */ setupPassport, requireToken } from "./auth";
 setupPassport(router);
-
-router.get("/secret", requireAuth, async function (req, res) {
-    const token = await makeToken(req.user);
-    res.send(`<ul>
-        <li><a href="/api/token/mint">Mint</a></li>
-        <li><a href="/api/token/confirm/${token}">Confirm (<kbd>${token}</kbd>)</a></li>
-        <li><a href="/api/logout">Logout</a></li>
-    </ul>`);
-});
 
 router.get("/login", async function (req, res) {
     if (req.query.referer ?? false) {
@@ -46,12 +37,12 @@ function holdingArea(): string {
     return holdingArea.endsWith("/") ? holdingArea : holdingArea + "/";
 }
 
-router.get("/", function (req, res) {
+router.get("/", requireToken, function (req, res) {
     const categoryCollection = new CategoryCollection(holdingArea());
     res.json(categoryCollection.raw());
 });
 
-router.get("/:category", function (req, res) {
+router.get("/:category", requireToken, function (req, res) {
     // TODO
     // Sanitize incoming parameters
     // 404 error for non-existent catgeory (if holding area + category is not a directory)
@@ -63,21 +54,21 @@ router.get("/:category/:job", requireToken, function (req, res) {
     res.json(getJobFromRequest(req).metadata.raw);
 });
 
-router.get("/:category/:job/status", function (req, res) {
+router.get("/:category/:job/status", requireToken, function (req, res) {
     res.json(getJobFromRequest(req).metadata.status);
 });
 
-router.put("/:category/:job/derivatives", function (req, res) {
+router.put("/:category/:job/derivatives", requireToken, function (req, res) {
     getJobFromRequest(req).makeDerivatives();
     res.json({ status: "ok" });
 });
 
-router.put("/:category/:job/ingest", function (req, res) {
+router.put("/:category/:job/ingest", requireToken, function (req, res) {
     getJobFromRequest(req).ingest();
     res.json({ status: "ok" });
 });
 
-router.put("/:category/:job", function (req, res) {
+router.put("/:category/:job", requireToken, function (req, res) {
     const job = getJobFromRequest(req);
     const raw = req.body;
     try {
@@ -93,7 +84,7 @@ router.put("/:category/:job", function (req, res) {
     }
 });
 
-router.get("/:category/:job/:image/:size", async function (req, res) {
+router.get("/:category/:job/:image/:size", requireToken, async function (req, res) {
     //TODO
     //Sanitize incoming parameters
     const legalSizes: Record<string, string> = {
@@ -108,8 +99,7 @@ router.get("/:category/:job/:image/:size", async function (req, res) {
     res.sendFile(deriv);
 });
 
-router.delete("/:category/:job/:image/*"),
-    async function (req, res) {
+router.delete("/:category/:job/:image/*"), requireToken, async function (req, res) {
         //TODO
         //Sanitize incoming parameters
         const image: string = req.params.image;

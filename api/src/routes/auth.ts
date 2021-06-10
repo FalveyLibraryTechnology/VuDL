@@ -74,28 +74,15 @@ export function allow(...permits: Array<string>): RequestHandler {
     };
 }
 
-// TODO: Separate levels of permissions
-// TODO: Accept referral from GET
-export function requireAuth(req: Request, res: Response, next?: NextFunction): void {
-    // Are we logged in?
-    if (req.isAuthenticated()) {
-        return next();
-    }
-
-    // Take ye to login!
-    req.session.referer = req.query.referer ?? req.header("referer");
-    console.log("< save login referral: " + req.session.referer);
-    res.sendStatus(401);
-}
-
 export async function requireToken(req: Request, res: Response, next?: NextFunction): Promise<void> {
     // Check for API key header
-    if (req.header("Authorization")) {
-        const token = req.header("Authorization").slice(6);
-        console.log("Token", token);
-        if (await confirmToken(token)) {
-            return next();
-        }
+    const userToken = req.header("Authorization")
+        ? req.header("Authorization").slice(6)
+        : req.session.token ?? null; // Get from session
+
+    console.log("Token", userToken);
+    if (await confirmToken(userToken)) {
+        return next();
     }
 
     // Take ye to login!
@@ -145,6 +132,7 @@ export function setupPassport(router: Router): void {
             return res.sendStatus(401);
         }
         const token = await makeToken(req.user);
+        req.session.token = token;
         res.json(token);
     });
 }
