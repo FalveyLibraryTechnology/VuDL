@@ -9,7 +9,7 @@
   "scripts": {
     "api": "node api/bin/www",
     "api:build": "cd api && tsc",
-    "api:dev": "nodemon --watch api/**/*.js --watch api/**/*.ejs api/bin/www",
+    "api:dev": "nodemon --watch api/**/*.js --watch api/**/*.ejs --ignore api/node_modules/ api/bin/www",
     "api:lint": "eslint api/*.js api/src/ --ext .ts,.js,.jsx",
     "api:setup": "cd api && npm ci",
     "api:watch": "cd api && tsc --watch",
