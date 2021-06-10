@@ -8,6 +8,7 @@ import { Request, Response, Router } from "express"; // Types
 import passport = require("passport");
 import hash = require("passport-hash");
 
+import Config from "../models/Config";
 import { getUserBy, confirmToken, makeToken } from "../services/Database";
 
 interface NextFunction {
@@ -85,8 +86,7 @@ export function setupPassport(router: Router): void {
 
     router.get("/logout", function (req, res) {
         req.logout();
-        // TODO: Config
-        res.redirect("http://localhost:3000");
+        res.redirect(Config.getInstance().clientUrl);
     });
 
     // Use passport.authenticate() as route middleware to authenticate the
@@ -96,8 +96,7 @@ export function setupPassport(router: Router): void {
     router.get("/user/confirm/:hash", authenticate, function (req: Request, res: Response) {
         const referral = req.query.referer ?? req.session.referer;
         console.log("> goto login referral: " + referral);
-        // TODO: Config
-        res.redirect(referral ?? "http://localhost:3000");
+        res.redirect(referral ?? Config.getInstance().clientUrl);
         req.session.referer = null;
     });
 

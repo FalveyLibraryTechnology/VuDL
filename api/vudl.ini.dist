@@ -1,3 +1,7 @@
+# URLs of VuDL API and React client
+client_url = "http://localhost:3000"
+api_url = "http://localhost:9000"
+
 # Credentials for connecting to a Fedora backend:
 fedora_host = "http://myserver:8088"
 fedora_api = "http://myserver:8088/fedora"

@@ -5,6 +5,16 @@ class PrivateConfig {
         this.ini = ini;
     }
 
+    get clientUrl(): string {
+        // TODO: not used -- do we need this?
+        return this.ini["client_url"];
+    }
+
+    get apiUrl(): string {
+        // TODO: not used -- do we need this?
+        return this.ini["api_url"];
+    }
+
     get fedoraHostUrl(): string {
         // TODO: not used -- do we need this?
         return this.ini["fedora_host"];
