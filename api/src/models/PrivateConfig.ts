@@ -5,6 +5,16 @@ class PrivateConfig {
         this.ini = ini;
     }
 
+    get clientUrl(): string {
+        // TODO: not used -- do we need this?
+        return this.ini["client_url"];
+    }
+
+    get apiUrl(): string {
+        // TODO: not used -- do we need this?
+        return this.ini["api_url"];
+    }
+
     get fedoraHostUrl(): string {
         // TODO: not used -- do we need this?
         return this.ini["fedora_host"];
@@ -91,6 +101,11 @@ class PrivateConfig {
     get userWhitelist(): string {
         // TODO: do we need this, or will authentication be handled differently in future?
         return this.ini["user_whitelist"];
+    }
+
+    get allowedOrigins(): string[] {
+        // TODO: do we need this, or will authentication be handled differently in future?
+        return this.ini["allowed_origins"];
     }
 }
 
