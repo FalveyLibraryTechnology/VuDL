@@ -43,10 +43,9 @@ export function authenticate(req: Request, res: Response, next?: NextFunction): 
 }
 
 export async function requireToken(req: Request, res: Response, next?: NextFunction): Promise<void> {
-    // Check for API key header
-    const userToken = req.header("Authorization") ? req.header("Authorization").slice(6) : req.session.token ?? null; // Get from session
+    // Check for API key in header or session
+    const userToken = req.header("Authorization") ? req.header("Authorization").slice(6) : req.session.token ?? null;
 
-    console.log("Token", userToken);
     if (await confirmToken(userToken)) {
         return next();
     }

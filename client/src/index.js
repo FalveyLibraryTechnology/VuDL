@@ -12,7 +12,6 @@ import VuDLPrep from "./VuDLPrep";
 
 let ajax = AjaxHelper.getInstance();
 ajax.url = "http://localhost:9000/api"; // TODO: Config
-// ajax.token = "passedToken";
 
 ReactDOM.render(
     <React.StrictMode>
