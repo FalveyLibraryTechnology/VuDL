@@ -104,7 +104,6 @@ class PrivateConfig {
     }
 
     get allowedOrigins(): string[] {
-        // TODO: do we need this, or will authentication be handled differently in future?
         return this.ini["allowed_origins"];
     }
 }
