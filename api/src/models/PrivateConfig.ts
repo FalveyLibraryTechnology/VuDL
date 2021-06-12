@@ -6,7 +6,6 @@ class PrivateConfig {
     }
 
     get clientUrl(): string {
-        // TODO: not used -- do we need this?
         return this.ini["client_url"];
     }
 
