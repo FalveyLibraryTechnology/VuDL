@@ -27,6 +27,10 @@ base_url = "http://vua6743.villanova.edu:8089/rest"
 # VuFind Base URL
 vufind_url = "https://myserver"
 
+# Base URL and core name for Solr instance containing index
+solr_url = "http://localhost:8983/solr"
+solr_core = "biblio"
+
 # Temp directory used for PDF generation
 pdf_directory = "/tmp/"
 

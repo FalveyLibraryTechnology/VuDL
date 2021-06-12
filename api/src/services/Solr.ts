@@ -1,5 +1,6 @@
 import http = require("needle");
 import { IncomingMessage } from "http";
+import Config from "../models/Config";
 
 // TODO: Now shared with Fedora.ts
 interface NeedleResponse extends IncomingMessage {
@@ -11,9 +12,8 @@ interface NeedleResponse extends IncomingMessage {
 class Solr {
     baseUrl: string;
 
-    constructor() {
-        // TODO: make configurable
-        this.baseUrl = "http://localhost:8983/solr";
+    constructor(baseUrl: string = null) {
+        this.baseUrl = baseUrl ?? Config.getInstance().solrUrl;
     }
 
     /**

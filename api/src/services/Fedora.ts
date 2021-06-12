@@ -45,10 +45,10 @@ export class Fedora {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
         const url = this.baseUrl + "/" + path;
 
-        // TODO: Config
+        // Basic Auth
         const auth = {
-            username: "fedoraAdmin", // Basic Auth
-            password: "fedoraAdmin",
+            username: Config.getInstance().fedoraUsername,
+            password: Config.getInstance().fedoraPassword,
         };
         const options = Object.assign({}, auth, _options);
         return http(method, url, data, options);
