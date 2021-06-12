@@ -105,6 +105,14 @@ class PrivateConfig {
     get allowedOrigins(): string[] {
         return this.ini["allowed_origins"];
     }
+
+    get pidNamespace(): string {
+        return this.ini["fedora_pid_namespace"] ?? "vudl";
+    }
+
+    get initialPidValue(): number {
+        return parseInt(this.ini["fedora_initial_pid"] ?? "1");
+    }
 }
 
 export default PrivateConfig;
