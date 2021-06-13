@@ -66,7 +66,7 @@ class IngestProcessor {
             const page = order[i];
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + page.filename);
-            const imageData = this.buildPage(pageList, page, number);
+            const imageData = await this.buildPage(pageList, page, number);
             await this.addDatastreamsToPage(page, imageData);
         }
     }
@@ -86,30 +86,30 @@ class IngestProcessor {
             const document = order[i];
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + document.filename);
-            const data = this.buildDocument(documentList, document, number);
+            const data = await this.buildDocument(documentList, document, number);
             this.addDatastreamsToDocument(document, data);
         }
     }
 
-    addAudio(audioList) {
+    async addAudio(audioList): Promise<void> {
         const order = this.job.metadata.audio.list;
         for (const i in order) {
             const audio = order[i];
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + audio.filename);
-            const audioData = this.buildAudio(audioList, audio, number);
+            const audioData = await this.buildAudio(audioList, audio, number);
             this.addDatastreamsToAudio(audio, audioData);
         }
     }
 
-    buildPage(pageList: FedoraObject, page: Page, number: number): FedoraObject {
+    async buildPage(pageList: FedoraObject, page: Page, number: number): Promise<FedoraObject> {
         const imageData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         imageData.parentPid = pageList.pid;
         imageData.modelType = "ImageData";
         imageData.title = page.label;
         this.logger.info("Creating Image Object " + imageData.pid);
 
-        imageData.coreIngest("I");
+        await imageData.coreIngest("Inactive");
         imageData.dataIngest();
         imageData.imageDataIngest();
 
@@ -118,28 +118,28 @@ class IngestProcessor {
         return imageData;
     }
 
-    buildPageList(resource) {
+    async buildPageList(resource): Promise<FedoraObject> {
         const pageList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         pageList.parentPid = resource.pid;
         pageList.modelType = "ListCollection";
         pageList.title = "Page List";
         this.logger.info("Creating Page List Object " + pageList.pid);
 
-        pageList.coreIngest("I");
+        await pageList.coreIngest("Inactive");
         pageList.collectionIngest();
         pageList.listCollectionIngest();
 
         return pageList;
     }
 
-    buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): FedoraObject {
+    async buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): Promise<FedoraObject> {
         const documentData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         documentData.parentPid = documentList.pid;
         documentData.modelType = "PDFData";
         documentData.title = document.label;
         this.logger.info("Creating Document Object " + documentData.pid);
 
-        documentData.coreIngest("I");
+        await documentData.coreIngest("Inactive");
         documentData.dataIngest();
         documentData.documentDataIngest();
 
@@ -148,28 +148,28 @@ class IngestProcessor {
         return documentData;
     }
 
-    buildDocumentList(resource: FedoraObject): FedoraObject {
+    async buildDocumentList(resource: FedoraObject): Promise<FedoraObject> {
         const documentList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         documentList.parentPid = resource.pid;
         documentList.modelType = "ListCollection";
         documentList.title = "Document List";
         this.logger.info("Creating Document List Object " + documentList.pid);
 
-        documentList.coreIngest("I");
+        await documentList.coreIngest("Inactive");
         documentList.collectionIngest();
         documentList.listCollectionIngest();
 
         return documentList;
     }
 
-    buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): FedoraObject {
+    async buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): Promise<FedoraObject> {
         const audioData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         audioData.parentPid = audioList.pid;
         audioData.modelType = "AudioData";
         audioData.title = audio.filename;
         this.logger.info("Creating Audio Object " + audioData.pid);
 
-        audioData.coreIngest("I");
+        await audioData.coreIngest("Inactive");
         audioData.dataIngest();
         audioData.audioDataIngest();
 
@@ -178,14 +178,14 @@ class IngestProcessor {
         return audioData;
     }
 
-    buildAudioList(resource: FedoraObject): FedoraObject {
+    async buildAudioList(resource: FedoraObject): Promise<FedoraObject> {
         const audioList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
         audioList.parentPid = resource.pid;
         audioList.modelType = "ListCollection";
         audioList.title = "Audio List";
         this.logger.info("Creating Audio List Object " + audioList.pid);
 
-        audioList.coreIngest("I");
+        await audioList.coreIngest("Inactive");
         audioList.collectionIngest();
         audioList.listCollectionIngest();
 
@@ -199,7 +199,7 @@ class IngestProcessor {
         resource.title = "Incomplete... / Processing...";
         this.logger.info("Creating Resource Object " + resource.pid);
 
-        resource.coreIngest("I");
+        await resource.coreIngest("Inactive");
         resource.collectionIngest();
         resource.resourceCollectionIngest();
 
@@ -274,15 +274,15 @@ class IngestProcessor {
         // (this was already a TODO in the Ruby code; low priority)
 
         if (this.job.metadata.order.pages.length > 0) {
-            await this.addPages(this.buildPageList(resource));
+            await this.addPages(await this.buildPageList(resource));
         }
 
         if (this.job.metadata.documents.list.length > 0 || this.category.supportsPdfGeneration) {
-            await this.addDocuments(this.buildDocumentList(resource));
+            await this.addDocuments(await this.buildDocumentList(resource));
         }
 
         if (this.job.metadata.audio.list.length > 0) {
-            this.addAudio(this.buildAudioList(resource));
+            await this.addAudio(await this.buildAudioList(resource));
         }
 
         await this.finalizeTitle(resource);

@@ -39,7 +39,7 @@ export class Fedora {
     protected _request(
         method = "get",
         _path = "/",
-        data: Record<string, unknown> = null,
+        data: string = null,
         _options: Record<string, unknown> = {}
     ): Promise<NeedleResponse> {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
@@ -143,6 +143,48 @@ export class Fedora {
             this.setCache(pid, cacheKey, JSON.stringify(dublinCore));
         }
         return dublinCore;
+    }
+
+    /**
+     * Escape a string for inclusion in a quoted Turtle value.
+     *
+     * @param str String to escape
+     */
+    turtleEscape(str: string): string {
+        return str.replace('"', '\\"');
+    }
+
+    /**
+     * Create a container in the repository
+     *
+     * @param pid Record id
+     * @param label Label
+     * @param state Object state (A = Active, I = Inactive)
+     * @param owner Object owner
+     */
+    async createContainer(pid: string, label: string, state: string, owner = "diglibEditor"): Promise<void> {
+        // TODO: should we use a library to build the Turtle?
+        // TODO: label is sometimes a number rather than a string; why?
+        // TODO: Slug is not being used as expected
+        // TODO: New objects are not appearing as children of the main node; why?
+        const data =
+            "<>\n" +
+            '\t<info:fedora/fedora-system:def/model#state>\t"' +
+            this.turtleEscape(state) +
+            '" ;\n' +
+            '\t<info:fedora/fedora-system:def/model#label>\t"' +
+            this.turtleEscape(label) +
+            '" ;\n';
+        +'\t<info:fedora/fedora-system:def/model#ownerId>\t"' + this.turtleEscape(owner) + '" .\n';
+        const options = {
+            headers: {
+                "Content-Type": "text/turtle",
+                Slug: pid,
+            },
+        };
+        const response = await this._request("post", "/", data, options);
+        // TODO: validate response
+        console.log(response);
     }
 }
 

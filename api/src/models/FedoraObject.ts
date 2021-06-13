@@ -120,21 +120,9 @@ export class FedoraObject {
         // TODO: add MEMBER-QUERY and MEMBER-LIST-RAW datastreams if needed (probably not)
     }
 
-    coreIngest(objectState: string): void {
+    async coreIngest(objectState: string): Promise<void> {
         this.log("Core ingest for " + this.pid);
-        this.ingest({
-            label: this.title,
-            format: "info:fedora/fedora-system:FOXML-1.1",
-            encoding: "UTF-8",
-            namespace: this.namespace,
-            ownerId: "diglibEditor",
-            logMessage: this.title + " - ingest",
-            ignoreMime: false,
-        });
-        this.modifyObject({
-            state: objectState,
-            logMessage: "Set initial state",
-        });
+        await this.fedora.createContainer(this.pid, this.title, objectState, "diglibEditor");
         this.addModelRelationship("CoreModel");
         this.addRelationship(
             "info:fedora/" + this.pid,
@@ -169,13 +157,6 @@ export class FedoraObject {
         this.addModelRelationship("AudioData");
     }
 
-    ingest(params: ObjectParameters, xml: string = null): void {
-        const targetPid = xml ? "new" : this.pid;
-        this.log("Ingest for " + targetPid);
-        // TODO
-        console.log("TODO - use these:", params);
-    }
-
     listCollectionIngest(): void {
         this.addModelRelationship("ListCollection");
         this.addSortRelationship("custom");
@@ -183,12 +164,6 @@ export class FedoraObject {
 
     modifyDatastream(id: string, params: DatastreamParameters, data: string): void {
         this.log("Updating datastream " + id + " on " + this.pid + " with " + data.length + " bytes");
-        // TODO
-        console.log("TODO - use these:", params);
-    }
-
-    modifyObject(params: ObjectParameters): void {
-        this.log("Modifying " + this.pid);
         // TODO
         console.log("TODO - use these:", params);
     }
