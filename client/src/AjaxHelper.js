@@ -9,19 +9,19 @@ class AjaxHelperInstance {
     }
 
     get apiUrl() {
-        return this.url;
+        return this.url + "/api";
     }
     get loginUrl() {
-        return this.url + "/login";
+        return this.apiUrl + "/login";
     }
     get logoutUrl() {
-        return this.url + "/logout";
+        return this.apiUrl + "/logout";
     }
 
     // TODO: Future-proof
     get testLoginAsChris() {
         console.warn("DEBUG LOGIN CODE BEING USED");
-        return this.url + "/user/confirm/V1StGXR8_Z5jdHi6B-myT";
+        return this.apiUrl + "/user/confirm/V1StGXR8_Z5jdHi6B-myT";
     }
 
     isLoggedIn() {
@@ -92,7 +92,7 @@ class AjaxHelperInstance {
         return $.ajax(this.addCredentials(params)).catch(this.handle4xx);
     }
 
-    getJSON(url = this.url, data, success) {
+    getJSON(url = this.apiUrl, data, success) {
         this.ajax({
             dataType: "json",
             url: url,
@@ -102,7 +102,7 @@ class AjaxHelperInstance {
     }
 
     getJobUrl(category, job, extra = "") {
-        return this.url + "/" + encodeURIComponent(category) + "/" + encodeURIComponent(job) + extra;
+        return this.apiUrl + "/" + encodeURIComponent(category) + "/" + encodeURIComponent(job) + extra;
     }
 
     getImageUrl(category, job, filename, size) {

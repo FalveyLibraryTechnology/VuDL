@@ -11,7 +11,7 @@ import AjaxHelper from "./AjaxHelper";
 import VuDLPrep from "./VuDLPrep";
 
 let ajax = AjaxHelper.getInstance();
-ajax.url = "http://localhost:9000/api"; // TODO: Config
+ajax.url = "http://localhost:9000"; // TODO: Config
 
 ReactDOM.render(
     <React.StrictMode>

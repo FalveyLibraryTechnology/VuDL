@@ -6,6 +6,8 @@ import AjaxHelper from "./AjaxHelper";
 import JobSelector from "./JobSelector";
 import JobPaginator from "./JobPaginator";
 import LogoutButton from "./LogoutButton";
+import MainMenu from "./MainMenu";
+import SolrIndexer from "./SolrIndexer";
 
 class VuDLPrep extends React.Component {
     constructor(props) {
@@ -22,6 +24,9 @@ class VuDLPrep extends React.Component {
                 <BrowserRouter>
                     <Switch>
                         <Route exact path="/">
+                            <MainMenu />
+                        </Route>
+                        <Route exact path="/paginate">
                             <JobSelector
                                 app={this}
                                 ref={(s) => {
@@ -31,6 +36,9 @@ class VuDLPrep extends React.Component {
                         </Route>
                         <Route path="/paginate/:category/:job">
                             <JobPaginatorHook />
+                        </Route>
+                        <Route exact path="/solr">
+                            <SolrIndexer />
                         </Route>
                     </Switch>
                 </BrowserRouter>
