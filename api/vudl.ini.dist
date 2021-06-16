@@ -9,6 +9,9 @@ fedora_username = "fedoraAdmin"
 fedora_password = "fedoraAdmin"
 fedora_pid_namespace = "vudl"
 
+# The first number for the PID generator to use:
+fedora_initial_pid = "1"
+
 solr_query_url = "http://myserver:8983/solr/core/query"
 
 # Settings for Tesseract OCR

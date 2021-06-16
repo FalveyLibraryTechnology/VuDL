@@ -60,13 +60,13 @@ class IngestProcessor {
         audioData.addMasterMetadataDatastream();
     }
 
-    async addPages(pageList): Promise<void> {
+    async addPages(pageList: FedoraObject): Promise<void> {
         const order = this.job.metadata.order.pages;
         for (const i in order) {
             const page = order[i];
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + page.filename);
-            const imageData = this.buildPage(pageList, page, number);
+            const imageData = await this.buildPage(pageList, page, number);
             await this.addDatastreamsToPage(page, imageData);
         }
     }
@@ -86,24 +86,24 @@ class IngestProcessor {
             const document = order[i];
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + document.filename);
-            const data = this.buildDocument(documentList, document, number);
+            const data = await this.buildDocument(documentList, document, number);
             this.addDatastreamsToDocument(document, data);
         }
     }
 
-    addAudio(audioList) {
+    async addAudio(audioList: FedoraObject): Promise<void> {
         const order = this.job.metadata.audio.list;
         for (const i in order) {
             const audio = order[i];
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + audio.filename);
-            const audioData = this.buildAudio(audioList, audio, number);
+            const audioData = await this.buildAudio(audioList, audio, number);
             this.addDatastreamsToAudio(audio, audioData);
         }
     }
 
-    buildPage(pageList: FedoraObject, page: Page, number: number): FedoraObject {
-        const imageData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+    async buildPage(pageList: FedoraObject, page: Page, number: number): Promise<FedoraObject> {
+        const imageData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         imageData.parentPid = pageList.pid;
         imageData.modelType = "ImageData";
         imageData.title = page.label;
@@ -118,8 +118,8 @@ class IngestProcessor {
         return imageData;
     }
 
-    buildPageList(resource) {
-        const pageList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+    async buildPageList(resource: FedoraObject): Promise<FedoraObject> {
+        const pageList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         pageList.parentPid = resource.pid;
         pageList.modelType = "ListCollection";
         pageList.title = "Page List";
@@ -132,8 +132,8 @@ class IngestProcessor {
         return pageList;
     }
 
-    buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): FedoraObject {
-        const documentData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+    async buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): Promise<FedoraObject> {
+        const documentData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         documentData.parentPid = documentList.pid;
         documentData.modelType = "PDFData";
         documentData.title = document.label;
@@ -148,8 +148,8 @@ class IngestProcessor {
         return documentData;
     }
 
-    buildDocumentList(resource: FedoraObject): FedoraObject {
-        const documentList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+    async buildDocumentList(resource: FedoraObject): Promise<FedoraObject> {
+        const documentList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         documentList.parentPid = resource.pid;
         documentList.modelType = "ListCollection";
         documentList.title = "Document List";
@@ -162,8 +162,8 @@ class IngestProcessor {
         return documentList;
     }
 
-    buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): FedoraObject {
-        const audioData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+    async buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): Promise<FedoraObject> {
+        const audioData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         audioData.parentPid = audioList.pid;
         audioData.modelType = "AudioData";
         audioData.title = audio.filename;
@@ -178,8 +178,8 @@ class IngestProcessor {
         return audioData;
     }
 
-    buildAudioList(resource: FedoraObject): FedoraObject {
-        const audioList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+    async buildAudioList(resource: FedoraObject): Promise<FedoraObject> {
+        const audioList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         audioList.parentPid = resource.pid;
         audioList.modelType = "ListCollection";
         audioList.title = "Audio List";
@@ -192,8 +192,8 @@ class IngestProcessor {
         return audioList;
     }
 
-    async buildResource(holdingArea): Promise<FedoraObject> {
-        const resource = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+    async buildResource(holdingArea: FedoraObject): Promise<FedoraObject> {
+        const resource = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         resource.parentPid = holdingArea.pid;
         resource.modelType = "ResourceCollection";
         resource.title = "Incomplete... / Processing...";
@@ -212,7 +212,7 @@ class IngestProcessor {
         return resource;
     }
 
-    async finalizeTitle(resource) {
+    async finalizeTitle(resource: FedoraObject) {
         const title = this.job.dir.substr(1).split("/").reverse().join("_");
         this.logger.info("Updating title to " + title);
         resource.modifyObject({
@@ -274,15 +274,15 @@ class IngestProcessor {
         // (this was already a TODO in the Ruby code; low priority)
 
         if (this.job.metadata.order.pages.length > 0) {
-            await this.addPages(this.buildPageList(resource));
+            await this.addPages(await this.buildPageList(resource));
         }
 
         if (this.job.metadata.documents.list.length > 0 || this.category.supportsPdfGeneration) {
-            await this.addDocuments(this.buildDocumentList(resource));
+            await this.addDocuments(await this.buildDocumentList(resource));
         }
 
         if (this.job.metadata.audio.list.length > 0) {
-            this.addAudio(this.buildAudioList(resource));
+            await this.addAudio(await this.buildAudioList(resource));
         }
 
         await this.finalizeTitle(resource);
