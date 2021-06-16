@@ -1,6 +1,8 @@
 import fs = require("fs");
 import winston = require("winston");
+import Config from "./Config";
 import Fedora from "../services/Fedora";
+import { getNextPid } from "../services/Database";
 
 export interface DatastreamParameters {
     checksumType?: string;
@@ -38,14 +40,12 @@ export class FedoraObject {
         this.logger = logger;
     }
 
-    static getNextPid(): string {
-        // TODO
-        return "FAKE";
+    static async getNextPid(): Promise<string> {
+        return getNextPid(Config.getInstance().pidNamespace);
     }
 
     get namespace(): string {
-        // TODO: make configurable, or eliminate if unneeded
-        return "vudl";
+        return Config.getInstance().pidNamespace;
     }
 
     addDatastream(id: string, params: DatastreamParameters, data: string): void {

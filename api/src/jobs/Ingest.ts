@@ -60,7 +60,7 @@ class IngestProcessor {
         audioData.addMasterMetadataDatastream();
     }
 
-    async addPages(pageList): Promise<void> {
+    async addPages(pageList: FedoraObject): Promise<void> {
         const order = this.job.metadata.order.pages;
         for (const i in order) {
             const page = order[i];
@@ -91,7 +91,7 @@ class IngestProcessor {
         }
     }
 
-    async addAudio(audioList): Promise<void> {
+    async addAudio(audioList: FedoraObject): Promise<void> {
         const order = this.job.metadata.audio.list;
         for (const i in order) {
             const audio = order[i];
@@ -103,7 +103,7 @@ class IngestProcessor {
     }
 
     async buildPage(pageList: FedoraObject, page: Page, number: number): Promise<FedoraObject> {
-        const imageData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+        const imageData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         imageData.parentPid = pageList.pid;
         imageData.modelType = "ImageData";
         imageData.title = page.label;
@@ -118,8 +118,8 @@ class IngestProcessor {
         return imageData;
     }
 
-    async buildPageList(resource): Promise<FedoraObject> {
-        const pageList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+    async buildPageList(resource: FedoraObject): Promise<FedoraObject> {
+        const pageList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         pageList.parentPid = resource.pid;
         pageList.modelType = "ListCollection";
         pageList.title = "Page List";
@@ -133,7 +133,7 @@ class IngestProcessor {
     }
 
     async buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): Promise<FedoraObject> {
-        const documentData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+        const documentData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         documentData.parentPid = documentList.pid;
         documentData.modelType = "PDFData";
         documentData.title = document.label;
@@ -149,7 +149,7 @@ class IngestProcessor {
     }
 
     async buildDocumentList(resource: FedoraObject): Promise<FedoraObject> {
-        const documentList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+        const documentList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         documentList.parentPid = resource.pid;
         documentList.modelType = "ListCollection";
         documentList.title = "Document List";
@@ -163,7 +163,7 @@ class IngestProcessor {
     }
 
     async buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): Promise<FedoraObject> {
-        const audioData = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+        const audioData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         audioData.parentPid = audioList.pid;
         audioData.modelType = "AudioData";
         audioData.title = audio.filename;
@@ -179,7 +179,7 @@ class IngestProcessor {
     }
 
     async buildAudioList(resource: FedoraObject): Promise<FedoraObject> {
-        const audioList = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+        const audioList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         audioList.parentPid = resource.pid;
         audioList.modelType = "ListCollection";
         audioList.title = "Audio List";
@@ -192,8 +192,8 @@ class IngestProcessor {
         return audioList;
     }
 
-    async buildResource(holdingArea): Promise<FedoraObject> {
-        const resource = new FedoraObject(FedoraObject.getNextPid(), this.logger);
+    async buildResource(holdingArea: FedoraObject): Promise<FedoraObject> {
+        const resource = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         resource.parentPid = holdingArea.pid;
         resource.modelType = "ResourceCollection";
         resource.title = "Incomplete... / Processing...";
@@ -212,7 +212,7 @@ class IngestProcessor {
         return resource;
     }
 
-    async finalizeTitle(resource) {
+    async finalizeTitle(resource: FedoraObject) {
         const title = this.job.dir.substr(1).split("/").reverse().join("_");
         this.logger.info("Updating title to " + title);
         resource.modifyObject({

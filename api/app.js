@@ -29,8 +29,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(function (req, res, next) {
     if (Config.getInstance().allowedOrigins.indexOf(req.headers.origin) > -1) {
         res.set("Access-Control-Allow-Credentials", "true");
-        res.set("Access-Control-Allow-Headers", "Authorization");
+        res.set("Access-Control-Allow-Headers", "Authorization,Content-Type");
         res.set("Access-Control-Allow-Origin", req.headers.origin);
+        res.set("Access-Control-Allow-Methods", "GET,HEAD,POST,PUT");
     } else {
         // allow other origins to make unauthenticated CORS requests
         res.set("Access-Control-Allow-Origin", "*");
