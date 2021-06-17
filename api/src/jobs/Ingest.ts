@@ -106,7 +106,7 @@ class IngestProcessor {
         const imageData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         imageData.parentPid = pageList.pid;
         imageData.modelType = "ImageData";
-        imageData.title = page.label;
+        imageData.title = String(page.label);
         this.logger.info("Creating Image Object " + imageData.pid);
 
         await imageData.coreIngest("Inactive");
@@ -136,7 +136,7 @@ class IngestProcessor {
         const documentData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         documentData.parentPid = documentList.pid;
         documentData.modelType = "PDFData";
-        documentData.title = document.label;
+        documentData.title = String(document.label);
         this.logger.info("Creating Document Object " + documentData.pid);
 
         await documentData.coreIngest("Inactive");
@@ -166,7 +166,7 @@ class IngestProcessor {
         const audioData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         audioData.parentPid = audioList.pid;
         audioData.modelType = "AudioData";
-        audioData.title = audio.filename;
+        audioData.title = String(audio.filename);
         this.logger.info("Creating Audio Object " + audioData.pid);
 
         await audioData.coreIngest("Inactive");
