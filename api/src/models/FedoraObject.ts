@@ -1,18 +1,8 @@
 import fs = require("fs");
 import winston = require("winston");
 import Config from "./Config";
-import Fedora from "../services/Fedora";
+import { DatastreamParameters, Fedora } from "../services/Fedora";
 import { getNextPid } from "../services/Database";
-
-export interface DatastreamParameters {
-    checksumType?: string;
-    controlGroup?: string;
-    dsLabel?: string;
-    dsState?: string;
-    mimeType?: string;
-    logMessage?: string;
-    versionable?: boolean;
-}
 
 export interface ObjectParameters {
     label?: string;
@@ -48,17 +38,16 @@ export class FedoraObject {
         return Config.getInstance().pidNamespace;
     }
 
-    addDatastream(id: string, params: DatastreamParameters, data: string): void {
-        this.log("Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes");
-        // TODO: Add the datastream!
-        console.log("TODO - use these:", params);
+    async addDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
+        this.log(params.logMessage ?? "Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes");
+        await this.fedora.addDatastream(this.pid, id, params, data);
     }
 
-    addDatastreamFromFile(filename: string, stream: string, mimeType: string): void {
-        return this.addDatastreamFromString(fs.readFileSync(filename).toString(), stream, mimeType);
+    async addDatastreamFromFile(filename: string, stream: string, mimeType: string): Promise<void> {
+        await this.addDatastreamFromString(fs.readFileSync(filename).toString(), stream, mimeType);
     }
 
-    addDatastreamFromString(contents: string, stream: string, mimeType: string, checksumType = "MD5"): void {
+    async addDatastreamFromString(contents: string, stream: string, mimeType: string, checksumType = "MD5"): Promise<void> {
         if (mimeType === "text/plain" && contents.length === 0) {
             contents = "\n"; // workaround for 500 error on empty OCR
         }
@@ -71,10 +60,10 @@ export class FedoraObject {
             mimeType: mimeType,
             logMessage: "Initial Ingest addDatastream - " + stream,
         };
-        this.addDatastream(stream, params, contents);
+        await this.addDatastream(stream, params, contents);
     }
 
-    addMasterMetadataDatastream(): void {
+    async addMasterMetadataDatastream(): Promise<void> {
         const params = {
             controlGroup: "M",
             dsLabel: this.pid.replace(":", "_") + "_MASTER-MD",
@@ -84,7 +73,7 @@ export class FedoraObject {
             mimeType: "text/xml",
             logMessage: "Initial Ingest addDatastream - MASTER-MD",
         };
-        this.addDatastream("MASTER-MD", params, this.fitsMasterMetadata());
+        await this.addDatastream("MASTER-MD", params, this.fitsMasterMetadata());
     }
 
     addRelationship(subject: string, predicate: string, obj: string, isLiteral = false, datatype: string = null): void {

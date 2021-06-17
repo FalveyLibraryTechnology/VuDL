@@ -4,7 +4,8 @@ import path = require("path");
 import AudioFile from "../models/AudioFile";
 import Category from "../models/Category";
 import Config from "../models/Config";
-import { DatastreamParameters, FedoraObject } from "../models/FedoraObject";
+import { DatastreamParameters } from "../services/Fedora"
+import { FedoraObject } from "../models/FedoraObject";
 import DocumentFile from "../models/DocumentFile";
 import ImageFile from "../models/ImageFile";
 import Job from "../models/Job";
@@ -35,29 +36,29 @@ class IngestProcessor {
 
     async addDatastreamsToPage(page: Page, imageData: FedoraObject): Promise<void> {
         const image = new ImageFile(this.job.dir + "/" + page.filename);
-        imageData.addDatastreamFromFile(image.filename, "MASTER", "image/tiff");
-        imageData.addMasterMetadataDatastream();
+        await imageData.addDatastreamFromFile(image.filename, "MASTER", "image/tiff");
+        await imageData.addMasterMetadataDatastream();
         for (const size in image.sizes) {
-            imageData.addDatastreamFromFile(await image.derivative(size), size, "image/jpeg");
+            await imageData.addDatastreamFromFile(await image.derivative(size), size, "image/jpeg");
         }
         if (this.category.supportsOcr) {
-            imageData.addDatastreamFromFile(await image.ocr(), "OCR-DIRTY", "text/plain");
+            await imageData.addDatastreamFromFile(await image.ocr(), "OCR-DIRTY", "text/plain");
         }
     }
 
-    addDatastreamsToDocument(document: DocumentFile, documentData: FedoraObject): void {
-        documentData.addDatastreamFromFile(this.job.dir + "/" + document.filename, "MASTER", "application/pdf");
-        documentData.addMasterMetadataDatastream();
+    async addDatastreamsToDocument(document: DocumentFile, documentData: FedoraObject): Promise<void> {
+        await documentData.addDatastreamFromFile(this.job.dir + "/" + document.filename, "MASTER", "application/pdf");
+        await documentData.addMasterMetadataDatastream();
     }
 
-    addDatastreamsToAudio(audio: AudioFile, audioData: FedoraObject) {
+    async addDatastreamsToAudio(audio: AudioFile, audioData: FedoraObject): Promise<void> {
         this.logger.info("Adding Flac");
-        audioData.addDatastreamFromFile(this.job.dir + "/" + audio.filename, "MASTER", "audio/x-flac");
+        await audioData.addDatastreamFromFile(this.job.dir + "/" + audio.filename, "MASTER", "audio/x-flac");
         this.logger.info("Adding MP3");
-        audioData.addDatastreamFromFile(audio.derivative("MP3"), "MP3", "audio/mpeg");
+        await audioData.addDatastreamFromFile(audio.derivative("MP3"), "MP3", "audio/mpeg");
         this.logger.info("Adding OGG");
-        audioData.addDatastreamFromFile(audio.derivative("OGG"), "OGG", "audio/ogg");
-        audioData.addMasterMetadataDatastream();
+        await audioData.addDatastreamFromFile(audio.derivative("OGG"), "OGG", "audio/ogg");
+        await audioData.addMasterMetadataDatastream();
     }
 
     async addPages(pageList: FedoraObject): Promise<void> {
@@ -87,7 +88,7 @@ class IngestProcessor {
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + document.filename);
             const data = await this.buildDocument(documentList, document, number);
-            this.addDatastreamsToDocument(document, data);
+            await this.addDatastreamsToDocument(document, data);
         }
     }
 
@@ -98,7 +99,7 @@ class IngestProcessor {
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + audio.filename);
             const audioData = await this.buildAudio(audioList, audio, number);
-            this.addDatastreamsToAudio(audio, audioData);
+            await this.addDatastreamsToAudio(audio, audioData);
         }
     }
 
@@ -207,7 +208,7 @@ class IngestProcessor {
         if (this.job.metadata.order.pages.length > 0) {
             const page = this.job.metadata.order.pages[0];
             const image = new ImageFile(this.job.dir + "/" + page.filename);
-            resource.addDatastreamFromFile(await image.derivative("THUMBNAIL"), "THUMBNAIL", "image/jpeg");
+            await resource.addDatastreamFromFile(await image.derivative("THUMBNAIL"), "THUMBNAIL", "image/jpeg");
         }
         return resource;
     }

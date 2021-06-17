@@ -2,6 +2,16 @@ import { IncomingMessage } from "http";
 import Config from "../models/Config";
 import http = require("needle");
 
+export interface DatastreamParameters {
+    checksumType?: string;
+    controlGroup?: string;
+    dsLabel?: string;
+    dsState?: string;
+    mimeType?: string;
+    logMessage?: string;
+    versionable?: boolean;
+}
+
 interface NeedleResponse extends IncomingMessage {
     body: any; // eslint-disable-line @typescript-eslint/no-explicit-any
     raw: Buffer;
@@ -154,6 +164,18 @@ export class Fedora {
         return str.replace('"', '\\"');
     }
 
+    async addDatastream(pid: string, stream: string, params: DatastreamParameters, data: string) {
+        // TODO: use all the parameters
+        const options = {
+            headers: {
+                "Content-Type": params.mimeType,
+            },
+        };
+        const response = await this._request("put", "/" + pid + "/" + stream, data, options);
+        // TODO: validate response
+        console.log(response);
+    }
+
     /**
      * Create a container in the repository
      *
@@ -164,6 +186,7 @@ export class Fedora {
      */
     async createContainer(pid: string, label: string, state: string, owner = "diglibEditor"): Promise<void> {
         // TODO: should we use a library to build the Turtle?
+        // TODO: why is owner not appearing in F6?
         const data =
             "<>\n" +
             '\t<info:fedora/fedora-system:def/model#state>\t"' +
