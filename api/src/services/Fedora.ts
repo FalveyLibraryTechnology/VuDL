@@ -164,7 +164,15 @@ export class Fedora {
         return str.replace('"', '\\"');
     }
 
-    async addDatastream(pid: string, stream: string, params: DatastreamParameters, data: string) {
+    /**
+     * Add a datastream to Fedora.
+     *
+     * @param pid    Object containing datastream
+     * @param stream Name of stream
+     * @param params Additional parameters
+     * @param data   Content to write to stream
+     */
+    async addDatastream(pid: string, stream: string, params: DatastreamParameters, data: string): Promise<void> {
         // TODO: use all the parameters
         const options = {
             headers: {
