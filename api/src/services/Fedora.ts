@@ -177,7 +177,7 @@ export class Fedora {
             headers: {
                 "Content-Type": "text/turtle",
             },
-        }
+        };
         const response = await this._request("put", "/" + pid, data, options);
         // TODO: validate response
         console.log(response);
