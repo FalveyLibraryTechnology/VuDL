@@ -80,7 +80,7 @@ class PaginatorControls extends React.Component {
                     <div className="status"></div>
                     <input
                         type="text"
-                        value={this.props.paginator.getLabel(this.props.paginator.state.currentPage, false)}
+                        value={this.props.paginator.getLabel(this.props.paginator.state.currentPage, false) ?? ""}
                         ref={(l) => {
                             this.labelInput = l;
                         }}
