@@ -168,6 +168,12 @@ export class FedoraObject {
         console.log("TODO - use these:", params);
     }
 
+    modifyObject(params: ObjectParameters): void {
+        this.log("Modifying " + this.pid);
+        // TODO
+        console.log("TODO - use these:", params);
+    }
+
     resourceCollectionIngest(): void {
         this.log("Resource collection ingest for " + this.pid);
         this.addModelRelationship("ResourceCollection");
