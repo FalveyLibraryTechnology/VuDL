@@ -164,9 +164,6 @@ export class Fedora {
      */
     async createContainer(pid: string, label: string, state: string, owner = "diglibEditor"): Promise<void> {
         // TODO: should we use a library to build the Turtle?
-        // TODO: label is sometimes a number rather than a string; why?
-        // TODO: Slug is not being used as expected
-        // TODO: New objects are not appearing as children of the main node; why?
         const data =
             "<>\n" +
             '\t<info:fedora/fedora-system:def/model#state>\t"' +
@@ -176,13 +173,7 @@ export class Fedora {
             this.turtleEscape(label) +
             '" ;\n';
         +'\t<info:fedora/fedora-system:def/model#ownerId>\t"' + this.turtleEscape(owner) + '" .\n';
-        const options = {
-            headers: {
-                "Content-Type": "text/turtle",
-                Slug: pid,
-            },
-        };
-        const response = await this._request("post", "/", data, options);
+        const response = await this._request("put", "/" + pid, data);
         // TODO: validate response
         console.log(response);
     }
