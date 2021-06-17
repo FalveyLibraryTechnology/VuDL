@@ -39,7 +39,9 @@ export class FedoraObject {
     }
 
     async addDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
-        this.log(params.logMessage ?? "Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes");
+        this.log(
+            params.logMessage ?? "Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes"
+        );
         await this.fedora.addDatastream(this.pid, id, params, data);
     }
 
@@ -47,7 +49,12 @@ export class FedoraObject {
         await this.addDatastreamFromString(fs.readFileSync(filename).toString(), stream, mimeType);
     }
 
-    async addDatastreamFromString(contents: string, stream: string, mimeType: string, checksumType = "MD5"): Promise<void> {
+    async addDatastreamFromString(
+        contents: string,
+        stream: string,
+        mimeType: string,
+        checksumType = "MD5"
+    ): Promise<void> {
         if (mimeType === "text/plain" && contents.length === 0) {
             contents = "\n"; // workaround for 500 error on empty OCR
         }

@@ -4,7 +4,7 @@ import path = require("path");
 import AudioFile from "../models/AudioFile";
 import Category from "../models/Category";
 import Config from "../models/Config";
-import { DatastreamParameters } from "../services/Fedora"
+import { DatastreamParameters } from "../services/Fedora";
 import { FedoraObject } from "../models/FedoraObject";
 import DocumentFile from "../models/DocumentFile";
 import ImageFile from "../models/ImageFile";
