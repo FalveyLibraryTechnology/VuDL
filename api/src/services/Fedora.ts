@@ -173,7 +173,12 @@ export class Fedora {
             this.turtleEscape(label) +
             '" ;\n';
         +'\t<info:fedora/fedora-system:def/model#ownerId>\t"' + this.turtleEscape(owner) + '" .\n';
-        const response = await this._request("put", "/" + pid, data);
+        const options = {
+            headers: {
+                "Content-Type": "text/turtle",
+            },
+        }
+        const response = await this._request("put", "/" + pid, data, options);
         // TODO: validate response
         console.log(response);
     }
