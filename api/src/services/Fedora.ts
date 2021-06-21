@@ -2,6 +2,7 @@ import { IncomingMessage } from "http";
 import Config from "../models/Config";
 import http = require("needle");
 import N3 = require("n3");
+import crypto = require("crypto");
 const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
 
@@ -52,7 +53,7 @@ export class Fedora {
     protected _request(
         method = "get",
         _path = "/",
-        data: string = null,
+        data: string|Buffer = null,
         _options: Record<string, unknown> = {}
     ): Promise<NeedleResponse> {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
@@ -166,16 +167,19 @@ export class Fedora {
      * @param params Additional parameters
      * @param data   Content to write to stream
      */
-    async addDatastream(pid: string, stream: string, params: DatastreamParameters, data: string): Promise<void> {
+    async addDatastream(pid: string, stream: string, params: DatastreamParameters, data: string|Buffer): Promise<void> {
         // TODO: use all the parameters
+        const md5 = crypto.createHash("md5").update(data).digest("hex");
+        const sha = crypto.createHash("sha512").update(data).digest("hex");
         const options = {
             headers: {
                 "Content-Type": params.mimeType,
+                "Digest": "md5=" + md5 + ", sha-512=" + sha,
             },
         };
         const response = await this._request("put", "/" + pid + "/" + stream, data, options);
         if (response.statusCode !== 201) {
-            throw "Expected 201 Created response, received: " + response.statusCode;
+            throw new Error("Expected 201 Created response, received: " + response.statusCode);
         }
     }
 
@@ -200,7 +204,7 @@ export class Fedora {
             data = result;
         });
         if (data.length === 0) {
-            throw "RDF graph generation failed!";
+            throw new Error("RDF graph generation failed!");
         }
         const options = {
             headers: {
@@ -209,7 +213,7 @@ export class Fedora {
         };
         const response = await this._request("put", "/" + pid, data, options);
         if (response.statusCode !== 201) {
-            throw "Expected 201 Created response, received: " + response.statusCode;
+            throw new Error("Expected 201 Created response, received: " + response.statusCode);
         }
     }
 }
