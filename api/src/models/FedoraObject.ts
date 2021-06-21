@@ -49,11 +49,7 @@ export class FedoraObject {
         await this.addDatastreamFromStringOrBuffer(fs.readFileSync(filename), stream, mimeType);
     }
 
-    async addDatastreamFromStringOrBuffer(
-        contents: string | Buffer,
-        stream: string,
-        mimeType: string
-    ): Promise<void> {
+    async addDatastreamFromStringOrBuffer(contents: string | Buffer, stream: string, mimeType: string): Promise<void> {
         if (mimeType === "text/plain" && contents.length === 0) {
             contents = "\n"; // workaround for 500 error on empty OCR
         }
