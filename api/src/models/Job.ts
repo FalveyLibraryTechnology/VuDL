@@ -78,7 +78,7 @@ class Job {
         const jpegs = await this.getLargeJpegs();
         await this.imagesToPdf(jpegs, filename);
         if (!fileExists(filename)) {
-            throw "Problem generating PDF: " + filename;
+            throw new Error("Problem generating PDF: " + filename);
         }
 
         const ocrmypdf = Config.getInstance().ocrmypdfPath;
@@ -89,7 +89,7 @@ class Job {
 
         const stats = statSync(filename);
         if (stats.size < 1) {
-            throw "Empty PDF generated: " + filename;
+            throw new Error("Empty PDF generated: " + filename);
         }
         return filename;
     }

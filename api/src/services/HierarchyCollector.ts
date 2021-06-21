@@ -17,7 +17,7 @@ class HierarchyCollector {
 
     protected extractMetadata(dc: DC): Record<string, Array<string>> {
         if (typeof dc.children === "undefined") {
-            throw "Unexpected failure: childless Dublin Core!";
+            throw new Error("Unexpected failure: childless Dublin Core!");
         }
         const metadata: Record<string, Array<string>> = {};
         dc.children.forEach((field) => {

@@ -118,7 +118,7 @@ export async function getNextPid(namespace: string): Promise<string> {
         // Get the latest PID, and fail if we can't find it:
         const current = await trx<Pid>("pids").where("namespace", namespace);
         if (current.length < 1) {
-            throw "Cannot find PID for namespace: " + namespace;
+            throw new Error("Cannot find PID for namespace: " + namespace);
         }
         // Increment the PID and update the database:
         const numericPortion = current[0].pid + 1;
@@ -129,7 +129,7 @@ export async function getNextPid(namespace: string): Promise<string> {
         pid = namespace + ":" + numericPortion;
     });
     if (pid.length === 0) {
-        throw "Unexpected pid generation error.";
+        throw new Error("Unexpected pid generation error.");
     }
     return pid;
 }

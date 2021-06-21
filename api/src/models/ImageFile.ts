@@ -87,7 +87,7 @@ class ImageFile {
             const ts_cmd = config.tesseractPath + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             execSync(ts_cmd);
             if (!fs.existsSync(txt)) {
-                throw "Problem running tesseract";
+                throw new Error("Problem running tesseract");
             }
             this.filterIllegalCharacters(txt);
         }
@@ -106,7 +106,7 @@ class ImageFile {
             const tc_cmd = config.textcleanerPath + " " + config.textcleanerSwitches + " " + deriv + " " + png;
             execSync(tc_cmd);
             if (!fs.existsSync(png)) {
-                throw "Problem running textcleaner";
+                throw new Error("Problem running textcleaner");
             }
         }
         return png;
