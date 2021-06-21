@@ -227,18 +227,49 @@ export class Fedora {
     }
 
     /**
+     * Change the label of a container
+     *
+     * @param pid   PID of object to modify
+     * @param title New label to apply
+     */
+    async modifyObjectLabel(pid: string, title: string): Promise<void> {
+        const writer = new N3.Writer({ format: "text/turtle" });
+        this.addLabelToContainerGraph(writer, title);
+        const insertClause = this.getTurtleFromWriter(writer);
+        const deleteClause =
+            "<> <http://purl.org/dc/terms/title> ?any ; <info:fedora/fedora-system:def/model#label> ?any .";
+        const whereClause = "?id <http://purl.org/dc/terms/title> ?any";
+        const response = await this.patchRdf("/" + pid, insertClause, deleteClause, whereClause);
+        if (response.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + response.statusCode);
+        }
+    }
+
+    /**
      * Patch the RDF of a resource in Fedora.
      *
-     * @param targetPath Fedora path to patch
-     * @param insert RDF to insert
+     * @param targetPath   Fedora path to patch
+     * @param insertClause RDF to insert
+     * @param deleteClause RDF delete conditions (optional)
+     * @param whereClause  RDF where clause (optional)
      */
-    async patchRdf(targetPath: string, insert: string): Promise<NeedleResponse> {
+    async patchRdf(
+        targetPath: string,
+        insertClause: string,
+        deleteClause = "",
+        whereClause = ""
+    ): Promise<NeedleResponse> {
         const options = {
             headers: {
                 "Content-Type": "application/sparql-update",
             },
         };
-        const update = "INSERT { " + insert + " } WHERE { }";
+        const update =
+            (deleteClause.length === 0 ? "" : "DELETE { " + deleteClause + " }") +
+            (insertClause.length === 0 ? "" : " INSERT { " + insertClause + " }") +
+            " WHERE { " +
+            whereClause +
+            " }";
         return this._request("patch", targetPath, update, options);
     }
 
@@ -262,6 +293,17 @@ export class Fedora {
     }
 
     /**
+     * Add appropriate label/title properties to an RDF graph representing a container.
+     *
+     * @param writer N3 RDF writer
+     * @param label  Title to add to graph
+     */
+    addLabelToContainerGraph(writer: N3.Writer, label: string): void {
+        writer.addQuad(namedNode(""), namedNode("http://purl.org/dc/terms/title"), literal(label));
+        writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#label"), literal(label));
+    }
+
+    /**
      * Create a container in the repository
      *
      * @param pid Record id
@@ -271,9 +313,8 @@ export class Fedora {
      */
     async createContainer(pid: string, label: string, state: string, owner = "diglibEditor"): Promise<void> {
         const writer = new N3.Writer({ format: "text/turtle" });
+        this.addLabelToContainerGraph(writer, label);
         writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#state"), literal(state));
-        writer.addQuad(namedNode(""), namedNode("http://purl.org/dc/terms/title"), literal(label));
-        writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#label"), literal(label));
         writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#ownerId"), literal(owner));
         const options = {
             headers: {

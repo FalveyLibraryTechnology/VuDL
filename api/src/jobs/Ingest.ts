@@ -214,13 +214,10 @@ class IngestProcessor {
         return resource;
     }
 
-    async finalizeTitle(resource: FedoraObject) {
+    async finalizeTitle(resource: FedoraObject): Promise<void> {
         const title = this.job.dir.substr(1).split("/").reverse().join("_");
         this.logger.info("Updating title to " + title);
-        resource.modifyObject({
-            label: title,
-            logMessage: "Set Label to ingest/process path",
-        });
+        await resource.modifyObjectLabel(title);
 
         const dc = await resource.getDatastream("DC");
         const escapedTitle = xmlescape(title);
@@ -228,19 +225,19 @@ class IngestProcessor {
         if (newDublinCore.indexOf(escapedTitle) < 0) {
             throw new Error("Problem updating Dublin Core title!");
         }
-        this.replaceDCMetadata(resource, newDublinCore, "Set dc:title to ingest/process path");
+        await this.replaceDCMetadata(resource, newDublinCore, "Set dc:title to ingest/process path");
     }
 
-    replaceDCMetadata(resource: FedoraObject, dc: string, message: string) {
+    async replaceDCMetadata(resource: FedoraObject, dc: string, message: string): Promise<void> {
         this.logger.info(message);
         const params: DatastreamParameters = {
             mimeType: "text/xml",
             logMessage: message,
         };
-        resource.modifyDatastream("DC", params, dc);
+        await resource.modifyDatastream("DC", params, dc);
     }
 
-    moveDirectory() {
+    moveDirectory(): void {
         const basePath = Config.getInstance().processedAreaPath;
         const currentTime = new Date();
         const now = currentTime.toISOString().substr(0, 10);

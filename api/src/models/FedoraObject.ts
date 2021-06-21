@@ -143,18 +143,16 @@ export class FedoraObject {
         this.addSortRelationship("custom");
     }
 
-    modifyDatastream(id: string, params: DatastreamParameters, data: string): void {
+    async modifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
         if (typeof params.dsLabel !== "undefined" || typeof params.dsState !== "undefined") {
             throw new Error("Unsupported parameter(s) passed to modifyDatastream()");
         }
         this.log(params.logMessage);
-        this.fedora.putDatastream(this.pid, id, params.mimeType, 204, data);
+        await this.fedora.putDatastream(this.pid, id, params.mimeType, 204, data);
     }
 
-    modifyObject(params: ObjectParameters): void {
-        this.log("Modifying " + this.pid);
-        // TODO
-        console.log("TODO - use these:", params);
+    async modifyObjectLabel(title: string): Promise<void> {
+        await this.fedora.modifyObjectLabel(this.pid, title);
     }
 
     resourceCollectionIngest(): void {
