@@ -1,6 +1,9 @@
 import { IncomingMessage } from "http";
 import Config from "../models/Config";
 import http = require("needle");
+import N3 = require("n3");
+const { DataFactory } = N3;
+const { namedNode, literal } = DataFactory;
 
 export interface DatastreamParameters {
     checksumType?: string;
@@ -156,15 +159,6 @@ export class Fedora {
     }
 
     /**
-     * Escape a string for inclusion in a quoted Turtle value.
-     *
-     * @param str String to escape
-     */
-    turtleEscape(str: string): string {
-        return str.replace('"', '\\"');
-    }
-
-    /**
      * Add a datastream to Fedora.
      *
      * @param pid    Object containing datastream
@@ -193,17 +187,20 @@ export class Fedora {
      * @param owner Object owner
      */
     async createContainer(pid: string, label: string, state: string, owner = "diglibEditor"): Promise<void> {
-        // TODO: should we use a library to build the Turtle?
-        // TODO: why is owner not appearing in F6?
-        const data =
-            "<>\n" +
-            '\t<info:fedora/fedora-system:def/model#state>\t"' +
-            this.turtleEscape(state) +
-            '" ;\n' +
-            '\t<info:fedora/fedora-system:def/model#label>\t"' +
-            this.turtleEscape(label) +
-            '" ;\n';
-        +'\t<info:fedora/fedora-system:def/model#ownerId>\t"' + this.turtleEscape(owner) + '" .\n';
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#state"), literal(state));
+        writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#label"), literal(label));
+        writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#ownerId"), literal(owner));
+        let data = "";
+        writer.end((error, result) => {
+            if (error) {
+                throw error;
+            }
+            data = result;
+        });
+        if (data.length === 0) {
+            throw "RDF graph generation failed!";
+        }
         const options = {
             headers: {
                 "Content-Type": "text/turtle",
