@@ -12,7 +12,15 @@ class AudioOrder {
     }
 
     static fromJob(job: Job): AudioOrder {
-        const list = glob.sync(job.dir + "/*.flac").map(function (flac: string) {
+        let pattern = job.dir + "/*.flac";
+        const options: Record<string, unknown> = { nocase: true };
+        // Special case for Windows -- we need to account for drive letters:
+        const colonIndex = pattern.indexOf(":");
+        if (colonIndex > -1) {
+            options.root = pattern.substring(0, colonIndex + 2);
+            pattern = pattern.substring(colonIndex + 1);
+        }
+        const list = glob.sync(pattern, options).map(function (flac: string) {
             return new AudioFile(path.basename(flac), job.dir);
         });
         return new AudioOrder(list);
