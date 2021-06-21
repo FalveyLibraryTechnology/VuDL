@@ -12,8 +12,15 @@ class DocumentOrder {
     }
 
     static fromJob(job: Job): DocumentOrder {
+        let pattern = job.dir + "/*.PDF";
         const options: Record<string, unknown> = { nocase: true };
-        const list = glob.sync(job.dir + "/*.PDF", options).map(function (pdf: string) {
+        // Special case for Windows -- we need to account for drive letters:
+        const colonIndex = pattern.indexOf(":");
+        if (colonIndex > -1) {
+            options.root = pattern.substring(0, colonIndex + 2);
+            pattern = pattern.substring(colonIndex + 1);
+        }
+        const list = glob.sync(pattern, options).map(function (pdf: string) {
             return new DocumentFile(path.basename(pdf), "PDF");
         });
         return new DocumentOrder(list);
