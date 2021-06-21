@@ -121,7 +121,7 @@ export class FedoraObject {
         this.addModelRelationship("DataModel");
     }
 
-    async datastreamDissemination(datastream: string): Promise<string> {
+    async getDatastream(datastream: string): Promise<string> {
         return this.fedora.getDatastreamAsString(this.pid, datastream);
     }
 

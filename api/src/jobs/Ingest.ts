@@ -221,7 +221,7 @@ class IngestProcessor {
             logMessage: "Set Label to ingest/process path",
         });
 
-        const dc = await resource.datastreamDissemination("DC");
+        const dc = await resource.getDatastream("DC");
         // TODO: validate that dc is actually valid Dublin Core XML!
         this.replaceDCMetadata(
             resource,
