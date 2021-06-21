@@ -12,7 +12,8 @@ class DocumentOrder {
     }
 
     static fromJob(job: Job): DocumentOrder {
-        const list = glob.sync(job.dir + ".PDF").map(function (pdf: string) {
+        const options: Record<string, unknown> = { nocase: true };
+        const list = glob.sync(job.dir + "/*.PDF", options).map(function (pdf: string) {
             return new DocumentFile(path.basename(pdf), "PDF");
         });
         return new DocumentOrder(list);

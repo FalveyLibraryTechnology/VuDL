@@ -12,7 +12,8 @@ class AudioOrder {
     }
 
     static fromJob(job: Job): AudioOrder {
-        const list = glob.sync(job.dir + "/*.flac").map(function (flac: string) {
+        const options: Record<string, unknown> = { nocase: true };
+        const list = glob.sync(job.dir + "/*.flac", options).map(function (flac: string) {
             return new AudioFile(path.basename(flac), job.dir);
         });
         return new AudioOrder(list);
