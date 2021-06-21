@@ -158,6 +158,38 @@ export class Fedora {
     }
 
     /**
+     * Write a datastream to Fedora.
+     *
+     * @param pid            Object containing datastream
+     * @param stream         Name of stream
+     * @param mimeType       MIME type of data
+     * @param expectedStatus Expected HTTP response code (otherwise, we'll fail)
+     * @param data           Content to write to stream
+     */
+    async putDatastream(
+        pid: string,
+        stream: string,
+        mimeType: string,
+        expectedStatus: number,
+        data: string | Buffer
+    ): Promise<void> {
+        const md5 = crypto.createHash("md5").update(data).digest("hex");
+        const sha = crypto.createHash("sha512").update(data).digest("hex");
+        const options = {
+            headers: {
+                "Content-Disposition": 'attachment; filename="' + stream + '"',
+                "Content-Type": mimeType,
+                Digest: "md5=" + md5 + ", sha-512=" + sha,
+            },
+        };
+        const targetPath = "/" + pid + "/" + stream;
+        const response = await this._request("put", targetPath, data, options);
+        if (response.statusCode !== expectedStatus) {
+            throw new Error("Expected " + expectedStatus + " Created response, received: " + response.statusCode);
+        }
+    }
+
+    /**
      * Add a datastream to Fedora.
      *
      * @param pid    Object containing datastream
@@ -171,20 +203,8 @@ export class Fedora {
         params: DatastreamParameters,
         data: string | Buffer
     ): Promise<void> {
-        const md5 = crypto.createHash("md5").update(data).digest("hex");
-        const sha = crypto.createHash("sha512").update(data).digest("hex");
-        const options = {
-            headers: {
-                "Content-Disposition": 'attachment; filename="' + stream + '"',
-                "Content-Type": params.mimeType,
-                Digest: "md5=" + md5 + ", sha-512=" + sha,
-            },
-        };
-        const targetPath = "/" + pid + "/" + stream;
-        const response = await this._request("put", targetPath, data, options);
-        if (response.statusCode !== 201) {
-            throw new Error("Expected 201 Created response, received: " + response.statusCode);
-        }
+        // First create the stream:
+        await this.putDatastream(pid, stream, params.mimeType, 201, data);
 
         // Now set appropriate metadata:
         const writer = new N3.Writer({ format: "text/turtle" });
@@ -199,9 +219,10 @@ export class Fedora {
             literal(params.dsLabel ?? pid.replace(":", "_") + "_" + stream)
         );
         const turtle = this.getTurtleFromWriter(writer);
-        const patchResponse = await this.patchRdf(targetPath + "/fcr:metadata", turtle);
+        const targetPath = "/" + pid + "/" + stream + "/fcr:metadata";
+        const patchResponse = await this.patchRdf(targetPath, turtle);
         if (patchResponse.statusCode !== 204) {
-            throw new Error("Expected 204 No Content response, received: " + response.statusCode);
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
         }
     }
 

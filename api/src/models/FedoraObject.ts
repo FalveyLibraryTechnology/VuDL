@@ -144,9 +144,11 @@ export class FedoraObject {
     }
 
     modifyDatastream(id: string, params: DatastreamParameters, data: string): void {
-        this.log("Updating datastream " + id + " on " + this.pid + " with " + data.length + " bytes");
-        // TODO
-        console.log("TODO - use these:", params);
+        if (typeof params.dsLabel !== "undefined" || typeof params.dsState !== "undefined") {
+            throw new Error("Unsupported parameter(s) passed to modifyDatastream()");
+        }
+        this.log(params.logMessage);
+        this.fedora.putDatastream(this.pid, id, params.mimeType, 204, data);
     }
 
     modifyObject(params: ObjectParameters): void {
