@@ -170,19 +170,69 @@ export class Fedora {
         params: DatastreamParameters,
         data: string | Buffer
     ): Promise<void> {
-        // TODO: use all the parameters
         const md5 = crypto.createHash("md5").update(data).digest("hex");
         const sha = crypto.createHash("sha512").update(data).digest("hex");
         const options = {
             headers: {
+                "Content-Disposition": 'attachment; filename="' + stream + '"',
                 "Content-Type": params.mimeType,
                 Digest: "md5=" + md5 + ", sha-512=" + sha,
             },
         };
-        const response = await this._request("put", "/" + pid + "/" + stream, data, options);
+        const targetPath = "/" + pid + "/" + stream;
+        const response = await this._request("put", targetPath, data, options);
         if (response.statusCode !== 201) {
             throw new Error("Expected 201 Created response, received: " + response.statusCode);
         }
+
+        // Now set appropriate metadata:
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(
+            namedNode(""),
+            namedNode("http://fedora.info/definitions/1/0/access/objState"),
+            literal(params.dsState ?? "A")
+        );
+        writer.addQuad(namedNode(""), namedNode("http://purl.org/dc/terms/title"), literal(params.dsLabel ?? stream));
+        const turtle = this.getTurtleFromWriter(writer);
+        const patchResponse = await this.patchRdf(targetPath + "/fcr:metadata", turtle);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + response.statusCode);
+        }
+    }
+
+    /**
+     * Patch the RDF of a resource in Fedora.
+     *
+     * @param targetPath Fedora path to patch
+     * @param insert RDF to insert
+     */
+    async patchRdf(targetPath: string, insert: string): Promise<NeedleResponse> {
+        const options = {
+            headers: {
+                "Content-Type": "application/sparql-update",
+            },
+        };
+        const update = "INSERT { " + insert + " } WHERE { }";
+        return this._request("patch", targetPath, update, options);
+    }
+
+    /**
+     * Get the Turtle output from an N3.Writer object.
+     *
+     * @param writer N3.Writer that has already been populated with RDF.
+     */
+    getTurtleFromWriter(writer: N3.Writer): string {
+        let data = "";
+        writer.end((error, result) => {
+            if (error) {
+                throw new Error("Problem writing Turtle.");
+            }
+            data = result;
+        });
+        if (data.length === 0) {
+            throw new Error("RDF graph generation failed!");
+        }
+        return data;
     }
 
     /**
@@ -198,22 +248,12 @@ export class Fedora {
         writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#state"), literal(state));
         writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#label"), literal(label));
         writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#ownerId"), literal(owner));
-        let data = "";
-        writer.end((error, result) => {
-            if (error) {
-                throw error;
-            }
-            data = result;
-        });
-        if (data.length === 0) {
-            throw new Error("RDF graph generation failed!");
-        }
         const options = {
             headers: {
                 "Content-Type": "text/turtle",
             },
         };
-        const response = await this._request("put", "/" + pid, data, options);
+        const response = await this._request("put", "/" + pid, this.getTurtleFromWriter(writer), options);
         if (response.statusCode !== 201) {
             throw new Error("Expected 201 Created response, received: " + response.statusCode);
         }
