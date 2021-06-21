@@ -7,7 +7,6 @@ const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
 
 export interface DatastreamParameters {
-    controlGroup?: string;
     dsLabel?: string;
     dsState?: string;
     mimeType?: string;

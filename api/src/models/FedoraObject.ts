@@ -58,7 +58,6 @@ export class FedoraObject {
             contents = "\n"; // workaround for 500 error on empty OCR
         }
         const params: DatastreamParameters = {
-            controlGroup: "M",
             dsLabel: this.pid.replace(":", "_") + "_" + stream,
             versionable: false,
             dsState: "A",
@@ -70,7 +69,6 @@ export class FedoraObject {
 
     async addMasterMetadataDatastream(): Promise<void> {
         const params = {
-            controlGroup: "M",
             dsLabel: this.pid.replace(":", "_") + "_MASTER-MD",
             versionable: false,
             dsState: "A",
