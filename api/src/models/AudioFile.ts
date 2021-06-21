@@ -26,10 +26,10 @@ class AudioFile {
                     const ffmpegCommand = ffmpeg_path + " -i " + this.dir + "/" + this.filename + " " + deriv;
                     execSync(ffmpegCommand);
                     if (!fs.existsSync(deriv)) {
-                        throw "Problem generating " + deriv + " with " + ffmpeg_path;
+                        throw new Error("Problem generating " + deriv + " with " + ffmpeg_path);
                     }
                 } else {
-                    throw "ffmpeg not configured";
+                    throw new Error("ffmpeg not configured");
                 }
             }
         }
