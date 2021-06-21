@@ -38,7 +38,7 @@ export class FedoraObject {
         return Config.getInstance().pidNamespace;
     }
 
-    async addDatastream(id: string, params: DatastreamParameters, data: string|Buffer): Promise<void> {
+    async addDatastream(id: string, params: DatastreamParameters, data: string | Buffer): Promise<void> {
         this.log(
             params.logMessage ?? "Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes"
         );
@@ -50,7 +50,7 @@ export class FedoraObject {
     }
 
     async addDatastreamFromStringOrBuffer(
-        contents: string|Buffer,
+        contents: string | Buffer,
         stream: string,
         mimeType: string,
         checksumType = "MD5"

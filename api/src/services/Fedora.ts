@@ -53,7 +53,7 @@ export class Fedora {
     protected _request(
         method = "get",
         _path = "/",
-        data: string|Buffer = null,
+        data: string | Buffer = null,
         _options: Record<string, unknown> = {}
     ): Promise<NeedleResponse> {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
@@ -167,14 +167,19 @@ export class Fedora {
      * @param params Additional parameters
      * @param data   Content to write to stream
      */
-    async addDatastream(pid: string, stream: string, params: DatastreamParameters, data: string|Buffer): Promise<void> {
+    async addDatastream(
+        pid: string,
+        stream: string,
+        params: DatastreamParameters,
+        data: string | Buffer
+    ): Promise<void> {
         // TODO: use all the parameters
         const md5 = crypto.createHash("md5").update(data).digest("hex");
         const sha = crypto.createHash("sha512").update(data).digest("hex");
         const options = {
             headers: {
                 "Content-Type": params.mimeType,
-                "Digest": "md5=" + md5 + ", sha-512=" + sha,
+                Digest: "md5=" + md5 + ", sha-512=" + sha,
             },
         };
         const response = await this._request("put", "/" + pid + "/" + stream, data, options);
