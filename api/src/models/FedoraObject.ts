@@ -52,8 +52,7 @@ export class FedoraObject {
     async addDatastreamFromStringOrBuffer(
         contents: string | Buffer,
         stream: string,
-        mimeType: string,
-        checksumType = "MD5"
+        mimeType: string
     ): Promise<void> {
         if (mimeType === "text/plain" && contents.length === 0) {
             contents = "\n"; // workaround for 500 error on empty OCR
@@ -63,7 +62,6 @@ export class FedoraObject {
             dsLabel: this.pid.replace(":", "_") + "_" + stream,
             versionable: false,
             dsState: "A",
-            checksumType: checksumType,
             mimeType: mimeType,
             logMessage: "Initial Ingest addDatastream - " + stream,
         };
@@ -76,7 +74,6 @@ export class FedoraObject {
             dsLabel: this.pid.replace(":", "_") + "_MASTER-MD",
             versionable: false,
             dsState: "A",
-            checksumType: "DISABLED",
             mimeType: "text/xml",
             logMessage: "Initial Ingest addDatastream - MASTER-MD",
         };
