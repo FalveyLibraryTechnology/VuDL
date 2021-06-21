@@ -5,6 +5,7 @@ import N3 = require("n3");
 import crypto = require("crypto");
 const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
+import xmlescape = require("xml-escape");
 
 export interface DatastreamParameters {
     dsLabel?: string;
@@ -192,7 +193,11 @@ export class Fedora {
             namedNode("http://fedora.info/definitions/1/0/access/objState"),
             literal(params.dsState ?? "A")
         );
-        writer.addQuad(namedNode(""), namedNode("http://purl.org/dc/terms/title"), literal(params.dsLabel ?? stream));
+        writer.addQuad(
+            namedNode(""),
+            namedNode("http://purl.org/dc/terms/title"),
+            literal(params.dsLabel ?? pid.replace(":", "_") + "_" + stream)
+        );
         const turtle = this.getTurtleFromWriter(writer);
         const patchResponse = await this.patchRdf(targetPath + "/fcr:metadata", turtle);
         if (patchResponse.statusCode !== 204) {
@@ -246,6 +251,7 @@ export class Fedora {
     async createContainer(pid: string, label: string, state: string, owner = "diglibEditor"): Promise<void> {
         const writer = new N3.Writer({ format: "text/turtle" });
         writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#state"), literal(state));
+        writer.addQuad(namedNode(""), namedNode("http://purl.org/dc/terms/title"), literal(label));
         writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#label"), literal(label));
         writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#ownerId"), literal(owner));
         const options = {
@@ -257,6 +263,19 @@ export class Fedora {
         if (response.statusCode !== 201) {
             throw new Error("Expected 201 Created response, received: " + response.statusCode);
         }
+        // Now create DC datastream:
+        const xml =
+            '<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">' +
+            "\n" +
+            "  <dc:title>" +
+            xmlescape(label) +
+            "</dc:title>\n" +
+            "</oai_dc:dc>\n";
+        const params: DatastreamParameters = {
+            mimeType: "text/xml",
+            logMessage: "Create initial Dublin Core record",
+        };
+        await this.addDatastream(pid, "DC", params, xml);
     }
 }
 

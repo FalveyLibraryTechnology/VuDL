@@ -12,6 +12,7 @@ import Job from "../models/Job";
 import Page from "../models/Page";
 import QueueJobInterface from "./QueueJobInterface";
 import winston = require("winston");
+import xmlescape = require("xml-escape");
 
 class IngestProcessor {
     protected job: Job;
@@ -222,12 +223,12 @@ class IngestProcessor {
         });
 
         const dc = await resource.getDatastream("DC");
-        // TODO: validate that dc is actually valid Dublin Core XML!
-        this.replaceDCMetadata(
-            resource,
-            dc.replace(/Incomplete... \/ Processing.../, title),
-            "Set dc:title to ingest/process path"
-        );
+        const escapedTitle = xmlescape(title);
+        const newDublinCore = dc.replace(/Incomplete... \/ Processing.../, escapedTitle);
+        if (newDublinCore.indexOf(escapedTitle) < 0) {
+            throw new Error("Problem updating Dublin Core title!");
+        }
+        this.replaceDCMetadata(resource, newDublinCore, "Set dc:title to ingest/process path");
     }
 
     replaceDCMetadata(resource: FedoraObject, dc: string, message: string) {
