@@ -59,7 +59,6 @@ export class FedoraObject {
         }
         const params: DatastreamParameters = {
             dsLabel: this.pid.replace(":", "_") + "_" + stream,
-            versionable: false,
             dsState: "A",
             mimeType: mimeType,
             logMessage: "Initial Ingest addDatastream - " + stream,
@@ -70,7 +69,6 @@ export class FedoraObject {
     async addMasterMetadataDatastream(): Promise<void> {
         const params = {
             dsLabel: this.pid.replace(":", "_") + "_MASTER-MD",
-            versionable: false,
             dsState: "A",
             mimeType: "text/xml",
             logMessage: "Initial Ingest addDatastream - MASTER-MD",

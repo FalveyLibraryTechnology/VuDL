@@ -11,7 +11,6 @@ export interface DatastreamParameters {
     dsState?: string;
     mimeType?: string;
     logMessage?: string;
-    versionable?: boolean;
 }
 
 interface NeedleResponse extends IncomingMessage {
