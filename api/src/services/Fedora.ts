@@ -174,8 +174,9 @@ export class Fedora {
             },
         };
         const response = await this._request("put", "/" + pid + "/" + stream, data, options);
-        // TODO: validate response
-        console.log(response);
+        if (response.statusCode !== 201) {
+            throw "Expected 201 Created response, received: " + response.statusCode;
+        }
     }
 
     /**
@@ -207,8 +208,9 @@ export class Fedora {
             },
         };
         const response = await this._request("put", "/" + pid, data, options);
-        // TODO: validate response
-        console.log(response);
+        if (response.statusCode !== 201) {
+            throw "Expected 201 Created response, received: " + response.statusCode;
+        }
     }
 }
 
