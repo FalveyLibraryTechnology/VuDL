@@ -6,7 +6,7 @@ import Config from "../models/Config";
 import Job from "../models/Job";
 
 const router = express.Router();
-const { body, validationResult } = require('express-validator');
+const { body, validationResult } = require("express-validator");
 import { setupPassport, requireToken } from "./auth";
 import fs = require("fs");
 setupPassport(router);
@@ -25,9 +25,9 @@ function sanitizeParameters(req, res, next) {
     const validParameter = /^[-a-zA-Z0-9_]+$/;
     for (const x in req.params) {
         if (!req.params[x].match(validParameter)) {
-            return res.status(400).json({ error: "invalid: " + x});
+            return res.status(400).json({ error: "invalid: " + x });
         }
-    } 
+    }
     next();
 }
 
@@ -38,7 +38,7 @@ router.get("/", requireToken, function (req, res) {
 
 router.get("/:category", sanitizeParameters, requireToken, function (req, res) {
     if (!fs.existsSync(holdingArea() + req.params.category)) {
-        return res.status(404).json({ error: "Not Found"});
+        return res.status(404).json({ error: "Not Found" });
     }
     const category = new Category(holdingArea() + req.params.category);
     res.json(category.raw());
