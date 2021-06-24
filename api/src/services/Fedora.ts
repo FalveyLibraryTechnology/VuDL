@@ -6,11 +6,13 @@ import crypto = require("crypto");
 const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
 import xmlescape = require("xml-escape");
+const { DOMParser, XMLSerializer } = require('xmldom');
 
 export interface DatastreamParameters {
     dsLabel?: string;
     dsState?: string;
     mimeType?: string;
+    linkHeader?: string;
     logMessage?: string;
 }
 
@@ -102,11 +104,20 @@ export class Fedora {
         this.cache[pid][key] = data;
     }
 
-    async getDatastreamAsString(pid: string, datastream: string, allowCaching = true): Promise<string> {
+    async getDatastreamAsString(pid: string, datastream: string, allowCaching = true, treatMissingAsEmpty = false): Promise<string> {
         const cacheKey = "stream_" + datastream;
         let data = allowCaching ? this.getCache(pid, cacheKey) : null;
         if (!data) {
-            data = (await this.getDatastream(pid, datastream)).body.toString();
+            const response = await this.getDatastream(pid, datastream);
+            if (response.statusCode !== 200) {
+                if (response.statusCode === 404 && treatMissingAsEmpty) {
+                    data = "";
+                } else {
+                    throw new Error("Unexpected response for " + pid + "/" + datastream + ": " + response.statusCode);
+                }
+            } else {
+                data = response.body.toString();
+            }
             if (allowCaching) {
                 this.setCache(pid, cacheKey, data);
             }
@@ -171,7 +182,8 @@ export class Fedora {
         stream: string,
         mimeType: string,
         expectedStatus: number,
-        data: string | Buffer
+        data: string | Buffer,
+        linkHeader = ""
     ): Promise<void> {
         const md5 = crypto.createHash("md5").update(data).digest("hex");
         const sha = crypto.createHash("sha512").update(data).digest("hex");
@@ -182,6 +194,9 @@ export class Fedora {
                 Digest: "md5=" + md5 + ", sha-512=" + sha,
             },
         };
+        if (linkHeader.length > 0) {
+            options.headers.Link = linkHeader;
+        }
         const targetPath = "/" + pid + "/" + stream;
         const response = await this._request("put", targetPath, data, options);
         if (response.statusCode !== expectedStatus) {
@@ -204,7 +219,7 @@ export class Fedora {
         data: string | Buffer
     ): Promise<void> {
         // First create the stream:
-        await this.putDatastream(pid, stream, params.mimeType, 201, data);
+        await this.putDatastream(pid, stream, params.mimeType, 201, data, params.linkHeader ?? "");
 
         // Now set appropriate metadata:
         const writer = new N3.Writer({ format: "text/turtle" });
@@ -218,7 +233,7 @@ export class Fedora {
             namedNode("http://purl.org/dc/terms/title"),
             literal(params.dsLabel ?? pid.replace(":", "_") + "_" + stream)
         );
-        const turtle = this.getTurtleFromWriter(writer);
+        const turtle = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid + "/" + stream + "/fcr:metadata";
         const patchResponse = await this.patchRdf(targetPath, turtle);
         if (patchResponse.statusCode !== 204) {
@@ -235,13 +250,58 @@ export class Fedora {
     async modifyObjectLabel(pid: string, title: string): Promise<void> {
         const writer = new N3.Writer({ format: "text/turtle" });
         this.addLabelToContainerGraph(writer, title);
-        const insertClause = this.getTurtleFromWriter(writer);
+        const insertClause = this.getOutputFromWriter(writer);
         const deleteClause =
             "<> <http://purl.org/dc/terms/title> ?any ; <info:fedora/fedora-system:def/model#label> ?any .";
         const whereClause = "?id <http://purl.org/dc/terms/title> ?any";
         const response = await this.patchRdf("/" + pid, insertClause, deleteClause, whereClause);
         if (response.statusCode !== 204) {
             throw new Error("Expected 204 No Content response, received: " + response.statusCode);
+        }
+    }
+
+    /**
+     * Add a triple to the RELS-EXT datastream.
+     *
+     * @param pid        PID to update
+     * @param subject    RDF subject
+     * @param predicate  RDF predicate
+     * @param obj        RDF object
+     * @param isLiteral  Is object a literal (true) or a URI (false)?
+     */
+    async addRelsExtRelationship(pid: string, subject: string, predicate: string, obj: string, isLiteral = false) {
+        // Try to fetch the RELS-EXT; if it's empty, we need to create it for the first time!
+        let relsExt = await this.getDatastreamAsString(pid, "RELS-EXT", false, true);
+        const rdfNs = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+        let relsExtAlreadyExists = relsExt.length > 0;
+        if (!relsExtAlreadyExists) {
+            relsExt = '<rdf:RDF xmlns:rdf="' + rdfNs + '">' + '<rdf:Description rdf:about="' + subject + '">' + "</rdf:Description></rdf:RDF>";
+        }
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(relsExt, "text/xml");
+        const description = xmlDoc.getElementsByTagNameNS(rdfNs, "Description");
+        const parts = predicate.split("#");
+        const tagName = parts[1];
+        const nameSpace = parts[0] + "#";
+        const newElement = xmlDoc.createElementNS(nameSpace, tagName);
+        if (isLiteral) {
+            const newText = xmlDoc.createTextNode(obj);
+            newElement.appendChild(newText);
+        } else {
+            newElement.setAttribute("rdf:resource", obj);
+        }
+        description[0].appendChild(newElement);
+        const updatedXml = new XMLSerializer().serializeToString(xmlDoc);
+        const mimeType = "application/rdf+xml";
+        if (!relsExtAlreadyExists) {
+            const dsParams: DatastreamParameters = {
+                dsLabel: "Relationships",
+                mimeType: mimeType,
+                linkHeader: '<http://www.w3.org/ns/ldp#NonRDFSource>; rel="type"',
+            };
+            await this.addDatastream(pid, "RELS-EXT", dsParams, updatedXml);
+        } else {
+            await this.putDatastream(pid, "RELS-EXT", mimeType, 204, updatedXml);
         }
     }
 
@@ -274,15 +334,15 @@ export class Fedora {
     }
 
     /**
-     * Get the Turtle output from an N3.Writer object.
+     * Get the output from an N3.Writer object.
      *
      * @param writer N3.Writer that has already been populated with RDF.
      */
-    getTurtleFromWriter(writer: N3.Writer): string {
+     getOutputFromWriter(writer: N3.Writer): string {
         let data = "";
         writer.end((error, result) => {
             if (error) {
-                throw new Error("Problem writing Turtle.");
+                throw new Error("Problem writing output.");
             }
             data = result;
         });
@@ -321,7 +381,7 @@ export class Fedora {
                 "Content-Type": "text/turtle",
             },
         };
-        const response = await this._request("put", "/" + pid, this.getTurtleFromWriter(writer), options);
+        const response = await this._request("put", "/" + pid, this.getOutputFromWriter(writer), options);
         if (response.statusCode !== 201) {
             throw new Error("Expected 201 Created response, received: " + response.statusCode);
         }

@@ -112,10 +112,10 @@ class IngestProcessor {
         this.logger.info("Creating Image Object " + imageData.pid);
 
         await imageData.coreIngest("Inactive");
-        imageData.dataIngest();
-        imageData.imageDataIngest();
+        await imageData.dataIngest();
+        await imageData.imageDataIngest();
 
-        imageData.addSequenceRelationship(pageList.pid, number);
+        await imageData.addSequenceRelationship(pageList.pid, number);
 
         return imageData;
     }
@@ -128,8 +128,8 @@ class IngestProcessor {
         this.logger.info("Creating Page List Object " + pageList.pid);
 
         await pageList.coreIngest("Inactive");
-        pageList.collectionIngest();
-        pageList.listCollectionIngest();
+        await pageList.collectionIngest();
+        await pageList.listCollectionIngest();
 
         return pageList;
     }
@@ -142,10 +142,10 @@ class IngestProcessor {
         this.logger.info("Creating Document Object " + documentData.pid);
 
         await documentData.coreIngest("Inactive");
-        documentData.dataIngest();
-        documentData.documentDataIngest();
+        await documentData.dataIngest();
+        await documentData.documentDataIngest();
 
-        documentData.addSequenceRelationship(documentList.pid, number);
+        await documentData.addSequenceRelationship(documentList.pid, number);
 
         return documentData;
     }
@@ -158,8 +158,8 @@ class IngestProcessor {
         this.logger.info("Creating Document List Object " + documentList.pid);
 
         await documentList.coreIngest("Inactive");
-        documentList.collectionIngest();
-        documentList.listCollectionIngest();
+        await documentList.collectionIngest();
+        await documentList.listCollectionIngest();
 
         return documentList;
     }
@@ -172,10 +172,10 @@ class IngestProcessor {
         this.logger.info("Creating Audio Object " + audioData.pid);
 
         await audioData.coreIngest("Inactive");
-        audioData.dataIngest();
-        audioData.audioDataIngest();
+        await audioData.dataIngest();
+        await audioData.audioDataIngest();
 
-        audioData.addSequenceRelationship(audioList.pid, number);
+        await audioData.addSequenceRelationship(audioList.pid, number);
 
         return audioData;
     }
@@ -188,8 +188,8 @@ class IngestProcessor {
         this.logger.info("Creating Audio List Object " + audioList.pid);
 
         await audioList.coreIngest("Inactive");
-        audioList.collectionIngest();
-        audioList.listCollectionIngest();
+        await audioList.collectionIngest();
+        await audioList.listCollectionIngest();
 
         return audioList;
     }
@@ -202,8 +202,8 @@ class IngestProcessor {
         this.logger.info("Creating Resource Object " + resource.pid);
 
         await resource.coreIngest("Inactive");
-        resource.collectionIngest();
-        resource.resourceCollectionIngest();
+        await resource.collectionIngest();
+        await resource.resourceCollectionIngest();
 
         // Attach thumbnail to resource:
         if (this.job.metadata.order.pages.length > 0) {

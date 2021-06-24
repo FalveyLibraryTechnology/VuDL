@@ -68,22 +68,21 @@ export class FedoraObject {
         await this.addDatastream("MASTER-MD", params, this.fitsMasterMetadata());
     }
 
-    addRelationship(subject: string, predicate: string, obj: string, isLiteral = false, datatype: string = null): void {
+    async addRelationship(subject: string, predicate: string, obj: string, isLiteral = false): Promise<void> {
         this.log("Adding relationship " + [subject, predicate, obj].join(" ") + " to " + this.pid);
-        // TODO
-        console.log("TODO - use these:", isLiteral, datatype);
+        return this.fedora.addRelsExtRelationship(this.pid, subject, predicate, obj, isLiteral);
     }
 
-    addModelRelationship(model: string): void {
-        this.addRelationship(
+    async addModelRelationship(model: string): Promise<void> {
+        return this.addRelationship(
             "info:fedora/" + this.pid,
             "info:fedora/fedora-system:def/model#hasModel",
             "info:fedora/vudl-system:" + model
         );
     }
 
-    addSequenceRelationship(parentPid: string, position: number): void {
-        this.addRelationship(
+    async addSequenceRelationship(parentPid: string, position: number): Promise<void> {
+        return this.addRelationship(
             "info:fedora/" + this.pid,
             "http://vudl.org/relationships#sequence",
             parentPid + "#" + position,
@@ -91,21 +90,21 @@ export class FedoraObject {
         );
     }
 
-    addSortRelationship(sort: string): void {
-        this.addRelationship("info:fedora/" + this.pid, "http://vudl.org/relationships#sortOn", sort, true);
+    async addSortRelationship(sort: string): Promise<void> {
+        return this.addRelationship("info:fedora/" + this.pid, "http://vudl.org/relationships#sortOn", sort, true);
     }
 
-    collectionIngest(): void {
+    async collectionIngest(): Promise<void> {
         this.log("Collection ingest for " + this.pid);
-        this.addModelRelationship("CollectionModel");
+        return this.addModelRelationship("CollectionModel");
         // TODO: add MEMBER-QUERY and MEMBER-LIST-RAW datastreams if needed (probably not)
     }
 
     async coreIngest(objectState: string): Promise<void> {
         this.log("Core ingest for " + this.pid);
         await this.fedora.createContainer(this.pid, this.title, objectState, "diglibEditor");
-        this.addModelRelationship("CoreModel");
-        this.addRelationship(
+        await this.addModelRelationship("CoreModel");
+        return this.addRelationship(
             "info:fedora/" + this.pid,
             "info:fedora/fedora-system:def/relations-external#isMemberOf",
             "info:fedora/" + this.parentPid
@@ -113,8 +112,8 @@ export class FedoraObject {
         // TODO: add PARENT-QUERY, PARENT-LIST-RAW and PARENT-LIST datastreams if needed (probably not).
     }
 
-    dataIngest(): void {
-        this.addModelRelationship("DataModel");
+    async dataIngest(): Promise<void> {
+        await this.addModelRelationship("DataModel");
     }
 
     async getDatastream(datastream: string): Promise<string> {
@@ -126,21 +125,21 @@ export class FedoraObject {
         return "TODO";
     }
 
-    imageDataIngest(): void {
-        this.addModelRelationship("ImageData");
+    async imageDataIngest(): Promise<void> {
+        return this.addModelRelationship("ImageData");
     }
 
-    documentDataIngest(): void {
-        this.addModelRelationship("PDFData");
+    async documentDataIngest(): Promise<void> {
+        return this.addModelRelationship("PDFData");
     }
 
-    audioDataIngest(): void {
-        this.addModelRelationship("AudioData");
+    async audioDataIngest(): Promise<void> {
+        return this.addModelRelationship("AudioData");
     }
 
-    listCollectionIngest(): void {
-        this.addModelRelationship("ListCollection");
-        this.addSortRelationship("custom");
+    async listCollectionIngest(): Promise<void> {
+        await this.addModelRelationship("ListCollection");
+        return this.addSortRelationship("custom");
     }
 
     async modifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
@@ -155,10 +154,10 @@ export class FedoraObject {
         await this.fedora.modifyObjectLabel(this.pid, title);
     }
 
-    resourceCollectionIngest(): void {
+    async resourceCollectionIngest(): Promise<void> {
         this.log("Resource collection ingest for " + this.pid);
-        this.addModelRelationship("ResourceCollection");
-        this.addSortRelationship("title");
+        await this.addModelRelationship("ResourceCollection");
+        return this.addSortRelationship("title");
         // TODO: original Ruby code had some TODOs about adding more parameters
         // here; perhaps this should be revisited in the future.
     }
