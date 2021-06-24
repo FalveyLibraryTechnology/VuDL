@@ -97,7 +97,6 @@ export class FedoraObject {
     async collectionIngest(): Promise<void> {
         this.log("Collection ingest for " + this.pid);
         return this.addModelRelationship("CollectionModel");
-        // TODO: add MEMBER-QUERY and MEMBER-LIST-RAW datastreams if needed (probably not)
     }
 
     async coreIngest(objectState: string): Promise<void> {
@@ -109,7 +108,6 @@ export class FedoraObject {
             "info:fedora/fedora-system:def/relations-external#isMemberOf",
             "info:fedora/" + this.parentPid
         );
-        // TODO: add PARENT-QUERY, PARENT-LIST-RAW and PARENT-LIST datastreams if needed (probably not).
     }
 
     async dataIngest(): Promise<void> {
@@ -158,8 +156,6 @@ export class FedoraObject {
         this.log("Resource collection ingest for " + this.pid);
         await this.addModelRelationship("ResourceCollection");
         return this.addSortRelationship("title");
-        // TODO: original Ruby code had some TODOs about adding more parameters
-        // here; perhaps this should be revisited in the future.
     }
 
     log(message: string): void {
