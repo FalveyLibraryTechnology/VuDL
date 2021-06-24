@@ -6,7 +6,7 @@ import crypto = require("crypto");
 const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
 import xmlescape = require("xml-escape");
-const { DOMParser, XMLSerializer } = require('xmldom');
+const { DOMParser, XMLSerializer } = require("xmldom");
 
 export interface DatastreamParameters {
     dsLabel?: string;
@@ -104,7 +104,12 @@ export class Fedora {
         this.cache[pid][key] = data;
     }
 
-    async getDatastreamAsString(pid: string, datastream: string, allowCaching = true, treatMissingAsEmpty = false): Promise<string> {
+    async getDatastreamAsString(
+        pid: string,
+        datastream: string,
+        allowCaching = true,
+        treatMissingAsEmpty = false
+    ): Promise<string> {
         const cacheKey = "stream_" + datastream;
         let data = allowCaching ? this.getCache(pid, cacheKey) : null;
         if (!data) {
@@ -275,7 +280,14 @@ export class Fedora {
         const rdfNs = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
         let relsExtAlreadyExists = relsExt.length > 0;
         if (!relsExtAlreadyExists) {
-            relsExt = '<rdf:RDF xmlns:rdf="' + rdfNs + '">' + '<rdf:Description rdf:about="' + subject + '">' + "</rdf:Description></rdf:RDF>";
+            relsExt =
+                '<rdf:RDF xmlns:rdf="' +
+                rdfNs +
+                '">' +
+                '<rdf:Description rdf:about="' +
+                subject +
+                '">' +
+                "</rdf:Description></rdf:RDF>";
         }
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(relsExt, "text/xml");
@@ -338,7 +350,7 @@ export class Fedora {
      *
      * @param writer N3.Writer that has already been populated with RDF.
      */
-     getOutputFromWriter(writer: N3.Writer): string {
+    getOutputFromWriter(writer: N3.Writer): string {
         let data = "";
         writer.end((error, result) => {
             if (error) {
