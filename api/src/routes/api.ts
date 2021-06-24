@@ -6,11 +6,13 @@ import Config from "../models/Config";
 import Job from "../models/Job";
 
 const router = express.Router();
+const { body, validationResult } = require('express-validator');
 import { setupPassport, requireToken } from "./auth";
+import fs = require("fs");
 setupPassport(router);
 
 function getJobFromRequest(req): Job {
-    // TODO: sanitize parameters!
+    //TODO make sure Job exists
     return new Job(holdingArea() + req.params.category + "/" + req.params.job);
 }
 
@@ -19,38 +21,48 @@ function holdingArea(): string {
     return holdingArea.endsWith("/") ? holdingArea : holdingArea + "/";
 }
 
+function sanitizeParameters(req, res, next) {
+    const validParameter = /^[-a-zA-Z0-9_]+$/;
+    for (const x in req.params) {
+        if (!req.params[x].match(validParameter)) {
+            return res.status(400).json({ error: "invalid: " + x});
+        }
+    } 
+    next();
+}
+
 router.get("/", requireToken, function (req, res) {
     const categoryCollection = new CategoryCollection(holdingArea());
     res.json(categoryCollection.raw());
 });
 
-router.get("/:category", requireToken, function (req, res) {
-    // TODO
-    // Sanitize incoming parameters
-    // 404 error for non-existent catgeory (if holding area + category is not a directory)
+router.get("/:category", sanitizeParameters, requireToken, function (req, res) {
+    if (!fs.existsSync(holdingArea() + req.params.category)) {
+        return res.status(404).json({ error: "Not Found"});
+    }
     const category = new Category(holdingArea() + req.params.category);
     res.json(category.raw());
 });
 
-router.get("/:category/:job", requireToken, function (req, res) {
+router.get("/:category/:job", sanitizeParameters, requireToken, function (req, res) {
     res.json(getJobFromRequest(req).metadata.raw);
 });
 
-router.get("/:category/:job/status", requireToken, function (req, res) {
+router.get("/:category/:job/status", sanitizeParameters, requireToken, function (req, res) {
     res.json(getJobFromRequest(req).metadata.status);
 });
 
-router.put("/:category/:job/derivatives", requireToken, function (req, res) {
+router.put("/:category/:job/derivatives", sanitizeParameters, requireToken, function (req, res) {
     getJobFromRequest(req).makeDerivatives();
     res.json({ status: "ok" });
 });
 
-router.put("/:category/:job/ingest", requireToken, function (req, res) {
+router.put("/:category/:job/ingest", sanitizeParameters, requireToken, function (req, res) {
     getJobFromRequest(req).ingest();
     res.json({ status: "ok" });
 });
 
-router.put("/:category/:job", requireToken, function (req, res) {
+router.put("/:category/:job", sanitizeParameters, requireToken, function (req, res) {
     const job = getJobFromRequest(req);
     const raw = req.body;
     try {
@@ -66,9 +78,7 @@ router.put("/:category/:job", requireToken, function (req, res) {
     }
 });
 
-router.get("/:category/:job/:image/:size", requireToken, async function (req, res) {
-    //TODO
-    //Sanitize incoming parameters
+router.get("/:category/:job/:image/:size", sanitizeParameters, requireToken, async function (req, res) {
     const legalSizes: Record<string, string> = {
         thumb: "THUMBNAIL",
         medium: "MEDIUM",
@@ -81,20 +91,16 @@ router.get("/:category/:job/:image/:size", requireToken, async function (req, re
     res.sendFile(deriv);
 });
 
-router.delete("/:category/:job/:image/*"),
-    requireToken,
-    async function (req, res) {
-        //TODO
-        //Sanitize incoming parameters
-        const image: string = req.params.image;
-        const job = getJobFromRequest(req);
-        const imageObj = job.getImage(image);
-        if (imageObj !== null) {
-            imageObj.delete();
-            res.json({ status: "ok" });
-        } else {
-            res.status(404).json({ status: "image missing" });
-        }
-    };
+router.delete("/:category/:job/:image/*", sanitizeParameters, requireToken, async function (req, res) {
+    const image: string = req.params.image;
+    const job = getJobFromRequest(req);
+    const imageObj = job.getImage(image);
+    if (imageObj !== null) {
+        imageObj.delete();
+        res.json({ status: "ok" });
+    } else {
+        res.status(404).json({ status: "image missing" });
+    }
+});
 
 module.exports = router;
