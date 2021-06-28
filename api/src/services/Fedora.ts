@@ -192,13 +192,12 @@ export class Fedora {
     ): Promise<void> {
         const md5 = crypto.createHash("md5").update(data).digest("hex");
         const sha = crypto.createHash("sha512").update(data).digest("hex");
-        const options = {
-            headers: {
-                "Content-Disposition": 'attachment; filename="' + stream + '"',
-                "Content-Type": mimeType,
-                Digest: "md5=" + md5 + ", sha-512=" + sha,
-            },
+        const headers: Record<string, string> = {
+            "Content-Disposition": 'attachment; filename="' + stream + '"',
+            "Content-Type": mimeType,
+            Digest: "md5=" + md5 + ", sha-512=" + sha,
         };
+        const options = { headers: headers };
         if (linkHeader.length > 0) {
             options.headers.Link = linkHeader;
         }
