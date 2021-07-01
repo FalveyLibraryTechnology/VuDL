@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import AjaxHelper from "./AjaxHelper";
-import EditorObject from "./Editor/EditorObject";
+import ObjectEditor from "./Editor/ObjectEditor";
 import JobSelector from "./JobSelector";
 import JobPaginator from "./JobPaginator";
 import LogoutButton from "./LogoutButton";
@@ -53,7 +53,7 @@ class VuDLPrep extends React.Component {
 
 function EditorHook() {
     let { pid } = useParams();
-    return <EditorObject pid={pid ?? "vudl:1"} />;
+    return <ObjectEditor pid={pid ?? "vudl:1"} />;
 }
 
 function JobPaginatorHook() {
