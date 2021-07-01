@@ -12,7 +12,8 @@ setupPassport(router);
 
 function getJobFromRequest(req): Job {
     return fs.existsSync(holdingArea() + req.params.category + "/" + req.params.job)
-        ? new Job(holdingArea() + req.params.category + "/" + req.params.job) : null;
+        ? new Job(holdingArea() + req.params.category + "/" + req.params.job)
+        : null;
 }
 
 function holdingArea(): string {
