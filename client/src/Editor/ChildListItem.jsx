@@ -26,23 +26,23 @@ class ChildListItem extends React.Component {
 
     render() {
         return (
-            <div className="orbeon__child-list-item">
-                <div className="orbeon__list-item-metadata">
-                    <button className="orbean__child-toggle" onClick={this.toggle}>
+            <div className="editor__child-list-item">
+                <div className="editor__list-item-metadata">
+                    <button className="editor__child-toggle" onClick={this.toggle}>
                         {this.state.open ? (
                             <i className="ri-checkbox-indeterminate-line"></i>
                         ) : (
                             <i className="ri-add-box-fill"></i>
                         )}
                     </button>{" "}
-                    <button className="orbean__gear-btn">
+                    <button className="editor__gear-btn">
                         <i className="ri-folder-5-fill"></i>
                         <i className="ri-settings-5-fill"></i>
                     </button>
-                    <Link to={`/editor/object/${this.props.pid}`} className="orbean__child-title">
+                    <Link to={`/editor/object/${this.props.pid}`} className="editor__child-title">
                         {this.props.title}
                     </Link>
-                    <div className="orbeon__list-item-status">TODO: status</div>
+                    <div className="editor__list-item-status">TODO: status</div>
                 </div>
                 {this.state.open && <ChildList parent={this.props.pid} />}
             </div>

@@ -1,36 +1,36 @@
-.orbeon__child-list {
+.editor__child-list {
     margin: 1rem;
 }
-.orbeon__child-list .orbeon__child-list {
+.editor__child-list .editor__child-list {
     margin-right: -1rem;
     padding-right: 0;
 }
 
-.orbeon__child-list-pages {
+.editor__child-list-pages {
     padding: 0.375rem 1rem;
 }
 
-.orbeon__child-list-item {
+.editor__child-list-item {
     padding: 0.5rem 1rem;
     border-bottom: 1px solid #aaa;
     background-color: #eee;
 }
-.orbeon__child-list-item:last-child {
+.editor__child-list-item:last-child {
     border-bottom: 0;
 }
-.orbeon__list-item-metadata {
+.editor__list-item-metadata {
     display: flex;
     align-items: center;
 }
-.orbean__child-toggle,
-.orbeon__list-item-status {
+.editor__child-toggle,
+.editor__list-item-status {
     flex: none;
 }
-.orbean__child-title {
+.editor__child-title {
     flex: 1;
 }
 
-.orbean__child-toggle {
+.editor__child-toggle {
     box-sizing: border-box;
     display: inline-block;
     padding: 0.25rem;
@@ -42,14 +42,14 @@
     border-radius: 0;
     box-shadow: none;
 }
-.orbean__child-toggle:active,
-.orbean__child-toggle:focus,
-.orbean__child-toggle:hover {
+.editor__child-toggle:active,
+.editor__child-toggle:focus,
+.editor__child-toggle:hover {
     color: blue;
     background-color: transparent;
 }
 
-.orbeon__list-item-status {
+.editor__list-item-status {
     padding: 0.375rem 0.75rem;
     font-size: 12px;
     background-color: #ddd;
