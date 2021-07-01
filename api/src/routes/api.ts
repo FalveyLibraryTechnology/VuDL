@@ -11,10 +11,8 @@ import fs = require("fs");
 setupPassport(router);
 
 function getJobFromRequest(req): Job {
-    if (!fs.existsSync(holdingArea() + req.params.category + "/" + req.params.job)) {
-        return null; //res.status(404).json({ error: "Not Found"});
-    }
-    return new Job(holdingArea() + req.params.category + "/" + req.params.job);
+    return fs.existsSync(holdingArea() + req.params.category + "/" + req.params.job)
+        ? new Job(holdingArea() + req.params.category + "/" + req.params.job) : null;
 }
 
 function holdingArea(): string {
