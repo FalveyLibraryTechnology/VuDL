@@ -48,37 +48,37 @@ router.get("/:category", sanitizeParameters(), requireToken, function (req, res)
 });
 
 router.get("/:category/:job", sanitizeParameters(), requireToken, function (req, res) {
-    if (getJobFromRequest(req).metadata.raw == null) {
-        res.status(404).json({ error: "Job not found" });
-    } else {
-        res.json(getJobFromRequest(req).metadata.raw);
+    const job = getJobFromRequest(req);
+    if (job == null) {
+        return res.status(404).json({ error: "Job not found" });
     }
+    res.json(job.metadata.raw);
 });
 
 router.get("/:category/:job/status", sanitizeParameters(), requireToken, function (req, res) {
-    if (getJobFromRequest(req).metadata.status == null) {
-        res.status(404).json({ error: "Job not found" });
-    } else {
-        res.json(getJobFromRequest(req).metadata.status);
+    const job = getJobFromRequest(req);
+    if (job == null) {
+        return res.status(404).json({ error: "Job not found" });
     }
+    res.json(job.metadata.status);
 });
 
 router.put("/:category/:job/derivatives", sanitizeParameters(), requireToken, function (req, res) {
-    if (getJobFromRequest(req).makeDerivatives() == null) {
-        res.status(404).json({ error: "Job not found" });
-    } else {
-        getJobFromRequest(req).makeDerivatives();
-        res.json({ status: "ok" });
+    const job = getJobFromRequest(req);
+    if (job == null) {
+        return res.status(404).json({ error: "Job not found" });
     }
+    job.makeDerivatives();
+    res.json({ status: "ok" });
 });
 
 router.put("/:category/:job/ingest", sanitizeParameters(), requireToken, function (req, res) {
-    if (getJobFromRequest(req).ingest() == null) {
-        res.status(404).json({ error: "Job not found" });
-    } else {
-        getJobFromRequest(req).ingest();
-        res.json({ status: "ok" });
+    const job = getJobFromRequest(req);
+    if (job == null) {
+        return res.status(404).json({ error: "Job not found" });
     }
+    job.ingest();
+    res.json({ status: "ok" });
 });
 
 router.put("/:category/:job", sanitizeParameters(), requireToken, function (req, res) {
@@ -88,7 +88,7 @@ router.put("/:category/:job", sanitizeParameters(), requireToken, function (req,
         if (!job == null) {
             job.metadata.raw = raw;
         } else {
-            res.status(404).json({ error: "Job not found" });
+            return res.status(404).json({ error: "Job not found" });
         }
         const problems = job.metadata.status.file_problems as Record<string, Array<string>>;
         if (problems.added.length > 0 || problems.deleted.length > 0) {
@@ -110,7 +110,7 @@ router.get("/:category/:job/:image/:size", sanitizeParameters(), requireToken, a
     const image: string = req.params.image;
     const size: string = req.params.size;
     const job = getJobFromRequest(req);
-    if (!job == null) {
+    if (job !== null) {
         const deriv = await job.getImage(image).derivative(legalSizes[size] ?? "THUMBNAIL");
         res.sendFile(deriv);
     } else {
@@ -128,7 +128,7 @@ router.delete(
             const image: string = req.params.image;
             const job = getJobFromRequest(req);
             if (job == null) {
-                res.status(404).json({ error: "Job not found" });
+                return res.status(404).json({ error: "Job not found" });
             } else {
                 const imageObj = job.getImage(image);
                 if (imageObj !== null) {
