@@ -50,7 +50,7 @@ router.get("/:category", sanitizeParameters, requireToken, function (req, res) {
 });
 
 router.get("/:category/:job", sanitizeParameters, requireToken, function (req, res) {
-    if ((getJobFromRequest(req).metadata.raw) == null) {
+    if (getJobFromRequest(req).metadata.raw == null) {
         res.status(404).json({ error: "Job not found" });
     } else {
         res.json(getJobFromRequest(req).metadata.raw);
@@ -58,7 +58,7 @@ router.get("/:category/:job", sanitizeParameters, requireToken, function (req, r
 });
 
 router.get("/:category/:job/status", sanitizeParameters, requireToken, function (req, res) {
-    if ((getJobFromRequest(req).metadata.status) == null) {
+    if (getJobFromRequest(req).metadata.status == null) {
         res.status(404).json({ error: "Job not found" });
     } else {
         res.json(getJobFromRequest(req).metadata.status);
@@ -66,7 +66,7 @@ router.get("/:category/:job/status", sanitizeParameters, requireToken, function 
 });
 
 router.put("/:category/:job/derivatives", sanitizeParameters, requireToken, function (req, res) {
-    if ((getJobFromRequest(req).makeDerivatives()) == null) {
+    if (getJobFromRequest(req).makeDerivatives() == null) {
         res.status(404).json({ error: "Job not found" });
     } else {
         getJobFromRequest(req).makeDerivatives();
@@ -75,7 +75,7 @@ router.put("/:category/:job/derivatives", sanitizeParameters, requireToken, func
 });
 
 router.put("/:category/:job/ingest", sanitizeParameters, requireToken, function (req, res) {
-    if ((getJobFromRequest(req).ingest()) == null) {
+    if (getJobFromRequest(req).ingest() == null) {
         res.status(404).json({ error: "Job not found" });
     } else {
         getJobFromRequest(req).ingest();
@@ -141,7 +141,7 @@ router.delete(
                 } else {
                     res.status(404).json({ status: "image missing" });
                 }
-            }   
+            }
         }
     )
 );
