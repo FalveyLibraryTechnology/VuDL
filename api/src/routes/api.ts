@@ -6,13 +6,14 @@ import Config from "../models/Config";
 import Job from "../models/Job";
 
 const router = express.Router();
-const { body, validationResult } = require("express-validator");
 import { setupPassport, requireToken } from "./auth";
 import fs = require("fs");
 setupPassport(router);
 
 function getJobFromRequest(req): Job {
-    //TODO make sure Job exists
+    if (!fs.existsSync(holdingArea() + req.params.category + "/" + req.params.job)) {
+        return null; //res.status(404).json({ error: "Not Found"});
+    }
     return new Job(holdingArea() + req.params.category + "/" + req.params.job);
 }
 
@@ -21,11 +22,15 @@ function holdingArea(): string {
     return holdingArea.endsWith("/") ? holdingArea : holdingArea + "/";
 }
 
-function sanitizeParameters(req, res, next) {
-    const validParameter = /^[-a-zA-Z0-9_]+$/;
+function sanitizeParameters(req, res, next, expectedParams) {
+    const validParameter = /^[-.a-zA-Z0-9_]+$/;
     for (const x in req.params) {
-        if (!req.params[x].match(validParameter)) {
-            return res.status(400).json({ error: "invalid: " + x });
+        if (typeof expectedParams[x] !== "undefined") {
+            if (req.params[x] !== expectedParams[x]) {
+                return res.status(400).json({ error: "invalid: " + x});
+            }
+        } else if (!req.params[x].match(validParameter)) {
+            return res.status(400).json({ error: "invalid: " + x});
         }
     }
     next();
@@ -91,16 +96,23 @@ router.get("/:category/:job/:image/:size", sanitizeParameters, requireToken, asy
     res.sendFile(deriv);
 });
 
-router.delete("/:category/:job/:image/*", sanitizeParameters, requireToken, async function (req, res) {
-    const image: string = req.params.image;
-    const job = getJobFromRequest(req);
-    const imageObj = job.getImage(image);
-    if (imageObj !== null) {
-        imageObj.delete();
-        res.json({ status: "ok" });
-    } else {
-        res.status(404).json({ status: "image missing" });
+router.delete("/:category/:job/:image/*", router.delete(
+    "/:category/:job/:image/*",
+    function (req, res, next) {
+        sanitizeParameters(req, res, next, {0: "*"});
+    },
+    requireToken,
+    async function (req, res) {
+        const image: string = req.params.image;
+        const job = getJobFromRequest(req);
+        const imageObj = job.getImage(image);
+        if (imageObj !== null) {
+            imageObj.delete();
+            res.json({ status: "ok" });
+        } else {
+            res.status(404).json({ status: "image missing" });
+        }
     }
-});
+));
 
 module.exports = router;
