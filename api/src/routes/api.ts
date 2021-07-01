@@ -27,10 +27,10 @@ function sanitizeParameters(req, res, next, expectedParams) {
     for (const x in req.params) {
         if (typeof expectedParams[x] !== "undefined") {
             if (req.params[x] !== expectedParams[x]) {
-                return res.status(400).json({ error: "invalid: " + x});
+                return res.status(400).json({ error: "invalid: " + x });
             }
         } else if (!req.params[x].match(validParameter)) {
-            return res.status(400).json({ error: "invalid: " + x});
+            return res.status(400).json({ error: "invalid: " + x });
         }
     }
     next();
@@ -96,23 +96,26 @@ router.get("/:category/:job/:image/:size", sanitizeParameters, requireToken, asy
     res.sendFile(deriv);
 });
 
-router.delete("/:category/:job/:image/*", router.delete(
+router.delete(
     "/:category/:job/:image/*",
-    function (req, res, next) {
-        sanitizeParameters(req, res, next, {0: "*"});
-    },
-    requireToken,
-    async function (req, res) {
-        const image: string = req.params.image;
-        const job = getJobFromRequest(req);
-        const imageObj = job.getImage(image);
-        if (imageObj !== null) {
-            imageObj.delete();
-            res.json({ status: "ok" });
-        } else {
-            res.status(404).json({ status: "image missing" });
+    router.delete(
+        "/:category/:job/:image/*",
+        function (req, res, next) {
+            sanitizeParameters(req, res, next, { 0: "*" });
+        },
+        requireToken,
+        async function (req, res) {
+            const image: string = req.params.image;
+            const job = getJobFromRequest(req);
+            const imageObj = job.getImage(image);
+            if (imageObj !== null) {
+                imageObj.delete();
+                res.json({ status: "ok" });
+            } else {
+                res.status(404).json({ status: "image missing" });
+            }
         }
-    }
-));
+    )
+);
 
 module.exports = router;
