@@ -22,18 +22,16 @@ function holdingArea(): string {
     return holdingArea.endsWith("/") ? holdingArea : holdingArea + "/";
 }
 
-function sanitizeParameters(req, res, next, expectedParams) {
-    const validParameter = /^[-.a-zA-Z0-9_]+$/;
-    for (const x in req.params) {
-        if (typeof expectedParams[x] !== "undefined") {
-            if (req.params[x] !== expectedParams[x]) {
+function sanitizeParameters(customRules = {}) {
+    return function (req, res, next) {
+        const defaultRule = /^[-.a-zA-Z0-9_]+$/;
+        for (const x in req.params) {
+            if (!req.params[x].match(customRules[x] ?? defaultRule)) {
                 return res.status(400).json({ error: "invalid: " + x });
             }
-        } else if (!req.params[x].match(validParameter)) {
-            return res.status(400).json({ error: "invalid: " + x });
         }
-    }
-    next();
+        next();
+    };
 }
 
 router.get("/", requireToken, function (req, res) {
@@ -41,7 +39,7 @@ router.get("/", requireToken, function (req, res) {
     res.json(categoryCollection.raw());
 });
 
-router.get("/:category", sanitizeParameters, requireToken, function (req, res) {
+router.get("/:category", sanitizeParameters(), requireToken, function (req, res) {
     if (!fs.existsSync(holdingArea() + req.params.category)) {
         return res.status(404).json({ error: "Not Found" });
     }
@@ -49,7 +47,7 @@ router.get("/:category", sanitizeParameters, requireToken, function (req, res) {
     res.json(category.raw());
 });
 
-router.get("/:category/:job", sanitizeParameters, requireToken, function (req, res) {
+router.get("/:category/:job", sanitizeParameters(), requireToken, function (req, res) {
     if (getJobFromRequest(req).metadata.raw == null) {
         res.status(404).json({ error: "Job not found" });
     } else {
@@ -57,7 +55,7 @@ router.get("/:category/:job", sanitizeParameters, requireToken, function (req, r
     }
 });
 
-router.get("/:category/:job/status", sanitizeParameters, requireToken, function (req, res) {
+router.get("/:category/:job/status", sanitizeParameters(), requireToken, function (req, res) {
     if (getJobFromRequest(req).metadata.status == null) {
         res.status(404).json({ error: "Job not found" });
     } else {
@@ -65,7 +63,7 @@ router.get("/:category/:job/status", sanitizeParameters, requireToken, function 
     }
 });
 
-router.put("/:category/:job/derivatives", sanitizeParameters, requireToken, function (req, res) {
+router.put("/:category/:job/derivatives", sanitizeParameters(), requireToken, function (req, res) {
     if (getJobFromRequest(req).makeDerivatives() == null) {
         res.status(404).json({ error: "Job not found" });
     } else {
@@ -74,7 +72,7 @@ router.put("/:category/:job/derivatives", sanitizeParameters, requireToken, func
     }
 });
 
-router.put("/:category/:job/ingest", sanitizeParameters, requireToken, function (req, res) {
+router.put("/:category/:job/ingest", sanitizeParameters(), requireToken, function (req, res) {
     if (getJobFromRequest(req).ingest() == null) {
         res.status(404).json({ error: "Job not found" });
     } else {
@@ -83,7 +81,7 @@ router.put("/:category/:job/ingest", sanitizeParameters, requireToken, function 
     }
 });
 
-router.put("/:category/:job", sanitizeParameters, requireToken, function (req, res) {
+router.put("/:category/:job", sanitizeParameters(), requireToken, function (req, res) {
     const job = getJobFromRequest(req);
     const raw = req.body;
     try {
@@ -103,7 +101,7 @@ router.put("/:category/:job", sanitizeParameters, requireToken, function (req, r
     }
 });
 
-router.get("/:category/:job/:image/:size", sanitizeParameters, requireToken, async function (req, res) {
+router.get("/:category/:job/:image/:size", sanitizeParameters(), requireToken, async function (req, res) {
     const legalSizes: Record<string, string> = {
         thumb: "THUMBNAIL",
         medium: "MEDIUM",
@@ -124,9 +122,7 @@ router.delete(
     "/:category/:job/:image/*",
     router.delete(
         "/:category/:job/:image/*",
-        function (req, res, next) {
-            sanitizeParameters(req, res, next, { 0: "*" });
-        },
+        sanitizeParameters({ 0: /^\*$/ }),
         requireToken,
         async function (req, res) {
             const image: string = req.params.image;
