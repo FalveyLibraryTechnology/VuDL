@@ -6,7 +6,8 @@ import crypto = require("crypto");
 const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
 import xmlescape = require("xml-escape");
-const { DOMParser, XMLSerializer } = require("xmldom");
+import xmldom = require("xmldom");
+const { DOMParser, XMLSerializer } = xmldom;
 
 export interface DatastreamParameters {
     dsLabel?: string;
@@ -273,11 +274,17 @@ export class Fedora {
      * @param obj        RDF object
      * @param isLiteral  Is object a literal (true) or a URI (false)?
      */
-    async addRelsExtRelationship(pid: string, subject: string, predicate: string, obj: string, isLiteral = false) {
+    async addRelsExtRelationship(
+        pid: string,
+        subject: string,
+        predicate: string,
+        obj: string,
+        isLiteral = false
+    ): Promise<void> {
         // Try to fetch the RELS-EXT; if it's empty, we need to create it for the first time!
         let relsExt = await this.getDatastreamAsString(pid, "RELS-EXT", false, true);
         const rdfNs = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-        let relsExtAlreadyExists = relsExt.length > 0;
+        const relsExtAlreadyExists = relsExt.length > 0;
         if (!relsExtAlreadyExists) {
             relsExt =
                 '<rdf:RDF xmlns:rdf="' +
