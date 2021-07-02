@@ -72,7 +72,7 @@ class HierarchyCollector {
             RDF_XML,
             {
                 rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                "fedora": "http://fedora.info/definitions/v4/repository#",
+                fedora: "http://fedora.info/definitions/v4/repository#",
                 "fedora3-model": "info:fedora/fedora-system:def/model#",
                 "fedora3-view": "info:fedora/fedora-system:def/view#",
             },
