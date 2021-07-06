@@ -44,6 +44,10 @@ class PrivateConfig {
         return this.ini["ffmpeg_path"];
     }
 
+    get fitsCommand(): string {
+        return this.ini["fits_command"];
+    }
+
     get tesseractPath(): string {
         return this.ini["tesseract_path"];
     }
