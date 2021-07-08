@@ -2,6 +2,7 @@ import fs = require("fs");
 import winston = require("winston");
 import Config from "./Config";
 import Fedora from "../services/Fedora";
+import { execSync } from "child_process";
 import { getNextPid } from "../services/Database";
 
 export interface DatastreamParameters {
@@ -74,7 +75,7 @@ export class FedoraObject {
         this.addDatastream(stream, params, contents);
     }
 
-    addMasterMetadataDatastream(): void {
+    addMasterMetadataDatastream(filename: string): void {
         const params = {
             controlGroup: "M",
             dsLabel: this.pid.replace(":", "_") + "_MASTER-MD",
@@ -84,7 +85,8 @@ export class FedoraObject {
             mimeType: "text/xml",
             logMessage: "Initial Ingest addDatastream - MASTER-MD",
         };
-        this.addDatastream("MASTER-MD", params, this.fitsMasterMetadata());
+        const fitsXml = this.fitsMasterMetadata(filename);
+        this.addDatastream("MASTER-MD", params, fitsXml);
     }
 
     addRelationship(subject: string, predicate: string, obj: string, isLiteral = false, datatype: string = null): void {
@@ -152,9 +154,9 @@ export class FedoraObject {
         return this.fedora.getDatastreamAsString(this.pid, datastream);
     }
 
-    fitsMasterMetadata(): string {
-        // TODO
-        return "TODO";
+    fitsMasterMetadata(filename: string): string {
+        const fitsCommand = Config.getInstance().fitsCommand + " -i " + filename;
+        return execSync(fitsCommand).toString();
     }
 
     imageDataIngest(): void {
