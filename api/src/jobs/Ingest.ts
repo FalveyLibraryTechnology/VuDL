@@ -38,7 +38,7 @@ class IngestProcessor {
     async addDatastreamsToPage(page: Page, imageData: FedoraObject): Promise<void> {
         const image = new ImageFile(this.job.dir + "/" + page.filename);
         await imageData.addDatastreamFromFile(image.filename, "MASTER", "image/tiff");
-        await imageData.addMasterMetadataDatastream();
+        await imageData.addMasterMetadataDatastream(image.filename);
         for (const size in image.sizes) {
             await imageData.addDatastreamFromFile(await image.derivative(size), size, "image/jpeg");
         }
@@ -48,18 +48,20 @@ class IngestProcessor {
     }
 
     async addDatastreamsToDocument(document: DocumentFile, documentData: FedoraObject): Promise<void> {
-        await documentData.addDatastreamFromFile(this.job.dir + "/" + document.filename, "MASTER", "application/pdf");
-        await documentData.addMasterMetadataDatastream();
+        const pdf = this.job.dir + "/" + document.filename;
+        await documentData.addDatastreamFromFile(pdf, "MASTER", "application/pdf");
+        await documentData.addMasterMetadataDatastream(pdf);
     }
 
     async addDatastreamsToAudio(audio: AudioFile, audioData: FedoraObject): Promise<void> {
         this.logger.info("Adding Flac");
-        await audioData.addDatastreamFromFile(this.job.dir + "/" + audio.filename, "MASTER", "audio/x-flac");
+        const flac = this.job.dir + "/" + audio.filename;
+        await audioData.addDatastreamFromFile(flac, "MASTER", "audio/x-flac");
         this.logger.info("Adding MP3");
         await audioData.addDatastreamFromFile(audio.derivative("MP3"), "MP3", "audio/mpeg");
         this.logger.info("Adding OGG");
         await audioData.addDatastreamFromFile(audio.derivative("OGG"), "OGG", "audio/ogg");
-        await audioData.addMasterMetadataDatastream();
+        await audioData.addMasterMetadataDatastream(flac);
     }
 
     async addPages(pageList: FedoraObject): Promise<void> {

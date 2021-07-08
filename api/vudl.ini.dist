@@ -40,6 +40,9 @@ pdf_directory = "/tmp/"
 # Settings for FFmpeg
 #ffmpeg_path = /usr/bin/ffmpeg
 
+# Full path to FITS command (see https://projects.iq.harvard.edu/fits/downloads)
+fits_command = /usr/local/fits/fits.sh
+
 # JVM to use for running Java apps (used for Tika)
 java_path = java
 
