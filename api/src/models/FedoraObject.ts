@@ -1,19 +1,9 @@
 import fs = require("fs");
 import winston = require("winston");
 import Config from "./Config";
-import Fedora from "../services/Fedora";
+import { DatastreamParameters, Fedora } from "../services/Fedora";
 import { execSync } from "child_process";
 import { getNextPid } from "../services/Database";
-
-export interface DatastreamParameters {
-    checksumType?: string;
-    controlGroup?: string;
-    dsLabel?: string;
-    dsState?: string;
-    mimeType?: string;
-    logMessage?: string;
-    versionable?: boolean;
-}
 
 export interface ObjectParameters {
     label?: string;
@@ -49,62 +39,52 @@ export class FedoraObject {
         return Config.getInstance().pidNamespace;
     }
 
-    addDatastream(id: string, params: DatastreamParameters, data: string): void {
-        this.log("Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes");
-        // TODO: Add the datastream!
-        console.log("TODO - use these:", params);
+    async addDatastream(id: string, params: DatastreamParameters, data: string | Buffer): Promise<void> {
+        this.log(
+            params.logMessage ?? "Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes"
+        );
+        await this.fedora.addDatastream(this.pid, id, params, data);
     }
 
-    addDatastreamFromFile(filename: string, stream: string, mimeType: string): void {
-        return this.addDatastreamFromString(fs.readFileSync(filename).toString(), stream, mimeType);
+    async addDatastreamFromFile(filename: string, stream: string, mimeType: string): Promise<void> {
+        await this.addDatastreamFromStringOrBuffer(fs.readFileSync(filename), stream, mimeType);
     }
 
-    addDatastreamFromString(contents: string, stream: string, mimeType: string, checksumType = "MD5"): void {
+    async addDatastreamFromStringOrBuffer(contents: string | Buffer, stream: string, mimeType: string): Promise<void> {
         if (mimeType === "text/plain" && contents.length === 0) {
             contents = "\n"; // workaround for 500 error on empty OCR
         }
         const params: DatastreamParameters = {
-            controlGroup: "M",
-            dsLabel: this.pid.replace(":", "_") + "_" + stream,
-            versionable: false,
-            dsState: "A",
-            checksumType: checksumType,
             mimeType: mimeType,
             logMessage: "Initial Ingest addDatastream - " + stream,
         };
-        this.addDatastream(stream, params, contents);
+        await this.addDatastream(stream, params, contents);
     }
 
-    addMasterMetadataDatastream(filename: string): void {
+    async addMasterMetadataDatastream(filename: string): Promise<void> {
         const params = {
-            controlGroup: "M",
-            dsLabel: this.pid.replace(":", "_") + "_MASTER-MD",
-            versionable: false,
-            dsState: "A",
-            checksumType: "DISABLED",
             mimeType: "text/xml",
             logMessage: "Initial Ingest addDatastream - MASTER-MD",
         };
         const fitsXml = this.fitsMasterMetadata(filename);
-        this.addDatastream("MASTER-MD", params, fitsXml);
+        await this.addDatastream("MASTER-MD", params, fitsXml);
     }
 
-    addRelationship(subject: string, predicate: string, obj: string, isLiteral = false, datatype: string = null): void {
+    async addRelationship(subject: string, predicate: string, obj: string, isLiteral = false): Promise<void> {
         this.log("Adding relationship " + [subject, predicate, obj].join(" ") + " to " + this.pid);
-        // TODO
-        console.log("TODO - use these:", isLiteral, datatype);
+        return this.fedora.addRelsExtRelationship(this.pid, subject, predicate, obj, isLiteral);
     }
 
-    addModelRelationship(model: string): void {
-        this.addRelationship(
+    async addModelRelationship(model: string): Promise<void> {
+        return this.addRelationship(
             "info:fedora/" + this.pid,
             "info:fedora/fedora-system:def/model#hasModel",
             "info:fedora/vudl-system:" + model
         );
     }
 
-    addSequenceRelationship(parentPid: string, position: number): void {
-        this.addRelationship(
+    async addSequenceRelationship(parentPid: string, position: number): Promise<void> {
+        return this.addRelationship(
             "info:fedora/" + this.pid,
             "http://vudl.org/relationships#sequence",
             parentPid + "#" + position,
@@ -112,45 +92,31 @@ export class FedoraObject {
         );
     }
 
-    addSortRelationship(sort: string): void {
-        this.addRelationship("info:fedora/" + this.pid, "http://vudl.org/relationships#sortOn", sort, true);
+    async addSortRelationship(sort: string): Promise<void> {
+        return this.addRelationship("info:fedora/" + this.pid, "http://vudl.org/relationships#sortOn", sort, true);
     }
 
-    collectionIngest(): void {
+    async collectionIngest(): Promise<void> {
         this.log("Collection ingest for " + this.pid);
-        this.addModelRelationship("CollectionModel");
-        // TODO: add MEMBER-QUERY and MEMBER-LIST-RAW datastreams if needed (probably not)
+        return this.addModelRelationship("CollectionModel");
     }
 
-    coreIngest(objectState: string): void {
+    async coreIngest(objectState: string): Promise<void> {
         this.log("Core ingest for " + this.pid);
-        this.ingest({
-            label: this.title,
-            format: "info:fedora/fedora-system:FOXML-1.1",
-            encoding: "UTF-8",
-            namespace: this.namespace,
-            ownerId: "diglibEditor",
-            logMessage: this.title + " - ingest",
-            ignoreMime: false,
-        });
-        this.modifyObject({
-            state: objectState,
-            logMessage: "Set initial state",
-        });
-        this.addModelRelationship("CoreModel");
-        this.addRelationship(
+        await this.fedora.createContainer(this.pid, this.title, objectState, "diglibEditor");
+        await this.addModelRelationship("CoreModel");
+        return this.addRelationship(
             "info:fedora/" + this.pid,
             "info:fedora/fedora-system:def/relations-external#isMemberOf",
             "info:fedora/" + this.parentPid
         );
-        // TODO: add PARENT-QUERY, PARENT-LIST-RAW and PARENT-LIST datastreams if needed (probably not).
     }
 
-    dataIngest(): void {
-        this.addModelRelationship("DataModel");
+    async dataIngest(): Promise<void> {
+        await this.addModelRelationship("DataModel");
     }
 
-    async datastreamDissemination(datastream: string): Promise<string> {
+    async getDatastream(datastream: string): Promise<string> {
         return this.fedora.getDatastreamAsString(this.pid, datastream);
     }
 
@@ -159,48 +125,39 @@ export class FedoraObject {
         return execSync(fitsCommand).toString();
     }
 
-    imageDataIngest(): void {
-        this.addModelRelationship("ImageData");
+    async imageDataIngest(): Promise<void> {
+        return this.addModelRelationship("ImageData");
     }
 
-    documentDataIngest(): void {
-        this.addModelRelationship("PDFData");
+    async documentDataIngest(): Promise<void> {
+        return this.addModelRelationship("PDFData");
     }
 
-    audioDataIngest(): void {
-        this.addModelRelationship("AudioData");
+    async audioDataIngest(): Promise<void> {
+        return this.addModelRelationship("AudioData");
     }
 
-    ingest(params: ObjectParameters, xml: string = null): void {
-        const targetPid = xml ? "new" : this.pid;
-        this.log("Ingest for " + targetPid);
-        // TODO
-        console.log("TODO - use these:", params);
+    async listCollectionIngest(): Promise<void> {
+        await this.addModelRelationship("ListCollection");
+        return this.addSortRelationship("custom");
     }
 
-    listCollectionIngest(): void {
-        this.addModelRelationship("ListCollection");
-        this.addSortRelationship("custom");
+    async modifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
+        if (typeof params.dsLabel !== "undefined" || typeof params.dsState !== "undefined") {
+            throw new Error("Unsupported parameter(s) passed to modifyDatastream()");
+        }
+        this.log(params.logMessage);
+        await this.fedora.putDatastream(this.pid, id, params.mimeType, 204, data);
     }
 
-    modifyDatastream(id: string, params: DatastreamParameters, data: string): void {
-        this.log("Updating datastream " + id + " on " + this.pid + " with " + data.length + " bytes");
-        // TODO
-        console.log("TODO - use these:", params);
+    async modifyObjectLabel(title: string): Promise<void> {
+        await this.fedora.modifyObjectLabel(this.pid, title);
     }
 
-    modifyObject(params: ObjectParameters): void {
-        this.log("Modifying " + this.pid);
-        // TODO
-        console.log("TODO - use these:", params);
-    }
-
-    resourceCollectionIngest(): void {
+    async resourceCollectionIngest(): Promise<void> {
         this.log("Resource collection ingest for " + this.pid);
-        this.addModelRelationship("ResourceCollection");
-        this.addSortRelationship("title");
-        // TODO: original Ruby code had some TODOs about adding more parameters
-        // here; perhaps this should be revisited in the future.
+        await this.addModelRelationship("ResourceCollection");
+        return this.addSortRelationship("title");
     }
 
     log(message: string): void {
