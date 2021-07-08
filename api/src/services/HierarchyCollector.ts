@@ -68,15 +68,28 @@ class HierarchyCollector {
     protected extractFedoraDetails(RDF: string): Record<string, Array<string>> {
         const xmlParser = new DOMParser();
         const RDF_XML = xmlParser.parseFromString(RDF, "text/xml");
-        return this.extractRDFXML(
+        const details = this.extractRDFXML(
             RDF_XML,
             {
                 rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                fedora: "http://fedora.info/definitions/v4/repository#",
                 "fedora3-model": "info:fedora/fedora-system:def/model#",
                 "fedora3-view": "info:fedora/fedora-system:def/view#",
             },
-            "//rdf:Description/fedora3-model:*|//rdf:Description/fedora3-view:*"
+            "//rdf:Description/fedora:*|//rdf:Description/fedora3-model:*|//rdf:Description/fedora3-view:*"
         );
+        // The new (F6) created and lastModified properties should take
+        // precedence over the legacy (F3) createdDate and lastModifiedDate
+        // properties when present.
+        if (typeof details.created !== "undefined") {
+            details.createdDate = details.created;
+            delete details.created;
+        }
+        if (typeof details.lastModified !== "undefined") {
+            details.lastModifiedDate = details.lastModified;
+            delete details.lastModified;
+        }
+        return details;
     }
 
     protected extractFedoraDatastreams(RDF: string): Array<string> {

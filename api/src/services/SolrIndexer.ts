@@ -299,7 +299,7 @@ class SolrIndexer {
 
         // If this is a data model, we want to pull the date from its parent.
         const dateString = fedoraData.models.includes("vudl-system:DataModel")
-            ? hierarchyParents[0].metadata["dc:date"][0] ?? ""
+            ? (hierarchyParents[0].metadata["dc:date"] ?? [])[0] ?? ""
             : (fields["dc.date_txt_mv"] ?? [])[0] ?? "";
         const strippedDate = dateString.substr(0, 4);
         // TODO: configurable date cut-off?
