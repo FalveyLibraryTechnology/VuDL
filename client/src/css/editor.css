@@ -1,10 +1,10 @@
 button,
 .button,
 .btn {
-  border: 1px solid #3b82f6;
-  color: #1e3a8a;
-  background-color: #eff6ff;
-  box-shadow: 0 0.25rem 0.375rem -0.125rem rgba(0, 0, 0, 0.1);
+    border: 1px solid #3b82f6;
+    color: #1e3a8a;
+    background-color: #eff6ff;
+    box-shadow: 0 0.25rem 0.375rem -0.125rem rgba(0, 0, 0, 0.1);
 }
 button:focus,
 .button:focus,
@@ -12,15 +12,14 @@ button:focus,
 button:hover,
 .button:hover,
 .btn:hover {
-  background-color: #fff;
-  box-shadow: 0 0 0 4px #bfdbfe,
-    0 0.25rem 0.375rem -0.125rem rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px #bfdbfe, 0 0.25rem 0.375rem -0.125rem rgba(0, 0, 0, 0.1);
 }
 button:active,
 .button:active,
 .btn:active {
-  color: #fff;
-  background-color: #18181b;
+    color: #fff;
+    background-color: #18181b;
 }
 
 .editor__child-list {
@@ -89,7 +88,7 @@ body.js-modal-open {
 }
 
 #modal:not(.is-open) {
-  display: none;
+    display: none;
 }
 
 .modal-overlay {
