@@ -23,7 +23,10 @@ class ObjectEditor extends React.Component {
     }
 
     openMetadataEditor(pid) {
-        this.setState({ modal: <MetadataEditor pid={pid} /> });
+        this.setState({
+            modal: <MetadataEditor pid={pid} />,
+            modalTitle: "Metadata for " + pid,
+        });
         this.render();
     }
 
@@ -37,7 +40,7 @@ class ObjectEditor extends React.Component {
                 <h1>{this.props.pid}</h1>
                 <ChildList parentID={this.props.pid} openMetadataEditor={this.openMetadataEditor} />
 
-                <Modal title="test" open={this.state.modal != null} closeModal={this.closeModal}>
+                <Modal title={this.state.modalTitle ?? ""} open={this.state.modal != null} closeModal={this.closeModal}>
                     {this.state.modal ?? ""}
                 </Modal>
             </div>

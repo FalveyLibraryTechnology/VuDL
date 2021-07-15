@@ -14,13 +14,13 @@ class Field extends React.Component {
     render() {
         return (
             <li className="field flex">
-                <button className="field__add flex-none btn--none">
-                    <i className="ri-add-fill"></i>
+                <div className="flex-1 field__values">{this.props.value}</div>
+                <button className="field__remove flex-none btn--none">
+                    <i className="ri-edit-line"></i>
                 </button>
                 <button className="field__remove flex-none btn--none">
-                    <i className="ri-subtract-fill"></i>
+                    <i className="ri-delete-bin-2-line"></i>
                 </button>
-                <div className="flex-1 field__values">{this.props.value}</div>
             </li>
         );
     }

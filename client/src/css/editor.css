@@ -83,6 +83,20 @@ button:active,
 .metadata__options {
     list-style: none;
 }
+
+.field {
+    background-color: #e9ecef;
+}
+.field:nth-child(even) {
+    background-color: #f8f9fa;
+}
+.field__values {
+    padding: 4px 10px;
+    line-height: 1.5;
+}
+
+
+
 body.js-modal-open {
     overflow-y: hidden;
 }

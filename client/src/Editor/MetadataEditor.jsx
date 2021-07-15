@@ -10,10 +10,12 @@ class MetadataEditor extends React.Component {
 
     constructor(props) {
         super(props);
-        this.fieldLists = [
-            { title: "Title", type: "String", values: ["one", "two"] },
-            { title: "Creator", type: "String", values: ["just Chris"] },
-        ];
+        this.state = {
+            fieldLists: [
+                { title: "Title", type: "String", values: ["one", "two"] },
+                { title: "Creator", type: "String", values: ["just Chris"] },
+            ],
+        };
         this.options = [
             { title: "Title", type: "String" },
             { title: "Creator", type: "String" },
@@ -31,6 +33,22 @@ class MetadataEditor extends React.Component {
             { title: "Coverage", type: "String" },
             { title: "Rights", type: "String" },
         ];
+
+        this.addField = this.addField.bind(this);
+    }
+
+    addField(newOption) {
+        console.log(newOption);
+        let newList = this.state.fieldLists.slice();
+        for (let i = 0; i < newList.length; i++) {
+            if (newList[i].title == newOption.title) {
+                newList[i].values.push("= NEW =");
+                this.setState({ fieldLists: newList });
+                return;
+            }
+        }
+        newList.push({ title: newOption.title, type: newOption.type, values: ["= NEW ="] });
+        this.setState({ fieldLists: newList });
     }
 
     render() {
@@ -43,14 +61,16 @@ class MetadataEditor extends React.Component {
 
                 <div className="flex">
                     <div className="flex-1 metadata__fieldLists">
-                        {this.fieldLists.map((fieldList) => (
+                        {this.state.fieldLists.map((fieldList) => (
                             <FieldList key={fieldList.title} {...fieldList} />
                         ))}
                     </div>
                     <ul className="flex-none metadata__options">
                         {this.options.map((option) => (
                             <li key={option.title}>
-                                <button type={option.type}>{option.title}</button>
+                                <button type={option.type} onClick={() => this.addField(option)}>
+                                    {option.title}
+                                </button>
                             </li>
                         ))}
                     </ul>
