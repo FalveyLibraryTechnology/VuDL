@@ -95,8 +95,6 @@ button:active,
     line-height: 1.5;
 }
 
-
-
 body.js-modal-open {
     overflow-y: hidden;
 }
