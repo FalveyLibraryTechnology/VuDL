@@ -10,6 +10,7 @@ class ChildListItem extends React.Component {
     static propTypes = {
         pid: PropTypes.string,
         title: PropTypes.string,
+        openMetadataEditor: PropTypes.func,
     };
 
     constructor(props) {
@@ -35,7 +36,7 @@ class ChildListItem extends React.Component {
                             <i className="ri-add-box-fill"></i>
                         )}
                     </button>{" "}
-                    <button className="editor__gear-btn">
+                    <button className="editor__gear-btn" onClick={() => this.props.openMetadataEditor(this.props.pid)}>
                         <i className="ri-folder-5-fill"></i>
                         <i className="ri-settings-5-fill"></i>
                     </button>
@@ -44,7 +45,9 @@ class ChildListItem extends React.Component {
                     </Link>
                     <div className="editor__list-item-status">TODO: status</div>
                 </div>
-                {this.state.open && <ChildList parent={this.props.pid} />}
+                {this.state.open && (
+                    <ChildList parent={this.props.pid} openMetadataEditor={this.props.openMetadataEditor} />
+                )}
             </div>
         );
     }

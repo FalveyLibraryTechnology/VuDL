@@ -7,6 +7,7 @@ import ChildListItem from "./ChildListItem";
 class ChildList extends React.Component {
     static propTypes = {
         parentID: PropTypes.string,
+        openMetadataEditor: PropTypes.func,
     };
 
     constructor(props) {
@@ -30,7 +31,7 @@ class ChildList extends React.Component {
             <div className="editor__child-list">
                 <div className="editor__child-list-pages">Page 1 of TODO</div>
                 {this.state.children.map((child) => (
-                    <ChildListItem key={child.pid} {...child} />
+                    <ChildListItem key={child.pid} {...child} openMetadataEditor={this.props.openMetadataEditor} />
                 ))}
             </div>
         );
