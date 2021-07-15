@@ -1,9 +1,13 @@
 import React from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 
 import FieldList from "./FieldList";
 
 class MetadataEditor extends React.Component {
+    static propTypes = {
+        pid: PropTypes.string,
+    };
+
     constructor(props) {
         super(props);
         this.fieldLists = [
