@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import ChildList from "./ChildList";
+import MetadataEditor from "./MetadataEditor";
+import { openModal } from "./interface-store.js";
 
 import "remixicon/fonts/remixicon.css";
 
@@ -10,7 +12,6 @@ class ChildListItem extends React.Component {
     static propTypes = {
         pid: PropTypes.string,
         title: PropTypes.string,
-        openMetadataEditor: PropTypes.func,
     };
 
     constructor(props) {
@@ -25,6 +26,10 @@ class ChildListItem extends React.Component {
         this.setState({ open: !this.state.open });
     }
 
+    openMetadataEditor(pid) {
+        openModal(<MetadataEditor pid={pid} />, "Metadata for " + pid);
+    }
+
     render() {
         return (
             <div className="editor__child-list-item">
@@ -36,7 +41,7 @@ class ChildListItem extends React.Component {
                             <i className="ri-add-box-fill"></i>
                         )}
                     </button>{" "}
-                    <button className="editor__gear-btn" onClick={() => this.props.openMetadataEditor(this.props.pid)}>
+                    <button className="editor__gear-btn" onClick={() => this.openMetadataEditor(this.props.pid)}>
                         <i className="ri-folder-5-fill"></i>
                         <i className="ri-settings-5-fill"></i>
                     </button>
@@ -45,9 +50,7 @@ class ChildListItem extends React.Component {
                     </Link>
                     <div className="editor__list-item-status">TODO: status</div>
                 </div>
-                {this.state.open && (
-                    <ChildList parent={this.props.pid} openMetadataEditor={this.props.openMetadataEditor} />
-                )}
+                {this.state.open && <ChildList parent={this.props.pid} />}
             </div>
         );
     }
