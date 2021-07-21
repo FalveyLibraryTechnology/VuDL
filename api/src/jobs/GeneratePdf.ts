@@ -102,7 +102,7 @@ class PdfGenerator {
 
     private async addDatastreamsToDocument(pdf: string, documentData: FedoraObject): Promise<void> {
         await documentData.addDatastreamFromFile(pdf, "MASTER", "application/pdf");
-        await documentData.addMasterMetadataDatastream();
+        await documentData.addMasterMetadataDatastream(pdf);
     }
 
     async run(): Promise<void> {
