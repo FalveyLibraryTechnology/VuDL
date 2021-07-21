@@ -254,7 +254,7 @@ class IngestProcessor {
         this.logger.info("Moving " + this.job.dir + " to " + target);
         const targetParent = path.dirname(target);
         if (!fs.existsSync(targetParent)) {
-            fs.mkdirSync(targetParent, {recursive: true});
+            fs.mkdirSync(targetParent, { recursive: true });
         }
         fs.renameSync(this.job.dir, target);
         fs.unlinkSync(target + "/ingest.lock");
