@@ -252,11 +252,12 @@ class IngestProcessor {
             target = target + "." + i;
         }
         this.logger.info("Moving " + this.job.dir + " to " + target);
-        // TODO: move the directory and clean up (original Ruby below):
-        //FileUtils.mkdir_p target unless File.exist?(target)
-        //FileUtils.mv Dir.glob("#{@job.dir}/*"), target
-        //FileUtils.rmdir @job.dir
-        //FileUtils.rm "#{target}/ingest.lock"
+        const targetParent = path.dirname(target);
+        if (!fs.existsSync(targetParent)) {
+            fs.mkdirSync(targetParent, {recursive: true});
+        }
+        fs.renameSync(this.job.dir, target);
+        fs.unlinkSync(target + "/ingest.lock");
     }
 
     async doIngest(): Promise<void> {
