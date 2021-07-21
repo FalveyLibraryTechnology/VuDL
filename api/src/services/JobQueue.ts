@@ -1,4 +1,3 @@
-// import { Queue } from 'bullmq';
 import { Worker } from "bullmq";
 
 // TODO: Maybe don't load all of them?
