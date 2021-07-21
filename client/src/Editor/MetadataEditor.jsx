@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import FieldList from "./FieldList";
+import { openModal } from "./interface-store.js";
 
 class MetadataEditor extends React.Component {
     static propTypes = {
@@ -73,7 +74,12 @@ class MetadataEditor extends React.Component {
         return (
             <div className="editor metadata-editor">
                 <nav>
-                    <button className="metadata__preview btn--big">Preview</button>
+                    <button
+                        className="metadata__preview btn--big"
+                        onClick={() => openModal(<p>It worked!</p>, "Second Modal Test")}
+                    >
+                        Preview
+                    </button>
                     <button className="metadata__preview btn--big">Clone metadata</button>
                 </nav>
 

@@ -1,19 +1,20 @@
-import { createMap } from "nanostores";
+import { createMap, getValue } from "nanostores";
 
 export const modal = createMap(() => {
     modal.set({
-        open: false,
-        content: null,
-        title: "",
+        content: [], // TODO: Make an array for a stack of modals???
+        titles: [],
     });
 });
 
-export function openModal(content, title = "") {
-    modal.setKey("open", true);
-    modal.setKey("content", content);
-    modal.setKey("title", title);
+export function openModal(newContent, newTitle = "") {
+    let { content, titles } = getValue(modal);
+    modal.setKey("content", [newContent, ...content]);
+    modal.setKey("titles", [newTitle, ...titles]);
 }
 
 export function closeModal() {
-    modal.setKey("open", false);
+    let { content, titles } = getValue(modal);
+    modal.setKey("content", content.slice(1));
+    modal.setKey("titles", titles.slice(1));
 }
