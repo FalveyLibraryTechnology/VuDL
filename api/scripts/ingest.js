@@ -3,7 +3,7 @@ const Config = require("../dist/models/Config").default; // eslint-disable-line 
 
 const collection = new CategoryCollection(Config.getInstance().holdingArea);
 collection.categories.forEach((category) => {
-    category.jobs.forEach((job) => {
-        job.ingest();
+    category.jobs.forEach(async (job) => {
+        await job.ingest();
     });
 });

@@ -46,21 +46,21 @@ router.get("/:category/:job/status", sanitizeParameters(), requireToken, functio
     res.json(job.metadata.status);
 });
 
-router.put("/:category/:job/derivatives", sanitizeParameters(), requireToken, function (req, res) {
+router.put("/:category/:job/derivatives", sanitizeParameters(), requireToken, async function (req, res) {
     const job = getJobFromRequest(req);
     if (job == null) {
         return res.status(404).json({ error: "Job not found" });
     }
-    job.makeDerivatives();
+    await job.makeDerivatives();
     res.json({ status: "ok" });
 });
 
-router.put("/:category/:job/ingest", sanitizeParameters(), requireToken, function (req, res) {
+router.put("/:category/:job/ingest", sanitizeParameters(), requireToken, async function (req, res) {
     const job = getJobFromRequest(req);
     if (job == null) {
         return res.status(404).json({ error: "Job not found" });
     }
-    job.ingest();
+    await job.ingest();
     res.json({ status: "ok" });
 });
 
