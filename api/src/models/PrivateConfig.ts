@@ -58,7 +58,8 @@ class PrivateConfig {
     }
 
     get holdingArea(): string {
-        return this.ini["holding_area_path"];
+        const holdingArea = this.ini["holding_area_path"];
+        return holdingArea.endsWith("/") ? holdingArea : holdingArea + "/";
     }
 
     get ocrmypdfPath(): string {

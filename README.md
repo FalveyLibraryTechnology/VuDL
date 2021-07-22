@@ -102,6 +102,8 @@ After a few moments, a new tab should automatically open in your browser pointin
 | queue:dev | start api worker listener, restart on changes |
 | queue:wsl | start api worker listener, restart on changes (use if on WSL or `api:dev` isn't working) |
 | | |
+| ingest | add all published jobs to the ingest queue |
+| | |
 | backend | start both api and worker queue servers |
 | backend:dev | start both api and worker queue servers, restart on changes |
 | backend:wsl | start both api and worker queue servers, restart on changes (use if on WSL or `api:dev` isn't working) |

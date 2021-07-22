@@ -12,26 +12,21 @@ import fs = require("fs");
 setupPassport(router);
 
 function getJobFromRequest(req): Job {
-    return fs.existsSync(holdingArea() + req.params.category + "/" + req.params.job)
-        ? new Job(holdingArea() + req.params.category + "/" + req.params.job)
-        : null;
-}
-
-function holdingArea(): string {
-    const holdingArea = Config.getInstance().holdingArea;
-    return holdingArea.endsWith("/") ? holdingArea : holdingArea + "/";
+    const jobDir = Config.getInstance().holdingArea + req.params.category + "/" + req.params.job;
+    return fs.existsSync(jobDir) ? new Job(jobDir) : null;
 }
 
 router.get("/", requireToken, function (req, res) {
-    const categoryCollection = new CategoryCollection(holdingArea());
+    const categoryCollection = new CategoryCollection(Config.getInstance().holdingArea);
     res.json(categoryCollection.raw());
 });
 
 router.get("/:category", sanitizeParameters(), requireToken, function (req, res) {
-    if (!fs.existsSync(holdingArea() + req.params.category)) {
+    const categoryDir = Config.getInstance().holdingArea + req.params.category;
+    if (!fs.existsSync(categoryDir)) {
         return res.status(404).json({ error: "Not Found" });
     }
-    const category = new Category(holdingArea() + req.params.category);
+    const category = new Category(categoryDir);
     res.json(category.raw());
 });
 

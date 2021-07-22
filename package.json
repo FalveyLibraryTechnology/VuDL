@@ -21,6 +21,7 @@
     "queue": "node api/worker-start.js",
     "queue:dev": "nodemon --watch 'api/**/*.js' api/worker-start.js",
     "queue:wsl": "nodemon --legacy-watch api/worker-start.js",
+    "ingest": "node api/scripts/ingest.js",
     "backend": "concurrently npm:api npm:queue",
     "backend:dev": "concurrently npm:api:dev npm:queue:dev",
     "backend:wsl": "concurrently npm:api:wsl npm:queue:wsl",
