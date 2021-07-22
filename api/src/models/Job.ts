@@ -24,6 +24,7 @@ class Job {
             closeSync(openSync(lockfile, "w")); // touch
             const q = new Queue("vudl");
             await q.add("ingest", { dir: this.dir });
+            q.close();
         }
     }
 
@@ -43,6 +44,7 @@ class Job {
             closeSync(openSync(lockfile, "w")); // touch
             const q = new Queue("vudl");
             await q.add("derivatives", { dir: this.dir });
+            q.close();
         }
     }
 

@@ -13,6 +13,7 @@ const pidSanitizer = sanitizeParameters({ pid: /^[a-zA-Z]+:[0-9]+/ }, /^$/);
 router.post("/pdfgenerator/:pid", pidSanitizer, requireToken, async function (req, res) {
     const q = new Queue("vudl");
     await q.add("generatepdf", { pid: req.params.pid });
+    q.close();
     res.status(200).send("ok");
 });
 
