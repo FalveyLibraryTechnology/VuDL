@@ -60,3 +60,16 @@ processed_area_path = "C:/processed"
 # Allowed origins, IPs, and addresses for CORS
 allowed_origins[] = http://localhost:3000 # api
 allowed_origins[] = http://localhost:9000 # client
+
+#Collection Models
+collection_models[List] = "vudl-system:ListCollection"
+collection_models[Resource] = "vudl-system:ResourceCollection"
+collection_models[Folder] = "vudl-system:FolderCollection"
+
+#Data Models
+data_models[Image] = "vudl-system:ImageData"
+data_models[PDF] = "vudl-system:PDFData"
+data_models[DOC] = "vudl-system:DOCData"
+data_models[Audio] = "vudl-system:AudioData"
+data_models[XLS] = "vudl-system:XLSData"
+data_models[Text] = "vudl-system:TextData"
