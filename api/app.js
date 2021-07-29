@@ -10,7 +10,8 @@ const path = require("path");
 const logger = require("morgan");
 
 const indexRouter = require("./dist/routes/index");
-const apiRouter = require("./dist/routes/api");
+const ingestRouter = require("./dist/routes/ingest");
+const editRouter = require("./dist/routes/edit");
 const messengerRouter = require("./dist/routes/messenger");
 const Config = require("./dist/models/Config").default;
 
@@ -54,7 +55,8 @@ if (app.get("env") === "production") {
 app.use(session(sess));
 
 app.use("/", indexRouter);
-app.use("/api", apiRouter);
+app.use("/api/ingest", ingestRouter);
+app.use("/api/edit", editRouter);
 app.use("/messenger", messengerRouter);
 
 // catch 404 and forward to error handler

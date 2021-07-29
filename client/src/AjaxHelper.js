@@ -8,20 +8,20 @@ class AjaxHelperInstance {
         this.handle4xx = this.handle4xx.bind(this);
     }
 
-    get apiUrl() {
-        return this.url + "/api";
+    get ingestApiUrl() {
+        return this.url + "/api/ingest";
     }
     get loginUrl() {
-        return this.apiUrl + "/login";
+        return this.ingestApiUrl + "/login";
     }
     get logoutUrl() {
-        return this.apiUrl + "/logout";
+        return this.ingestApiUrl + "/logout";
     }
 
     // TODO: Future-proof
     get testLoginAsChris() {
         console.warn("DEBUG LOGIN CODE BEING USED");
-        return this.apiUrl + "/user/confirm/V1StGXR8_Z5jdHi6B-myT";
+        return this.ingestApiUrl + "/user/confirm/V1StGXR8_Z5jdHi6B-myT";
     }
 
     isLoggedIn() {
@@ -57,7 +57,7 @@ class AjaxHelperInstance {
             $.ajax(
                 this.addCredentials({
                     dataType: "json",
-                    url: this.apiUrl + "/token/mint",
+                    url: this.ingestApiUrl + "/token/mint",
                 })
             )
                 .done((token) => {
@@ -92,7 +92,7 @@ class AjaxHelperInstance {
         return $.ajax(this.addCredentials(params)).catch(this.handle4xx);
     }
 
-    getJSON(url = this.apiUrl, data, success) {
+    getJSON(url = this.ingestApiUrl, data, success) {
         this.ajax({
             dataType: "json",
             url: url,
@@ -102,7 +102,7 @@ class AjaxHelperInstance {
     }
 
     getJobUrl(category, job, extra = "") {
-        return this.apiUrl + "/" + encodeURIComponent(category) + "/" + encodeURIComponent(job) + extra;
+        return this.ingestApiUrl + "/" + encodeURIComponent(category) + "/" + encodeURIComponent(job) + extra;
     }
 
     getImageUrl(category, job, filename, size) {

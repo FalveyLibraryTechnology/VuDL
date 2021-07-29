@@ -1,3 +1,5 @@
+import AudioFile from "./AudioFile";
+
 class PrivateConfig {
     protected ini;
 
@@ -100,6 +102,14 @@ class PrivateConfig {
 
     get initialPidValue(): number {
         return parseInt(this.ini["fedora_initial_pid"] ?? "1");
+    }
+
+    get dataModels(): Record <string, string> {
+        return this.ini["data_models"]
+    }
+
+    get collectionModels(): Record <string, string> {
+        return this.ini["collection_models"]
     }
 }
 
