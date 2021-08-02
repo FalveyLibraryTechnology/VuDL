@@ -18,6 +18,9 @@ class JobPaginator extends React.Component {
         this.autonumberFollowingPages = this.autonumberFollowingPages.bind(this);
         this.getLabel = this.getLabel.bind(this);
         this.toggleZoom = this.toggleZoom.bind(this);
+        this.deletePage = this.deletePage.bind(this);
+        this.nextPage = this.nextPage.bind(this);
+        this.prevPage = this.prevPage.bind(this);
     }
 
     getImageUrl(imageNumber, size) {

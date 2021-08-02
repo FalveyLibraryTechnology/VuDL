@@ -1,13 +1,11 @@
 # URLs of VuDL API and React client
 client_url = "http://localhost:3000"
-api_url = "http://localhost:9000"
 
 # Credentials for connecting to a Fedora backend:
-fedora_host = "http://myserver:8088"
-fedora_api = "http://myserver:8088/fedora"
 fedora_username = "fedoraAdmin"
 fedora_password = "fedoraAdmin"
 fedora_pid_namespace = "vudl"
+base_url = "http://localhost:8080/rest"
 
 # The first number for the PID generator to use:
 fedora_initial_pid = "1"
@@ -22,10 +20,7 @@ tesseract_path = "/usr/local/bin/tesseract"
 #tesseract_allowed_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!'\"()&$%-+=[]?<>“”‘’—"
 
 # Settings for ocrmypdf (omit setting to skip this step if you aren't using it)
-#ocrmypdf_path = /usr/local/bin/ocrmypdf
-
-# REST base URL
-base_url = "http://vua6743.villanova.edu:8089/rest" 
+#ocrmypdf_path = /usr/local/bin/ocrmypdf 
 
 # VuFind Base URL
 vufind_url = "https://myserver"
@@ -39,6 +34,9 @@ pdf_directory = "/tmp/"
 
 # Settings for FFmpeg
 #ffmpeg_path = /usr/bin/ffmpeg
+
+# Full path to FITS command (see https://projects.iq.harvard.edu/fits/downloads)
+fits_command = /usr/local/fits/fits.sh
 
 # JVM to use for running Java apps (used for Tika)
 java_path = java
@@ -58,15 +56,6 @@ holding_area_path = "C:/holdingarea"
 
 # Base path where processed files are moved after ingestion.
 processed_area_path = "C:/processed"
-
-# Should we require a login? (Set to false for easy debugging; DO NOT DISABLE
-# IN PRODUCTION)
-require_login = true
-
-# An array of uids that are allowed to log in (e.g. [user1, user2, user3]; set
-# to "*" to allow all users). See also config/initializers/omniauth.rb for
-# authentication settings.
-user_whitelist = "*"
 
 # Allowed origins, IPs, and addresses for CORS
 allowed_origins[] = http://localhost:3000 # api

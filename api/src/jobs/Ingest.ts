@@ -4,13 +4,15 @@ import path = require("path");
 import AudioFile from "../models/AudioFile";
 import Category from "../models/Category";
 import Config from "../models/Config";
-import { DatastreamParameters, FedoraObject } from "../models/FedoraObject";
+import { DatastreamParameters } from "../services/Fedora";
+import { FedoraObject } from "../models/FedoraObject";
 import DocumentFile from "../models/DocumentFile";
 import ImageFile from "../models/ImageFile";
 import Job from "../models/Job";
 import Page from "../models/Page";
 import QueueJobInterface from "./QueueJobInterface";
 import winston = require("winston");
+import xmlescape = require("xml-escape");
 
 class IngestProcessor {
     protected job: Job;
@@ -35,29 +37,31 @@ class IngestProcessor {
 
     async addDatastreamsToPage(page: Page, imageData: FedoraObject): Promise<void> {
         const image = new ImageFile(this.job.dir + "/" + page.filename);
-        imageData.addDatastreamFromFile(image.filename, "MASTER", "image/tiff");
-        imageData.addMasterMetadataDatastream();
+        await imageData.addDatastreamFromFile(image.filename, "MASTER", "image/tiff");
+        await imageData.addMasterMetadataDatastream(image.filename);
         for (const size in image.sizes) {
-            imageData.addDatastreamFromFile(await image.derivative(size), size, "image/jpeg");
+            await imageData.addDatastreamFromFile(await image.derivative(size), size, "image/jpeg");
         }
         if (this.category.supportsOcr) {
-            imageData.addDatastreamFromFile(await image.ocr(), "OCR-DIRTY", "text/plain");
+            await imageData.addDatastreamFromFile(await image.ocr(), "OCR-DIRTY", "text/plain");
         }
     }
 
-    addDatastreamsToDocument(document: DocumentFile, documentData: FedoraObject): void {
-        documentData.addDatastreamFromFile(this.job.dir + "/" + document.filename, "MASTER", "application/pdf");
-        documentData.addMasterMetadataDatastream();
+    async addDatastreamsToDocument(document: DocumentFile, documentData: FedoraObject): Promise<void> {
+        const pdf = this.job.dir + "/" + document.filename;
+        await documentData.addDatastreamFromFile(pdf, "MASTER", "application/pdf");
+        await documentData.addMasterMetadataDatastream(pdf);
     }
 
-    addDatastreamsToAudio(audio: AudioFile, audioData: FedoraObject) {
+    async addDatastreamsToAudio(audio: AudioFile, audioData: FedoraObject): Promise<void> {
         this.logger.info("Adding Flac");
-        audioData.addDatastreamFromFile(this.job.dir + "/" + audio.filename, "MASTER", "audio/x-flac");
+        const flac = this.job.dir + "/" + audio.filename;
+        await audioData.addDatastreamFromFile(flac, "MASTER", "audio/x-flac");
         this.logger.info("Adding MP3");
-        audioData.addDatastreamFromFile(audio.derivative("MP3"), "MP3", "audio/mpeg");
+        await audioData.addDatastreamFromFile(audio.derivative("MP3"), "MP3", "audio/mpeg");
         this.logger.info("Adding OGG");
-        audioData.addDatastreamFromFile(audio.derivative("OGG"), "OGG", "audio/ogg");
-        audioData.addMasterMetadataDatastream();
+        await audioData.addDatastreamFromFile(audio.derivative("OGG"), "OGG", "audio/ogg");
+        await audioData.addMasterMetadataDatastream(flac);
     }
 
     async addPages(pageList: FedoraObject): Promise<void> {
@@ -87,7 +91,7 @@ class IngestProcessor {
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + document.filename);
             const data = await this.buildDocument(documentList, document, number);
-            this.addDatastreamsToDocument(document, data);
+            await this.addDatastreamsToDocument(document, data);
         }
     }
 
@@ -98,7 +102,7 @@ class IngestProcessor {
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + audio.filename);
             const audioData = await this.buildAudio(audioList, audio, number);
-            this.addDatastreamsToAudio(audio, audioData);
+            await this.addDatastreamsToAudio(audio, audioData);
         }
     }
 
@@ -106,14 +110,14 @@ class IngestProcessor {
         const imageData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         imageData.parentPid = pageList.pid;
         imageData.modelType = "ImageData";
-        imageData.title = page.label;
+        imageData.title = String(page.label);
         this.logger.info("Creating Image Object " + imageData.pid);
 
-        imageData.coreIngest("I");
-        imageData.dataIngest();
-        imageData.imageDataIngest();
+        await imageData.coreIngest("Inactive");
+        await imageData.dataIngest();
+        await imageData.imageDataIngest();
 
-        imageData.addSequenceRelationship(pageList.pid, number);
+        await imageData.addSequenceRelationship(pageList.pid, number);
 
         return imageData;
     }
@@ -125,9 +129,9 @@ class IngestProcessor {
         pageList.title = "Page List";
         this.logger.info("Creating Page List Object " + pageList.pid);
 
-        pageList.coreIngest("I");
-        pageList.collectionIngest();
-        pageList.listCollectionIngest();
+        await pageList.coreIngest("Inactive");
+        await pageList.collectionIngest();
+        await pageList.listCollectionIngest();
 
         return pageList;
     }
@@ -136,14 +140,14 @@ class IngestProcessor {
         const documentData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         documentData.parentPid = documentList.pid;
         documentData.modelType = "PDFData";
-        documentData.title = document.label;
+        documentData.title = String(document.label);
         this.logger.info("Creating Document Object " + documentData.pid);
 
-        documentData.coreIngest("I");
-        documentData.dataIngest();
-        documentData.documentDataIngest();
+        await documentData.coreIngest("Inactive");
+        await documentData.dataIngest();
+        await documentData.documentDataIngest();
 
-        documentData.addSequenceRelationship(documentList.pid, number);
+        await documentData.addSequenceRelationship(documentList.pid, number);
 
         return documentData;
     }
@@ -155,9 +159,9 @@ class IngestProcessor {
         documentList.title = "Document List";
         this.logger.info("Creating Document List Object " + documentList.pid);
 
-        documentList.coreIngest("I");
-        documentList.collectionIngest();
-        documentList.listCollectionIngest();
+        await documentList.coreIngest("Inactive");
+        await documentList.collectionIngest();
+        await documentList.listCollectionIngest();
 
         return documentList;
     }
@@ -166,14 +170,14 @@ class IngestProcessor {
         const audioData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
         audioData.parentPid = audioList.pid;
         audioData.modelType = "AudioData";
-        audioData.title = audio.filename;
+        audioData.title = String(audio.filename);
         this.logger.info("Creating Audio Object " + audioData.pid);
 
-        audioData.coreIngest("I");
-        audioData.dataIngest();
-        audioData.audioDataIngest();
+        await audioData.coreIngest("Inactive");
+        await audioData.dataIngest();
+        await audioData.audioDataIngest();
 
-        audioData.addSequenceRelationship(audioList.pid, number);
+        await audioData.addSequenceRelationship(audioList.pid, number);
 
         return audioData;
     }
@@ -185,9 +189,9 @@ class IngestProcessor {
         audioList.title = "Audio List";
         this.logger.info("Creating Audio List Object " + audioList.pid);
 
-        audioList.coreIngest("I");
-        audioList.collectionIngest();
-        audioList.listCollectionIngest();
+        await audioList.coreIngest("Inactive");
+        await audioList.collectionIngest();
+        await audioList.listCollectionIngest();
 
         return audioList;
     }
@@ -199,46 +203,43 @@ class IngestProcessor {
         resource.title = "Incomplete... / Processing...";
         this.logger.info("Creating Resource Object " + resource.pid);
 
-        resource.coreIngest("I");
-        resource.collectionIngest();
-        resource.resourceCollectionIngest();
+        await resource.coreIngest("Inactive");
+        await resource.collectionIngest();
+        await resource.resourceCollectionIngest();
 
         // Attach thumbnail to resource:
         if (this.job.metadata.order.pages.length > 0) {
             const page = this.job.metadata.order.pages[0];
             const image = new ImageFile(this.job.dir + "/" + page.filename);
-            resource.addDatastreamFromFile(await image.derivative("THUMBNAIL"), "THUMBNAIL", "image/jpeg");
+            await resource.addDatastreamFromFile(await image.derivative("THUMBNAIL"), "THUMBNAIL", "image/jpeg");
         }
         return resource;
     }
 
-    async finalizeTitle(resource: FedoraObject) {
+    async finalizeTitle(resource: FedoraObject): Promise<void> {
         const title = this.job.dir.substr(1).split("/").reverse().join("_");
         this.logger.info("Updating title to " + title);
-        resource.modifyObject({
-            label: title,
-            logMessage: "Set Label to ingest/process path",
-        });
+        await resource.modifyObjectLabel(title);
 
-        const dc = await resource.datastreamDissemination("DC");
-        // TODO: validate that dc is actually valid Dublin Core XML!
-        this.replaceDCMetadata(
-            resource,
-            dc.replace(/Incomplete... \/ Processing.../, title),
-            "Set dc:title to ingest/process path"
-        );
+        const dc = await resource.getDatastream("DC");
+        const escapedTitle = xmlescape(title);
+        const newDublinCore = dc.replace(/Incomplete... \/ Processing.../, escapedTitle);
+        if (newDublinCore.indexOf(escapedTitle) < 0) {
+            throw new Error("Problem updating Dublin Core title!");
+        }
+        await this.replaceDCMetadata(resource, newDublinCore, "Set dc:title to ingest/process path");
     }
 
-    replaceDCMetadata(resource: FedoraObject, dc: string, message: string) {
+    async replaceDCMetadata(resource: FedoraObject, dc: string, message: string): Promise<void> {
         this.logger.info(message);
         const params: DatastreamParameters = {
             mimeType: "text/xml",
             logMessage: message,
         };
-        resource.modifyDatastream("DC", params, dc);
+        await resource.modifyDatastream("DC", params, dc);
     }
 
-    moveDirectory() {
+    moveDirectory(): void {
         const basePath = Config.getInstance().processedAreaPath;
         const currentTime = new Date();
         const now = currentTime.toISOString().substr(0, 10);
@@ -251,11 +252,12 @@ class IngestProcessor {
             target = target + "." + i;
         }
         this.logger.info("Moving " + this.job.dir + " to " + target);
-        // TODO: move the directory and clean up (original Ruby below):
-        //FileUtils.mkdir_p target unless File.exist?(target)
-        //FileUtils.mv Dir.glob("#{@job.dir}/*"), target
-        //FileUtils.rmdir @job.dir
-        //FileUtils.rm "#{target}/ingest.lock"
+        const targetParent = path.dirname(target);
+        if (!fs.existsSync(targetParent)) {
+            fs.mkdirSync(targetParent, { recursive: true });
+        }
+        fs.renameSync(this.job.dir, target);
+        fs.unlinkSync(target + "/ingest.lock");
     }
 
     async doIngest(): Promise<void> {

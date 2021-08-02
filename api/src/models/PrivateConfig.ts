@@ -9,21 +9,6 @@ class PrivateConfig {
         return this.ini["client_url"];
     }
 
-    get apiUrl(): string {
-        // TODO: not used -- do we need this?
-        return this.ini["api_url"];
-    }
-
-    get fedoraHostUrl(): string {
-        // TODO: not used -- do we need this?
-        return this.ini["fedora_host"];
-    }
-
-    get fedoraApiUrl(): string {
-        // TODO: not used -- do we need this? How does it differ from restBaseUrl() below?
-        return this.ini["fedora_api"];
-    }
-
     get fedoraUsername(): string {
         return this.ini["fedora_username"];
     }
@@ -42,6 +27,10 @@ class PrivateConfig {
 
     get ffmpegPath(): string {
         return this.ini["ffmpeg_path"];
+    }
+
+    get fitsCommand(): string {
+        return this.ini["fits_command"];
     }
 
     get tesseractPath(): string {
@@ -69,7 +58,8 @@ class PrivateConfig {
     }
 
     get holdingArea(): string {
-        return this.ini["holding_area_path"];
+        const holdingArea = this.ini["holding_area_path"];
+        return holdingArea.endsWith("/") ? holdingArea : holdingArea + "/";
     }
 
     get ocrmypdfPath(): string {
@@ -98,16 +88,6 @@ class PrivateConfig {
 
     get solrUrl(): string {
         return this.ini["solr_url"] ?? "http://localhost:8983/solr";
-    }
-
-    get requireLogin(): string {
-        // TODO: do we need this, or will authentication be handled differently in future?
-        return this.ini["require_login"];
-    }
-
-    get userWhitelist(): string {
-        // TODO: do we need this, or will authentication be handled differently in future?
-        return this.ini["user_whitelist"];
     }
 
     get allowedOrigins(): string[] {

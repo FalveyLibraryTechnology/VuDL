@@ -18,12 +18,13 @@ class Job {
         this.name = path.basename(dir);
     }
 
-    ingest(): void {
+    async ingest(): Promise<void> {
         const lockfile = this.metadata.ingestLockfile;
         if (this.metadata.published && !fileExists(lockfile)) {
             closeSync(openSync(lockfile, "w")); // touch
             const q = new Queue("vudl");
-            q.add("ingest", { dir: this.dir });
+            await q.add("ingest", { dir: this.dir });
+            q.close();
         }
     }
 
@@ -35,14 +36,15 @@ class Job {
         return new ImageFile(this.dir + "/" + fileName);
     }
 
-    makeDerivatives(): void {
+    async makeDerivatives(): Promise<void> {
         const status = this.metadata.derivativeStatus;
         const lockfile = this.metadata.derivativeLockfile;
 
         if (status.expected > status.processed && !fileExists(lockfile)) {
             closeSync(openSync(lockfile, "w")); // touch
             const q = new Queue("vudl");
-            q.add("derivatives", { dir: this.dir });
+            await q.add("derivatives", { dir: this.dir });
+            q.close();
         }
     }
 
