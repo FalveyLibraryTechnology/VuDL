@@ -8,10 +8,6 @@ import Modal from "./Modal";
 import "../css/editor.css";
 
 class ObjectEditor extends React.Component {
-    static propTypes = {
-        pid: PropTypes.string,
-    };
-
     constructor(props) {
         super(props);
         this.ajax = AjaxHelper.getInstance();
@@ -30,5 +26,9 @@ class ObjectEditor extends React.Component {
         );
     }
 }
+
+ObjectEditor.propTypes = {
+    pid: PropTypes.string,
+};
 
 export default ObjectEditor;

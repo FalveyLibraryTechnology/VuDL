@@ -2,14 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 class Field extends React.Component {
-    static propTypes = {
-        value: PropTypes.string,
-        type: PropTypes.string,
-        index: PropTypes.number,
-        editField: PropTypes.func,
-        removeField: PropTypes.func,
-    };
-
     constructor(props) {
         super(props);
     }
@@ -34,5 +26,13 @@ class Field extends React.Component {
         );
     }
 }
+
+Field.propTypes = {
+    value: PropTypes.string,
+    type: PropTypes.string,
+    index: PropTypes.number,
+    editField: PropTypes.func,
+    removeField: PropTypes.func,
+};
 
 export default Field;

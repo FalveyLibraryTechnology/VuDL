@@ -5,10 +5,6 @@ import AjaxHelper from "../AjaxHelper";
 import ChildListItem from "./ChildListItem";
 
 class ChildList extends React.Component {
-    static propTypes = {
-        parentID: PropTypes.string,
-    };
-
     constructor(props) {
         super(props);
         this.ajax = AjaxHelper.getInstance();
@@ -36,5 +32,9 @@ class ChildList extends React.Component {
         );
     }
 }
+
+ChildList.propTypes = {
+    parentID: PropTypes.string,
+};
 
 export default ChildList;

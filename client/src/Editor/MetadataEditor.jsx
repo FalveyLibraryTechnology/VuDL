@@ -5,10 +5,6 @@ import FieldList from "./FieldList";
 import { openModal } from "./interface-store.js";
 
 class MetadataEditor extends React.Component {
-    static propTypes = {
-        pid: PropTypes.string,
-    };
-
     constructor(props) {
         super(props);
         this.state = {
@@ -109,5 +105,9 @@ class MetadataEditor extends React.Component {
         );
     }
 }
+
+MetadataEditor.propTypes = {
+    pid: PropTypes.string,
+};
 
 export default MetadataEditor;

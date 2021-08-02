@@ -4,15 +4,6 @@ import PropTypes from "prop-types";
 import Field from "./Field";
 
 class FieldList extends React.Component {
-    static propTypes = {
-        index: PropTypes.number,
-        title: PropTypes.string,
-        type: PropTypes.string,
-        values: PropTypes.arrayOf(PropTypes.string),
-        editField: PropTypes.func,
-        removeField: PropTypes.func,
-    };
-
     constructor(props) {
         super(props);
         this.editField = this.editField.bind(this);
@@ -44,5 +35,14 @@ class FieldList extends React.Component {
         );
     }
 }
+
+FieldList.propTypes = {
+    index: PropTypes.number,
+    title: PropTypes.string,
+    type: PropTypes.string,
+    values: PropTypes.arrayOf(PropTypes.string),
+    editField: PropTypes.func,
+    removeField: PropTypes.func,
+};
 
 export default FieldList;

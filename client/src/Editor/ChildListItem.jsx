@@ -9,11 +9,6 @@ import { openModal } from "./interface-store.js";
 import "remixicon/fonts/remixicon.css";
 
 class ChildListItem extends React.Component {
-    static propTypes = {
-        pid: PropTypes.string,
-        title: PropTypes.string,
-    };
-
     constructor(props) {
         super(props);
         this.state = { open: false };
@@ -55,5 +50,10 @@ class ChildListItem extends React.Component {
         );
     }
 }
+
+ChildListItem.propTypes = {
+    pid: PropTypes.string,
+    title: PropTypes.string,
+};
 
 export default ChildListItem;
