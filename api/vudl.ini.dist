@@ -1,4 +1,4 @@
-# URLs of VuDL API and React client
+# URL of React client:
 client_url = "http://localhost:3000"
 
 # Credentials for connecting to a Fedora backend:
@@ -10,7 +10,15 @@ base_url = "http://localhost:8080/rest"
 # The first number for the PID generator to use:
 fedora_initial_pid = "1"
 
-solr_query_url = "http://myserver:8983/solr/core/query"
+# Values to be indexed into commonly-used Solr facet fields:
+institution = "My University"
+collection = "Digital Library"
+
+# Top-level PIDs (used to determine the end of the chain when retrieving parents)
+# This is commonly the PID of your very top-level object -- e.g. vudl:1 -- and
+# the PID of your top-level public object -- e.g. vudl:3.
+top_level_pids[] = "vudl:1"
+top_level_pids[] = "vudl:3"
 
 # Settings for Tesseract OCR
 tesseract_path = "/usr/local/bin/tesseract"
@@ -52,14 +60,125 @@ textcleaner_switches = "-g -e stretch -u -T"
 # Base path where incoming files are stored; this must contain two levels
 # of subdirectories, the first representing categories and the second
 # representing jobs within those categories.
-holding_area_path = "C:/holdingarea"
+holding_area_path = "/opt/holdingarea"
 
 # Base path where processed files are moved after ingestion.
-processed_area_path = "C:/processed"
+processed_area_path = "/opt/processed"
 
 # Allowed origins, IPs, and addresses for CORS
 allowed_origins[] = http://localhost:3000 # api
 allowed_origins[] = http://localhost:9000 # client
+
+# The lowest number recognized as a legal year during indexing
+minimum_valid_year = 1000
+
+# Articles that should be stripped from the title sort field during indexing.
+# Be sure to include a trailing space if the articles are whole words.
+# These should always be entered in all-lowercase, as sort text will be lowercased.
+articles_to_strip[] = "a "
+articles_to_strip[] = "an "
+articles_to_strip[] = "the "
+
+# Mapping of language codes to display names; used for indexing
+[LanguageMap]
+ab = Abkhazian
+af = Afrikaans
+an = Aragonese
+ar = Arabic
+as = Assamese
+az = Azerbaijani
+be = Belarusian
+bg = Bulgarian
+bn = Bengali
+bo = Tibetan
+br = Breton
+bs = Bosnian
+ca = Catalan / Valencian
+ce = Chechen
+co = Corsican
+cs = Czech
+cu = Church Slavic
+cy = Welsh
+da = Danish
+de = German
+el = Greek
+en = English
+eo = Esperanto
+es = Spanish / Castilian
+et = Estonian
+eu = Basque
+fa = Persian
+fi = Finnish
+fj = Fijian
+fo = Faroese
+fr = French
+fy = Western Frisian
+ga = Irish
+gd = Gaelic / Scottish Gaelic
+gl = Galician
+grc = Ancient Greek
+gv = Manx
+he = Hebrew
+hi = Hindi
+hr = Croatian
+ht = Haitian; Haitian Creole
+hu = Hungarian
+hy = Armenian
+id = Indonesian
+is = Icelandic
+it = Italian
+ja = Japanese
+jv = Javanese
+ka = Georgian
+kg = Kongo
+ko = Korean
+ku = Kurdish
+kw = Cornish
+ky = Kirghiz
+la = Latin
+lb = Luxembourgish; Letzeburgesch
+li = Limburgan; Limburger; Limburgish
+ln = Lingala
+lt = Lithuanian
+lv = Latvian
+mg = Malagasy
+mk = Macedonian
+mn = Mongolian
+mo = Moldavian
+ms = Malay
+mt = Maltese
+my = Burmese
+nb = Norwegian (Bokmål)
+ne = Nepali
+nl = Dutch
+nn = Norwegian (Nynorsk)
+no = Norwegian
+oc = Occitan (post 1500); Provençal
+pl = Polish
+pt = Portuguese
+pt-BR = Portuguese (Brazilian)
+rm = Raeto-Romance
+ro = Romanian
+ru = Russian
+sc = Sardinian
+se = Northern Sami
+sk = Slovak
+sl = Slovenian
+so = Somali
+sq = Albanian
+sr = Serbian
+sv = Swedish
+sw = Swahili
+tk = Turkmen
+tr = Turkish
+ty = Tahitian
+uk = Ukrainian
+ur = Urdu
+uz = Uzbek
+vi = Vietnamese
+vo = Volapuk
+yi = Yiddish
+zh = Chinese
 
 # Collection Models
 [collection_models]

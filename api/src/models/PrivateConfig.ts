@@ -21,10 +21,6 @@ class PrivateConfig {
         return this.ini["fedora_pid_namespace"];
     }
 
-    get solrQueryUrl(): string {
-        return this.ini["solr_query_url"];
-    }
-
     get ffmpegPath(): string {
         return this.ini["ffmpeg_path"];
     }
@@ -108,6 +104,30 @@ class PrivateConfig {
 
     get collectionModels(): Record<string, string> {
         return this.ini["collection_models"];
+    }
+
+    get institution(): string {
+        return this.ini["institution"] ?? "My University";
+    }
+
+    get collection(): string {
+        return this.ini["collection"] ?? "Digital Library";
+    }
+
+    get topLevelPids(): Array<string> {
+        return this.ini["top_level_pids"] ?? [];
+    }
+
+    get articlesToStrip(): Array<string> {
+        return this.ini["articles_to_strip"] ?? [];
+    }
+
+    get languageMap(): Record<string, string> {
+        return this.ini["LanguageMap"] ?? {};
+    }
+
+    get minimumValidYear(): number {
+        return parseInt(this.ini["minimum_valid_year"] ?? 1000);
     }
 }
 
