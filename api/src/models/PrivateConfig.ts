@@ -1,5 +1,3 @@
-import AudioFile from "./AudioFile";
-
 class PrivateConfig {
     protected ini;
 
