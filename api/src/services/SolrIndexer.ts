@@ -3,6 +3,7 @@ import DateSanitizer from "./DateSanitizer";
 import Fedora from "./Fedora";
 import FedoraData from "../models/FedoraData";
 import HierarchyCollector from "./HierarchyCollector";
+import http = require("needle");
 
 interface SolrFields {
     [key: string]: string | Array<string>;
@@ -21,6 +22,26 @@ class SolrIndexer {
         // Yes, I wrote a left_pad function.
         const paddedNumber = "0000000000" + num;
         return paddedNumber.substr(paddedNumber.length - 10);
+    }
+
+    protected async getChangeTrackerDetails(pid: string, modificationDate: string): Promise<Record<string, string>> {
+        const core = Config.getInstance().solrCore;
+        const url = Config.getInstance().vufindUrl + "/XSLT/Home?";
+        const query =
+            "method[]=getLastIndexed&method[]=getFirstIndexed&id=" +
+            encodeURIComponent(pid) +
+            "&core=" +
+            encodeURIComponent(core) +
+            "&date=" +
+            encodeURIComponent(modificationDate);
+        const response = (await http("get", url + query)).body;
+        if (
+            typeof response.results.getFirstIndexed !== "string" ||
+            typeof response.results.getLastIndexed !== "string"
+        ) {
+            throw new Error("Unexpected change tracker response.");
+        }
+        return response.results;
     }
 
     async getFields(pid: string): Promise<SolrFields> {
@@ -263,6 +284,14 @@ class SolrIndexer {
         if (fullText.length > 0) {
             fields.fulltext = fullText;
         }
+
+        // Change tracker details:
+        const change = await this.getChangeTrackerDetails(
+            pid,
+            fields["fgs.lastModifiedDate_txt_mv"][0] ?? "1900-01-01T00:00:00Z"
+        );
+        fields.first_indexed = change.getFirstIndexed;
+        fields.last_indexed = change.getLastIndexed;
 
         return fields;
     }
