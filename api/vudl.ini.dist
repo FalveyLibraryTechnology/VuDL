@@ -10,8 +10,6 @@ base_url = "http://localhost:8080/rest"
 # The first number for the PID generator to use:
 fedora_initial_pid = "1"
 
-solr_query_url = "http://myserver:8983/solr/core/query"
-
 # Values to be indexed into commonly-used Solr facet fields:
 institution = "My University"
 collection = "Digital Library"
