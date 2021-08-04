@@ -21,6 +21,7 @@ export default class DateSanitizer {
             "1888-05-99",
             "1888/05/12",
             "1888--05--12",
+            "693-01-07",
         ];
         for (const date of tests) {
             console.log(date, DateSanitizer.sanitize(date));
@@ -62,7 +63,8 @@ export default class DateSanitizer {
         }
 
         // If we've gotten this far, we at least know that we have a valid year.
-        const year = date.substr(0, 4);
+        const yearValue = "0000" + parseInt(date.substr(0, 4));
+        const year = yearValue.substr(yearValue.length - 4, 4);
 
         // Let's get rid of punctuation and normalize separators:
         date = date.replace(/[. ?]/g, "").replace(/\/|--|0-/g, "-");
