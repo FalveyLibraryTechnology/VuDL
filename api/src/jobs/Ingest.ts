@@ -265,7 +265,7 @@ class IngestProcessor {
         this.logger.info("Beginning ingest.");
         this.logger.info("Target collection ID: " + this.category.targetCollectionId);
         const holdingArea = new FedoraObject(this.category.targetCollectionId, this.logger);
-        if (holdingArea.sort == "custom") {
+        if (await holdingArea.getSort() == "custom") {
             // This was already a TODO in the Ruby code; low priority:
             throw new Error("TODO: implement custom sort support.");
         }
