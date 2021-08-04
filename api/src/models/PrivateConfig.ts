@@ -21,10 +21,6 @@ class PrivateConfig {
         return this.ini["fedora_pid_namespace"];
     }
 
-    get solrQueryUrl(): string {
-        return this.ini["solr_query_url"];
-    }
-
     get ffmpegPath(): string {
         return this.ini["ffmpeg_path"];
     }
