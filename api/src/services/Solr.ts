@@ -1,13 +1,6 @@
 import http = require("needle");
-import { IncomingMessage } from "http";
+import { NeedleResponse } from "./interfaces";
 import Config from "../models/Config";
-
-// TODO: Now shared with Fedora.ts
-interface NeedleResponse extends IncomingMessage {
-    body: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    raw: Buffer;
-    bytes: number;
-}
 
 class Solr {
     baseUrl: string;
