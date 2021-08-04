@@ -173,15 +173,13 @@ class HierarchyCollector {
 
     async getFedoraData(pid: string, fetchRdf = true): Promise<FedoraData> {
         // Use Fedora to get data
-        // TODO: type
-        // TODO: catch failure
-        // TODO: Launch promises together, Promise.all()
-        const DC = await this.fedora.getDC(pid);
-        const RELS = await this.fedora.getDatastreamAsString(pid, "RELS-EXT");
+        const DCPromise = this.fedora.getDC(pid);
+        const RELSPromise = this.fedora.getDatastreamAsString(pid, "RELS-EXT");
         // For indexing purposes, we only need the RDF information for the
         // first object retrieved; so when we recurse higher into the tree,
         // we can skip fetching more RDF in order to save some time!
-        const RDF = fetchRdf ? await this.fedora.getRdf(pid) : null;
+        const RDFPromise = fetchRdf ? this.fedora.getRdf(pid) : null;
+        const [DC, RELS, RDF] = await Promise.all([DCPromise, RELSPromise, RDFPromise]);
         const dataStreams = fetchRdf ? this.extractFedoraDatastreams(RDF) : [];
         const relations = this.extractRelations(RELS);
         // Fetch license details if appropriate/available:
