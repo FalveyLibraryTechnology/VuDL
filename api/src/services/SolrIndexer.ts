@@ -1,3 +1,4 @@
+import Config from "../models/Config";
 import DateSanitizer from "./DateSanitizer";
 import Fedora from "./Fedora";
 import FedoraData from "../models/FedoraData";
@@ -9,126 +10,17 @@ interface SolrFields {
 
 class SolrIndexer {
     hierarchyCollector: HierarchyCollector;
-    // TODO: make configurable
-    institution = "Villanova University";
-    collection = "Digital Library";
 
     constructor() {
         // Make Fedora connection
         const fedora = new Fedora();
-        // TODO: make configurable
-        const topPids = ["vudl:1", "vudl:3"];
-        this.hierarchyCollector = new HierarchyCollector(fedora, topPids);
+        this.hierarchyCollector = new HierarchyCollector(fedora, Config.getInstance().topLevelPids);
     }
 
     protected padNumber(num: string): string {
         // Yes, I wrote a left_pad function.
         const paddedNumber = "0000000000" + num;
         return paddedNumber.substr(paddedNumber.length - 10);
-    }
-
-    protected getLanguageMap(): Record<string, string> {
-        // TODO: make configurable
-        return {
-            ab: "Abkhazian",
-            af: "Afrikaans",
-            an: "Aragonese",
-            ar: "Arabic",
-            as: "Assamese",
-            az: "Azerbaijani",
-            be: "Belarusian",
-            bg: "Bulgarian",
-            bn: "Bengali",
-            bo: "Tibetan",
-            br: "Breton",
-            bs: "Bosnian",
-            ca: "Catalan / Valencian",
-            ce: "Chechen",
-            co: "Corsican",
-            cs: "Czech",
-            cu: "Church Slavic",
-            cy: "Welsh",
-            da: "Danish",
-            de: "German",
-            el: "Greek",
-            en: "English",
-            eo: "Esperanto",
-            es: "Spanish / Castilian",
-            et: "Estonian",
-            eu: "Basque",
-            fa: "Persian",
-            fi: "Finnish",
-            fj: "Fijian",
-            fo: "Faroese",
-            fr: "French",
-            fy: "Western Frisian",
-            ga: "Irish",
-            gd: "Gaelic / Scottish Gaelic",
-            gl: "Galician",
-            grc: "Ancient Greek",
-            gv: "Manx",
-            he: "Hebrew",
-            hi: "Hindi",
-            hr: "Croatian",
-            ht: "Haitian; Haitian Creole",
-            hu: "Hungarian",
-            hy: "Armenian",
-            id: "Indonesian",
-            is: "Icelandic",
-            it: "Italian",
-            ja: "Japanese",
-            jv: "Javanese",
-            ka: "Georgian",
-            kg: "Kongo",
-            ko: "Korean",
-            ku: "Kurdish",
-            kw: "Cornish",
-            ky: "Kirghiz",
-            la: "Latin",
-            lb: "Luxembourgish; Letzeburgesch",
-            li: "Limburgan; Limburger; Limburgish",
-            ln: "Lingala",
-            lt: "Lithuanian",
-            lv: "Latvian",
-            mg: "Malagasy",
-            mk: "Macedonian",
-            mn: "Mongolian",
-            mo: "Moldavian",
-            ms: "Malay",
-            mt: "Maltese",
-            my: "Burmese",
-            nb: "Norwegian (Bokmål)",
-            ne: "Nepali",
-            nl: "Dutch",
-            nn: "Norwegian (Nynorsk)",
-            no: "Norwegian",
-            oc: "Occitan (post 1500); Provençal",
-            pl: "Polish",
-            pt: "Portuguese",
-            rm: "Raeto-Romance",
-            ro: "Romanian",
-            ru: "Russian",
-            sc: "Sardinian",
-            se: "Northern Sami",
-            sk: "Slovak",
-            sl: "Slovenian",
-            so: "Somali",
-            sq: "Albanian",
-            sr: "Serbian",
-            sv: "Swedish",
-            sw: "Swahili",
-            tk: "Turkmen",
-            tr: "Turkish",
-            ty: "Tahitian",
-            uk: "Ukrainian",
-            ur: "Urdu",
-            uz: "Uzbek",
-            vi: "Vietnamese",
-            vo: "Volapuk",
-            yi: "Yiddish",
-            zh: "Chinese",
-            "pt-BR": "Portuguese (Brazilian)",
-        };
     }
 
     async getFields(pid: string): Promise<SolrFields> {
@@ -139,8 +31,8 @@ class SolrIndexer {
         const fields: SolrFields = {
             id: pid,
             record_format: "vudl",
-            institution: this.institution,
-            collection: this.collection,
+            institution: Config.getInstance().institution,
+            collection: Config.getInstance().collection,
             modeltype_str_mv: fedoraData.models,
             datastream_str_mv: fedoraData.fedoraDatastreams,
             hierarchytype: "",
@@ -301,25 +193,23 @@ class SolrIndexer {
         const dateString = fedoraData.models.includes("vudl-system:DataModel")
             ? (hierarchyParents[0].metadata["dc:date"] ?? [])[0] ?? ""
             : (fields["dc.date_txt_mv"] ?? [])[0] ?? "";
-        const strippedDate = dateString.substr(0, 4);
-        // TODO: configurable date cut-off?
-        if (parseInt(strippedDate) > 1000) {
-            fields.publishDate = strippedDate;
-            fields.publishDateSort = strippedDate;
+        const strippedDate = parseInt(dateString.substr(0, 4));
+        if (strippedDate > Config.getInstance().minimumValidYear) {
+            fields.publishDate = String(strippedDate);
+            fields.publishDateSort = String(strippedDate);
             fields.normalized_sort_date = DateSanitizer.sanitize(dateString);
         }
 
         if (typeof fields["dc.language_txt_mv"] !== "undefined") {
             fields.language = (fields["dc.language_txt_mv"] as Array<string>).map((lang) => {
-                return this.getLanguageMap()[lang] ?? lang;
+                return Config.getInstance().languageMap[lang] ?? lang;
             });
         }
 
         if (typeof fields["title"] !== "undefined") {
-            // TODO: configurable article list:
-            const articles = ["a ", "an ", "the "];
+            // If we have a title, generate a sort-friendly version:
             let sortTitle = (fields["title"] as string).toLowerCase();
-            for (const article of articles) {
+            for (const article of Config.getInstance().articlesToStrip) {
                 if (sortTitle.substr(0, article.length) === article) {
                     sortTitle = sortTitle.substr(article.length);
                     break;
