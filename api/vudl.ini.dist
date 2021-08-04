@@ -75,7 +75,9 @@ allowed_origins[] = http://localhost:9000 # client
 # The lowest number recognized as a legal year during indexing
 minimum_valid_year = 1000
 
-# Articles that should be stripped from the title sort field during indexing
+# Articles that should be stripped from the title sort field during indexing.
+# Be sure to include a trailing space if the articles are whole words.
+# These should always be entered in all-lowercase, as sort text will be lowercased.
 articles_to_strip[] = "a "
 articles_to_strip[] = "an "
 articles_to_strip[] = "the "

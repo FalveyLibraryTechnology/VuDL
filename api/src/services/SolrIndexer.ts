@@ -193,10 +193,10 @@ class SolrIndexer {
         const dateString = fedoraData.models.includes("vudl-system:DataModel")
             ? (hierarchyParents[0].metadata["dc:date"] ?? [])[0] ?? ""
             : (fields["dc.date_txt_mv"] ?? [])[0] ?? "";
-        const strippedDate = dateString.substr(0, 4);
-        if (parseInt(strippedDate) > Config.getInstance().minimumValidYear) {
-            fields.publishDate = strippedDate;
-            fields.publishDateSort = strippedDate;
+        const strippedDate = parseInt(dateString.substr(0, 4));
+        if (strippedDate > Config.getInstance().minimumValidYear) {
+            fields.publishDate = String(strippedDate);
+            fields.publishDateSort = String(strippedDate);
             fields.normalized_sort_date = DateSanitizer.sanitize(dateString);
         }
 
