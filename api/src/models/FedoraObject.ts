@@ -2,8 +2,10 @@ import fs = require("fs");
 import winston = require("winston");
 import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
+import { DOMParser } from "xmldom";
 import { execSync } from "child_process";
 import { getNextPid } from "../services/Database";
+import xpath = require("xpath");
 
 export interface ObjectParameters {
     label?: string;
@@ -166,8 +168,18 @@ export class FedoraObject {
         }
     }
 
-    get sort(): string {
-        // TODO: fetch sort value from RELS-EXT or equivalent, instead of hard-coding
-        return "title";
+    async getSort(): Promise<string> {
+        let sort = "title"; // default
+        // If we can find a RELS-EXT, let's check for non-default values:
+        const rels = await this.fedora.getDatastreamAsString(this.pid, "RELS-EXT", false, true);
+        if (rels.length > 0) {
+            const xmlParser = new DOMParser();
+            const xml = xmlParser.parseFromString(rels, "text/xml");
+            const rdfXPath = xpath.useNamespaces({ "vudl-rel": "http://vudl.org/relationships#" });
+            rdfXPath("//vudl-rel:sortOn/text()", xml).forEach((node: Node) => {
+                sort = node.nodeValue;
+            });
+        }
+        return sort;
     }
 }
