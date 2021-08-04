@@ -1,10 +1,10 @@
-import { IncomingMessage } from "http";
 import Config from "../models/Config";
 import http = require("needle");
 import N3 = require("n3");
 import crypto = require("crypto");
 const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
+import { NeedleResponse } from "./interfaces";
 import xmlescape = require("xml-escape");
 import xmldom = require("xmldom");
 const { DOMParser, XMLSerializer } = xmldom;
@@ -15,12 +15,6 @@ export interface DatastreamParameters {
     mimeType?: string;
     linkHeader?: string;
     logMessage?: string;
-}
-
-interface NeedleResponse extends IncomingMessage {
-    body: any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    raw: Buffer;
-    bytes: number;
 }
 
 interface Attributes {
