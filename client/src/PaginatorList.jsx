@@ -10,9 +10,9 @@ class PaginatorList extends React.Component {
     }
 
     scrollTo(thumb) {
-        var listOffset = this.pageList.offsetTop + (this.firstThumb.wrapper.offsetTop - this.pageList.offsetTop);
-        // TODO: this doesn't seem to be working:
-        this.pageList.current.scrollTop = thumb.offsetTop - listOffset;
+        const pageListOffset = this.pageList.current.offsetTop;
+        var listOffset = pageListOffset + (this.firstThumb.wrapper.current.offsetTop - pageListOffset);
+        this.pageList.current.scrollTop = thumb.current.offsetTop - listOffset;
     }
 
     render() {
