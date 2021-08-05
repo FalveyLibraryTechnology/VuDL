@@ -1,4 +1,4 @@
-<form action="/api/login">
+<form action="/api/auth/login">
     <label>
         Username
         <input type="text" name="username" />
@@ -10,7 +10,7 @@
     <button type="submit" class="primary">
         Submit
     </button>
-    <a class="button" href="/api/user/confirm/<%=user.hash %>">
+    <a class="button" href="/api/auth/user/confirm/<%=user.hash %>">
         just log in as <%=user.username %>...
     </a>
 </form>

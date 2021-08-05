@@ -180,3 +180,17 @@ vo = Volapuk
 yi = Yiddish
 zh = Chinese
 
+# Collection Models
+[collection_models]
+List = "vudl-system:ListCollection"
+Resource = "vudl-system:ResourceCollection"
+Folder = "vudl-system:FolderCollection"
+
+# Data Models
+[data_models]
+Image = "vudl-system:ImageData"
+PDF = "vudl-system:PDFData"
+DOC = "vudl-system:DOCData"
+Audio = "vudl-system:AudioData"
+XLS = "vudl-system:XLSData"
+Text = "vudl-system:TextData"

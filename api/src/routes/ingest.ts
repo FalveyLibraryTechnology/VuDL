@@ -6,10 +6,9 @@ import Config from "../models/Config";
 import Job from "../models/Job";
 
 const router = express.Router();
-import { setupPassport, requireToken } from "./auth";
+import { requireToken } from "./auth";
 import { sanitizeParameters } from "./sanitize";
 import fs = require("fs");
-setupPassport(router);
 
 function getJobFromRequest(req): Job {
     const jobDir = Config.getInstance().holdingArea + req.params.category + "/" + req.params.job;

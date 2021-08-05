@@ -98,6 +98,14 @@ class PrivateConfig {
         return parseInt(this.ini["fedora_initial_pid"] ?? "1");
     }
 
+    get dataModels(): Record<string, string> {
+        return this.ini["data_models"];
+    }
+
+    get collectionModels(): Record<string, string> {
+        return this.ini["collection_models"];
+    }
+
     get institution(): string {
         return this.ini["institution"] ?? "My University";
     }
