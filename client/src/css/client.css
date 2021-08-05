@@ -117,6 +117,7 @@ label input {
     margin-top: 0.5rem;
     margin-left: 8px;
     padding: 4px;
+    padding-bottom: 400px;
     border: 1px solid #c1c1c1;
     background-color: #fff;
     border-radius: 6px 0 0 6px;
@@ -133,8 +134,12 @@ label input {
     background: #e1e1e1;
     font-weight: 400;
     text-align: center;
+    text-shadow: 0 1px 0 #fff;
     cursor: pointer;
     word-break: break-all;
+}
+.thumbnail.selected {
+    background: #51aded;
 }
 .thumbnail img {
     display: block;
