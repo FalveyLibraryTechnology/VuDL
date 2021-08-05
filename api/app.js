@@ -9,6 +9,7 @@ const session = require("express-session");
 const path = require("path");
 const logger = require("morgan");
 
+const authRouter = require("./dist/routes/auth").router;
 const indexRouter = require("./dist/routes/index");
 const ingestRouter = require("./dist/routes/ingest");
 const editRouter = require("./dist/routes/edit");
@@ -55,6 +56,7 @@ if (app.get("env") === "production") {
 app.use(session(sess));
 
 app.use("/", indexRouter);
+app.use("/api/auth", authRouter);
 app.use("/api/ingest", ingestRouter);
 app.use("/api/edit", editRouter);
 app.use("/messenger", messengerRouter);

@@ -8,20 +8,29 @@ class AjaxHelperInstance {
         this.handle4xx = this.handle4xx.bind(this);
     }
 
-    get ingestApiUrl() {
-        return this.url + "/api/ingest";
+    get apiUrl() {
+        return this.url + "/api";
     }
+
+    get authApiUrl() {
+        return this.apiUrl + "/auth";
+    }
+
+    get ingestApiUrl() {
+        return this.apiUrl + "/ingest";
+    }
+
     get loginUrl() {
-        return this.ingestApiUrl + "/login";
+        return this.authApiUrl + "/login";
     }
     get logoutUrl() {
-        return this.ingestApiUrl + "/logout";
+        return this.authApiUrl + "/logout";
     }
 
     // TODO: Future-proof
     get testLoginAsChris() {
         console.warn("DEBUG LOGIN CODE BEING USED");
-        return this.ingestApiUrl + "/user/confirm/V1StGXR8_Z5jdHi6B-myT";
+        return this.authApiUrl + "/user/confirm/V1StGXR8_Z5jdHi6B-myT";
     }
 
     isLoggedIn() {
@@ -57,7 +66,7 @@ class AjaxHelperInstance {
             $.ajax(
                 this.addCredentials({
                     dataType: "json",
-                    url: this.ingestApiUrl + "/token/mint",
+                    url: this.authApiUrl + "/token/mint",
                 })
             )
                 .done((token) => {
