@@ -82,10 +82,16 @@ class Job extends React.Component {
                     this.state.derivatives.building ||
                     (typeof this.state.ingest_info !== "undefined" && this.state.ingest_info.length > 0)
                 ) {
-                    setTimeout(this.updateStatus, 1000);
+                    this.updateTimer = setTimeout(this.updateStatus, 1000);
                 }
             }.bind(this)
         );
+    }
+
+    componentWillUnmount() {
+        if (typeof this.updateTimer !== "undefined") {
+            clearTimeout(this.updateTimer);
+        }
     }
 
     getAgeString(minutes) {
