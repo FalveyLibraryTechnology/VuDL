@@ -18,8 +18,10 @@ class IngestProcessor {
     protected job: Job;
     protected category: Category;
     protected logger: winston.Logger;
+    protected config: Config;
 
-    constructor(dir: string) {
+    constructor(dir: string, config: Config) {
+        this.config = config;
         this.job = new Job(dir);
         this.category = new Category(path.dirname(dir));
         this.logger = winston.createLogger({
@@ -33,6 +35,10 @@ class IngestProcessor {
                 new winston.transports.Console(),
             ],
         });
+    }
+
+    public static build(dir: string): IngestProcessor {
+        return new IngestProcessor(dir, Config.getInstance());
     }
 
     async addDatastreamsToPage(page: Page, imageData: FedoraObject): Promise<void> {
@@ -240,7 +246,7 @@ class IngestProcessor {
     }
 
     moveDirectory(): void {
-        const basePath = Config.getInstance().processedAreaPath;
+        const basePath = this.config.processedAreaPath;
         const currentTime = new Date();
         const now = currentTime.toISOString().substr(0, 10);
         let target = basePath + "/" + now + "/" + this.category.name + "/" + this.job.name;
@@ -311,7 +317,7 @@ class IngestProcessor {
 
 class Ingest implements QueueJobInterface {
     async run(job: QueueJob): Promise<void> {
-        const handler = new IngestProcessor(job.data.dir);
+        const handler = IngestProcessor.build(job.data.dir);
         await handler.run();
     }
 }
