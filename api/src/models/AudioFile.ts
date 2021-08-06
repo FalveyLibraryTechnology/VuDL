@@ -7,10 +7,16 @@ class AudioFile {
     filename: string;
     extensions: Array<string> = ["OGG", "MP3"];
     dir: string;
+    config: Config;
 
-    constructor(filename: string, dir: string) {
+    constructor(filename: string, dir: string, config: Config) {
         this.filename = filename;
         this.dir = dir;
+        this.config = config;
+    }
+
+    public static build(filename: string, dir: string): AudioFile {
+        return new AudioFile(filename, dir, Config.getInstance());
     }
 
     derivative(extension: string): string {
@@ -21,7 +27,7 @@ class AudioFile {
                 fs.mkdirSync(dir, { recursive: true });
             }
             if (this.extensions.includes(extension)) {
-                const ffmpeg_path = Config.getInstance().ffmpegPath;
+                const ffmpeg_path = this.config.ffmpegPath;
                 if (ffmpeg_path) {
                     const ffmpegCommand = ffmpeg_path + " -i " + this.dir + "/" + this.filename + " " + deriv;
                     execSync(ffmpegCommand);
@@ -36,8 +42,8 @@ class AudioFile {
         return deriv;
     }
 
-    static fromRaw(raw: Record<string, string>): AudioFile {
-        return new AudioFile(raw.filename, raw.label);
+    static fromRaw(raw: Record<string, string>, config: Config = null): AudioFile {
+        return new AudioFile(raw.filename, raw.label, config ?? Config.getInstance());
     }
 
     raw(): Record<string, string> {

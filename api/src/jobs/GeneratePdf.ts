@@ -78,7 +78,7 @@ class PdfGenerator {
     }
 
     private async addPdfToPid(pdf: string): Promise<void> {
-        const documentList = new FedoraObject(await FedoraObject.getNextPid());
+        const documentList = await FedoraObject.fromNextPid();
         documentList.parentPid = this.pid;
         documentList.modelType = "ListCollection";
         documentList.title = "Document List";
@@ -92,7 +92,7 @@ class PdfGenerator {
     }
 
     private async buildDocument(documentList: FedoraObject, number: number): Promise<FedoraObject> {
-        const documentData = new FedoraObject(await FedoraObject.getNextPid());
+        const documentData = await FedoraObject.fromNextPid();
         documentData.parentPid = documentList.pid;
         documentData.modelType = "PDFData";
         documentData.title = "PDF";

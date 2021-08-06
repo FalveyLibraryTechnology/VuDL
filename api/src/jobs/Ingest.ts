@@ -113,7 +113,7 @@ class IngestProcessor {
     }
 
     async buildPage(pageList: FedoraObject, page: Page, number: number): Promise<FedoraObject> {
-        const imageData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
+        const imageData = await FedoraObject.fromNextPid(this.logger);
         imageData.parentPid = pageList.pid;
         imageData.modelType = "ImageData";
         imageData.title = String(page.label);
@@ -129,7 +129,7 @@ class IngestProcessor {
     }
 
     async buildPageList(resource: FedoraObject): Promise<FedoraObject> {
-        const pageList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
+        const pageList = await FedoraObject.fromNextPid(this.logger);
         pageList.parentPid = resource.pid;
         pageList.modelType = "ListCollection";
         pageList.title = "Page List";
@@ -143,7 +143,7 @@ class IngestProcessor {
     }
 
     async buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): Promise<FedoraObject> {
-        const documentData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
+        const documentData = await FedoraObject.fromNextPid(this.logger);
         documentData.parentPid = documentList.pid;
         documentData.modelType = "PDFData";
         documentData.title = String(document.label);
@@ -159,7 +159,7 @@ class IngestProcessor {
     }
 
     async buildDocumentList(resource: FedoraObject): Promise<FedoraObject> {
-        const documentList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
+        const documentList = await FedoraObject.fromNextPid(this.logger);
         documentList.parentPid = resource.pid;
         documentList.modelType = "ListCollection";
         documentList.title = "Document List";
@@ -173,7 +173,7 @@ class IngestProcessor {
     }
 
     async buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): Promise<FedoraObject> {
-        const audioData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
+        const audioData = await FedoraObject.fromNextPid(this.logger);
         audioData.parentPid = audioList.pid;
         audioData.modelType = "AudioData";
         audioData.title = String(audio.filename);
@@ -189,7 +189,7 @@ class IngestProcessor {
     }
 
     async buildAudioList(resource: FedoraObject): Promise<FedoraObject> {
-        const audioList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
+        const audioList = await FedoraObject.fromNextPid(this.logger);
         audioList.parentPid = resource.pid;
         audioList.modelType = "ListCollection";
         audioList.title = "Audio List";
@@ -203,7 +203,7 @@ class IngestProcessor {
     }
 
     async buildResource(holdingArea: FedoraObject): Promise<FedoraObject> {
-        const resource = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
+        const resource = await FedoraObject.fromNextPid(this.logger);
         resource.parentPid = holdingArea.pid;
         resource.modelType = "ResourceCollection";
         resource.title = "Incomplete... / Processing...";
@@ -270,7 +270,7 @@ class IngestProcessor {
         const startTime = Date.now();
         this.logger.info("Beginning ingest.");
         this.logger.info("Target collection ID: " + this.category.targetCollectionId);
-        const holdingArea = new FedoraObject(this.category.targetCollectionId, this.logger);
+        const holdingArea = FedoraObject.build(this.category.targetCollectionId, this.logger);
         if ((await holdingArea.getSort()) == "custom") {
             // This was already a TODO in the Ruby code; low priority:
             throw new Error("TODO: implement custom sort support.");

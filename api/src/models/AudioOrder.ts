@@ -21,7 +21,7 @@ class AudioOrder {
             pattern = pattern.substring(colonIndex + 1);
         }
         const list = glob.sync(pattern, options).map(function (flac: string) {
-            return new AudioFile(path.basename(flac), job.dir);
+            return AudioFile.build(path.basename(flac), job.dir);
         });
         return new AudioOrder(list);
     }
