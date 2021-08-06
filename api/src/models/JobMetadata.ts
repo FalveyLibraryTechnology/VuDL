@@ -4,7 +4,7 @@ import AudioOrder from "./AudioOrder";
 import { DocumentFileRaw } from "./DocumentFile";
 import DocumentOrder from "./DocumentOrder";
 import Job from "./Job";
-import Image from "./ImageFile";
+import ImageFile from "./ImageFile";
 import { PageRaw } from "./Page";
 import PageOrder from "./PageOrder";
 
@@ -64,7 +64,7 @@ class JobMetadata {
             building: lockfileExists,
         };
         this.order.pages.forEach((page) => {
-            const image: Image = new Image(this.job.dir + "/" + page.filename);
+            const image: ImageFile = ImageFile.build(this.job.dir + "/" + page.filename);
             Object.keys(image.sizes).forEach((key) => {
                 status.expected += 1;
                 if (fs.existsSync(image.derivativePath(key))) {

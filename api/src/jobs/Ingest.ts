@@ -22,7 +22,7 @@ class IngestProcessor {
 
     constructor(dir: string, config: Config) {
         this.config = config;
-        this.job = new Job(dir);
+        this.job = Job.build(dir);
         this.category = new Category(path.dirname(dir));
         this.logger = winston.createLogger({
             level: "info",
@@ -42,7 +42,7 @@ class IngestProcessor {
     }
 
     async addDatastreamsToPage(page: Page, imageData: FedoraObject): Promise<void> {
-        const image = new ImageFile(this.job.dir + "/" + page.filename);
+        const image = ImageFile.build(this.job.dir + "/" + page.filename);
         await imageData.addDatastreamFromFile(image.filename, "MASTER", "image/tiff");
         await imageData.addMasterMetadataDatastream(image.filename);
         for (const size in image.sizes) {
@@ -216,7 +216,7 @@ class IngestProcessor {
         // Attach thumbnail to resource:
         if (this.job.metadata.order.pages.length > 0) {
             const page = this.job.metadata.order.pages[0];
-            const image = new ImageFile(this.job.dir + "/" + page.filename);
+            const image = ImageFile.build(this.job.dir + "/" + page.filename);
             await resource.addDatastreamFromFile(await image.derivative("THUMBNAIL"), "THUMBNAIL", "image/jpeg");
         }
         return resource;

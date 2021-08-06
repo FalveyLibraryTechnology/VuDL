@@ -12,7 +12,7 @@ import fs = require("fs");
 
 function getJobFromRequest(req): Job {
     const jobDir = Config.getInstance().holdingArea + req.params.category + "/" + req.params.job;
-    return fs.existsSync(jobDir) ? new Job(jobDir) : null;
+    return fs.existsSync(jobDir) ? Job.build(jobDir) : null;
 }
 
 router.get("/", requireToken, function (req, res) {

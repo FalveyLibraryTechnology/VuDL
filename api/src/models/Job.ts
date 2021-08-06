@@ -12,10 +12,16 @@ class Job {
     dir: string;
     name: string;
     _metadata: JobMetadata = null;
+    config: Config;
 
-    constructor(dir: string) {
+    constructor(dir: string, config: Config) {
         this.dir = dir;
         this.name = path.basename(dir);
+        this.config = config;
+    }
+
+    public static build(dir: string): Job {
+        return new Job(dir, Config.getInstance());
     }
 
     async ingest(): Promise<void> {
@@ -33,7 +39,7 @@ class Job {
     }
 
     getImage(fileName: string): ImageFile {
-        return new ImageFile(this.dir + "/" + fileName);
+        return ImageFile.build(this.dir + "/" + fileName);
     }
 
     async makeDerivatives(): Promise<void> {
@@ -69,7 +75,7 @@ class Job {
         const pages = this.metadata.order.pages;
         const jpegs = [];
         for (const i in pages) {
-            const image = new ImageFile(this.dir + "/" + pages[i].filename);
+            const image = ImageFile.build(this.dir + "/" + pages[i].filename);
             jpegs[i] = await image.derivative("LARGE");
         }
         return jpegs;
@@ -83,7 +89,7 @@ class Job {
             throw new Error("Problem generating PDF: " + filename);
         }
 
-        const ocrmypdf = Config.getInstance().ocrmypdfPath;
+        const ocrmypdf = this.config.ocrmypdfPath;
         if (ocrmypdf) {
             const ocrmypdfCommand = ocrmypdf + " " + filename + " " + filename;
             execSync(ocrmypdfCommand);
