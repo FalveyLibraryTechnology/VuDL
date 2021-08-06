@@ -29,7 +29,7 @@ export class FedoraObject {
 
     constructor(pid: string, logger: winston.Logger = null) {
         this.pid = pid;
-        this.fedora = new Fedora();
+        this.fedora = Fedora.getInstance();
         this.logger = logger;
     }
 

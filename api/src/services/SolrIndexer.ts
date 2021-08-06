@@ -1,6 +1,5 @@
 import Config from "../models/Config";
 import DateSanitizer from "./DateSanitizer";
-import Fedora from "./Fedora";
 import FedoraData from "../models/FedoraData";
 import HierarchyCollector from "./HierarchyCollector";
 import http = require("needle");
@@ -10,12 +9,20 @@ interface SolrFields {
 }
 
 class SolrIndexer {
+    private static instance: SolrIndexer;
+    config: Config;
     hierarchyCollector: HierarchyCollector;
 
-    constructor() {
-        // Make Fedora connection
-        const fedora = new Fedora();
-        this.hierarchyCollector = new HierarchyCollector(fedora, Config.getInstance().topLevelPids);
+    constructor(hierarchyCollector: HierarchyCollector, config: Config) {
+        this.hierarchyCollector = hierarchyCollector;
+        this.config = config;
+    }
+
+    public static getInstance(): SolrIndexer {
+        if (!SolrIndexer.instance) {
+            SolrIndexer.instance = new SolrIndexer(HierarchyCollector.getInstance(), Config.getInstance());
+        }
+        return SolrIndexer.instance;
     }
 
     protected padNumber(num: string): string {
@@ -25,8 +32,8 @@ class SolrIndexer {
     }
 
     protected async getChangeTrackerDetails(pid: string, modificationDate: string): Promise<Record<string, string>> {
-        const core = Config.getInstance().solrCore;
-        const url = Config.getInstance().vufindUrl + "/XSLT/Home?";
+        const core = this.config.solrCore;
+        const url = this.config.vufindUrl + "/XSLT/Home?";
         const query =
             "method[]=getLastIndexed&method[]=getFirstIndexed&id=" +
             encodeURIComponent(pid) +
@@ -52,8 +59,8 @@ class SolrIndexer {
         const fields: SolrFields = {
             id: pid,
             record_format: "vudl",
-            institution: Config.getInstance().institution,
-            collection: Config.getInstance().collection,
+            institution: this.config.institution,
+            collection: this.config.collection,
             modeltype_str_mv: fedoraData.models,
             datastream_str_mv: fedoraData.fedoraDatastreams,
             hierarchytype: "",
@@ -215,7 +222,7 @@ class SolrIndexer {
             ? (hierarchyParents[0].metadata["dc:date"] ?? [])[0] ?? ""
             : (fields["dc.date_txt_mv"] ?? [])[0] ?? "";
         const strippedDate = parseInt(dateString.substr(0, 4));
-        if (strippedDate > Config.getInstance().minimumValidYear) {
+        if (strippedDate > this.config.minimumValidYear) {
             fields.publishDate = String(strippedDate);
             fields.publishDateSort = String(strippedDate);
             fields.normalized_sort_date = DateSanitizer.sanitize(dateString);
@@ -223,14 +230,14 @@ class SolrIndexer {
 
         if (typeof fields["dc.language_txt_mv"] !== "undefined") {
             fields.language = (fields["dc.language_txt_mv"] as Array<string>).map((lang) => {
-                return Config.getInstance().languageMap[lang] ?? lang;
+                return this.config.languageMap[lang] ?? lang;
             });
         }
 
         if (typeof fields["title"] !== "undefined") {
             // If we have a title, generate a sort-friendly version:
             let sortTitle = (fields["title"] as string).toLowerCase();
-            for (const article of Config.getInstance().articlesToStrip) {
+            for (const article of this.config.articlesToStrip) {
                 if (sortTitle.substr(0, article.length) === article) {
                     sortTitle = sortTitle.substr(article.length);
                     break;
