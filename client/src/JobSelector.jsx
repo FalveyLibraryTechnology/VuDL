@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import Category from "./Category";
 import AjaxHelper from "./AjaxHelper";
@@ -52,11 +51,5 @@ class JobSelector extends React.Component {
         );
     }
 }
-
-JobSelector.propTypes = {
-    app: PropTypes.shape({
-        getJSON: PropTypes.func,
-    }),
-};
 
 export default JobSelector;

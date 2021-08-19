@@ -1,24 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { useStore } from "nanostores/react";
 
-class ZoomToggleButton extends React.Component {
-    render() {
-        return (
-            <button onClick={this.props.paginator.toggleZoom}>
-                {this.props.paginator.state.zoom ? "Turn Zoom Off" : "Turn Zoom On"}
-            </button>
-        );
-    }
-}
+import { paginatorStore, toggleZoom } from "./paginator-store";
 
-ZoomToggleButton.propTypes = {
-    // JobPaginator
-    paginator: PropTypes.shape({
-        toggleZoom: PropTypes.func,
-        state: PropTypes.shape({
-            zoom: PropTypes.bool,
-        }),
-    }),
+const ZoomToggleButton = () => {
+    const { zoom } = useStore(paginatorStore);
+    return <button onClick={toggleZoom}>{zoom ? "Turn Zoom Off" : "Turn Zoom On"}</button>;
 };
 
 export default ZoomToggleButton;

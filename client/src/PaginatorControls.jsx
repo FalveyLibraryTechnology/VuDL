@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import MagicLabeler from "./MagicLabeler";
 import PaginatorControlGroup from "./PaginatorControlGroup";
 import ZoomToggleButton from "./ZoomToggleButton";
+import { paginatorStore, getLabel, setLabel, nextPage, prevPage } from "./paginator-store";
 
 class PaginatorControls extends React.Component {
     constructor(props) {
@@ -23,22 +24,24 @@ class PaginatorControls extends React.Component {
         this.updateCurrentPageLabel = this.updateCurrentPageLabel.bind(this);
     }
 
+    componentDidMount() {
+        paginatorStore.subscribe(({ currentPage }) => {
+            this.currentPage = currentPage;
+            this.forceUpdate();
+        });
+    }
+
     approveCurrentPageLabel() {
         this.setLabel(this.getLabel(true));
     }
 
-    getLabel(useMagic) {
-        if (typeof useMagic === "undefined") {
-            useMagic = true;
-        }
+    getLabel(useMagic = true) {
         var label = this.labelInput.value;
-        return label.length === 0 && useMagic
-            ? this.props.paginator.getLabel(this.props.paginator.state.currentPage)
-            : label;
+        return label.length === 0 && useMagic ? getLabel(this.currentPage) : label;
     }
 
     setLabel(label) {
-        this.props.paginator.setLabel(this.props.paginator.state.currentPage, label);
+        setLabel(this.currentPage, label);
     }
 
     setLabelPrefix(str) {
@@ -80,25 +83,32 @@ class PaginatorControls extends React.Component {
                     <div className="status"></div>
                     <input
                         type="text"
-                        value={this.props.paginator.getLabel(this.props.paginator.state.currentPage, false) ?? ""}
+                        value={getLabel(this.currentPage, false) ?? ""}
                         ref={(l) => {
                             this.labelInput = l;
                         }}
                         id="page"
                         onChange={this.updateCurrentPageLabel}
                     />
-                    <button onClick={this.props.paginator.prevPage}>Prev</button>
                     <button
                         onClick={function () {
                             this.approveCurrentPageLabel();
-                            this.props.paginator.nextPage();
+                            prevPage();
+                        }.bind(this)}
+                    >
+                        Prev
+                    </button>
+                    <button
+                        onClick={function () {
+                            this.approveCurrentPageLabel();
+                            nextPage();
                         }.bind(this)}
                     >
                         Next
                     </button>
                 </div>
                 <div className="top">
-                    <ZoomToggleButton paginator={this.props.paginator} />
+                    <ZoomToggleButton />
                     <button
                         className="primary"
                         onClick={function () {
@@ -154,11 +164,7 @@ PaginatorControls.propTypes = {
     paginator: PropTypes.shape({
         autonumberFollowingPages: PropTypes.func,
         deletePage: PropTypes.func,
-        getLabel: PropTypes.func,
-        nextPage: PropTypes.func,
-        prevPage: PropTypes.func,
         save: PropTypes.func,
-        setLabel: PropTypes.func,
         state: PropTypes.shape({
             currentPage: PropTypes.number,
         }),
