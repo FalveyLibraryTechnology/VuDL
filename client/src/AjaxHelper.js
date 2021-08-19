@@ -110,6 +110,18 @@ class AjaxHelperInstance {
         });
     }
 
+    getJSONPromise(url = this.ingestApiUrl, data = null) {
+        return new Promise((resolve, reject) => {
+            this.ajax({
+                dataType: "json",
+                url: url,
+                data: data,
+                success: resolve,
+                error: reject,
+            });
+        });
+    }
+
     getJobUrl(category, job, extra = "") {
         return this.ingestApiUrl + "/" + encodeURIComponent(category) + "/" + encodeURIComponent(job) + extra;
     }

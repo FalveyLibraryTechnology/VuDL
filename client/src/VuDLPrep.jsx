@@ -10,6 +10,8 @@ import MainMenu from "./MainMenu";
 import PdfGenerator from "./PdfGenerator";
 import SolrIndexer from "./SolrIndexer";
 
+import CreateObject from "./Editor/CreateObject";
+
 class VuDLPrep extends React.Component {
     constructor(props) {
         super(props);
@@ -34,6 +36,9 @@ class VuDLPrep extends React.Component {
                                     this.selector = s;
                                 }}
                             />
+                        </Route>
+                        <Route path="/editor/object/new">
+                            <CreateObject />
                         </Route>
                         <Route path="/paginate/:category/:job">
                             <JobPaginatorHook />
