@@ -131,8 +131,15 @@ export class FedoraObject {
     }
 
     fitsMasterMetadata(filename: string): string {
-        const fitsCommand = this.config.fitsCommand + " -i " + filename;
-        return execSync(fitsCommand).toString();
+        const targetXml = filename + ".fits.xml";
+        if (!fs.existsSync(targetXml)) {
+            const fitsCommand = this.config.fitsCommand + " -i " + filename + " -o " + targetXml;
+            execSync(fitsCommand);
+            if (!fs.existsSync(targetXml)) {
+                throw new Error("FITS failed to create " + targetXml);
+            }
+        }
+        return fs.readFileSync(targetXml).toString();
     }
 
     async imageDataIngest(): Promise<void> {
