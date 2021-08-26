@@ -9,6 +9,7 @@ router.get("/models", requireToken, function (req, res) {
 
 router.post("/object/new", requireToken, function (req, res) {
     console.log("form post! object new!", req.params);
+    res.json({ TODO: "Handle this form", ...req.params });
 });
 
 module.exports = router;
