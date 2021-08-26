@@ -18,6 +18,7 @@
     "client:build": "cd client && npm run build",
     "client:lint": "eslint client/src/ --ext .ts,.js,.jsx",
     "client:setup": "cd client && npm ci",
+    "client:test": "cd client && npm test",
     "queue": "node api/worker-start.js",
     "queue:dev": "nodemon --watch 'api/vudl.ini' --watch 'api/**/*.js' api/worker-start.js",
     "queue:wsl": "nodemon --legacy-watch api/worker-start.js",
@@ -27,10 +28,11 @@
     "backend:wsl": "concurrently npm:api:wsl npm:queue:wsl",
     "build": "concurrently npm:api:build npm:client:build",
     "dev": "concurrently -c 'cyan,green,gray' npm:client npm:api:dev npm:queue:dev",
-    "format": "prettier --check --write api/*.js api/src/** client/src/**",
+    "format": "prettier --check --write api/*.js api/src/** client/src/*.{js,jsx,tsx,ts}",
     "lint": "eslint api/*.js api/src/ client/src/ --ext .ts,.js,.jsx --max-warnings 0",
     "setup": "concurrently npm:api:setup npm:client:setup",
     "start": "concurrently -c 'cyan,green,gray' npm:client npm:api npm:queue",
+    "test": "npm run client:test",
     "watch": "cd api && tsc --watch"
   },
   "devDependencies": {
