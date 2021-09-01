@@ -1,18 +1,29 @@
 import { DC, Fedora } from "./Fedora";
+import Config from "../models/Config";
 import FedoraData from "../models/FedoraData";
 import { DOMParser } from "xmldom";
 import xpath = require("xpath");
 import TikaExtractor from "./TikaExtractor";
 
 class HierarchyCollector {
+    private static instance: HierarchyCollector;
+
     fedora: Fedora;
     // PIDs that define the top of a hierarchy. Typically this
     // includes the overall top PID, plus the top public PID.
     hierarchyTops: Array<string>;
+    config: Config;
 
-    constructor(fedora: Fedora, hierarchyTops: Array<string>) {
+    constructor(fedora: Fedora, config: Config) {
         this.fedora = fedora;
-        this.hierarchyTops = hierarchyTops;
+        this.config = config;
+    }
+
+    public static getInstance(): HierarchyCollector {
+        if (!HierarchyCollector.instance) {
+            HierarchyCollector.instance = new HierarchyCollector(Fedora.getInstance(), Config.getInstance());
+        }
+        return HierarchyCollector.instance;
     }
 
     protected extractMetadata(dc: DC): Record<string, Array<string>> {
@@ -206,7 +217,7 @@ class HierarchyCollector {
         }
         const models = relations.hasModel ?? [];
         if (models.includes("info:fedora/vudl-system:DOCData") || models.includes("info:fedora/vudl-system:PDFData")) {
-            const extractor = new TikaExtractor((await this.fedora.getDatastream(pid, "MASTER")).body);
+            const extractor = new TikaExtractor((await this.fedora.getDatastream(pid, "MASTER")).body, this.config);
             extraDetails.fullText.fromDocument = [extractor.extractText()];
         }
         return new FedoraData(
@@ -224,7 +235,7 @@ class HierarchyCollector {
         // Create promises to retrieve parents asynchronously...
         const promises = (result.relations.isMemberOf ?? []).map(async (resource) => {
             const parentPid = resource.substr("info:fedora/".length);
-            if (!this.hierarchyTops.includes(parentPid)) {
+            if (!this.config.topLevelPids.includes(parentPid)) {
                 // The "false" here skips RDF retrieval:
                 const parent = await this.getHierarchy(parentPid, false);
                 result.addParent(parent);

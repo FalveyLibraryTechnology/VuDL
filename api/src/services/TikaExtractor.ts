@@ -5,8 +5,10 @@ import tmp = require("tmp");
 
 class TikaExtractor {
     protected filename: string;
+    protected config: Config;
 
-    constructor(data: Buffer) {
+    constructor(data: Buffer, config: Config) {
+        this.config = config;
         // Write the data to a temporary file:
         const tmpobj = tmp.fileSync();
         this.filename = tmpobj.name;
@@ -14,8 +16,8 @@ class TikaExtractor {
     }
 
     extractText(): string {
-        const javaPath = Config.getInstance().javaPath;
-        const tikaPath = Config.getInstance().tikaPath;
+        const javaPath = this.config.javaPath;
+        const tikaPath = this.config.tikaPath;
         const tikaCommand = javaPath + " -jar " + tikaPath + " --text -eUTF8 " + this.filename;
         const result = execSync(tikaCommand).toString();
         fs.rmSync(this.filename); // clean up temp file; we're done now!

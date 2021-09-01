@@ -10,9 +10,15 @@ import tmp = require("tmp");
 
 class PdfGenerator {
     protected pid: string;
+    protected config: Config;
 
-    constructor(pid: string) {
+    constructor(pid: string, config: Config) {
         this.pid = pid;
+        this.config = config;
+    }
+
+    public static build(pid: string): PdfGenerator {
+        return new PdfGenerator(pid, Config.getInstance());
     }
 
     private hasPdfAlready(manifest): boolean {
@@ -62,7 +68,7 @@ class PdfGenerator {
         });
 
         // Now apply OCR:
-        const ocrmypdf = Config.getInstance().ocrmypdfPath;
+        const ocrmypdf = this.config.ocrmypdfPath;
         if (ocrmypdf) {
             const ocrmypdfCommand = ocrmypdf + " " + pdf + " " + pdf;
             execSync(ocrmypdfCommand);
@@ -72,7 +78,7 @@ class PdfGenerator {
     }
 
     private async addPdfToPid(pdf: string): Promise<void> {
-        const documentList = new FedoraObject(await FedoraObject.getNextPid());
+        const documentList = await FedoraObject.fromNextPid();
         documentList.parentPid = this.pid;
         documentList.modelType = "ListCollection";
         documentList.title = "Document List";
@@ -86,7 +92,7 @@ class PdfGenerator {
     }
 
     private async buildDocument(documentList: FedoraObject, number: number): Promise<FedoraObject> {
-        const documentData = new FedoraObject(await FedoraObject.getNextPid());
+        const documentData = await FedoraObject.fromNextPid();
         documentData.parentPid = documentList.pid;
         documentData.modelType = "PDFData";
         documentData.title = "PDF";
@@ -106,7 +112,7 @@ class PdfGenerator {
     }
 
     async run(): Promise<void> {
-        const manifestUrl = Config.getInstance().vufindUrl + "/Item/" + this.pid + "/Manifest";
+        const manifestUrl = this.config.vufindUrl + "/Item/" + this.pid + "/Manifest";
         const response = await http("get", manifestUrl);
         if (response.statusCode !== 200) {
             const msg = "Unexpected " + response.statusCode + " status for " + manifestUrl;
@@ -127,7 +133,7 @@ class PdfGenerator {
 
 class GeneratePdf implements QueueJobInterface {
     async run(job: QueueJob): Promise<void> {
-        const handler = new PdfGenerator(job.data.pid);
+        const handler = PdfGenerator.build(job.data.pid);
         await handler.run();
     }
 }

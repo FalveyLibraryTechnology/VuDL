@@ -19,7 +19,7 @@ export class Category {
         this.dir = dir;
         this.name = path.basename(dir);
         this.jobs = glob.sync(dir + "/*/").map(function (dir: string) {
-            return new Job(dir);
+            return Job.build(dir);
         });
     }
 

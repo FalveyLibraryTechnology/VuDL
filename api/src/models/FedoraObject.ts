@@ -24,21 +24,29 @@ export class FedoraObject {
     public pid: string;
     public parentPid: string;
     public title: string;
+    protected config: Config;
     protected fedora: Fedora;
     protected logger: winston.Logger;
 
-    constructor(pid: string, logger: winston.Logger = null) {
+    constructor(pid: string, config: Config, fedora: Fedora, logger: winston.Logger = null) {
         this.pid = pid;
-        this.fedora = new Fedora();
+        this.config = config;
+        this.fedora = fedora;
         this.logger = logger;
     }
 
-    static async getNextPid(): Promise<string> {
-        return getNextPid(Config.getInstance().pidNamespace);
+    public static build(pid: string, logger: winston.Logger = null, config: Config = null): FedoraObject {
+        return new FedoraObject(pid, config ?? Config.getInstance(), Fedora.getInstance(), logger);
+    }
+
+    static async fromNextPid(logger: winston.Logger = null, _config: Config = null): Promise<FedoraObject> {
+        const config = _config ?? Config.getInstance();
+        const pid = await getNextPid(config.pidNamespace);
+        return FedoraObject.build(pid, logger, config);
     }
 
     get namespace(): string {
-        return Config.getInstance().pidNamespace;
+        return this.config.pidNamespace;
     }
 
     async addDatastream(id: string, params: DatastreamParameters, data: string | Buffer): Promise<void> {
@@ -125,7 +133,7 @@ export class FedoraObject {
     fitsMasterMetadata(filename: string): string {
         const targetXml = filename + ".fits.xml";
         if (!fs.existsSync(targetXml)) {
-            const fitsCommand = Config.getInstance().fitsCommand + " -i " + filename + " -o " + targetXml;
+            const fitsCommand = this.config.fitsCommand + " -i " + filename + " -o " + targetXml;
             execSync(fitsCommand);
             if (!fs.existsSync(targetXml)) {
                 throw new Error("FITS failed to create " + targetXml);

@@ -29,12 +29,19 @@ export interface DC {
 }
 
 export class Fedora {
-    baseUrl: string;
+    private static instance: Fedora;
+    config: Config;
     cache: Record<string, Record<string, string>> = {};
 
-    constructor() {
-        const config = Config.getInstance();
-        this.baseUrl = config.restBaseUrl;
+    constructor(config: Config) {
+        this.config = config;
+    }
+
+    public static getInstance(): Fedora {
+        if (!Fedora.instance) {
+            Fedora.instance = new Fedora(Config.getInstance());
+        }
+        return Fedora.instance;
     }
 
     /**
@@ -52,12 +59,12 @@ export class Fedora {
         _options: Record<string, unknown> = {}
     ): Promise<NeedleResponse> {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
-        const url = this.baseUrl + "/" + path;
+        const url = this.config.restBaseUrl + "/" + path;
 
         // Basic Auth
         const auth = {
-            username: Config.getInstance().fedoraUsername,
-            password: Config.getInstance().fedoraPassword,
+            username: this.config.fedoraUsername,
+            password: this.config.fedoraPassword,
         };
         const options = Object.assign({}, auth, _options);
         return http(method, url, data, options);
