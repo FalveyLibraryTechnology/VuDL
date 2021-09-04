@@ -127,10 +127,6 @@ class IngestProcessor {
         return imageData;
     }
 
-    async buildPageList(resource: FedoraObject): Promise<FedoraObject> {
-        return this.objectFactory.build("ListCollection", "Page List", "Inactive", resource.pid, this.logger);
-    }
-
     async buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): Promise<FedoraObject> {
         const documentData = await this.objectFactory.build(
             "PDFData",
@@ -141,10 +137,6 @@ class IngestProcessor {
         );
         await documentData.addSequenceRelationship(documentList.pid, number);
         return documentData;
-    }
-
-    async buildDocumentList(resource: FedoraObject): Promise<FedoraObject> {
-        return this.objectFactory.build("ListCollection", "Document List", "Inactive", resource.pid, this.logger);
     }
 
     async buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): Promise<FedoraObject> {
@@ -159,8 +151,8 @@ class IngestProcessor {
         return audioData;
     }
 
-    async buildAudioList(resource: FedoraObject): Promise<FedoraObject> {
-        return this.objectFactory.build("ListCollection", "Audio List", "Inactive", resource.pid, this.logger);
+    async buildListCollection(resource: FedoraObject, title: string): Promise<FedoraObject> {
+        return this.objectFactory.build("ListCollection", title, "Inactive", resource.pid, this.logger);
     }
 
     async buildResource(holdingArea: FedoraObject): Promise<FedoraObject> {
@@ -240,15 +232,15 @@ class IngestProcessor {
         // (this was already a TODO in the Ruby code; low priority)
 
         if (this.job.metadata.order.pages.length > 0) {
-            await this.addPages(await this.buildPageList(resource));
+            await this.addPages(await this.buildListCollection(resource, "Page List"));
         }
 
         if (this.job.metadata.documents.list.length > 0 || this.category.supportsPdfGeneration) {
-            await this.addDocuments(await this.buildDocumentList(resource));
+            await this.addDocuments(await this.buildListCollection(resource, "Document List"));
         }
 
         if (this.job.metadata.audio.list.length > 0) {
-            await this.addAudio(await this.buildAudioList(resource));
+            await this.addAudio(await this.buildListCollection(resource, "Audio List"));
         }
 
         await this.finalizeTitle(resource);
