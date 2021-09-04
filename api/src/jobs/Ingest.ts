@@ -7,6 +7,7 @@ import Config from "../models/Config";
 import { DatastreamParameters } from "../services/Fedora";
 import { FedoraObject } from "../models/FedoraObject";
 import DocumentFile from "../models/DocumentFile";
+import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import ImageFile from "../models/ImageFile";
 import Job from "../models/Job";
 import Page from "../models/Page";
@@ -19,9 +20,11 @@ class IngestProcessor {
     protected category: Category;
     protected logger: winston.Logger;
     protected config: Config;
+    protected objectFactory: FedoraObjectFactory;
 
-    constructor(dir: string, config: Config) {
+    constructor(dir: string, config: Config, objectFactory: FedoraObjectFactory) {
         this.config = config;
+        this.objectFactory = objectFactory;
         this.job = Job.build(dir);
         this.category = new Category(path.dirname(dir));
         this.logger = winston.createLogger({
@@ -38,7 +41,7 @@ class IngestProcessor {
     }
 
     public static build(dir: string): IngestProcessor {
-        return new IngestProcessor(dir, Config.getInstance());
+        return new IngestProcessor(dir, Config.getInstance(), FedoraObjectFactory.getInstance());
     }
 
     async addDatastreamsToPage(page: Page, imageData: FedoraObject): Promise<void> {
@@ -113,106 +116,61 @@ class IngestProcessor {
     }
 
     async buildPage(pageList: FedoraObject, page: Page, number: number): Promise<FedoraObject> {
-        const imageData = await FedoraObject.fromNextPid(this.logger);
-        imageData.parentPid = pageList.pid;
-        imageData.modelType = "ImageData";
-        imageData.title = String(page.label);
-        this.logger.info("Creating Image Object " + imageData.pid);
-
-        await imageData.coreIngest("Inactive");
-        await imageData.dataIngest();
-        await imageData.imageDataIngest();
-
+        const imageData = await this.objectFactory.build(
+            "ImageData",
+            String(page.label),
+            "Inactive",
+            pageList.pid,
+            this.logger
+        );
         await imageData.addSequenceRelationship(pageList.pid, number);
-
         return imageData;
     }
 
     async buildPageList(resource: FedoraObject): Promise<FedoraObject> {
-        const pageList = await FedoraObject.fromNextPid(this.logger);
-        pageList.parentPid = resource.pid;
-        pageList.modelType = "ListCollection";
-        pageList.title = "Page List";
-        this.logger.info("Creating Page List Object " + pageList.pid);
-
-        await pageList.coreIngest("Inactive");
-        await pageList.collectionIngest();
-        await pageList.listCollectionIngest();
-
-        return pageList;
+        return this.objectFactory.build("ListCollection", "Page List", "Inactive", resource.pid, this.logger);
     }
 
     async buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): Promise<FedoraObject> {
-        const documentData = await FedoraObject.fromNextPid(this.logger);
-        documentData.parentPid = documentList.pid;
-        documentData.modelType = "PDFData";
-        documentData.title = String(document.label);
-        this.logger.info("Creating Document Object " + documentData.pid);
-
-        await documentData.coreIngest("Inactive");
-        await documentData.dataIngest();
-        await documentData.documentDataIngest();
-
+        const documentData = await this.objectFactory.build(
+            "PDFData",
+            String(document.label),
+            "Inactive",
+            documentList.pid,
+            this.logger
+        );
         await documentData.addSequenceRelationship(documentList.pid, number);
-
         return documentData;
     }
 
     async buildDocumentList(resource: FedoraObject): Promise<FedoraObject> {
-        const documentList = await FedoraObject.fromNextPid(this.logger);
-        documentList.parentPid = resource.pid;
-        documentList.modelType = "ListCollection";
-        documentList.title = "Document List";
-        this.logger.info("Creating Document List Object " + documentList.pid);
-
-        await documentList.coreIngest("Inactive");
-        await documentList.collectionIngest();
-        await documentList.listCollectionIngest();
-
-        return documentList;
+        return this.objectFactory.build("ListCollection", "Document List", "Inactive", resource.pid, this.logger);
     }
 
     async buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): Promise<FedoraObject> {
-        const audioData = await FedoraObject.fromNextPid(this.logger);
-        audioData.parentPid = audioList.pid;
-        audioData.modelType = "AudioData";
-        audioData.title = String(audio.filename);
-        this.logger.info("Creating Audio Object " + audioData.pid);
-
-        await audioData.coreIngest("Inactive");
-        await audioData.dataIngest();
-        await audioData.audioDataIngest();
-
+        const audioData = await this.objectFactory.build(
+            "AudioData",
+            String(audio.filename),
+            "Inactive",
+            audioList.pid,
+            this.logger
+        );
         await audioData.addSequenceRelationship(audioList.pid, number);
-
         return audioData;
     }
 
     async buildAudioList(resource: FedoraObject): Promise<FedoraObject> {
-        const audioList = await FedoraObject.fromNextPid(this.logger);
-        audioList.parentPid = resource.pid;
-        audioList.modelType = "ListCollection";
-        audioList.title = "Audio List";
-        this.logger.info("Creating Audio List Object " + audioList.pid);
-
-        await audioList.coreIngest("Inactive");
-        await audioList.collectionIngest();
-        await audioList.listCollectionIngest();
-
-        return audioList;
+        return this.objectFactory.build("ListCollection", "Audio List", "Inactive", resource.pid, this.logger);
     }
 
     async buildResource(holdingArea: FedoraObject): Promise<FedoraObject> {
-        const resource = await FedoraObject.fromNextPid(this.logger);
-        resource.parentPid = holdingArea.pid;
-        resource.modelType = "ResourceCollection";
-        resource.title = "Incomplete... / Processing...";
-        this.logger.info("Creating Resource Object " + resource.pid);
-
-        await resource.coreIngest("Inactive");
-        await resource.collectionIngest();
-        await resource.resourceCollectionIngest();
-
+        const resource = await this.objectFactory.build(
+            "ResourceCollection",
+            "Incomplete... / Processing...",
+            "Inactive",
+            holdingArea.pid,
+            this.logger
+        );
         // Attach thumbnail to resource:
         if (this.job.metadata.order.pages.length > 0) {
             const page = this.job.metadata.order.pages[0];
