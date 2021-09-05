@@ -4,7 +4,6 @@ import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
 import { DOMParser } from "xmldom";
 import { execSync } from "child_process";
-import { getNextPid } from "../services/Database";
 import xpath = require("xpath");
 
 export interface ObjectParameters {
@@ -36,12 +35,6 @@ export class FedoraObject {
 
     public static build(pid: string, logger: winston.Logger = null, config: Config = null): FedoraObject {
         return new FedoraObject(pid, config ?? Config.getInstance(), Fedora.getInstance(), logger);
-    }
-
-    static async fromNextPid(logger: winston.Logger = null, _config: Config = null): Promise<FedoraObject> {
-        const config = _config ?? Config.getInstance();
-        const pid = await getNextPid(config.pidNamespace);
-        return FedoraObject.build(pid, logger, config);
     }
 
     get namespace(): string {

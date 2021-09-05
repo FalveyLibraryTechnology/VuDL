@@ -1,5 +1,6 @@
 import Config from "../models/Config";
 import { FedoraObject } from "../models/FedoraObject";
+import { getNextPid } from "./Database";
 import winston = require("winston");
 
 class FedoraObjectFactory {
@@ -31,7 +32,8 @@ class FedoraObjectFactory {
         parentPid: string = null,
         logger: winston.Logger = null
     ): Promise<FedoraObject> {
-        const object = await FedoraObject.fromNextPid(logger, this.config);
+        const pid = await getNextPid(this.config.pidNamespace);
+        const object = await FedoraObject.build(pid, logger, this.config);
         object.title = title;
         object.parentPid = parentPid;
         await object.initialize(state, model);
