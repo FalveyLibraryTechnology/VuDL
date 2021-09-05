@@ -187,7 +187,6 @@ class IngestProcessor {
     }
 
     async replaceDCMetadata(resource: FedoraObject, dc: string, message: string): Promise<void> {
-        this.logger.info(message);
         const params: DatastreamParameters = {
             mimeType: "text/xml",
             logMessage: message,
