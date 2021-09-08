@@ -3,6 +3,7 @@ import Solr from "../services/Solr";
 import SolrIndexer from "../services/SolrIndexer";
 
 import express = require("express");
+import bodyParser = require("body-parser");
 import { Queue } from "bullmq";
 import { requireToken } from "./auth";
 import { sanitizeParameters } from "./sanitize";
@@ -43,6 +44,11 @@ router.post("/solrindex/:pid", pidSanitizer, requireToken, async function (req, 
     res.status(result.statusCode).send(
         result.statusCode === 200 ? "ok" : ((result.body ?? {}).error ?? {}).msg ?? "error"
     );
+});
+
+router.post("/camel", bodyParser.text(), async function (req, res) {
+    console.log(req.body);
+    res.status(200).send("ok");
 });
 
 module.exports = router;
