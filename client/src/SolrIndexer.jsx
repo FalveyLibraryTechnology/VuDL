@@ -1,42 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import AjaxHelper from "./AjaxHelper";
 
-export default function SolrIndexer() {
+const SolrIndexer = () => {
+    const [pid, setPid] = useState("");
+    const [results, setResults] = useState("");
+
     function doApiCall(method) {
         const ajax = AjaxHelper.getInstance();
-        const pid = document.getElementById("solrIndexPid").value;
         const url = ajax.url + "/messenger/solrindex/" + encodeURIComponent(pid);
         ajax.ajax({
             method: method,
             url: url,
             dataType: "text",
             error: function (result, status) {
-                document.getElementById("solrIndexResults").innerHTML = status;
+                setResults(status);
             },
             success: function (result) {
-                document.getElementById("solrIndexResults").innerHTML = result;
+                setResults(result);
             },
         });
-    }
-
-    function preview() {
-        doApiCall("GET");
-    }
-
-    function index() {
-        doApiCall("POST");
     }
 
     return (
         <div>
             <h1>Solr Index Tool</h1>
             <label>
-                PID: <input type="text" id="solrIndexPid" />
+                PID: <input type="text" id="solrIndexPid" value={pid} onChange={(e) => setPid(e.target.value)} />
             </label>
-            <button onClick={preview}>Preview</button>
-            <button onClick={index}>Index</button>
+            <button onClick={() => doApiCall("GET")}>Preview</button>
+            <button onClick={() => doApiCall("POST")}>Index</button>
             <h2>Results:</h2>
-            <pre id="solrIndexResults"></pre>
+            <pre id="solrIndexResults">{results}</pre>
         </div>
     );
-}
+};
+
+export default SolrIndexer;

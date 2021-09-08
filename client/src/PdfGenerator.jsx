@@ -1,37 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
+
 import AjaxHelper from "./AjaxHelper";
 
-export default function PdfGenerator() {
-    function doApiCall(method) {
+const PdfGenerator = () => {
+    const [pid, setPid] = useState("");
+    const [results, setResults] = useState("");
+
+    const doApiCall = (method) => {
         const ajax = AjaxHelper.getInstance();
-        const pid = document.getElementById("pdfGeneratePid").value;
         const url = ajax.url + "/messenger/pdfgenerator/" + encodeURIComponent(pid);
         ajax.ajax({
             method: method,
             url: url,
             dataType: "text",
             error: function (result, status) {
-                document.getElementById("pdfGenerateResults").innerHTML = status;
+                setResults(status);
             },
             success: function (result) {
-                document.getElementById("pdfGenerateResults").innerHTML = result;
+                setResults(result);
             },
         });
-    }
-
-    function generate() {
-        doApiCall("POST");
-    }
+    };
 
     return (
         <div>
             <h1>PDF Generator Tool</h1>
             <label>
-                PID: <input type="text" id="pdfGeneratePid" />
+                PID: <input type="text" id="pdfGeneratePid" value={pid} onChange={(e) => setPid(e.target.value)} />
             </label>
-            <button onClick={generate}>Generate</button>
+            <button onClick={() => doApiCall("POST")}>Generate</button>
             <h2>Results:</h2>
-            <pre id="pdfGenerateResults"></pre>
+            <pre id="pdfGenerateResults">{results}</pre>
         </div>
     );
-}
+};
+
+export default PdfGenerator;
