@@ -1,57 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Category from "./Category";
 import AjaxHelper from "./AjaxHelper";
 
-class JobSelector extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { active: true, data: [] };
-        this.ajax = AjaxHelper.getInstance();
-    }
+const JobSelector = () => {
+    const [data, setData] = useState([]);
+    const ajax = AjaxHelper.getInstance();
+    const injestApi = () => {
+        ajax.getJSON(ajax.ingestApiUrl, null, (data) => {
+            setData(data);
+        });
+    };
+    useEffect(() => {
+        injestApi();
+    }, []);
 
-    hide() {
-        var newState = this.state;
-        newState.active = false;
-        this.setState(newState);
-    }
+    const categoryComponents = Object.values(data).reduce(
+        (categoryComponents, category) => {
+            categoryComponents[category.jobs.length > 0 ? 0 : 1].push(
+                <Category key={category.category} data={category} />
+            );
+            return categoryComponents;
+        },
+        [[], []]
+    );
 
-    show() {
-        this.setState({ active: true, data: [] });
-        this.componentDidMount();
-    }
-
-    componentDidMount() {
-        this.ajax.getJSON(
-            this.ajax.ingestApiUrl,
-            null,
-            function (data) {
-                this.setState({ active: true, data: data });
-            }.bind(this)
-        );
-    }
-
-    render() {
-        var categories = [];
-        var empty_categories = [];
-        for (var i in this.state.data) {
-            var category = this.state.data[i];
-            var element = <Category key={category.category} data={category} />;
-            if (category.jobs.length > 0) {
-                categories[categories.length] = element;
-            } else {
-                empty_categories[empty_categories.length] = element;
-            }
-        }
-        return (
-            <div className={this.state.active ? "" : "hidden"} id="jobSelector">
-                {categories}
-                {empty_categories}
-            </div>
-        );
-    }
-}
+    return <div id="jobSelector">{[...categoryComponents[0], ...categoryComponents[1]]}</div>;
+};
 
 JobSelector.propTypes = {
     app: PropTypes.shape({

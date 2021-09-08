@@ -3,20 +3,17 @@ import PropTypes from "prop-types";
 
 import Job from "./Job";
 
-class JobList extends React.Component {
-    render() {
-        const jobs = this.props.data.map(
-            function (job) {
-                return (
-                    <Job category={this.props.category} key={this.props.category + "|" + job}>
-                        {job}
-                    </Job>
-                );
-            }.bind(this)
-        );
-        return <ul>{jobs}</ul>;
-    }
-}
+const JobList = ({ category, data }) => {
+    return (
+        <ul>
+            {data.map((job) => (
+                <Job category={category} key={category + "|" + job}>
+                    {job}
+                </Job>
+            ))}
+        </ul>
+    );
+};
 
 JobList.propTypes = {
     category: PropTypes.string,
