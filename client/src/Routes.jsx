@@ -19,12 +19,7 @@ const Routes = () => {
                 <MainMenu />
             </Route>
             <Route exact path="/paginate">
-                <JobSelector
-                    app={this}
-                    ref={(s) => {
-                        this.selector = s;
-                    }}
-                />
+                <JobSelector />
             </Route>
             <Route path="/paginate/:category/:job">
                 <JobPaginatorHook />

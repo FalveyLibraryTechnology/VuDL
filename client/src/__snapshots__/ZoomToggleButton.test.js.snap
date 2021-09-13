@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ZoomToggleButton renders 1`] = `
+<button
+  onClick={[MockFunction]}
+>
+  Turn Zoom On
+</button>
+`;
