@@ -18,7 +18,7 @@ router.post("/pdfgenerator/:pid", pidSanitizer, requireToken, async function (re
 });
 
 router.get("/solrindex/:pid", pidSanitizer, requireToken, async function (req, res) {
-    const indexer = new SolrIndexer();
+    const indexer = SolrIndexer.getInstance();
     try {
         const fedoraFields = await indexer.getFields(req.params.pid);
         res.send(JSON.stringify(fedoraFields, null, "\t"));
@@ -29,7 +29,7 @@ router.get("/solrindex/:pid", pidSanitizer, requireToken, async function (req, r
 });
 
 router.post("/solrindex/:pid", pidSanitizer, requireToken, async function (req, res) {
-    const indexer = new SolrIndexer();
+    const indexer = SolrIndexer.getInstance();
     let fedoraFields = null;
     try {
         fedoraFields = await indexer.getFields(req.params.pid);

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PaginatorList renders 1`] = `
+<div
+  className="pageList"
+>
+  <Thumbnail
+    key="0"
+    number={0}
+    paginator={
+      Object {
+        "state": Object {
+          "currentPage": 0,
+        },
+      }
+    }
+    scrollTo={[Function]}
+    selected={true}
+  />
+</div>
+`;

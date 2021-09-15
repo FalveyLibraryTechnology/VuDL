@@ -97,6 +97,8 @@ After a few moments, a new tab should automatically open in your browser pointin
 | client:build | build React code for production |
 | client:lint | lint only the api code |
 | client:setup | install npm dependencies in client/ |
+| client:test | run client unit tests with test coverage |
+| client:test | run client unit tests while watching source folders |
 | | |
 | queue | start api worker queue server |
 | queue:dev | start api worker listener, restart on changes |
@@ -114,4 +116,5 @@ After a few moments, a new tab should automatically open in your browser pointin
 | lint | report lint errors in all code |
 | setup | install subdirectory npm dependencies |
 | start | run api, client, and queue servers (production) |
+| test  | run both client and api tests |
 | watch | alias for api:watch |

@@ -3,6 +3,7 @@ import fs = require("fs");
 import Config from "../models/Config";
 import { FedoraObject } from "../models/FedoraObject";
 import { execSync } from "child_process";
+import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import http = require("needle");
 import PDFDocument = require("pdfkit");
 import QueueJobInterface from "./QueueJobInterface";
@@ -10,9 +11,17 @@ import tmp = require("tmp");
 
 class PdfGenerator {
     protected pid: string;
+    protected config: Config;
+    protected objectFactory: FedoraObjectFactory;
 
-    constructor(pid: string) {
+    constructor(pid: string, config: Config, objectFactory: FedoraObjectFactory) {
         this.pid = pid;
+        this.config = config;
+        this.objectFactory = objectFactory;
+    }
+
+    public static build(pid: string): PdfGenerator {
+        return new PdfGenerator(pid, Config.getInstance(), FedoraObjectFactory.getInstance());
     }
 
     private hasPdfAlready(manifest): boolean {
@@ -62,7 +71,7 @@ class PdfGenerator {
         });
 
         // Now apply OCR:
-        const ocrmypdf = Config.getInstance().ocrmypdfPath;
+        const ocrmypdf = this.config.ocrmypdfPath;
         if (ocrmypdf) {
             const ocrmypdfCommand = ocrmypdf + " " + pdf + " " + pdf;
             execSync(ocrmypdfCommand);
@@ -72,31 +81,14 @@ class PdfGenerator {
     }
 
     private async addPdfToPid(pdf: string): Promise<void> {
-        const documentList = new FedoraObject(await FedoraObject.getNextPid());
-        documentList.parentPid = this.pid;
-        documentList.modelType = "ListCollection";
-        documentList.title = "Document List";
-
-        await documentList.coreIngest("Active");
-        await documentList.collectionIngest();
-        await documentList.listCollectionIngest();
-
+        const documentList = await this.objectFactory.build("ListCollection", "Document List", "Active", this.pid);
         const pdfObject = await this.buildDocument(documentList, 1);
         await this.addDatastreamsToDocument(pdf, pdfObject);
     }
 
     private async buildDocument(documentList: FedoraObject, number: number): Promise<FedoraObject> {
-        const documentData = new FedoraObject(await FedoraObject.getNextPid());
-        documentData.parentPid = documentList.pid;
-        documentData.modelType = "PDFData";
-        documentData.title = "PDF";
-
-        await documentData.coreIngest("Active");
-        await documentData.dataIngest();
-        await documentData.documentDataIngest();
-
+        const documentData = await this.objectFactory.build("PDFData", "PDF", "Active", documentList.pid);
         await documentData.addSequenceRelationship(documentList.pid, number);
-
         return documentData;
     }
 
@@ -106,7 +98,7 @@ class PdfGenerator {
     }
 
     async run(): Promise<void> {
-        const manifestUrl = Config.getInstance().vufindUrl + "/Item/" + this.pid + "/Manifest";
+        const manifestUrl = this.config.vufindUrl + "/Item/" + this.pid + "/Manifest";
         const response = await http("get", manifestUrl);
         if (response.statusCode !== 200) {
             const msg = "Unexpected " + response.statusCode + " status for " + manifestUrl;
@@ -127,7 +119,7 @@ class PdfGenerator {
 
 class GeneratePdf implements QueueJobInterface {
     async run(job: QueueJob): Promise<void> {
-        const handler = new PdfGenerator(job.data.pid);
+        const handler = PdfGenerator.build(job.data.pid);
         await handler.run();
     }
 }

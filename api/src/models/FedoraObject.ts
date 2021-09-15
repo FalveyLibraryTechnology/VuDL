@@ -4,7 +4,6 @@ import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
 import { DOMParser } from "xmldom";
 import { execSync } from "child_process";
-import { getNextPid } from "../services/Database";
 import xpath = require("xpath");
 
 export interface ObjectParameters {
@@ -20,25 +19,26 @@ export interface ObjectParameters {
 }
 
 export class FedoraObject {
-    public modelType: string;
     public pid: string;
-    public parentPid: string;
+    public parentPid: string = null;
     public title: string;
+    protected config: Config;
     protected fedora: Fedora;
     protected logger: winston.Logger;
 
-    constructor(pid: string, logger: winston.Logger = null) {
+    constructor(pid: string, config: Config, fedora: Fedora, logger: winston.Logger = null) {
         this.pid = pid;
-        this.fedora = new Fedora();
+        this.config = config;
+        this.fedora = fedora;
         this.logger = logger;
     }
 
-    static async getNextPid(): Promise<string> {
-        return getNextPid(Config.getInstance().pidNamespace);
+    public static build(pid: string, logger: winston.Logger = null, config: Config = null): FedoraObject {
+        return new FedoraObject(pid, config ?? Config.getInstance(), Fedora.getInstance(), logger);
     }
 
     get namespace(): string {
-        return Config.getInstance().pidNamespace;
+        return this.config.pidNamespace;
     }
 
     async addDatastream(id: string, params: DatastreamParameters, data: string | Buffer): Promise<void> {
@@ -98,24 +98,41 @@ export class FedoraObject {
         return this.addRelationship("info:fedora/" + this.pid, "http://vudl.org/relationships#sortOn", sort, true);
     }
 
-    async collectionIngest(): Promise<void> {
-        this.log("Collection ingest for " + this.pid);
-        return this.addModelRelationship("CollectionModel");
-    }
-
-    async coreIngest(objectState: string): Promise<void> {
-        this.log("Core ingest for " + this.pid);
-        await this.fedora.createContainer(this.pid, this.title, objectState, "diglibEditor");
+    async initialize(objectState: string, model: string, owner = "diglibEditor"): Promise<void> {
+        // Determine model type -- everything should be either data or a collection:
+        let modelType: string = null;
+        if (Object.values(this.config.collectionModels).indexOf("vudl-system:" + model) > -1) {
+            modelType = "CollectionModel";
+        } else if (Object.values(this.config.dataModels).indexOf("vudl-system:" + model) > -1) {
+            modelType = "DataModel";
+        } else {
+            throw new Error("Unknown model type: " + model);
+        }
+        this.log("Creating object " + this.pid + " with models CoreModel, " + modelType + ", " + model);
+        // Create the object in Fedora:
+        await this.fedora.createContainer(this.pid, this.title, objectState, owner);
+        // Add the three layers of models -- core (always), the type (data/collection), and the specific model
         await this.addModelRelationship("CoreModel");
-        return this.addRelationship(
-            "info:fedora/" + this.pid,
-            "info:fedora/fedora-system:def/relations-external#isMemberOf",
-            "info:fedora/" + this.parentPid
-        );
-    }
-
-    async dataIngest(): Promise<void> {
-        await this.addModelRelationship("DataModel");
+        await this.addModelRelationship(modelType);
+        await this.addModelRelationship(model);
+        // Some collection types always have specific sort orders:
+        switch (model) {
+            case "ListCollection":
+                await this.addSortRelationship("custom");
+                break;
+            case "FolderCollection":
+            case "ResourceCollection":
+                await this.addSortRelationship("title");
+                break;
+        }
+        // Attach parent if present:
+        if (this.parentPid !== null) {
+            await this.addRelationship(
+                "info:fedora/" + this.pid,
+                "info:fedora/fedora-system:def/relations-external#isMemberOf",
+                "info:fedora/" + this.parentPid
+            );
+        }
     }
 
     async getDatastream(datastream: string): Promise<string> {
@@ -123,25 +140,15 @@ export class FedoraObject {
     }
 
     fitsMasterMetadata(filename: string): string {
-        const fitsCommand = Config.getInstance().fitsCommand + " -i " + filename;
-        return execSync(fitsCommand).toString();
-    }
-
-    async imageDataIngest(): Promise<void> {
-        return this.addModelRelationship("ImageData");
-    }
-
-    async documentDataIngest(): Promise<void> {
-        return this.addModelRelationship("PDFData");
-    }
-
-    async audioDataIngest(): Promise<void> {
-        return this.addModelRelationship("AudioData");
-    }
-
-    async listCollectionIngest(): Promise<void> {
-        await this.addModelRelationship("ListCollection");
-        return this.addSortRelationship("custom");
+        const targetXml = filename + ".fits.xml";
+        if (!fs.existsSync(targetXml)) {
+            const fitsCommand = this.config.fitsCommand + " -i " + filename + " -o " + targetXml;
+            execSync(fitsCommand);
+            if (!fs.existsSync(targetXml)) {
+                throw new Error("FITS failed to create " + targetXml);
+            }
+        }
+        return fs.readFileSync(targetXml).toString();
     }
 
     async modifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
@@ -154,12 +161,6 @@ export class FedoraObject {
 
     async modifyObjectLabel(title: string): Promise<void> {
         await this.fedora.modifyObjectLabel(this.pid, title);
-    }
-
-    async resourceCollectionIngest(): Promise<void> {
-        this.log("Resource collection ingest for " + this.pid);
-        await this.addModelRelationship("ResourceCollection");
-        return this.addSortRelationship("title");
     }
 
     log(message: string): void {

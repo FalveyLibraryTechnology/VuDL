@@ -16,7 +16,7 @@ class Derivative implements QueueJob {
         const generatingPromises = [];
         order.raw.forEach((page) => {
             // For each size
-            const image = new ImageFile(`${job.data.dir}/${page.filename}`);
+            const image = ImageFile.build(`${job.data.dir}/${page.filename}`);
             for (const size in image.sizes) {
                 // Check and generate
                 const p = image.derivative(size);

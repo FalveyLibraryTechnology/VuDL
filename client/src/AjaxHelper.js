@@ -2,7 +2,7 @@ import $ from "jquery";
 
 class AjaxHelperInstance {
     constructor() {
-        this.url = null;
+        this.url = "http://localhost:9000"; // TODO: Config
         this._token = sessionStorage.getItem("token") ?? null;
         // Bind
         this.handle4xx = this.handle4xx.bind(this);

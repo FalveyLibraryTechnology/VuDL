@@ -14,9 +14,15 @@ class ImageFile {
         MEDIUM: 640,
         THUMBNAIL: 120,
     };
+    config: Config;
 
-    constructor(filename: string) {
+    constructor(filename: string, config: Config) {
         this.filename = filename;
+        this.config = config;
+    }
+
+    public static build(filename: string): ImageFile {
+        return new ImageFile(filename, Config.getInstance());
     }
 
     constraintForSize(size: string): number {
@@ -64,7 +70,7 @@ class ImageFile {
     }
 
     protected filterIllegalCharacters(txt: string): void {
-        const allowedChars = Config.getInstance().tesseractAllowedChars;
+        const allowedChars = this.config.tesseractAllowedChars;
         // Only filter if we have a non-empty setting:
         if (allowedChars) {
             const content = fs.readFileSync(txt);
@@ -83,8 +89,8 @@ class ImageFile {
                 fs.mkdirSync(txtPath, { recursive: true });
             }
             const deriv = await this.ocrDerivative();
-            const config = Config.getInstance();
-            const ts_cmd = config.tesseractPath + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
+            const ts_cmd =
+                this.config.tesseractPath + " " + deriv + " " + txt.slice(0, -4) + " " + this.ocrProperties();
             execSync(ts_cmd);
             if (!fs.existsSync(txt)) {
                 throw new Error("Problem running tesseract");
@@ -101,9 +107,9 @@ class ImageFile {
             if (!fs.existsSync(pngPath)) {
                 fs.mkdirSync(pngPath, { recursive: true });
             }
-            const config = Config.getInstance();
             const deriv = await this.derivative("LARGE");
-            const tc_cmd = config.textcleanerPath + " " + config.textcleanerSwitches + " " + deriv + " " + png;
+            const tc_cmd =
+                this.config.textcleanerPath + " " + this.config.textcleanerSwitches + " " + deriv + " " + png;
             execSync(tc_cmd);
             if (!fs.existsSync(png)) {
                 throw new Error("Problem running textcleaner");

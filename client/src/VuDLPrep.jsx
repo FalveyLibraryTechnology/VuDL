@@ -1,15 +1,11 @@
 import React from "react";
-import { BrowserRouter, Switch, Route, useParams } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import AjaxHelper from "./AjaxHelper";
-import JobSelector from "./JobSelector";
-import JobPaginator from "./JobPaginator";
+import Routes from "./Routes";
 import LogoutButton from "./LogoutButton";
-import MainMenu from "./MainMenu";
-import PdfGenerator from "./PdfGenerator";
-import SolrIndexer from "./SolrIndexer";
 
+<<<<<<< HEAD
 import CreateObject from "./Editor/CreateObject";
 
 class VuDLPrep extends React.Component {
@@ -51,15 +47,20 @@ class VuDLPrep extends React.Component {
                         </Route>
                     </Switch>
                 </BrowserRouter>
+=======
+const VuDLPrep = () => {
+    return (
+        <div>
+            <div className="logout">
+                <LogoutButton />
+>>>>>>> dev
             </div>
-        );
-    }
-}
-
-function JobPaginatorHook() {
-    let { category, job } = useParams();
-    return <JobPaginator category={category} job={job} />;
-}
+            <BrowserRouter>
+                <Routes />
+            </BrowserRouter>
+        </div>
+    );
+};
 
 VuDLPrep.propTypes = {
     logoutUrl: PropTypes.string,

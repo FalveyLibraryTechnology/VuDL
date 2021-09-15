@@ -1,41 +1,38 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 import Zoomy from "./Zoomy";
 
-class PaginatorZoomy extends React.Component {
-    constructor(props) {
-        super(props);
-        this.status = React.createRef();
-    }
-
-    componentDidMount() {
+const PaginatorZoomy = ({ img }) => {
+    const status = useRef();
+    const initializeZoomy = () => {
         Zoomy.init(document.getElementById("zoomy"));
-        this.componentDidUpdate();
-    }
-
-    componentDidUpdate() {
+    };
+    const loadZoomy = () => {
         Zoomy.load(
-            this.props.img,
+            img,
             function () {
                 Zoomy.resize();
                 Zoomy.center();
-                this.status.current.className = "hidden";
+                status.current.className = "hidden";
             }.bind(this)
         );
-    }
+    };
 
-    render() {
-        return (
-            <div>
-                <div ref={this.status} id="zoomyStatus">
-                    Loading...
-                </div>
-                <canvas id="zoomy"></canvas>
+    useEffect(() => {
+        initializeZoomy();
+        loadZoomy();
+    }, []);
+
+    return (
+        <div>
+            <div ref={status} id="zoomyStatus">
+                Loading...
             </div>
-        );
-    }
-}
+            <canvas id="zoomy"></canvas>
+        </div>
+    );
+};
 
 PaginatorZoomy.propTypes = {
     img: PropTypes.string,

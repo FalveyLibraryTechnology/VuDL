@@ -7,6 +7,7 @@ import Config from "../models/Config";
 import { DatastreamParameters } from "../services/Fedora";
 import { FedoraObject } from "../models/FedoraObject";
 import DocumentFile from "../models/DocumentFile";
+import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import ImageFile from "../models/ImageFile";
 import Job from "../models/Job";
 import Page from "../models/Page";
@@ -18,9 +19,13 @@ class IngestProcessor {
     protected job: Job;
     protected category: Category;
     protected logger: winston.Logger;
+    protected config: Config;
+    protected objectFactory: FedoraObjectFactory;
 
-    constructor(dir: string) {
-        this.job = new Job(dir);
+    constructor(dir: string, config: Config, objectFactory: FedoraObjectFactory) {
+        this.config = config;
+        this.objectFactory = objectFactory;
+        this.job = Job.build(dir);
         this.category = new Category(path.dirname(dir));
         this.logger = winston.createLogger({
             level: "info",
@@ -35,8 +40,12 @@ class IngestProcessor {
         });
     }
 
+    public static build(dir: string): IngestProcessor {
+        return new IngestProcessor(dir, Config.getInstance(), FedoraObjectFactory.getInstance());
+    }
+
     async addDatastreamsToPage(page: Page, imageData: FedoraObject): Promise<void> {
-        const image = new ImageFile(this.job.dir + "/" + page.filename);
+        const image = ImageFile.build(this.job.dir + "/" + page.filename);
         await imageData.addDatastreamFromFile(image.filename, "MASTER", "image/tiff");
         await imageData.addMasterMetadataDatastream(image.filename);
         for (const size in image.sizes) {
@@ -107,110 +116,57 @@ class IngestProcessor {
     }
 
     async buildPage(pageList: FedoraObject, page: Page, number: number): Promise<FedoraObject> {
-        const imageData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
-        imageData.parentPid = pageList.pid;
-        imageData.modelType = "ImageData";
-        imageData.title = String(page.label);
-        this.logger.info("Creating Image Object " + imageData.pid);
-
-        await imageData.coreIngest("Inactive");
-        await imageData.dataIngest();
-        await imageData.imageDataIngest();
-
+        const imageData = await this.objectFactory.build(
+            "ImageData",
+            String(page.label),
+            "Inactive",
+            pageList.pid,
+            this.logger
+        );
         await imageData.addSequenceRelationship(pageList.pid, number);
-
         return imageData;
     }
 
-    async buildPageList(resource: FedoraObject): Promise<FedoraObject> {
-        const pageList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
-        pageList.parentPid = resource.pid;
-        pageList.modelType = "ListCollection";
-        pageList.title = "Page List";
-        this.logger.info("Creating Page List Object " + pageList.pid);
-
-        await pageList.coreIngest("Inactive");
-        await pageList.collectionIngest();
-        await pageList.listCollectionIngest();
-
-        return pageList;
-    }
-
     async buildDocument(documentList: FedoraObject, document: DocumentFile, number: number): Promise<FedoraObject> {
-        const documentData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
-        documentData.parentPid = documentList.pid;
-        documentData.modelType = "PDFData";
-        documentData.title = String(document.label);
-        this.logger.info("Creating Document Object " + documentData.pid);
-
-        await documentData.coreIngest("Inactive");
-        await documentData.dataIngest();
-        await documentData.documentDataIngest();
-
+        const documentData = await this.objectFactory.build(
+            "PDFData",
+            String(document.label),
+            "Inactive",
+            documentList.pid,
+            this.logger
+        );
         await documentData.addSequenceRelationship(documentList.pid, number);
-
         return documentData;
     }
 
-    async buildDocumentList(resource: FedoraObject): Promise<FedoraObject> {
-        const documentList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
-        documentList.parentPid = resource.pid;
-        documentList.modelType = "ListCollection";
-        documentList.title = "Document List";
-        this.logger.info("Creating Document List Object " + documentList.pid);
-
-        await documentList.coreIngest("Inactive");
-        await documentList.collectionIngest();
-        await documentList.listCollectionIngest();
-
-        return documentList;
-    }
-
     async buildAudio(audioList: FedoraObject, audio: AudioFile, number: number): Promise<FedoraObject> {
-        const audioData = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
-        audioData.parentPid = audioList.pid;
-        audioData.modelType = "AudioData";
-        audioData.title = String(audio.filename);
-        this.logger.info("Creating Audio Object " + audioData.pid);
-
-        await audioData.coreIngest("Inactive");
-        await audioData.dataIngest();
-        await audioData.audioDataIngest();
-
+        const audioData = await this.objectFactory.build(
+            "AudioData",
+            String(audio.filename),
+            "Inactive",
+            audioList.pid,
+            this.logger
+        );
         await audioData.addSequenceRelationship(audioList.pid, number);
-
         return audioData;
     }
 
-    async buildAudioList(resource: FedoraObject): Promise<FedoraObject> {
-        const audioList = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
-        audioList.parentPid = resource.pid;
-        audioList.modelType = "ListCollection";
-        audioList.title = "Audio List";
-        this.logger.info("Creating Audio List Object " + audioList.pid);
-
-        await audioList.coreIngest("Inactive");
-        await audioList.collectionIngest();
-        await audioList.listCollectionIngest();
-
-        return audioList;
+    async buildListCollection(resource: FedoraObject, title: string): Promise<FedoraObject> {
+        return this.objectFactory.build("ListCollection", title, "Inactive", resource.pid, this.logger);
     }
 
     async buildResource(holdingArea: FedoraObject): Promise<FedoraObject> {
-        const resource = new FedoraObject(await FedoraObject.getNextPid(), this.logger);
-        resource.parentPid = holdingArea.pid;
-        resource.modelType = "ResourceCollection";
-        resource.title = "Incomplete... / Processing...";
-        this.logger.info("Creating Resource Object " + resource.pid);
-
-        await resource.coreIngest("Inactive");
-        await resource.collectionIngest();
-        await resource.resourceCollectionIngest();
-
+        const resource = await this.objectFactory.build(
+            "ResourceCollection",
+            "Incomplete... / Processing...",
+            "Inactive",
+            holdingArea.pid,
+            this.logger
+        );
         // Attach thumbnail to resource:
         if (this.job.metadata.order.pages.length > 0) {
             const page = this.job.metadata.order.pages[0];
-            const image = new ImageFile(this.job.dir + "/" + page.filename);
+            const image = ImageFile.build(this.job.dir + "/" + page.filename);
             await resource.addDatastreamFromFile(await image.derivative("THUMBNAIL"), "THUMBNAIL", "image/jpeg");
         }
         return resource;
@@ -231,7 +187,6 @@ class IngestProcessor {
     }
 
     async replaceDCMetadata(resource: FedoraObject, dc: string, message: string): Promise<void> {
-        this.logger.info(message);
         const params: DatastreamParameters = {
             mimeType: "text/xml",
             logMessage: message,
@@ -240,7 +195,7 @@ class IngestProcessor {
     }
 
     moveDirectory(): void {
-        const basePath = Config.getInstance().processedAreaPath;
+        const basePath = this.config.processedAreaPath;
         const currentTime = new Date();
         const now = currentTime.toISOString().substr(0, 10);
         let target = basePath + "/" + now + "/" + this.category.name + "/" + this.job.name;
@@ -264,7 +219,7 @@ class IngestProcessor {
         const startTime = Date.now();
         this.logger.info("Beginning ingest.");
         this.logger.info("Target collection ID: " + this.category.targetCollectionId);
-        const holdingArea = new FedoraObject(this.category.targetCollectionId, this.logger);
+        const holdingArea = FedoraObject.build(this.category.targetCollectionId, this.logger);
         if ((await holdingArea.getSort()) == "custom") {
             // This was already a TODO in the Ruby code; low priority:
             throw new Error("TODO: implement custom sort support.");
@@ -276,15 +231,15 @@ class IngestProcessor {
         // (this was already a TODO in the Ruby code; low priority)
 
         if (this.job.metadata.order.pages.length > 0) {
-            await this.addPages(await this.buildPageList(resource));
+            await this.addPages(await this.buildListCollection(resource, "Page List"));
         }
 
         if (this.job.metadata.documents.list.length > 0 || this.category.supportsPdfGeneration) {
-            await this.addDocuments(await this.buildDocumentList(resource));
+            await this.addDocuments(await this.buildListCollection(resource, "Document List"));
         }
 
         if (this.job.metadata.audio.list.length > 0) {
-            await this.addAudio(await this.buildAudioList(resource));
+            await this.addAudio(await this.buildListCollection(resource, "Audio List"));
         }
 
         await this.finalizeTitle(resource);
@@ -311,7 +266,7 @@ class IngestProcessor {
 
 class Ingest implements QueueJobInterface {
     async run(job: QueueJob): Promise<void> {
-        const handler = new IngestProcessor(job.data.dir);
+        const handler = IngestProcessor.build(job.data.dir);
         await handler.run();
     }
 }
