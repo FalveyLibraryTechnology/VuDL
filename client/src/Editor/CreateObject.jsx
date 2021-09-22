@@ -51,7 +51,7 @@ export default class CreateObject extends React.Component {
             );
         }
         return (
-            <form className="editor__create-object" action={this.ajax.apiUrl + "/object/new"}>
+            <form className="editor__create-object" method="post" action={this.ajax.apiUrl + "/edit/object/new"}>
                 <label>
                     Title
                     <input type="text" name="title" required />
@@ -63,13 +63,18 @@ export default class CreateObject extends React.Component {
                 </label>
 
                 <label>
-                    <input type="radio" name="active" value="1" />
+                    <input type="radio" name="state" value="Active" />
                     Active
                 </label>
 
                 <label>
-                    <input type="radio" name="active" value="0" checked />
+                    <input type="radio" name="state" value="Inactive" defaultChecked />
                     Inactive
+                </label>
+
+                <label>
+                    <input type="radio" name="state" value="Deleted" />
+                    Deleted
                 </label>
 
                 <label>
