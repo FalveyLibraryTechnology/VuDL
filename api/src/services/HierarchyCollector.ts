@@ -1,7 +1,7 @@
 import { DC, Fedora } from "./Fedora";
 import Config from "../models/Config";
 import FedoraData from "../models/FedoraData";
-import { DOMParser } from "xmldom";
+import { DOMParser } from "@xmldom/xmldom";
 import xpath = require("xpath");
 import TikaExtractor from "./TikaExtractor";
 
@@ -41,7 +41,7 @@ class HierarchyCollector {
     }
 
     protected extractRDFXML(
-        xml: DOMParser.Dom,
+        xml: Document,
         namespaces: Record<string, string>,
         xpathQuery: string
     ): Record<string, Array<string>> {
