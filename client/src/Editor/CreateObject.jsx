@@ -7,6 +7,12 @@ const CreateObject = () => {
     const ajax = AjaxHelper.getInstance();
     const [models, setModels] = useState({});
     const [selectedModel, setSelectedModel] = useState("");
+    const [results, setResults] = useState("");
+    const [title, setTitle] = useState("");
+    const [parent, setParent] = useState("");
+    const [state, setState] = useState("Inactive");
+
+    const states = ["Active", "Inactive", "Deleted"];
 
     useEffect(() => {
         ajax.getJSONPromise(ajax.apiUrl + "/edit/models").then((json) => {
@@ -24,6 +30,44 @@ const CreateObject = () => {
         return false;
     }
 
+    function handleSubmit(event) {
+        event.preventDefault();
+        const url = ajax.apiUrl + "/edit/object/new";
+        const data = {
+            title: title,
+            parent: parent,
+            model: selectedModel,
+            state: state,
+        };
+        console.log(data);
+        ajax.ajax({
+            method: "post",
+            url: url,
+            dataType: "json",
+            data: data,
+            error: function (result, status) {
+                console.log(status);
+                setResults("Error!");
+            },
+            success: function (status) {
+                console.log(status);
+                setResults("Success!");
+            },
+        });
+    }
+
+    function handleParentChange(event) {
+        setParent(event.target.value);
+    }
+
+    function handleStateChange(event) {
+        setState(event.target.value);
+    }
+
+    function handleTitleChange(event) {
+        setTitle(event.target.value);
+    }
+
     let categories = [];
     for (let category in models) {
         let children = [];
@@ -37,32 +81,36 @@ const CreateObject = () => {
             </TreeItem>
         );
     }
+    let stateControls = [];
+    states.forEach((currentState) => {
+        stateControls.push(
+            <label>
+                {currentState}
+                <input
+                    key={currentState}
+                    type="radio"
+                    name="state"
+                    value={currentState}
+                    checked={state === currentState}
+                    onChange={handleStateChange}
+                />
+            </label>
+        );
+    });
     return (
-        <form className="editor__create-object" method="post" action={ajax.apiUrl + "/edit/object/new"}>
+        <form onSubmit={handleSubmit} className="editor__create-object">
+            {results.length > 0 ? <div>{"Results: " + results}</div> : ""}
             <label>
                 Title
-                <input type="text" name="title" required />
+                <input type="text" value={title} name="title" onChange={handleTitleChange} required />
             </label>
 
             <label>
                 Parent ID
-                <input type="text" name="parent" required />
+                <input type="text" value={parent} name="parent" onChange={handleParentChange} required />
             </label>
 
-            <label>
-                <input type="radio" name="state" value="Active" />
-                Active
-            </label>
-
-            <label>
-                <input type="radio" name="state" value="Inactive" defaultChecked />
-                Inactive
-            </label>
-
-            <label>
-                <input type="radio" name="state" value="Deleted" />
-                Deleted
-            </label>
+            {stateControls}
 
             <label>
                 Select Model Type:
