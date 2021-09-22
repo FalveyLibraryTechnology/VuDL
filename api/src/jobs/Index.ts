@@ -9,7 +9,11 @@ class Index implements QueueJob {
         const indexer = SolrIndexer.getInstance();
         const result = await indexer.indexPid(job.data.pid);
         if (result.statusCode !== 200) {
-            const msg = "Problem indexing " + job.data.pid + ": " + (((result.body ?? {}).error ?? {}).msg ?? "unspecified error");
+            const msg =
+                "Problem indexing " +
+                job.data.pid +
+                ": " +
+                (((result.body ?? {}).error ?? {}).msg ?? "unspecified error");
             console.error(msg);
             throw new Error(msg);
         }
