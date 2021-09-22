@@ -2,7 +2,6 @@ import { Job } from "bullmq";
 import QueueJob from "./QueueJobInterface";
 import SolrIndexer from "../services/SolrIndexer";
 
-// TODO: Abstract Job?
 class Index implements QueueJob {
     async run(job: Job): Promise<void> {
         console.log("Indexing...", job.data);
