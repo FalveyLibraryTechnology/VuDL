@@ -1,4 +1,4 @@
-import { Worker } from "bullmq";
+import { Job, Worker } from "bullmq";
 
 // TODO: Maybe don't load all of them?
 import Derivative from "../jobs/Derivative";
