@@ -54,8 +54,7 @@ class SolrIndexer {
     }
 
     async indexPid(pid: string): Promise<NeedleResponse> {
-        let fedoraFields = null;
-        fedoraFields = await this.getFields(pid);
+        const fedoraFields = await this.getFields(pid);
         const solr = new Solr();
         return await solr.indexRecord(this.config.solrCore, fedoraFields);
     }
