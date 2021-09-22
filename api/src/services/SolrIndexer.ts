@@ -3,6 +3,8 @@ import DateSanitizer from "./DateSanitizer";
 import FedoraData from "../models/FedoraData";
 import HierarchyCollector from "./HierarchyCollector";
 import http = require("needle");
+import { NeedleResponse } from "./interfaces";
+import Solr from "./Solr";
 
 interface SolrFields {
     [key: string]: string | Array<string>;
@@ -49,6 +51,13 @@ class SolrIndexer {
             throw new Error("Unexpected change tracker response.");
         }
         return response.results;
+    }
+
+    async indexPid(pid: string): Promise<NeedleResponse> {
+        let fedoraFields = null;
+        fedoraFields = await this.getFields(pid);
+        const solr = new Solr();
+        return await solr.indexRecord(this.config.solrCore, fedoraFields);
     }
 
     async getFields(pid: string): Promise<SolrFields> {
