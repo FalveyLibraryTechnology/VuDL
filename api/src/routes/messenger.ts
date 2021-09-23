@@ -1,7 +1,6 @@
 import SolrIndexer from "../services/SolrIndexer";
 
 import express = require("express");
-import bodyParser = require("body-parser");
 import { Queue } from "bullmq";
 import { requireToken } from "./auth";
 import { sanitizeParameters } from "./sanitize";
@@ -60,7 +59,7 @@ async function queueIndexOperation(pid): Promise<void> {
     q.close();
 }
 
-router.post("/camel", bodyParser.text(), async function (req, res) {
+router.post("/camel", async function (req, res) {
     const pid = req.headers["org.fcrepo.jms.identifier"].split("/")[1];
     const action = req.headers["org.fcrepo.jms.eventtype"].split("#").pop();
 
