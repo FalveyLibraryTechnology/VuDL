@@ -98,7 +98,7 @@ After a few moments, a new tab should automatically open in your browser pointin
 | client:lint | lint only the api code |
 | client:setup | install npm dependencies in client/ |
 | client:test | run client unit tests with test coverage |
-| client:test | run client unit tests while watching source folders |
+| client:testWatch | run client unit tests while watching source folders |
 | | |
 | queue | start api worker queue server |
 | queue:dev | start api worker listener, restart on changes |
