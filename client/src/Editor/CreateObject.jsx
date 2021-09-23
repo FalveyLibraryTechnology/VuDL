@@ -46,8 +46,7 @@ const CreateObject = () => {
             dataType: "json",
             data: data,
             error: function (result, status) {
-                console.log(status);
-                setResults("Error!");
+                setResults("Error! " + result.responseText ?? status);
             },
             success: function (status) {
                 console.log(status);
