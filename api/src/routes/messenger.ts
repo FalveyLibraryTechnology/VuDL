@@ -40,10 +40,7 @@ router.post("/solrindex/:pid", pidSanitizer, requireToken, async function (req, 
     }
 });
 
-router.post("/camel", bodyParser.text(), async function (req, res) {
-    // TODO: determine the pid in a more appropriate way
-    const pid = req.body;
-
+async function queueIndexOperation(pid): Promise<void> {
     // Fedora often fires many change events about the same object in rapid succession;
     // we don't want to index more times than we have to, so let's not re-queue anything
     // that is already awaiting indexing.
@@ -61,6 +58,26 @@ router.post("/camel", bodyParser.text(), async function (req, res) {
         await q.add("index", { pid: pid });
     }
     q.close();
+}
+
+router.post("/camel", bodyParser.text(), async function (req, res) {
+    const pid = req.headers["org.fcrepo.jms.identifier"].split("/")[1];
+    const action = req.headers["org.fcrepo.jms.eventtype"].split("#").pop();
+
+    switch (action) {
+        case "Create":
+        case "Update":
+            await queueIndexOperation(pid);
+            break;
+        case "Delete":
+            // TODO: handle deletes
+            break;
+        default:
+            const msg = "Unexpected action: " + action + " (on PID: " + pid + ")";
+            console.error(msg);
+            res.status(400).send(msg);
+            return;
+    }
 
     res.status(200).send("ok");
 });
