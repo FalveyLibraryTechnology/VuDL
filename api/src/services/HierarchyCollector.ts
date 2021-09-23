@@ -1,185 +1,31 @@
-import { DC, Fedora } from "./Fedora";
+import { Fedora } from "./Fedora";
 import Config from "../models/Config";
 import FedoraData from "../models/FedoraData";
-import { DOMParser } from "@xmldom/xmldom";
-import xpath = require("xpath");
+import MetadataExtractor from "./MetadataExtractor";
 import TikaExtractor from "./TikaExtractor";
 
 class HierarchyCollector {
     private static instance: HierarchyCollector;
 
     fedora: Fedora;
-    // PIDs that define the top of a hierarchy. Typically this
-    // includes the overall top PID, plus the top public PID.
-    hierarchyTops: Array<string>;
+    extractor: MetadataExtractor;
     config: Config;
 
-    constructor(fedora: Fedora, config: Config) {
+    constructor(fedora: Fedora, extractor: MetadataExtractor, config: Config) {
         this.fedora = fedora;
+        this.extractor = extractor;
         this.config = config;
     }
 
     public static getInstance(): HierarchyCollector {
         if (!HierarchyCollector.instance) {
-            HierarchyCollector.instance = new HierarchyCollector(Fedora.getInstance(), Config.getInstance());
+            HierarchyCollector.instance = new HierarchyCollector(
+                Fedora.getInstance(),
+                MetadataExtractor.getInstance(),
+                Config.getInstance()
+            );
         }
         return HierarchyCollector.instance;
-    }
-
-    protected extractMetadata(dc: DC): Record<string, Array<string>> {
-        if (typeof dc.children === "undefined") {
-            throw new Error("Unexpected failure: childless Dublin Core!");
-        }
-        const metadata: Record<string, Array<string>> = {};
-        dc.children.forEach((field) => {
-            if (typeof metadata[field.name] === "undefined") {
-                metadata[field.name] = [];
-            }
-            metadata[field.name].push(field.value);
-        });
-        return metadata;
-    }
-
-    protected extractRDFXML(
-        xml: Document,
-        namespaces: Record<string, string>,
-        xpathQuery: string
-    ): Record<string, Array<string>> {
-        const rdfXPath = xpath.useNamespaces(namespaces);
-        const relations: Record<string, Array<string>> = {};
-        rdfXPath(xpathQuery, xml).forEach((relation: Node) => {
-            let values = rdfXPath("text()", relation) as Array<Node>;
-            // If there's a namespace on the node name, strip it:
-            const nodeName = relation.nodeName.split(":").pop();
-            if (values.length === 0) {
-                values = rdfXPath("./@rdf:resource", relation) as Array<Node>;
-            }
-            if (values.length > 0) {
-                if (typeof relations[nodeName] === "undefined") {
-                    relations[nodeName] = [];
-                }
-                relations[nodeName].push(values[0].nodeValue);
-            }
-        });
-        return relations;
-    }
-
-    protected extractRelations(RELS: string): Record<string, Array<string>> {
-        const xmlParser = new DOMParser();
-        const RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
-        return this.extractRDFXML(
-            RELS_XML,
-            {
-                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-            },
-            "//rdf:Description/*"
-        );
-    }
-
-    protected extractFedoraDetails(RDF: string): Record<string, Array<string>> {
-        const xmlParser = new DOMParser();
-        const RDF_XML = xmlParser.parseFromString(RDF, "text/xml");
-        const details = this.extractRDFXML(
-            RDF_XML,
-            {
-                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                fedora: "http://fedora.info/definitions/v4/repository#",
-                "fedora3-model": "info:fedora/fedora-system:def/model#",
-                "fedora3-view": "info:fedora/fedora-system:def/view#",
-            },
-            "//rdf:Description/fedora:*|//rdf:Description/fedora3-model:*|//rdf:Description/fedora3-view:*"
-        );
-        // The new (F6) created and lastModified properties should take
-        // precedence over the legacy (F3) createdDate and lastModifiedDate
-        // properties when present.
-        if (typeof details.created !== "undefined") {
-            details.createdDate = details.created;
-            delete details.created;
-        }
-        if (typeof details.lastModified !== "undefined") {
-            details.lastModifiedDate = details.lastModified;
-            delete details.lastModified;
-        }
-        return details;
-    }
-
-    protected extractFedoraDatastreams(RDF: string): Array<string> {
-        const xmlParser = new DOMParser();
-        const RDF_XML = xmlParser.parseFromString(RDF, "text/xml");
-        const raw =
-            this.extractRDFXML(
-                RDF_XML,
-                {
-                    rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                    ldp: "http://www.w3.org/ns/ldp#",
-                },
-                "//ldp:contains"
-            )["contains"] ?? [];
-        return raw.map((ds) => {
-            return ds.split("/").pop();
-        });
-    }
-
-    protected extractLicense(XML: string): string {
-        const xmlParser = new DOMParser();
-        const parsedXml = xmlParser.parseFromString(XML, "text/xml");
-        const namespaces = {
-            rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-            METS: "http://www.loc.gov/METS/",
-            xlink: "http://www.w3.org/1999/xlink",
-        };
-        const rdfXPath = xpath.useNamespaces(namespaces);
-        let license = null;
-        rdfXPath("//@xlink:href", parsedXml).forEach((relation: Node) => {
-            license = relation.nodeValue;
-        });
-        return license;
-    }
-
-    protected extractAgents(xml: string): Record<string, Array<string>> {
-        const xmlParser = new DOMParser();
-        const RDF_XML = xmlParser.parseFromString(xml, "text/xml");
-        return this.extractRDFXML(
-            RDF_XML,
-            {
-                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                METS: "http://www.loc.gov/METS/",
-            },
-            "//METS:agent/*"
-        );
-    }
-
-    protected extractFitsData(xml: string): Record<string, Array<string>> {
-        const xmlParser = new DOMParser();
-        const RDF_XML = xmlParser.parseFromString(xml, "text/xml");
-        const namespaces = {
-            rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-            fits: "http://hul.harvard.edu/ois/xml/ns/fits/fits_output",
-        };
-        const details = this.extractRDFXML(
-            RDF_XML,
-            namespaces,
-            "//fits:fileinfo/fits:size|//fits:imageWidth|//fits:imageHeight"
-        );
-        details.mimetype = [];
-        const fitsXPath = xpath.useNamespaces(namespaces);
-        fitsXPath("//fits:identity/@mimetype", RDF_XML).forEach((relation: Node) => {
-            details.mimetype.push(relation.nodeValue);
-        });
-        return details;
-    }
-
-    protected extractThumbnailDetails(xml: string): Record<string, Array<string>> {
-        const xmlParser = new DOMParser();
-        const RDF_XML = xmlParser.parseFromString(xml, "text/xml");
-        return this.extractRDFXML(
-            RDF_XML,
-            {
-                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                premis: "http://www.loc.gov/premis/rdf/v1#",
-            },
-            "//premis:*"
-        );
     }
 
     async getFedoraData(pid: string, fetchRdf = true): Promise<FedoraData> {
@@ -191,25 +37,25 @@ class HierarchyCollector {
         // we can skip fetching more RDF in order to save some time!
         const RDFPromise = fetchRdf ? this.fedora.getRdf(pid) : null;
         const [DC, RELS, RDF] = await Promise.all([DCPromise, RELSPromise, RDFPromise]);
-        const dataStreams = fetchRdf ? this.extractFedoraDatastreams(RDF) : [];
-        const relations = this.extractRelations(RELS);
+        const dataStreams = fetchRdf ? this.extractor.extractFedoraDatastreams(RDF) : [];
+        const relations = this.extractor.extractRelations(RELS);
         // Fetch license details if appropriate/available:
         const extraDetails: Record<string, Record<string, Array<string>>> = {};
         if (dataStreams.includes("LICENSE")) {
             const licenseStream = await this.fedora.getDatastreamAsString(pid, "LICENSE");
-            extraDetails.license = { url: [this.extractLicense(licenseStream)] };
+            extraDetails.license = { url: [this.extractor.extractLicense(licenseStream)] };
         }
         if (dataStreams.includes("AGENTS")) {
             const agentsStream = await this.fedora.getDatastreamAsString(pid, "AGENTS");
-            extraDetails.agents = this.extractAgents(agentsStream);
+            extraDetails.agents = this.extractor.extractAgents(agentsStream);
         }
         if (dataStreams.includes("THUMBNAIL")) {
             const thumbRdf = await this.fedora.getRdf(pid + "/THUMBNAIL/fcr:metadata");
-            extraDetails.thumbnails = this.extractThumbnailDetails(thumbRdf);
+            extraDetails.thumbnails = this.extractor.extractThumbnailDetails(thumbRdf);
         }
         if (dataStreams.includes("MASTER-MD")) {
             const fitsXml = await this.fedora.getDatastreamAsString(pid, "MASTER-MD");
-            extraDetails.fitsData = this.extractFitsData(fitsXml);
+            extraDetails.fitsData = this.extractor.extractFitsData(fitsXml);
         }
         extraDetails.fullText = {};
         if (dataStreams.includes("OCR-DIRTY")) {
@@ -223,8 +69,8 @@ class HierarchyCollector {
         return new FedoraData(
             pid,
             relations,
-            this.extractMetadata(DC),
-            fetchRdf ? this.extractFedoraDetails(RDF) : {},
+            this.extractor.extractMetadata(DC),
+            fetchRdf ? this.extractor.extractFedoraDetails(RDF) : {},
             dataStreams,
             extraDetails
         );
