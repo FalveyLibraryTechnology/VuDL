@@ -19,6 +19,7 @@
     "client:lint": "eslint client/src/ --ext .ts,.js,.jsx",
     "client:setup": "cd client && npm ci",
     "client:test": "cd client && npm test",
+    "client:testWatch": "cd client && npm run testWatch",
     "queue": "node api/worker-start.js",
     "queue:dev": "nodemon --watch 'api/vudl.ini' --watch 'api/**/*.js' api/worker-start.js",
     "queue:wsl": "nodemon --legacy-watch api/worker-start.js",

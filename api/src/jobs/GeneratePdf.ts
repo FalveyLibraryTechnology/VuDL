@@ -3,6 +3,7 @@ import fs = require("fs");
 import Config from "../models/Config";
 import { FedoraObject } from "../models/FedoraObject";
 import { execSync } from "child_process";
+import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import http = require("needle");
 import PDFDocument = require("pdfkit");
 import QueueJobInterface from "./QueueJobInterface";
@@ -11,14 +12,16 @@ import tmp = require("tmp");
 class PdfGenerator {
     protected pid: string;
     protected config: Config;
+    protected objectFactory: FedoraObjectFactory;
 
-    constructor(pid: string, config: Config) {
+    constructor(pid: string, config: Config, objectFactory: FedoraObjectFactory) {
         this.pid = pid;
         this.config = config;
+        this.objectFactory = objectFactory;
     }
 
     public static build(pid: string): PdfGenerator {
-        return new PdfGenerator(pid, Config.getInstance());
+        return new PdfGenerator(pid, Config.getInstance(), FedoraObjectFactory.getInstance());
     }
 
     private hasPdfAlready(manifest): boolean {
@@ -78,31 +81,14 @@ class PdfGenerator {
     }
 
     private async addPdfToPid(pdf: string): Promise<void> {
-        const documentList = await FedoraObject.fromNextPid();
-        documentList.parentPid = this.pid;
-        documentList.modelType = "ListCollection";
-        documentList.title = "Document List";
-
-        await documentList.coreIngest("Active");
-        await documentList.collectionIngest();
-        await documentList.listCollectionIngest();
-
+        const documentList = await this.objectFactory.build("ListCollection", "Document List", "Active", this.pid);
         const pdfObject = await this.buildDocument(documentList, 1);
         await this.addDatastreamsToDocument(pdf, pdfObject);
     }
 
     private async buildDocument(documentList: FedoraObject, number: number): Promise<FedoraObject> {
-        const documentData = await FedoraObject.fromNextPid();
-        documentData.parentPid = documentList.pid;
-        documentData.modelType = "PDFData";
-        documentData.title = "PDF";
-
-        await documentData.coreIngest("Active");
-        await documentData.dataIngest();
-        await documentData.documentDataIngest();
-
+        const documentData = await this.objectFactory.build("PDFData", "PDF", "Active", documentList.pid);
         await documentData.addSequenceRelationship(documentList.pid, number);
-
         return documentData;
     }
 

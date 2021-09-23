@@ -1,27 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-class PaginatorControlGroup extends React.Component {
-    render() {
-        var buttons = this.props.children.map(
-            function (item) {
-                var callback = function () {
-                    this.props.callback(item);
-                }.bind(this);
-                return (
-                    <button onClick={callback} key={item}>
-                        {item}
-                    </button>
-                );
-            }.bind(this)
-        );
-        return (
-            <div className="group" id={this.props.label}>
-                {buttons}
-            </div>
-        );
-    }
-}
+const PaginatorControlGroup = ({ callback, children, label }) => {
+    return (
+        <div className="group" id={label}>
+            {children.map((item) => (
+                <button onClick={() => callback(item)} key={item}>
+                    {item}
+                </button>
+            ))}
+        </div>
+    );
+};
 
 PaginatorControlGroup.propTypes = {
     callback: PropTypes.func,

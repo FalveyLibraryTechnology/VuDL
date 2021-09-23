@@ -1,4 +1,4 @@
-import { Worker } from "bullmq";
+import { Job, Worker } from "bullmq";
 
 // TODO: Maybe don't load all of them?
 import Derivative from "../jobs/Derivative";
@@ -27,6 +27,9 @@ class JobQueue {
             }
 
             return await this.workers[job.name].run(job);
+        });
+        this.manager.on("failed", (job: Job, failedReason: string) => {
+            console.error("Job failed; reason: " + failedReason);
         });
 
         console.log("JobQueue started");

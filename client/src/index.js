@@ -7,11 +7,7 @@ import "./css/client.css";
 import "./css/justgrid.css";
 import "../node_modules/@fortawesome/fontawesome-free/css/all.css";
 
-import AjaxHelper from "./AjaxHelper";
 import VuDLPrep from "./VuDLPrep";
-
-let ajax = AjaxHelper.getInstance();
-ajax.url = "http://localhost:9000"; // TODO: Config
 
 ReactDOM.render(
     <React.StrictMode>
