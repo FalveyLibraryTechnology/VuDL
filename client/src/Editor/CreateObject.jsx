@@ -84,10 +84,9 @@ const CreateObject = () => {
     let stateControls = [];
     states.forEach((currentState) => {
         stateControls.push(
-            <label>
+            <label key={currentState + "-label"}>
                 {currentState}
                 <input
-                    key={currentState}
                     type="radio"
                     name="state"
                     value={currentState}
