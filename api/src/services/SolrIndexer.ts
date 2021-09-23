@@ -14,15 +14,21 @@ class SolrIndexer {
     private static instance: SolrIndexer;
     config: Config;
     hierarchyCollector: HierarchyCollector;
+    solr: Solr;
 
-    constructor(hierarchyCollector: HierarchyCollector, config: Config) {
+    constructor(hierarchyCollector: HierarchyCollector, solr: Solr, config: Config) {
         this.hierarchyCollector = hierarchyCollector;
         this.config = config;
+        this.solr = solr;
     }
 
     public static getInstance(): SolrIndexer {
         if (!SolrIndexer.instance) {
-            SolrIndexer.instance = new SolrIndexer(HierarchyCollector.getInstance(), Config.getInstance());
+            SolrIndexer.instance = new SolrIndexer(
+                HierarchyCollector.getInstance(),
+                Solr.getInstance(),
+                Config.getInstance()
+            );
         }
         return SolrIndexer.instance;
     }
@@ -53,10 +59,13 @@ class SolrIndexer {
         return response.results;
     }
 
+    async deletePid(pid: string): Promise<NeedleResponse> {
+        return await this.solr.deleteRecord(this.config.solrCore, pid);
+    }
+
     async indexPid(pid: string): Promise<NeedleResponse> {
         const fedoraFields = await this.getFields(pid);
-        const solr = new Solr();
-        return await solr.indexRecord(this.config.solrCore, fedoraFields);
+        return await this.solr.indexRecord(this.config.solrCore, fedoraFields);
     }
 
     async getFields(pid: string): Promise<SolrFields> {

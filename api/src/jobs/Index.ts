@@ -6,10 +6,22 @@ class Index implements QueueJob {
     async run(job: Job): Promise<void> {
         console.log("Indexing...", job.data);
         const indexer = SolrIndexer.getInstance();
-        const result = await indexer.indexPid(job.data.pid);
+        let result = null;
+        switch (job.data.action) {
+            case "delete":
+                result = await indexer.deletePid(job.data.pid);
+                break;
+            case "index":
+                result = await indexer.indexPid(job.data.pid);
+                break;
+            default:
+                throw new Error("Unexpected index action: " + job.data.action);
+        }
         if (result.statusCode !== 200) {
             const msg =
-                "Problem indexing " +
+                "Problem performing " +
+                job.data.action +
+                " on " +
                 job.data.pid +
                 ": " +
                 (((result.body ?? {}).error ?? {}).msg ?? "unspecified error");

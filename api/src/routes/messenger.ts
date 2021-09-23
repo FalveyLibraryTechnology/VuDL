@@ -39,43 +39,54 @@ router.post("/solrindex/:pid", pidSanitizer, requireToken, async function (req, 
     }
 });
 
-async function queueIndexOperation(pid): Promise<void> {
+async function queueIndexOperation(pid, action): Promise<void> {
     // Fedora often fires many change events about the same object in rapid succession;
     // we don't want to index more times than we have to, so let's not re-queue anything
     // that is already awaiting indexing.
     const q = new Queue("vudl");
     const jobs = await q.getJobs("wait");
-    let indexNeeded = true;
+    let lastPidAction = null;
     for (let i = 0; i < jobs.length; i++) {
         if (jobs[i].name === "index" && jobs[i].data.pid === pid) {
-            indexNeeded = false;
-            console.log("Skipping queue; " + pid + " is already awaiting indexing.");
+            lastPidAction = jobs[i].data.action;
             break;
         }
     }
-    if (indexNeeded) {
-        await q.add("index", { pid: pid });
+    if (action === lastPidAction) {
+        console.log("Skipping queue; " + pid + " is already awaiting " + action + ".");
+    } else {
+        await q.add("index", { pid: pid, action: action });
     }
     q.close();
 }
 
 router.post("/camel", async function (req, res) {
-    const pid = req.headers["org.fcrepo.jms.identifier"].split("/")[1];
-    const action = req.headers["org.fcrepo.jms.eventtype"].split("#").pop();
+    const idParts = req.headers["org.fcrepo.jms.identifier"].split("/");
+    const pid = idParts[1];
+    const datastream = idParts[2] ?? null;
+    let action = req.headers["org.fcrepo.jms.eventtype"].split("#").pop();
+
+    // If we deleted a datastream, we should treat that as an update operation
+    // (because we don't want to delete the whole PID!):
+    if (datastream !== null && action === "Delete") {
+        console.log(pid " datastream " + datastream + " deleted; updating...");
+        action = "Update";
+    }
 
     switch (action) {
         case "Create":
         case "Update":
-            await queueIndexOperation(pid);
+            await queueIndexOperation(pid, "index");
             break;
         case "Delete":
-            // TODO: handle deletes
+            await queueIndexOperation(pid, "delete");
             break;
-        default:
+        default: {
             const msg = "Unexpected action: " + action + " (on PID: " + pid + ")";
             console.error(msg);
             res.status(400).send(msg);
             return;
+        }
     }
 
     res.status(200).send("ok");
