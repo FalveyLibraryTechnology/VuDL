@@ -31,5 +31,10 @@ exports[`Routes render 1`] = `
   >
     <Component />
   </Route>
+  <Route
+    path="/editor/object/new"
+  >
+    <CreateObject />
+  </Route>
 </Switch>
 `;

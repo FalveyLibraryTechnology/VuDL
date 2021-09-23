@@ -51,5 +51,17 @@ exports[`MainMenu renders 1`] = `
       </Link>
     </li>
   </ul>
+  <h2>
+    Object Editor Pieces
+  </h2>
+  <ul>
+    <li>
+      <Link
+        to="/editor/object/new"
+      >
+        Create Object
+      </Link>
+    </li>
+  </ul>
 </div>
 `;
