@@ -45,7 +45,7 @@ The software is written in node.js, but requires quite a few external tools to a
 
 This software is designed to run on multiple operating systems; however, Ubuntu (or other Debian flavors) tend to be the quickest and easiest because of the availability of easy-to-install packages for most of the external dependencies.
 
-## External Tools
+## External Dependencies
 
 - [Fedora Commons](https://duraspace.org/fedora/) - required for storing repository content
 - [FFmpeg](http://ffmpeg.org/) - required for audio/video processing
@@ -66,6 +66,11 @@ This software is designed to run on multiple operating systems; however, Ubuntu 
 - NPM (`npm install -g npm`)
 - Execute `npm install` to install root node dependencies
 - Execute `npm run setup` to install node dependencies in subdirectories
+
+## Underlying Technologies
+- [Express.js](https://expressjs.com)
+- [React.js](https://reactjs.org)
+- [BullMQ](https://github.com/taskforcesh/bullmq)
 
 # Set up configuration in the api directory
 
