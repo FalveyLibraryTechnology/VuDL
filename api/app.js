@@ -14,6 +14,7 @@ const indexRouter = require("./dist/routes/index");
 const ingestRouter = require("./dist/routes/ingest");
 const editRouter = require("./dist/routes/edit");
 const messengerRouter = require("./dist/routes/messenger");
+const queueRouter = require("./dist/routes/queue");
 const Config = require("./dist/models/Config").default;
 
 const app = express();
@@ -60,6 +61,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/ingest", ingestRouter);
 app.use("/api/edit", editRouter);
 app.use("/messenger", messengerRouter);
+app.use("/queue", queueRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
