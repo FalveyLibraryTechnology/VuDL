@@ -1,4 +1,4 @@
-const Arena = require('bull-arena');
+const Arena = require("bull-arena");
 import { Queue, FlowProducer } from "bullmq";
 
 const arena = Arena({
