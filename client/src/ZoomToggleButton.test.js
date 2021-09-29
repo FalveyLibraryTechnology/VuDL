@@ -9,12 +9,8 @@ describe("ZoomToggleButton", () => {
 
     beforeEach(() => {
         props = {
-            paginator: {
-                toggleZoom: jest.fn(),
-                state: {
-                    zoom: false,
-                },
-            },
+            toggleZoom: jest.fn(),
+            zoom: false,
         };
     });
 
@@ -29,19 +25,19 @@ describe("ZoomToggleButton", () => {
     });
 
     it("renders correctly when zoom is on", () => {
-        props.paginator.state.zoom = true;
+        props.zoom = true;
         const wrapper = render(<ZoomToggleButton {...props} />);
         expect(wrapper.text().includes("Turn Zoom Off")).toBeTruthy();
     });
 
     it("calls toggle zoom when button is clicked", () => {
-        props.paginator.state.zoom = true;
+        props.zoom = true;
         const wrapper = mount(<ZoomToggleButton {...props} />);
 
-        expect(props.paginator.toggleZoom).not.toHaveBeenCalled();
+        expect(props.toggleZoom).not.toHaveBeenCalled();
 
         wrapper.find("button").simulate("click");
 
-        expect(props.paginator.toggleZoom).toHaveBeenCalled();
+        expect(props.toggleZoom).toHaveBeenCalled();
     });
 });

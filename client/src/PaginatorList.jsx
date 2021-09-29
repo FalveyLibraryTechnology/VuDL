@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import Thumbnail from "./Thumbnail";
 
-const PaginatorList = ({ pageCount, paginator }) => {
+const PaginatorList = ({ getLabel, getMagicLabel, setPage, getImageUrl, currentPage, pageCount }) => {
     const pageList = useRef();
     const thumbRefs = useRef([]);
     const scrollTo = (number) => {
@@ -20,8 +20,11 @@ const PaginatorList = ({ pageCount, paginator }) => {
                     thumbRefs.current.push(thumbRef);
                 }}
                 scrollTo={scrollTo}
-                selected={pageIndex === paginator.state.currentPage}
-                paginator={paginator}
+                selected={pageIndex === currentPage}
+                setPage={setPage}
+                getLabel={getLabel}
+                getMagicLabel={getMagicLabel}
+                getImageUrl={getImageUrl}
                 key={pageIndex}
                 number={pageIndex}
             />
@@ -36,13 +39,12 @@ const PaginatorList = ({ pageCount, paginator }) => {
 };
 
 PaginatorList.propTypes = {
-    // JobPaginator
-    paginator: PropTypes.shape({
-        state: PropTypes.shape({
-            currentPage: PropTypes.number,
-        }),
-    }),
+    currentPage: PropTypes.number,
     pageCount: PropTypes.number,
+    getLabel: PropTypes.func,
+    getMagicLabel: PropTypes.func,
+    setPage: PropTypes.func,
+    getImageUrl: PropTypes.func,
 };
 
 export default PaginatorList;

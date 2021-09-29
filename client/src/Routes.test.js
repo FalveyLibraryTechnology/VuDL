@@ -51,8 +51,8 @@ describe("Routes", () => {
         );
         expect(mockjobPaginator).toHaveBeenCalledWith(
             expect.objectContaining({
-                category: "testCategory",
-                job: "testJob",
+                initialCategory: "testCategory",
+                initialJob: "testJob",
             })
         );
     });
