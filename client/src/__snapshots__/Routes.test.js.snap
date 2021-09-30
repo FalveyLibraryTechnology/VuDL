@@ -34,7 +34,9 @@ exports[`Routes render 1`] = `
   <Route
     path="/editor/object/new"
   >
-    <CreateObject />
+    <CreateObject
+      allowNoParentPid={true}
+    />
   </Route>
 </Switch>
 `;
