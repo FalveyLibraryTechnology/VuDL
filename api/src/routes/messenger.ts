@@ -69,7 +69,7 @@ router.post("/camel", async function (req, res) {
     // If we deleted a datastream, we should treat that as an update operation
     // (because we don't want to delete the whole PID!):
     if (datastream !== null && action === "Delete") {
-        console.log(pid " datastream " + datastream + " deleted; updating...");
+        console.log(pid + " datastream " + datastream + " deleted; updating...");
         action = "Update";
     }
 
