@@ -1,15 +1,21 @@
+import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { TreeView, TreeItem } from "@material-ui/lab";
 
 import AjaxHelper from "../AjaxHelper";
 
-const CreateObject = () => {
+const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangeParentPid = true }) => {
+    // Validate properties
+    if (!allowChangeParentPid && !allowNoParentPid && parentPid === "") {
+        throw new Error("allowChangeParentPid and allowNoParentPid cannot both be false when parentPid is empty.");
+    }
     const ajax = AjaxHelper.getInstance();
     const [models, setModels] = useState({});
     const [selectedModel, setSelectedModel] = useState("");
     const [results, setResults] = useState("");
     const [title, setTitle] = useState("");
-    const [parent, setParent] = useState("");
+    const [parent, setParent] = useState(parentPid);
+    const [noParent, setNoParent] = useState(allowNoParentPid && parentPid === "");
     const [state, setState] = useState("Inactive");
 
     const states = ["Active", "Inactive", "Deleted"];
@@ -35,11 +41,11 @@ const CreateObject = () => {
         const url = ajax.apiUrl + "/edit/object/new";
         const data = {
             title: title,
+            noParent: noParent ? 1 : 0,
             parent: parent,
             model: selectedModel,
             state: state,
         };
-        console.log(data);
         ajax.ajax({
             method: "post",
             url: url,
@@ -48,15 +54,24 @@ const CreateObject = () => {
             error: function (result, status) {
                 setResults("Error! " + result.responseText ?? status);
             },
-            success: function (status) {
-                console.log(status);
+            success: function () {
                 setResults("Success!");
             },
         });
     }
 
+    function handleNoParentChange(event) {
+        setNoParent(event.target.checked);
+        if (allowChangeParentPid && event.target.checked) {
+            setParent("");
+        }
+    }
+
     function handleParentChange(event) {
         setParent(event.target.value);
+        if (allowNoParentPid) {
+            setNoParent(event.target.value.length === 0);
+        }
     }
 
     function handleStateChange(event) {
@@ -95,6 +110,29 @@ const CreateObject = () => {
             </label>
         );
     });
+    let noParentControl = "";
+    if (allowNoParentPid) {
+        noParentControl = allowChangeParentPid ? (
+            <label>
+                <input type="checkbox" name="noParent" value="1" onChange={handleNoParentChange} checked={noParent} />
+                No parent PID
+            </label>
+        ) : (
+            <input type="hidden" name="noParent" value="1" />
+        );
+    }
+    let parentControl = "";
+    if (allowChangeParentPid || parent.length > 0) {
+        parentControl = allowChangeParentPid ? (
+            <label>
+                Parent ID
+                <input type="text" value={parent} name="parent" onChange={handleParentChange} required={!noParent} />
+            </label>
+        ) : (
+            <input type="hidden" value={parent} name="parent" />
+        );
+    }
+
     return (
         <form onSubmit={handleSubmit} className="editor__create-object">
             {results.length > 0 ? <div>{"Results: " + results}</div> : ""}
@@ -103,11 +141,8 @@ const CreateObject = () => {
                 <input type="text" value={title} name="title" onChange={handleTitleChange} required />
             </label>
 
-            <label>
-                Parent ID
-                <input type="text" value={parent} name="parent" onChange={handleParentChange} required />
-            </label>
-
+            {noParentControl}
+            {parentControl}
             {stateControls}
 
             <label>
@@ -121,6 +156,12 @@ const CreateObject = () => {
             {selectedModel && <button>Create Object</button>}
         </form>
     );
+};
+
+CreateObject.propTypes = {
+    parentPid: PropTypes.string,
+    allowChangeParentPid: PropTypes.bool,
+    allowNoParentPid: PropTypes.bool,
 };
 
 export default CreateObject;

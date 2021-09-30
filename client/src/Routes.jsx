@@ -32,7 +32,7 @@ const Routes = () => {
                 <SolrIndexer />
             </Route>
             <Route path="/editor/object/new">
-                <CreateObject />
+                <CreateObject allowNoParentPid={true} />
             </Route>
         </Switch>
     );

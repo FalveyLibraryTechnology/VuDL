@@ -13,15 +13,33 @@ router.get("/models", requireToken, function (req, res) {
 });
 
 router.post("/object/new", requireToken, bodyParser.json(), async function (req, res) {
-    const fedora = Fedora.getInstance();
-    const extractor = MetadataExtractor.getInstance();
-    const relsExt = await fedora.getDatastreamAsString(req.body.parent, "RELS-EXT");
-    const models = extractor.extractRelations(relsExt).hasModel ?? [];
+    let parentPid = req.body.parent ?? null;
+    if (parentPid !== null && parentPid.length === 0) {
+        parentPid = null;
+    }
+    const noParent = (req.body.noParent ?? "0") === "1";
 
-    // Parents must be collections; validate!
-    if (!models.includes("info:fedora/vudl-system:CollectionModel")) {
-        res.status(400).send("Illegal parent " + req.body.parent + "; not a collection!");
+    // Validate parent parameters:
+    if (noParent && parentPid !== null) {
+        res.status(400).send("Cannot set parent PID and no parent PID");
         return;
+    }
+    if (!noParent && parentPid === null) {
+        res.status(400).send("Must set either parent or noParent");
+        return;
+    }
+    // Validate parent PID, if set:
+    if (parentPid !== null) {
+        const fedora = Fedora.getInstance();
+        const extractor = MetadataExtractor.getInstance();
+        const relsExt = await fedora.getDatastreamAsString(req.body.parent, "RELS-EXT");
+        const models = extractor.extractRelations(relsExt).hasModel ?? [];
+
+        // Parents must be collections; validate!
+        if (!models.includes("info:fedora/vudl-system:CollectionModel")) {
+            res.status(400).send("Illegal parent " + req.body.parent + "; not a collection!");
+            return;
+        }
     }
 
     const factory = FedoraObjectFactory.getInstance();
@@ -30,7 +48,7 @@ router.post("/object/new", requireToken, bodyParser.json(), async function (req,
             req.body.model.replace("vudl-system:", ""),
             req.body.title,
             req.body.state,
-            req.body.parent
+            parentPid
         );
         res.status(200).send(newObject.pid);
     } catch (e) {
