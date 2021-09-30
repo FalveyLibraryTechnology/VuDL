@@ -10,7 +10,7 @@ import CreateObject from "./Editor/CreateObject";
 
 const JobPaginatorHook = () => {
     const { category, job } = useParams();
-    return <JobPaginator category={category} job={job} />;
+    return <JobPaginator initialCategory={category} initialJob={job} />;
 };
 
 const Routes = () => {

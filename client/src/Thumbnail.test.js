@@ -10,11 +10,10 @@ describe("Thumbnail", () => {
     beforeEach(() => {
         props = {
             scrollTo: jest.fn(),
-            paginator: {
-                getLabel: jest.fn().mockReturnValue(null),
-                setPage: jest.fn(),
-                getImageUrl: jest.fn().mockReturnValue("www.testurl.com"),
-            },
+            getLabel: jest.fn().mockReturnValue(null),
+            getMagicLabel: jest.fn().mockReturnValue(null),
+            setPage: jest.fn(),
+            getImageUrl: jest.fn().mockReturnValue("www.testurl.com"),
             selected: true,
             number: 12,
         };
@@ -29,7 +28,7 @@ describe("Thumbnail", () => {
         const wrapper = mount(<Thumbnail {...props} />);
 
         expect(props.scrollTo).toHaveBeenCalled();
-        expect(props.paginator.getImageUrl).toHaveBeenCalledWith(props.number, "thumb");
+        expect(props.getImageUrl).toHaveBeenCalledWith(props.number, "thumb");
         expect(wrapper.find(".thumbnail.selected").exists()).toBeTruthy();
         expect(wrapper.text().includes("13")).toBeTruthy();
         expect(wrapper.find(".label.magic").exists()).toBeTruthy();
@@ -37,12 +36,13 @@ describe("Thumbnail", () => {
 
     it("renders correctly when not selected or no label", () => {
         props.selected = false;
-        props.paginator.getLabel.mockReturnValue("testLabel");
+        props.getLabel.mockReturnValue("testLabel");
+        props.getMagicLabel.mockReturnValue("testLabel");
 
         const wrapper = mount(<Thumbnail {...props} />);
 
         expect(props.scrollTo).not.toHaveBeenCalled();
-        expect(props.paginator.getImageUrl).toHaveBeenCalledWith(props.number, "thumb");
+        expect(props.getImageUrl).toHaveBeenCalledWith(props.number, "thumb");
         expect(wrapper.find(".thumbnail.selected").exists()).toBeFalsy();
         expect(wrapper.find(".label.magic").exists()).toBeFalsy();
         expect(wrapper.text().includes("testLabel")).toBeTruthy();
@@ -51,8 +51,8 @@ describe("Thumbnail", () => {
     it("calls setPage when div is clicked", () => {
         const wrapper = mount(<Thumbnail {...props} />);
 
-        expect(props.paginator.setPage).not.toHaveBeenCalledWith(12);
+        expect(props.setPage).not.toHaveBeenCalledWith(12);
         wrapper.find(".thumbnail").simulate("click");
-        expect(props.paginator.setPage).toHaveBeenCalledWith(12);
+        expect(props.setPage).toHaveBeenCalledWith(12);
     });
 });

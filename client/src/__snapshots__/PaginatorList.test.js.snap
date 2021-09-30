@@ -7,13 +7,6 @@ exports[`PaginatorList renders 1`] = `
   <Thumbnail
     key="0"
     number={0}
-    paginator={
-      Object {
-        "state": Object {
-          "currentPage": 0,
-        },
-      }
-    }
     scrollTo={[Function]}
     selected={true}
   />
