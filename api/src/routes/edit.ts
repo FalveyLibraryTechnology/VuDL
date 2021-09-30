@@ -13,7 +13,7 @@ router.get("/models", requireToken, function (req, res) {
 });
 
 router.post("/object/new", requireToken, bodyParser.json(), async function (req, res) {
-    let parentPid = req.body.parent ?? null;
+    let parentPid = req?.body?.parent;
     if (parentPid !== null && parentPid.length === 0) {
         parentPid = null;
     }
