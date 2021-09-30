@@ -65,7 +65,7 @@ exports[`CreateObject renders appropriately with default settings 1`] = `
     Select Model Type:
     <b />
   </label>
-  <WithStyles(ForwardRef(TreeView))
+  <TreeView
     defaultCollapseIcon="➖"
     defaultExpandIcon="➕"
     onNodeSelect={[Function]}
@@ -133,7 +133,7 @@ exports[`CreateObject renders appropriately with editing disabled 1`] = `
     Select Model Type:
     <b />
   </label>
-  <WithStyles(ForwardRef(TreeView))
+  <TreeView
     defaultCollapseIcon="➖"
     defaultExpandIcon="➕"
     onNodeSelect={[Function]}
@@ -216,7 +216,7 @@ exports[`CreateObject renders appropriately with noParent and parent change enab
     Select Model Type:
     <b />
   </label>
-  <WithStyles(ForwardRef(TreeView))
+  <TreeView
     defaultCollapseIcon="➖"
     defaultExpandIcon="➕"
     onNodeSelect={[Function]}
