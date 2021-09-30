@@ -31,5 +31,16 @@ describe("CreateObject", () => {
         props.allowChangeParentPid = false;
         const wrapper = shallow(<CreateObject {...props} />);
         expect(toJson(wrapper)).toMatchSnapshot();
-    })
+    });
+
+    it("disallows all empty pid settings", () => {
+        props.allowChangeParentPid = false;
+        expect(() => shallow(<CreateObject {...props} />)).toThrowError("allowChangeParentPid and allowNoParentPid cannot both be false when parentPid is empty.");
+    });
+
+    it("disallows incompatible allowNoParentPid/allowChangeParentPid settings", () => {
+        props.allowNoParentPid = true;
+        props.allowChangeParentPid = false;
+        expect(() => shallow(<CreateObject {...props} />)).toThrowError("allowNoParentPid=true requires allowChangeParentPid to be true")
+    });
 });
