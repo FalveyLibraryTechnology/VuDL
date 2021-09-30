@@ -10,7 +10,7 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
         throw new Error("allowChangeParentPid and allowNoParentPid cannot both be false when parentPid is empty.");
     }
     if (allowNoParentPid && !allowChangeParentPid) {
-        throw new Error("allowNoParentPid=true requires allowChangeParentPid to be true")
+        throw new Error("allowNoParentPid=true requires allowChangeParentPid to be true");
     }
     const ajax = AjaxHelper.getInstance();
     const [models, setModels] = useState({});

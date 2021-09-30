@@ -1,6 +1,6 @@
 import React from "react";
-import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { render, shallow, mount } from "enzyme";
+import { beforeEach, describe, expect, it } from "@jest/globals";
+import { shallow } from "enzyme";
 import toJson from "enzyme-to-json";
 import CreateObject from "./CreateObject";
 
@@ -35,12 +35,16 @@ describe("CreateObject", () => {
 
     it("disallows all empty pid settings", () => {
         props.allowChangeParentPid = false;
-        expect(() => shallow(<CreateObject {...props} />)).toThrowError("allowChangeParentPid and allowNoParentPid cannot both be false when parentPid is empty.");
+        expect(() => shallow(<CreateObject {...props} />)).toThrowError(
+            "allowChangeParentPid and allowNoParentPid cannot both be false when parentPid is empty."
+        );
     });
 
     it("disallows incompatible allowNoParentPid/allowChangeParentPid settings", () => {
         props.allowNoParentPid = true;
         props.allowChangeParentPid = false;
-        expect(() => shallow(<CreateObject {...props} />)).toThrowError("allowNoParentPid=true requires allowChangeParentPid to be true")
+        expect(() => shallow(<CreateObject {...props} />)).toThrowError(
+            "allowNoParentPid=true requires allowChangeParentPid to be true"
+        );
     });
 });
