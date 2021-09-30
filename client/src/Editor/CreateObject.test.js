@@ -95,4 +95,30 @@ describe("CreateObject", () => {
             })
         );
     });
+
+    it("submits appropriate data with no parent", () => {
+        props.parentPid = "foo:1234";
+        props.allowNoParentPid = true;
+        const wrapper = mount(<CreateObject {...props} />);
+        act(() => {
+            nodeSelectFunction(new Event("event-foo"), "model-foo");
+        });
+        wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
+        wrapper.find("input[name='noParent']").simulate("change", { target: { checked: true } });
+        wrapper.find("form").simulate("submit");
+        expect(ajax.ajax).toHaveBeenCalledWith(
+            expect.objectContaining({
+                data: {
+                    model: "model-foo",
+                    noParent: 1,
+                    parent: "",
+                    state: "Inactive",
+                    title: "Test Title",
+                },
+                dataType: "json",
+                method: "post",
+                url: "http://foo/edit/object/new",
+            })
+        );
+    });
 });
