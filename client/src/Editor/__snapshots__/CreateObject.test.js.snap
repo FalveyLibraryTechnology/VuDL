@@ -1,0 +1,225 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateObject renders appropriately with default settings 1`] = `
+<form
+  className="editor__create-object"
+  onSubmit={[Function]}
+>
+  <label>
+    Title
+    <input
+      name="title"
+      onChange={[Function]}
+      required={true}
+      type="text"
+      value=""
+    />
+  </label>
+  <label>
+    Parent ID
+    <input
+      name="parent"
+      onChange={[Function]}
+      required={true}
+      type="text"
+      value=""
+    />
+  </label>
+  <label
+    key="Active-label"
+  >
+    Active
+    <input
+      checked={false}
+      name="state"
+      onChange={[Function]}
+      type="radio"
+      value="Active"
+    />
+  </label>
+  <label
+    key="Inactive-label"
+  >
+    Inactive
+    <input
+      checked={true}
+      name="state"
+      onChange={[Function]}
+      type="radio"
+      value="Inactive"
+    />
+  </label>
+  <label
+    key="Deleted-label"
+  >
+    Deleted
+    <input
+      checked={false}
+      name="state"
+      onChange={[Function]}
+      type="radio"
+      value="Deleted"
+    />
+  </label>
+  <label>
+    Select Model Type:
+    <b />
+  </label>
+  <WithStyles(ForwardRef(TreeView))
+    defaultCollapseIcon="➖"
+    defaultExpandIcon="➕"
+    onNodeSelect={[Function]}
+  />
+</form>
+`;
+
+exports[`CreateObject renders appropriately with editing disabled 1`] = `
+<form
+  className="editor__create-object"
+  onSubmit={[Function]}
+>
+  <label>
+    Title
+    <input
+      name="title"
+      onChange={[Function]}
+      required={true}
+      type="text"
+      value=""
+    />
+  </label>
+  <input
+    name="parent"
+    type="hidden"
+    value="foo:1234"
+  />
+  <label
+    key="Active-label"
+  >
+    Active
+    <input
+      checked={false}
+      name="state"
+      onChange={[Function]}
+      type="radio"
+      value="Active"
+    />
+  </label>
+  <label
+    key="Inactive-label"
+  >
+    Inactive
+    <input
+      checked={true}
+      name="state"
+      onChange={[Function]}
+      type="radio"
+      value="Inactive"
+    />
+  </label>
+  <label
+    key="Deleted-label"
+  >
+    Deleted
+    <input
+      checked={false}
+      name="state"
+      onChange={[Function]}
+      type="radio"
+      value="Deleted"
+    />
+  </label>
+  <label>
+    Select Model Type:
+    <b />
+  </label>
+  <WithStyles(ForwardRef(TreeView))
+    defaultCollapseIcon="➖"
+    defaultExpandIcon="➕"
+    onNodeSelect={[Function]}
+  />
+</form>
+`;
+
+exports[`CreateObject renders appropriately with noParent and parent change enabled 1`] = `
+<form
+  className="editor__create-object"
+  onSubmit={[Function]}
+>
+  <label>
+    Title
+    <input
+      name="title"
+      onChange={[Function]}
+      required={true}
+      type="text"
+      value=""
+    />
+  </label>
+  <label>
+    <input
+      checked={true}
+      name="noParent"
+      onChange={[Function]}
+      type="checkbox"
+      value="1"
+    />
+    No parent PID
+  </label>
+  <label>
+    Parent ID
+    <input
+      name="parent"
+      onChange={[Function]}
+      required={false}
+      type="text"
+      value=""
+    />
+  </label>
+  <label
+    key="Active-label"
+  >
+    Active
+    <input
+      checked={false}
+      name="state"
+      onChange={[Function]}
+      type="radio"
+      value="Active"
+    />
+  </label>
+  <label
+    key="Inactive-label"
+  >
+    Inactive
+    <input
+      checked={true}
+      name="state"
+      onChange={[Function]}
+      type="radio"
+      value="Inactive"
+    />
+  </label>
+  <label
+    key="Deleted-label"
+  >
+    Deleted
+    <input
+      checked={false}
+      name="state"
+      onChange={[Function]}
+      type="radio"
+      value="Deleted"
+    />
+  </label>
+  <label>
+    Select Model Type:
+    <b />
+  </label>
+  <WithStyles(ForwardRef(TreeView))
+    defaultCollapseIcon="➖"
+    defaultExpandIcon="➕"
+    onNodeSelect={[Function]}
+  />
+</form>
+`;
