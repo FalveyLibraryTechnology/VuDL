@@ -1,6 +1,6 @@
 # Cantaloupe Setup Notes
 
-The [Cantaloupe Image Server](https://cantaloupe-project.github.io/) is required when using [VuFind](https://vufind.org) as the front-end for your repository. In order to configure the server to display images from [Fedora Commons](https://duraspace.org/fedora/), it is only necessary to change a few settings from the defaults in cantaloupe.properties:
+A IIIF image server is required when using [VuFind](https://vufind.org) as the front-end for your repository. The [Cantaloupe Image Server](https://cantaloupe-project.github.io/) is a recommended option. In order to configure the server to display images from [Fedora Commons](https://duraspace.org/fedora/), it is only necessary to change a few settings from the defaults in cantaloupe.properties:
 
 <pre>
 source.static = HttpSource
