@@ -103,6 +103,7 @@ After a few moments, a new tab should automatically open in your browser pointin
 | client:build | build React code for production |
 | client:lint | lint only the api code |
 | client:setup | install npm dependencies in client/ |
+| client:snapshots | update snapshots used by test suite |
 | client:test | run client unit tests with test coverage |
 | client:testWatch | run client unit tests while watching source folders |
 | | |
