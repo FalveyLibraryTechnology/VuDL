@@ -17,17 +17,6 @@ router.post("/object/new", requireToken, bodyParser.json(), async function (req,
     if (parentPid !== null && parentPid.length === 0) {
         parentPid = null;
     }
-    const noParent = (req.body.noParent ?? "0") === "1";
-
-    // Validate parent parameters:
-    if (noParent && parentPid !== null) {
-        res.status(400).send("Cannot set parent PID and no parent PID");
-        return;
-    }
-    if (!noParent && parentPid === null) {
-        res.status(400).send("Must set either parent or noParent");
-        return;
-    }
     // Validate parent PID, if set:
     if (parentPid !== null) {
         const fedora = Fedora.getInstance();

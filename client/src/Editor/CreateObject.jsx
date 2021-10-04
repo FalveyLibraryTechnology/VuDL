@@ -44,7 +44,6 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
         const url = ajax.apiUrl + "/edit/object/new";
         const data = {
             title,
-            noParent: noParent ? 1 : 0,
             parent,
             model: selectedModel,
             state,

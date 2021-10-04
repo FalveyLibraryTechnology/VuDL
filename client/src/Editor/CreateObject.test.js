@@ -97,7 +97,6 @@ describe("CreateObject", () => {
             expect.objectContaining({
                 data: {
                     model: "model-foo",
-                    noParent: 0,
                     parent: "foo:1234",
                     state: "Inactive",
                     title: "Test Title",
@@ -126,7 +125,6 @@ describe("CreateObject", () => {
             expect.objectContaining({
                 data: {
                     model: "model-foo",
-                    noParent: 0,
                     parent: "foo:1234",
                     state: "Inactive",
                     title: "Test Title",
@@ -156,7 +154,6 @@ describe("CreateObject", () => {
             expect.objectContaining({
                 data: {
                     model: "model-foo",
-                    noParent: 1,
                     parent: "",
                     state: "Active",
                     title: "Test Title",
@@ -186,7 +183,6 @@ describe("CreateObject", () => {
             expect.objectContaining({
                 data: {
                     model: "model-foo",
-                    noParent: 1,
                     parent: "",
                     state: "Active",
                     title: "Test Title",
