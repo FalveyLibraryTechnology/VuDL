@@ -32,12 +32,18 @@ router.post("/object/new", requireToken, bodyParser.json(), async function (req,
     if (parentPid !== null) {
         const fedora = Fedora.getInstance();
         const extractor = MetadataExtractor.getInstance();
-        const relsExt = await fedora.getDatastreamAsString(req.body.parent, "RELS-EXT");
+        let relsExt: string;
+        try {
+            relsExt = await fedora.getDatastreamAsString(parentPid, "RELS-EXT");
+        } catch (e) {
+            res.status(404).send("Error loading parent PID: " + parentPid);
+            return;
+        }
         const models = extractor.extractRelations(relsExt).hasModel ?? [];
 
         // Parents must be collections; validate!
         if (!models.includes("info:fedora/vudl-system:CollectionModel")) {
-            res.status(400).send("Illegal parent " + req.body.parent + "; not a collection!");
+            res.status(400).send("Illegal parent " + parentPid + "; not a collection!");
             return;
         }
     }

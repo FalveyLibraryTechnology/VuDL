@@ -43,17 +43,17 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
         event.preventDefault();
         const url = ajax.apiUrl + "/edit/object/new";
         const data = {
-            title: title,
+            title,
             noParent: noParent ? 1 : 0,
-            parent: parent,
+            parent,
             model: selectedModel,
-            state: state,
+            state,
         };
         ajax.ajax({
             method: "post",
-            url: url,
+            url,
             dataType: "json",
-            data: data,
+            data,
             error: function (result, status) {
                 setResults("Error! " + result.responseText ?? status);
             },
