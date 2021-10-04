@@ -98,21 +98,18 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
             </TreeItem>
         );
     }
-    let stateControls = [];
-    states.forEach((currentState) => {
-        stateControls.push(
-            <label key={currentState + "-label"}>
-                {currentState}
-                <input
-                    type="radio"
-                    name="state"
-                    value={currentState}
-                    checked={state === currentState}
-                    onChange={handleStateChange}
-                />
-            </label>
-        );
-    });
+    const stateControls = states.map((currentState) => (
+        <label key={currentState + "-label"}>
+            {currentState}
+            <input
+                type="radio"
+                name="state"
+                value={currentState}
+                checked={state === currentState}
+                onChange={handleStateChange}
+            />
+        </label>
+    ));
     let noParentControl = "";
     if (allowNoParentPid) {
         noParentControl = allowChangeParentPid ? (
