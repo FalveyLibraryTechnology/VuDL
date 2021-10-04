@@ -20,11 +20,7 @@ describe("PaginatorList", () => {
     beforeEach(() => {
         props = {
             pageCount: 1,
-            paginator: {
-                state: {
-                    currentPage: 0,
-                },
-            },
+            currentPage: 0,
         };
     });
 
@@ -40,7 +36,6 @@ describe("PaginatorList", () => {
             expect.objectContaining({
                 scrollTo: expect.any(Function),
                 selected: true,
-                paginator: expect.anything(),
                 number: 0,
             })
         );

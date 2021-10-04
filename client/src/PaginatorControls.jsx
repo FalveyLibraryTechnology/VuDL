@@ -32,13 +32,11 @@ class PaginatorControls extends React.Component {
             useMagic = true;
         }
         var label = this.labelInput.value;
-        return label.length === 0 && useMagic
-            ? this.props.paginator.getLabel(this.props.paginator.state.currentPage)
-            : label;
+        return label.length === 0 && useMagic ? this.props.getMagicLabel(this.props.currentPage) : label;
     }
 
     setLabel(label) {
-        this.props.paginator.setLabel(this.props.paginator.state.currentPage, label);
+        this.props.setLabel(this.props.currentPage, label);
     }
 
     setLabelPrefix(str) {
@@ -80,30 +78,30 @@ class PaginatorControls extends React.Component {
                     <div className="status"></div>
                     <input
                         type="text"
-                        value={this.props.paginator.getLabel(this.props.paginator.state.currentPage, false) ?? ""}
+                        value={this.props.getLabel(this.props.currentPage) ?? ""}
                         ref={(l) => {
                             this.labelInput = l;
                         }}
                         id="page"
                         onChange={this.updateCurrentPageLabel}
                     />
-                    <button onClick={this.props.paginator.prevPage}>Prev</button>
+                    <button onClick={this.props.prevPage}>Prev</button>
                     <button
                         onClick={function () {
                             this.approveCurrentPageLabel();
-                            this.props.paginator.nextPage();
+                            this.props.nextPage();
                         }.bind(this)}
                     >
                         Next
                     </button>
                 </div>
                 <div className="top">
-                    <ZoomToggleButton paginator={this.props.paginator} />
+                    <ZoomToggleButton toggleZoom={this.props.toggleZoom} zoom={this.props.zoom} />
                     <button
                         className="primary"
                         onClick={function () {
                             this.approveCurrentPageLabel();
-                            this.props.paginator.save(false);
+                            this.props.save(false);
                         }.bind(this)}
                     >
                         Save
@@ -112,7 +110,7 @@ class PaginatorControls extends React.Component {
                         className="primary"
                         onClick={function () {
                             this.approveCurrentPageLabel();
-                            this.props.paginator.save(true);
+                            this.props.save(true);
                         }.bind(this)}
                     >
                         Save and Publish
@@ -138,10 +136,10 @@ class PaginatorControls extends React.Component {
                         4<i className="fa fa-fw fa-arrows-alt-h"></i>IV
                     </button>
                 </div>
-                <button onClick={this.props.paginator.autonumberFollowingPages} title="Autonumber Following Pages">
+                <button onClick={this.props.autonumberFollowingPages} title="Autonumber Following Pages">
                     <i className="fa fa-sort-numeric-down"></i>
                 </button>
-                <button className="danger" onClick={this.props.paginator.deletePage} title="Delete Current Page">
+                <button className="danger" onClick={this.props.deletePage} title="Delete Current Page">
                     <i className="fa fa-fw fa-trash"></i> Delete Current Page
                 </button>
             </div>
@@ -150,19 +148,17 @@ class PaginatorControls extends React.Component {
 }
 
 PaginatorControls.propTypes = {
-    // JobPaginator
-    paginator: PropTypes.shape({
-        autonumberFollowingPages: PropTypes.func,
-        deletePage: PropTypes.func,
-        getLabel: PropTypes.func,
-        nextPage: PropTypes.func,
-        prevPage: PropTypes.func,
-        save: PropTypes.func,
-        setLabel: PropTypes.func,
-        state: PropTypes.shape({
-            currentPage: PropTypes.number,
-        }),
-    }),
+    autonumberFollowingPages: PropTypes.func,
+    deletePage: PropTypes.func,
+    getLabel: PropTypes.func,
+    getMagicLabel: PropTypes.func,
+    nextPage: PropTypes.func,
+    prevPage: PropTypes.func,
+    save: PropTypes.func,
+    setLabel: PropTypes.func,
+    toggleZoom: PropTypes.func,
+    zoom: PropTypes.bool,
+    currentPage: PropTypes.number,
 };
 
 export default PaginatorControls;

@@ -45,8 +45,9 @@ The software is written in node.js, but requires quite a few external tools to a
 
 This software is designed to run on multiple operating systems; however, Ubuntu (or other Debian flavors) tend to be the quickest and easiest because of the availability of easy-to-install packages for most of the external dependencies.
 
-## External Tools
+## External Dependencies
 
+- [Cantaloupe Image Server](https://cantaloupe-project.github.io/) (or another IIIF image server) - optional, but required when using VuFind (see below, and also [setup notes](docs/cantaloupe.md)).
 - [Fedora Commons](https://duraspace.org/fedora/) - required for storing repository content
 - [FFmpeg](http://ffmpeg.org/) - required for audio/video processing
 - [FITS](https://projects.iq.harvard.edu/fits/home) - required for file characterization
@@ -66,6 +67,11 @@ This software is designed to run on multiple operating systems; however, Ubuntu 
 - NPM (`npm install -g npm`)
 - Execute `npm install` to install root node dependencies
 - Execute `npm run setup` to install node dependencies in subdirectories
+
+## Underlying Technologies
+- [Express.js](https://expressjs.com)
+- [React.js](https://reactjs.org)
+- [BullMQ](https://github.com/taskforcesh/bullmq)
 
 # Set up configuration in the api directory
 
@@ -97,6 +103,7 @@ After a few moments, a new tab should automatically open in your browser pointin
 | client:build | build React code for production |
 | client:lint | lint only the api code |
 | client:setup | install npm dependencies in client/ |
+| client:snapshots | update snapshots used by test suite |
 | client:test | run client unit tests with test coverage |
 | client:testWatch | run client unit tests while watching source folders |
 | | |
