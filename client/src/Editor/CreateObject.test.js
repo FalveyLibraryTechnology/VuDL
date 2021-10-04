@@ -74,8 +74,9 @@ describe("CreateObject", () => {
     it("disallows incompatible allowNoParentPid/allowChangeParentPid settings", () => {
         props.allowNoParentPid = true;
         props.allowChangeParentPid = false;
+        props.parentPid = "foo:pid";
         expect(() => shallow(<CreateObject {...props} />)).toThrowError(
-            "allowNoParentPid=true requires allowChangeParentPid to be true"
+            "allowNoParentPid=true requires allowChangeParentPid to be true when parentPid is non-empty."
         );
     });
 
