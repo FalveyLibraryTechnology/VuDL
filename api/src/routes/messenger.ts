@@ -1,6 +1,7 @@
 import SolrIndexer from "../services/SolrIndexer";
-
+import bodyParser = require("body-parser");
 import express = require("express");
+import Config from "../models/Config";
 import { Queue } from "bullmq";
 import { requireToken } from "./auth";
 import { sanitizeParameters } from "./sanitize";
@@ -60,11 +61,20 @@ async function queueIndexOperation(pid, action): Promise<void> {
     q.close();
 }
 
-router.post("/camel", async function (req, res) {
-    const idParts = req.headers["org.fcrepo.jms.identifier"].split("/");
+router.post("/camel", bodyParser.json(), async function (req, res) {
+    const fedoraBase = Config.getInstance().restBaseUrl;
+    const idParts = req?.body?.id.replace(fedoraBase, "").split("/");
+    if (idParts === null) {
+        res.status(400).send("Missing id in body");
+        return;
+    }
     const pid = idParts[1];
     const datastream = idParts[2] ?? null;
-    let action = req.headers["org.fcrepo.jms.eventtype"].split("#").pop();
+    let action = req?.body?.type.split("#").pop();
+    if (action === null) {
+        res.status(400).send("Missing type in body");
+        return;
+    }
 
     // If we deleted a datastream, we should treat that as an update operation
     // (because we don't want to delete the whole PID!):
