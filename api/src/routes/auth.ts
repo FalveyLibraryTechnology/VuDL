@@ -15,6 +15,8 @@ interface NextFunction {
     (err?: Error): void;
 }
 
+const loginPath = "/api/auth/login";
+
 passport.serializeUser(function (user, done) {
     done(null, user.id);
 });
@@ -34,13 +36,25 @@ passport.use(
 );
 
 export function authenticate(req: Request, res: Response, next?: NextFunction): void {
-    // Attempt sign in
-    const authMethod = passport.authenticate("hash", { failureRedirect: "/login" });
+    const authMethod = passport.authenticate("hash", { failureRedirect: loginPath });
     // we can switch tactics here
     if (req.header("Authorization")) {
         console.log("Authorization", req.header("Authorization"));
     }
     authMethod(req, res, next);
+}
+
+function saveSessionReferer(req: Request) {
+    req.session.referer = req.query.referer ?? req.header("referer") ?? req.originalUrl;
+    console.log("< save login referral: " + req.session.referer);
+}
+
+export function requireLogin(req: Request, res: Response, next?: NextFunction): void {
+    if (req.user) {
+        return next();
+    }
+    saveSessionReferer(req);
+    res.redirect(loginPath);
 }
 
 export async function requireToken(req: Request, res: Response, next?: NextFunction): Promise<void> {
@@ -52,8 +66,7 @@ export async function requireToken(req: Request, res: Response, next?: NextFunct
     }
 
     // Take ye to login!
-    req.session.referer = req.query.referer ?? req.header("referer");
-    console.log("< save login referral: " + req.session.referer);
+    saveSessionReferer(req);
     res.sendStatus(401);
 }
 
