@@ -50,12 +50,11 @@ function saveSessionReferer(req: Request) {
 }
 
 export function requireLogin(req: Request, res: Response, next?: NextFunction): void {
-    if (!req.user) {
-        saveSessionReferer(req);
-        res.redirect(loginPath);
-        return;
+    if (req.user) {
+       return next();
     }
-    next();
+    saveSessionReferer(req);
+    res.redirect(loginPath);
 }
 
 export async function requireToken(req: Request, res: Response, next?: NextFunction): Promise<void> {
