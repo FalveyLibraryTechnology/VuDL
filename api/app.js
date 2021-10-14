@@ -9,11 +9,13 @@ const session = require("express-session");
 const path = require("path");
 const logger = require("morgan");
 
-const authRouter = require("./dist/routes/auth").router;
+const auth = require("./dist/routes/auth");
 const indexRouter = require("./dist/routes/index");
 const ingestRouter = require("./dist/routes/ingest");
 const editRouter = require("./dist/routes/edit");
 const messengerRouter = require("./dist/routes/messenger");
+const queueRouter = require("./dist/routes/queue");
+const passport = require("passport");
 const Config = require("./dist/models/Config").default;
 
 const app = express();
@@ -56,10 +58,11 @@ if (app.get("env") === "production") {
 app.use(session(sess));
 
 app.use("/", indexRouter);
-app.use("/api/auth", authRouter);
+app.use("/api/auth", auth.router);
 app.use("/api/ingest", ingestRouter);
 app.use("/api/edit", editRouter);
 app.use("/messenger", messengerRouter);
+app.use("/queue", passport.initialize(), passport.session(), auth.requireLogin, queueRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
