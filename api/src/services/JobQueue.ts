@@ -3,6 +3,7 @@ import { Job, Worker } from "bullmq";
 // TODO: Maybe don't load all of them?
 import Derivative from "../jobs/Derivative";
 import GeneratePdf from "../jobs/GeneratePdf";
+import Index from "../jobs/Index";
 import Ingest from "../jobs/Ingest";
 import QueueJob from "../jobs/QueueJobInterface";
 
@@ -15,6 +16,7 @@ class JobQueue {
         // TODO: Maybe don't load all of them?
         this.workers.derivatives = new Derivative();
         this.workers.generatepdf = new GeneratePdf();
+        this.workers.index = new Index();
         this.workers.ingest = new Ingest();
 
         this.manager = new Worker("vudl", async (job) => {

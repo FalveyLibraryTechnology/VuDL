@@ -9,6 +9,7 @@
   "dependencies": {
     "@stomp/stompjs": "^6.1.0",
     "@xmldom/xmldom": "^0.7.0",
+    "body-parser": "^1.18.3",
     "bullmq": "^1.14.8",
     "connect-session-knex": "^2.1.0",
     "cookie-parser": "~1.4.4",
