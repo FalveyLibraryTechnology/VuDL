@@ -3,10 +3,18 @@ import { NeedleResponse } from "./interfaces";
 import Config from "../models/Config";
 
 class Solr {
+    private static instance: Solr;
     baseUrl: string;
 
-    constructor(baseUrl: string = null) {
-        this.baseUrl = baseUrl ?? Config.getInstance().solrUrl;
+    constructor(baseUrl: string) {
+        this.baseUrl = baseUrl;
+    }
+
+    public static getInstance(): Solr {
+        if (!Solr.instance) {
+            Solr.instance = new Solr(Config.getInstance().solrUrl);
+        }
+        return Solr.instance;
     }
 
     /**
@@ -24,8 +32,19 @@ class Solr {
         return http(method, url, data, options);
     }
 
-    async indexRecord(core: string, _data: Record<string, unknown>): Promise<NeedleResponse> {
+    public async deleteRecord(core: string, pid: string): Promise<NeedleResponse> {
+        // Strip double quotes from PID -- they should never be present, and it protects
+        // against malicious query manipulation.
+        const data = JSON.stringify({ delete: { query: 'id:"' + pid.replace('"', "") + '"' } });
+        return this.updateSolr(core, data);
+    }
+
+    public async indexRecord(core: string, _data: Record<string, unknown>): Promise<NeedleResponse> {
         const data = JSON.stringify({ add: { doc: _data } });
+        return this.updateSolr(core, data);
+    }
+
+    protected async updateSolr(core: string, data: string): Promise<NeedleResponse> {
         const headers = {
             headers: { "Content-Type": "application/json" },
         };
