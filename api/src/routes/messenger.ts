@@ -4,10 +4,8 @@ import express = require("express");
 import Config from "../models/Config";
 import { Queue } from "bullmq";
 import { requireToken } from "./auth";
-import { sanitizeParameters } from "./sanitize";
+import { pidSanitizer } from "./sanitize";
 const router = express.Router();
-
-const pidSanitizer = sanitizeParameters({ pid: /^[a-zA-Z]+:[0-9]+/ }, /^$/);
 
 router.post("/pdfgenerator/:pid", pidSanitizer, requireToken, async function (req, res) {
     const q = new Queue("vudl");
