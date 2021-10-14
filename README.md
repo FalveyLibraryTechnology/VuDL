@@ -47,6 +47,7 @@ This software is designed to run on multiple operating systems; however, Ubuntu 
 
 ## External Dependencies
 
+- [Cantaloupe Image Server](https://cantaloupe-project.github.io/) (or another IIIF image server) - optional, but required when using VuFind (see below, and also [setup notes](docs/cantaloupe.md)).
 - [Fedora Commons](https://duraspace.org/fedora/) - required for storing repository content
 - [FFmpeg](http://ffmpeg.org/) - required for audio/video processing
 - [FITS](https://projects.iq.harvard.edu/fits/home) - required for file characterization
@@ -102,6 +103,7 @@ After a few moments, a new tab should automatically open in your browser pointin
 | client:build | build React code for production |
 | client:lint | lint only the api code |
 | client:setup | install npm dependencies in client/ |
+| client:snapshots | update snapshots used by test suite |
 | client:test | run client unit tests with test coverage |
 | client:testWatch | run client unit tests while watching source folders |
 | | |

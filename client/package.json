@@ -19,6 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "snapshots": "react-scripts test --updateSnapshot --watchAll=false",
     "test": "react-scripts test --coverage --watchAll=false",
     "testWatch": "react-scripts test --coverage --watchAll=true",
     "eject": "react-scripts eject"
