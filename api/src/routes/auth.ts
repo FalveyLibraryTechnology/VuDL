@@ -51,7 +51,7 @@ function saveSessionReferer(req: Request) {
 
 export function requireLogin(req: Request, res: Response, next?: NextFunction): void {
     if (req.user) {
-       return next();
+        return next();
     }
     saveSessionReferer(req);
     res.redirect(loginPath);
