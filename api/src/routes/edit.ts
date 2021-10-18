@@ -16,14 +16,15 @@ async function getChildren(req, res) {
             : "-hierarchy_parent_id:*";
     const config = Config.getInstance();
     const solr = Solr.getInstance();
-    // TODO: make rows a parameter
-    const result = await solr.query(config.solrCore, query, { fl: "id", rows: "100000" });
+    const rows = parseInt(req.query.rows ?? "100000").toString();
+    const start = parseInt(req.query.start ?? "0").toString();
+    const result = await solr.query(config.solrCore, query, { fl: "id,title", rows, start });
     if (result.statusCode !== 200) {
         res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
         return;
     }
-    const docs = result?.body?.response?.docs ?? [];
-    res.json(docs.map((doc) => doc.id));
+    const response = result?.body?.response ?? {numFound: 0, start: 0, docs: []};
+    res.json(response);
 }
 
 router.get("/object/children", requireToken, getChildren);
