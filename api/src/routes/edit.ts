@@ -23,7 +23,7 @@ async function getChildren(req, res) {
         res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
         return;
     }
-    const response = result?.body?.response ?? {numFound: 0, start: 0, docs: []};
+    const response = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
     res.json(response);
 }
 
