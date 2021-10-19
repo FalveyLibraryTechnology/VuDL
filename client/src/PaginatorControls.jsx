@@ -72,7 +72,7 @@ class PaginatorControls extends React.Component {
     }
 
     render() {
-        return (
+        return this.props.pageCount > 0 ? (
             <div className="controls">
                 <div className="group">
                     <div className="status"></div>
@@ -143,6 +143,26 @@ class PaginatorControls extends React.Component {
                     <i className="fa fa-fw fa-trash"></i> Delete Current Page
                 </button>
             </div>
+        ) : (
+            // No pages, only show save buttons:
+            <div>
+                <button
+                    className="primary"
+                    onClick={function () {
+                        this.props.save(false);
+                    }.bind(this)}
+                >
+                    Save
+                </button>
+                <button
+                    className="primary"
+                    onClick={function () {
+                        this.props.save(true);
+                    }.bind(this)}
+                >
+                    Save and Publish
+                </button>
+            </div>
         );
     }
 }
@@ -159,6 +179,7 @@ PaginatorControls.propTypes = {
     toggleZoom: PropTypes.func,
     zoom: PropTypes.bool,
     currentPage: PropTypes.number,
+    pageCount: PropTypes.number,
 };
 
 export default PaginatorControls;
