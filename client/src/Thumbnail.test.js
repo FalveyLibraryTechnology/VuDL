@@ -13,7 +13,7 @@ describe("Thumbnail", () => {
             getLabel: jest.fn().mockReturnValue(null),
             getMagicLabel: jest.fn().mockReturnValue(null),
             setPage: jest.fn(),
-            getImageUrl: jest.fn().mockReturnValue("www.testurl.com"),
+            getJobImageUrl: jest.fn().mockReturnValue("www.testurl.com"),
             selected: true,
             number: 12,
         };
@@ -28,7 +28,7 @@ describe("Thumbnail", () => {
         const wrapper = mount(<Thumbnail {...props} />);
 
         expect(props.scrollTo).toHaveBeenCalled();
-        expect(props.getImageUrl).toHaveBeenCalledWith(props.number, "thumb");
+        expect(props.getJobImageUrl).toHaveBeenCalledWith(props.number, "thumb");
         expect(wrapper.find(".thumbnail.selected").exists()).toBeTruthy();
         expect(wrapper.text().includes("13")).toBeTruthy();
         expect(wrapper.find(".label.magic").exists()).toBeTruthy();
@@ -42,7 +42,7 @@ describe("Thumbnail", () => {
         const wrapper = mount(<Thumbnail {...props} />);
 
         expect(props.scrollTo).not.toHaveBeenCalled();
-        expect(props.getImageUrl).toHaveBeenCalledWith(props.number, "thumb");
+        expect(props.getJobImageUrl).toHaveBeenCalledWith(props.number, "thumb");
         expect(wrapper.find(".thumbnail.selected").exists()).toBeFalsy();
         expect(wrapper.find(".label.magic").exists()).toBeFalsy();
         expect(wrapper.text().includes("testLabel")).toBeTruthy();
