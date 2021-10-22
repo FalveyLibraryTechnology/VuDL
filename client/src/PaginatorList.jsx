@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import Thumbnail from "./Thumbnail";
 
-const PaginatorList = ({ getLabel, getMagicLabel, setPage, getImageUrl, currentPage, pageCount }) => {
+const PaginatorList = ({ getLabel, getMagicLabel, setPage, getJobImageUrl, currentPage, pageCount }) => {
     const pageList = useRef();
     const thumbRefs = useRef([]);
     const scrollTo = (number) => {
@@ -24,7 +24,7 @@ const PaginatorList = ({ getLabel, getMagicLabel, setPage, getImageUrl, currentP
                 setPage={setPage}
                 getLabel={getLabel}
                 getMagicLabel={getMagicLabel}
-                getImageUrl={getImageUrl}
+                getJobImageUrl={getJobImageUrl}
                 key={pageIndex}
                 number={pageIndex}
             />
@@ -44,7 +44,7 @@ PaginatorList.propTypes = {
     getLabel: PropTypes.func,
     getMagicLabel: PropTypes.func,
     setPage: PropTypes.func,
-    getImageUrl: PropTypes.func,
+    getJobImageUrl: PropTypes.func,
 };
 
 export default PaginatorList;
