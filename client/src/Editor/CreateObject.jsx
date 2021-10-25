@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { TreeView, TreeItem } from "@material-ui/lab";
-
-import AjaxHelper from "../AjaxHelper";
+import { useFetchContext } from "../context";
+import { apiUrl } from "../routes";
 
 const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangeParentPid = true }) => {
     // Validate properties
@@ -12,7 +12,9 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
     if (!allowChangeParentPid && allowNoParentPid && parentPid !== "") {
         throw new Error("allowNoParentPid=true requires allowChangeParentPid to be true when parentPid is non-empty.");
     }
-    const ajax = AjaxHelper.getInstance();
+    const {
+        action: { makeRequest, fetchJSON },
+    } = useFetchContext();
     const [models, setModels] = useState({});
     const [selectedModel, setSelectedModel] = useState("");
     const [results, setResults] = useState("");
@@ -23,10 +25,14 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
 
     const states = ["Active", "Inactive", "Deleted"];
 
-    useEffect(() => {
-        ajax.getJSONPromise(ajax.apiUrl + "/edit/models").then((json) => {
-            setModels(json);
-        });
+    useEffect(async () => {
+        let models = {};
+        try {
+            models = await fetchJSON(apiUrl + "/edit/models");
+        } catch (e) {
+            console.error("Problem fetching models: ", e.message);
+        }
+        setModels(models);
     }, []);
 
     function handleSelect(event, model) {
@@ -39,27 +45,27 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
         return false;
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
-        const url = ajax.apiUrl + "/edit/object/new";
+        const url = apiUrl + "/edit/object/new";
         const data = {
             title,
             parent,
             model: selectedModel,
             state,
         };
-        ajax.ajax({
-            method: "post",
-            url,
-            dataType: "json",
-            data,
-            error: function (result, status) {
-                setResults("Error! " + result.responseText ?? status);
-            },
-            success: function () {
-                setResults("Success!");
-            },
-        });
+        try {
+            const result = makeRequest(
+                url,
+                {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                }
+            );
+            setResults(result);
+        } catch (e) {
+            setResults("Error: " + e.message);
+        }
     }
 
     function handleNoParentChange(event) {
