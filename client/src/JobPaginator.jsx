@@ -20,7 +20,7 @@ const JobPaginator = ({ initialCategory, initialJob }) => {
             save,
             loadJob,
             autonumberFollowingPages,
-            getImageUrl,
+            getJobImageUrl,
             setZoom,
         },
     } = useJobPaginator(initialCategory, initialJob);
@@ -33,7 +33,10 @@ const JobPaginator = ({ initialCategory, initialJob }) => {
         <div id="paginator">
             <div className="row">
                 <div className="six col">
-                    <JobPaginatorZoomToggle zoom={zoom} getImageUrl={(size) => getImageUrl(order[currentPage], size)} />
+                    <JobPaginatorZoomToggle
+                        zoom={zoom}
+                        getJobImageUrl={(size) => getJobImageUrl(order[currentPage], size)}
+                    />
                 </div>
                 <div className="six col">
                     <p>
@@ -59,7 +62,7 @@ const JobPaginator = ({ initialCategory, initialJob }) => {
                         getLabel={getLabel}
                         getMagicLabel={getMagicLabel}
                         setLabel={setLabel}
-                        getImageUrl={(imageNumber, size) => getImageUrl(order[imageNumber], size)}
+                        getJobImageUrl={(imageNumber, size) => getJobImageUrl(order[imageNumber], size)}
                         currentPage={currentPage}
                         pageCount={order.length}
                     />
@@ -74,9 +77,9 @@ JobPaginator.propTypes = {
     app: PropTypes.shape({
         activateJobSelector: PropTypes.func,
         ajax: PropTypes.func,
-        getImageUrl: PropTypes.func,
+        getJobImageUrl: PropTypes.func,
         getJobUrl: PropTypes.func,
-        getJSON: PropTypes.func,
+        fetchJSON: PropTypes.func,
     }),
     initialCategory: PropTypes.string,
     initialJob: PropTypes.string,

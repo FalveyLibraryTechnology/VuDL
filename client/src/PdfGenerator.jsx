@@ -1,25 +1,20 @@
 import React, { useState } from "react";
-
-import AjaxHelper from "./AjaxHelper";
+import { baseUrl } from "./routes";
+import { useFetchContext } from "./context";
 
 const PdfGenerator = () => {
     const [pid, setPid] = useState("");
     const [results, setResults] = useState("");
+    const {
+        action: { fetchText },
+    } = useFetchContext();
 
-    const doApiCall = (method) => {
-        const ajax = AjaxHelper.getInstance();
-        const url = ajax.url + "/messenger/pdfgenerator/" + encodeURIComponent(pid);
-        ajax.ajax({
-            method: method,
-            url: url,
-            dataType: "text",
-            error: function (result, status) {
-                setResults(status);
-            },
-            success: function (result) {
-                setResults(result);
-            },
-        });
+    const doApiCall = async (method) => {
+        try {
+            setResults(await fetchText(`${baseUrl}/messenger/pdfgenerator/${encodeURIComponent(pid)}`, { method }));
+        } catch (error) {
+            setResults(error.message);
+        }
     };
 
     return (
