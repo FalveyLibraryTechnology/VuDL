@@ -5,46 +5,22 @@ exports[`JobPaginator renders 1`] = `
   id="paginator"
 >
   <div
-    className="row"
+    class="row"
   >
     <div
-      className="six col"
+      class="six col"
     >
       <div>
         Preview not available.
       </div>
     </div>
     <div
-      className="six col"
+      class="six col"
     >
       <p>
-        testCategory
-         &gt; 
-        testJob
+        testCategory &gt; testJob
       </p>
-      <Component
-        autonumberFollowingPages={[Function]}
-        currentPage={0}
-        deletePage={[Function]}
-        getLabel={[Function]}
-        getMagicLabel={[Function]}
-        nextPage={[Function]}
-        pageCount={0}
-        prevPage={[Function]}
-        save={[Function]}
-        setLabel={[Function]}
-        toggleZoom={[Function]}
-        zoom={false}
-      />
-      <Component
-        currentPage={0}
-        getImageUrl={[Function]}
-        getLabel={[Function]}
-        getMagicLabel={[Function]}
-        pageCount={0}
-        setLabel={[Function]}
-        setPage={[Function]}
-      />
+      PaginatorControlsPaginatorList
     </div>
   </div>
 </div>

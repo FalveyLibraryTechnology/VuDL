@@ -9,19 +9,14 @@ exports[`SolrIndexer renders 1`] = `
     PID: 
     <input
       id="solrIndexPid"
-      onChange={[Function]}
       type="text"
       value=""
     />
   </label>
-  <button
-    onClick={[Function]}
-  >
+  <button>
     Preview
   </button>
-  <button
-    onClick={[Function]}
-  >
+  <button>
     Index
   </button>
   <h2>

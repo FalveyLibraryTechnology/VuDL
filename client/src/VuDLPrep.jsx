@@ -2,19 +2,20 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
+import { FetchContextProvider } from "./context";
 import Routes from "./Routes";
 import LogoutButton from "./LogoutButton";
 
 const VuDLPrep = () => {
     return (
-        <div>
+        <FetchContextProvider>
             <div className="logout">
                 <LogoutButton />
             </div>
             <BrowserRouter>
                 <Routes />
             </BrowserRouter>
-        </div>
+        </FetchContextProvider>
     );
 };
 
