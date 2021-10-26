@@ -25,14 +25,17 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
 
     const states = ["Active", "Inactive", "Deleted"];
 
-    useEffect(async () => {
-        let models = {};
-        try {
-            models = await fetchJSON(apiUrl + "/edit/models");
-        } catch (e) {
-            console.error("Problem fetching models: ", e.message);
+    useEffect(() => {
+        async function loadModels() {
+            let models = {};
+            try {
+                models = await fetchJSON(apiUrl + "/edit/models");
+            } catch (e) {
+                console.error("Problem fetching models: ", e.message);
+            }
+            setModels(models);
         }
-        setModels(models);
+        loadModels();
     }, []);
 
     function handleSelect(event, model) {
@@ -57,8 +60,8 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
         try {
             const params = { method: "POST", body: JSON.stringify(data) };
             const headers = { "Content-Type": "application/json" };
-            const result = makeRequest(url, params, headers);
-            setResults(result);
+            const result = await makeRequest(url, params, headers);
+            setResults(await result.text());
         } catch (e) {
             setResults("Error: " + e.message);
         }
