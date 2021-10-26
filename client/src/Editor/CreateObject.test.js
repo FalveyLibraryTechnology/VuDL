@@ -1,11 +1,11 @@
 import React from "react";
-import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+import { beforeEach, describe, expect, it, jest, requireActual } from "@jest/globals";
 import { act } from "react-dom/test-utils";
 import { waitFor } from "@testing-library/react";
 import { mount, render } from "enzyme";
 import toJson from "enzyme-to-json";
 import CreateObject from "./CreateObject";
-import { FetchContextProvider, useFetchContext } from "../context";
+import { FetchContextProvider } from "../context";
 
 let nodeSelectFunction = null;
 let treeItems = null;
@@ -20,13 +20,11 @@ jest.mock("@material-ui/lab", function () {
     };
 });
 
-function setFakeModels(callback) {
-    callback(["model-foo", "model-bar", "model-baz"]);
-}
-
 describe("CreateObject", () => {
-    let ajax;
     let props;
+    let fetchJSON;
+    let makeRequest;
+    let token = "fooToken";
 
     beforeEach(() => {
         props = {
@@ -34,13 +32,31 @@ describe("CreateObject", () => {
             allowNoParentPid: false,
             allowChangeParentPid: true,
         };
-        ajax = {};
-        useFetchContext.fetchJSON = jest.fn(() => new Promise(setFakeModels, jest.fn()));
-        useFetchContext.makeRequest = jest.fn();
+        jest.doMock("../context", () => {
+            const originalModule = requireActual("../context");
+
+            function setFakeModels(callback) {
+                callback(["model-foo", "model-bar", "model-baz"]);
+            }
+
+            fetchJSON = jest.fn(() => new Promise(setFakeModels, jest.fn()));
+            makeRequest = jest.fn();
+
+            return {
+                ...originalModule,
+                useFetchContext: jest.fn(() => {
+                    return { action: { fetchJSON, makeRequest }, state: { token } };
+                }),
+            };
+        });
     });
 
     function getCreateObjectToTest(props) {
-        return <FetchContextProvider><CreateObject {...props} /></FetchContextProvider>;
+        return (
+            <FetchContextProvider>
+                <CreateObject {...props} />
+            </FetchContextProvider>
+        );
     }
 
     it("renders appropriately with default settings", async () => {
@@ -91,8 +107,8 @@ describe("CreateObject", () => {
         wrapper.find("input[name='parent']").simulate("change", { target: { value: "foo:1234" } });
         wrapper.find("form").simulate("submit");
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
-        expect(useFetchContext.makeRequest).toHaveBeenCalledWith(
-            "http://foo/edit/object/new",
+        expect(makeRequest).toHaveBeenCalledWith(
+            expect.stringMatching("http://foo/edit/object/new"),
             expect.objectContaining({
                 method: "POST",
                 data: JSON.stringify({
@@ -102,7 +118,7 @@ describe("CreateObject", () => {
                     title: "Test Title",
                 }),
             }),
-            { "Content-Type": "application/json" }
+            expect.objectContaining({ "Content-Type": "application/json" })
         );
     });
 
@@ -119,8 +135,8 @@ describe("CreateObject", () => {
         wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
         wrapper.find("form").simulate("submit");
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
-        expect(useFetchContext.makeRequest).toHaveBeenCalledWith(
-            "http://foo/edit/object/new",
+        expect(makeRequest).toHaveBeenCalledWith(
+            expect.stringMatching("http://foo/edit/object/new"),
             expect.objectContaining({
                 method: "POST",
                 data: JSON.stringify({
@@ -130,7 +146,7 @@ describe("CreateObject", () => {
                     title: "Test Title",
                 }),
             }),
-            { "Content-Type": "application/json" }
+            expect.objectContaining({ "Content-Type": "application/json" })
         );
     });
 
@@ -148,8 +164,8 @@ describe("CreateObject", () => {
         wrapper.find("input[name='state'][value='Active']").simulate("change", { target: { value: "Active" } });
         wrapper.find("input[name='noParent']").simulate("change", { target: { checked: true } });
         wrapper.find("form").simulate("submit");
-        expect(useFetchContext.makeRequest).toHaveBeenCalledWith(
-            "http://foo/edit/object/new",
+        expect(makeRequest).toHaveBeenCalledWith(
+            expect.stringMatching("http://foo/edit/object/new"),
             expect.objectContaining({
                 method: "POST",
                 data: JSON.stringify({
@@ -159,7 +175,7 @@ describe("CreateObject", () => {
                     title: "Test Title",
                 }),
             }),
-            { "Content-Type": "application/json" }
+            expect.objectContaining({ "Content-Type": "application/json" })
         );
     });
 
@@ -177,8 +193,8 @@ describe("CreateObject", () => {
         wrapper.find("input[name='state'][value='Active']").simulate("change", { target: { value: "Active" } });
         wrapper.find("input[name='parent']").simulate("change", { target: { value: "" } });
         wrapper.find("form").simulate("submit");
-        expect(useFetchContext.makeRequest).toHaveBeenCalledWith(
-            "http://foo/edit/object/new",
+        expect(makeRequest).toHaveBeenCalledWith(
+            expect.stringMatching("http://foo/edit/object/new"),
             expect.objectContaining({
                 method: "POST",
                 data: JSON.stringify({
@@ -188,7 +204,7 @@ describe("CreateObject", () => {
                     title: "Test Title",
                 }),
             }),
-            { "Content-Type": "application/json" }
+            expect.objectContaining({ "Content-Type": "application/json" })
         );
     });
 });
