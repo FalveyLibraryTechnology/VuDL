@@ -55,13 +55,9 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
             state,
         };
         try {
-            const result = makeRequest(
-                url,
-                {
-                    method: "POST",
-                    body: JSON.stringify(data),
-                }
-            );
+            const params = { method: "POST", body: JSON.stringify(data) };
+            const headers = { "Content-Type": "application/json" };
+            const result = makeRequest(url, params, headers);
             setResults(result);
         } catch (e) {
             setResults("Error: " + e.message);
