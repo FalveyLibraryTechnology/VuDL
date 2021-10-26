@@ -1,5 +1,5 @@
 import React from "react";
-import { beforeEach, describe, expect, it, jest, requireActual } from "@jest/globals";
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { act } from "react-dom/test-utils";
 import { waitFor } from "@testing-library/react";
 import { mount, render } from "enzyme";
@@ -22,9 +22,7 @@ jest.mock("@material-ui/lab", function () {
 
 describe("CreateObject", () => {
     let props;
-    let fetchJSON;
-    let makeRequest;
-    let token = "fooToken";
+    let submittedData;
 
     beforeEach(() => {
         props = {
@@ -32,22 +30,27 @@ describe("CreateObject", () => {
             allowNoParentPid: false,
             allowChangeParentPid: true,
         };
-        jest.doMock("../context", () => {
-            const originalModule = requireActual("../context");
-
-            function setFakeModels(callback) {
-                callback(["model-foo", "model-bar", "model-baz"]);
+        submittedData = null;
+        global.fetch = jest.fn((url, data) => {
+            if (url == "http://localhost:9000/api/edit/models") {
+                // If models were requested, set up fake data:
+                const setFakeModels = function (callback) {
+                    callback(["model-foo", "model-bar", "model-baz"]);
+                };
+                return {
+                    ok: true,
+                    status: 200,
+                    json: () => new Promise(setFakeModels, jest.fn()),
+                };
+            } else if (url == "http://localhost:9000/api/edit/object/new") {
+                // If the form was submitted, save the data so we can make assertions about it:
+                submittedData = data;
+                return {
+                    ok: true,
+                    status: 200,
+                    text: async () => "ok",
+                };
             }
-
-            fetchJSON = jest.fn(() => new Promise(setFakeModels, jest.fn()));
-            makeRequest = jest.fn();
-
-            return {
-                ...originalModule,
-                useFetchContext: jest.fn(() => {
-                    return { action: { fetchJSON, makeRequest }, state: { token } };
-                }),
-            };
         });
     });
 
@@ -105,21 +108,25 @@ describe("CreateObject", () => {
         });
         wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
         wrapper.find("input[name='parent']").simulate("change", { target: { value: "foo:1234" } });
-        wrapper.find("form").simulate("submit");
+        act(() => {
+            wrapper.find("form").simulate("submit");
+        });
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
-        expect(makeRequest).toHaveBeenCalledWith(
-            expect.stringMatching("http://foo/edit/object/new"),
-            expect.objectContaining({
-                method: "POST",
-                data: JSON.stringify({
-                    model: "model-foo",
-                    parent: "foo:1234",
-                    state: "Inactive",
-                    title: "Test Title",
-                }),
+        expect(submittedData).toEqual({
+            body: JSON.stringify({
+                title: "Test Title",
+                parent: "foo:1234",
+                model: "model-foo",
+                state: "Inactive",
             }),
-            expect.objectContaining({ "Content-Type": "application/json" })
-        );
+            credentials: "include",
+            headers: {
+                Authorization: "Token null",
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            mode: "cors",
+        });
     });
 
     it("pre-fills parent pid using parentPid property", async () => {
@@ -133,21 +140,25 @@ describe("CreateObject", () => {
             nodeSelectFunction(new Event("event-foo"), "model-foo");
         });
         wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
-        wrapper.find("form").simulate("submit");
+        act(() => {
+            wrapper.find("form").simulate("submit");
+        });
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
-        expect(makeRequest).toHaveBeenCalledWith(
-            expect.stringMatching("http://foo/edit/object/new"),
-            expect.objectContaining({
-                method: "POST",
-                data: JSON.stringify({
-                    model: "model-foo",
-                    parent: "foo:1234",
-                    state: "Inactive",
-                    title: "Test Title",
-                }),
+        expect(submittedData).toEqual({
+            body: JSON.stringify({
+                title: "Test Title",
+                parent: "foo:1234",
+                model: "model-foo",
+                state: "Inactive",
             }),
-            expect.objectContaining({ "Content-Type": "application/json" })
-        );
+            credentials: "include",
+            headers: {
+                Authorization: "Token null",
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            mode: "cors",
+        });
     });
 
     it("submits appropriate data with active state and no parent", async () => {
@@ -163,20 +174,24 @@ describe("CreateObject", () => {
         wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
         wrapper.find("input[name='state'][value='Active']").simulate("change", { target: { value: "Active" } });
         wrapper.find("input[name='noParent']").simulate("change", { target: { checked: true } });
-        wrapper.find("form").simulate("submit");
-        expect(makeRequest).toHaveBeenCalledWith(
-            expect.stringMatching("http://foo/edit/object/new"),
-            expect.objectContaining({
-                method: "POST",
-                data: JSON.stringify({
-                    model: "model-foo",
-                    parent: "",
-                    state: "Active",
-                    title: "Test Title",
-                }),
+        act(() => {
+            wrapper.find("form").simulate("submit");
+        });
+        expect(submittedData).toEqual({
+            body: JSON.stringify({
+                title: "Test Title",
+                parent: "",
+                model: "model-foo",
+                state: "Active",
             }),
-            expect.objectContaining({ "Content-Type": "application/json" })
-        );
+            credentials: "include",
+            headers: {
+                Authorization: "Token null",
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            mode: "cors",
+        });
     });
 
     it("checks no parent when parent pid is cleared", async () => {
@@ -192,19 +207,23 @@ describe("CreateObject", () => {
         wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
         wrapper.find("input[name='state'][value='Active']").simulate("change", { target: { value: "Active" } });
         wrapper.find("input[name='parent']").simulate("change", { target: { value: "" } });
-        wrapper.find("form").simulate("submit");
-        expect(makeRequest).toHaveBeenCalledWith(
-            expect.stringMatching("http://foo/edit/object/new"),
-            expect.objectContaining({
-                method: "POST",
-                data: JSON.stringify({
-                    model: "model-foo",
-                    parent: "",
-                    state: "Active",
-                    title: "Test Title",
-                }),
+        act(() => {
+            wrapper.find("form").simulate("submit");
+        });
+        expect(submittedData).toEqual({
+            body: JSON.stringify({
+                title: "Test Title",
+                parent: "",
+                model: "model-foo",
+                state: "Active",
             }),
-            expect.objectContaining({ "Content-Type": "application/json" })
-        );
+            credentials: "include",
+            headers: {
+                Authorization: "Token null",
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            mode: "cors",
+        });
     });
 });
