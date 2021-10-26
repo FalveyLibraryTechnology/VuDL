@@ -2,9 +2,10 @@ import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { act } from "react-dom/test-utils";
 import { waitFor } from "@testing-library/react";
-import { mount, shallow } from "enzyme";
+import { mount, render } from "enzyme";
 import toJson from "enzyme-to-json";
 import CreateObject from "./CreateObject";
+import { FetchContextProvider, useFetchContext } from "../context";
 
 let nodeSelectFunction = null;
 let treeItems = null;
@@ -33,29 +34,36 @@ describe("CreateObject", () => {
             allowNoParentPid: false,
             allowChangeParentPid: true,
         };
+        ajax = {};
+        useFetchContext.fetchJSON = jest.fn(() => new Promise(setFakeModels, jest.fn()));
+        useFetchContext.makeRequest = jest.fn();
     });
 
+    function getCreateObjectToTest(props) {
+        return <FetchContextProvider><CreateObject {...props} /></FetchContextProvider>;
+    }
+
     it("renders appropriately with default settings", async () => {
-        const wrapper = shallow(<CreateObject {...props} />);
+        const wrapper = render(getCreateObjectToTest(props));
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it("renders appropriately with noParent and parent change enabled", () => {
         props.allowNoParentPid = true;
-        const wrapper = shallow(<CreateObject {...props} />);
+        const wrapper = render(getCreateObjectToTest(props));
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it("renders appropriately with editing disabled", () => {
         props.parentPid = "foo:1234";
         props.allowChangeParentPid = false;
-        const wrapper = shallow(<CreateObject {...props} />);
+        const wrapper = render(getCreateObjectToTest(props));
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it("disallows all empty pid settings", () => {
         props.allowChangeParentPid = false;
-        expect(() => shallow(<CreateObject {...props} />)).toThrowError(
+        expect(() => render(getCreateObjectToTest(props))).toThrowError(
             "allowChangeParentPid and allowNoParentPid cannot both be false when parentPid is empty."
         );
     });
@@ -64,7 +72,7 @@ describe("CreateObject", () => {
         props.allowNoParentPid = true;
         props.allowChangeParentPid = false;
         props.parentPid = "foo:pid";
-        expect(() => shallow(<CreateObject {...props} />)).toThrowError(
+        expect(() => render(getCreateObjectToTest(props))).toThrowError(
             "allowNoParentPid=true requires allowChangeParentPid to be true when parentPid is non-empty."
         );
     });
@@ -72,7 +80,7 @@ describe("CreateObject", () => {
     it("submits appropriate data in default case", async () => {
         let wrapper;
         await waitFor(() => {
-            wrapper = mount(<CreateObject {...props} />);
+            wrapper = mount(getCreateObjectToTest(props));
         });
         act(() => {
             nodeSelectFunction(new Event("event-foo"), "model-foo");
@@ -83,21 +91,19 @@ describe("CreateObject", () => {
         wrapper.find("input[name='parent']").simulate("change", { target: { value: "foo:1234" } });
         wrapper.find("form").simulate("submit");
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
-        /* TODO: fix me
-        expect(ajax.ajax).toHaveBeenCalledWith(
+        expect(useFetchContext.makeRequest).toHaveBeenCalledWith(
+            "http://foo/edit/object/new",
             expect.objectContaining({
-                data: {
+                method: "POST",
+                data: JSON.stringify({
                     model: "model-foo",
                     parent: "foo:1234",
                     state: "Inactive",
                     title: "Test Title",
-                },
-                dataType: "json",
-                method: "post",
-                url: "http://foo/edit/object/new",
-            })
+                }),
+            }),
+            { "Content-Type": "application/json" }
         );
-         */
     });
 
     it("pre-fills parent pid using parentPid property", async () => {
@@ -105,7 +111,7 @@ describe("CreateObject", () => {
         props.allowChangeParentPid = false;
         let wrapper;
         await waitFor(() => {
-            wrapper = mount(<CreateObject {...props} />);
+            wrapper = mount(getCreateObjectToTest(props));
         });
         act(() => {
             nodeSelectFunction(new Event("event-foo"), "model-foo");
@@ -113,21 +119,19 @@ describe("CreateObject", () => {
         wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
         wrapper.find("form").simulate("submit");
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
-        /* TODO fix me:
-        expect(ajax.ajax).toHaveBeenCalledWith(
+        expect(useFetchContext.makeRequest).toHaveBeenCalledWith(
+            "http://foo/edit/object/new",
             expect.objectContaining({
-                data: {
+                method: "POST",
+                data: JSON.stringify({
                     model: "model-foo",
                     parent: "foo:1234",
                     state: "Inactive",
                     title: "Test Title",
-                },
-                dataType: "json",
-                method: "post",
-                url: "http://foo/edit/object/new",
-            })
+                }),
+            }),
+            { "Content-Type": "application/json" }
         );
-         */
     });
 
     it("submits appropriate data with active state and no parent", async () => {
@@ -135,7 +139,7 @@ describe("CreateObject", () => {
         props.allowNoParentPid = true;
         let wrapper;
         await waitFor(() => {
-            wrapper = mount(<CreateObject {...props} />);
+            wrapper = mount(getCreateObjectToTest(props));
         });
         act(() => {
             nodeSelectFunction(new Event("event-foo"), "model-foo");
@@ -144,21 +148,19 @@ describe("CreateObject", () => {
         wrapper.find("input[name='state'][value='Active']").simulate("change", { target: { value: "Active" } });
         wrapper.find("input[name='noParent']").simulate("change", { target: { checked: true } });
         wrapper.find("form").simulate("submit");
-        /* TODO fix me
-        expect(ajax.ajax).toHaveBeenCalledWith(
+        expect(useFetchContext.makeRequest).toHaveBeenCalledWith(
+            "http://foo/edit/object/new",
             expect.objectContaining({
-                data: {
+                method: "POST",
+                data: JSON.stringify({
                     model: "model-foo",
                     parent: "",
                     state: "Active",
                     title: "Test Title",
-                },
-                dataType: "json",
-                method: "post",
-                url: "http://foo/edit/object/new",
-            })
+                }),
+            }),
+            { "Content-Type": "application/json" }
         );
-         */
     });
 
     it("checks no parent when parent pid is cleared", async () => {
@@ -166,7 +168,7 @@ describe("CreateObject", () => {
         props.allowNoParentPid = true;
         let wrapper;
         await waitFor(() => {
-            wrapper = mount(<CreateObject {...props} />);
+            wrapper = mount(getCreateObjectToTest(props));
         });
         act(() => {
             nodeSelectFunction(new Event("event-foo"), "model-foo");
@@ -175,20 +177,18 @@ describe("CreateObject", () => {
         wrapper.find("input[name='state'][value='Active']").simulate("change", { target: { value: "Active" } });
         wrapper.find("input[name='parent']").simulate("change", { target: { value: "" } });
         wrapper.find("form").simulate("submit");
-        /* TODO: fix me
-        expect(ajax.ajax).toHaveBeenCalledWith(
+        expect(useFetchContext.makeRequest).toHaveBeenCalledWith(
+            "http://foo/edit/object/new",
             expect.objectContaining({
-                data: {
+                method: "POST",
+                data: JSON.stringify({
                     model: "model-foo",
                     parent: "",
                     state: "Active",
                     title: "Test Title",
-                },
-                dataType: "json",
-                method: "post",
-                url: "http://foo/edit/object/new",
-            })
+                }),
+            }),
+            { "Content-Type": "application/json" }
         );
-         */
     });
 });

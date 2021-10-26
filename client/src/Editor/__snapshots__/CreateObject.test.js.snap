@@ -2,15 +2,13 @@
 
 exports[`CreateObject renders appropriately with default settings 1`] = `
 <form
-  className="editor__create-object"
-  onSubmit={[Function]}
+  class="editor__create-object"
 >
   <label>
     Title
     <input
       name="title"
-      onChange={[Function]}
-      required={true}
+      required=""
       type="text"
       value=""
     />
@@ -19,44 +17,32 @@ exports[`CreateObject renders appropriately with default settings 1`] = `
     Parent ID
     <input
       name="parent"
-      onChange={[Function]}
-      required={true}
+      required=""
       type="text"
       value=""
     />
   </label>
-  <label
-    key="Active-label"
-  >
+  <label>
     Active
     <input
-      checked={false}
       name="state"
-      onChange={[Function]}
       type="radio"
       value="Active"
     />
   </label>
-  <label
-    key="Inactive-label"
-  >
+  <label>
     Inactive
     <input
-      checked={true}
+      checked=""
       name="state"
-      onChange={[Function]}
       type="radio"
       value="Inactive"
     />
   </label>
-  <label
-    key="Deleted-label"
-  >
+  <label>
     Deleted
     <input
-      checked={false}
       name="state"
-      onChange={[Function]}
       type="radio"
       value="Deleted"
     />
@@ -65,25 +51,18 @@ exports[`CreateObject renders appropriately with default settings 1`] = `
     Select Model Type:
     <b />
   </label>
-  <TreeView
-    defaultCollapseIcon="➖"
-    defaultExpandIcon="➕"
-    onNodeSelect={[Function]}
-  />
 </form>
 `;
 
 exports[`CreateObject renders appropriately with editing disabled 1`] = `
 <form
-  className="editor__create-object"
-  onSubmit={[Function]}
+  class="editor__create-object"
 >
   <label>
     Title
     <input
       name="title"
-      onChange={[Function]}
-      required={true}
+      required=""
       type="text"
       value=""
     />
@@ -93,38 +72,27 @@ exports[`CreateObject renders appropriately with editing disabled 1`] = `
     type="hidden"
     value="foo:1234"
   />
-  <label
-    key="Active-label"
-  >
+  <label>
     Active
     <input
-      checked={false}
       name="state"
-      onChange={[Function]}
       type="radio"
       value="Active"
     />
   </label>
-  <label
-    key="Inactive-label"
-  >
+  <label>
     Inactive
     <input
-      checked={true}
+      checked=""
       name="state"
-      onChange={[Function]}
       type="radio"
       value="Inactive"
     />
   </label>
-  <label
-    key="Deleted-label"
-  >
+  <label>
     Deleted
     <input
-      checked={false}
       name="state"
-      onChange={[Function]}
       type="radio"
       value="Deleted"
     />
@@ -133,34 +101,26 @@ exports[`CreateObject renders appropriately with editing disabled 1`] = `
     Select Model Type:
     <b />
   </label>
-  <TreeView
-    defaultCollapseIcon="➖"
-    defaultExpandIcon="➕"
-    onNodeSelect={[Function]}
-  />
 </form>
 `;
 
 exports[`CreateObject renders appropriately with noParent and parent change enabled 1`] = `
 <form
-  className="editor__create-object"
-  onSubmit={[Function]}
+  class="editor__create-object"
 >
   <label>
     Title
     <input
       name="title"
-      onChange={[Function]}
-      required={true}
+      required=""
       type="text"
       value=""
     />
   </label>
   <label>
     <input
-      checked={true}
+      checked=""
       name="noParent"
-      onChange={[Function]}
       type="checkbox"
       value="1"
     />
@@ -170,44 +130,31 @@ exports[`CreateObject renders appropriately with noParent and parent change enab
     Parent ID
     <input
       name="parent"
-      onChange={[Function]}
-      required={false}
       type="text"
       value=""
     />
   </label>
-  <label
-    key="Active-label"
-  >
+  <label>
     Active
     <input
-      checked={false}
       name="state"
-      onChange={[Function]}
       type="radio"
       value="Active"
     />
   </label>
-  <label
-    key="Inactive-label"
-  >
+  <label>
     Inactive
     <input
-      checked={true}
+      checked=""
       name="state"
-      onChange={[Function]}
       type="radio"
       value="Inactive"
     />
   </label>
-  <label
-    key="Deleted-label"
-  >
+  <label>
     Deleted
     <input
-      checked={false}
       name="state"
-      onChange={[Function]}
       type="radio"
       value="Deleted"
     />
@@ -216,10 +163,5 @@ exports[`CreateObject renders appropriately with noParent and parent change enab
     Select Model Type:
     <b />
   </label>
-  <TreeView
-    defaultCollapseIcon="➖"
-    defaultExpandIcon="➕"
-    onNodeSelect={[Function]}
-  />
 </form>
 `;
