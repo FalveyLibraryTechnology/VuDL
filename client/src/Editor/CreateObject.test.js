@@ -108,8 +108,10 @@ describe("CreateObject", () => {
         });
         wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
         wrapper.find("input[name='parent']").simulate("change", { target: { value: "foo:1234" } });
-        act(() => {
-            wrapper.find("form").simulate("submit");
+        await act(async () => {
+            await waitFor(() => {
+                wrapper.find("form").simulate("submit");
+            });
         });
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
         expect(submittedData).toEqual({
@@ -140,8 +142,10 @@ describe("CreateObject", () => {
             nodeSelectFunction(new Event("event-foo"), "model-foo");
         });
         wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
-        act(() => {
-            wrapper.find("form").simulate("submit");
+        await act(async () => {
+            await waitFor(() => {
+                wrapper.find("form").simulate("submit");
+            });
         });
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
         expect(submittedData).toEqual({
@@ -174,8 +178,10 @@ describe("CreateObject", () => {
         wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
         wrapper.find("input[name='state'][value='Active']").simulate("change", { target: { value: "Active" } });
         wrapper.find("input[name='noParent']").simulate("change", { target: { checked: true } });
-        act(() => {
-            wrapper.find("form").simulate("submit");
+        await act(async () => {
+            await waitFor(() => {
+                wrapper.find("form").simulate("submit");
+            });
         });
         expect(submittedData).toEqual({
             body: JSON.stringify({
@@ -207,8 +213,10 @@ describe("CreateObject", () => {
         wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
         wrapper.find("input[name='state'][value='Active']").simulate("change", { target: { value: "Active" } });
         wrapper.find("input[name='parent']").simulate("change", { target: { value: "" } });
-        act(() => {
-            wrapper.find("form").simulate("submit");
+        await act(async () => {
+            await waitFor(() => {
+                wrapper.find("form").simulate("submit");
+            });
         });
         expect(submittedData).toEqual({
             body: JSON.stringify({
