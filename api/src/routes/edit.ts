@@ -14,7 +14,7 @@ router.get("/models", requireToken, function (req, res) {
 
 router.post("/object/new", requireToken, bodyParser.json(), async function (req, res) {
     let parentPid = req?.body?.parent;
-    if (parentPid !== null && !(parentPid?.length)) {
+    if (parentPid !== null && !parentPid?.length) {
         parentPid = null;
     }
     const model = req.body?.model;
@@ -54,12 +54,7 @@ router.post("/object/new", requireToken, bodyParser.json(), async function (req,
     }
     const factory = FedoraObjectFactory.getInstance();
     try {
-        const newObject = await factory.build(
-            model.replace("vudl-system:", ""),
-            title,
-            state,
-            parentPid
-        );
+        const newObject = await factory.build(model.replace("vudl-system:", ""), title, state, parentPid);
         res.status(200).send(newObject.pid);
     } catch (e) {
         console.error(e);
