@@ -139,7 +139,7 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
 
     return (
         <form onSubmit={handleSubmit} className="editor__create-object">
-            {results.length > 0 ? <div>{"Results: " + results}</div> : ""}
+            {results && results.length > 0 ? <div>{"Results: " + results}</div> : ""}
             <label>
                 Title
                 <input type="text" value={title} name="title" onChange={handleTitleChange} required />
