@@ -16,7 +16,7 @@ const JobPaginatorHook = () => {
 
 const ObjectEditorHook = () => {
     const { pid } = useParams();
-    return <ObjectEditor pid={pid} />;
+    return <ObjectEditor pid={pid} key={"object-editor-" + pid} />;
 };
 
 const Routes = () => {
