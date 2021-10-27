@@ -65,8 +65,13 @@ class FedoraData {
     }
 
     getBreadcrumbTrail(): TreeNode {
-        return { pid: this.pid, title: this.title, parents: this.parents.map(function(parent) 
-            { return parent.getBreadcrumbTrail()}) };
+        return {
+            pid: this.pid,
+            title: this.title,
+            parents: this.parents.map(function (parent) {
+                return parent.getBreadcrumbTrail();
+            }),
+        };
     }
 
     getThumbnailHash(type: string): string {

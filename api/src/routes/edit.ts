@@ -14,6 +14,6 @@ router.get("/models", requireToken, function (req, res) {
 router.get("/breadcrumbs/:pid", pidSanitizer, requireToken, async function (req, res) {
     const fedoraData = await HierarchyCollector.getInstance().getHierarchy(req.params.pid, false);
     res.json(fedoraData.getBreadcrumbTrail());
-})
+});
 
 module.exports = router;
