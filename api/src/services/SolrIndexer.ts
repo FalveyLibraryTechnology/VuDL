@@ -106,10 +106,15 @@ class SolrIndexer {
             fields[dynamic_sequence_field_name] = this.padNumber(seqNum);
         }
 
-        // Process parent data:
+        // Process parent data (note that hierarchyParents makes some special exceptions for VuFind;
+        // hierarchyImmediateParents exactly maintains the hierarchy as represented in Fedora):
         const hierarchyParents: Array<FedoraData> = [];
+        const hierarchyImmediateParents: Array<FedoraData> = [];
         const hierarchySequences: Array<string> = [];
         for (const parent of fedoraData.parents) {
+            // Immediate parents are always the same...
+            hierarchyImmediateParents.push(parent);
+
             // If the object is a Data, the parentPID is the Resource it belongs
             // to (skip the List object):
             if (fedoraData.models.includes("vudl-system:DataModel")) {
@@ -149,6 +154,7 @@ class SolrIndexer {
                     fields.hierarchy_parent_title.push(parent.title);
                 }
             }
+            fields.hierarchy_immediate_parent_id_str_mv = hierarchyImmediateParents.map((parent) => parent.pid);
         } else {
             // If no parents, we still need to include the current object as
             // its own parent for field-collapsing purposes, and we can figure
