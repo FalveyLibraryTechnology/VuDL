@@ -12,7 +12,7 @@ describe("JobPaginatorZoomToggle", () => {
     beforeEach(() => {
         props = {
             zoom: true,
-            getImageUrl: jest.fn(),
+            getJobImageUrl: jest.fn(),
         };
     });
 
@@ -25,7 +25,7 @@ describe("JobPaginatorZoomToggle", () => {
         const wrapper = mount(<JobPaginatorZoomToggle {...props} />);
 
         expect(wrapper.contains("PaginatorZoomy")).toBeTruthy();
-        expect(props.getImageUrl).toHaveBeenCalledWith("large");
+        expect(props.getJobImageUrl).toHaveBeenCalledWith("large");
     });
 
     it("renders PaginatorPreview", () => {
@@ -33,6 +33,6 @@ describe("JobPaginatorZoomToggle", () => {
         const wrapper = mount(<JobPaginatorZoomToggle {...props} />);
 
         expect(wrapper.contains("PaginatorPreview")).toBeTruthy();
-        expect(props.getImageUrl).toHaveBeenCalledWith("medium");
+        expect(props.getJobImageUrl).toHaveBeenCalledWith("medium");
     });
 });

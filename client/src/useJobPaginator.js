@@ -1,21 +1,20 @@
 import { useState } from "react";
 import MagicLabeler from "./MagicLabeler";
-import AjaxHelper from "./AjaxHelper";
+import { useFetchContext } from "./context";
 import {
     countMagicLabels,
-    deleteImage,
     deletePageValidation,
     getAddedPages,
     getNonRemovedPages,
-    getStatus,
-    getJob,
     getLabel,
-    putJob,
-    validatePublish,
     userMustReviewMoreLabels,
 } from "./JobPaginatorState";
+import { getImageUrl, getJobUrl } from "./routes";
 
 const useJobPaginator = (initialCategory, initialJob) => {
+    const {
+        action: { makeRequest, fetchJSON },
+    } = useFetchContext();
     const [active] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const [zoom, setZoom] = useState(false);
@@ -90,32 +89,49 @@ const useJobPaginator = (initialCategory, initialJob) => {
     };
 
     const loadJob = async () => {
-        const { order } = await getJob(category, job);
+        const { order } = await fetchJSON(getJobUrl(category, job));
         setOrder(order);
         setCurrentPage(0);
-        updatePagesByStatus(await getStatus(category, job));
+        updatePagesByStatus(await fetchJSON(getJobUrl(category, job, "/status")));
         dispatchEvent(new Event("Prep.loaded"));
     };
 
-    const deletePage = () => {
+    const deletePage = async () => {
         if (deletePageValidation(order)) {
-            const imageUrl = getImageUrl(order[currentPage], "*");
+            const imageUrl = getJobImageUrl(order[currentPage], "*");
             const imageFilename = imageUrl.split("/").reverse()[1];
-            deleteImage(
-                imageUrl,
-                () => {
-                    const newOrder = getNonRemovedPages(order, [imageFilename]);
-                    setOrder(newOrder);
-                    if (currentPage >= newOrder.length) {
-                        setPage(currentPage - 1);
-                    }
-                    alert("Page deleted!");
-                },
-                () => {
-                    alert("Unable to delete!");
+            try {
+                await makeRequest(imageUrl, { method: "DELETE" });
+                const newOrder = getNonRemovedPages(order, [imageFilename]);
+                setOrder(newOrder);
+                if (currentPage >= newOrder.length) {
+                    setPage(currentPage - 1);
                 }
+                alert("Page deleted!");
+            } catch (error) {
+                console.error(error);
+                alert("Unable to delete!");
+            }
+        }
+    };
+    const publishValid = async (published) => {
+        if (published) {
+            const {
+                derivatives: { expected, processed },
+            } = await fetchJSON(getJobUrl(category, job, "/status"));
+            if (expected > processed) {
+                alert(
+                    `Derivative images have not been generated yet. Please` +
+                        ` go back to the main menu and hit the "build" button` +
+                        ` for this job before publishing it.`
+                );
+                return false;
+            }
+            return window.confirm(
+                "Are you sure you wish to publish this job? You will not be able to make any further edits."
             );
         }
+        return true;
     };
 
     const save = async (published) => {
@@ -123,19 +139,25 @@ const useJobPaginator = (initialCategory, initialJob) => {
             return;
         }
         saveMagicLabels();
-
-        if (published && !(await validatePublish(category, job))) {
-            return;
-        }
-        putJob(
-            { category, job, order, published },
-            () => {
+        if (await publishValid(published)) {
+            try {
+                await makeRequest(
+                    getJobUrl(category, job),
+                    {
+                        method: "PUT",
+                        body: JSON.stringify({ order, published }),
+                    },
+                    {
+                        "Content-Type": "application/json",
+                    }
+                );
                 alert("Success!");
                 window.location.assign("/paginate"); // TODO: Route better?
                 dispatchEvent(new Event("Prep.saved"));
-            },
-            () => alert("Unable to save!")
-        );
+            } catch (error) {
+                alert("Unable to save!");
+            }
+        }
     };
 
     const autonumberFollowingPages = () => {
@@ -149,11 +171,11 @@ const useJobPaginator = (initialCategory, initialJob) => {
         }
     };
 
-    const getImageUrl = (orderImage, size) => {
+    const getJobImageUrl = (orderImage, size) => {
         if (typeof orderImage === "undefined") {
             return false;
         }
-        return AjaxHelper.getInstance().getImageUrl(category, job, orderImage.filename, size);
+        return getImageUrl(category, job, orderImage.filename, size);
     };
 
     return {
@@ -180,7 +202,7 @@ const useJobPaginator = (initialCategory, initialJob) => {
             setOrder,
             save,
             autonumberFollowingPages,
-            getImageUrl,
+            getJobImageUrl,
             setZoom,
         },
     };
