@@ -1,3 +1,9 @@
+interface TreeNode {
+    pid: string;
+    title: string;
+    parents: Array<TreeNode>;
+}
+
 class FedoraData {
     public metadata: Record<string, Array<string>>;
     public pid: string;
@@ -56,6 +62,11 @@ class FedoraData {
             });
         });
         return results;
+    }
+
+    getBreadcrumbTrail(): TreeNode {
+        return { pid: this.pid, title: this.title, parents: this.parents.map(function(parent) 
+            { return parent.getBreadcrumbTrail()}) };
     }
 
     getThumbnailHash(type: string): string {

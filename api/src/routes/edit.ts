@@ -1,10 +1,19 @@
 import express = require("express");
 import Config from "../models/Config";
-const router = express.Router();
+import HierarchyCollector from "../services/HierarchyCollector";
 import { requireToken } from "./auth";
+import { sanitizeParameters } from "./sanitize";
+const router = express.Router();
+
+const pidSanitizer = sanitizeParameters({ pid: /^[a-zA-Z]+:[0-9]+/ }, /^$/);
 
 router.get("/models", requireToken, function (req, res) {
     res.json({ CollectionModels: Config.getInstance().collectionModels, DataModels: Config.getInstance().dataModels });
 });
+
+router.get("/breadcrumbs/:pid", pidSanitizer, requireToken, async function (req, res) {
+    const fedoraData = await HierarchyCollector.getInstance().getHierarchy(req.params.pid, false);
+    res.json(fedoraData.getBreadcrumbTrail());
+})
 
 module.exports = router;
