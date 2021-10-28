@@ -26,7 +26,7 @@ const ChildList = ({ pid = null }) => {
     const contents = (children?.docs ?? []).map((child) => {
         return (
             <li key={pid + "child" + child.id}>
-                <Link to={"/edit/object/" + child.id}>{child.title}</Link>
+                <Link to={"/edit/object/" + child.id}>{(child.title ?? "-") + " [" + child.id + "]"}</Link>
             </li>
         );
     });
