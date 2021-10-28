@@ -141,8 +141,8 @@ describe("useJobPaginator", () => {
                 ]);
             });
 
-            act(() => {
-                result.current.action.deletePage();
+            await act(async () => {
+                await result.current.action.deletePage();
             });
 
             expect(JobPaginatorState.deletePageValidation).toHaveBeenCalled;
