@@ -107,23 +107,25 @@ class SolrIndexer {
         }
 
         // Process parent data (note that hierarchyParents makes some special exceptions for VuFind;
-        // hierarchyImmediateParents exactly maintains the hierarchy as represented in Fedora):
+        // fedoraParents exactly maintains the hierarchy as represented in Fedora):
         const hierarchyParents: Array<FedoraData> = [];
-        const hierarchyImmediateParents: Array<FedoraData> = [];
+        const fedoraParents: Array<FedoraData> = [];
         const hierarchySequences: Array<string> = [];
         for (const parent of fedoraData.parents) {
-            // Immediate parents are always the same...
-            hierarchyImmediateParents.push(parent);
+            // Fedora parents should directly reflect the repository without any
+            // VuFind-specific filtering or adjustments:
+            fedoraParents.push(parent);
 
-            // If the object is a Data, the parentPID is the Resource it belongs
+            // If the object is a Data, the VuFind parentPID is the Resource it belongs
             // to (skip the List object):
             if (fedoraData.models.includes("vudl-system:DataModel")) {
                 for (const grandParent of parent.parents) {
                     hierarchyParents.push(grandParent);
                     hierarchySequences.push(this.padNumber(sequenceIndex[grandParent.pid] ?? 0));
                 }
-            } else {
-                // ...else it is the immediate parent (Folder most likely):
+            } else if (!this.config.topLevelPids.includes(pid)) {
+                // ...for non-Data objects, store the immediate parent (Folder most likely)
+                // as long as the current pid is not marked as a top-level one:
                 hierarchyParents.push(parent);
                 hierarchySequences.push(this.padNumber(sequenceIndex[parent.pid] ?? 0));
             }
@@ -139,6 +141,7 @@ class SolrIndexer {
                 }
             }
         }
+        fields.fedora_parent_id_str_mv = fedoraParents.map((parent) => parent.pid);
         if (hierarchyParents.length > 0) {
             // This is what we are collapsing on:
             fields.hierarchy_first_parent_id_str = fedoraData.models.includes("vudl-system:DataModel")
@@ -154,7 +157,6 @@ class SolrIndexer {
                     fields.hierarchy_parent_title.push(parent.title);
                 }
             }
-            fields.hierarchy_immediate_parent_id_str_mv = hierarchyImmediateParents.map((parent) => parent.pid);
         } else {
             // If no parents, we still need to include the current object as
             // its own parent for field-collapsing purposes, and we can figure
