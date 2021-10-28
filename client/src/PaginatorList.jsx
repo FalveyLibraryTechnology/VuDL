@@ -37,7 +37,7 @@ const PaginatorList = ({ getLabel, getMagicLabel, setPage, getJobImageUrl, curre
         </div>
     ) : (
         // No pages, no visible list element:
-        <div></div>
+        <></>
     );
 };
 

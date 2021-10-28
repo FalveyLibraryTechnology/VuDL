@@ -145,7 +145,7 @@ class PaginatorControls extends React.Component {
             </div>
         ) : (
             // No pages, only show save buttons:
-            <div>
+            <>
                 <button
                     className="primary"
                     onClick={function () {
@@ -162,7 +162,7 @@ class PaginatorControls extends React.Component {
                 >
                     Save and Publish
                 </button>
-            </div>
+            </>
         );
     }
 }
