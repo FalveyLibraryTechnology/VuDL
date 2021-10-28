@@ -10,9 +10,7 @@ exports[`JobPaginator renders 1`] = `
     <div
       class="six col"
     >
-      <div>
-        Preview not available.
-      </div>
+      JobPaginatorZoomToggle
     </div>
     <div
       class="six col"

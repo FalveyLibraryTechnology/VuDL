@@ -29,17 +29,16 @@ const JobPaginator = ({ initialCategory, initialJob }) => {
         loadJob();
     }, []);
 
-    const preview =
-        order.length > 0 ? (
-            <JobPaginatorZoomToggle zoom={zoom} getJobImageUrl={(size) => getJobImageUrl(order[currentPage], size)} />
-        ) : (
-            <div>Preview not available.</div>
-        );
-
     return (
         <div id="paginator">
             <div className="row">
-                <div className="six col">{preview}</div>
+                <div className="six col">
+                    <JobPaginatorZoomToggle
+                        enabled={order.length > 0}
+                        zoom={zoom}
+                        getJobImageUrl={(size) => getJobImageUrl(order[currentPage], size)}
+                    />
+                </div>
                 <div className="six col">
                     <p>
                         {category} &gt; {job}
