@@ -19,8 +19,6 @@ router.get("/breadcrumbs/:pid", pidSanitizer, requireToken, async function (req,
         console.error("Error retrieving breadcrumbs: " + e);
         res.status(500).send("Unexpected error");
     }
-    
-    
 });
 
 module.exports = router;
