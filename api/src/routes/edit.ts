@@ -18,8 +18,6 @@ router.get("/breadcrumbs/:pid", pidSanitizer, requireToken, async function (req,
     } catch (e) {
         console.error("Error retrieving breadcrumbs: " + e);
     }
-    
-    
 });
 
 module.exports = router;
