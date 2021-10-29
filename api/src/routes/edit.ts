@@ -17,6 +17,7 @@ router.get("/breadcrumbs/:pid", pidSanitizer, requireToken, async function (req,
         res.json(fedoraData.getBreadcrumbTrail());
     } catch (e) {
         console.error("Error retrieving breadcrumbs: " + e);
+        res.status(500).send("Unexpected error");
     }
     
     
