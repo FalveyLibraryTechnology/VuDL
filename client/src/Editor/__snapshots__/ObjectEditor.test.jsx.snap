@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ObjectEditor renders 1`] = `
+<div>
+  <p>
+    You are editing 
+    foo:123
+  </p>
+  <ChildList
+    pid="foo:123"
+  />
+</div>
+`;
