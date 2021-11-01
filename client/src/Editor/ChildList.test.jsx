@@ -1,11 +1,11 @@
 import React from "react";
-import { describe, expect, it } from "@jest/globals";
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import ChildList from "./ChildList";
 import { FetchContextProvider } from "../context";
-import { BrowserRouter} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 describe("ChildList", () => {
     let props;
@@ -19,10 +19,10 @@ describe("ChildList", () => {
                 ok: true,
                 status: 200,
                 json: async function () {
-                    return { docs: [ { id: "foo:124", title: "hello" } ] };
+                    return { docs: [{ id: "foo:124", title: "hello" }] };
                 },
             };
-        })
+        });
     });
 
     it("renders using ajax-loaded root data", async () => {
