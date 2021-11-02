@@ -26,33 +26,31 @@ describe("ChildList", () => {
     });
 
     it("renders using ajax-loaded root data", async () => {
-        let wrapper;
-        await waitFor(() => {
-            wrapper = mount(
-                <BrowserRouter>
-                    <FetchContextProvider>
-                        <ChildList {...props} />
-                    </FetchContextProvider>
-                </BrowserRouter>
-            );
-        });
+        const wrapper = mount(
+            <BrowserRouter>
+                <FetchContextProvider>
+                    <ChildList {...props} />
+                </FetchContextProvider>
+            </BrowserRouter>
+        );
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/children");
+        wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it("renders using ajax-loaded object data", async () => {
         props.pid = "foo:123";
-        let wrapper;
-        await waitFor(() => {
-            wrapper = mount(
-                <BrowserRouter>
-                    <FetchContextProvider>
-                        <ChildList {...props} />
-                    </FetchContextProvider>
-                </BrowserRouter>
-            );
-        });
+        const wrapper = mount(
+            <BrowserRouter>
+                <FetchContextProvider>
+                    <ChildList {...props} />
+                </FetchContextProvider>
+            </BrowserRouter>
+        );
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/children/foo:123");
+        wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 });

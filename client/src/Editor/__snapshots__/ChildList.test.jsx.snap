@@ -28,7 +28,27 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
       <ChildList
         pid="foo:123"
       >
-        <ul />
+        <ul>
+          <li
+            key="foo:123childfoo:124"
+          >
+            <Link
+              to="/edit/object/foo:124"
+            >
+              <LinkAnchor
+                href="/edit/object/foo:124"
+                navigate={[Function]}
+              >
+                <a
+                  href="/edit/object/foo:124"
+                  onClick={[Function]}
+                >
+                  hello [foo:124]
+                </a>
+              </LinkAnchor>
+            </Link>
+          </li>
+        </ul>
       </ChildList>
     </FetchContextProvider>
   </Router>
@@ -61,7 +81,27 @@ exports[`ChildList renders using ajax-loaded root data 1`] = `
   >
     <FetchContextProvider>
       <ChildList>
-        <ul />
+        <ul>
+          <li
+            key="rootchildfoo:124"
+          >
+            <Link
+              to="/edit/object/foo:124"
+            >
+              <LinkAnchor
+                href="/edit/object/foo:124"
+                navigate={[Function]}
+              >
+                <a
+                  href="/edit/object/foo:124"
+                  onClick={[Function]}
+                >
+                  hello [foo:124]
+                </a>
+              </LinkAnchor>
+            </Link>
+          </li>
+        </ul>
       </ChildList>
     </FetchContextProvider>
   </Router>
