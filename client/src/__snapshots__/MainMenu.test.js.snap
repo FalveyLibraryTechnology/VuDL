@@ -37,6 +37,13 @@ exports[`MainMenu renders 1`] = `
     className="main-menu-other-tools-list"
   >
     <li>
+      <a
+        href="http://localhost:9000/queue"
+      >
+        Arena (Job Queue Manager)
+      </a>
+    </li>
+    <li>
       <Link
         to="/pdf"
       >
