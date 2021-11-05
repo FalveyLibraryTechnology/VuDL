@@ -1,11 +1,11 @@
 import express = require("express");
 import Config from "../models/Config";
-const router = express.Router();
+const edit = express.Router();
 import { requireToken } from "./auth";
 import { pidSanitizer } from "./sanitize";
 import Solr from "../services/Solr";
 
-router.get("/models", requireToken, function (req, res) {
+edit.get("/models", requireToken, function (req, res) {
     res.json({ CollectionModels: Config.getInstance().collectionModels, DataModels: Config.getInstance().dataModels });
 });
 
@@ -27,7 +27,7 @@ async function getChildren(req, res) {
     res.json(response);
 }
 
-router.get("/object/children", requireToken, getChildren);
-router.get("/object/children/:pid", requireToken, pidSanitizer, getChildren);
+edit.get("/object/children", requireToken, getChildren);
+edit.get("/object/children/:pid", requireToken, pidSanitizer, getChildren);
 
-module.exports = router;
+export default edit;

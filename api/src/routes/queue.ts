@@ -1,7 +1,7 @@
 import Arena = require("bull-arena");
 import { Queue, FlowProducer } from "bullmq";
 
-const arena = Arena({
+const queue = Arena({
     BullMQ: Queue,
     FlowBullMQ: FlowProducer,
     queues: [
@@ -14,4 +14,4 @@ const arena = Arena({
     ],
 });
 
-module.exports = arena;
+export default queue;
