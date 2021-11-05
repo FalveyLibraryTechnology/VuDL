@@ -94,7 +94,7 @@ router.get("/login", async function (req, res) {
         req.session.referer = req.query.referer;
     }
     const user = await getUserBy("username", "chris");
-    res.render("login-test", { user });
+    res.render("../../views/login-test", { user });
 });
 
 router.get("/logout", function (req, res) {

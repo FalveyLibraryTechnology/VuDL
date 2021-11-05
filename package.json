@@ -7,11 +7,13 @@
     "api:wsl/queue:wsl": "These are for Chris since WSL causes listening weirdness in nodemon."
   },
   "scripts": {
-    "api": "node api/bin/www",
+    "api": "cd api && npm run start:server",
     "api:build": "cd api && tsc",
-    "api:dev": "nodemon --watch 'api/vudl.ini' --watch 'api/**/*.js' --watch 'api/**/*.ejs' --ignore api/node_modules/ api/bin/www",
+    "api:dev": "cd api && npm run start:serverWatch",
     "api:lint": "eslint api/*.js api/src/ --ext .ts,.js,.jsx",
     "api:setup": "cd api && npm ci",
+    "api:test": "cd api && npm test",
+    "api:testWatch": "cd api && npm run testWatch",
     "api:watch": "cd api && tsc --watch",
     "api:wsl": "nodemon --legacy-watch api/bin/www",
     "client": "cd client && npm run start",
@@ -21,8 +23,8 @@
     "client:snapshots": "cd client && npm run snapshots",
     "client:test": "cd client && npm test",
     "client:testWatch": "cd client && npm run testWatch",
-    "queue": "node api/worker-start.js",
-    "queue:dev": "nodemon --watch 'api/vudl.ini' --watch 'api/**/*.js' api/worker-start.js",
+    "queue": "cd api && npm run start:worker",
+    "queue:dev": "cd api && npm run start:workerWatch",
     "queue:wsl": "nodemon --legacy-watch api/worker-start.js",
     "ingest": "node api/scripts/ingest.js",
     "backend": "concurrently npm:api npm:queue",
@@ -34,7 +36,7 @@
     "lint": "eslint api/*.js api/src/ client/src/ --ext .ts,.js,.jsx --max-warnings 0",
     "setup": "concurrently npm:api:setup npm:client:setup",
     "start": "concurrently -c 'cyan,green,gray' npm:client npm:api npm:queue",
-    "test": "npm run client:test",
+    "test": "concurrently npm:client:test npm:api:test",
     "watch": "cd api && tsc --watch"
   },
   "devDependencies": {
