@@ -34,6 +34,7 @@ const JobPaginator = ({ initialCategory, initialJob }) => {
             <div className="row">
                 <div className="six col">
                     <JobPaginatorZoomToggle
+                        enabled={order.length > 0}
                         zoom={zoom}
                         getJobImageUrl={(size) => getJobImageUrl(order[currentPage], size)}
                     />
@@ -56,6 +57,7 @@ const JobPaginator = ({ initialCategory, initialJob }) => {
                             setZoom(!zoom);
                         }}
                         zoom={zoom}
+                        pageCount={order.length}
                     />
                     <PaginatorList
                         setPage={setPage}

@@ -4,7 +4,10 @@ import PropTypes from "prop-types";
 import PaginatorPreview from "./PaginatorPreview";
 import PaginatorZoomy from "./PaginatorZoomy";
 
-const JobPaginatorZoomToggle = ({ zoom, getJobImageUrl }) => {
+const JobPaginatorZoomToggle = ({ enabled = true, zoom, getJobImageUrl }) => {
+    if (!enabled) {
+        return <div>Preview not available.</div>;
+    }
     return zoom ? (
         <PaginatorZoomy img={getJobImageUrl("large")} />
     ) : (
@@ -13,6 +16,7 @@ const JobPaginatorZoomToggle = ({ zoom, getJobImageUrl }) => {
 };
 
 JobPaginatorZoomToggle.propTypes = {
+    enabled: PropTypes.bool,
     zoom: PropTypes.bool,
     getJobImageUrl: PropTypes.func,
 };
