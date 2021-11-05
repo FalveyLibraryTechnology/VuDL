@@ -45,7 +45,7 @@ export function authenticate(req: Request, res: Response, next?: NextFunction): 
 }
 
 function saveSessionReferer(req: Request) {
-    req.session.referer = req.query.referer ?? req.header("referer") ?? req.originalUrl;
+    req.session.referer = req.originalUrl;
     console.log("< save login referral: " + req.session.referer);
 }
 
