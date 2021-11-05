@@ -31,10 +31,13 @@ const PaginatorList = ({ getLabel, getMagicLabel, setPage, getJobImageUrl, curre
         );
     }
 
-    return (
+    return pageCount > 0 ? (
         <div ref={pageList} className="pageList">
             {pages}
         </div>
+    ) : (
+        // No pages, no visible list element:
+        <></>
     );
 };
 

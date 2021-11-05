@@ -21,6 +21,12 @@ describe("JobPaginatorZoomToggle", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
+    it("can be disabled", () => {
+        props.enabled = false;
+        const wrapper = shallow(<JobPaginatorZoomToggle {...props} />);
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
     it("renders PaginatorZoomy", () => {
         const wrapper = mount(<JobPaginatorZoomToggle {...props} />);
 
