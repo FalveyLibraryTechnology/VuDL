@@ -12,7 +12,7 @@ router.get("/models", requireToken, function (req, res) {
 async function getChildren(req, res) {
     const query =
         (req.params.pid ?? "").length > 0
-            ? 'fedora_parent_id_str_mv:"' + req.params.pid.replace('"', "") + '"'
+            ? `fedora_parent_id_str_mv:"${req.params.pid.replace('"', "")}"`
             : "-fedora_parent_id_str_mv:*";
     const config = Config.getInstance();
     const solr = Solr.getInstance();
