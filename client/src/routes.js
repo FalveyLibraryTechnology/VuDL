@@ -1,4 +1,6 @@
-const baseUrl = "http://localhost:9000";
+import config from "./config";
+
+const baseUrl = config.API_SERVER_BASE_URL;
 const apiUrl = `${baseUrl}/api`;
 const authApiUrl = `${apiUrl}/auth`;
 const ingestApiUrl = `${apiUrl}/ingest`;
