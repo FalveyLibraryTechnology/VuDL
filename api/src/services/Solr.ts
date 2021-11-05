@@ -37,10 +37,10 @@ class Solr {
         solrQuery: string,
         queryParams: Record<string, string> = {}
     ): Promise<NeedleResponse> {
-        let extras = "";
-        for (const i in queryParams) {
-            extras += "&" + encodeURIComponent(i) + "=" + encodeURIComponent(queryParams[i]);
-        }
+        const formatter = ([key, val]) => {
+            return "&" + encodeURIComponent(key) + "=" + encodeURIComponent(val);
+        };
+        const extras = Object.entries(queryParams).map(formatter).join("");
         return this._request("get", core + "/select?q=" + encodeURIComponent(solrQuery) + extras);
     }
 
