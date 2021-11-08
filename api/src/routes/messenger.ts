@@ -4,19 +4,17 @@ import express = require("express");
 import Config from "../models/Config";
 import { Queue } from "bullmq";
 import { requireToken } from "./auth";
-import { sanitizeParameters } from "./sanitize";
-const router = express.Router();
+import { pidSanitizer } from "./sanitize";
+const messenger = express.Router();
 
-const pidSanitizer = sanitizeParameters({ pid: /^[a-zA-Z]+:[0-9]+/ }, /^$/);
-
-router.post("/pdfgenerator/:pid", pidSanitizer, requireToken, async function (req, res) {
+messenger.post("/pdfgenerator/:pid", pidSanitizer, requireToken, async function (req, res) {
     const q = new Queue("vudl");
     await q.add("generatepdf", { pid: req.params.pid });
     q.close();
     res.status(200).send("ok");
 });
 
-router.get("/solrindex/:pid", pidSanitizer, requireToken, async function (req, res) {
+messenger.get("/solrindex/:pid", pidSanitizer, requireToken, async function (req, res) {
     const indexer = SolrIndexer.getInstance();
     try {
         const fedoraFields = await indexer.getFields(req.params.pid);
@@ -27,7 +25,7 @@ router.get("/solrindex/:pid", pidSanitizer, requireToken, async function (req, r
     }
 });
 
-router.post("/solrindex/:pid", pidSanitizer, requireToken, async function (req, res) {
+messenger.post("/solrindex/:pid", pidSanitizer, requireToken, async function (req, res) {
     const indexer = SolrIndexer.getInstance();
     try {
         const result = await indexer.indexPid(req.params.pid);
@@ -61,7 +59,7 @@ async function queueIndexOperation(pid, action): Promise<void> {
     q.close();
 }
 
-router.post("/camel", bodyParser.json(), async function (req, res) {
+messenger.post("/camel", bodyParser.json(), async function (req, res) {
     const fedoraBase = Config.getInstance().restBaseUrl;
     const idParts = req?.body?.id.replace(fedoraBase, "").split("/");
     if (idParts === null) {
@@ -102,4 +100,4 @@ router.post("/camel", bodyParser.json(), async function (req, res) {
     res.status(200).send("ok");
 });
 
-module.exports = router;
+export default messenger;

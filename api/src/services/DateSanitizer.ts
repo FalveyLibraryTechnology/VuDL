@@ -3,31 +3,6 @@ import dateFormat = require("locutus/php/datetime/date");
 import strtotime = require("locutus/php/datetime/strtotime");
 
 export default class DateSanitizer {
-    static runTests(): void {
-        // TODO: move this to a real test suite
-        const tests = [
-            "",
-            "n.d.",
-            "n. d.",
-            "February 29, 2008",
-            "February 29, 2009",
-            "01 June 1467",
-            "1872",
-            "[1872]",
-            "1872&1873",
-            "1888-01",
-            "1888-28",
-            "1888-05-12",
-            "1888-05-99",
-            "1888/05/12",
-            "1888--05--12",
-            "693-01-07",
-        ];
-        for (const date of tests) {
-            console.log(date, DateSanitizer.sanitize(date));
-        }
-    }
-
     static sanitize(_date: string): string {
         // Strip brackets; we'll assume guesses are correct.
         let date = _date.replace(/\[|\]/g, "");

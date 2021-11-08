@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`VuDLPrep renders 1`] = `
-<div>
+Array [
   <div
     class="logout"
   >
     LogoutButton
-  </div>
-  Routes
-</div>
+  </div>,
+  "Routes",
+]
 `;

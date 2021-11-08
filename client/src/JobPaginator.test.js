@@ -1,10 +1,11 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { mount, shallow } from "enzyme";
+import { mount, render } from "enzyme";
 import toJson from "enzyme-to-json";
 import JobPaginator from "./JobPaginator";
-import * as JobPaginatorState from "./JobPaginatorState";
+import { FetchContextProvider } from "./context";
+import { getJobUrl } from "./routes";
 
 jest.mock("./JobPaginatorState");
 jest.mock("./PaginatorControls", () => () => "PaginatorControls");
@@ -14,21 +15,19 @@ jest.mock("./JobPaginatorZoomToggle", () => () => "JobPaginatorZoomToggle");
 describe("JobPaginator", () => {
     let props;
     beforeEach(() => {
-        jest.spyOn(JobPaginatorState, "getJob").mockResolvedValue({
-            order: [
-                {
-                    filename: "test1",
-                    label: "test2",
-                },
-            ],
-        });
-
-        jest.spyOn(JobPaginatorState, "getStatus").mockResolvedValue({
-            file_problems: {
-                deleted: [],
-                added: [],
-            },
-        });
+        global.fetch = jest.fn(() =>
+            Promise.resolve({
+                ok: true,
+                json: () =>
+                    Promise.resolve({
+                        order: ["testOrder"],
+                        file_problems: {
+                            deleted: 0,
+                            added: 0,
+                        },
+                    }),
+            })
+        );
         props = {
             initialCategory: "testCategory",
             initialJob: "testJob",
@@ -36,17 +35,29 @@ describe("JobPaginator", () => {
     });
 
     it("renders", () => {
-        const wrapper = shallow(<JobPaginator {...props} />);
-        expect(wrapper.contains(props.initialCategory)).toBeTruthy();
-        expect(wrapper.contains(props.initialJob)).toBeTruthy();
+        const wrapper = render(
+            <FetchContextProvider>
+                <JobPaginator {...props} />
+            </FetchContextProvider>
+        );
+        expect(wrapper.children().text().includes(props.initialCategory)).toBeTruthy();
+        expect(wrapper.children().text().includes(props.initialJob)).toBeTruthy();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it("should loadJob from useEffect", async () => {
         await act(async () => {
-            await mount(<JobPaginator {...props} />);
+            await mount(
+                <FetchContextProvider>
+                    <JobPaginator {...props} />
+                </FetchContextProvider>
+            );
         });
-        expect(JobPaginatorState.getJob).toHaveBeenCalled();
-        expect(JobPaginatorState.getStatus).toHaveBeenCalled();
+        expect(global.fetch).toHaveBeenCalledWith(
+            getJobUrl(props.initialCategory, props.initialJob),
+            expect.objectContaining({
+                method: "GET",
+            })
+        );
     });
 });

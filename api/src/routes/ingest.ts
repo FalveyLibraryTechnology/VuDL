@@ -1,26 +1,24 @@
 import express = require("express");
-
 import CategoryCollection from "../models/CategoryCollection";
 import Category from "../models/Category";
 import Config from "../models/Config";
 import Job from "../models/Job";
-
-const router = express.Router();
 import { requireToken } from "./auth";
 import { sanitizeParameters } from "./sanitize";
 import fs = require("fs");
 
+const ingest = express.Router();
 function getJobFromRequest(req): Job {
     const jobDir = Config.getInstance().holdingArea + req.params.category + "/" + req.params.job;
     return fs.existsSync(jobDir) ? Job.build(jobDir) : null;
 }
 
-router.get("/", requireToken, function (req, res) {
+ingest.get("/", requireToken, function (req, res) {
     const categoryCollection = new CategoryCollection(Config.getInstance().holdingArea);
     res.json(categoryCollection.raw());
 });
 
-router.get("/:category", sanitizeParameters(), requireToken, function (req, res) {
+ingest.get("/:category", sanitizeParameters(), requireToken, function (req, res) {
     const categoryDir = Config.getInstance().holdingArea + req.params.category;
     if (!fs.existsSync(categoryDir)) {
         return res.status(404).json({ error: "Not Found" });
@@ -29,7 +27,7 @@ router.get("/:category", sanitizeParameters(), requireToken, function (req, res)
     res.json(category.raw());
 });
 
-router.get("/:category/:job", sanitizeParameters(), requireToken, function (req, res) {
+ingest.get("/:category/:job", sanitizeParameters(), requireToken, function (req, res) {
     const job = getJobFromRequest(req);
     if (job == null) {
         return res.status(404).json({ error: "Job not found" });
@@ -37,7 +35,7 @@ router.get("/:category/:job", sanitizeParameters(), requireToken, function (req,
     res.json(job.metadata.raw);
 });
 
-router.get("/:category/:job/status", sanitizeParameters(), requireToken, function (req, res) {
+ingest.get("/:category/:job/status", sanitizeParameters(), requireToken, function (req, res) {
     const job = getJobFromRequest(req);
     if (job == null) {
         return res.status(404).json({ error: "Job not found" });
@@ -45,7 +43,7 @@ router.get("/:category/:job/status", sanitizeParameters(), requireToken, functio
     res.json(job.metadata.status);
 });
 
-router.put("/:category/:job/derivatives", sanitizeParameters(), requireToken, async function (req, res) {
+ingest.put("/:category/:job/derivatives", sanitizeParameters(), requireToken, async function (req, res) {
     const job = getJobFromRequest(req);
     if (job == null) {
         return res.status(404).json({ error: "Job not found" });
@@ -54,7 +52,7 @@ router.put("/:category/:job/derivatives", sanitizeParameters(), requireToken, as
     res.json({ status: "ok" });
 });
 
-router.put("/:category/:job/ingest", sanitizeParameters(), requireToken, async function (req, res) {
+ingest.put("/:category/:job/ingest", sanitizeParameters(), requireToken, async function (req, res) {
     const job = getJobFromRequest(req);
     if (job == null) {
         return res.status(404).json({ error: "Job not found" });
@@ -63,7 +61,7 @@ router.put("/:category/:job/ingest", sanitizeParameters(), requireToken, async f
     res.json({ status: "ok" });
 });
 
-router.put("/:category/:job", sanitizeParameters(), requireToken, function (req, res) {
+ingest.put("/:category/:job", sanitizeParameters(), requireToken, function (req, res) {
     const job = getJobFromRequest(req);
     const raw = req.body;
     try {
@@ -82,7 +80,7 @@ router.put("/:category/:job", sanitizeParameters(), requireToken, function (req,
     }
 });
 
-router.get("/:category/:job/:image/:size", sanitizeParameters(), requireToken, async function (req, res) {
+ingest.get("/:category/:job/:image/:size", sanitizeParameters(), requireToken, async function (req, res) {
     const legalSizes: Record<string, string> = {
         thumb: "THUMBNAIL",
         medium: "MEDIUM",
@@ -98,9 +96,9 @@ router.get("/:category/:job/:image/:size", sanitizeParameters(), requireToken, a
     res.sendFile(deriv);
 });
 
-router.delete(
+ingest.delete(
     "/:category/:job/:image/*",
-    router.delete(
+    ingest.delete(
         "/:category/:job/:image/*",
         sanitizeParameters({ 0: /^\*$/ }),
         requireToken,
@@ -121,4 +119,4 @@ router.delete(
     )
 );
 
-module.exports = router;
+export default ingest;

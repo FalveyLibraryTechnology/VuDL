@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditHome renders 1`] = `
+<div>
+  <p>
+    Welcome to the editor!
+  </p>
+  <ChildList />
+</div>
+`;
