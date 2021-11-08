@@ -81,11 +81,9 @@ class HierarchyCollector {
         // Create promises to retrieve parents asynchronously...
         const promises = (result.relations.isMemberOf ?? []).map(async (resource) => {
             const parentPid = resource.substr("info:fedora/".length);
-            if (!this.config.topLevelPids.includes(parentPid)) {
-                // The "false" here skips RDF retrieval:
-                const parent = await this.getHierarchy(parentPid, false);
-                result.addParent(parent);
-            }
+            // The "false" here skips RDF retrieval:
+            const parent = await this.getHierarchy(parentPid, false);
+            result.addParent(parent);
         });
         // Now wait for the promises to complete before we return results, so
         // nothing happens out of order.

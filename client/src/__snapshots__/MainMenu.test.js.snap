@@ -25,7 +25,11 @@ exports[`MainMenu renders 1`] = `
       </Link>
     </li>
     <li>
-      Object Editor [coming soon]
+      <Link
+        to="/edit"
+      >
+        Object Editor
+      </Link>
     </li>
   </ul>
   <h2

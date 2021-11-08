@@ -14,3 +14,5 @@ export function sanitizeParameters(customRules = {}, defaultRule = /^[-.a-zA-Z0-
         next();
     };
 }
+
+export const pidSanitizer = sanitizeParameters({ pid: /^[a-zA-Z]+:[0-9]+/ }, /^$/);
