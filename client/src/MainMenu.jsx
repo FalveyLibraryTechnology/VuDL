@@ -27,12 +27,6 @@ const MainMenu = () => {
                     <Link to="/solr">Solr Indexer</Link>
                 </li>
             </ul>
-            <h2>Object Editor Pieces</h2>
-            <ul>
-                <li>
-                    <Link to="/editor/object/new">Create Object</Link>
-                </li>
-            </ul>
         </div>
     );
 };

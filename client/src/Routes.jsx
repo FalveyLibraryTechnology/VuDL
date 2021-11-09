@@ -10,6 +10,11 @@ import PdfGenerator from "./PdfGenerator";
 import SolrIndexer from "./SolrIndexer";
 import CreateObject from "./Editor/CreateObject";
 
+const CreateObjectHook = () => {
+    const { pid } = useParams();
+    return <CreateObject parentPid={pid} allowNoParentPid={false} allowChangeParentPid={false} />;
+};
+
 const JobPaginatorHook = () => {
     const { category, job } = useParams();
     return <JobPaginator initialCategory={category} initialJob={job} />;
@@ -29,6 +34,12 @@ const Routes = () => {
             <Route exact path="/edit">
                 <EditHome />
             </Route>
+            <Route exact path="/edit/newChild">
+                <CreateObject allowNoParentPid={true} allowChangeParentPid={false} />
+            </Route>
+            <Route path="/edit/object/:pid/newChild">
+                <CreateObjectHook />
+            </Route>
             <Route path="/edit/object/:pid">
                 <ObjectEditorHook />
             </Route>
@@ -43,9 +54,6 @@ const Routes = () => {
             </Route>
             <Route exact path="/solr">
                 <SolrIndexer />
-            </Route>
-            <Route path="/editor/object/new">
-                <CreateObject allowNoParentPid={true} />
             </Route>
         </Switch>
     );
