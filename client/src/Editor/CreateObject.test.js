@@ -6,6 +6,7 @@ import { mount, render } from "enzyme";
 import toJson from "enzyme-to-json";
 import CreateObject from "./CreateObject";
 import { FetchContextProvider } from "../context";
+import { BrowserRouter } from "react-router-dom";
 
 let nodeSelectFunction = null;
 let treeItems = null;
@@ -56,9 +57,11 @@ describe("CreateObject", () => {
 
     function getCreateObjectToTest(props) {
         return (
-            <FetchContextProvider>
-                <CreateObject {...props} />
-            </FetchContextProvider>
+            <BrowserRouter>
+                <FetchContextProvider>
+                    <CreateObject {...props} />
+                </FetchContextProvider>
+            </BrowserRouter>
         );
     }
 

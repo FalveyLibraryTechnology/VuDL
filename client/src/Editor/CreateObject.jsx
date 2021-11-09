@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { TreeView, TreeItem } from "@material-ui/lab";
 import { useFetchContext } from "../context";
 import { apiUrl } from "../routes";
+import { Link } from "react-router-dom";
 
 const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangeParentPid = true }) => {
     // Validate properties
@@ -17,7 +18,7 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
     } = useFetchContext();
     const [models, setModels] = useState({});
     const [selectedModel, setSelectedModel] = useState("");
-    const [results, setResults] = useState("");
+    const [results, setResults] = useState();
     const [title, setTitle] = useState("");
     const [parent, setParent] = useState(parentPid);
     const [noParent, setNoParent] = useState(allowNoParentPid && parentPid === "");
@@ -57,11 +58,17 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
             model: selectedModel,
             state,
         };
+        setResults("Working...");
         try {
             const params = { method: "POST", body: JSON.stringify(data) };
             const headers = { "Content-Type": "application/json" };
             const result = await makeRequest(url, params, headers);
-            setResults(await result.text());
+            const pid = await result.text();
+            setResults(
+                <span>
+                    Object created: <Link to={"/edit/object/" + pid}>{pid}</Link>
+                </span>
+            );
         } catch (e) {
             setResults("Error: " + e.message);
         }
@@ -136,10 +143,12 @@ const CreateObject = ({ parentPid = "", allowNoParentPid = false, allowChangePar
             <input type="hidden" value={parent} name="parent" />
         );
     }
-
+    // If the form has completed, just display the result:
+    if (results) {
+        return results;
+    }
     return (
         <form onSubmit={handleSubmit} className="editor__create-object">
-            {results && results.length > 0 ? <div>{"Results: " + results}</div> : ""}
             <label>
                 Title
                 <input type="text" value={title} name="title" onChange={handleTitleChange} required />
