@@ -1,9 +1,11 @@
 import React from "react";
 import { Switch, Route, useParams } from "react-router-dom";
 
+import EditHome from "./Editor/EditHome";
 import JobSelector from "./JobSelector";
 import JobPaginator from "./JobPaginator";
 import MainMenu from "./MainMenu";
+import ObjectEditor from "./Editor/ObjectEditor";
 import PdfGenerator from "./PdfGenerator";
 import SolrIndexer from "./SolrIndexer";
 import CreateObject from "./Editor/CreateObject";
@@ -13,11 +15,22 @@ const JobPaginatorHook = () => {
     return <JobPaginator initialCategory={category} initialJob={job} />;
 };
 
+const ObjectEditorHook = () => {
+    const { pid } = useParams();
+    return <ObjectEditor pid={pid} key={"object-editor-" + pid} />;
+};
+
 const Routes = () => {
     return (
         <Switch>
             <Route exact path="/">
                 <MainMenu />
+            </Route>
+            <Route exact path="/edit">
+                <EditHome />
+            </Route>
+            <Route path="/edit/object/:pid">
+                <ObjectEditorHook />
             </Route>
             <Route exact path="/paginate">
                 <JobSelector />

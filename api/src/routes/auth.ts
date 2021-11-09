@@ -45,7 +45,7 @@ export function authenticate(req: Request, res: Response, next?: NextFunction): 
 }
 
 function saveSessionReferer(req: Request) {
-    req.session.referer = req.query.referer ?? req.header("referer") ?? req.originalUrl;
+    req.session.referer = req.originalUrl;
     console.log("< save login referral: " + req.session.referer);
 }
 
@@ -94,7 +94,7 @@ router.get("/login", async function (req, res) {
         req.session.referer = req.query.referer;
     }
     const user = await getUserBy("username", "chris");
-    res.render("login-test", { user });
+    res.render("../../views/login-test", { user });
 });
 
 router.get("/logout", function (req, res) {

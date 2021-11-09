@@ -24,7 +24,13 @@ describe("PaginatorList", () => {
         };
     });
 
-    it("renders", () => {
+    it("renders thumbnails for pages", () => {
+        const wrapper = shallow(<PaginatorList {...props} />);
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders empty element when pages are absent", () => {
+        props.pageCount = 0;
         const wrapper = shallow(<PaginatorList {...props} />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });

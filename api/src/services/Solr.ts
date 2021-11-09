@@ -32,6 +32,18 @@ class Solr {
         return http(method, url, data, options);
     }
 
+    public async query(
+        core: string,
+        solrQuery: string,
+        queryParams: Record<string, string> = {}
+    ): Promise<NeedleResponse> {
+        const formatter = ([key, val]) => {
+            return "&" + encodeURIComponent(key) + "=" + encodeURIComponent(val);
+        };
+        const extras = Object.entries(queryParams).map(formatter).join("");
+        return this._request("get", core + "/select?q=" + encodeURIComponent(solrQuery) + extras);
+    }
+
     public async deleteRecord(core: string, pid: string): Promise<NeedleResponse> {
         // Strip double quotes from PID -- they should never be present, and it protects
         // against malicious query manipulation.

@@ -10,6 +10,17 @@ exports[`Routes render 1`] = `
   </Route>
   <Route
     exact={true}
+    path="/edit"
+  >
+    <EditHome />
+  </Route>
+  <Route
+    path="/edit/object/:pid"
+  >
+    <ObjectEditorHook />
+  </Route>
+  <Route
+    exact={true}
     path="/paginate"
   >
     <Component />

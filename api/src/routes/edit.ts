@@ -5,14 +5,15 @@ import Fedora from "../services/Fedora";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import MetadataExtractor from "../services/MetadataExtractor";
 import { requireToken } from "./auth";
+import { pidSanitizer } from "./sanitize";
+import Solr from "../services/Solr";
+const edit = express.Router();
 
-const router = express.Router();
-
-router.get("/models", requireToken, function (req, res) {
+edit.get("/models", requireToken, function (req, res) {
     res.json({ CollectionModels: Config.getInstance().collectionModels, DataModels: Config.getInstance().dataModels });
 });
 
-router.post("/object/new", requireToken, bodyParser.json(), async function (req, res) {
+edit.post("/object/new", requireToken, bodyParser.json(), async function (req, res) {
     let parentPid = req?.body?.parent;
     if (parentPid !== null && !parentPid?.length) {
         parentPid = null;
@@ -62,4 +63,25 @@ router.post("/object/new", requireToken, bodyParser.json(), async function (req,
     }
 });
 
-module.exports = router;
+async function getChildren(req, res) {
+    const query =
+        (req.params.pid ?? "").length > 0
+            ? `fedora_parent_id_str_mv:"${req.params.pid.replace('"', "")}"`
+            : "-fedora_parent_id_str_mv:*";
+    const config = Config.getInstance();
+    const solr = Solr.getInstance();
+    const rows = parseInt(req.query.rows ?? "100000").toString();
+    const start = parseInt(req.query.start ?? "0").toString();
+    const result = await solr.query(config.solrCore, query, { fl: "id,title", rows, start });
+    if (result.statusCode !== 200) {
+        res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
+        return;
+    }
+    const response = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
+    res.json(response);
+}
+
+edit.get("/object/children", requireToken, getChildren);
+edit.get("/object/children/:pid", requireToken, pidSanitizer, getChildren);
+
+export default edit;
