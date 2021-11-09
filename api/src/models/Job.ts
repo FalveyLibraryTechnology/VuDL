@@ -6,31 +6,31 @@ import Config from "./Config";
 import { execSync } from "child_process";
 import JobMetadata from "./JobMetadata";
 import ImageFile from "./ImageFile";
-import { Queue } from "bullmq";
+import QueueManager from "../services/QueueManager";
 
 class Job {
     dir: string;
     name: string;
     _metadata: JobMetadata = null;
     config: Config;
+    queue: QueueManager;
 
-    constructor(dir: string, config: Config) {
+    constructor(dir: string, config: Config, queue: QueueManager) {
         this.dir = dir;
         this.name = path.basename(dir);
         this.config = config;
+        this.queue = queue;
     }
 
     public static build(dir: string): Job {
-        return new Job(dir, Config.getInstance());
+        return new Job(dir, Config.getInstance(), QueueManager.getInstance());
     }
 
     async ingest(): Promise<void> {
         const lockfile = this.metadata.ingestLockfile;
         if (this.metadata.published && !fileExists(lockfile)) {
             closeSync(openSync(lockfile, "w")); // touch
-            const q = new Queue("vudl");
-            await q.add("ingest", { dir: this.dir });
-            q.close();
+            this.queue.ingestJob(this.dir);
         }
     }
 
@@ -48,9 +48,7 @@ class Job {
 
         if (status.expected > status.processed && !fileExists(lockfile)) {
             closeSync(openSync(lockfile, "w")); // touch
-            const q = new Queue("vudl");
-            await q.add("derivatives", { dir: this.dir });
-            q.close();
+            this.queue.buildDerivatives(this.dir);
         }
     }
 

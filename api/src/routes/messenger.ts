@@ -2,15 +2,13 @@ import SolrIndexer from "../services/SolrIndexer";
 import bodyParser = require("body-parser");
 import express = require("express");
 import Config from "../models/Config";
-import { Queue } from "bullmq";
+import QueueManager from "../services/QueueManager";
 import { requireToken } from "./auth";
 import { pidSanitizer } from "./sanitize";
 const messenger = express.Router();
 
 messenger.post("/pdfgenerator/:pid", pidSanitizer, requireToken, async function (req, res) {
-    const q = new Queue("vudl");
-    await q.add("generatepdf", { pid: req.params.pid });
-    q.close();
+    QueueManager.getInstance().generatePdf(req.params.pid);
     res.status(200).send("ok");
 });
 
@@ -38,27 +36,6 @@ messenger.post("/solrindex/:pid", pidSanitizer, requireToken, async function (re
     }
 });
 
-async function queueIndexOperation(pid, action): Promise<void> {
-    // Fedora often fires many change events about the same object in rapid succession;
-    // we don't want to index more times than we have to, so let's not re-queue anything
-    // that is already awaiting indexing.
-    const q = new Queue("vudl");
-    const jobs = await q.getJobs("wait");
-    let lastPidAction = null;
-    for (let i = 0; i < jobs.length; i++) {
-        if (jobs[i].name === "index" && jobs[i].data.pid === pid) {
-            lastPidAction = jobs[i].data.action;
-            break;
-        }
-    }
-    if (action === lastPidAction) {
-        console.log("Skipping queue; " + pid + " is already awaiting " + action + ".");
-    } else {
-        await q.add("index", { pid: pid, action: action });
-    }
-    q.close();
-}
-
 messenger.post("/camel", bodyParser.json(), async function (req, res) {
     const fedoraBase = Config.getInstance().restBaseUrl;
     const idParts = req?.body?.id.replace(fedoraBase, "").split("/");
@@ -84,10 +61,10 @@ messenger.post("/camel", bodyParser.json(), async function (req, res) {
     switch (action) {
         case "Create":
         case "Update":
-            await queueIndexOperation(pid, "index");
+            await QueueManager.getInstance().performIndexOperation(pid, "index");
             break;
         case "Delete":
-            await queueIndexOperation(pid, "delete");
+            await QueueManager.getInstance().performIndexOperation(pid, "delete");
             break;
         default: {
             const msg = "Unexpected action: " + action + " (on PID: " + pid + ")";
