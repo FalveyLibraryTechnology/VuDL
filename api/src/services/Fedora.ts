@@ -92,6 +92,10 @@ export class Fedora {
         return data;
     }
 
+    public clearCache(pid: string): void {
+        this.cache[pid] = {};
+    }
+
     protected getCache(pid: string, key: string): string {
         if (typeof this.cache[pid] === "undefined" || typeof this.cache[pid][key] === "undefined") {
             return null;
