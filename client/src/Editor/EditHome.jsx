@@ -1,10 +1,18 @@
 import React from "react";
 import ChildList from "./ChildList";
+import { Link } from "react-router-dom";
 
 const EditHome = () => {
     return (
         <div>
-            <p>Welcome to the editor!</p>
+            <h1>Editor</h1>
+            <h2>Tools</h2>
+            <ul>
+                <li>
+                    <Link to="/edit/newChild">Create New Top-Level Object</Link>
+                </li>
+            </ul>
+            <h2>Contents</h2>
             <ChildList />
         </div>
     );

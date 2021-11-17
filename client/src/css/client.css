@@ -51,14 +51,25 @@ form {
 label {
     display: block;
     margin: 1rem 0;
-    padding: 0 4px;
+    padding: 1px 4px;
+    cursor: pointer;
 }
-label input {
+label:hover {
+    background-color: #c8e1ff;
+}
+label input[type="text"],
+label input[type="number"],
+label input[type="password"] {
     display: block;
     width: 100%;
     margin: 6px 0;
     padding: 0.5rem 0.75rem;
     font: inherit;
+}
+label input[type="checkbox"],
+label input[type="radio"] {
+    margin: 0 4px;
+    padding: 0.75rem;
 }
 
 .group {
@@ -177,4 +188,10 @@ label input {
 }
 #zoomyStatus {
     text-align: center;
+}
+
+.MuiTreeItem-root.Mui-selected,
+.MuiTreeItem-root.Mui-selected:hover {
+    color: #fff;
+    background-color: #000;
 }
