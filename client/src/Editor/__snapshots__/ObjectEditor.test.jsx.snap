@@ -2,10 +2,25 @@
 
 exports[`ObjectEditor renders 1`] = `
 <div>
-  <p>
-    You are editing 
+  <h1>
+    Editor: Object 
     foo:123
-  </p>
+  </h1>
+  <h2>
+    Tools
+  </h2>
+  <ul>
+    <li>
+      <Link
+        to="/edit/object/foo:123/newChild"
+      >
+        Create New Child Object
+      </Link>
+    </li>
+  </ul>
+  <h2>
+    Contents
+  </h2>
   <ChildList
     pid="foo:123"
   />

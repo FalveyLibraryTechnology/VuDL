@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateObject renders appropriately with default settings 1`] = `
+<form
+  class="editor__create-object"
+>
+  <label>
+    Title
+    <input
+      name="title"
+      required=""
+      type="text"
+      value=""
+    />
+  </label>
+  <label>
+    Parent ID
+    <input
+      name="parent"
+      required=""
+      type="text"
+      value=""
+    />
+  </label>
+  <label>
+    Active
+    <input
+      name="state"
+      type="radio"
+      value="Active"
+    />
+  </label>
+  <label>
+    Inactive
+    <input
+      checked=""
+      name="state"
+      type="radio"
+      value="Inactive"
+    />
+  </label>
+  <label>
+    Deleted
+    <input
+      name="state"
+      type="radio"
+      value="Deleted"
+    />
+  </label>
+  <label>
+    Select Model Type:
+    <b />
+  </label>
+</form>
+`;
+
+exports[`CreateObject renders appropriately with editing disabled 1`] = `
+<form
+  class="editor__create-object"
+>
+  <label>
+    Title
+    <input
+      name="title"
+      required=""
+      type="text"
+      value=""
+    />
+  </label>
+  <input
+    name="parent"
+    type="hidden"
+    value="foo:1234"
+  />
+  <label>
+    Active
+    <input
+      name="state"
+      type="radio"
+      value="Active"
+    />
+  </label>
+  <label>
+    Inactive
+    <input
+      checked=""
+      name="state"
+      type="radio"
+      value="Inactive"
+    />
+  </label>
+  <label>
+    Deleted
+    <input
+      name="state"
+      type="radio"
+      value="Deleted"
+    />
+  </label>
+  <label>
+    Select Model Type:
+    <b />
+  </label>
+</form>
+`;
+
+exports[`CreateObject renders appropriately with noParent and parent change enabled 1`] = `
+<form
+  class="editor__create-object"
+>
+  <label>
+    Title
+    <input
+      name="title"
+      required=""
+      type="text"
+      value=""
+    />
+  </label>
+  <label>
+    <input
+      checked=""
+      name="noParent"
+      type="checkbox"
+      value="1"
+    />
+    No parent PID
+  </label>
+  <label>
+    Parent ID
+    <input
+      name="parent"
+      type="text"
+      value=""
+    />
+  </label>
+  <label>
+    Active
+    <input
+      name="state"
+      type="radio"
+      value="Active"
+    />
+  </label>
+  <label>
+    Inactive
+    <input
+      checked=""
+      name="state"
+      type="radio"
+      value="Inactive"
+    />
+  </label>
+  <label>
+    Deleted
+    <input
+      name="state"
+      type="radio"
+      value="Deleted"
+    />
+  </label>
+  <label>
+    Select Model Type:
+    <b />
+  </label>
+</form>
+`;

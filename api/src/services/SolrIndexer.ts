@@ -64,6 +64,10 @@ class SolrIndexer {
     }
 
     async indexPid(pid: string): Promise<NeedleResponse> {
+        // Empty out Fedora cache data to be sure we get the latest
+        // information while indexing.
+        // TODO: review datastream caching logic; do we need it? Is there a better way?
+        this.hierarchyCollector.fedora.clearCache(pid);
         const fedoraFields = await this.getFields(pid);
         return await this.solr.indexRecord(this.config.solrCore, fedoraFields);
     }
