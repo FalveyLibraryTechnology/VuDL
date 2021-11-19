@@ -139,6 +139,10 @@ export class FedoraObject {
         return this.fedora.getDatastreamAsString(this.pid, datastream);
     }
 
+    async getDatastreamAsBuffer(datastream: string): Promise<Buffer> {
+        return this.fedora.getDatastreamAsBuffer(this.pid, datastream);
+    }
+
     fitsMasterMetadata(filename: string): string {
         const targetXml = filename + ".fits.xml";
         if (!fs.existsSync(targetXml)) {

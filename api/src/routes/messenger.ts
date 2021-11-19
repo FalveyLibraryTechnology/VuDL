@@ -61,6 +61,9 @@ messenger.post("/camel", bodyParser.json(), async function (req, res) {
     switch (action) {
         case "Create":
         case "Update":
+            if (datastream == "MASTER") {
+                await QueueManager.getInstance().queueMetadataOperation(pid, "add");
+            }
             await QueueManager.getInstance().performIndexOperation(pid, "index");
             break;
         case "Delete":
