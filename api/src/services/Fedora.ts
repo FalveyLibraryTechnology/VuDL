@@ -119,21 +119,25 @@ export class Fedora {
         const cacheKey = "stream_" + datastream;
         let data = allowCaching ? this.getCache(pid, cacheKey) : null;
         if (!data) {
-            const response = await this.getDatastream(pid, datastream);
-            if (response.statusCode !== 200) {
-                if (response.statusCode === 404 && treatMissingAsEmpty) {
-                    data = "";
-                } else {
-                    throw new Error("Unexpected response for " + pid + "/" + datastream + ": " + response.statusCode);
-                }
-            } else {
-                data = response.body.toString();
-            }
+            data = (await this.getDatastreamAsBuffer(pid, datastream, treatMissingAsEmpty)).toString();
             if (allowCaching) {
                 this.setCache(pid, cacheKey, data);
             }
         }
         return data;
+    }
+
+    async getDatastreamAsBuffer(pid: string, datastream: string, treatMissingAsEmpty = false): Promise<Buffer> {
+        const response = await this.getDatastream(pid, datastream);
+        if (response.statusCode === 200) {
+            return response.body;
+        }
+
+        if (response.statusCode === 404 && treatMissingAsEmpty) {
+            return Buffer.from("");
+        } else {
+            throw new Error("Unexpected response for " + pid + "/" + datastream + ": " + response.statusCode);
+        }
     }
 
     /**
