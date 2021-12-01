@@ -5,7 +5,7 @@ import { waitFor } from "@testing-library/react";
 import { mount, render } from "enzyme";
 import toJson from "enzyme-to-json";
 import CreateObject from "./CreateObject";
-import { FetchContextProvider } from "../context";
+import { FetchContextProvider } from "../FetchContext";
 import { BrowserRouter } from "react-router-dom";
 
 let nodeSelectFunction = null;

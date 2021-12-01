@@ -4,6 +4,12 @@ import { render, shallow } from "enzyme";
 import toJson from "enzyme-to-json";
 import PaginatorList from "./PaginatorList";
 
+const mockUseJobPaginatorContext = jest.fn();
+jest.mock("./PaginatorContext", () => ({
+    usePaginatorContext: () => {
+        return mockUseJobPaginatorContext();
+    },
+}));
 const mockThumbnail = jest.fn();
 jest.mock(
     "./Thumbnail",
@@ -15,29 +21,36 @@ jest.mock(
 );
 
 describe("PaginatorList", () => {
-    let props;
+    let paginatorValues;
 
     beforeEach(() => {
-        props = {
-            pageCount: 1,
-            currentPage: 0,
+        paginatorValues = {
+            state: {
+                order: [
+                    {
+                        filename: "test.jpg",
+                    },
+                ],
+                currentPage: 0,
+            },
         };
+        mockUseJobPaginatorContext.mockReturnValue(paginatorValues);
     });
 
     it("renders thumbnails for pages", () => {
-        const wrapper = shallow(<PaginatorList {...props} />);
+        const wrapper = shallow(<PaginatorList />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it("renders empty element when pages are absent", () => {
-        props.pageCount = 0;
-        const wrapper = shallow(<PaginatorList {...props} />);
+        paginatorValues.state.order = [];
+        const wrapper = shallow(<PaginatorList />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it("renders a thumbnail", () => {
         expect(mockThumbnail).not.toHaveBeenCalled();
-        render(<PaginatorList {...props} />);
+        render(<PaginatorList />);
         expect(mockThumbnail).toHaveBeenCalledWith(
             expect.objectContaining({
                 scrollTo: expect.any(Function),

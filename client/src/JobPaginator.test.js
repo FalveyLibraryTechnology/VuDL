@@ -4,9 +4,14 @@ import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { mount, render } from "enzyme";
 import toJson from "enzyme-to-json";
 import JobPaginator from "./JobPaginator";
-import { FetchContextProvider } from "./context";
-import { getJobUrl } from "./routes";
+import { FetchContextProvider } from "./FetchContext";
 
+const mockUseJobPaginatorContext = jest.fn();
+jest.mock("./PaginatorContext", () => ({
+    usePaginatorContext: () => {
+        return mockUseJobPaginatorContext();
+    },
+}));
 jest.mock("./JobPaginatorState");
 jest.mock("./PaginatorControls", () => () => "PaginatorControls");
 jest.mock("./PaginatorList", () => () => "PaginatorList");
@@ -14,24 +19,22 @@ jest.mock("./JobPaginatorZoomToggle", () => () => "JobPaginatorZoomToggle");
 
 describe("JobPaginator", () => {
     let props;
+    let paginatorValues;
     beforeEach(() => {
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                ok: true,
-                json: () =>
-                    Promise.resolve({
-                        order: ["testOrder"],
-                        file_problems: {
-                            deleted: 0,
-                            added: 0,
-                        },
-                    }),
-            })
-        );
         props = {
             initialCategory: "testCategory",
             initialJob: "testJob",
         };
+        paginatorValues = {
+            state: {
+                category: props.initialCategory,
+                job: props.initialJob,
+            },
+            action: {
+                loadJob: jest.fn(),
+            },
+        };
+        mockUseJobPaginatorContext.mockReturnValue(paginatorValues);
     });
 
     it("renders", () => {
@@ -53,11 +56,6 @@ describe("JobPaginator", () => {
                 </FetchContextProvider>
             );
         });
-        expect(global.fetch).toHaveBeenCalledWith(
-            getJobUrl(props.initialCategory, props.initialJob),
-            expect.objectContaining({
-                method: "GET",
-            })
-        );
+        expect(paginatorValues.action.loadJob).toHaveBeenCalledWith(props.initialCategory, props.initialJob);
     });
 });

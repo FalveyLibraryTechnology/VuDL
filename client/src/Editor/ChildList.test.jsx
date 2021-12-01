@@ -4,7 +4,7 @@ import { waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import ChildList from "./ChildList";
-import { FetchContextProvider } from "../context";
+import { FetchContextProvider } from "../FetchContext";
 import { BrowserRouter } from "react-router-dom";
 
 describe("ChildList", () => {

@@ -1,9 +1,12 @@
 import React, { useRef } from "react";
-import PropTypes from "prop-types";
 
+import { usePaginatorContext } from "./PaginatorContext";
 import Thumbnail from "./Thumbnail";
-
-const PaginatorList = ({ getLabel, getMagicLabel, setPage, getJobImageUrl, currentPage, pageCount }) => {
+const PaginatorList = () => {
+    const {
+        state: { order, currentPage },
+    } = usePaginatorContext();
+    const pageCount = order.length;
     const pageList = useRef();
     const thumbRefs = useRef([]);
     const scrollTo = (number) => {
@@ -21,10 +24,6 @@ const PaginatorList = ({ getLabel, getMagicLabel, setPage, getJobImageUrl, curre
                 }}
                 scrollTo={scrollTo}
                 selected={pageIndex === currentPage}
-                setPage={setPage}
-                getLabel={getLabel}
-                getMagicLabel={getMagicLabel}
-                getJobImageUrl={getJobImageUrl}
                 key={pageIndex}
                 number={pageIndex}
             />
@@ -35,19 +34,7 @@ const PaginatorList = ({ getLabel, getMagicLabel, setPage, getJobImageUrl, curre
         <div ref={pageList} className="pageList">
             {pages}
         </div>
-    ) : (
-        // No pages, no visible list element:
-        <></>
-    );
-};
-
-PaginatorList.propTypes = {
-    currentPage: PropTypes.number,
-    pageCount: PropTypes.number,
-    getLabel: PropTypes.func,
-    getMagicLabel: PropTypes.func,
-    setPage: PropTypes.func,
-    getJobImageUrl: PropTypes.func,
+    ) : null;
 };
 
 export default PaginatorList;

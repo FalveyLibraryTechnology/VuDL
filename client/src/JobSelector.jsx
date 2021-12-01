@@ -4,7 +4,8 @@ import PropTypes from "prop-types";
 import Category from "./Category";
 import { ingestApiUrl } from "./routes";
 
-import { useFetchContext } from "./context";
+import { useFetchContext } from "./FetchContext";
+
 const JobSelector = () => {
     const {
         action: { fetchJSON },

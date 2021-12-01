@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import { FetchContextProvider } from "./context";
+import { FetchContextProvider } from "./FetchContext";
 import Routes from "./Routes";
 import LogoutButton from "./LogoutButton";
 

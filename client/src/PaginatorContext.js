@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { createContext, useContext, useReducer } from "react";
+import PropTypes from "prop-types";
 import MagicLabeler from "./MagicLabeler";
-import { useFetchContext } from "./context";
+import { useFetchContext } from "./FetchContext";
 import {
     countMagicLabels,
     deletePageValidation,
@@ -11,17 +12,61 @@ import {
 } from "./JobPaginatorState";
 import { getImageUrl, getJobUrl } from "./routes";
 
-const useJobPaginator = (initialCategory, initialJob) => {
+/**
+ * Pass a shared entity to react components,
+ * specifically a way to make api requests.
+ */
+const paginatorContextParams = {
+    active: false,
+    currentPage: 0,
+    zoom: false,
+    order: [],
+    magicLabelCache: [],
+    category: "",
+    job: "",
+};
+
+const PaginatorContext = createContext({});
+
+const typePayloadMapping = {
+    UPDATE_ACTIVE: "active",
+    UPDATE_CURRENT_PAGE: "currentPage",
+    UPDATE_ZOOM: "zoom",
+    UPDATE_ORDER: "order",
+    UPDATE_MAGIC_LABEL_CACHE: "magicLabelCache",
+    UPDATE_CATEGORY: "category",
+    UPDATE_JOB: "job",
+};
+/**
+ * Update the shared states of react components.
+ */
+const paginatorReducer = (state, { type, payload }) => {
+    if (Object.keys(typePayloadMapping).includes(type)) {
+        return {
+            ...state,
+            [`${typePayloadMapping[type]}`]: payload,
+        };
+    } else {
+        console.error(`paginator action type: ${type} does not exist`);
+        return state;
+    }
+};
+
+export const PaginatorContextProvider = ({ children }) => {
+    const [state, dispatch] = useReducer(paginatorReducer, paginatorContextParams);
+    const value = { state, dispatch };
+    return <PaginatorContext.Provider value={value}>{children}</PaginatorContext.Provider>;
+};
+
+export const usePaginatorContext = () => {
     const {
         action: { makeRequest, fetchJSON },
     } = useFetchContext();
-    const [active] = useState(false);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [zoom, setZoom] = useState(false);
-    const [order, setOrder] = useState([]);
-    const [magicLabelCache, setMagicLabelCache] = useState([]);
-    const [category] = useState(initialCategory);
-    const [job] = useState(initialJob);
+
+    const {
+        state: { active, currentPage, zoom, order, magicLabelCache, category, job },
+        dispatch,
+    } = useContext(PaginatorContext);
 
     const saveMagicLabels = () => {
         order.forEach((o, orderIndex) => {
@@ -30,6 +75,18 @@ const useJobPaginator = (initialCategory, initialJob) => {
             }
         });
     };
+
+    const setOrder = (order) =>
+        dispatch({
+            type: "UPDATE_ORDER",
+            payload: order,
+        });
+
+    const setMagicLabelCache = (magicLabelCache) =>
+        dispatch({
+            type: "UPDATE_MAGIC_LABEL_CACHE",
+            payload: magicLabelCache,
+        });
 
     const setLabel = (imageNumber, text) => {
         setMagicLabelCache([]); // clear label cache whenever there is a change
@@ -53,6 +110,12 @@ const useJobPaginator = (initialCategory, initialJob) => {
         }
         return magicLabelCache[imageNumber];
     };
+
+    const setCurrentPage = (currentPage) =>
+        dispatch({
+            type: "UPDATE_CURRENT_PAGE",
+            payload: currentPage,
+        });
 
     const setPage = (page) => {
         if (page >= 0 && page < order.length) {
@@ -88,11 +151,29 @@ const useJobPaginator = (initialCategory, initialJob) => {
         }
     };
 
-    const loadJob = async () => {
-        const { order } = await fetchJSON(getJobUrl(category, job));
+    const setCategory = (category) =>
+        dispatch({
+            type: "UPDATE_CATEGORY",
+            payload: category,
+        });
+
+    const setJob = (job) =>
+        dispatch({
+            type: "UPDATE_JOB",
+            payload: job,
+        });
+
+    const initialize = (initialCategory, initialJob) => {
+        setCategory(initialCategory);
+        setJob(initialJob);
+    };
+
+    const loadJob = async (initialCategory, initialJob) => {
+        initialize(initialCategory, initialJob);
+        const { order } = await fetchJSON(getJobUrl(initialCategory, initialJob));
         setOrder(order);
         setCurrentPage(0);
-        updatePagesByStatus(await fetchJSON(getJobUrl(category, job, "/status")));
+        updatePagesByStatus(await fetchJSON(getJobUrl(initialCategory, initialJob, "/status")));
         dispatchEvent(new Event("Prep.loaded"));
     };
 
@@ -177,6 +258,8 @@ const useJobPaginator = (initialCategory, initialJob) => {
         }
         return getImageUrl(category, job, orderImage.filename, size);
     };
+    const setZoom = (zoom) => dispatch({ type: "UPDATE_ZOOM", payload: zoom });
+    const toggleZoom = () => setZoom(!zoom);
 
     return {
         state: {
@@ -192,6 +275,7 @@ const useJobPaginator = (initialCategory, initialJob) => {
             getLabel: (imageNumber) => {
                 return getLabel(order, imageNumber);
             },
+            initialize,
             setLabel,
             getMagicLabel,
             setPage,
@@ -203,9 +287,13 @@ const useJobPaginator = (initialCategory, initialJob) => {
             save,
             autonumberFollowingPages,
             getJobImageUrl,
-            setZoom,
+            toggleZoom,
         },
     };
 };
 
-export default useJobPaginator;
+PaginatorContextProvider.propTypes = {
+    children: PropTypes.node,
+};
+
+export default { PaginatorContextProvider, usePaginatorContext };

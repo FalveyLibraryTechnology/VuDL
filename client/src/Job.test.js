@@ -2,7 +2,7 @@ import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render } from "enzyme";
 import toJson from "enzyme-to-json";
-import { FetchContextProvider } from "./context";
+import { FetchContextProvider } from "./FetchContext";
 import Job from "./Job";
 
 const mockjobClickable = jest.fn();

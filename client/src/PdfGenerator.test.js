@@ -3,7 +3,7 @@ import { describe, expect, it } from "@jest/globals";
 import { render, mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import PdfGenerator from "./PdfGenerator";
-import { FetchContextProvider } from "./context";
+import { FetchContextProvider } from "./FetchContext";
 
 describe("PdfGenerator", () => {
     it("renders", () => {

@@ -8,6 +8,7 @@ import MainMenu from "./MainMenu";
 import ObjectEditor from "./Editor/ObjectEditor";
 import PdfGenerator from "./PdfGenerator";
 import SolrIndexer from "./SolrIndexer";
+import { PaginatorContextProvider } from "./PaginatorContext";
 import CreateObject from "./Editor/CreateObject";
 
 const CreateObjectHook = () => {
@@ -17,7 +18,11 @@ const CreateObjectHook = () => {
 
 const JobPaginatorHook = () => {
     const { category, job } = useParams();
-    return <JobPaginator initialCategory={category} initialJob={job} />;
+    return (
+        <PaginatorContextProvider>
+            <JobPaginator initialCategory={category} initialJob={job} />
+        </PaginatorContextProvider>
+    );
 };
 
 const ObjectEditorHook = () => {

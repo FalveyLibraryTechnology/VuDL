@@ -1,24 +1,23 @@
 import React from "react";
-import PropTypes from "prop-types";
 
+import { usePaginatorContext } from "./PaginatorContext";
 import PaginatorPreview from "./PaginatorPreview";
 import PaginatorZoomy from "./PaginatorZoomy";
 
-const JobPaginatorZoomToggle = ({ enabled = true, zoom, getJobImageUrl }) => {
-    if (!enabled) {
+const JobPaginatorZoomToggle = () => {
+    const {
+        state: { order, zoom, currentPage },
+        action: { getJobImageUrl },
+    } = usePaginatorContext();
+
+    if (order.length < 1) {
         return <div>Preview not available.</div>;
     }
     return zoom ? (
-        <PaginatorZoomy img={getJobImageUrl("large")} />
+        <PaginatorZoomy img={getJobImageUrl(order[currentPage], "large")} />
     ) : (
-        <PaginatorPreview img={getJobImageUrl("medium")} />
+        <PaginatorPreview img={getJobImageUrl(order[currentPage], "medium")} />
     );
-};
-
-JobPaginatorZoomToggle.propTypes = {
-    enabled: PropTypes.bool,
-    zoom: PropTypes.bool,
-    getJobImageUrl: PropTypes.func,
 };
 
 export default JobPaginatorZoomToggle;

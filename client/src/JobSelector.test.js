@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import JobSelector from "./JobSelector";
-import { FetchContextProvider } from "./context";
+import { FetchContextProvider } from "./FetchContext";
 
 const mockCategory = jest.fn();
 jest.mock(
