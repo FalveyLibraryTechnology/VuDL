@@ -3,7 +3,7 @@ import { describe, expect, it } from "@jest/globals";
 import { mount, render } from "enzyme";
 import toJson from "enzyme-to-json";
 import SolrIndexer from "./SolrIndexer";
-import { FetchContextProvider } from "./context";
+import { FetchContextProvider } from "./FetchContext";
 
 describe("SolrIndexer", () => {
     it("renders", () => {

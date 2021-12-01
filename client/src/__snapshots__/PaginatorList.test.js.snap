@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PaginatorList renders empty element when pages are absent 1`] = `<Fragment />`;
+exports[`PaginatorList renders empty element when pages are absent 1`] = `""`;
 
 exports[`PaginatorList renders thumbnails for pages 1`] = `
 <div

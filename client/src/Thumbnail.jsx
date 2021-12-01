@@ -1,33 +1,30 @@
 import React, { useEffect, forwardRef } from "react";
 import PropTypes from "prop-types";
+import { usePaginatorContext } from "./PaginatorContext";
 
-const Thumbnail = forwardRef(
-    ({ scrollTo, getLabel, getMagicLabel, setPage, getJobImageUrl, selected, number }, ref) => {
-        useEffect(() => {
-            if (selected) {
-                scrollTo(number);
-            }
-        }, [selected]);
+const Thumbnail = forwardRef(({ scrollTo, selected, number }, ref) => {
+    const {
+        state: { order },
+        action: { getLabel, getMagicLabel, setPage, getJobImageUrl },
+    } = usePaginatorContext();
+    useEffect(() => {
+        if (selected) {
+            scrollTo(number);
+        }
+    }, [selected]);
 
-        return (
-            <div onClick={() => setPage(number)} className={"thumbnail" + (selected ? " selected" : "")} ref={ref}>
-                <img alt="" src={getJobImageUrl(number, "thumb")} />
-                <div className="number">{number + 1}</div>
-                <div className={"label" + (getLabel(number) === null ? " magic" : "")}>{getMagicLabel(number)}</div>
-            </div>
-        );
-    }
-);
+    return (
+        <div onClick={() => setPage(number)} className={"thumbnail" + (selected ? " selected" : "")} ref={ref}>
+            <img alt="" src={getJobImageUrl(order[number], "thumb")} />
+            <div className="number">{number + 1}</div>
+            <div className={"label" + (getLabel(number) === null ? " magic" : "")}>{getMagicLabel(number)}</div>
+        </div>
+    );
+});
 Thumbnail.displayName = "Thumbnail";
 Thumbnail.propTypes = {
-    // JobList
     scrollTo: PropTypes.func,
     number: PropTypes.number,
-    // JobPaginator
-    getJobImageUrl: PropTypes.func,
-    getLabel: PropTypes.func,
-    getMagicLabel: PropTypes.func,
-    setPage: PropTypes.func,
     selected: PropTypes.bool,
 };
 

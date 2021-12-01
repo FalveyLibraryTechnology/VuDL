@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { renderHook, act } from "@testing-library/react-hooks";
 import useJob from "./useJob";
-import { FetchContextProvider } from "./context";
+import { FetchContextProvider } from "./FetchContext";
 
 describe("useJob", () => {
     let props;
