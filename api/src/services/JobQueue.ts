@@ -5,6 +5,7 @@ import Derivative from "../jobs/Derivative";
 import GeneratePdf from "../jobs/GeneratePdf";
 import Index from "../jobs/Index";
 import Ingest from "../jobs/Ingest";
+import Metadata from "../jobs/Metadata";
 import QueueJob from "../jobs/QueueJobInterface";
 
 class JobQueue {
@@ -18,7 +19,7 @@ class JobQueue {
         this.workers.generatepdf = new GeneratePdf();
         this.workers.index = new Index();
         this.workers.ingest = new Ingest();
-
+        this.workers.metadata = new Metadata();
         this.manager = new Worker("vudl", async (job) => {
             console.log("JOB: " + job.name);
             if (typeof this.workers[job.name] === "undefined") {

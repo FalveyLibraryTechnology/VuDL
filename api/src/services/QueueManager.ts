@@ -1,4 +1,4 @@
-import { Queue } from "bullmq";
+import { Queue, Job } from "bullmq";
 
 class QueueManager {
     private static instance: QueueManager;
@@ -35,17 +35,30 @@ class QueueManager {
         // that is already awaiting indexing.
         const q = new Queue(this.defaultQueueName);
         const jobs = await q.getJobs("wait");
-        let lastPidAction = null;
-        for (let i = 0; i < jobs.length; i++) {
-            if (jobs[i].name === "index" && jobs[i].data.pid === pid) {
-                lastPidAction = jobs[i].data.action;
-                break;
-            }
-        }
-        if (action === lastPidAction) {
+        const queueJob = { pid, action };
+        if (this.isAlreadyAwaitingAction(jobs, "index", queueJob)) {
             console.log("Skipping queue; " + pid + " is already awaiting " + action + ".");
         } else {
             await q.add("index", { pid, action });
+        }
+        q.close();
+    }
+
+    isAlreadyAwaitingAction(jobs: Array<Job>, name: string, { pid, action }: { pid: string; action: string }): boolean {
+        const matchingJob = jobs.find((job) => {
+            return job.name === name && job.data.pid === pid;
+        });
+        return matchingJob ? matchingJob?.data?.action === action : false;
+    }
+
+    public async queueMetadataOperation(pid: string, action: string): Promise<void> {
+        const q = new Queue(this.defaultQueueName);
+        const jobs = await q.getJobs("wait");
+        const queueJob = { pid, action };
+        if (this.isAlreadyAwaitingAction(jobs, "metadata", queueJob)) {
+            console.log("Skipping queue; " + pid + " is already awaiting " + action + ".");
+        } else {
+            await q.add("metadata", queueJob);
         }
         q.close();
     }

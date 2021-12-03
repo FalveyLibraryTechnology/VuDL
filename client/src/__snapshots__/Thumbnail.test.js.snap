@@ -12,7 +12,7 @@ exports[`Thumbnail renders 1`] = `
   <div
     className="number"
   >
-    13
+    2
   </div>
   <div
     className="label magic"

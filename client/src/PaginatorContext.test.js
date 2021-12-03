@@ -1,13 +1,24 @@
+import React from "react";
+import PropTypes from "prop-types";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { renderHook, act } from "@testing-library/react-hooks";
 import * as JobPaginatorState from "./JobPaginatorState";
 import * as routes from "./routes";
-import { FetchContextProvider } from "./context";
-import useJobPaginator from "./useJobPaginator";
+import { FetchContextProvider } from "./FetchContext";
+import { PaginatorContextProvider, usePaginatorContext } from "./PaginatorContext";
 
-jest.mock("./JobPaginatorState");
-
-describe("useJobPaginator", () => {
+const wrapper = ({ children }) => {
+    return (
+        <FetchContextProvider>
+            <PaginatorContextProvider>{children}</PaginatorContextProvider>
+        </FetchContextProvider>
+    );
+};
+wrapper.displayName = "wrapper";
+wrapper.propTypes = {
+    children: PropTypes.node,
+};
+describe("usePaginatorContext", () => {
     let json;
     beforeEach(() => {
         json = jest.fn();
@@ -28,7 +39,7 @@ describe("useJobPaginator", () => {
     });
 
     it("increments and decrements the currentPage", async () => {
-        const { result } = await renderHook(() => useJobPaginator(), { wrapper: FetchContextProvider });
+        const { result } = await renderHook(() => usePaginatorContext(), { wrapper });
 
         act(() => {
             result.current.action.setOrder([
@@ -58,7 +69,7 @@ describe("useJobPaginator", () => {
 
     describe("setLabel", () => {
         it("changes the label if null", () => {
-            const { result } = renderHook(() => useJobPaginator(), { wrapper: FetchContextProvider });
+            const { result } = renderHook(() => usePaginatorContext(), { wrapper });
 
             act(() => {
                 result.current.action.setOrder([
@@ -77,7 +88,7 @@ describe("useJobPaginator", () => {
         });
 
         it("does not change the label if index is out of range", () => {
-            const { result } = renderHook(() => useJobPaginator(), { wrapper: FetchContextProvider });
+            const { result } = renderHook(() => usePaginatorContext(), { wrapper });
 
             act(() => {
                 result.current.action.setOrder([
@@ -99,7 +110,7 @@ describe("useJobPaginator", () => {
     describe("getMagicLabel", () => {
         it("gets current label if not null", () => {
             jest.spyOn(JobPaginatorState, "getLabel").mockReturnValue("test2");
-            const { result } = renderHook(() => useJobPaginator(), { wrapper: FetchContextProvider });
+            const { result } = renderHook(() => usePaginatorContext(), { wrapper });
 
             act(() => {
                 expect(result.current.action.getMagicLabel(0)).toEqual("test2");
@@ -108,7 +119,7 @@ describe("useJobPaginator", () => {
 
         it("gets magic label if null", () => {
             jest.spyOn(JobPaginatorState, "getLabel").mockReturnValue(null);
-            const { result } = renderHook(() => useJobPaginator(), { wrapper: FetchContextProvider });
+            const { result } = renderHook(() => usePaginatorContext(), { wrapper });
 
             act(() => {
                 result.current.action.setOrder([
@@ -131,7 +142,7 @@ describe("useJobPaginator", () => {
             jest.spyOn(routes, "getImageUrl").mockReturnValue("www.image.com/imageName");
             jest.spyOn(JobPaginatorState, "getNonRemovedPages").mockReturnValue([]);
 
-            const { result } = renderHook(() => useJobPaginator(), { wrapper: FetchContextProvider });
+            const { result } = renderHook(() => usePaginatorContext(), { wrapper });
 
             act(() => {
                 result.current.action.setOrder([
@@ -154,8 +165,8 @@ describe("useJobPaginator", () => {
             const userMustReviewMoreLabelsMock = jest
                 .spyOn(JobPaginatorState, "userMustReviewMoreLabels")
                 .mockReturnValue(true);
-            const { result } = renderHook(() => useJobPaginator("testCategory", "testJob"), {
-                wrapper: FetchContextProvider,
+            const { result } = renderHook(() => usePaginatorContext(), {
+                wrapper,
             });
 
             act(() => {
@@ -196,8 +207,8 @@ describe("useJobPaginator", () => {
                 },
             };
             json.mockResolvedValueOnce(publishValidValues);
-            const { result } = renderHook(() => useJobPaginator("testCategory", "testJob"), {
-                wrapper: FetchContextProvider,
+            const { result } = renderHook(() => usePaginatorContext(), {
+                wrapper,
             });
             act(() => {
                 result.current.action.setOrder([
@@ -247,7 +258,7 @@ describe("useJobPaginator", () => {
             jest.spyOn(JobPaginatorState, "countMagicLabels").mockReturnValue(0);
             window.confirm.mockReturnValue(false);
 
-            const { result } = renderHook(() => useJobPaginator(), { wrapper: FetchContextProvider });
+            const { result } = renderHook(() => usePaginatorContext(), { wrapper });
             act(() => {
                 result.current.action.setOrder([
                     {
@@ -272,7 +283,7 @@ describe("useJobPaginator", () => {
             jest.spyOn(JobPaginatorState, "countMagicLabels").mockReturnValue(0);
             window.confirm.mockReturnValue(true);
 
-            const { result } = renderHook(() => useJobPaginator(), { wrapper: FetchContextProvider });
+            const { result } = renderHook(() => usePaginatorContext(), { wrapper });
             act(() => {
                 result.current.action.setOrder([
                     {
@@ -296,17 +307,19 @@ describe("useJobPaginator", () => {
 
     describe("getJobImageUrl", () => {
         it("returns false when order image is undefined", () => {
-            const { result } = renderHook(() => useJobPaginator(), { wrapper: FetchContextProvider });
+            const { result } = renderHook(() => usePaginatorContext(), { wrapper });
 
             expect(result.current.action.getJobImageUrl(undefined, 2)).toBeFalsy();
         });
 
         it("calls getJobImageUrl with appropriate params", () => {
             const getImageUrlSpy = jest.spyOn(routes, "getImageUrl");
-            const { result } = renderHook(() => useJobPaginator("testCategory", "testJob"), {
-                wrapper: FetchContextProvider,
+            const { result } = renderHook(() => usePaginatorContext(), {
+                wrapper,
             });
-
+            act(() => {
+                result.current.action.initialize("testCategory", "testJob");
+            });
             expect(result.current.action.getJobImageUrl({ filename: "image.png" }, 2, 2)).toBeFalsy();
             expect(getImageUrlSpy).toHaveBeenCalledWith("testCategory", "testJob", "image.png", 2);
         });

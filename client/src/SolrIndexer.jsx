@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { baseUrl } from "./routes";
-import { useFetchContext } from "./context";
+import { useFetchContext } from "./FetchContext";
 const SolrIndexer = () => {
     const [pid, setPid] = useState("");
     const [results, setResults] = useState("");

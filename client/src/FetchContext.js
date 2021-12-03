@@ -23,18 +23,18 @@ const fetchReducer = (state, { type, payload }) => {
                 token: payload,
             };
         default:
-            console.error("action type does not exist", type);
+            console.error(`fetch action type: ${type} does not exist`);
             return state;
     }
 };
 
-const FetchContextProvider = ({ children }) => {
+export const FetchContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(fetchReducer, fetchContextParams);
     const value = { state, dispatch };
     return <FetchContext.Provider value={value}>{children}</FetchContext.Provider>;
 };
 
-const useFetchContext = () => {
+export const useFetchContext = () => {
     const {
         state: { token },
         dispatch,
@@ -112,10 +112,10 @@ const useFetchContext = () => {
      */
     const fetchJSON = async (url = ingestApiUrl, params = {}, headers = {}) => {
         const response = await makeRequest(url, params, headers);
-        if (response.ok) {
+        if (response?.ok) {
             return await response.json();
         }
-        throw new Error(response.statusText);
+        throw new Error(response?.statusText ?? "Could not make request");
     };
 
     /**
@@ -148,4 +148,4 @@ FetchContextProvider.propTypes = {
     children: PropTypes.node,
 };
 
-export { FetchContextProvider, useFetchContext };
+export default { FetchContextProvider, useFetchContext };

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { FetchContextProvider, useFetchContext } from "./context";
+import { FetchContextProvider, useFetchContext } from "./FetchContext";
 
 describe("useFetchContext", () => {
     let url;
