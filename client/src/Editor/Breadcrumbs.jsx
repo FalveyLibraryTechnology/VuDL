@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useFetchContext } from "../context";
+import { useFetchContext } from "../FetchContext";
 import { apiUrl } from "../routes";
 import { Link } from "react-router-dom";
 
