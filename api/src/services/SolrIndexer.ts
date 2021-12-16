@@ -284,7 +284,6 @@ class SolrIndexer {
             isMemberOf: "relsext",
             sequence: "relsext",
             sortOn: "relsext",
-
         };
         for (const field in fedoraData.fedoraDetails) {
             const prefix = prefixes[field] ?? "fgs";
