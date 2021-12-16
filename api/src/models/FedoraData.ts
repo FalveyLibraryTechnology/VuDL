@@ -1,7 +1,6 @@
 class FedoraData {
     public metadata: Record<string, Array<string>>;
     public pid: string;
-    public relations: Record<string, Array<string>>;
     public fedoraDetails: Record<string, Array<string>>;
     public fedoraDatastreams: Array<string>;
     public parents: Array<FedoraData> = [];
