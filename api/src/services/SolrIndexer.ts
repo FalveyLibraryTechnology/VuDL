@@ -88,12 +88,6 @@ class SolrIndexer {
             hierarchy_all_parents_str_mv: fedoraData.getAllParents(),
         };
 
-        // Load RELS-EXT data (some of this is used below):
-        for (const field in fedoraData.relations) {
-            const fieldName = "legacy_relsext." + field + "_txt_mv";
-            fields[fieldName] = fedoraData.relations[field];
-        }
-
         // Is this a hierarchy?
         if (fedoraData.models.includes("vudl-system:FolderCollection")) {
             fields.is_hierarchy_id = fedoraData.pid;

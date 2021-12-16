@@ -31,14 +31,9 @@ class HierarchyCollector {
     async getFedoraData(pid: string): Promise<FedoraData> {
         // Use Fedora to get data
         const DCPromise = this.fedora.getDC(pid);
-        const RELSPromise = this.fedora.getDatastreamAsString(pid, "RELS-EXT");
-        // For indexing purposes, we only need the RDF information for the
-        // first object retrieved; so when we recurse higher into the tree,
-        // we can skip fetching more RDF in order to save some time!
         const RDFPromise = this.fedora.getRdf(pid);
-        const [DC, RELS, RDF] = await Promise.all([DCPromise, RELSPromise, RDFPromise]);
+        const [DC, RDF] = await Promise.all([DCPromise, RDFPromise]);
         const dataStreams = this.extractor.extractFedoraDatastreams(RDF);
-        const relations = this.extractor.extractRelations(RELS);
         // Fetch license details if appropriate/available:
         const extraDetails: Record<string, Record<string, Array<string>>> = {};
         if (dataStreams.includes("LICENSE")) {
@@ -61,26 +56,25 @@ class HierarchyCollector {
         if (dataStreams.includes("OCR-DIRTY")) {
             extraDetails.fullText.ocrDirty = [await this.fedora.getDatastreamAsString(pid, "OCR-DIRTY")];
         }
-        const models = relations.hasModel ?? [];
-        if (models.includes("info:fedora/vudl-system:DOCData") || models.includes("info:fedora/vudl-system:PDFData")) {
+        const data = new FedoraData(
+            pid,
+            this.extractor.extractMetadata(DC),
+            this.extractor.extractFedoraDetails(RDF),
+            dataStreams
+        );
+        if (data.models.includes("vudl-system:DOCData") || data.models.includes("vudl-system:PDFData")) {
             const extractor = new TikaExtractor((await this.fedora.getDatastream(pid, "MASTER")).body, this.config);
             extraDetails.fullText.fromDocument = [extractor.extractText()];
         }
-        return new FedoraData(
-            pid,
-            relations,
-            this.extractor.extractMetadata(DC),
-            this.extractor.extractFedoraDetails(RDF),
-            dataStreams,
-            extraDetails
-        );
+        data.extraDetails = extraDetails;
+        return data;
     }
 
     async getHierarchy(pid: string): Promise<FedoraData> {
         const result = await this.getFedoraData(pid);
         // Create promises to retrieve parents asynchronously...
-        const promises = (result.relations.isMemberOf ?? []).map(async (resource) => {
-            const parentPid = resource.substr("info:fedora/".length);
+        const promises = (result.fedoraDetails.isMemberOf ?? []).map(async (resource) => {
+            const parentPid = resource.split("/").pop();
             const parent = await this.getHierarchy(parentPid);
             result.addParent(parent);
         });
