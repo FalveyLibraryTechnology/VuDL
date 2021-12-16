@@ -3,10 +3,11 @@ import bodyParser = require("body-parser");
 import Config from "../models/Config";
 import Fedora from "../services/Fedora";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
-import MetadataExtractor from "../services/MetadataExtractor";
+import HierarchyCollector from "../services/HierarchyCollector";
 import { requireToken } from "./auth";
 import { pidSanitizer } from "./sanitize";
 import Solr from "../services/Solr";
+import FedoraData from "../models/FedoraData";
 const edit = express.Router();
 
 edit.get("/models", requireToken, function (req, res) {
@@ -37,18 +38,16 @@ edit.post("/object/new", requireToken, bodyParser.json(), async function (req, r
     // Validate parent PID, if set:
     if (parentPid !== null) {
         const fedora = Fedora.getInstance();
-        const extractor = MetadataExtractor.getInstance();
-        let relsExt: string;
+        const collector = HierarchyCollector.getInstance();
+        let parent: FedoraData;
         try {
-            relsExt = await fedora.getDatastreamAsString(parentPid, "RELS-EXT");
+            parent = await collector.getFedoraData(parentPid);
         } catch (e) {
             res.status(404).send("Error loading parent PID: " + parentPid);
             return;
         }
-        const models = extractor.extractRelations(relsExt).hasModel ?? [];
-
         // Parents must be collections; validate!
-        if (!models.includes("info:fedora/vudl-system:CollectionModel")) {
+        if (!parent.models.includes("vudl-system:CollectionModel")) {
             res.status(400).send("Illegal parent " + parentPid + "; not a collection!");
             return;
         }
