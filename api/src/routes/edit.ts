@@ -1,7 +1,6 @@
 import express = require("express");
 import bodyParser = require("body-parser");
 import Config from "../models/Config";
-import Fedora from "../services/Fedora";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import HierarchyCollector from "../services/HierarchyCollector";
 import { requireToken } from "./auth";
@@ -37,7 +36,6 @@ edit.post("/object/new", requireToken, bodyParser.json(), async function (req, r
 
     // Validate parent PID, if set:
     if (parentPid !== null) {
-        const fedora = Fedora.getInstance();
         const collector = HierarchyCollector.getInstance();
         let parent: FedoraData;
         try {
