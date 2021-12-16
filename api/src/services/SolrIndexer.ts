@@ -277,8 +277,12 @@ class SolrIndexer {
                 fields.collection_title_sort_str = fields.title_sort;
             }
         }
-
+        // Fedora 3 stored some data in Fedora object XML and some in separate RELS-EXT datastreams.
+        // Legacy VuDL indexed these two data sources using different prefixes. For stability of legacy
+        // queries, we retain this prefix separation, using the table below to identify the former
+        // RELS-EXT fields and defaulting to the "fgs." prefix for everything else.
         const prefixes = {
+            hasLegacyURL: "relsext",
             hasModel: "relsext",
             itemID: "relsext",
             isMemberOf: "relsext",
