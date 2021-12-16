@@ -28,16 +28,16 @@ class HierarchyCollector {
         return HierarchyCollector.instance;
     }
 
-    async getFedoraData(pid: string, fetchRdf = true): Promise<FedoraData> {
+    async getFedoraData(pid: string): Promise<FedoraData> {
         // Use Fedora to get data
         const DCPromise = this.fedora.getDC(pid);
         const RELSPromise = this.fedora.getDatastreamAsString(pid, "RELS-EXT");
         // For indexing purposes, we only need the RDF information for the
         // first object retrieved; so when we recurse higher into the tree,
         // we can skip fetching more RDF in order to save some time!
-        const RDFPromise = fetchRdf ? this.fedora.getRdf(pid) : null;
+        const RDFPromise = this.fedora.getRdf(pid);
         const [DC, RELS, RDF] = await Promise.all([DCPromise, RELSPromise, RDFPromise]);
-        const dataStreams = fetchRdf ? this.extractor.extractFedoraDatastreams(RDF) : [];
+        const dataStreams = this.extractor.extractFedoraDatastreams(RDF);
         const relations = this.extractor.extractRelations(RELS);
         // Fetch license details if appropriate/available:
         const extraDetails: Record<string, Record<string, Array<string>>> = {};
@@ -70,19 +70,18 @@ class HierarchyCollector {
             pid,
             relations,
             this.extractor.extractMetadata(DC),
-            fetchRdf ? this.extractor.extractFedoraDetails(RDF) : {},
+            this.extractor.extractFedoraDetails(RDF),
             dataStreams,
             extraDetails
         );
     }
 
-    async getHierarchy(pid: string, fetchRdf = true): Promise<FedoraData> {
-        const result = await this.getFedoraData(pid, fetchRdf);
+    async getHierarchy(pid: string): Promise<FedoraData> {
+        const result = await this.getFedoraData(pid);
         // Create promises to retrieve parents asynchronously...
         const promises = (result.relations.isMemberOf ?? []).map(async (resource) => {
             const parentPid = resource.substr("info:fedora/".length);
-            // The "false" here skips RDF retrieval:
-            const parent = await this.getHierarchy(parentPid, false);
+            const parent = await this.getHierarchy(parentPid);
             result.addParent(parent);
         });
         // Now wait for the promises to complete before we return results, so
