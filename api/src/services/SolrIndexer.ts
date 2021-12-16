@@ -90,7 +90,7 @@ class SolrIndexer {
 
         // Load RELS-EXT data (some of this is used below):
         for (const field in fedoraData.relations) {
-            const fieldName = "relsext." + field + "_txt_mv";
+            const fieldName = "legacy_relsext." + field + "_txt_mv";
             fields[fieldName] = fedoraData.relations[field];
         }
 
@@ -278,12 +278,21 @@ class SolrIndexer {
             }
         }
 
-        fields.has_order_str = ((fields["relsext.sortOn_txt_mv"] ?? [])[0] ?? "title") === "custom" ? "yes" : "no";
+        const prefixes = {
+            hasModel: "relsext",
+            itemID: "relsext",
+            isMemberOf: "relsext",
+            sequence: "relsext",
+            sortOn: "relsext",
 
+        };
         for (const field in fedoraData.fedoraDetails) {
-            const fieldName = "fgs." + field + "_txt_mv";
+            const prefix = prefixes[field] ?? "fgs";
+            const fieldName = prefix + "." + field + "_txt_mv";
             fields[fieldName] = fedoraData.fedoraDetails[field];
         }
+
+        fields.has_order_str = ((fields["relsext.sortOn_txt_mv"] ?? [])[0] ?? "title") === "custom" ? "yes" : "no";
 
         for (const field in fedoraData.agents) {
             const fieldName = "agent." + field + "_txt_mv";

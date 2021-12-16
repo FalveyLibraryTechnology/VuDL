@@ -94,9 +94,12 @@ class MetadataExtractor {
                 rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
                 fedora: "http://fedora.info/definitions/v4/repository#",
                 "fedora3-model": "info:fedora/fedora-system:def/model#",
+                "fedora3-relsext": "info:fedora/fedora-system:def/relations-external#",
                 "fedora3-view": "info:fedora/fedora-system:def/view#",
+                oai: "http://www.openarchives.org/OAI/2.0/",
+                vudl: "http://vudl.org/relationships#",
             },
-            "//rdf:Description/fedora:*|//rdf:Description/fedora3-model:*|//rdf:Description/fedora3-view:*"
+            "//rdf:Description/fedora:*|//rdf:Description/fedora3-model:*|//rdf:Description/fedora3-relsext:*|//rdf:Description/fedora3-view:*|//rdf:Description/oai:*|//rdf:Description/vudl:*"
         );
         // The new (F6) created and lastModified properties should take
         // precedence over the legacy (F3) createdDate and lastModifiedDate
