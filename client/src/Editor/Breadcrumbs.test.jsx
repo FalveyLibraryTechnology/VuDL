@@ -26,19 +26,7 @@ describe("Breadcrumb", () => {
         });
     });
 
-    it("renders using ajax-loaded object data (simple case)", async () => {
-        breadcrumbResponse = {
-            pid: "foo:1234",
-            title: "Fake Title",
-            parents: [
-                {
-                    pid: "foo:1233",
-                    title: "Fake Parent",
-                    parents: [],
-                },
-            ],
-        };
-
+    async function runStandardSnapshotTest() {
         const wrapper = mount(
             <BrowserRouter>
                 <FetchContextProvider>
@@ -50,47 +38,46 @@ describe("Breadcrumb", () => {
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/breadcrumbs/foo:1234");
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
+    }
+
+    function getObject(pid, title, parents = []) {
+        return { pid, title, parents };
+    }
+
+    it("renders using ajax-loaded object data (no parents)", async () => {
+        breadcrumbResponse = getObject("foo:1234", "Fake Title");
+        await runStandardSnapshotTest();
+    });
+
+    it("renders using ajax-loaded object data (simple case)", async () => {
+        const parent = getObject("foo:1233", "Fake Parent");
+        breadcrumbResponse = getObject("foo:1234", "Fake Title", [parent]);
+        await runStandardSnapshotTest();
+    });
+
+    it("renders using ajax-loaded object data (many parents)", async () => {
+        const parents = [];
+        for (let $x = 0; $x < 15; $x++) {
+            parents.push(getObject("foo:" + $x, "Fake Parent " + $x));
+        }
+        breadcrumbResponse = getObject("foo:1234", "Fake Title", parents);
+        await runStandardSnapshotTest();
+    });
+
+    it("renders using ajax-loaded object data (deep parent chain)", async () => {
+        let parents = [];
+        for (let $x = 0; $x < 15; $x++) {
+            parents = [getObject("foo:" + $x, "Fake Parent " + $x, parents)];
+        }
+        breadcrumbResponse = getObject("foo:1234", "Fake Title", parents);
+        await runStandardSnapshotTest();
     });
 
     it("renders using ajax-loaded object data (multiple parents with common grandparent)", async () => {
-        breadcrumbResponse = {
-            pid: "foo:1234",
-            title: "Fake Title",
-            parents: [
-                {
-                    pid: "foo:1233",
-                    title: "Fake Parent 1",
-                    parents: [
-                        {
-                            pid: "foo:1232",
-                            title: "Fake Grandparent",
-                            parents: [],
-                        },
-                    ],
-                },
-                {
-                    pid: "foo:1231",
-                    title: "Fake Parent 2",
-                    parents: [
-                        {
-                            pid: "foo:1232",
-                            title: "Fake Grandparent",
-                            parents: [],
-                        },
-                    ],
-                },
-            ],
-        };
-        const wrapper = mount(
-            <BrowserRouter>
-                <FetchContextProvider>
-                    <Breadcrumbs {...props} />
-                </FetchContextProvider>
-            </BrowserRouter>
-        );
-        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/breadcrumbs/foo:1234");
-        wrapper.update();
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const grandparent = getObject("foo:1232", "Fake Grandparent");
+        const parent1 = getObject("foo:1233", "Fake Parent 1", [grandparent]);
+        const parent2 = getObject("foo:1231", "Fake Parent 2", [grandparent]);
+        breadcrumbResponse = getObject("foo:1234", "Fake Title", [parent1, parent2]);
+        await runStandardSnapshotTest();
     });
 });
