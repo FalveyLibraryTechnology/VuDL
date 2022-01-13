@@ -330,6 +330,19 @@ export class Fedora {
         } else {
             await this.putDatastream(pid, "RELS-EXT", mimeType, 204, updatedXml);
         }
+        
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(
+            namedNode(subject),
+            namedNode(predicate),
+            isLiteral ? literal(obj) : namedNode(obj)
+        );
+        const turtle = this.getOutputFromWriter(writer);
+        const targetPath = "/" + pid;
+        const patchResponse = await this.patchRdf(targetPath, turtle);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
     }
 
     /**
