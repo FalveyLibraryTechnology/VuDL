@@ -18,6 +18,9 @@ exports[`ObjectEditor renders 1`] = `
       </Link>
     </li>
   </ul>
+  <DatastreamEditor
+    pid="foo:123"
+  />
   <h2>
     Contents
   </h2>

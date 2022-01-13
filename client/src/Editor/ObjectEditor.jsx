@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ChildList from "./ChildList";
+import DatastreamEditor from "./DatastreamEditor";
 import { Link } from "react-router-dom";
 
 const ObjectEditor = ({ pid }) => {
@@ -13,6 +14,7 @@ const ObjectEditor = ({ pid }) => {
                     <Link to={`/edit/object/${pid}/newChild`}>Create New Child Object</Link>
                 </li>
             </ul>
+            <DatastreamEditor pid={pid} />
             <h2>Contents</h2>
             <ChildList pid={pid} />
         </div>
