@@ -82,7 +82,7 @@ async function getChildren(req, res) {
     res.json(response);
 }
 
-edit.get("/object/details/:pid", requireToken, pidSanitizer, async function(req, res) {
+edit.get("/object/details/:pid", requireToken, pidSanitizer, async function (req, res) {
     try {
         const data = await HierarchyCollector.getInstance().getFedoraData(req.params.pid);
         res.json({ models: data.models, datastreams: data.fedoraDatastreams });
