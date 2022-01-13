@@ -4,6 +4,7 @@ import Config from "../models/Config";
 import Fedora from "../services/Fedora";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import MetadataExtractor from "../services/MetadataExtractor";
+import HierarchyCollector from "../services/HierarchyCollector";
 import { requireToken } from "./auth";
 import { pidSanitizer } from "./sanitize";
 import Solr from "../services/Solr";
@@ -81,6 +82,15 @@ async function getChildren(req, res) {
     res.json(response);
 }
 
+edit.get("/object/details/:pid", requireToken, pidSanitizer, async function(req, res) {
+    try {
+        const data = await HierarchyCollector.getInstance().getFedoraData(req.params.pid);
+        res.json({ models: data.models, datastreams: data.fedoraDatastreams });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
 edit.get("/object/children", requireToken, getChildren);
 edit.get("/object/children/:pid", requireToken, pidSanitizer, getChildren);
 
