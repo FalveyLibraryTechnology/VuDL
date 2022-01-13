@@ -6,7 +6,6 @@ const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
 import { NeedleResponse } from "./interfaces";
 import xmlescape = require("xml-escape");
-import xmldom = require("@xmldom/xmldom");
 
 export interface DatastreamParameters {
     dsLabel?: string;
