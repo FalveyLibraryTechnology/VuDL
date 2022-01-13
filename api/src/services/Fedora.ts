@@ -291,11 +291,7 @@ export class Fedora {
         isLiteral = false
     ): Promise<void> {
         const writer = new N3.Writer({ format: "text/turtle" });
-        writer.addQuad(
-            namedNode(subject),
-            namedNode(predicate),
-            isLiteral ? literal(obj) : namedNode(obj)
-        );
+        writer.addQuad(namedNode(subject), namedNode(predicate), isLiteral ? literal(obj) : namedNode(obj));
         const turtle = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid;
         const patchResponse = await this.patchRdf(targetPath, turtle);
