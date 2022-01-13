@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ObjectEditor renders 1`] = `
+<div>
+  <h1>
+    Editor: Object 
+    foo:123
+  </h1>
+  <h2>
+    Tools
+  </h2>
+  <ul>
+    <li>
+      <Link
+        href="/edit/object/foo:123/newChild"
+      >
+        Create New Child Object
+      </Link>
+    </li>
+  </ul>
+  <h2>
+    Contents
+  </h2>
+  <ChildList
+    pid="foo:123"
+  />
+</div>
+`;
