@@ -290,47 +290,6 @@ export class Fedora {
         obj: string,
         isLiteral = false
     ): Promise<void> {
-        // Try to fetch the RELS-EXT; if it's empty, we need to create it for the first time!
-        let relsExt = await this.getDatastreamAsString(pid, "RELS-EXT", false, true);
-        const rdfNs = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-        const relsExtAlreadyExists = relsExt.length > 0;
-        if (!relsExtAlreadyExists) {
-            relsExt =
-                '<rdf:RDF xmlns:rdf="' +
-                rdfNs +
-                '">' +
-                '<rdf:Description rdf:about="' +
-                subject +
-                '">' +
-                "</rdf:Description></rdf:RDF>";
-        }
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(relsExt, "text/xml");
-        const description = xmlDoc.getElementsByTagNameNS(rdfNs, "Description");
-        const parts = predicate.split("#");
-        const tagName = parts[1];
-        const nameSpace = parts[0] + "#";
-        const newElement = xmlDoc.createElementNS(nameSpace, tagName);
-        if (isLiteral) {
-            const newText = xmlDoc.createTextNode(obj);
-            newElement.appendChild(newText);
-        } else {
-            newElement.setAttribute("rdf:resource", obj);
-        }
-        description[0].appendChild(newElement);
-        const updatedXml = new XMLSerializer().serializeToString(xmlDoc);
-        const mimeType = "application/rdf+xml";
-        if (!relsExtAlreadyExists) {
-            const dsParams: DatastreamParameters = {
-                dsLabel: "Relationships",
-                mimeType: mimeType,
-                linkHeader: '<http://www.w3.org/ns/ldp#NonRDFSource>; rel="type"',
-            };
-            await this.addDatastream(pid, "RELS-EXT", dsParams, updatedXml);
-        } else {
-            await this.putDatastream(pid, "RELS-EXT", mimeType, 204, updatedXml);
-        }
-        
         const writer = new N3.Writer({ format: "text/turtle" });
         writer.addQuad(
             namedNode(subject),
