@@ -96,7 +96,6 @@ After a few moments, a new tab should automatically open in your browser pointin
 | api:dev | run api server, restart server on changes |
 | api:lint | lint only the api code |
 | api:setup | install npm dependencies in api/ |
-| api:watch | run Typescript in watch mode on api code |
 | api:wsl | run api server, restart on changes (use if on WSL or `api:dev` isn't working) |
 | | |
 | client | run react-scripts server |
