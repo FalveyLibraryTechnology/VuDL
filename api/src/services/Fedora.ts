@@ -273,7 +273,7 @@ export class Fedora {
     }
 
     /**
-     * Add a triple to the RELS-EXT datastream.
+     * Add a triple to the Fedora object.
      *
      * @param pid        PID to update
      * @param subject    RDF subject
@@ -281,7 +281,7 @@ export class Fedora {
      * @param obj        RDF object
      * @param isLiteral  Is object a literal (true) or a URI (false)?
      */
-    async addRelsExtRelationship(
+    async addRelationship(
         pid: string,
         subject: string,
         predicate: string,

@@ -74,7 +74,7 @@ export class FedoraObject {
 
     async addRelationship(subject: string, predicate: string, obj: string, isLiteral = false): Promise<void> {
         this.log("Adding relationship " + [subject, predicate, obj].join(" ") + " to " + this.pid);
-        return this.fedora.addRelsExtRelationship(this.pid, subject, predicate, obj, isLiteral);
+        return this.fedora.addRelationship(this.pid, subject, predicate, obj, isLiteral);
     }
 
     async addModelRelationship(model: string): Promise<void> {
