@@ -39,7 +39,7 @@
     "passport": "^0.4.1",
     "passport-hash": "^0.6.1",
     "pdfkit": "^0.12.1",
-    "sqlite3": "^5.0.2",
+    "sqlite3": "git@github.com:mapbox/node-sqlite3.git#3fb3715c4e699ca3bc19e47b136758c66f61e477",
     "tmp": "^0.2.1",
     "ts-node": "^10.4.0",
     "winston": "^3.3.3",
