@@ -62,24 +62,6 @@ class MetadataExtractor {
     }
 
     /**
-     * Extract relationships from RELS-EXT XML.
-     *
-     * @param RELS RELS-EXT XML
-     * @returns    Record mapping fields to values
-     */
-    public extractRelations(RELS: string): Record<string, Array<string>> {
-        const xmlParser = new DOMParser();
-        const RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
-        return this.extractRDFXML(
-            RELS_XML,
-            {
-                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-            },
-            "//rdf:Description/*"
-        );
-    }
-
-    /**
      * Extract key details from the description of a Fedora 6 container object.
      *
      * @param RDF RDF XML from Fedora 6 (describing a container)
