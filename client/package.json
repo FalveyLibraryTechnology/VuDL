@@ -1,58 +1,43 @@
 {
   "name": "client",
-  "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "build": "next build",
+    "format": "next lint --fix",
+    "lint": "next lint",
+    "prod": "next start",
+    "snapshots": "jest --updateSnapshot",
+    "start": "next dev",
+    "test": "jest --coverage",
+    "testWatch": "jest --watch --coverage"
+  },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@material-ui/lab": "^4.0.0-alpha.60",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^10",
-    "@testing-library/react-hooks": "^7.0.2",
-    "@testing-library/user-event": "^7.1.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.3",
+    "next": "12.0.7",
+    "react": "17.0.2",
     "roman-numerals": "^0.3.2"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "snapshots": "react-scripts test --updateSnapshot --watchAll=false",
-    "test": "react-scripts test --coverage --watchAll=false",
-    "testWatch": "react-scripts test --coverage --watchAll=true",
-    "eject": "react-scripts eject"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!<rootDir>/node_modules/"
-    ],
-    "coverageReporters": [
-      "text"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
+    "@testing-library/dom": "^8.11.1",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/react-hooks": "^7.0.2",
+    "@types/jest": "^27.0.3",
+    "@types/node": "16.11.12",
+    "@types/react": "17.0.37",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.6",
-    "enzyme-to-json": "^3.6.2"
+    "enzyme-to-json": "^3.6.2",
+    "eslint": "8.4.1",
+    "eslint-config-next": "12.0.7",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.27.1",
+    "jest": "^27.4.3",
+    "prettier": "^2.5.1",
+    "react-dom": "^17.0.2",
+    "react-test-renderer": "^17.0.2",
+    "typescript": "4.5.2"
   }
 }
