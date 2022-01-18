@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JobClickable renders 1`] = `
+<a
+  href="/paginate/testCategory/testChildren"
+>
+  testChildren
+</a>
+`;
