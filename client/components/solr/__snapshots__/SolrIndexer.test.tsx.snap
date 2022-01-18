@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SolrIndexer renders 1`] = `
+<div>
+  <h1>
+    Solr Index Tool
+  </h1>
+  <label>
+    PID: 
+    <input
+      id="solrIndexPid"
+      type="text"
+      value=""
+    />
+  </label>
+  <button
+    id="solrIndexPreviewButton"
+  >
+    Preview
+  </button>
+  <button
+    id="solrIndexIndexButton"
+  >
+    Index
+  </button>
+  <h2>
+    Results:
+  </h2>
+  <pre
+    id="solrIndexResults"
+  />
+</div>
+`;
