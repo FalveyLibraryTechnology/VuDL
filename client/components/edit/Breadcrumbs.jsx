@@ -53,7 +53,7 @@ const Breadcrumbs = ({ pid = null }) => {
     useEffect(() => {
         async function loadData() {
             let data = [];
-            const url = apiUrl + "/edit/breadcrumbs" + (pid === null ? "" : "/" + pid);
+            const url = apiUrl + "/edit/breadcrumbs/" + encodeURIComponent(pid);
             try {
                 data = processBreadcrumbData(await fetchJSON(url));
             } catch (e) {
