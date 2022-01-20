@@ -6,6 +6,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
     pid="foo:1234"
   >
     <ul
+      className="breadcrumb"
       key="breadcrumbs_0"
     >
       <li
@@ -259,6 +260,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
     pid="foo:1234"
   >
     <ul
+      className="breadcrumb"
       key="breadcrumbs_0"
     >
       <li
@@ -293,6 +295,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_1"
     >
       <li
@@ -327,6 +330,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_2"
     >
       <li
@@ -361,6 +365,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_3"
     >
       <li
@@ -395,6 +400,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_4"
     >
       <li
@@ -429,6 +435,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_5"
     >
       <li
@@ -463,6 +470,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_6"
     >
       <li
@@ -497,6 +505,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_7"
     >
       <li
@@ -531,6 +540,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_8"
     >
       <li
@@ -565,6 +575,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_9"
     >
       <li
@@ -599,6 +610,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_10"
     >
       <li
@@ -633,6 +645,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_11"
     >
       <li
@@ -667,6 +680,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_12"
     >
       <li
@@ -701,6 +715,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_13"
     >
       <li
@@ -735,6 +750,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_14"
     >
       <li
@@ -778,6 +794,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
     pid="foo:1234"
   >
     <ul
+      className="breadcrumb"
       key="breadcrumbs_0"
     >
       <li
@@ -827,6 +844,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
       </li>
     </ul>
     <ul
+      className="breadcrumb"
       key="breadcrumbs_1"
     >
       <li
@@ -885,6 +903,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (no parents) 1`] = `
     pid="foo:1234"
   >
     <ul
+      className="breadcrumb"
       key="breadcrumbs_0"
     >
       <li
@@ -913,6 +932,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (simple case) 1`] = `
     pid="foo:1234"
   >
     <ul
+      className="breadcrumb"
       key="breadcrumbs_0"
     >
       <li
