@@ -1,3 +1,4 @@
+import styles from "./Breadcrumbs.module.css";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useFetchContext } from "../../context/FetchContext";
@@ -92,19 +93,26 @@ const Breadcrumbs = ({ pid = null }) => {
                 }
             });
         }
-        return result;
+        // Even if no trails were found, at least return a single empty array so that we can
+        // display the "Edit Home" link when we process the data.
+        return result.length == 0 ? [[]] : result;
     }
 
     const allTrails = generateBreadcrumbTrails(treeData, pid);
     const contents = allTrails.map((trail, trailIndex) => {
         const breadcrumbs = trail.map((breadcrumb) => {
             return (
-                <li key={(breadcrumb.pid ?? "root") + "_" + trailIndex}>
+                <li key={"breacrumb_" + breadcrumb.pid + "_" + trailIndex}>
                     <Link href={"/edit/object/" + breadcrumb.pid}>{breadcrumb.title}</Link>
                 </li>
             );
         });
-        return <ul key={"breadcrumbs" + "_" + trailIndex}>{breadcrumbs}</ul>;
+        breadcrumbs.unshift(
+            <li key={"breadcrumb_home_" + trailIndex}>
+                <Link href="/edit">Edit Home</Link>
+            </li>
+        );
+        return <ul className={styles.breadcrumb} key={"breadcrumbs" + "_" + trailIndex}>{breadcrumbs}</ul>;
     });
     return <>{contents}</>;
 };
