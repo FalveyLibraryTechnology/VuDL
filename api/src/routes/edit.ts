@@ -89,7 +89,7 @@ edit.get("/breadcrumbs/:pid", pidSanitizer, requireToken, async function (req, r
     try {
         console.log(req.params.pid);
         const fedoraData = await HierarchyCollector.getInstance().getHierarchy(req.params.pid, false);
-        res.json(fedoraData.getBreadcrumbTrail());
+        res.json(fedoraData.getParentTree());
     } catch (e) {
         console.error("Error retrieving breadcrumbs: " + e);
         res.status(500).send("Unexpected error!!");
