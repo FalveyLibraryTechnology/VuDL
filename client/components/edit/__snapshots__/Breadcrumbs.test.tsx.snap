@@ -9,7 +9,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
       key="breadcrumbs_0"
     >
       <li
-        key="foo:0_0"
+        key="breadcrumb_home_0"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:0_0"
       >
         <Link
           href="/edit/object/foo:0"
@@ -24,7 +39,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:1_0"
+        key="breacrumb_foo:1_0"
       >
         <Link
           href="/edit/object/foo:1"
@@ -39,7 +54,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:2_0"
+        key="breacrumb_foo:2_0"
       >
         <Link
           href="/edit/object/foo:2"
@@ -54,7 +69,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:3_0"
+        key="breacrumb_foo:3_0"
       >
         <Link
           href="/edit/object/foo:3"
@@ -69,7 +84,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:4_0"
+        key="breacrumb_foo:4_0"
       >
         <Link
           href="/edit/object/foo:4"
@@ -84,7 +99,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:5_0"
+        key="breacrumb_foo:5_0"
       >
         <Link
           href="/edit/object/foo:5"
@@ -99,7 +114,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:6_0"
+        key="breacrumb_foo:6_0"
       >
         <Link
           href="/edit/object/foo:6"
@@ -114,7 +129,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:7_0"
+        key="breacrumb_foo:7_0"
       >
         <Link
           href="/edit/object/foo:7"
@@ -129,7 +144,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:8_0"
+        key="breacrumb_foo:8_0"
       >
         <Link
           href="/edit/object/foo:8"
@@ -144,7 +159,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:9_0"
+        key="breacrumb_foo:9_0"
       >
         <Link
           href="/edit/object/foo:9"
@@ -159,7 +174,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:10_0"
+        key="breacrumb_foo:10_0"
       >
         <Link
           href="/edit/object/foo:10"
@@ -174,7 +189,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:11_0"
+        key="breacrumb_foo:11_0"
       >
         <Link
           href="/edit/object/foo:11"
@@ -189,7 +204,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:12_0"
+        key="breacrumb_foo:12_0"
       >
         <Link
           href="/edit/object/foo:12"
@@ -204,7 +219,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:13_0"
+        key="breacrumb_foo:13_0"
       >
         <Link
           href="/edit/object/foo:13"
@@ -219,7 +234,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
         </Link>
       </li>
       <li
-        key="foo:14_0"
+        key="breacrumb_foo:14_0"
       >
         <Link
           href="/edit/object/foo:14"
@@ -247,7 +262,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_0"
     >
       <li
-        key="foo:0_0"
+        key="breadcrumb_home_0"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:0_0"
       >
         <Link
           href="/edit/object/foo:0"
@@ -266,7 +296,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_1"
     >
       <li
-        key="foo:1_1"
+        key="breadcrumb_home_1"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:1_1"
       >
         <Link
           href="/edit/object/foo:1"
@@ -285,7 +330,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_2"
     >
       <li
-        key="foo:2_2"
+        key="breadcrumb_home_2"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:2_2"
       >
         <Link
           href="/edit/object/foo:2"
@@ -304,7 +364,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_3"
     >
       <li
-        key="foo:3_3"
+        key="breadcrumb_home_3"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:3_3"
       >
         <Link
           href="/edit/object/foo:3"
@@ -323,7 +398,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_4"
     >
       <li
-        key="foo:4_4"
+        key="breadcrumb_home_4"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:4_4"
       >
         <Link
           href="/edit/object/foo:4"
@@ -342,7 +432,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_5"
     >
       <li
-        key="foo:5_5"
+        key="breadcrumb_home_5"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:5_5"
       >
         <Link
           href="/edit/object/foo:5"
@@ -361,7 +466,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_6"
     >
       <li
-        key="foo:6_6"
+        key="breadcrumb_home_6"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:6_6"
       >
         <Link
           href="/edit/object/foo:6"
@@ -380,7 +500,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_7"
     >
       <li
-        key="foo:7_7"
+        key="breadcrumb_home_7"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:7_7"
       >
         <Link
           href="/edit/object/foo:7"
@@ -399,7 +534,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_8"
     >
       <li
-        key="foo:8_8"
+        key="breadcrumb_home_8"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:8_8"
       >
         <Link
           href="/edit/object/foo:8"
@@ -418,7 +568,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_9"
     >
       <li
-        key="foo:9_9"
+        key="breadcrumb_home_9"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:9_9"
       >
         <Link
           href="/edit/object/foo:9"
@@ -437,7 +602,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_10"
     >
       <li
-        key="foo:10_10"
+        key="breadcrumb_home_10"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:10_10"
       >
         <Link
           href="/edit/object/foo:10"
@@ -456,7 +636,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_11"
     >
       <li
-        key="foo:11_11"
+        key="breadcrumb_home_11"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:11_11"
       >
         <Link
           href="/edit/object/foo:11"
@@ -475,7 +670,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_12"
     >
       <li
-        key="foo:12_12"
+        key="breadcrumb_home_12"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:12_12"
       >
         <Link
           href="/edit/object/foo:12"
@@ -494,7 +704,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_13"
     >
       <li
-        key="foo:13_13"
+        key="breadcrumb_home_13"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:13_13"
       >
         <Link
           href="/edit/object/foo:13"
@@ -513,7 +738,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       key="breadcrumbs_14"
     >
       <li
-        key="foo:14_14"
+        key="breadcrumb_home_14"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:14_14"
       >
         <Link
           href="/edit/object/foo:14"
@@ -541,7 +781,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
       key="breadcrumbs_0"
     >
       <li
-        key="foo:1232_0"
+        key="breadcrumb_home_0"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:1232_0"
       >
         <Link
           href="/edit/object/foo:1232"
@@ -556,7 +811,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
         </Link>
       </li>
       <li
-        key="foo:1233_0"
+        key="breacrumb_foo:1233_0"
       >
         <Link
           href="/edit/object/foo:1233"
@@ -575,7 +830,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
       key="breadcrumbs_1"
     >
       <li
-        key="foo:1232_1"
+        key="breadcrumb_home_1"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:1232_1"
       >
         <Link
           href="/edit/object/foo:1232"
@@ -590,7 +860,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
         </Link>
       </li>
       <li
-        key="foo:1231_1"
+        key="breacrumb_foo:1231_1"
       >
         <Link
           href="/edit/object/foo:1231"
@@ -613,7 +883,27 @@ exports[`Breadcrumb renders using ajax-loaded object data (no parents) 1`] = `
 <FetchContextProvider>
   <Breadcrumbs
     pid="foo:1234"
-  />
+  >
+    <ul
+      key="breadcrumbs_0"
+    >
+      <li
+        key="breadcrumb_home_0"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+    </ul>
+  </Breadcrumbs>
 </FetchContextProvider>
 `;
 
@@ -626,7 +916,22 @@ exports[`Breadcrumb renders using ajax-loaded object data (simple case) 1`] = `
       key="breadcrumbs_0"
     >
       <li
-        key="foo:1233_0"
+        key="breadcrumb_home_0"
+      >
+        <Link
+          href="/edit"
+        >
+          <a
+            href="/edit"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            Edit Home
+          </a>
+        </Link>
+      </li>
+      <li
+        key="breacrumb_foo:1233_0"
       >
         <Link
           href="/edit/object/foo:1233"

@@ -5,13 +5,11 @@ import { useFetchContext } from "../../context/FetchContext";
 import { apiUrl } from "../../util/routes";
 import Link from "next/link";
 
-/* TODO: use this interface when we convert to Typescript:
 interface TreeData {
     topNodes: Array<string>,
     records: Record<string, Record<string, string>>,
     childLookups: Record<string, Array<string>>,
 }
- */
 
 const Breadcrumbs = ({ pid = null }) => {
     const {
@@ -24,9 +22,9 @@ const Breadcrumbs = ({ pid = null }) => {
      * no parents) and creating lookup tables for children. This makes it easier to
      * render breadcrumbs from left to right and to find all relevant trails.
      */
-    function processBreadcrumbData(data) {
+    function processBreadcrumbData(data): TreeData {
         const queue = [data];
-        const topNodes = [];
+        const topNodes: Array<string> = [];
         const childLookups = {};
         const records = {};
         while (queue.length > 0) {
