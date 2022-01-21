@@ -8,10 +8,14 @@ import "../styles/application.css";
 import "../styles/client.css";
 import "../styles/justgrid.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import LogoutButton from "../components/LogoutButton";
 
 function MyApp({ Component, pageProps }) {
     return (
         <PaginatorContextProvider>
+            <div className="logout">
+                <LogoutButton />
+            </div>
             <FetchContextProvider>
                 <Component {...pageProps} />
             </FetchContextProvider>
