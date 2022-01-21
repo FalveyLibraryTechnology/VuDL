@@ -28,7 +28,13 @@ export class FedoraObject {
     protected logger: winston.Logger;
     protected metadataExtractor: MetadataExtractor;
 
-    constructor(pid: string, config: Config, fedora: Fedora, metadataExtractor: MetadataExtractor, logger: winston.Logger = null) {
+    constructor(
+        pid: string,
+        config: Config,
+        fedora: Fedora,
+        metadataExtractor: MetadataExtractor,
+        logger: winston.Logger = null
+    ) {
         this.pid = pid;
         this.config = config;
         this.fedora = fedora;
@@ -37,7 +43,13 @@ export class FedoraObject {
     }
 
     public static build(pid: string, logger: winston.Logger = null, config: Config = null): FedoraObject {
-        return new FedoraObject(pid, config ?? Config.getInstance(), Fedora.getInstance(), MetadataExtractor.getInstance(), logger);
+        return new FedoraObject(
+            pid,
+            config ?? Config.getInstance(),
+            Fedora.getInstance(),
+            MetadataExtractor.getInstance(),
+            logger
+        );
     }
 
     get namespace(): string {
