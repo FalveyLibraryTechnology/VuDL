@@ -2,6 +2,7 @@ import fs = require("fs");
 import winston = require("winston");
 import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
+import MetadataExtractor from "../services/MetadataExtractor";
 import { DOMParser } from "@xmldom/xmldom";
 import { execSync } from "child_process";
 import xpath = require("xpath");
@@ -25,16 +26,18 @@ export class FedoraObject {
     protected config: Config;
     protected fedora: Fedora;
     protected logger: winston.Logger;
+    protected metadataExtractor: MetadataExtractor;
 
-    constructor(pid: string, config: Config, fedora: Fedora, logger: winston.Logger = null) {
+    constructor(pid: string, config: Config, fedora: Fedora, metadataExtractor: MetadataExtractor, logger: winston.Logger = null) {
         this.pid = pid;
         this.config = config;
         this.fedora = fedora;
         this.logger = logger;
+        this.metadataExtractor = metadataExtractor;
     }
 
     public static build(pid: string, logger: winston.Logger = null, config: Config = null): FedoraObject {
-        return new FedoraObject(pid, config ?? Config.getInstance(), Fedora.getInstance(), logger);
+        return new FedoraObject(pid, config ?? Config.getInstance(), Fedora.getInstance(), MetadataExtractor.getInstance(), logger);
     }
 
     get namespace(): string {
@@ -175,15 +178,12 @@ export class FedoraObject {
 
     async getSort(): Promise<string> {
         let sort = "title"; // default
-        // If we can find a RELS-EXT, let's check for non-default values:
-        const rels = await this.fedora.getDatastreamAsString(this.pid, "RELS-EXT", false, true);
-        if (rels.length > 0) {
-            const xmlParser = new DOMParser();
-            const xml = xmlParser.parseFromString(rels, "text/xml");
-            const rdfXPath = xpath.useNamespaces({ "vudl-rel": "http://vudl.org/relationships#" });
-            rdfXPath("//vudl-rel:sortOn/text()", xml).forEach((node: Node) => {
-                sort = node.nodeValue;
-            });
+        const rdf = await this.fedora.getRdf(this.pid);
+        if (rdf.length > 0) {
+            const details = this.metadataExtractor.extractFedoraDetails(rdf);
+            if ((details?.sortOn ?? []).length > 0) {
+                sort = details.sortOn[0];
+            }
         }
         return sort;
     }
