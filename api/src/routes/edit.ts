@@ -84,11 +84,11 @@ async function getChildren(req, res) {
 
 edit.get("/object/children", requireToken, getChildren);
 edit.get("/object/children/:pid", requireToken, pidSanitizer, getChildren);
-edit.get("/object/details/:pid", requireToken, pidSanitizer, async function(req, res) {
+edit.get("/object/details/:pid", requireToken, pidSanitizer, async function (req, res) {
     const pid = req.params.pid;
     const obj = FedoraObject.build(pid);
     const sort = await obj.getSort();
-    res.json({pid, sort})
+    res.json({ pid, sort });
 });
 
 export default edit;
