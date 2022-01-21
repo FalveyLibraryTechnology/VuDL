@@ -14,7 +14,6 @@
     "api:setup": "cd api && npm ci",
     "api:test": "cd api && npm test",
     "api:testWatch": "cd api && npm run testWatch",
-    "api:watch": "cd api && tsc --watch",
     "api:wsl": "nodemon --legacy-watch api/bin/www",
     "client": "cd client && npm run prod",
     "client:build": "cd client && npm run build",
