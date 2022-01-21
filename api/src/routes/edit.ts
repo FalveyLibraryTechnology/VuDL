@@ -2,6 +2,7 @@ import express = require("express");
 import bodyParser = require("body-parser");
 import Config from "../models/Config";
 import Fedora from "../services/Fedora";
+import { FedoraObject } from "../models/FedoraObject";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import MetadataExtractor from "../services/MetadataExtractor";
 import { requireToken } from "./auth";
@@ -83,5 +84,11 @@ async function getChildren(req, res) {
 
 edit.get("/object/children", requireToken, getChildren);
 edit.get("/object/children/:pid", requireToken, pidSanitizer, getChildren);
+edit.get("/object/details/:pid", requireToken, pidSanitizer, async function(req, res) {
+    const pid = req.params.pid;
+    const obj = FedoraObject.build(pid);
+    const sort = await obj.getSort();
+    res.json({pid, sort})
+});
 
 export default edit;
