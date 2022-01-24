@@ -170,7 +170,7 @@ class IngestProcessor {
     }
 
     async finalizeTitle(resource: FedoraObject): Promise<void> {
-        const title = this.job.dir.substr(1).split("/").reverse().join("_");
+        const title = this.job.dir.substring(1).split("/").reverse().join("_");
         this.logger.info("Updating title to " + title);
         await resource.modifyObjectLabel(title);
 
@@ -194,7 +194,7 @@ class IngestProcessor {
     moveDirectory(): void {
         const basePath = this.config.processedAreaPath;
         const currentTime = new Date();
-        const now = currentTime.toISOString().substr(0, 10);
+        const now = currentTime.toISOString().substring(0, 10);
         let target = basePath + "/" + now + "/" + this.category.name + "/" + this.job.name;
         if (fs.existsSync(target)) {
             let i = 2;

@@ -36,7 +36,7 @@ class SolrIndexer {
     protected padNumber(num: string): string {
         // Yes, I wrote a left_pad function.
         const paddedNumber = "0000000000" + num;
-        return paddedNumber.substr(paddedNumber.length - 10);
+        return paddedNumber.substring(paddedNumber.length - 10);
     }
 
     protected async getChangeTrackerDetails(pid: string, modificationDate: string): Promise<Record<string, string>> {
@@ -250,7 +250,7 @@ class SolrIndexer {
         const dateString = fedoraData.models.includes("vudl-system:DataModel")
             ? (hierarchyParents[0]?.metadata["dc:date"] ?? [])[0] ?? ""
             : (fields["dc.date_txt_mv"] ?? [])[0] ?? "";
-        const strippedDate = parseInt(dateString.substr(0, 4));
+        const strippedDate = parseInt(dateString.substring(0, 4));
         if (strippedDate > this.config.minimumValidYear) {
             fields.publishDate = String(strippedDate);
             fields.publishDateSort = String(strippedDate);
@@ -267,8 +267,8 @@ class SolrIndexer {
             // If we have a title, generate a sort-friendly version:
             let sortTitle = (fields["title"] as string).toLowerCase();
             for (const article of this.config.articlesToStrip) {
-                if (sortTitle.substr(0, article.length) === article) {
-                    sortTitle = sortTitle.substr(article.length);
+                if (sortTitle.substring(0, article.length) === article) {
+                    sortTitle = sortTitle.substring(article.length);
                     break;
                 }
             }

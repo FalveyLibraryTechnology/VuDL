@@ -136,7 +136,7 @@ class FedoraData {
     get models(): Array<string> {
         // Strip off "info:fedora/" prefix:
         return (this.relations.hasModel ?? []).map((model) => {
-            return model.substr("info:fedora/".length);
+            return model.substring("info:fedora/".length);
         });
     }
 
