@@ -10,8 +10,8 @@ describe("Job", () => {
     let config;
     let queueManager;
     beforeEach(() => {
-        config = { };
-        queueManager = { };
+        config = {};
+        queueManager = {};
         jest.spyOn(Config, "getInstance").mockReturnValue(config);
         jest.spyOn(QueueManager, "getInstance").mockReturnValue(queueManager);
         job = new Job("test1", config, queueManager);
