@@ -1,4 +1,4 @@
-import {Category, CategoryRaw} from './Category';
+import { Category, CategoryRaw } from "./Category";
 
 describe("Category", () => {
     let category: Category;
@@ -15,5 +15,4 @@ describe("Category", () => {
         expect(categoryRaw.category).toEqual("test1");
         expect(categoryRaw.jobs).toEqual([]);
     });
-
 });

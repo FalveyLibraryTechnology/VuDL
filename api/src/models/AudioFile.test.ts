@@ -8,7 +8,7 @@ describe("Audio", () => {
     let config;
     beforeEach(() => {
         config = {
-            ffmpegPath: "/usr/bin/ffmpeg"
+            ffmpegPath: "/usr/bin/ffmpeg",
         };
         jest.spyOn(Config, "getInstance").mockReturnValue(config);
         audio = new AudioFile("test1", "test2", config);
@@ -17,5 +17,4 @@ describe("Audio", () => {
     it("should return the filename", () => {
         expect(audio.filename).toEqual("test1");
     });
-
 });

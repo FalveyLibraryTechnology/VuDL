@@ -10,10 +10,10 @@ describe("Job", () => {
     let config;
     let queueManager;
     beforeEach(() => {
-        config = { };
-        queueManager = { 
+        config = {};
+        queueManager = {
             performIndexOperation: jest.fn(),
-            queueMetadataOperation: jest.fn(), 
+            queueMetadataOperation: jest.fn(),
         };
         jest.spyOn(Config, "getInstance").mockReturnValue(config);
         jest.spyOn(QueueManager, "getInstance").mockReturnValue(queueManager);
@@ -23,5 +23,4 @@ describe("Job", () => {
     it("should return the name", () => {
         expect(job.name).toEqual("test1");
     });
-
 });
