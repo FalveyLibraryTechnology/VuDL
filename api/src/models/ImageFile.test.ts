@@ -8,8 +8,8 @@ describe("Image", () => {
     let config;
     beforeEach(() => {
         config = {
-            tesseractPath: '/usr/local/bin/tesseract',
-            textcleanerPath: '/usr/local/bin/textcleaner'
+            tesseractPath: '/foo/tesseract',
+            textcleanerPath: '/foo/textcleaner'
         };
         jest.spyOn(Config, "getInstance").mockReturnValue(config);
         image = new ImageFile("test1", config);

@@ -10,7 +10,7 @@ describe("Category", () => {
         expect(category.dir).toEqual("test1");
     });
 
-    it("should return the category and jobs", () => {
+    it("should return the category and jobs in raw format", () => {
         const categoryRaw: CategoryRaw = category.raw();
         expect(categoryRaw.category).toEqual("test1");
         expect(categoryRaw.jobs).toEqual([]);

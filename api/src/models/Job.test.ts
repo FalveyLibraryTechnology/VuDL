@@ -11,10 +11,7 @@ describe("Job", () => {
     let queueManager;
     beforeEach(() => {
         config = { };
-        queueManager = { 
-            performIndexOperation: jest.fn(),
-            queueMetadataOperation: jest.fn(), 
-        };
+        queueManager = { };
         jest.spyOn(Config, "getInstance").mockReturnValue(config);
         jest.spyOn(QueueManager, "getInstance").mockReturnValue(queueManager);
         job = new Job("test1", config, queueManager);
