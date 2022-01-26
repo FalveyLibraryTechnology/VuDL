@@ -20,5 +20,4 @@ describe("Job", () => {
     it("should return the name", () => {
         expect(job.name).toEqual("test1");
     });
-
 });

@@ -18,5 +18,4 @@ describe("Image", () => {
     it("should return the filename", () => {
         expect(image.filename).toEqual("test1");
     });
-
 });
