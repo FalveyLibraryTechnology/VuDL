@@ -9,7 +9,7 @@
     "sourceType": "module"
   },
   "plugins": ["react"],
-  "extends": ["eslint:recommended", "plugin:prettier/recommended", "plugin:react/recommended"],
+  "extends": ["next", "eslint:recommended", "plugin:prettier/recommended", "plugin:react/recommended"],
   "rules": {
     "prettier/prettier": [
       "error",
