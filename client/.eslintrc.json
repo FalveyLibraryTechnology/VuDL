@@ -11,6 +11,7 @@
   "plugins": ["react"],
   "extends": ["next", "eslint:recommended", "plugin:prettier/recommended", "plugin:react/recommended"],
   "rules": {
+    "@next/next/no-img-element": "off",
     "prettier/prettier": [
       "error",
       {},
