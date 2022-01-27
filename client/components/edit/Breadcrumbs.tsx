@@ -6,9 +6,9 @@ import { apiUrl } from "../../util/routes";
 import Link from "next/link";
 
 interface TreeData {
-    topNodes: Array<string>,
-    records: Record<string, Record<string, string>>,
-    childLookups: Record<string, Array<string>>,
+    topNodes: Array<string>;
+    records: Record<string, Record<string, string>>;
+    childLookups: Record<string, Array<string>>;
 }
 
 const Breadcrumbs = ({ pid = null }) => {
@@ -110,7 +110,11 @@ const Breadcrumbs = ({ pid = null }) => {
                 <Link href="/edit">Edit Home</Link>
             </li>
         );
-        return <ul className={styles.breadcrumb} key={"breadcrumbs" + "_" + trailIndex}>{breadcrumbs}</ul>;
+        return (
+            <ul className={styles.breadcrumb} key={"breadcrumbs" + "_" + trailIndex}>
+                {breadcrumbs}
+            </ul>
+        );
     });
     return <>{contents}</>;
 };
