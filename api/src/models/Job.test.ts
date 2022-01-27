@@ -1,6 +1,6 @@
 import Job from "./Job";
-import Config from "../models/Config";
-import QueueManager from "../services/QueueManager";
+//import Config from "../models/Config";
+//import QueueManager from "../services/QueueManager";
 
 //jest.mock("../models/Config");
 //jest.mock("../services/QueueManager");

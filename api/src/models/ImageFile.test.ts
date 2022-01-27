@@ -1,5 +1,5 @@
 import ImageFile from "./ImageFile";
-import Config from "../models/Config";
+//import Config from "../models/Config";
 
 //jest.mock("../models/Config");
 
