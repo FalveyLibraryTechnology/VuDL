@@ -6,6 +6,9 @@ exports[`ObjectEditor renders 1`] = `
     Editor: Object 
     foo:123
   </h1>
+  <ObjectSummary
+    pid="foo:123"
+  />
   <h2>
     Tools
   </h2>
