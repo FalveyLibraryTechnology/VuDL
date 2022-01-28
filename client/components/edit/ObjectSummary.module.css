@@ -1,0 +1,9 @@
+.infobox {
+    background-color: lightgray;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.infobox h2 {
+    margin: 0;
+}

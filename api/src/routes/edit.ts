@@ -88,7 +88,9 @@ edit.get("/object/details/:pid", requireToken, pidSanitizer, async function (req
     const pid = req.params.pid;
     const obj = FedoraObject.build(pid);
     const sort = await obj.getSort();
-    res.json({ pid, sort });
+    const metadata = await Fedora.getInstance().getDC(pid);
+    const extractedMetadata = MetadataExtractor.getInstance().extractMetadata(metadata);
+    res.json({ pid, sort, metadata: extractedMetadata });
 });
 
 export default edit;
