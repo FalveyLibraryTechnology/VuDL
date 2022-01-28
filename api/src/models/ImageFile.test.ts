@@ -5,15 +5,15 @@ import ImageFile from "./ImageFile";
 
 describe("Image", () => {
     let image: ImageFile;
-    //let config;
+    let config;
     beforeEach(() => {
-        //config = {
-        //    tesseractPath: "/foo/tesseract",
-        //    textcleanerPath: "/foo/textcleaner",
-        //};
+        config = {
+            tesseractPath: "/foo/tesseract",
+            textcleanerPath: "/foo/textcleaner",
+        };
         //use later
         //jest.spyOn(Config, "getInstance").mockReturnValue(config);
-        //image = new ImageFile("test1", config);
+        image = new ImageFile("test1", config);
     });
 
     it("should return the filename", () => {

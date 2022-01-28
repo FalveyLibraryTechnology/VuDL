@@ -5,14 +5,14 @@ import AudioFile from "./AudioFile";
 
 describe("Audio", () => {
     let audio: AudioFile;
-    //let config;
+    let config;
     beforeEach(() => {
-        //config = {
-        //    ffmpegPath: "/foo/ffmpeg",
-        //};
+        config = {
+            ffmpegPath: "/foo/ffmpeg",
+        };
         //use later
         //jest.spyOn(Config, "getInstance").mockReturnValue(config);
-        //audio = new AudioFile("test1", "test2", config);
+        audio = new AudioFile("test1", "test2", config);
     });
 
     it("should return the filename", () => {

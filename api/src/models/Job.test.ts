@@ -7,15 +7,15 @@ import Job from "./Job";
 
 describe("Job", () => {
     let job: Job;
-    //let config;
-    //let queueManager;
+    let config;
+    let queueManager;
     beforeEach(() => {
         //use later
-        //config = { };
-        //queueManager = { };
+        config = {};
+        queueManager = {};
         //jest.spyOn(Config, "getInstance").mockReturnValue(config);
         //jest.spyOn(QueueManager, "getInstance").mockReturnValue(queueManager);
-        //job = new Job("test1", config, queueManager);
+        job = new Job("test1", config, queueManager);
     });
 
     it("should return the name", () => {
