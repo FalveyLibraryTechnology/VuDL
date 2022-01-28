@@ -18,7 +18,8 @@
       {
         "usePrettierrc": true
       }
-    ]
+    ],
+    "react-hooks/exhaustive-deps": "off"
   },
   "settings": {
     "react": {
