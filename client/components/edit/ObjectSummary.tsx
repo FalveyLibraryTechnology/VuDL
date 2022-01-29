@@ -1,7 +1,7 @@
 import styles from "./ObjectSummary.module.css";
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import HtmlReactParser from 'html-react-parser';
+import HtmlReactParser from "html-react-parser";
 import { useFetchContext } from "../../context/FetchContext";
 import { apiUrl } from "../../util/routes";
 
@@ -12,7 +12,7 @@ const ObjectSummary = ({ pid = null }) => {
     const [details, setDetails] = useState([]);
 
     function extractMetadata(metadata, field, defaultValue) {
-        const values = typeof(metadata[field]) === "undefined" ? [] : metadata[field];
+        const values = typeof metadata[field] === "undefined" ? [] : metadata[field];
         return values.length > 0 ? values[0] : defaultValue;
     }
 
@@ -35,7 +35,7 @@ const ObjectSummary = ({ pid = null }) => {
     return (
         <div className={styles.infobox}>
             <h2>{title}</h2>
-            <div>{ HtmlReactParser(description) }</div>
+            <div>{HtmlReactParser(description)}</div>
         </div>
     );
 };
