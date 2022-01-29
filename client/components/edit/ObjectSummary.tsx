@@ -23,7 +23,7 @@ const ObjectSummary = ({ pid = null }) => {
             try {
                 data = await fetchJSON(url);
             } catch (e) {
-                console.error("Problem fetching tree data from " + url);
+                console.error("Problem fetching object details from " + url);
             }
             setDetails(data);
         }
