@@ -30,7 +30,7 @@ class HierarchyCollector {
 
     async getFedoraData(pid: string, fetchRdf = true): Promise<FedoraData> {
         // Use Fedora to get data
-        const DCPromise = this.fedora.getDC(pid);
+        const DCPromise = this.fedora.getDublinCore(pid);
         const RELSPromise = this.fedora.getDatastreamAsString(pid, "RELS-EXT");
         // For indexing purposes, we only need the RDF information for the
         // first object retrieved; so when we recurse higher into the tree,

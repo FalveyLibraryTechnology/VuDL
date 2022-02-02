@@ -167,7 +167,7 @@ export class Fedora {
      *
      * @param pid Record id
      */
-    async getDC(pid: string, allowCaching = true): Promise<DC> {
+    async getDublinCore(pid: string, allowCaching = true): Promise<DC> {
         const cacheKey = "DC";
         const data = allowCaching ? this.getCache(pid, cacheKey) : null;
         if (data) {
