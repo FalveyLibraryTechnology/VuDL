@@ -5,10 +5,21 @@ import { useFetchContext } from "../../context/FetchContext";
 import { apiUrl } from "../../util/routes";
 import Link from "next/link";
 
+interface TreeNode {
+    pid: string;
+    title: string;
+    parents: Array<TreeNode>;
+}
+
 interface TreeData {
     topNodes: Array<string>;
-    records: Record<string, Record<string, string>>;
+    records: Record<string, TreeNode>;
     childLookups: Record<string, Array<string>>;
+}
+
+interface BreadcrumbTrail {
+    pid: string;
+    path: Array<TreeNode>;
 }
 
 const Breadcrumbs = ({ pid = null }) => {
@@ -22,17 +33,20 @@ const Breadcrumbs = ({ pid = null }) => {
      * no parents) and creating lookup tables for children. This makes it easier to
      * render breadcrumbs from left to right and to find all relevant trails.
      */
-    function processBreadcrumbData(data): TreeData {
-        const queue = [data];
+    function processBreadcrumbData(data: TreeNode): TreeData {
+        const queue: Array<TreeNode> = [data];
         const topNodes: Array<string> = [];
-        const childLookups = {};
-        const records = {};
+        const childLookups: Record<string, Array<string>> = {};
+        const records: Record<string, TreeNode> = {};
         while (queue.length > 0) {
             const current = queue.shift();
+            if (!current) {
+                break;
+            }
             if (current.parents.length === 0) {
                 topNodes.push(current.pid);
             }
-            records[current.pid] = { pid: current.pid, title: current.title };
+            records[current.pid] = { pid: current.pid, title: current.title, parents: [] };
             current.parents.forEach((parent) => {
                 queue.push(parent);
                 if (typeof childLookups[parent.pid] === "undefined") {
@@ -51,7 +65,11 @@ const Breadcrumbs = ({ pid = null }) => {
 
     useEffect(() => {
         async function loadData() {
-            let data = [];
+            let data: TreeData = {
+                topNodes: [],
+                childLookups: {},
+                records: {}
+            };
             const url = apiUrl + "/edit/object/parents/" + encodeURIComponent(pid);
             try {
                 data = processBreadcrumbData(await fetchJSON(url));
@@ -63,22 +81,25 @@ const Breadcrumbs = ({ pid = null }) => {
         loadData();
     }, []);
 
-    function generateBreadcrumbTrails(treeData, pid) {
+    function generateBreadcrumbTrails(treeData: TreeData, pid: string) {
         // BFS from top (root id) to target pid
-        const queue = [];
+        const queue: Array<BreadcrumbTrail> = [];
         (treeData.topNodes ?? []).forEach((rootId) => {
             queue.push({
                 pid: rootId,
                 path: [],
             });
         });
-        const result = [];
+        const result: Array<Array<TreeNode>> = [];
         while (queue.length > 0) {
             const current = queue.shift();
+            if (!current) {
+                break;
+            }
             const record = treeData.records[current.pid] ?? {};
             const path = current.path;
             path.push(record);
-            (treeData.childLookups[current.pid] ?? []).forEach((childPid) => {
+            (treeData.childLookups[current.pid] ?? []).forEach((childPid: string) => {
                 // At target
                 if (childPid === pid) {
                     result.push(path);
@@ -100,7 +121,7 @@ const Breadcrumbs = ({ pid = null }) => {
     const contents = allTrails.map((trail, trailIndex) => {
         const breadcrumbs = trail.map((breadcrumb) => {
             return (
-                <li key={"breacrumb_" + breadcrumb.pid + "_" + trailIndex}>
+                <li key={"breadcrumb_" + breadcrumb.pid + "_" + trailIndex}>
                     <Link href={"/edit/object/" + breadcrumb.pid}>{breadcrumb.title}</Link>
                 </li>
             );
