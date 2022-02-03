@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import ChildList from "./ChildList";
 import Breadcrumbs from "./Breadcrumbs";
+import ObjectSummary from "./ObjectSummary";
 import Link from "next/link";
 
 const ObjectEditor = ({ pid }) => {
@@ -9,6 +10,7 @@ const ObjectEditor = ({ pid }) => {
         <div>
             <Breadcrumbs pid={pid} />
             <h1>Editor: Object {pid}</h1>
+            <ObjectSummary pid={pid} />
             <h2>Tools</h2>
             <ul>
                 <li>
