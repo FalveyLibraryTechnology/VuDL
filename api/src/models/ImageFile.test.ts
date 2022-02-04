@@ -16,6 +16,10 @@ describe("Image", () => {
         image = new ImageFile("test1", config);
     });
 
+    jest.mock('jimp', () => {
+        return {};
+    });
+
     it("should return the filename", () => {
         expect(image.filename).toEqual("test1");
     });

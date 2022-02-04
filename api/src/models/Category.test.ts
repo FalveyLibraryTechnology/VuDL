@@ -6,6 +6,10 @@ describe("Category", () => {
         category = new Category("test1");
     });
 
+    jest.mock('./ImageFile.ts', () => {
+        return {};
+    });
+
     it("should return the directory name", () => {
         expect(category.dir).toEqual("test1");
     });
