@@ -68,7 +68,7 @@ const Breadcrumbs = ({ pid = null }) => {
             let data: TreeData = {
                 topNodes: [],
                 childLookups: {},
-                records: {}
+                records: {},
             };
             const url = apiUrl + "/edit/object/parents/" + encodeURIComponent(pid);
             try {
