@@ -83,12 +83,11 @@ const Breadcrumbs = ({ pid = null }) => {
 
     function generateBreadcrumbTrails(treeData: TreeData, pid: string) {
         // BFS from top (root id) to target pid
-        const queue: Array<BreadcrumbTrail> = [];
-        (treeData.topNodes ?? []).forEach((rootId) => {
-            queue.push({
+        const queue: Array<BreadcrumbTrail> = (treeData.topNodes ?? []).map((rootId) => {
+            return {
                 pid: rootId,
                 path: [],
-            });
+            };
         });
         const result: Array<Array<TreeNode>> = [];
         while (queue.length > 0) {
