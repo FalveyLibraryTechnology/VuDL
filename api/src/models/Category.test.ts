@@ -6,7 +6,7 @@ describe("Category", () => {
         category = new Category("test1");
     });
 
-    jest.mock('./ImageFile.ts', () => {
+    jest.mock("./ImageFile.ts", () => {
         return {};
     });
 

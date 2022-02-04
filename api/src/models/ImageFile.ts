@@ -60,8 +60,8 @@ class ImageFile {
                 image.quality(90); // set JPEG quality
                 console.log("image quality set");
                 //await image.writeAsync(deriv); // save
-                image.toFile(deriv, (err, info) => {  });
-                
+                image.toFile(deriv, (err, info) => {});
+
                 console.log("image written");
             } catch (error) {
                 console.error("resize error: " + error);
@@ -69,7 +69,7 @@ class ImageFile {
         } else {
             // Image source smaller than derivative size
             //await image.writeAsync(deriv); // save
-            image.toFile(deriv, (err, info) => {  });
+            image.toFile(deriv, (err, info) => {});
         }
         return deriv;
     }

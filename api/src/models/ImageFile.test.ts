@@ -16,7 +16,7 @@ describe("Image", () => {
         image = new ImageFile("test1", config);
     });
 
-    jest.mock('jimp', () => {
+    jest.mock("jimp", () => {
         return {};
     });
 
