@@ -37,35 +37,10 @@ class HierarchyCollector {
         // we can skip fetching more RDF in order to save some time!
         const RDFPromise = fetchRdf ? this.fedora.getRdf(pid) : null;
         const [DC, RELS, RDF] = await Promise.all([DCPromise, RELSPromise, RDFPromise]);
-        const dataStreams = fetchRdf ? this.extractor.extractFedoraDatastreams(RDF) : [];
         const relations = this.extractor.extractRelations(RELS);
-        // Fetch license details if appropriate/available:
-        const extraDetails: Record<string, Record<string, Array<string>>> = {};
-        if (dataStreams.includes("LICENSE")) {
-            const licenseStream = await this.fedora.getDatastreamAsString(pid, "LICENSE");
-            extraDetails.license = { url: [this.extractor.extractLicense(licenseStream)] };
-        }
-        if (dataStreams.includes("AGENTS")) {
-            const agentsStream = await this.fedora.getDatastreamAsString(pid, "AGENTS");
-            extraDetails.agents = this.extractor.extractAgents(agentsStream);
-        }
-        if (dataStreams.includes("THUMBNAIL")) {
-            const thumbRdf = await this.fedora.getRdf(pid + "/THUMBNAIL/fcr:metadata");
-            extraDetails.thumbnails = this.extractor.extractThumbnailDetails(thumbRdf);
-        }
-        if (dataStreams.includes("MASTER-MD")) {
-            const fitsXml = await this.fedora.getDatastreamAsString(pid, "MASTER-MD");
-            extraDetails.fitsData = this.extractor.extractFitsData(fitsXml);
-        }
-        extraDetails.fullText = {};
-        if (dataStreams.includes("OCR-DIRTY")) {
-            extraDetails.fullText.ocrDirty = [await this.fedora.getDatastreamAsString(pid, "OCR-DIRTY")];
-        }
-        const models = relations.hasModel ?? [];
-        if (models.includes("info:fedora/vudl-system:DOCData") || models.includes("info:fedora/vudl-system:PDFData")) {
-            const extractor = new TikaExtractor((await this.fedora.getDatastream(pid, "MASTER")).body, this.config);
-            extraDetails.fullText.fromDocument = [extractor.extractText()];
-        }
+        const dataStreams = fetchRdf ? this.extractor.extractFedoraDatastreams(RDF) : [];
+        const extraDetails = await this.getExtraDetails(pid, dataStreams, relations);
+
         return new FedoraData(
             pid,
             relations,
@@ -74,6 +49,41 @@ class HierarchyCollector {
             dataStreams,
             extraDetails
         );
+    }
+
+    async getExtraDetails(
+        pid: string,
+        datastreams: Array<string>,
+        relations: Record<string, Array<string>>
+    ): Promise<Record<string, Record<string, Array<string>>>> {
+        // Fetch license details if appropriate/available:
+        const extraDetails: Record<string, Record<string, Array<string>>> = {};
+        if (datastreams.includes("LICENSE")) {
+            const licenseStream = await this.fedora.getDatastreamAsString(pid, "LICENSE");
+            extraDetails.license = { url: [this.extractor.extractLicense(licenseStream)] };
+        }
+        if (datastreams.includes("AGENTS")) {
+            const agentsStream = await this.fedora.getDatastreamAsString(pid, "AGENTS");
+            extraDetails.agents = this.extractor.extractAgents(agentsStream);
+        }
+        if (datastreams.includes("THUMBNAIL")) {
+            const thumbRdf = await this.fedora.getRdf(pid + "/THUMBNAIL/fcr:metadata");
+            extraDetails.thumbnails = this.extractor.extractThumbnailDetails(thumbRdf);
+        }
+        if (datastreams.includes("MASTER-MD")) {
+            const fitsXml = await this.fedora.getDatastreamAsString(pid, "MASTER-MD");
+            extraDetails.fitsData = this.extractor.extractFitsData(fitsXml);
+        }
+        extraDetails.fullText = {};
+        if (datastreams.includes("OCR-DIRTY")) {
+            extraDetails.fullText.ocrDirty = [await this.fedora.getDatastreamAsString(pid, "OCR-DIRTY")];
+        }
+        const models = relations.hasModel ?? [];
+        if (models.includes("info:fedora/vudl-system:DOCData") || models.includes("info:fedora/vudl-system:PDFData")) {
+            const extractor = new TikaExtractor((await this.fedora.getDatastream(pid, "MASTER")).body, this.config);
+            extraDetails.fullText.fromDocument = [extractor.extractText()];
+        }
+        return extraDetails;
     }
 
     async getHierarchy(pid: string, fetchRdf = true): Promise<FedoraData> {

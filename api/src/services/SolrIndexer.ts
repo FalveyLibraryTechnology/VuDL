@@ -322,12 +322,12 @@ class SolrIndexer {
         }
 
         // Change tracker details:
-        const change = await this.getChangeTrackerDetails(
-            pid,
-            fields["fgs.lastModifiedDate_txt_mv"][0] ?? "1900-01-01T00:00:00Z"
-        );
-        fields.first_indexed = change.getFirstIndexed;
-        fields.last_indexed = change.getLastIndexed;
+        // const change = await this.getChangeTrackerDetails(
+        //     pid,
+        //     fields["fgs.lastModifiedDate_txt_mv"][0] ?? "1900-01-01T00:00:00Z"
+        // );
+        // fields.first_indexed = change.getFirstIndexed;
+        // fields.last_indexed = change.getLastIndexed;
 
         return fields;
     }
