@@ -1,4 +1,5 @@
 import Jimp = require("jimp");
+import Sharp = require("sharp");
 import path = require("path");
 
 import { execSync } from "child_process";
@@ -42,22 +43,22 @@ class ImageFile {
             return deriv;
         }
 
-        // Create derivative
-        const image = await Jimp.read(this.filename);
+        const image = Sharp(this.filename);
         const constraint = this.constraintForSize(size);
 
-        if (image.bitmap.width > constraint || image.bitmap.height > constraint) {
+        if (image.width > constraint || image.height > constraint) {
             try {
-                console.log("make derivative", constraint, deriv);
-                image.scaleToFit(constraint, constraint); // resize to pixel sizes?
+                image.resize(constraint, constraint);
                 image.quality(90); // set JPEG quality
-                await image.writeAsync(deriv); // save
+                image.toFile(deriv, (err, info) => {});
+
+                console.log("image written");
             } catch (error) {
                 console.error("resize error: " + error);
             }
         } else {
             // Image source smaller than derivative size
-            await image.writeAsync(deriv); // save
+            image.toFile(deriv, (err, info) => {});
         }
         return deriv;
     }
