@@ -240,8 +240,8 @@ class IngestProcessor {
         }
 
         await this.finalizeTitle(resource);
-        if (this.job.metadata.dc.length > 0) {
-            this.replaceDCMetadata(resource, this.job.metadata.dc, "Loading DC XML");
+        if (this.job.metadata.dublinCore.length > 0) {
+            this.replaceDCMetadata(resource, this.job.metadata.dublinCore, "Loading DC XML");
         }
 
         this.moveDirectory();

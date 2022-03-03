@@ -30,7 +30,7 @@ class HierarchyCollector {
 
     async getFedoraData(pid: string): Promise<FedoraData> {
         // Use Fedora to get data
-        const DCPromise = this.fedora.getDC(pid);
+        const DCPromise = this.fedora.getDublinCore(pid);
         const RDFPromise = this.fedora.getRdf(pid);
         const [DC, RDF] = await Promise.all([DCPromise, RDFPromise]);
         const dataStreams = this.extractor.extractFedoraDatastreams(RDF);
