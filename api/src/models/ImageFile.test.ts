@@ -1,23 +1,16 @@
+import Config from "./Config";
 import ImageFile from "./ImageFile";
-//import Config from "../models/Config";
 
-//jest.mock("../models/Config");
+// We don't want JIMP loading to interfere with the test suite (and we
+// don't really want to do any image manipulation during testing).
+jest.mock("jimp", () => {
+    return {};
+});
 
 describe("Image", () => {
     let image: ImageFile;
-    let config;
     beforeEach(() => {
-        config = {
-            tesseractPath: "/foo/tesseract",
-            textcleanerPath: "/foo/textcleaner",
-        };
-        //use later
-        //jest.spyOn(Config, "getInstance").mockReturnValue(config);
-        image = new ImageFile("test1", config);
-    });
-
-    jest.mock("jimp", () => {
-        return {};
+        image = new ImageFile("test1", new Config({}));
     });
 
     it("should return the filename", () => {

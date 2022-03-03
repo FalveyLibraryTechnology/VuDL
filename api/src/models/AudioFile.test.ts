@@ -1,21 +1,17 @@
 import AudioFile from "./AudioFile";
-//import Config from "../models/Config";
-
-//jest.mock("../models/Config");
+import Config from "./Config";
 
 describe("Audio", () => {
     let audio: AudioFile;
-    let config;
     beforeEach(() => {
-        config = {
-            ffmpegPath: "/foo/ffmpeg",
-        };
-        //use later
-        //jest.spyOn(Config, "getInstance").mockReturnValue(config);
-        audio = new AudioFile("test1", "test2", config);
+        audio = new AudioFile("test1.flac", "/test2", new Config({}));
     });
 
     it("should return the filename", () => {
-        expect(audio.filename).toEqual("test1");
+        expect(audio.filename).toEqual("test1.flac");
+    });
+
+    it("generates appropriate derivative paths", () => {
+        expect(audio.derivativePath("ogg")).toEqual("/test2/test1.ogg");
     });
 });

@@ -1,21 +1,22 @@
+import Config from "./Config";
 import Job from "./Job";
-//import Config from "../models/Config";
-//import QueueManager from "../services/QueueManager";
+import QueueManager from "../services/QueueManager";
 
-//jest.mock("../models/Config");
-//jest.mock("../services/QueueManager");
+jest.mock("./Config");
+jest.mock("../services/QueueManager");
+
+// We have an indirect dependency on ImageFile, but we don't really want
+// to load it for the context of this test.
+jest.mock("./ImageFile.ts", () => {
+    return {};
+});
+
 
 describe("Job", () => {
     let job: Job;
-    let config;
-    let queueManager;
+
     beforeEach(() => {
-        //use later
-        config = {};
-        queueManager = {};
-        //jest.spyOn(Config, "getInstance").mockReturnValue(config);
-        //jest.spyOn(QueueManager, "getInstance").mockReturnValue(queueManager);
-        job = new Job("test1", config, queueManager);
+        job = new Job("test1", new Config({}), new QueueManager());
     });
 
     it("should return the name", () => {
