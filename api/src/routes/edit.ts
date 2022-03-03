@@ -5,6 +5,7 @@ import Fedora from "../services/Fedora";
 import { FedoraObject } from "../models/FedoraObject";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import HierarchyCollector from "../services/HierarchyCollector";
+import MetadataExtractor from "../services/MetadataExtractor";
 import { requireToken } from "./auth";
 import { pidSanitizer } from "./sanitize";
 import Solr from "../services/Solr";
