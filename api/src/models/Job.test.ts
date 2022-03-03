@@ -11,7 +11,6 @@ jest.mock("./ImageFile.ts", () => {
     return {};
 });
 
-
 describe("Job", () => {
     let job: Job;
 
