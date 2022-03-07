@@ -1,5 +1,6 @@
 import fs = require("fs");
 import ini = require("ini");
+import { FedoraModel } from "../services/FedoraCatalog";
 
 class Config {
     private static instance: Config;
@@ -142,6 +143,10 @@ class Config {
 
     get minimumValidYear(): number {
         return parseInt(this.ini["minimum_valid_year"] ?? 1000);
+    }
+
+    get models(): Record<string, FedoraModel> {
+        return this.ini["models"] || {};
     }
 }
 

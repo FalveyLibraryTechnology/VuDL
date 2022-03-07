@@ -2,16 +2,36 @@ import express = require("express");
 import bodyParser = require("body-parser");
 import Config from "../models/Config";
 import Fedora from "../services/Fedora";
+import FedoraCatalog from "../services/FedoraCatalog";
 import { FedoraObject } from "../models/FedoraObject";
+import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
+import HierarchyCollector from "../services/HierarchyCollector";
 import MetadataExtractor from "../services/MetadataExtractor";
 import { requireToken } from "./auth";
 import { pidSanitizer } from "./sanitize";
+import * as formidable from "formidable";
 import Solr from "../services/Solr";
 const edit = express.Router();
 
 edit.get("/models", requireToken, function (req, res) {
     res.json({ CollectionModels: Config.getInstance().collectionModels, DataModels: Config.getInstance().dataModels });
+});
+
+edit.get("/catalog", requireToken, function (req, res) {
+    res.json({ models: FedoraCatalog.getInstance().getCompleteCatalog() });
+});
+
+edit.get("/catalog/models", requireToken, function (req, res) {
+    res.json(FedoraCatalog.getInstance().getModelCatalog());
+});
+
+edit.get("/catalog/datastreams", requireToken, function (req, res) {
+    res.json(FedoraCatalog.getInstance().getDatastreamCatalog());
+});
+
+edit.get("/catalog/datastreammimetypes", requireToken, function (req, res) {
+    res.json(FedoraCatalog.getInstance().getDatastreamMimetypes());
 });
 
 edit.post("/object/new", requireToken, bodyParser.json(), async function (req, res) {
@@ -82,6 +102,37 @@ async function getChildren(req, res) {
     res.json(response);
 }
 
+function uploadFile(req, res, next) {
+    const { pid } = req.params;
+    const form = formidable({ multiples: true });
+
+    form.parse(req, async (err, fields, files) => {
+        if (err) {
+            next(err);
+            return;
+        }
+        try {
+            const datastream = DatastreamManager.getInstance();
+            const { stream } = fields;
+            const { filepath, mimetype } = files?.file;
+            await datastream.uploadFile(pid, stream, filepath, mimetype);
+            res.status(200).send("Upload success");
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    });
+}
+
+edit.get("/object/modelsdatastreams/:pid", requireToken, pidSanitizer, async function (req, res) {
+    try {
+        const data = await HierarchyCollector.getInstance().getFedoraData(req.params.pid);
+        res.json({ models: data.models, datastreams: data.fedoraDatastreams });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
+edit.post("/object/:pid", requireToken, pidSanitizer, uploadFile);
 edit.get("/object/children", requireToken, getChildren);
 edit.get("/object/children/:pid", requireToken, pidSanitizer, getChildren);
 edit.get("/object/details/:pid", requireToken, pidSanitizer, async function (req, res) {

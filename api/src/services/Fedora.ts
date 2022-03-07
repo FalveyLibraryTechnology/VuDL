@@ -196,7 +196,7 @@ export class Fedora {
         pid: string,
         stream: string,
         mimeType: string,
-        expectedStatus: number,
+        expectedStatus = [201],
         data: string | Buffer,
         linkHeader = ""
     ): Promise<void> {
@@ -213,7 +213,7 @@ export class Fedora {
         }
         const targetPath = "/" + pid + "/" + stream;
         const response = await this._request("put", targetPath, data, options);
-        if (response.statusCode !== expectedStatus) {
+        if (!expectedStatus.includes(response.statusCode)) {
             throw new Error("Expected " + expectedStatus + " Created response, received: " + response.statusCode);
         }
     }
@@ -230,10 +230,11 @@ export class Fedora {
         pid: string,
         stream: string,
         params: DatastreamParameters,
-        data: string | Buffer
+        data: string | Buffer,
+        expectedStatus = [201]
     ): Promise<void> {
         // First create the stream:
-        await this.putDatastream(pid, stream, params.mimeType, 201, data, params.linkHeader ?? "");
+        await this.putDatastream(pid, stream, params.mimeType, expectedStatus, data, params.linkHeader ?? "");
 
         // Now set appropriate metadata:
         const writer = new N3.Writer({ format: "text/turtle" });
@@ -326,9 +327,9 @@ export class Fedora {
                 mimeType: mimeType,
                 linkHeader: '<http://www.w3.org/ns/ldp#NonRDFSource>; rel="type"',
             };
-            await this.addDatastream(pid, "RELS-EXT", dsParams, updatedXml);
+            await this.addDatastream(pid, "RELS-EXT", dsParams, updatedXml, [201]);
         } else {
-            await this.putDatastream(pid, "RELS-EXT", mimeType, 204, updatedXml);
+            await this.putDatastream(pid, "RELS-EXT", mimeType, [204], updatedXml);
         }
     }
 
@@ -424,7 +425,7 @@ export class Fedora {
             mimeType: "text/xml",
             logMessage: "Create initial Dublin Core record",
         };
-        await this.addDatastream(pid, "DC", params, xml);
+        await this.addDatastream(pid, "DC", params, xml, [201]);
     }
 }
 

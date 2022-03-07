@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamControlButton renders 1`] = `
+<ForwardRef(Button)
+  onClick={[Function]}
+  size="small"
+  variant="outlined"
+>
+  Upload
+</ForwardRef(Button)>
+`;

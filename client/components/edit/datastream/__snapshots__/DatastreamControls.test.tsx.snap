@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamControls renders 1`] = `
+<div
+  class="datastreamControls MuiBox-root css-0"
+>
+  <div
+    class="MuiButtonGroup-root MuiButtonGroup-text css-1or64il-MuiButtonGroup-root"
+    role="group"
+  >
+    DatastreamControlButton
+  </div>
+</div>
+`;
