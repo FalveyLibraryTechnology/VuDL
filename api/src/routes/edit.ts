@@ -8,7 +8,6 @@ import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import HierarchyCollector from "../services/HierarchyCollector";
 import MetadataExtractor from "../services/MetadataExtractor";
-import HierarchyCollector from "../services/HierarchyCollector";
 import { requireToken } from "./auth";
 import { pidSanitizer } from "./sanitize";
 import * as formidable from "formidable";
