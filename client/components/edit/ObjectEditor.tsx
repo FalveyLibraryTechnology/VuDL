@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import ChildList from "./ChildList";
+import Breadcrumbs from "./Breadcrumbs";
 import ObjectSummary from "./ObjectSummary";
 import { Grid, Box } from "@mui/material";
 import Link from "next/link";
@@ -20,6 +21,7 @@ const ObjectEditor = ({ pid }) => {
 
     return (
         <div>
+            <Breadcrumbs pid={pid} />
             <h1>Editor: Object {pid}</h1>
             <ObjectSummary pid={pid} />
             <h2>Tools</h2>

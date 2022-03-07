@@ -8,6 +8,7 @@ import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import HierarchyCollector from "../services/HierarchyCollector";
 import MetadataExtractor from "../services/MetadataExtractor";
+import HierarchyCollector from "../services/HierarchyCollector";
 import { requireToken } from "./auth";
 import { pidSanitizer } from "./sanitize";
 import * as formidable from "formidable";
@@ -142,6 +143,16 @@ edit.get("/object/details/:pid", requireToken, pidSanitizer, async function (req
     const metadata = await Fedora.getInstance().getDublinCore(pid);
     const extractedMetadata = MetadataExtractor.getInstance().extractMetadata(metadata);
     res.json({ pid, sort, metadata: extractedMetadata });
+});
+
+edit.get("/object/parents/:pid", pidSanitizer, requireToken, async function (req, res) {
+    try {
+        const fedoraData = await HierarchyCollector.getInstance().getHierarchy(req.params.pid, false);
+        res.json(fedoraData.getParentTree());
+    } catch (e) {
+        console.error("Error retrieving breadcrumbs: " + e);
+        res.status(500).send("Unexpected error!!");
+    }
 });
 
 export default edit;
