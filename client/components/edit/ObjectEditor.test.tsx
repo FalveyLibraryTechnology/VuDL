@@ -11,6 +11,7 @@ jest.mock("../../context/EditorContext", () => ({
     },
 }));
 jest.mock("./ChildList", () => () => "ChildList");
+jest.mock("./Breadcrumbs", () => () => "Breadcrumbs");
 jest.mock("./datastream/DatastreamList", () => () => "DatastreamList");
 jest.mock("./datastream/DatastreamModal", () => () => "DatastreamModal");
 jest.mock("./ObjectSummary", () => () => "ObjectSummary");

@@ -2,7 +2,7 @@
 
 exports[`ObjectEditor renders 1`] = `
 <div>
-  <Breadcrumbs
+  <Component
     pid="foo:123"
   />
   <h1>
