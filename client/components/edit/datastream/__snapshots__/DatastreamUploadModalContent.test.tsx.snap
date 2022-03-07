@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamUploadModalContent renders 1`] = `
+<ForwardRef(DialogContent)>
+  <input
+    className="uploadFileButton"
+    onChange={[Function]}
+    type="file"
+  />
+</ForwardRef(DialogContent)>
+`;

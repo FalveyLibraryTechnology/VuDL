@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamList renders 1`] = `
+<DatastreamList>
+  <ForwardRef(List)>
+    <MuiListRoot
+      as="ul"
+      className="MuiList-root MuiList-padding"
+      ownerState={
+        Object {
+          "children": Array [
+            <Unknown
+              datastream="test1"
+            />,
+          ],
+          "component": "ul",
+          "dense": false,
+          "disablePadding": false,
+        }
+      }
+    >
+      <Noop />
+      <ul
+        className="MuiList-root MuiList-padding css-h4y409-MuiList-root"
+      >
+        <Component
+          datastream="test1"
+          key="0"
+        >
+          Datastream
+        </Component>
+      </ul>
+    </MuiListRoot>
+  </ForwardRef(List)>
+</DatastreamList>
+`;
