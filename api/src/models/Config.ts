@@ -53,7 +53,7 @@ class Config {
     }
 
     get vufindUrl(): string {
-        return this.ini["vufind_url"];
+        return this.ini["vufind_url"] ?? "";
     }
 
     get pdfDirectory(): string {

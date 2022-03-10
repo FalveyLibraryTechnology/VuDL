@@ -30,7 +30,9 @@ tesseract_path = "/usr/local/bin/tesseract"
 # Settings for ocrmypdf (omit setting to skip this step if you aren't using it)
 #ocrmypdf_path = /usr/local/bin/ocrmypdf
 
-# VuFind Base URL
+# VuFind Base URL. Required for indexing first/last change dates into Solr and
+# for generating PDFs for existing items in the collection. You can omit the
+# setting if you do not use VuFind and do not need these features.
 vufind_url = "https://myserver"
 
 # Base URL and core name for Solr instance containing index
