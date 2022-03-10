@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import React from "react";
 import { describe, expect, it, jest } from "@jest/globals";
 import { render } from "enzyme";
