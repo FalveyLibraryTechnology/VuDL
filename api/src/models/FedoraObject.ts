@@ -53,6 +53,15 @@ export class FedoraObject {
         await this.fedora.addDatastream(this.pid, id, params, data, expectedStatus);
     }
 
+    async deleteDatastream(stream: string): Promise<void> {
+        await this.fedora.deleteDatastream(this.pid, stream);
+        await this.deleteDatastreamTombstone(stream);
+    }
+
+    async deleteDatastreamTombstone(stream: string): Promise<void> {
+        await this.fedora.deleteDatastreamTombstone(this.pid, stream);
+    }
+
     async addDatastreamFromFile(filename: string, stream: string, mimeType: string): Promise<void> {
         await this.addDatastreamFromStringOrBuffer(fs.readFileSync(filename), stream, mimeType, [201]);
     }

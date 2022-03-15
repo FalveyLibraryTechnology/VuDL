@@ -3,6 +3,7 @@
 exports[`DatastreamModal renders 1`] = `
 <ForwardRef(Dialog)
   className="datastreamModal"
+  fullWidth={true}
   onClose={[MockFunction]}
   open={true}
 >
@@ -13,9 +14,7 @@ exports[`DatastreamModal renders 1`] = `
       <ForwardRef(Grid)
         item={true}
         xs={11}
-      >
-        Upload
-      </ForwardRef(Grid)>
+      />
       <ForwardRef(Grid)
         item={true}
         xs={1}
@@ -29,6 +28,8 @@ exports[`DatastreamModal renders 1`] = `
       </ForwardRef(Grid)>
     </ForwardRef(Grid)>
   </ForwardRef(DialogTitle)>
-  <Component />
+  <DatastreamModalContent
+    datastreamModalState=""
+  />
 </ForwardRef(Dialog)>
 `;

@@ -11,12 +11,14 @@ jest.mock("../../../context/EditorContext", () => ({
     },
 }));
 jest.mock("./DatastreamUploadModalContent", () => () => "DatastreamUploadModalContent");
+jest.mock("./DatastreamDeleteModalContent", () => () => "DatastreamDeleteModalContent");
 
 describe("DatastreamModal", () => {
     let editorValues;
     beforeEach(() => {
         editorValues = {
             state: {
+                datastreamModalState: "",
                 isDatastreamModalOpen: true,
             },
             action: {
@@ -37,5 +39,21 @@ describe("DatastreamModal", () => {
 
         expect(editorValues.action.toggleDatastreamModal).toHaveBeenCalled();
         component.unmount();
+    });
+
+    it("switches to the delete modal content", () => {
+        editorValues.state.datastreamModalState = "Delete";
+
+        const component = mount(<DatastreamModal />);
+
+        expect(component.text()).toContain("DatastreamDeleteModalContent");
+    });
+
+    it("switches to the upload modal content", () => {
+        editorValues.state.datastreamModalState = "Upload";
+
+        const component = mount(<DatastreamModal />);
+
+        expect(component.text()).toContain("DatastreamUploadModalContent");
     });
 });

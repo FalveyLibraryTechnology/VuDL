@@ -6,7 +6,7 @@ import DatastreamControls from "./DatastreamControls";
 const Datastream = ({ datastream }) => {
     const { stream, disabled } = datastream;
     return (
-        <ListItem disabled={disabled} secondaryAction={<DatastreamControls datastream={stream} />}>
+        <ListItem secondaryAction={<DatastreamControls datastream={stream} disabled={disabled} />}>
             <ListItemText primary={stream} />
         </ListItem>
     );

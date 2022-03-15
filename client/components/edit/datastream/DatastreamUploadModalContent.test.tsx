@@ -27,6 +27,9 @@ describe("DatastreamUploadModalContent", () => {
             },
         };
         editorValues = {
+            action: {
+                getCurrentModelsDatastreams: jest.fn().mockResolvedValue({}),
+            },
             state: {
                 currentPid: "vudl:123",
                 activeDatastream: "THUMBNAIL",
@@ -72,7 +75,7 @@ describe("DatastreamUploadModalContent", () => {
                 body: expect.any(FormData),
             })
         );
-
+        expect(editorValues.action.getCurrentModelsDatastreams).toHaveBeenCalled();
         expect(wrapper.children().text()).toEqual("upload worked");
     });
 
