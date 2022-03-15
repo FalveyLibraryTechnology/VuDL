@@ -10,6 +10,7 @@ const DatastreamUploadModalContent = () => {
         action: { fetchText },
     } = useFetchContext();
     const {
+        action: { getCurrentModelsDatastreams },
         state: { currentPid, activeDatastream, datastreamsCatalog },
     } = useEditorContext();
     const [{ state, text }, setResponseText] = useState({
@@ -40,6 +41,7 @@ const DatastreamUploadModalContent = () => {
                 method: "POST",
                 body,
             });
+            await getCurrentModelsDatastreams();
             setResponseText({
                 state: "success",
                 text,

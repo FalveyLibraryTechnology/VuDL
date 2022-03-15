@@ -9,7 +9,7 @@ import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import HierarchyCollector from "../services/HierarchyCollector";
 import MetadataExtractor from "../services/MetadataExtractor";
 import { requireToken } from "./auth";
-import { pidSanitizer } from "./sanitize";
+import { defaultSanitizeRegEx, pidSanitizer, pidSanitizeRegEx, sanitizeParameters } from "./sanitize";
 import * as formidable from "formidable";
 import Solr from "../services/Solr";
 const edit = express.Router();
@@ -151,6 +151,21 @@ edit.get("/object/parents/:pid", pidSanitizer, requireToken, async function (req
     } catch (e) {
         console.error("Error retrieving breadcrumbs: " + e);
         res.status(500).send("Unexpected error!!");
+    }
+});
+
+const datastreamSanitizer = sanitizeParameters({ pid: pidSanitizeRegEx, stream: defaultSanitizeRegEx }, /^$/);
+edit.delete("/object/:pid/datastream/:stream", requireToken, datastreamSanitizer, async function (req, res) {
+    const pid = req.params.pid;
+    const stream = req.params.stream;
+    const datastreamManager = DatastreamManager.getInstance();
+
+    try {
+        await datastreamManager.deleteDatastream(pid, stream);
+        res.status(200).send("Datastream successfully deleted");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
     }
 });
 

@@ -16,6 +16,7 @@ describe("Datastream", () => {
     it("renders", () => {
         const datastream = {
             stream: "test1",
+            disabled: true,
         };
         const wrapper = render(<Datastream datastream={datastream} />);
         expect(toJson(wrapper)).toMatchSnapshot();

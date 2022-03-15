@@ -7,6 +7,7 @@ const { namedNode, literal } = DataFactory;
 import { NeedleResponse } from "./interfaces";
 import xmlescape = require("xml-escape");
 import xmldom = require("@xmldom/xmldom");
+import { HttpError } from "../models/HttpError";
 const { DOMParser, XMLSerializer } = xmldom;
 
 export interface DatastreamParameters {
@@ -141,6 +142,46 @@ export class Fedora {
     }
 
     /**
+     * Delete datastream from Fedora
+     *
+     * @param pid Record id
+     * @param datastream Which stream to request
+     * @param parse Parse JSON (true) or return raw (false, default)
+     */
+    async deleteDatastream(
+        pid: string,
+        datastream: string,
+        requestOptions = { parse_response: false }
+    ): Promise<NeedleResponse> {
+        return await this._request(
+            "delete",
+            `${pid}/${datastream}`,
+            null, // Data
+            requestOptions
+        );
+    }
+
+    /**
+     *
+     * @param pid Record id
+     * @param datastream Which stream to request
+     * @param requestOptions Parse JSON (true) or return raw (false, default)
+     * @returns
+     */
+    async deleteDatastreamTombstone(
+        pid: string,
+        datastream: string,
+        requestOptions = { parse_response: false }
+    ): Promise<NeedleResponse> {
+        return await this._request(
+            "delete",
+            `${pid}/${datastream}/fcr:tombstone`,
+            null, // Data
+            requestOptions
+        );
+    }
+
+    /**
      * Get datastream from Fedora
      *
      * @param pid Record id
@@ -214,7 +255,10 @@ export class Fedora {
         const targetPath = "/" + pid + "/" + stream;
         const response = await this._request("put", targetPath, data, options);
         if (!expectedStatus.includes(response.statusCode)) {
-            throw new Error("Expected " + expectedStatus + " Created response, received: " + response.statusCode);
+            throw new HttpError(
+                response,
+                `Expected ${expectedStatus} Created response, received: ${response.statusCode}`
+            );
         }
     }
 

@@ -18,11 +18,25 @@ class DatastreamManager {
 
     async uploadFile(pid: string, stream: string, filepath: string, mimeType: string): Promise<void> {
         const fedoraObject = FedoraObject.build(pid);
+
         if (this.hasValidMimeType(stream, mimeType)) {
-            await fedoraObject.updateDatastreamFromFile(filepath, stream, mimeType);
+            try {
+                await fedoraObject.updateDatastreamFromFile(filepath, stream, mimeType);
+            } catch (error) {
+                console.error(error);
+                if (error?.name === "HttpError" && error.statusCode === 410) {
+                    await fedoraObject.deleteDatastreamTombstone(stream);
+                    await fedoraObject.updateDatastreamFromFile(filepath, stream, mimeType);
+                }
+            }
         } else {
             throw new Error(`Invalid mime type: ${mimeType}`);
         }
+    }
+
+    async deleteDatastream(pid: string, stream: string): Promise<void> {
+        const fedoraObject = FedoraObject.build(pid);
+        await fedoraObject.deleteDatastream(stream);
     }
 
     hasValidMimeType(stream: string, mimeType: string): boolean {

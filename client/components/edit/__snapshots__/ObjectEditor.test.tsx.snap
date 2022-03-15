@@ -9,12 +9,12 @@ exports[`ObjectEditor renders 1`] = `
     Editor: Object 
     foo:123
   </h1>
-  <Component
-    pid="foo:123"
-  />
   <h2>
     Tools
   </h2>
+  <Component
+    pid="foo:123"
+  />
   <ForwardRef(Grid)
     container={true}
   >
@@ -56,5 +56,6 @@ exports[`ObjectEditor renders 1`] = `
   <Component
     pid="foo:123"
   />
+  <Component />
 </div>
 `;

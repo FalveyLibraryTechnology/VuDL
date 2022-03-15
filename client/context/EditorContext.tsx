@@ -14,6 +14,11 @@ const editorContextParams = {
     activeDatastream: null,
     isDatastreamModalOpen: false,
     datastreamModalState: null,
+    snackbarState: {
+        open: false,
+        message: "",
+        severity: "info"
+    }
 };
 
 export const DatastreamModalStates = {
@@ -21,7 +26,7 @@ export const DatastreamModalStates = {
     // VIEW: "View",
     // METADATA: "Metadata",
     // DOWNLOAD: "Download",
-    // DELETE: "Delete"
+    DELETE: "Delete"
 };
 
 
@@ -35,6 +40,7 @@ const reducerMapping = {
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
     SET_DATASTREAM_MODAL_STATE: "datastreamModalState",
+    SET_SNACKBAR_STATE: "snackbarState"
 };
 /**
  * Update the shared states of react components.
@@ -71,7 +77,8 @@ export const useEditorContext = () => {
             activeDatastream,
             isDatastreamModalOpen,
             datastreamModalState,
-            modelsCatalog
+            modelsCatalog,
+            snackbarState
         },
         dispatch,
     } = useContext(EditorContext);
@@ -94,7 +101,7 @@ export const useEditorContext = () => {
         dispatch({
             type: "SET_MODELS_CATALOG",
             payload: modelsCatalog
-        })
+        });
     };
 
     const setCurrentPid = (pid) => {
@@ -115,7 +122,7 @@ export const useEditorContext = () => {
         dispatch({
             type: "SET_CURRENT_DATASTREAMS",
             payload: datastreams
-        })
+        });
     };
 
     const toggleDatastreamModal = () => {
@@ -137,6 +144,13 @@ export const useEditorContext = () => {
             type: "SET_ACTIVE_DATASTREAM",
             payload: datastream
         })
+    };
+
+    const setSnackbarState = (snackbarState) => {
+        dispatch({
+            type: "SET_SNACKBAR_STATE",
+            payload: snackbarState
+        });
     };
 
     const datastreamsCatalog = Object.values(modelsCatalog).reduce((acc, model) => {
@@ -173,7 +187,8 @@ export const useEditorContext = () => {
             isDatastreamModalOpen,
             datastreamModalState,
             datastreamsCatalog,
-            modelsDatastreams
+            modelsDatastreams,
+            snackbarState
         },
         action: {
             initializeModelsCatalog,
@@ -182,6 +197,7 @@ export const useEditorContext = () => {
             setActiveDatastream,
             setDatastreamModalState,
             toggleDatastreamModal,
+            setSnackbarState
         },
     };
 }

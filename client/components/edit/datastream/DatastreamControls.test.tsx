@@ -14,11 +14,12 @@ jest.mock("./DatastreamControlButton", () => (props) => {
 describe("DatastreamControls", () => {
     it("renders", () => {
         const datastream = "test1";
-        const wrapper = render(<DatastreamControls datastream={datastream} />);
+        const wrapper = render(<DatastreamControls datastream={datastream} disabled={false} />);
         expect(toJson(wrapper)).toMatchSnapshot();
         expect(mockDatastreamControlButton).toHaveBeenCalledWith({
             modalState: DatastreamModalStates.UPLOAD,
             datastream,
+            disabled: false,
         });
     });
 });

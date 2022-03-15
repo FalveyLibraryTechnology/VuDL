@@ -1,11 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatastreamControlButton renders 1`] = `
-<ForwardRef(Button)
-  onClick={[Function]}
-  size="small"
-  variant="outlined"
+<ForwardRef(Tooltip)
+  title="Upload"
 >
-  Upload
-</ForwardRef(Button)>
+  <ForwardRef(IconButton)
+    aria-label="Upload"
+    disabled={false}
+    onClick={[Function]}
+    size="small"
+  >
+    <Memo(ForwardRef(UploadFileIcon)) />
+  </ForwardRef(IconButton)>
+</ForwardRef(Tooltip)>
 `;

@@ -8,6 +8,7 @@ import Link from "next/link";
 import DatastreamList from "./datastream/DatastreamList";
 import DatastreamModal from "./datastream/DatastreamModal";
 import { useEditorContext } from "../../context/EditorContext";
+import EditorSnackbar from "./EditorSnackbar";
 
 const ObjectEditor = ({ pid }) => {
     const {
@@ -23,8 +24,8 @@ const ObjectEditor = ({ pid }) => {
         <div>
             <Breadcrumbs pid={pid} />
             <h1>Editor: Object {pid}</h1>
-            <ObjectSummary pid={pid} />
             <h2>Tools</h2>
+            <ObjectSummary pid={pid} />
             <Grid container>
                 <Grid item xs={4}>
                     <Box>
@@ -47,6 +48,7 @@ const ObjectEditor = ({ pid }) => {
             <DatastreamModal />
             <h2>Contents</h2>
             <ChildList pid={pid} />
+            <EditorSnackbar />
         </div>
     );
 };

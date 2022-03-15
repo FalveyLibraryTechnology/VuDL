@@ -106,4 +106,23 @@ describe("DatastreamManager", () => {
             );
         });
     });
+
+    describe("deleteDatastream", () => {
+        let deleteDatastreamSpy;
+        let pid;
+        let stream;
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            deleteDatastreamSpy = jest.spyOn(FedoraObject.prototype, "deleteDatastream");
+        });
+
+        it("deletes the datastream", async () => {
+            deleteDatastreamSpy.mockResolvedValue({});
+
+            await datastreamManager.deleteDatastream(pid, stream);
+
+            expect(deleteDatastreamSpy).toHaveBeenCalledWith(stream);
+        });
+    });
 });

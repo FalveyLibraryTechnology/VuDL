@@ -37,6 +37,10 @@ const postObjectDatastreamUrl = (pid) => {
     return `${editObjectUrl}/${pid}`;
 }
 
+const deleteObjectDatastreamUrl = (pid, datastream: string) => {
+    return `${editObjectUrl}/${pid}/datastream/${datastream}`;
+}
+
 export {
     baseUrl,
     apiUrl,
@@ -52,5 +56,6 @@ export {
     getIngestUrl,
     getStatusUrl,
     getObjectModelsDatastreamsUrl,
-    postObjectDatastreamUrl
+    postObjectDatastreamUrl,
+    deleteObjectDatastreamUrl,
 };

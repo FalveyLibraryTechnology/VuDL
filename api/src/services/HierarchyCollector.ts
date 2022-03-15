@@ -35,7 +35,7 @@ class HierarchyCollector {
         // For indexing purposes, we only need the RDF information for the
         // first object retrieved; so when we recurse higher into the tree,
         // we can skip fetching more RDF in order to save some time!
-        const RDFPromise = fetchRdf ? this.fedora.getRdf(pid) : null;
+        const RDFPromise = fetchRdf ? this.fedora.getRdf(pid, false) : null;
         const [DC, RELS, RDF] = await Promise.all([DCPromise, RELSPromise, RDFPromise]);
         const relations = this.extractor.extractRelations(RELS);
         const datastreams = fetchRdf ? this.extractor.extractFedoraDatastreams(RDF) : [];
