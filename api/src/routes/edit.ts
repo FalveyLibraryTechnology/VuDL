@@ -144,7 +144,7 @@ edit.get("/object/details/:pid", requireToken, pidSanitizer, async function (req
 
 edit.get("/object/parents/:pid", pidSanitizer, requireToken, async function (req, res) {
     try {
-        const fedoraData = await HierarchyCollector.getInstance().getHierarchy(req.params.pid, false);
+        const fedoraData = await HierarchyCollector.getInstance().getHierarchy(req.params.pid);
         res.json(fedoraData.getParentTree());
     } catch (e) {
         console.error("Error retrieving breadcrumbs: " + e);
