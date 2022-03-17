@@ -41,6 +41,10 @@ class SolrIndexer {
 
     protected async getChangeTrackerDetails(pid: string, modificationDate: string): Promise<Record<string, string>> {
         const core = this.config.solrCore;
+        if (!this.config.vufindUrl) {
+            console.warn("No VuFind URL configured; skipping change tracking indexing.");
+            return {};
+        }
         const url = this.config.vufindUrl + "/XSLT/Home?";
         const query =
             "method[]=getLastIndexed&method[]=getFirstIndexed&id=" +
@@ -332,8 +336,12 @@ class SolrIndexer {
             pid,
             fields["fgs.lastModifiedDate_txt_mv"][0] ?? "1900-01-01T00:00:00Z"
         );
-        fields.first_indexed = change.getFirstIndexed;
-        fields.last_indexed = change.getLastIndexed;
+        if (change.getFirstIndexed ?? "") {
+            fields.first_indexed = change.getFirstIndexed;
+        }
+        if (change.getLastIndexed ?? "") {
+            fields.last_indexed = change.getLastIndexed;
+        }
 
         return fields;
     }

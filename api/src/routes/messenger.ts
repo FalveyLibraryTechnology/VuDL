@@ -53,7 +53,7 @@ messenger.post("/camel", bodyParser.json(), async function (req, res) {
 
     // If we deleted a datastream, we should treat that as an update operation
     // (because we don't want to delete the whole PID!):
-    if (datastream !== null && action === "Delete") {
+    if (datastream !== null && (action === "Delete" || action === "Purge")) {
         console.log(pid + " datastream " + datastream + " deleted; updating...");
         action = "Update";
     }
@@ -67,6 +67,7 @@ messenger.post("/camel", bodyParser.json(), async function (req, res) {
             await QueueManager.getInstance().performIndexOperation(pid, "index");
             break;
         case "Delete":
+        case "Purge":
             await QueueManager.getInstance().performIndexOperation(pid, "delete");
             break;
         default: {

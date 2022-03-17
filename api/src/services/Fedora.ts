@@ -6,6 +6,7 @@ const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
 import { NeedleResponse } from "./interfaces";
 import xmlescape = require("xml-escape");
+import { HttpError } from "../models/HttpError";
 
 export interface DatastreamParameters {
     dsLabel?: string;
@@ -139,6 +140,46 @@ export class Fedora {
     }
 
     /**
+     * Delete datastream from Fedora
+     *
+     * @param pid Record id
+     * @param datastream Which stream to request
+     * @param parse Parse JSON (true) or return raw (false, default)
+     */
+    async deleteDatastream(
+        pid: string,
+        datastream: string,
+        requestOptions = { parse_response: false }
+    ): Promise<NeedleResponse> {
+        return await this._request(
+            "delete",
+            `${pid}/${datastream}`,
+            null, // Data
+            requestOptions
+        );
+    }
+
+    /**
+     *
+     * @param pid Record id
+     * @param datastream Which stream to request
+     * @param requestOptions Parse JSON (true) or return raw (false, default)
+     * @returns
+     */
+    async deleteDatastreamTombstone(
+        pid: string,
+        datastream: string,
+        requestOptions = { parse_response: false }
+    ): Promise<NeedleResponse> {
+        return await this._request(
+            "delete",
+            `${pid}/${datastream}/fcr:tombstone`,
+            null, // Data
+            requestOptions
+        );
+    }
+
+    /**
      * Get datastream from Fedora
      *
      * @param pid Record id
@@ -194,7 +235,7 @@ export class Fedora {
         pid: string,
         stream: string,
         mimeType: string,
-        expectedStatus: number,
+        expectedStatus = [201],
         data: string | Buffer,
         linkHeader = ""
     ): Promise<void> {
@@ -211,8 +252,11 @@ export class Fedora {
         }
         const targetPath = "/" + pid + "/" + stream;
         const response = await this._request("put", targetPath, data, options);
-        if (response.statusCode !== expectedStatus) {
-            throw new Error("Expected " + expectedStatus + " Created response, received: " + response.statusCode);
+        if (!expectedStatus.includes(response.statusCode)) {
+            throw new HttpError(
+                response,
+                `Expected ${expectedStatus} Created response, received: ${response.statusCode}`
+            );
         }
     }
 
@@ -228,10 +272,11 @@ export class Fedora {
         pid: string,
         stream: string,
         params: DatastreamParameters,
-        data: string | Buffer
+        data: string | Buffer,
+        expectedStatus = [201]
     ): Promise<void> {
         // First create the stream:
-        await this.putDatastream(pid, stream, params.mimeType, 201, data, params.linkHeader ?? "");
+        await this.putDatastream(pid, stream, params.mimeType, expectedStatus, data, params.linkHeader ?? "");
 
         // Now set appropriate metadata:
         const writer = new N3.Writer({ format: "text/turtle" });
@@ -390,7 +435,7 @@ export class Fedora {
             mimeType: "text/xml",
             logMessage: "Create initial Dublin Core record",
         };
-        await this.addDatastream(pid, "DC", params, xml);
+        await this.addDatastream(pid, "DC", params, xml, [201]);
     }
 }
 

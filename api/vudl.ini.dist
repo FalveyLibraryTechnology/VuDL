@@ -28,9 +28,11 @@ tesseract_path = "/usr/local/bin/tesseract"
 #tesseract_allowed_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!'\"()&$%-+=[]?<>“”‘’—"
 
 # Settings for ocrmypdf (omit setting to skip this step if you aren't using it)
-#ocrmypdf_path = /usr/local/bin/ocrmypdf 
+#ocrmypdf_path = /usr/local/bin/ocrmypdf
 
-# VuFind Base URL
+# VuFind Base URL. Required for indexing first/last change dates into Solr and
+# for generating PDFs for existing items in the collection. You can omit the
+# setting if you do not use VuFind and do not need these features.
 vufind_url = "https://myserver"
 
 # Base URL and core name for Solr instance containing index
@@ -194,3 +196,73 @@ DOC = "vudl-system:DOCData"
 Audio = "vudl-system:AudioData"
 XLS = "vudl-system:XLSData"
 Text = "vudl-system:TextData"
+
+# AudioData
+[models.AudioData.datastreams.WAV.mimetype]
+allowedType = "audio"
+allowedSubtypes = "wav,x-wav"
+[models.AudioData.datastreams.MP3.mimetype]
+allowedType = "audio"
+allowedSubtypes = "mpeg3,x-mpeg-3,mpeg"
+models.AudioData.datastreams.OGG.mimetype]
+allowedType = "audio"
+allowedSubtypes = "ogg"
+
+# CollectionModel
+[models.CollectionModel.datastreams]
+
+# CoreModel
+[models.CoreModel.datastreams.THUMBNAIL.mimetype]
+allowedType = "image"
+allowedSubtypes = "jpeg,gif,png"
+[models.CoreModel.datastreams.LICENSE.mimetype]
+allowedType = "text"
+allowedSubtypes = "xml"
+[models.CoreModel.datastreams.DC.mimetype]
+allowedType = "text"
+allowedSubtypes = "xml"
+
+# DOCData
+[models.DOCData.datastreams]
+
+# DataModel
+[models.DataModel.datastreams.MASTER.mimetype]
+allowedType = "*"
+allowedSubtypes = "*"
+[models.DataModel.datastreams.MASTER-MD.mimetype]
+allowedType = "text"
+allowedSubtypes = "xml"
+
+# FolderCollection
+[models.FolderCollection.datastreams]
+
+# ImageData
+[models.ImageData.datastreams.LARGE.mimetype]
+allowedType = "image"
+allowedSubtypes = "*"
+[models.ImageData.datastreams.MEDIUM.mimetype]
+allowedType = "image"
+allowedSubtypes = "*"
+[models.ImageData.datastreams.OCR-DIRTY.mimetype]
+allowedType = "text"
+allowedSubtypes = "plain"
+[models.ImageData.datastreams.OCR-EDITED.mimetype]
+allowedType = "text"
+allowedSubtypes = "plain"
+
+# ListCollection
+[models.ListCollection.datastreams]
+
+# PDFData
+[models.PDFData.datastreams]
+
+# ResourceCollection
+[models.ResourceCollection.datastreams.AGENTS.mimetype]
+allowedType = "text"
+allowedSubtypes = "xml"
+[models.ResourceCollection.datastreams.PROCESS-MD.mimetype]
+allowedType = "text"
+allowedSubtypes = "xml"
+
+# XLSData
+[models.XLSData.datastreams]
