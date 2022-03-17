@@ -42,7 +42,7 @@ class HierarchyCollector {
             datastreams,
             {}
         );
-        data.extraDetails = await this.getExtraDetails(pid, datastreams, data.models)
+        data.extraDetails = await this.getExtraDetails(pid, datastreams, data.models);
         return data;
     }
 
