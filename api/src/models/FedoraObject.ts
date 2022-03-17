@@ -3,9 +3,7 @@ import winston = require("winston");
 import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
 import MetadataExtractor from "../services/MetadataExtractor";
-import { DOMParser } from "@xmldom/xmldom";
 import { execSync } from "child_process";
-import xpath = require("xpath");
 
 export interface ObjectParameters {
     label?: string;
