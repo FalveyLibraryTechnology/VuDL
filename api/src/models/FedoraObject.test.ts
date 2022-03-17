@@ -1,5 +1,6 @@
 import { FedoraObject } from "./FedoraObject";
 import { Fedora } from "../services/Fedora";
+import MetadataExtractor from "../services/MetadataExtractor";
 import * as fs from "fs";
 import Config from "../models/Config";
 
@@ -21,6 +22,41 @@ describe("FedoraObject", () => {
         jest.spyOn(fs, "readFileSync").mockReturnValue(buffer);
         jest.spyOn(Config, "getInstance").mockReturnValue(null);
         fedoraObject = FedoraObject.build(pid);
+    });
+
+    describe("addRelationship", () => {
+        it("proxies a call to the fedora service", () => {
+            const config = new Config({});
+            const fedora = new Fedora(config);
+            const spy = jest.spyOn(fedora, "addRelationship").mockImplementation(jest.fn());
+            fedoraObject = new FedoraObject(pid, config, fedora, new MetadataExtractor());
+            fedoraObject.addRelationship("subject", "predicate", "object", true);
+            expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy).toHaveBeenCalledWith(pid, "subject", "predicate", "object", true);
+        });
+    });
+
+    describe("getSort", () => {
+        it("defaults to title", async () => {
+            const config = new Config({});
+            const fedora = new Fedora(config);
+            jest.spyOn(fedora, "getRdf").mockImplementation(async () => "");
+            fedoraObject = new FedoraObject(pid, config, fedora, new MetadataExtractor());
+            expect(await fedoraObject.getSort()).toEqual("title");
+        });
+
+        it("uses the metadata extractor to obtain data", async () => {
+            const config = new Config({});
+            const fedora = new Fedora(config);
+            const extractor = new MetadataExtractor();
+            const fakeRDF = "<rdf />";
+            jest.spyOn(fedora, "getRdf").mockImplementation(async () => fakeRDF);
+            const extractorSpy = jest.spyOn(extractor, "extractFedoraDetails").mockReturnValue({ sortOn: ["title"] });
+            fedoraObject = new FedoraObject(pid, config, fedora, extractor);
+            expect(await fedoraObject.getSort()).toEqual("title");
+            expect(extractorSpy).toHaveBeenCalledTimes(1);
+            expect(extractorSpy).toHaveBeenCalledWith(fakeRDF);
+        });
     });
 
     describe("updateDatastreamFromFile", () => {
