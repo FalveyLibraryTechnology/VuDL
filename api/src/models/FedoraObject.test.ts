@@ -40,7 +40,7 @@ describe("FedoraObject", () => {
         it("defaults to title", async () => {
             const config = new Config({});
             const fedora = new Fedora(config);
-            jest.spyOn(fedora, "getRdf").mockImplementation(async () => "");
+            jest.spyOn(fedora, "getRdf").mockResolvedValue("");
             fedoraObject = new FedoraObject(pid, config, fedora, new MetadataExtractor());
             expect(await fedoraObject.getSort()).toEqual("title");
         });
@@ -50,7 +50,7 @@ describe("FedoraObject", () => {
             const fedora = new Fedora(config);
             const extractor = new MetadataExtractor();
             const fakeRDF = "<rdf />";
-            jest.spyOn(fedora, "getRdf").mockImplementation(async () => fakeRDF);
+            jest.spyOn(fedora, "getRdf").mockResolvedValue(fakeRDF);
             const extractorSpy = jest.spyOn(extractor, "extractFedoraDetails").mockReturnValue({ sortOn: ["title"] });
             fedoraObject = new FedoraObject(pid, config, fedora, extractor);
             expect(await fedoraObject.getSort()).toEqual("title");
