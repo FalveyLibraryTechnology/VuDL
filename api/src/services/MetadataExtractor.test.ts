@@ -35,44 +35,28 @@ describe("MetadataExtractor", () => {
                 </rdf:Description>
                 </rdf:RDF>
             `;
-            expect(MetadataExtractor.getInstance().extractFedoraDetails(rdf)).toEqual(
-                {
-                    "createdDate": [
-                        "2022-03-17T17:22:17.148516Z",
-                    ],
-                    "hasModel": [
-                        "http://localhost:8080/rest/vudl-system:CollectionModel",
-                        "http://localhost:8080/rest/vudl-system:CoreModel",
-                        "http://localhost:8080/rest/vudl-system:ListCollection",
-                    ],
-                    "isMemberOf": [
-                        "http://localhost:8080/rest/vudl:700047",
-                    ],
-                    "label": [
-                        "Document List",
-                    ],
-                    "lastModifiedDate": [
-                        "2022-03-17T17:22:17.813586Z",
-                    ],
-                    "ownerId": [
-                        "diglibEditor",
-                    ],
-                    "sortOn": [
-                        "custom",
-                    ],
-                    "state": [
-                        "Inactive",
-                    ],
-                    "type": [
-                        "http://www.w3.org/ns/ldp#RDFSource",
-                        "http://www.w3.org/ns/ldp#Resource",
-                        "http://fedora.info/definitions/v4/repository#Container",
-                        "http://www.w3.org/ns/ldp#Container",
-                        "http://fedora.info/definitions/v4/repository#Resource",
-                        "http://www.w3.org/ns/ldp#BasicContainer",
-                    ],
-                }
-            );
-        })
+            expect(MetadataExtractor.getInstance().extractFedoraDetails(rdf)).toEqual({
+                createdDate: ["2022-03-17T17:22:17.148516Z"],
+                hasModel: [
+                    "http://localhost:8080/rest/vudl-system:CollectionModel",
+                    "http://localhost:8080/rest/vudl-system:CoreModel",
+                    "http://localhost:8080/rest/vudl-system:ListCollection",
+                ],
+                isMemberOf: ["http://localhost:8080/rest/vudl:700047"],
+                label: ["Document List"],
+                lastModifiedDate: ["2022-03-17T17:22:17.813586Z"],
+                ownerId: ["diglibEditor"],
+                sortOn: ["custom"],
+                state: ["Inactive"],
+                type: [
+                    "http://www.w3.org/ns/ldp#RDFSource",
+                    "http://www.w3.org/ns/ldp#Resource",
+                    "http://fedora.info/definitions/v4/repository#Container",
+                    "http://www.w3.org/ns/ldp#Container",
+                    "http://fedora.info/definitions/v4/repository#Resource",
+                    "http://www.w3.org/ns/ldp#BasicContainer",
+                ],
+            });
+        });
     });
 });
