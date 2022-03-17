@@ -31,7 +31,7 @@ describe("Fedora", () => {
             expect(requestSpy).toHaveBeenCalledWith(
                 "patch",
                 "/" + pid,
-                " INSERT { <subject> <predicate> \"object\".\n } WHERE {  }",
+                ' INSERT { <subject> <predicate> "object".\n } WHERE {  }',
                 { headers: { "Content-Type": "application/sparql-update" } }
             );
         });
