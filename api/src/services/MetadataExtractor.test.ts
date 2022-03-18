@@ -1,4 +1,3 @@
-import { assert } from "console";
 import MetadataExtractor from "./MetadataExtractor";
 
 describe("MetadataExtractor", () => {
