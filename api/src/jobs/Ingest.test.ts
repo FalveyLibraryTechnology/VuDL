@@ -5,6 +5,7 @@ import Fedora from "../services/Fedora";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import { IngestProcessor } from "./Ingest";
 import QueueManager from "../services/QueueManager";
+import fs = require("fs");
 import winston = require("winston");
 
 // We have an indirect dependency on ImageFile, but we don't really want
@@ -24,7 +25,7 @@ describe("IngestProcessor", () => {
     beforeEach(() => {
         dir = "/my/fake/dir";
         jobName = "fakejob";
-        config = new Config({});
+        config = new Config({ processed_area_path: "/fake_processed" });
         logger = winston.createLogger({
             level: "error", // we don't want to see info messages while testing
             transports: [new winston.transports.Console()],
@@ -58,4 +59,24 @@ describe("IngestProcessor", () => {
             );
         });
     });
+    describe("moveDirectory", () => {
+        it("moves the directory appropriately", () => {
+            const date = new Date();
+            const month = ("0" + (date.getMonth() + 1));
+            const day = ("0" + date.getDate());
+            const expectedTargetParent = "/fake_processed/" + date.getFullYear() + "-" + month.substring(month.length - 2) + "-" + day.substring(day.length - 2) + "/fake";
+            const expectedTarget = expectedTargetParent + "/fakejob";
+            const existsSpy = jest.spyOn(fs, "existsSync").mockReturnValueOnce(false).mockReturnValueOnce(true);
+            const renameSpy = jest.spyOn(fs, "renameSync").mockImplementation(jest.fn());
+            const unlinkSpy = jest.spyOn(fs, "unlinkSync").mockImplementation(jest.fn());
+            ingest.moveDirectory();
+            expect(existsSpy).toHaveBeenCalledTimes(2);
+            expect(existsSpy).toHaveBeenNthCalledWith(1, expectedTarget);
+            expect(existsSpy).toHaveBeenNthCalledWith(2, expectedTargetParent);
+            expect(renameSpy).toHaveBeenCalledTimes(1);
+            expect(renameSpy).toHaveBeenCalledWith(job.dir, expectedTarget);
+            expect(unlinkSpy).toHaveBeenCalledTimes(1);
+            expect(unlinkSpy).toHaveBeenCalledWith(expectedTarget + "/ingest.lock");
+        });
+    })
 });
