@@ -62,9 +62,16 @@ describe("IngestProcessor", () => {
     describe("moveDirectory", () => {
         it("moves the directory appropriately", () => {
             const date = new Date();
-            const month = ("0" + (date.getMonth() + 1));
-            const day = ("0" + date.getDate());
-            const expectedTargetParent = "/fake_processed/" + date.getFullYear() + "-" + month.substring(month.length - 2) + "-" + day.substring(day.length - 2) + "/fake";
+            const month = "0" + (date.getMonth() + 1);
+            const day = "0" + date.getDate();
+            const expectedTargetParent =
+                "/fake_processed/" +
+                date.getFullYear() +
+                "-" +
+                month.substring(month.length - 2) +
+                "-" +
+                day.substring(day.length - 2) +
+                "/fake";
             const expectedTarget = expectedTargetParent + "/fakejob";
             const existsSpy = jest.spyOn(fs, "existsSync").mockReturnValueOnce(false).mockReturnValueOnce(true);
             const renameSpy = jest.spyOn(fs, "renameSync").mockImplementation(jest.fn());
@@ -78,5 +85,5 @@ describe("IngestProcessor", () => {
             expect(unlinkSpy).toHaveBeenCalledTimes(1);
             expect(unlinkSpy).toHaveBeenCalledWith(expectedTarget + "/ingest.lock");
         });
-    })
+    });
 });
