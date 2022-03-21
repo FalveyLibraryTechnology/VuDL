@@ -1,0 +1,7 @@
+.breadcrumb li {
+    display: inline;
+}
+
+.breadcrumb li:not(:first-child):before {
+    content: " > "
+}

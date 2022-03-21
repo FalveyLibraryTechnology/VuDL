@@ -1,3 +1,9 @@
+interface TreeNode {
+    pid: string;
+    title: string;
+    parents: Array<TreeNode>;
+}
+
 class FedoraData {
     public metadata: Record<string, Array<string>>;
     public pid: string;
@@ -45,6 +51,9 @@ class FedoraData {
         return tops;
     }
 
+    /**
+     * Create a flattened list of all PIDs "above" the current one.
+     */
     getAllParents(): Array<string> {
         const results = [];
         this.parents.forEach((parent) => {
@@ -56,6 +65,19 @@ class FedoraData {
             });
         });
         return results;
+    }
+
+    /**
+     * Return a tree of parent nodes useful for generating breadcrumb trails.
+     */
+    getParentTree(): TreeNode {
+        return {
+            pid: this.pid,
+            title: this.title,
+            parents: this.parents.map(function (parent) {
+                return parent.getParentTree();
+            }),
+        };
     }
 
     getThumbnailHash(type: string): string {

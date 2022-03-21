@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditorSnackbar renders 1`] = `
+<ForwardRef(Snackbar)
+  autoHideDuration={5000}
+  className="editorSnackbar"
+  onClose={[Function]}
+  open={true}
+>
+  <ForwardRef(Alert)
+    action={
+      <ForwardRef(IconButton)
+        aria-label="close"
+        className="editorSnackBarAlertCloseButton"
+        color="inherit"
+        onClick={[Function]}
+        size="small"
+      >
+        <Memo
+          fontSize="inherit"
+        />
+      </ForwardRef(IconButton)>
+    }
+    className="editorSnackbarAlert"
+    severity="info"
+  >
+    test1
+  </ForwardRef(Alert)>
+</ForwardRef(Snackbar)>
+`;

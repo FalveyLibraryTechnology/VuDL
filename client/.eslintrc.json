@@ -9,15 +9,17 @@
     "sourceType": "module"
   },
   "plugins": ["react"],
-  "extends": ["eslint:recommended", "plugin:prettier/recommended", "plugin:react/recommended"],
+  "extends": ["next", "eslint:recommended", "plugin:prettier/recommended", "plugin:react/recommended"],
   "rules": {
+    "@next/next/no-img-element": "off",
     "prettier/prettier": [
       "error",
       {},
       {
         "usePrettierrc": true
       }
-    ]
+    ],
+    "react-hooks/exhaustive-deps": "off"
   },
   "settings": {
     "react": {

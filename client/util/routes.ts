@@ -6,6 +6,10 @@ const authApiUrl = `${apiUrl}/auth`;
 const ingestApiUrl = `${apiUrl}/ingest`;
 const loginUrl = `${authApiUrl}/login`;
 const logoutUrl = `${authApiUrl}/logout`;
+const editObjectUrl = `${apiUrl}/edit/object`;
+const datastreamsUrl = `${editObjectUrl}/datastreams`;
+const editObjectCatalogUrl = `${apiUrl}/edit/catalog`;
+
 const getJobUrl = (category, job, extra = "") => {
     return `${ingestApiUrl}/${encodeURIComponent(category)}/${encodeURIComponent(job)}${extra}`;
 };
@@ -25,6 +29,18 @@ const getStatusUrl = (category, children) => {
     return getJobUrl(category, children, "/status");
 };
 
+const getObjectModelsDatastreamsUrl = (pid) => {
+    return `${editObjectUrl}/modelsdatastreams/${pid}`;
+}
+
+const postObjectDatastreamUrl = (pid) => {
+    return `${editObjectUrl}/${pid}`;
+}
+
+const deleteObjectDatastreamUrl = (pid, datastream: string) => {
+    return `${editObjectUrl}/${pid}/datastream/${datastream}`;
+}
+
 export {
     baseUrl,
     apiUrl,
@@ -32,9 +48,14 @@ export {
     ingestApiUrl,
     loginUrl,
     logoutUrl,
+    datastreamsUrl,
+    editObjectCatalogUrl,
     getJobUrl,
     getImageUrl,
     getDerivUrl,
     getIngestUrl,
     getStatusUrl,
+    getObjectModelsDatastreamsUrl,
+    postObjectDatastreamUrl,
+    deleteObjectDatastreamUrl,
 };

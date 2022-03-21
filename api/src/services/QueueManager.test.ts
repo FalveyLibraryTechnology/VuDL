@@ -1,7 +1,14 @@
 import QueueManager from "./QueueManager";
 import { Queue } from "bullmq";
 
-jest.mock("bullmq");
+jest.mock("bullmq", () => {
+    return {
+        Queue: jest.fn(),
+    };
+});
+Queue.prototype.add = jest.fn();
+Queue.prototype.close = jest.fn();
+Queue.prototype.getJobs = jest.fn();
 
 describe("QueueManager", () => {
     let queueManager;

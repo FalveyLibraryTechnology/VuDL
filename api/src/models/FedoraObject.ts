@@ -41,18 +41,41 @@ export class FedoraObject {
         return this.config.pidNamespace;
     }
 
-    async addDatastream(id: string, params: DatastreamParameters, data: string | Buffer): Promise<void> {
+    async addDatastream(
+        id: string,
+        params: DatastreamParameters,
+        data: string | Buffer,
+        expectedStatus = [201]
+    ): Promise<void> {
         this.log(
             params.logMessage ?? "Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes"
         );
-        await this.fedora.addDatastream(this.pid, id, params, data);
+        await this.fedora.addDatastream(this.pid, id, params, data, expectedStatus);
+    }
+
+    async deleteDatastream(stream: string): Promise<void> {
+        await this.fedora.deleteDatastream(this.pid, stream);
+        await this.deleteDatastreamTombstone(stream);
+    }
+
+    async deleteDatastreamTombstone(stream: string): Promise<void> {
+        await this.fedora.deleteDatastreamTombstone(this.pid, stream);
     }
 
     async addDatastreamFromFile(filename: string, stream: string, mimeType: string): Promise<void> {
-        await this.addDatastreamFromStringOrBuffer(fs.readFileSync(filename), stream, mimeType);
+        await this.addDatastreamFromStringOrBuffer(fs.readFileSync(filename), stream, mimeType, [201]);
     }
 
-    async addDatastreamFromStringOrBuffer(contents: string | Buffer, stream: string, mimeType: string): Promise<void> {
+    async updateDatastreamFromFile(filename: string, stream: string, mimeType: string): Promise<void> {
+        await this.addDatastreamFromStringOrBuffer(fs.readFileSync(filename), stream, mimeType, [201, 204]);
+    }
+
+    async addDatastreamFromStringOrBuffer(
+        contents: string | Buffer,
+        stream: string,
+        mimeType: string,
+        expectedStatus = [201]
+    ): Promise<void> {
         if (mimeType === "text/plain" && contents.length === 0) {
             contents = "\n"; // workaround for 500 error on empty OCR
         }
@@ -60,7 +83,7 @@ export class FedoraObject {
             mimeType: mimeType,
             logMessage: "Initial Ingest addDatastream - " + stream,
         };
-        await this.addDatastream(stream, params, contents);
+        await this.addDatastream(stream, params, contents, expectedStatus);
     }
 
     async addMasterMetadataDatastream(filename: string): Promise<void> {
@@ -69,7 +92,7 @@ export class FedoraObject {
             logMessage: "Initial Ingest addDatastream - MASTER-MD",
         };
         const fitsXml = this.fitsMasterMetadata(filename);
-        await this.addDatastream("MASTER-MD", params, fitsXml);
+        await this.addDatastream("MASTER-MD", params, fitsXml, [201]);
     }
 
     async addRelationship(subject: string, predicate: string, obj: string, isLiteral = false): Promise<void> {
@@ -160,7 +183,7 @@ export class FedoraObject {
             throw new Error("Unsupported parameter(s) passed to modifyDatastream()");
         }
         this.log(params.logMessage);
-        await this.fedora.putDatastream(this.pid, id, params.mimeType, 204, data);
+        await this.fedora.putDatastream(this.pid, id, params.mimeType, [204], data);
     }
 
     async modifyObjectLabel(title: string): Promise<void> {
