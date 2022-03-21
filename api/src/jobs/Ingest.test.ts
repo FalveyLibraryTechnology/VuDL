@@ -27,9 +27,7 @@ describe("IngestProcessor", () => {
         config = new Config({});
         logger = winston.createLogger({
             level: "error", // we don't want to see info messages while testing
-            transports: [
-                new winston.transports.Console(),
-            ],
+            transports: [new winston.transports.Console()],
         });
         fedora = new Fedora(config);
         job = new Job(dir + "/" + jobName, config, new QueueManager());
@@ -43,7 +41,9 @@ describe("IngestProcessor", () => {
         it("creates a title based on the directory path", async () => {
             const fedoraObject = new FedoraObject("foo:123", config, fedora);
             const labelSpy = jest.spyOn(fedoraObject, "modifyObjectLabel").mockImplementation(jest.fn());
-            const datastreamSpy = jest.spyOn(fedoraObject, "getDatastream").mockResolvedValue("<oai:dc><dc:title>Incomplete... / Processing...</dc:title></oai:dc>");
+            const datastreamSpy = jest
+                .spyOn(fedoraObject, "getDatastream")
+                .mockResolvedValue("<oai:dc><dc:title>Incomplete... / Processing...</dc:title></oai:dc>");
             const replaceSpy = jest.spyOn(ingest, "replaceDCMetadata").mockImplementation(jest.fn());
             await ingest.finalizeTitle(fedoraObject);
             expect(labelSpy).toHaveBeenCalledTimes(1);
@@ -51,7 +51,11 @@ describe("IngestProcessor", () => {
             expect(datastreamSpy).toHaveBeenCalledTimes(1);
             expect(datastreamSpy).toHaveBeenCalledWith("DC");
             expect(replaceSpy).toHaveBeenCalledTimes(1);
-            expect(replaceSpy).toHaveBeenCalledWith(fedoraObject, "<oai:dc><dc:title>fakejob_dir_fake_my</dc:title></oai:dc>", "Set dc:title to ingest/process path");
+            expect(replaceSpy).toHaveBeenCalledWith(
+                fedoraObject,
+                "<oai:dc><dc:title>fakejob_dir_fake_my</dc:title></oai:dc>",
+                "Set dc:title to ingest/process path"
+            );
         });
     });
 });
