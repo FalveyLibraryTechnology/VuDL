@@ -10,10 +10,14 @@ jest.mock("jimp", () => {
 describe("Image", () => {
     let image: ImageFile;
     beforeEach(() => {
-        image = new ImageFile("test1", new Config({}));
+        image = new ImageFile("test1.tif", new Config({}));
     });
 
     it("should return the filename", () => {
-        expect(image.filename).toEqual("test1");
+        expect(image.filename).toEqual("test1.tif");
+    });
+
+    it("generates appropriate derivative paths", () => {
+        expect(image.derivativePath("HUGE", "gif")).toEqual("./test1/HUGE/test1.gif");
     });
 });
