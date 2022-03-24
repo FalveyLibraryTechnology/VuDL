@@ -70,6 +70,9 @@ messenger.post("/camel", bodyParser.json(), async function (req, res) {
         case "Purge":
             await QueueManager.getInstance().performIndexOperation(pid, "delete");
             break;
+        case "Follow":
+            // Follow messages do not require any action at this time.
+            break;
         default: {
             const msg = "Unexpected action: " + action + " (on PID: " + pid + ")";
             console.error(msg);
