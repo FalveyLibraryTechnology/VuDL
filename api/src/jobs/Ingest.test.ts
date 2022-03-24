@@ -61,29 +61,22 @@ describe("IngestProcessor", () => {
     });
     describe("moveDirectory", () => {
         it("moves the directory appropriately", () => {
-            const date = new Date();
-            const month = "0" + (date.getMonth() + 1);
-            const day = "0" + date.getDate();
-            const expectedTargetParent =
-                "/fake_processed/" +
-                date.getFullYear() +
-                "-" +
-                month.substring(month.length - 2) +
-                "-" +
-                day.substring(day.length - 2) +
-                "/fake";
+            const expectedTargetParent = "/fake_processed/2\\d\\d\\d-\\d\\d-\\d\\d/fake";
+            const expectedTargetParentRegEx = new RegExp(expectedTargetParent);
             const expectedTarget = expectedTargetParent + "/fakejob";
+            const expectedTargetRegEx = new RegExp(expectedTarget);
+            const expectedLockRegEx = new RegExp(expectedTarget + "/ingest.lock");
             const existsSpy = jest.spyOn(fs, "existsSync").mockReturnValueOnce(false).mockReturnValueOnce(true);
             const renameSpy = jest.spyOn(fs, "renameSync").mockImplementation(jest.fn());
             const unlinkSpy = jest.spyOn(fs, "unlinkSync").mockImplementation(jest.fn());
             ingest.moveDirectory();
             expect(existsSpy).toHaveBeenCalledTimes(2);
-            expect(existsSpy).toHaveBeenNthCalledWith(1, expectedTarget);
-            expect(existsSpy).toHaveBeenNthCalledWith(2, expectedTargetParent);
+            expect(existsSpy).toHaveBeenNthCalledWith(1, expect.stringMatching(expectedTargetRegEx));
+            expect(existsSpy).toHaveBeenNthCalledWith(2, expect.stringMatching(expectedTargetParentRegEx));
             expect(renameSpy).toHaveBeenCalledTimes(1);
-            expect(renameSpy).toHaveBeenCalledWith(job.dir, expectedTarget);
+            expect(renameSpy).toHaveBeenCalledWith(job.dir, expect.stringMatching(expectedTargetRegEx));
             expect(unlinkSpy).toHaveBeenCalledTimes(1);
-            expect(unlinkSpy).toHaveBeenCalledWith(expectedTarget + "/ingest.lock");
+            expect(unlinkSpy).toHaveBeenCalledWith(expect.stringMatching(expectedLockRegEx));
         });
     });
 });
