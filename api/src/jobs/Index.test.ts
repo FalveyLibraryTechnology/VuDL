@@ -15,6 +15,8 @@ describe("Index", () => {
         let job: Job;
         let indexer;
         let needleResponse: NeedleResponse;
+        let consoleErrorSpy;
+        let consoleLogSpy;
         beforeEach(() => {
             needleResponse = {
                 statusCode: 200,
@@ -30,6 +32,12 @@ describe("Index", () => {
                 },
             } as Job;
             jest.spyOn(SolrIndexer, "getInstance").mockReturnValue(indexer);
+            consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
+            consoleLogSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
         });
 
         it("deletes the pid", async () => {
@@ -37,6 +45,9 @@ describe("Index", () => {
 
             await index.run(job);
 
+            expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+            expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "delete", pid: 123 });
             expect(indexer.deletePid).toHaveBeenCalledWith(job.data.pid);
         });
 
@@ -46,6 +57,9 @@ describe("Index", () => {
 
             await index.run(job);
 
+            expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+            expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: 123 });
             expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
         });
 
@@ -58,8 +72,10 @@ describe("Index", () => {
         it("throws an error for statusCode not 200", async () => {
             needleResponse.statusCode = 404;
             jest.spyOn(indexer, "deletePid").mockResolvedValue(needleResponse);
-
             await expect(index.run(job)).rejects.toThrow(/Problem performing/);
+
+            expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+            expect(consoleErrorSpy).toHaveBeenCalledWith("Problem performing delete on 123: unspecified error");
         });
     });
 });

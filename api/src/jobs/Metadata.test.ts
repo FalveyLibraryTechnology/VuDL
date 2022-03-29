@@ -37,12 +37,18 @@ describe("Metadata", () => {
             jest.spyOn(FedoraObject, "build").mockReturnValue(fedoraObject);
         });
 
+        afterEach(() => {
+            jest.restoreAllMocks();
+        })
+
         it("adds a master data stream", async () => {
             fedoraObject.getDatastreamAsBuffer.mockResolvedValue(dataStream);
             tmp.fileSync.mockReturnValue(contentFile);
 
+            const consoleSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
             await metadata.run(job);
-
+            expect(consoleSpy).toHaveBeenCalledTimes(1);
+            expect(consoleSpy).toHaveBeenCalledWith("Adding metadata...", { pid: 123 });
             expect(fs.writeFileSync).toHaveBeenCalledWith(contentFile.name, dataStream);
             expect(fedoraObject.addMasterMetadataDatastream).toHaveBeenCalledWith(contentFile.name);
         });
