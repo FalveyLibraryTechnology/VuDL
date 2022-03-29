@@ -6,9 +6,7 @@ const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
 import { NeedleResponse } from "./interfaces";
 import xmlescape = require("xml-escape");
-import xmldom = require("@xmldom/xmldom");
 import { HttpError } from "../models/HttpError";
-const { DOMParser, XMLSerializer } = xmldom;
 
 export interface DatastreamParameters {
     dsLabel?: string;
@@ -320,7 +318,7 @@ export class Fedora {
     }
 
     /**
-     * Add a triple to the RELS-EXT datastream.
+     * Add a triple to the Fedora object.
      *
      * @param pid        PID to update
      * @param subject    RDF subject
@@ -328,52 +326,20 @@ export class Fedora {
      * @param obj        RDF object
      * @param isLiteral  Is object a literal (true) or a URI (false)?
      */
-    async addRelsExtRelationship(
+    async addRelationship(
         pid: string,
         subject: string,
         predicate: string,
         obj: string,
         isLiteral = false
     ): Promise<void> {
-        // Try to fetch the RELS-EXT; if it's empty, we need to create it for the first time!
-        let relsExt = await this.getDatastreamAsString(pid, "RELS-EXT", false, true);
-        const rdfNs = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-        const relsExtAlreadyExists = relsExt.length > 0;
-        if (!relsExtAlreadyExists) {
-            relsExt =
-                '<rdf:RDF xmlns:rdf="' +
-                rdfNs +
-                '">' +
-                '<rdf:Description rdf:about="' +
-                subject +
-                '">' +
-                "</rdf:Description></rdf:RDF>";
-        }
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(relsExt, "text/xml");
-        const description = xmlDoc.getElementsByTagNameNS(rdfNs, "Description");
-        const parts = predicate.split("#");
-        const tagName = parts[1];
-        const nameSpace = parts[0] + "#";
-        const newElement = xmlDoc.createElementNS(nameSpace, tagName);
-        if (isLiteral) {
-            const newText = xmlDoc.createTextNode(obj);
-            newElement.appendChild(newText);
-        } else {
-            newElement.setAttribute("rdf:resource", obj);
-        }
-        description[0].appendChild(newElement);
-        const updatedXml = new XMLSerializer().serializeToString(xmlDoc);
-        const mimeType = "application/rdf+xml";
-        if (!relsExtAlreadyExists) {
-            const dsParams: DatastreamParameters = {
-                dsLabel: "Relationships",
-                mimeType: mimeType,
-                linkHeader: '<http://www.w3.org/ns/ldp#NonRDFSource>; rel="type"',
-            };
-            await this.addDatastream(pid, "RELS-EXT", dsParams, updatedXml, [201]);
-        } else {
-            await this.putDatastream(pid, "RELS-EXT", mimeType, [204], updatedXml);
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(subject), namedNode(predicate), isLiteral ? literal(obj) : namedNode(obj));
+        const turtle = this.getOutputFromWriter(writer);
+        const targetPath = "/" + pid;
+        const patchResponse = await this.patchRdf(targetPath, turtle);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
         }
     }
 

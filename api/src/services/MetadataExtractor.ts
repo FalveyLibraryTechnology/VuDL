@@ -62,24 +62,6 @@ class MetadataExtractor {
     }
 
     /**
-     * Extract relationships from RELS-EXT XML.
-     *
-     * @param RELS RELS-EXT XML
-     * @returns    Record mapping fields to values
-     */
-    public extractRelations(RELS: string): Record<string, Array<string>> {
-        const xmlParser = new DOMParser();
-        const RELS_XML = xmlParser.parseFromString(RELS, "text/xml");
-        return this.extractRDFXML(
-            RELS_XML,
-            {
-                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-            },
-            "//rdf:Description/*"
-        );
-    }
-
-    /**
      * Extract key details from the description of a Fedora 6 container object.
      *
      * @param RDF RDF XML from Fedora 6 (describing a container)
@@ -88,16 +70,23 @@ class MetadataExtractor {
     public extractFedoraDetails(RDF: string): Record<string, Array<string>> {
         const xmlParser = new DOMParser();
         const RDF_XML = xmlParser.parseFromString(RDF, "text/xml");
-        const details = this.extractRDFXML(
-            RDF_XML,
-            {
-                rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                fedora: "http://fedora.info/definitions/v4/repository#",
-                "fedora3-model": "info:fedora/fedora-system:def/model#",
-                "fedora3-view": "info:fedora/fedora-system:def/view#",
-            },
-            "//rdf:Description/fedora:*|//rdf:Description/fedora3-model:*|//rdf:Description/fedora3-view:*"
-        );
+        // We want to extract all values from the following namespaces, so we'll define the list
+        // and use it to build an Xpath query to fetch everything:
+        const namespaces = {
+            rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+            fedora: "http://fedora.info/definitions/v4/repository#",
+            "fedora3-model": "info:fedora/fedora-system:def/model#",
+            "fedora3-relations": "info:fedora/fedora-system:def/relations-external#",
+            "fedora3-view": "info:fedora/fedora-system:def/view#",
+            oai: "http://www.openarchives.org/OAI/2.0/",
+            vudl: "http://vudl.org/relationships#",
+            "vudl-legacy": "http://digital.library.villanova.edu/rdf/relations#",
+        };
+        const toXpath = function (ns) {
+            return "//rdf:Description/" + ns + ":*";
+        };
+        const xpath = Object.keys(namespaces).map(toXpath).join("|");
+        const details = this.extractRDFXML(RDF_XML, namespaces, xpath);
         // The new (F6) created and lastModified properties should take
         // precedence over the legacy (F3) createdDate and lastModifiedDate
         // properties when present.

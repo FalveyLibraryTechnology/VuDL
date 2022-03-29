@@ -92,12 +92,6 @@ class SolrIndexer {
             hierarchy_all_parents_str_mv: fedoraData.getAllParents(),
         };
 
-        // Load RELS-EXT data (some of this is used below):
-        for (const field in fedoraData.relations) {
-            const fieldName = "relsext." + field + "_txt_mv";
-            fields[fieldName] = fedoraData.relations[field];
-        }
-
         // Is this a hierarchy?
         if (fedoraData.models.includes("vudl-system:FolderCollection")) {
             fields.is_hierarchy_id = fedoraData.pid;
@@ -180,7 +174,7 @@ class SolrIndexer {
             // to look them up manually in Fedora. Perhaps this can be optimized or
             // simplified somehow...
             const titlePromises = ((fields.hierarchy_parent_id ?? []) as Array<string>).map(async (id) => {
-                const currentObject = await this.hierarchyCollector.getFedoraData(id, false);
+                const currentObject = await this.hierarchyCollector.getFedoraData(id);
                 return currentObject.title;
             });
             fields.hierarchy_parent_title = await Promise.all(titlePromises);
@@ -281,13 +275,25 @@ class SolrIndexer {
                 fields.collection_title_sort_str = fields.title_sort;
             }
         }
-
-        fields.has_order_str = ((fields["relsext.sortOn_txt_mv"] ?? [])[0] ?? "title") === "custom" ? "yes" : "no";
-
+        // Fedora 3 stored some data in Fedora object XML and some in separate RELS-EXT datastreams.
+        // Legacy VuDL indexed these two data sources using different prefixes. For stability of legacy
+        // queries, we retain this prefix separation, using the table below to identify the former
+        // RELS-EXT fields and defaulting to the "fgs." prefix for everything else.
+        const prefixes = {
+            hasLegacyURL: "relsext",
+            hasModel: "relsext",
+            itemID: "relsext",
+            isMemberOf: "relsext",
+            sequence: "relsext",
+            sortOn: "relsext",
+        };
         for (const field in fedoraData.fedoraDetails) {
-            const fieldName = "fgs." + field + "_txt_mv";
+            const prefix = prefixes[field] ?? "fgs";
+            const fieldName = prefix + "." + field + "_txt_mv";
             fields[fieldName] = fedoraData.fedoraDetails[field];
         }
+
+        fields.has_order_str = ((fields["relsext.sortOn_txt_mv"] ?? [])[0] ?? "title") === "custom" ? "yes" : "no";
 
         for (const field in fedoraData.agents) {
             const fieldName = "agent." + field + "_txt_mv";

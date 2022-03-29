@@ -21,6 +21,32 @@ describe("Fedora", () => {
         fedora = Fedora.getInstance();
     });
 
+    describe("addRelationship", () => {
+        beforeEach(() => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
+        });
+
+        it("will add a relationship with a literal object", () => {
+            fedora.addRelationship(pid, "subject", "predicate", "object", true);
+            expect(requestSpy).toHaveBeenCalledWith(
+                "patch",
+                "/" + pid,
+                ' INSERT { <subject> <predicate> "object".\n } WHERE {  }',
+                { headers: { "Content-Type": "application/sparql-update" } }
+            );
+        });
+
+        it("will add a relationship with a URI object", () => {
+            fedora.addRelationship(pid, "subject", "predicate", "object", false);
+            expect(requestSpy).toHaveBeenCalledWith(
+                "patch",
+                "/" + pid,
+                " INSERT { <subject> <predicate> <object>.\n } WHERE {  }",
+                { headers: { "Content-Type": "application/sparql-update" } }
+            );
+        });
+    });
+
     describe("deleteDatastream", () => {
         beforeEach(() => {
             requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({});
