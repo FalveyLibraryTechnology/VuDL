@@ -39,7 +39,7 @@ describe("Metadata", () => {
 
         afterEach(() => {
             jest.restoreAllMocks();
-        })
+        });
 
         it("adds a master data stream", async () => {
             fedoraObject.getDatastreamAsBuffer.mockResolvedValue(dataStream);
