@@ -18,12 +18,7 @@ class FedoraExtraDetails {
     protected fitsData: Record<string, Array<string>>;
     protected fullText: Record<string, Array<string>>;
 
-    constructor(
-        data: FedoraData,
-        fedora: Fedora,
-        extractor: MetadataExtractor,
-        tika: TikaExtractor
-    ) {
+    constructor(data: FedoraData, fedora: Fedora, extractor: MetadataExtractor, tika: TikaExtractor) {
         this.data = data;
         this.fedora = fedora;
         this.extractor = extractor;
