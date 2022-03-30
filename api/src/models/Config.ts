@@ -13,7 +13,14 @@ class Config {
 
     public static getInstance(): Config {
         if (!Config.instance) {
-            const config = ini.parse(fs.readFileSync(__dirname.replace(/\\/g, "/") + "/../../vudl.ini", "utf-8"));
+            const filename = __dirname.replace(/\\/g, "/") + "/../../vudl.ini";
+            let config;
+            try {
+                config = ini.parse(fs.readFileSync(filename, "utf-8"));
+            } catch (e) {
+                console.warn(`Could not load ${filename}; defaulting to empty configuration.`);
+                config = {};
+            }
             // ini returns any, but we can cast it to what we need:
             Config.instance = new Config(config as Record<string, string>);
         }
