@@ -22,7 +22,7 @@ describe("TikaExtractor", () => {
         const filename = "foo";
         const fd = "fake.fd";
         jest.spyOn(tmp, "fileSync").mockReturnValue({ name: filename, fd });
-        const writeSpy = jest.spyOn(fs, "writeSync").mockImplementation(jest.fn())
+        const writeSpy = jest.spyOn(fs, "writeSync").mockImplementation(jest.fn());
         const deleteSpy = jest.spyOn(fs, "rmSync").mockImplementation(jest.fn());
         const buffer = Buffer.from("fake");
         expect(extractor.extractText(buffer)).toEqual("bar");
