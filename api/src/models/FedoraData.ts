@@ -1,3 +1,8 @@
+import Fedora from "../services/Fedora";
+import FedoraExtraDetails from "./FedoraExtraDetails";
+import MetadataExtractor from "../services/MetadataExtractor";
+import TikaExtractor from "../services/TikaExtractor";
+
 interface TreeNode {
     pid: string;
     title: string;
@@ -10,20 +15,42 @@ class FedoraData {
     public fedoraDetails: Record<string, Array<string>>;
     public fedoraDatastreams: Array<string>;
     public parents: Array<FedoraData> = [];
-    public extraDetails: Record<string, Record<string, Array<string>>>;
+    public extraDetails: FedoraExtraDetails;
 
     constructor(
         pid: string,
         metadata: Record<string, Array<string>>,
         fedoraDetails: Record<string, Array<string>>,
         fedoraDatastreams: Array<string>,
-        extraDetails: Record<string, Record<string, Array<string>>> = {}
+        fedora: Fedora,
+        extractor: MetadataExtractor,
+        tika: TikaExtractor
     ) {
         this.pid = pid;
         this.metadata = metadata;
         this.fedoraDetails = fedoraDetails;
         this.fedoraDatastreams = fedoraDatastreams;
-        this.extraDetails = extraDetails;
+        this.extraDetails = new FedoraExtraDetails(this, fedora, extractor, tika);
+    }
+
+    public static build(
+        pid: string,
+        metadata: Record<string, Array<string>> = {},
+        fedoraDetails: Record<string, Array<string>> = {},
+        fedoraDatastreams: Array<string> = [],
+        fedora: Fedora = null,
+        extractor: MetadataExtractor = null,
+        tika: TikaExtractor = null
+    ): FedoraData {
+        return new FedoraData(
+            pid,
+            metadata,
+            fedoraDetails,
+            fedoraDatastreams,
+            fedora ?? Fedora.getInstance(),
+            extractor ?? MetadataExtractor.getInstance(),
+            tika ?? TikaExtractor.getInstance()
+        );
     }
 
     addParent(parent: FedoraData): void {
@@ -77,11 +104,8 @@ class FedoraData {
         };
     }
 
-    getThumbnailHash(type: string): string {
-        const hashes =
-            typeof this.extraDetails.thumbnails === "undefined"
-                ? []
-                : this.extraDetails.thumbnails.hasMessageDigest ?? [];
+    async getThumbnailHash(type: string): Promise<string> {
+        const hashes = (await this.extraDetails.getThumbnails()).hasMessageDigest ?? [];
         for (const hash of hashes) {
             const parts = hash.split(":");
             if ((parts[1] ?? "") === type && typeof parts[2] !== "undefined") {
@@ -91,26 +115,28 @@ class FedoraData {
         return null;
     }
 
-    get agents(): Record<string, Array<string>> {
-        return typeof this.extraDetails.agents === "undefined" ? {} : this.extraDetails.agents;
+    async getFitsValueAsArray(name: string): Promise<Array<string>> {
+        const fitsData = await this.extraDetails.getFitsData();
+        return fitsData[name] ?? [];
     }
 
-    get fileSize(): string {
-        if (
-            typeof this.extraDetails.fitsData === "undefined" ||
-            typeof this.extraDetails.fitsData.size === "undefined"
-        ) {
+    async getFitsValueAsString(name: string): Promise<string> {
+        const fitsData = await this.extraDetails.getFitsData();
+        if (typeof fitsData[name] === "undefined") {
             return null;
         }
-        return this.extraDetails.fitsData.size[0] ?? null;
+        return fitsData[name][0] ?? null;
     }
 
-    get fullText(): Array<string> {
+    async getFileSize(): Promise<string> {
+        return await this.getFitsValueAsString("size");
+    }
+
+    async getFullText(): Promise<Array<string>> {
         let fullText = [];
-        if (typeof this.extraDetails.fullText !== "undefined") {
-            for (const current in this.extraDetails.fullText) {
-                fullText = fullText.concat(this.extraDetails.fullText[current]);
-            }
+        const rawFullText = await this.extraDetails.getFullText();
+        for (const current in rawFullText) {
+            fullText = fullText.concat(rawFullText[current]);
         }
         return fullText.map((str) => {
             // Normalize whitespace:
@@ -118,38 +144,21 @@ class FedoraData {
         });
     }
 
-    get imageHeight(): string {
-        if (
-            typeof this.extraDetails.fitsData === "undefined" ||
-            typeof this.extraDetails.fitsData.imageHeight === "undefined"
-        ) {
-            return null;
-        }
-        return this.extraDetails.fitsData.imageHeight[0] ?? null;
+    async getImageHeight(): Promise<string> {
+        return await this.getFitsValueAsString("imageHeight");
     }
 
-    get imageWidth(): string {
-        if (
-            typeof this.extraDetails.fitsData === "undefined" ||
-            typeof this.extraDetails.fitsData.imageWidth === "undefined"
-        ) {
-            return null;
-        }
-        return this.extraDetails.fitsData.imageWidth[0] ?? null;
+    async getImageWidth(): Promise<string> {
+        return await this.getFitsValueAsString("imageWidth");
     }
 
-    get license(): string {
-        return typeof this.extraDetails.license === "undefined" ? null : this.extraDetails.license.url[0];
+    async getLicense(): Promise<string> {
+        const license = await this.extraDetails.getLicense();
+        return license.url[0] ?? null;
     }
 
-    get mimetype(): Array<string> {
-        if (
-            typeof this.extraDetails.fitsData === "undefined" ||
-            typeof this.extraDetails.fitsData.mimetype === "undefined"
-        ) {
-            return [];
-        }
-        return this.extraDetails.fitsData.mimetype;
+    async getMimeType(): Promise<Array<string>> {
+        return await this.getFitsValueAsArray("mimetype");
     }
 
     get models(): Array<string> {

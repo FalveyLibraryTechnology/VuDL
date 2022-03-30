@@ -295,38 +295,44 @@ class SolrIndexer {
 
         fields.has_order_str = ((fields["relsext.sortOn_txt_mv"] ?? [])[0] ?? "title") === "custom" ? "yes" : "no";
 
-        for (const field in fedoraData.agents) {
+        const agents = await fedoraData.extraDetails.getAgents();
+        for (const field in agents) {
             const fieldName = "agent." + field + "_txt_mv";
-            fields[fieldName] = fedoraData.agents[field];
+            fields[fieldName] = agents[field];
         }
 
-        if (fedoraData.license !== null) {
-            fields["license.mdRef_str"] = fedoraData.license;
+        const license = await fedoraData.getLicense();
+        if (license !== null) {
+            fields["license.mdRef_str"] = license;
         }
         if ((fields["license.mdRef_str"] ?? null) === "http://digital.library.villanova.edu/copyright.html") {
             fields.license_str = "protected";
         }
         fields.has_thumbnail_str = fedoraData.fedoraDatastreams.includes("THUMBNAIL") ? "true" : "false";
         if (fields.has_thumbnail_str === "true") {
-            fields.THUMBNAIL_contentDigest_digest_str = fedoraData.getThumbnailHash("md5");
+            fields.THUMBNAIL_contentDigest_digest_str = await fedoraData.getThumbnailHash("md5");
         }
 
         // FITS details:
-        if (fedoraData.fileSize !== null) {
-            fields.sizebytes_str = fedoraData.fileSize;
+        const fileSize = await fedoraData.getFileSize();
+        if (fileSize !== null) {
+            fields.sizebytes_str = fileSize;
         }
-        if (fedoraData.imageHeight !== null) {
-            fields.height_str = fedoraData.imageHeight;
+        const imageHeight = await fedoraData.getImageHeight();
+        if (imageHeight !== null) {
+            fields.height_str = imageHeight;
         }
-        if (fedoraData.imageWidth !== null) {
-            fields.width_str = fedoraData.imageWidth;
+        const imageWidth = await fedoraData.getImageWidth();
+        if (imageWidth !== null) {
+            fields.width_str = imageWidth;
         }
-        if (fedoraData.mimetype.length > 0) {
-            fields.mime_str_mv = fedoraData.mimetype;
+        const mimetype = await fedoraData.getMimeType();
+        if (mimetype.length > 0) {
+            fields.mime_str_mv = mimetype;
         }
 
         // Full text:
-        const fullText = fedoraData.fullText;
+        const fullText = await fedoraData.getFullText();
         if (fullText.length > 0) {
             fields.fulltext = fullText;
         }

@@ -60,7 +60,7 @@ describe("edit", () => {
             expect(response.text).toEqual("Missing state parameter.");
         });
         it("will fail if parent does not have collection model", async () => {
-            const mockData = new FedoraData("pid:123", {}, {}, [], {});
+            const mockData = FedoraData.build("pid:123");
             const collector = HierarchyCollector.getInstance();
             const dataSpy = jest.spyOn(collector, "getFedoraData").mockResolvedValue(mockData);
             const response = await request(app)
@@ -73,7 +73,7 @@ describe("edit", () => {
             expect(dataSpy).toHaveBeenCalledWith("pid:123");
         });
         it("will succeed if parent has collection model", async () => {
-            const mockData = new FedoraData("pid:123", {}, {}, [], {});
+            const mockData = FedoraData.build("pid:123");
             mockData.fedoraDetails = {
                 hasModel: [
                     "http://localhost:8080/rest/vudl-system:FolderModel",
