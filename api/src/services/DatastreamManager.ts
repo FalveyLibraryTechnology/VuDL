@@ -1,5 +1,6 @@
 import { FedoraObject } from "../models/FedoraObject";
 import FedoraCatalog from "./FedoraCatalog";
+import MetadataExtractor from "./MetadataExtractor";
 
 class DatastreamManager {
     private static instance: DatastreamManager;
@@ -14,6 +15,24 @@ class DatastreamManager {
             DatastreamManager.instance = new DatastreamManager(FedoraCatalog.getInstance());
         }
         return DatastreamManager.instance;
+    }
+
+    async getMetadata(pid: string, stream: string): Promise<string> {
+        const fedoraObject = FedoraObject.build(pid);
+        const xml = await fedoraObject.getDatastreamMetadata(stream);
+        return xml;
+    }
+
+    async getMimeType(pid: string, stream: string): Promise<string> {
+        const metadataExtractor = MetadataExtractor.getInstance();
+        const xml = await this.getMetadata(pid, stream);
+        const ebuNode = metadataExtractor.extractEbuCore(xml, "//ebucore:hasMimeType");
+        return ebuNode?.hasMimeType?.[0] || "";
+    }
+
+    async downloadBuffer(pid: string, stream: string): Promise<Buffer> {
+        const fedoraObject = FedoraObject.build(pid);
+        return await fedoraObject.getDatastreamAsBuffer(stream);
     }
 
     async uploadFile(pid: string, stream: string, filepath: string, mimeType: string): Promise<void> {

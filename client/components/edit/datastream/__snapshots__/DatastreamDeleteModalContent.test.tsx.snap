@@ -16,7 +16,7 @@ exports[`DatastreamDeleteModalContent renders 1`] = `
     </ForwardRef(Button)>
     <ForwardRef(Button)
       className="yesButton"
-      onClick={[Function]}
+      onClick={[MockFunction]}
     >
       Yes
     </ForwardRef(Button)>

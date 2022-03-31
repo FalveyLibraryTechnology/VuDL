@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import { TreeView, TreeItem } from "@material-ui/lab";
+import { TreeView, TreeItem } from "@mui/lab";
 import { useFetchContext } from "../../context/FetchContext";
 import { apiUrl } from "../../util/routes";
 import Link from "next/link";

@@ -41,6 +41,14 @@ const deleteObjectDatastreamUrl = (pid, datastream: string) => {
     return `${editObjectUrl}/${pid}/datastream/${datastream}`;
 }
 
+const downloadObjectDatastreamUrl = (pid, datastream: string) => {
+    return `${editObjectUrl}/${pid}/datastream/${datastream}/download`;
+}
+
+const getObjectDatastreamMetadataUrl = (pid, datastream: string) => {
+    return `${editObjectUrl}/${pid}/datastream/${datastream}/metadata`;
+}
+
 export {
     baseUrl,
     apiUrl,
@@ -58,4 +66,6 @@ export {
     getObjectModelsDatastreamsUrl,
     postObjectDatastreamUrl,
     deleteObjectDatastreamUrl,
+    downloadObjectDatastreamUrl,
+    getObjectDatastreamMetadataUrl
 };

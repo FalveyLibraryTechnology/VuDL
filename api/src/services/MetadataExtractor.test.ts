@@ -1,6 +1,11 @@
 import MetadataExtractor from "./MetadataExtractor";
+import { DOMParser } from "@xmldom/xmldom";
 
 describe("MetadataExtractor", () => {
+    let metadataExtractor;
+    beforeEach(() => {
+        metadataExtractor = MetadataExtractor.getInstance();
+    });
     describe("extractFedoraDetails", () => {
         it("extracts details from RDF", () => {
             const rdf = `
@@ -11,7 +16,7 @@ describe("MetadataExtractor", () => {
                     xmlns:j.1="http://vudl.org/relationships#"
                     xmlns:fedora="http://fedora.info/definitions/v4/repository#"
                     xmlns:ldp="http://www.w3.org/ns/ldp#"
-                    xmlns:j.2="info:fedora/fedora-system:def/model#" > 
+                    xmlns:j.2="info:fedora/fedora-system:def/model#" >
                 <rdf:Description rdf:about="http://localhost:8080/rest/vudl:700048">
                     <j.2:hasModel rdf:resource="http://localhost:8080/rest/vudl-system:CollectionModel"/>
                     <j.2:label>Document List</j.2:label>
@@ -34,7 +39,7 @@ describe("MetadataExtractor", () => {
                 </rdf:Description>
                 </rdf:RDF>
             `;
-            expect(MetadataExtractor.getInstance().extractFedoraDetails(rdf)).toEqual({
+            expect(metadataExtractor.extractFedoraDetails(rdf)).toEqual({
                 createdDate: ["2022-03-17T17:22:17.148516Z"],
                 hasModel: [
                     "http://localhost:8080/rest/vudl-system:CollectionModel",
@@ -55,6 +60,37 @@ describe("MetadataExtractor", () => {
                     "http://fedora.info/definitions/v4/repository#Resource",
                     "http://www.w3.org/ns/ldp#BasicContainer",
                 ],
+            });
+        });
+    });
+    describe("extractEbuCore", () => {
+        let xml;
+        let xpathQuery;
+        let rdfXml;
+        let parseFromStringSpy;
+        beforeEach(() => {
+            xml = "test1";
+            xpathQuery = "test2";
+            rdfXml = "test3";
+            parseFromStringSpy = jest.spyOn(DOMParser.prototype, "parseFromString");
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("extracts an ebu node", async () => {
+            parseFromStringSpy.mockReturnValue(rdfXml);
+            const extractRDFXMLSpy = jest.spyOn(metadataExtractor, "extractRDFXML").mockReturnValue({
+                test: ["test4"],
+            });
+
+            const response = metadataExtractor.extractEbuCore(xml, xpathQuery);
+
+            expect(parseFromStringSpy).toHaveBeenCalledWith(xml, "text/xml");
+            expect(extractRDFXMLSpy).toHaveBeenCalled();
+            expect(response).toEqual({
+                test: ["test4"],
             });
         });
     });

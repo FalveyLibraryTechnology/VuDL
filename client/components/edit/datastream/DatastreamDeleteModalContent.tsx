@@ -1,37 +1,14 @@
 import React from "react";
 import { Button, DialogContent, DialogActions, DialogContentText } from "@mui/material";
 import { useEditorContext } from "../../../context/EditorContext";
-import { useFetchContext } from "../../../context/FetchContext";
-import { deleteObjectDatastreamUrl } from "../../../util/routes";
+import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 
 const DatastreamDeleteModalContent = () => {
     const {
-        action: { fetchText },
-    } = useFetchContext();
-    const {
-        state: { currentPid, activeDatastream },
-        action: { setSnackbarState, toggleDatastreamModal, getCurrentModelsDatastreams },
+        action: { toggleDatastreamModal },
     } = useEditorContext();
-    const deleteDatastream = async () => {
-        try {
-            const text = await fetchText(deleteObjectDatastreamUrl(currentPid, activeDatastream), {
-                method: "DELETE",
-            });
-            await getCurrentModelsDatastreams();
-            setSnackbarState({
-                open: true,
-                message: text,
-                severity: "success",
-            });
-        } catch (err) {
-            setSnackbarState({
-                open: true,
-                message: err.message,
-                severity: "error",
-            });
-        }
-        toggleDatastreamModal();
-    };
+    const { deleteDatastream } = useDatastreamOperation();
+
     return (
         <>
             <DialogContent>

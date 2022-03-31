@@ -9,7 +9,7 @@ import { FetchContextProvider } from "../../context/FetchContext";
 
 let nodeSelectFunction = null;
 let treeItems = null;
-jest.mock("@material-ui/lab", function () {
+jest.mock("@mui/lab", function () {
     return {
         TreeView: ({ onNodeSelect, children }) => {
             nodeSelectFunction = onNodeSelect;
