@@ -50,23 +50,24 @@ describe("SolrIndexer", () => {
         expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
     });
 
-    it("returns reasonable results in response to fully-populated input", async () => {
+    it("processes title data correctly", async () => {
         const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
         const pid = "test:123";
+        const altTitle = "alternate title";
         const title = "the test title";
         const metadata = {
-            "dc:title": [title],
+            "dc:title": [title, altTitle],
         };
         const collector = HierarchyCollector.getInstance();
         const record = FedoraData.build(pid, metadata);
         const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
         const result = await indexer.getFields(pid);
         expect(result).toEqual({
-            allfields: [title],
+            allfields: [title, altTitle],
             collection: "Digital Library",
             collection_title_sort_str: "test title",
             datastream_str_mv: [],
-            "dc.title_txt_mv": [title],
+            "dc.title_txt_mv": [title, altTitle],
             dc_title_str: title,
             fedora_parent_id_str_mv: [],
             has_order_str: "no",
@@ -83,6 +84,7 @@ describe("SolrIndexer", () => {
             modeltype_str_mv: [],
             record_format: "vudl",
             title: title,
+            title_alt: [altTitle],
             title_full: title,
             title_short: title,
             title_sort: "test title",
