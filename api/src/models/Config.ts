@@ -7,7 +7,7 @@ class Config {
 
     protected ini;
 
-    constructor(ini: Record<string, string>) {
+    constructor(ini: Record<string, string|string[]>) {
         this.ini = ini;
     }
 
@@ -22,9 +22,13 @@ class Config {
                 config = {};
             }
             // ini returns any, but we can cast it to what we need:
-            Config.instance = new Config(config as Record<string, string>);
+            Config.setInstance(new Config(config as Record<string, string>));
         }
         return Config.instance;
+    }
+
+    public static setInstance(config: Config) {
+        Config.instance = config;
     }
 
     get clientUrl(): string {

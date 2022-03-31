@@ -338,10 +338,9 @@ class SolrIndexer {
         }
 
         // Change tracker details:
-        const change = await this.getChangeTrackerDetails(
-            pid,
-            fields["fgs.lastModifiedDate_txt_mv"][0] ?? "1900-01-01T00:00:00Z"
-        );
+        const lastModified = (typeof(fields["fgs.lastModifiedDate_txt_mv"]) !== "undefined" && fields["fgs.lastModifiedDate_txt_mv"].length > 0)
+            ? fields["fgs.lastModifiedDate_txt_mv"][0] : "1900-01-01T00:00:00Z";
+        const change = await this.getChangeTrackerDetails(pid, lastModified);
         if (change.getFirstIndexed ?? "") {
             fields.first_indexed = change.getFirstIndexed;
         }
