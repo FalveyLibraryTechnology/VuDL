@@ -2,10 +2,6 @@ import Fedora from "./Fedora";
 import HierarchyCollector from "./HierarchyCollector";
 import MetadataExtractor from "./MetadataExtractor";
 
-jest.mock("child_process", () => {
-    return { execSync: jest.fn(() => "bar") };
-});
-
 describe("HierarchyCollector", () => {
     let collector;
     beforeEach(() => {
