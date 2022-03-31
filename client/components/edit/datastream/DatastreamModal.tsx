@@ -9,7 +9,6 @@ const contentMapping = {
     Upload: <DatastreamUploadModalContent />,
     View: null,
     Metadata: null,
-    Download: null,
     Delete: <DatastreamDeleteModalContent />,
 };
 

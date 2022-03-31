@@ -9,7 +9,7 @@ import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import HierarchyCollector from "../services/HierarchyCollector";
 import MetadataExtractor from "../services/MetadataExtractor";
 import { requireToken } from "./auth";
-import { defaultSanitizeRegEx, pidSanitizer, pidSanitizeRegEx, sanitizeParameters } from "./sanitize";
+import { datastreamSanitizer, pidSanitizer } from "./sanitize";
 import * as formidable from "formidable";
 import Solr from "../services/Solr";
 import FedoraData from "../models/FedoraData";
@@ -152,7 +152,27 @@ edit.get("/object/parents/:pid", pidSanitizer, requireToken, async function (req
     }
 });
 
-const datastreamSanitizer = sanitizeParameters({ pid: pidSanitizeRegEx, stream: defaultSanitizeRegEx }, /^$/);
+edit.get("/object/:pid/datastream/:stream/download", datastreamSanitizer, requireToken, async function (req, res) {
+    const pid = req.params.pid;
+    const stream = req.params.stream;
+    const datastream = DatastreamManager.getInstance();
+    try {
+        const mimeType = await datastream.getMimeType(pid, stream);
+        const fileType = mimeType?.split("/")?.[1];
+        const fileName = `${pid.replace(/:/g, "_")}_${stream}.${fileType}`;
+        const buffer = await datastream.downloadBuffer(pid, stream);
+        res.header({
+            "Access-Control-Expose-Headers": "Content-Disposition",
+            "Content-Disposition": `attachment; filename=${fileName}`,
+            "Content-Type": mimeType,
+        });
+        res.status(200).send(buffer);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
+
 edit.delete("/object/:pid/datastream/:stream", requireToken, datastreamSanitizer, async function (req, res) {
     const pid = req.params.pid;
     const stream = req.params.stream;
