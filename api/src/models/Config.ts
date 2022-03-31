@@ -27,7 +27,7 @@ class Config {
         return Config.instance;
     }
 
-    public static setInstance(config: Config) {
+    public static setInstance(config: Config): void {
         Config.instance = config;
     }
 
