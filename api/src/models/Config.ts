@@ -7,7 +7,7 @@ class Config {
 
     protected ini;
 
-    constructor(ini: Record<string, string|string[]>) {
+    constructor(ini: Record<string, string | string[]>) {
         this.ini = ini;
     }
 
