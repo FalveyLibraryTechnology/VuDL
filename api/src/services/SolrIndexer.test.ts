@@ -1,4 +1,5 @@
 import Config from "../models/Config";
+import Fedora from "./Fedora";
 import FedoraData from "../models/FedoraData";
 import HierarchyCollector from "./HierarchyCollector";
 import SolrIndexer from "./SolrIndexer";
@@ -288,6 +289,58 @@ describe("SolrIndexer", () => {
             topic_facet: ["Topic"],
             topic_str_mv: ["Topic"],
         });
+        expect(getHierarchySpy).toHaveBeenCalledTimes(1);
+        expect(getHierarchySpy).toHaveBeenCalledWith(pid);
+        expect(changeSpy).toHaveBeenCalledTimes(1);
+        expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
+    });
+
+    it("processes agent data correctly", async () => {
+        const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
+        const pid = "test:123";
+        const collector = HierarchyCollector.getInstance();
+        const record = FedoraData.build(pid, {}, {}, ["AGENTS"]);
+        const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
+        const fedora = Fedora.getInstance();
+        const agentXml = `<METS:metsHdr xmlns:METS="http://www.loc.gov/METS/" CREATEDATE="2012-08-16T02:28:47.698Z" LASTMODDATE="2012-08-17T20:25:54.802Z" RECORDSTATUS="PUBLISHED">
+    <METS:agent ROLE="DISSEMINATOR" TYPE="ORGANIZATION">
+        <METS:name>Falvey Memorial Library, Villanova University</METS:name>
+    </METS:agent>
+    <METS:agent ROLE="CREATOR" TYPE="INDIVIDUAL">
+        <METS:name>MPF</METS:name>
+    </METS:agent>
+    <METS:agent ROLE="EDITOR" TYPE="INDIVIDUAL">
+        <METS:name>MPF</METS:name>
+    </METS:agent>
+</METS:metsHdr>`;
+        const getStreamSpy = jest.spyOn(fedora, "getDatastreamAsString").mockResolvedValue(agentXml);
+        const result = await indexer.getFields(pid);
+        expect(result).toEqual({
+            "agent.name_txt_mv": [
+                "Falvey Memorial Library, Villanova University",
+                "MPF",
+                "MPF",
+            ],
+            allfields: [],
+            collection: "Digital Library",
+            datastream_str_mv: ["AGENTS"],
+            fedora_parent_id_str_mv: [],
+            has_order_str: "no",
+            has_thumbnail_str: "false",
+            hierarchy_all_parents_str_mv: [],
+            hierarchy_first_parent_id_str: pid,
+            hierarchy_parent_title: [],
+            hierarchy_sequence: "0000000000",
+            hierarchy_top_id: [pid],
+            hierarchy_top_title: [""],
+            hierarchytype: "",
+            id: pid,
+            institution: "My University",
+            modeltype_str_mv: [],
+            record_format: "vudl",
+        });
+        expect(getStreamSpy).toHaveBeenCalledTimes(1);
+        expect(getStreamSpy).toHaveBeenCalledWith(pid, "AGENTS");
         expect(getHierarchySpy).toHaveBeenCalledTimes(1);
         expect(getHierarchySpy).toHaveBeenCalledWith(pid);
         expect(changeSpy).toHaveBeenCalledTimes(1);
