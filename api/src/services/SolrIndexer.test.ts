@@ -212,7 +212,7 @@ describe("SolrIndexer", () => {
             "dc:series": ["Series"],
             "dc:subject": ["Topic"],
             "dc:relation": ["Relation"],
-            "dc:date": ["1979-12-06"]
+            "dc:date": ["1979-12-06"],
         };
         const collector = HierarchyCollector.getInstance();
         const record = FedoraData.build(pid, metadata);
