@@ -196,4 +196,96 @@ describe("SolrIndexer", () => {
         expect(changeSpy).toHaveBeenCalledTimes(1);
         expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
     });
+
+    it("processes Dublin Core fields correctly", async () => {
+        const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
+        const pid = "test:123";
+        const title = "title";
+        const metadata = {
+            "dc:title": [title],
+            "dc:creator": ["Doe, Jane"],
+            "dc:contributor": ["Smith, John"],
+            "dc:source": ["Source"],
+            "dc:description": ["Description"],
+            "dc:format": ["Book"],
+            "dc:publisher": ["Publisher"],
+            "dc:series": ["Series"],
+            "dc:subject": ["Topic"],
+            "dc:relation": ["Relation"],
+            "dc:date": ["1979-12-06"]
+        };
+        const collector = HierarchyCollector.getInstance();
+        const record = FedoraData.build(pid, metadata);
+        const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
+        const result = await indexer.getFields(pid);
+        expect(result).toEqual({
+            allfields: [
+                title,
+                "Doe, Jane",
+                "Smith, John",
+                "Source",
+                "Description",
+                "Book",
+                "Publisher",
+                "Series",
+                "Topic",
+                "Relation",
+                "1979-12-06",
+            ],
+            author: ["Doe, Jane"],
+            author2: ["Smith, John"],
+            author_sort: "Doe, Jane",
+            collection: "Digital Library",
+            collection_title_sort_str: title,
+            datastream_str_mv: [],
+            "dc.contributor_txt_mv": ["Smith, John"],
+            "dc.creator_txt_mv": ["Doe, Jane"],
+            "dc.date_txt_mv": ["1979-12-06"],
+            "dc.description_txt_mv": ["Description"],
+            "dc.format_txt_mv": ["Book"],
+            "dc.publisher_txt_mv": ["Publisher"],
+            "dc.relation_txt_mv": ["Relation"],
+            "dc.series_txt_mv": ["Series"],
+            "dc.source_txt_mv": ["Source"],
+            "dc.subject_txt_mv": ["Topic"],
+            "dc.title_txt_mv": [title],
+            dc_date_str: "1979-12-06",
+            dc_relation_str: "Relation",
+            dc_source_str_mv: ["Source"],
+            dc_title_str: title,
+            description: ["Description"],
+            fedora_parent_id_str_mv: [],
+            format: ["Book"],
+            has_order_str: "no",
+            has_thumbnail_str: "false",
+            hierarchy_all_parents_str_mv: [],
+            hierarchy_first_parent_id_str: pid,
+            hierarchy_parent_title: [],
+            hierarchy_sequence: "0000000000",
+            hierarchy_top_id: [pid],
+            hierarchy_top_title: [title],
+            hierarchytype: "",
+            id: pid,
+            institution: "My University",
+            modeltype_str_mv: [],
+            normalized_sort_date: "1979-12-06T00:00:00Z",
+            publishDate: "1979",
+            publishDateSort: "1979",
+            publisher: ["Publisher"],
+            publisher_str_mv: ["Publisher"],
+            record_format: "vudl",
+            series: ["Relation"],
+            title: title,
+            title_full: title,
+            title_short: title,
+            title_sort: title,
+            topic: ["Topic"],
+            topic_facet: ["Topic"],
+            topic_str_mv: ["Topic"],
+        });
+        expect(getHierarchySpy).toHaveBeenCalledTimes(1);
+        expect(getHierarchySpy).toHaveBeenCalledWith(pid);
+        expect(changeSpy).toHaveBeenCalledTimes(1);
+        expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
+    });
 });
