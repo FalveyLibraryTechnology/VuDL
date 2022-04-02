@@ -9,6 +9,7 @@ describe("SolrIndexer", () => {
         Config.setInstance(
             new Config({
                 articles_to_strip: ["a ", "an ", "the "],
+                LanguageMap: { en: "English" },
             })
         );
         indexer = SolrIndexer.getInstance();
@@ -205,6 +206,7 @@ describe("SolrIndexer", () => {
             "dc:title": [title],
             "dc:creator": ["Doe, Jane"],
             "dc:contributor": ["Smith, John"],
+            "dc:language": ["en"],
             "dc:source": ["Source"],
             "dc:description": ["Description"],
             "dc:format": ["Book"],
@@ -223,6 +225,7 @@ describe("SolrIndexer", () => {
                 title,
                 "Doe, Jane",
                 "Smith, John",
+                "en",
                 "Source",
                 "Description",
                 "Book",
@@ -243,6 +246,7 @@ describe("SolrIndexer", () => {
             "dc.date_txt_mv": ["1979-12-06"],
             "dc.description_txt_mv": ["Description"],
             "dc.format_txt_mv": ["Book"],
+            "dc.language_txt_mv": ["en"],
             "dc.publisher_txt_mv": ["Publisher"],
             "dc.relation_txt_mv": ["Relation"],
             "dc.series_txt_mv": ["Series"],
@@ -267,6 +271,7 @@ describe("SolrIndexer", () => {
             hierarchytype: "",
             id: pid,
             institution: "My University",
+            language: ["English"],
             modeltype_str_mv: [],
             normalized_sort_date: "1979-12-06T00:00:00Z",
             publishDate: "1979",

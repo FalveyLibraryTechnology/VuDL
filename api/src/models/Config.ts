@@ -2,12 +2,17 @@ import fs = require("fs");
 import ini = require("ini");
 import { FedoraModel } from "../services/FedoraCatalog";
 
+type ConfigValue = string | string[] | ConfigRecord;
+interface ConfigRecord {
+    [key: string]: ConfigValue;
+}
+
 class Config {
     private static instance: Config;
 
     protected ini;
 
-    constructor(ini: Record<string, string | string[]>) {
+    constructor(ini: ConfigRecord) {
         this.ini = ini;
     }
 
