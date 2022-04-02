@@ -4,7 +4,7 @@ import FedoraData from "../models/FedoraData";
 import HierarchyCollector from "./HierarchyCollector";
 import { IncomingMessage } from "http";
 import { NeedleResponse } from "./interfaces";
-import { Socket } from 'net';
+import { Socket } from "net";
 import SolrIndexer from "./SolrIndexer";
 import TikaExtractor from "./TikaExtractor";
 
@@ -556,10 +556,7 @@ describe("SolrIndexer", () => {
             collection: "Digital Library",
             datastream_str_mv: ["MASTER", "OCR-DIRTY"],
             fedora_parent_id_str_mv: [],
-            fulltext: [
-                "dirty OCR",
-                "tika text",
-            ],
+            fulltext: ["dirty OCR", "tika text"],
             has_order_str: "no",
             has_thumbnail_str: "false",
             hierarchy_all_parents_str_mv: [],
@@ -578,7 +575,7 @@ describe("SolrIndexer", () => {
         expect(getStreamSpy).toHaveBeenCalledTimes(1);
         expect(getStreamSpy).toHaveBeenCalledWith(pid, "OCR-DIRTY");
         expect(getStreamSpy2).toHaveBeenCalledTimes(1);
-        expect(getStreamSpy2).toHaveBeenCalledWith(pid, "MASTER")
+        expect(getStreamSpy2).toHaveBeenCalledWith(pid, "MASTER");
         expect(tikaSpy).toHaveBeenCalledTimes(1);
         expect(tikaSpy).toHaveBeenCalledWith("foo");
         expect(getHierarchySpy).toHaveBeenCalledTimes(1);
