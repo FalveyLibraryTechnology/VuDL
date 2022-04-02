@@ -2,7 +2,11 @@ import Config from "../models/Config";
 import Fedora from "./Fedora";
 import FedoraData from "../models/FedoraData";
 import HierarchyCollector from "./HierarchyCollector";
+import { IncomingMessage } from "http";
+import { NeedleResponse } from "./interfaces";
+import { Socket } from 'net';
 import SolrIndexer from "./SolrIndexer";
+import TikaExtractor from "./TikaExtractor";
 
 describe("SolrIndexer", () => {
     let indexer;
@@ -383,6 +387,95 @@ describe("SolrIndexer", () => {
         expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
     });
 
+    it("processes FITS data correctly", async () => {
+        const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
+        const pid = "test:123";
+        const collector = HierarchyCollector.getInstance();
+        const record = FedoraData.build(pid, {}, {}, ["MASTER-MD"]);
+        const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
+        const fedora = Fedora.getInstance();
+        const fitsXml = `<?xml version="1.0" encoding="UTF-8"?>
+<fits xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd" version="0.6.1" timestamp="12/13/12 7:24 PM">
+    <identification>
+    <identity format="Tagged Image File Format" mimetype="image/tiff" toolname="FITS" toolversion="0.6.1">
+        <tool toolname="Jhove" toolversion="1.5" />
+        <tool toolname="file utility" toolversion="5.04" />
+        <tool toolname="Exiftool" toolversion="7.74" />
+        <tool toolname="Droid" toolversion="3.0" />
+        <tool toolname="NLNZ Metadata Extractor" toolversion="3.4GA" />
+        <tool toolname="ffident" toolversion="0.2" />
+        <version toolname="Jhove" toolversion="1.5" status="CONFLICT">5.0</version>
+        <version toolname="Droid" toolversion="3.0" status="CONFLICT">3</version>
+        <version toolname="Droid" toolversion="3.0" status="CONFLICT">4</version>
+        <version toolname="Droid" toolversion="3.0" status="CONFLICT">6</version>
+        <externalIdentifier toolname="Droid" toolversion="3.0" type="puid">fmt/7</externalIdentifier>
+        <externalIdentifier toolname="Droid" toolversion="3.0" type="puid">fmt/8</externalIdentifier>
+        <externalIdentifier toolname="Droid" toolversion="3.0" type="puid">fmt/9</externalIdentifier>
+        <externalIdentifier toolname="Droid" toolversion="3.0" type="puid">fmt/10</externalIdentifier>
+    </identity>
+    </identification>
+    <fileinfo>
+    <size toolname="Jhove" toolversion="1.5">21627336</size>
+    <lastmodified toolname="Exiftool" toolversion="7.74" status="SINGLE_RESULT">2012:12:13 19:24:01-05:00</lastmodified>
+    <filepath toolname="OIS File Information" toolversion="0.1" status="SINGLE_RESULT">/var/tmp/outFile</filepath>
+    <filename toolname="OIS File Information" toolversion="0.1" status="SINGLE_RESULT">/var/tmp/outFile</filename>
+    <md5checksum toolname="OIS File Information" toolversion="0.1" status="SINGLE_RESULT">5f56d86c1ee7b0531717f070046786cc</md5checksum>
+    <fslastmodified toolname="OIS File Information" toolversion="0.1" status="SINGLE_RESULT">1355444641000</fslastmodified>
+    </fileinfo>
+    <filestatus>
+    <well-formed toolname="Jhove" toolversion="1.5" status="SINGLE_RESULT">true</well-formed>
+    <valid toolname="Jhove" toolversion="1.5" status="SINGLE_RESULT">true</valid>
+    </filestatus>
+    <metadata>
+    <image>
+        <byteOrder toolname="Jhove" toolversion="1.5" status="SINGLE_RESULT">little endian</byteOrder>
+        <compressionScheme toolname="Jhove" toolversion="1.5">Uncompressed</compressionScheme>
+        <imageWidth toolname="Jhove" toolversion="1.5">2318</imageWidth>
+        <imageHeight toolname="Jhove" toolversion="1.5">3110</imageHeight>
+        <colorSpace toolname="Jhove" toolversion="1.5">RGB</colorSpace>
+        <referenceBlackWhite toolname="Jhove" toolversion="1.5" status="SINGLE_RESULT">0.0 255.0 0.0 255.0 0.0 255.0</referenceBlackWhite>
+        <orientation toolname="Jhove" toolversion="1.5">normal*</orientation>
+        <samplingFrequencyUnit toolname="Jhove" toolversion="1.5">in.</samplingFrequencyUnit>
+        <xSamplingFrequency toolname="Jhove" toolversion="1.5">400</xSamplingFrequency>
+        <ySamplingFrequency toolname="Jhove" toolversion="1.5">400</ySamplingFrequency>
+        <bitsPerSample toolname="Jhove" toolversion="1.5">8 8 8</bitsPerSample>
+        <samplesPerPixel toolname="Jhove" toolversion="1.5">3</samplesPerPixel>
+    </image>
+    </metadata>
+</fits>`;
+        const getStreamSpy = jest.spyOn(fedora, "getDatastreamAsString").mockResolvedValue(fitsXml);
+        const result = await indexer.getFields(pid);
+        expect(result).toEqual({
+            allfields: [],
+            collection: "Digital Library",
+            datastream_str_mv: ["MASTER-MD"],
+            fedora_parent_id_str_mv: [],
+            has_order_str: "no",
+            has_thumbnail_str: "false",
+            height_str: "3110",
+            hierarchy_all_parents_str_mv: [],
+            hierarchy_first_parent_id_str: pid,
+            hierarchy_parent_title: [],
+            hierarchy_sequence: "0000000000",
+            hierarchy_top_id: [pid],
+            hierarchy_top_title: [""],
+            hierarchytype: "",
+            id: pid,
+            institution: "My University",
+            mime_str_mv: ["image/tiff"],
+            modeltype_str_mv: [],
+            record_format: "vudl",
+            sizebytes_str: "21627336",
+            width_str: "2318",
+        });
+        expect(getStreamSpy).toHaveBeenCalledTimes(1);
+        expect(getStreamSpy).toHaveBeenCalledWith(pid, "MASTER-MD");
+        expect(getHierarchySpy).toHaveBeenCalledTimes(1);
+        expect(getHierarchySpy).toHaveBeenCalledWith(pid);
+        expect(changeSpy).toHaveBeenCalledTimes(1);
+        expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
+    });
+
     it("processes thumbnail data correctly", async () => {
         const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
         const pid = "test:123";
@@ -439,6 +532,55 @@ describe("SolrIndexer", () => {
         });
         expect(getRdfSpy).toHaveBeenCalledTimes(1);
         expect(getRdfSpy).toHaveBeenCalledWith(pid + "/THUMBNAIL/fcr:metadata");
+        expect(getHierarchySpy).toHaveBeenCalledTimes(1);
+        expect(getHierarchySpy).toHaveBeenCalledWith(pid);
+        expect(changeSpy).toHaveBeenCalledTimes(1);
+        expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
+    });
+
+    it("processes full text data correctly", async () => {
+        const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
+        const pid = "test:123";
+        const collector = HierarchyCollector.getInstance();
+        const record = FedoraData.build(pid, {}, { hasModel: ["vudl-system:PDFData"] }, ["MASTER", "OCR-DIRTY"]);
+        const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
+        const fedora = Fedora.getInstance();
+        const getStreamSpy = jest.spyOn(fedora, "getDatastreamAsString").mockResolvedValue("dirty OCR");
+        const mockMsg = { body: "foo" };
+        const getStreamSpy2 = jest.spyOn(fedora, "getDatastream").mockResolvedValue(mockMsg as NeedleResponse);
+        const tika = TikaExtractor.getInstance();
+        const tikaSpy = jest.spyOn(tika, "extractText").mockReturnValue("tika text");
+        const result = await indexer.getFields(pid);
+        expect(result).toEqual({
+            allfields: [],
+            collection: "Digital Library",
+            datastream_str_mv: ["MASTER", "OCR-DIRTY"],
+            fedora_parent_id_str_mv: [],
+            fulltext: [
+                "dirty OCR",
+                "tika text",
+            ],
+            has_order_str: "no",
+            has_thumbnail_str: "false",
+            hierarchy_all_parents_str_mv: [],
+            hierarchy_first_parent_id_str: pid,
+            hierarchy_parent_title: [],
+            hierarchy_sequence: "0000000000",
+            hierarchy_top_id: [pid],
+            hierarchy_top_title: [""],
+            hierarchytype: "",
+            id: pid,
+            institution: "My University",
+            modeltype_str_mv: ["vudl-system:PDFData"],
+            record_format: "vudl",
+            "relsext.hasModel_txt_mv": ["vudl-system:PDFData"],
+        });
+        expect(getStreamSpy).toHaveBeenCalledTimes(1);
+        expect(getStreamSpy).toHaveBeenCalledWith(pid, "OCR-DIRTY");
+        expect(getStreamSpy2).toHaveBeenCalledTimes(1);
+        expect(getStreamSpy2).toHaveBeenCalledWith(pid, "MASTER")
+        expect(tikaSpy).toHaveBeenCalledTimes(1);
+        expect(tikaSpy).toHaveBeenCalledWith("foo");
         expect(getHierarchySpy).toHaveBeenCalledTimes(1);
         expect(getHierarchySpy).toHaveBeenCalledWith(pid);
         expect(changeSpy).toHaveBeenCalledTimes(1);
