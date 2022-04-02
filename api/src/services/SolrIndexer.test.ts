@@ -70,9 +70,16 @@ describe("SolrIndexer", () => {
         const grandparentRecordDetails = {
             hasModel: ["vudl-system:CoreModel", "vudl-system:CollectionModel", "vudl-system:ResourceCollection"],
         };
-        const grandparentRecord = FedoraData.build(grandparentPid, { "dc:title": ["test record"] }, grandparentRecordDetails);
+        const grandparentRecord = FedoraData.build(
+            grandparentPid,
+            { "dc:title": ["test record"] },
+            grandparentRecordDetails
+        );
         parentRecord.addParent(grandparentRecord);
-        const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValueOnce(record).mockResolvedValueOnce(parentRecord);
+        const getHierarchySpy = jest
+            .spyOn(collector, "getHierarchy")
+            .mockResolvedValueOnce(record)
+            .mockResolvedValueOnce(parentRecord);
         const result = await indexer.getFields(pid);
         expect(result).toEqual({
             allfields: ["page"],
@@ -105,7 +112,7 @@ describe("SolrIndexer", () => {
             title_short: "page",
             title_sort: "page",
         });
-        const parentResult = await indexer.getFields(parentPid)
+        const parentResult = await indexer.getFields(parentPid);
         expect(parentResult).toEqual({
             allfields: ["page list"],
             collection: "Digital Library",
