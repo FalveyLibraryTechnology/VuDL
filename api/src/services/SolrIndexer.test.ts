@@ -343,6 +343,46 @@ describe("SolrIndexer", () => {
         expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
     });
 
+    it("processes license data correctly", async () => {
+        const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
+        const pid = "test:123";
+        const collector = HierarchyCollector.getInstance();
+        const record = FedoraData.build(pid, {}, {}, ["LICENSE"]);
+        const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
+        const fedora = Fedora.getInstance();
+        const licenseXml = `<METS:rightsMD xmlns:METS="http://www.loc.gov/METS/" ID="0">
+    <METS:mdRef xmlns:xlink="http://www.w3.org/1999/xlink" LOCTYPE="URL" MDTYPE="OTHER" MIMETYPE="text/html" OTHERMDTYPE="HTML" xlink:href="http://creativecommons.org/licenses/by-sa/4.0/"></METS:mdRef>
+</METS:rightsMD>`;
+        const getStreamSpy = jest.spyOn(fedora, "getDatastreamAsString").mockResolvedValue(licenseXml);
+        const result = await indexer.getFields(pid);
+        expect(result).toEqual({
+            allfields: [],
+            collection: "Digital Library",
+            datastream_str_mv: ["LICENSE"],
+            fedora_parent_id_str_mv: [],
+            has_order_str: "no",
+            has_thumbnail_str: "false",
+            hierarchy_all_parents_str_mv: [],
+            hierarchy_first_parent_id_str: pid,
+            hierarchy_parent_title: [],
+            hierarchy_sequence: "0000000000",
+            hierarchy_top_id: [pid],
+            hierarchy_top_title: [""],
+            hierarchytype: "",
+            id: pid,
+            institution: "My University",
+            "license.mdRef_str": "http://creativecommons.org/licenses/by-sa/4.0/",
+            modeltype_str_mv: [],
+            record_format: "vudl",
+        });
+        expect(getStreamSpy).toHaveBeenCalledTimes(1);
+        expect(getStreamSpy).toHaveBeenCalledWith(pid, "LICENSE");
+        expect(getHierarchySpy).toHaveBeenCalledTimes(1);
+        expect(getHierarchySpy).toHaveBeenCalledWith(pid);
+        expect(changeSpy).toHaveBeenCalledTimes(1);
+        expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
+    });
+
     it("processes thumbnail data correctly", async () => {
         const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
         const pid = "test:123";
