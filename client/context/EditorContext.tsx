@@ -25,7 +25,7 @@ export const DatastreamModalStates = {
     UPLOAD: "Upload",
     // VIEW: "View",
     // METADATA: "Metadata",
-    // DOWNLOAD: "Download",
+    DOWNLOAD: "Download",
     DELETE: "Delete"
 };
 

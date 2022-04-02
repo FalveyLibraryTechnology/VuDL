@@ -1,38 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { IconButton, Tooltip } from "@mui/material";
-import { UploadFile, Delete } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
+import { Tooltip } from "@mui/material";
+import { UploadFile, Delete, Download } from "@mui/icons-material";
 import { useEditorContext } from "../../../context/EditorContext";
+import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 
 const Icons = {
     Upload: <UploadFile />,
     // VIEW: ,
     // METADATA: ,
-    // DOWNLOAD: ,
+    Download: <Download />,
     Delete: <Delete />,
 };
 
 const DatastreamControlButton = ({ modalState, datastream, disabled }) => {
+    const [isLoading, setLoading] = useState(false);
     const {
         action: { toggleDatastreamModal, setActiveDatastream, setDatastreamModalState },
     } = useEditorContext();
-
-    const onClick = () => {
-        setActiveDatastream(datastream);
-        setDatastreamModalState(modalState);
-        toggleDatastreamModal();
+    const { downloadDatastream } = useDatastreamOperation();
+    const onClick = (modalState) => {
+        if (modalState !== "Download") {
+            return () => {
+                setActiveDatastream(datastream);
+                setDatastreamModalState(modalState);
+                toggleDatastreamModal();
+            };
+        }
+        return async () => {
+            setLoading(true);
+            await downloadDatastream(datastream);
+            setLoading(false);
+        };
     };
 
     return (
         <Tooltip title={modalState}>
-            <IconButton
+            <LoadingButton
+                className="datastreamControlButton"
+                loading={isLoading}
                 aria-label={modalState}
                 disabled={modalState !== "Upload" && disabled}
-                onClick={onClick}
+                onClick={onClick(modalState)}
                 size="small"
             >
                 {Icons[modalState]}
-            </IconButton>
+            </LoadingButton>
         </Tooltip>
     );
 };

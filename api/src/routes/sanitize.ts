@@ -19,3 +19,4 @@ export function sanitizeParameters(customRules = {}, defaultRule = defaultSaniti
 }
 
 export const pidSanitizer = sanitizeParameters({ pid: pidSanitizeRegEx }, /^$/);
+export const datastreamSanitizer = sanitizeParameters({ pid: pidSanitizeRegEx, stream: defaultSanitizeRegEx }, /^$/);

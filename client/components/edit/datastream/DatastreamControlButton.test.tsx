@@ -1,6 +1,7 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
+import { act } from "react-dom/test-utils";
 import toJson from "enzyme-to-json";
 import DatastreamControlButton from "./DatastreamControlButton";
 
@@ -10,8 +11,11 @@ jest.mock("../../../context/EditorContext", () => ({
         return mockUseEditorContext();
     },
 }));
+const mockUseDatastreamOperation = jest.fn();
+jest.mock("../../../hooks/useDatastreamOperation", () => () => mockUseDatastreamOperation());
 describe("DatastreamControlButton", () => {
     let editorValues;
+    let datastreamOperationValues;
     beforeEach(() => {
         editorValues = {
             action: {
@@ -20,10 +24,24 @@ describe("DatastreamControlButton", () => {
                 setDatastreamModalState: jest.fn(),
             },
         };
+        datastreamOperationValues = {
+            downloadDatastream: jest.fn(),
+        };
         mockUseEditorContext.mockReturnValue(editorValues);
+        mockUseDatastreamOperation.mockReturnValue(datastreamOperationValues);
     });
+
     it("renders", () => {
         const wrapper = shallow(<DatastreamControlButton modalState="Upload" datastream="THUMBNAIL" />);
         expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("downloads the datastream", async () => {
+        const wrapper = mount(<DatastreamControlButton modalState="Download" datastream="THUMBNAIL" />);
+        await act(async () => {
+            wrapper.find("button.datastreamControlButton").simulate("click");
+            wrapper.update();
+        });
+        expect(datastreamOperationValues.downloadDatastream).toHaveBeenCalledWith("THUMBNAIL");
     });
 });
