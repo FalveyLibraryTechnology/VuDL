@@ -342,4 +342,66 @@ describe("SolrIndexer", () => {
         expect(changeSpy).toHaveBeenCalledTimes(1);
         expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
     });
+
+    it("processes thumbnail data correctly", async () => {
+        const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
+        const pid = "test:123";
+        const collector = HierarchyCollector.getInstance();
+        const record = FedoraData.build(pid, {}, {}, ["THUMBNAIL"]);
+        const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
+        const fedora = Fedora.getInstance();
+        const agentXml = `<rdf:RDF
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:dcterms="http://purl.org/dc/terms/"
+        xmlns:ebucore="http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#"
+        xmlns:premis="http://www.loc.gov/premis/rdf/v1#"
+        xmlns:fedora="http://fedora.info/definitions/v4/repository#"
+        xmlns:ldp="http://www.w3.org/ns/ldp#"
+        xmlns:j.0="http://fedora.info/definitions/1/0/access/" > 
+      <rdf:Description rdf:about="http://localhost:8080/rest/vudl:8/THUMBNAIL">
+        <j.0:objState>A</j.0:objState>
+        <rdf:type rdf:resource="http://fedora.info/definitions/v4/repository#Binary"/>
+        <rdf:type rdf:resource="http://fedora.info/definitions/v4/repository#Resource"/>
+        <fedora:hasFixityService rdf:resource="http://localhost:8080/rest/vudl:8/THUMBNAIL/fcr:fixity"/>
+        <premis:hasMessageDigest rdf:resource="urn:md5:fb36b2582b217396361c85e784015efb"/>
+        <rdf:type rdf:resource="http://www.w3.org/ns/ldp#Resource"/>
+        <ebucore:filename>THUMBNAIL</ebucore:filename>
+        <fedora:lastModified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2022-03-18T19:51:22.280867Z</fedora:lastModified>
+        <premis:hasMessageDigest rdf:resource="urn:sha-512:6165712b868b5ffcc0885a7c069bc7d0bab981da54864c23ec8a3a1444c2c3ec76fbf662806095558f7e045759e8b7f442787b0eb8a9f2bbbb4d21509abe1896"/>
+        <rdf:type rdf:resource="http://www.w3.org/ns/ldp#NonRDFSource"/>
+        <dcterms:title>vudl_8_THUMBNAIL</dcterms:title>
+        <ebucore:hasMimeType>image/jpeg</ebucore:hasMimeType>
+        <premis:hasSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1005</premis:hasSize>
+        <fedora:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2022-03-18T19:51:22.234645Z</fedora:created>
+      </rdf:Description>
+    </rdf:RDF>`;
+        const getRdfSpy = jest.spyOn(fedora, "getRdf").mockResolvedValue(agentXml);
+        const result = await indexer.getFields(pid);
+        expect(result).toEqual({
+            THUMBNAIL_contentDigest_digest_str: "fb36b2582b217396361c85e784015efb",
+            allfields: [],
+            collection: "Digital Library",
+            datastream_str_mv: ["THUMBNAIL"],
+            fedora_parent_id_str_mv: [],
+            has_order_str: "no",
+            has_thumbnail_str: "true",
+            hierarchy_all_parents_str_mv: [],
+            hierarchy_first_parent_id_str: pid,
+            hierarchy_parent_title: [],
+            hierarchy_sequence: "0000000000",
+            hierarchy_top_id: [pid],
+            hierarchy_top_title: [""],
+            hierarchytype: "",
+            id: pid,
+            institution: "My University",
+            modeltype_str_mv: [],
+            record_format: "vudl",
+        });
+        expect(getRdfSpy).toHaveBeenCalledTimes(1);
+        expect(getRdfSpy).toHaveBeenCalledWith(pid + "/THUMBNAIL/fcr:metadata");
+        expect(getHierarchySpy).toHaveBeenCalledTimes(1);
+        expect(getHierarchySpy).toHaveBeenCalledWith(pid);
+        expect(changeSpy).toHaveBeenCalledTimes(1);
+        expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
+    });
 });
