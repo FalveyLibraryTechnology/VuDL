@@ -316,11 +316,7 @@ describe("SolrIndexer", () => {
         const getStreamSpy = jest.spyOn(fedora, "getDatastreamAsString").mockResolvedValue(agentXml);
         const result = await indexer.getFields(pid);
         expect(result).toEqual({
-            "agent.name_txt_mv": [
-                "Falvey Memorial Library, Villanova University",
-                "MPF",
-                "MPF",
-            ],
+            "agent.name_txt_mv": ["Falvey Memorial Library, Villanova University", "MPF", "MPF"],
             allfields: [],
             collection: "Digital Library",
             datastream_str_mv: ["AGENTS"],
