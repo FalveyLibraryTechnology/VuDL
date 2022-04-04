@@ -4,6 +4,7 @@ describe("DateSanitizer", () => {
     test.each([
         ["n.d.", null, "Unknown date, no space."],
         ["n. d.", null, "Unknown date, with space"],
+        ["zzzz", null, "Short string, not a date"],
         ["February 29, 2008", "2008-02-29T00:00:00Z", "Legal leap year date, human readable M D, Y"],
         ["February 29, 2009", "2009-02-01T00:00:00Z", "Illegal leap year date, human readable M D, Y"],
         ["01 June 1467", "1467-06-01T00:00:00Z", "Date far in the past, human readable D M Y"],
@@ -12,6 +13,7 @@ describe("DateSanitizer", () => {
         ["1872&1873", "1872-01-01T00:00:00Z", "Two years joined with ampersand"],
         ["1888-01", "1888-01-01T00:00:00Z", "Year-month, numeric format, January"],
         ["1888-02", "1888-02-01T00:00:00Z", "Year-month, numeric format, February"],
+        ["1888-zz", "1888-01-01T00:00:00Z", "Year-month, numeric format, invalid month"],
         ["1888-1", "1888-01-01T00:00:00Z", "Year-month, numeric format, January, short month"],
         ["1888-2", "1888-02-01T00:00:00Z", "Year-month, numeric format, February, short month"],
         ["1888-28", "1888-01-01T00:00:00Z", "Year-illegal month, numeric format"],
