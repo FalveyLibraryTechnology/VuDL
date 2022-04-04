@@ -295,7 +295,7 @@ class SolrIndexer {
 
         fields.has_order_str = ((fields["relsext.sortOn_txt_mv"] ?? [])[0] ?? "title") === "custom" ? "yes" : "no";
 
-        const agents = await fedoraData.extraDetails.getAgents();
+        const agents = await fedoraData.datastreamDetails.getAgents();
         for (const field in agents) {
             const fieldName = "agent." + field + "_txt_mv";
             fields[fieldName] = agents[field];

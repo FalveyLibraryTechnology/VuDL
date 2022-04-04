@@ -1,5 +1,5 @@
 import Fedora from "../services/Fedora";
-import FedoraExtraDetails from "./FedoraExtraDetails";
+import FedoraDatastreamDetails from "./FedoraDatastreamDetails";
 import MetadataExtractor from "../services/MetadataExtractor";
 import TikaExtractor from "../services/TikaExtractor";
 
@@ -15,7 +15,7 @@ class FedoraData {
     public fedoraDetails: Record<string, Array<string>>;
     public fedoraDatastreams: Array<string>;
     public parents: Array<FedoraData> = [];
-    public extraDetails: FedoraExtraDetails;
+    public datastreamDetails: FedoraDatastreamDetails;
 
     constructor(
         pid: string,
@@ -30,7 +30,7 @@ class FedoraData {
         this.metadata = metadata;
         this.fedoraDetails = fedoraDetails;
         this.fedoraDatastreams = fedoraDatastreams;
-        this.extraDetails = new FedoraExtraDetails(this, fedora, extractor, tika);
+        this.datastreamDetails = new FedoraDatastreamDetails(this, fedora, extractor, tika);
     }
 
     public static build(
@@ -105,7 +105,7 @@ class FedoraData {
     }
 
     async getThumbnailHash(type: string): Promise<string> {
-        const hashes = (await this.extraDetails.getThumbnails()).hasMessageDigest ?? [];
+        const hashes = (await this.datastreamDetails.getThumbnails()).hasMessageDigest ?? [];
         for (const hash of hashes) {
             const parts = hash.split(":");
             if ((parts[1] ?? "") === type && typeof parts[2] !== "undefined") {
@@ -116,12 +116,12 @@ class FedoraData {
     }
 
     async getFitsValueAsArray(name: string): Promise<Array<string>> {
-        const fitsData = await this.extraDetails.getFitsData();
+        const fitsData = await this.datastreamDetails.getFitsData();
         return fitsData[name] ?? [];
     }
 
     async getFitsValueAsString(name: string): Promise<string> {
-        const fitsData = await this.extraDetails.getFitsData();
+        const fitsData = await this.datastreamDetails.getFitsData();
         if (typeof fitsData[name] === "undefined") {
             return null;
         }
@@ -134,7 +134,7 @@ class FedoraData {
 
     async getFullText(): Promise<Array<string>> {
         let fullText = [];
-        const rawFullText = await this.extraDetails.getFullText();
+        const rawFullText = await this.datastreamDetails.getFullText();
         for (const current in rawFullText) {
             fullText = fullText.concat(rawFullText[current]);
         }
@@ -153,7 +153,7 @@ class FedoraData {
     }
 
     async getLicense(): Promise<string> {
-        const license = await this.extraDetails.getLicense();
+        const license = await this.datastreamDetails.getLicense();
         return license.url[0] ?? null;
     }
 

@@ -7,7 +7,7 @@ interface LicenseData {
     url: string[];
 }
 
-class FedoraExtraDetails {
+class FedoraDatastreamDetails {
     protected data: FedoraData;
     protected fedora: Fedora;
     protected extractor: MetadataExtractor;
@@ -88,4 +88,4 @@ class FedoraExtraDetails {
     }
 }
 
-export default FedoraExtraDetails;
+export default FedoraDatastreamDetails;
