@@ -2,22 +2,38 @@ import fs = require("fs");
 import ini = require("ini");
 import { FedoraModel } from "../services/FedoraCatalog";
 
+type ConfigValue = string | string[] | ConfigRecord;
+interface ConfigRecord {
+    [key: string]: ConfigValue;
+}
+
 class Config {
     private static instance: Config;
 
     protected ini;
 
-    constructor(ini: Record<string, string>) {
+    constructor(ini: ConfigRecord) {
         this.ini = ini;
     }
 
     public static getInstance(): Config {
         if (!Config.instance) {
-            const config = ini.parse(fs.readFileSync(__dirname.replace(/\\/g, "/") + "/../../vudl.ini", "utf-8"));
+            const filename = __dirname.replace(/\\/g, "/") + "/../../vudl.ini";
+            let config;
+            try {
+                config = ini.parse(fs.readFileSync(filename, "utf-8"));
+            } catch (e) {
+                console.warn(`Could not load ${filename}; defaulting to empty configuration.`);
+                config = {};
+            }
             // ini returns any, but we can cast it to what we need:
-            Config.instance = new Config(config as Record<string, string>);
+            Config.setInstance(new Config(config as Record<string, string>));
         }
         return Config.instance;
+    }
+
+    public static setInstance(config: Config): void {
+        Config.instance = config;
     }
 
     get clientUrl(): string {

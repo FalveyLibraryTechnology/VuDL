@@ -24,6 +24,7 @@ describe("IngestProcessor", () => {
         dir = "/my/fake/dir";
         jobName = "fakejob";
         config = new Config({ processed_area_path: "/fake_processed" });
+        Config.setInstance(config);
         logger = winston.createLogger({
             level: "error", // we don't want to see info messages while testing
             transports: [new winston.transports.Console()],
