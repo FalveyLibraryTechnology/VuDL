@@ -52,7 +52,7 @@ export default class DateSanitizer {
         if (date.length < 5) {
             month = day = "01";
         } else {
-            const padNumber = function(val) {
+            const padNumber = function (val) {
                 const paddedVal = "0" + val;
                 return paddedVal.substring(paddedVal.length - 2);
             };
