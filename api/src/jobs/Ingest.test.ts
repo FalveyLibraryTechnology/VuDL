@@ -1,7 +1,6 @@
 import Config from "../models/Config";
 import Job from "../models/Job";
 import { FedoraObject } from "../models/FedoraObject";
-import Fedora from "../services/Fedora";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import { IngestProcessor } from "./Ingest";
 import QueueManager from "../services/QueueManager";
