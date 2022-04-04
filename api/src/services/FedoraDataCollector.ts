@@ -1,11 +1,11 @@
 import { Fedora } from "./Fedora";
 import Config from "../models/Config";
-import FedoraData from "../models/FedoraData";
+import FedoraDataCollection from "../models/FedoraDataCollection";
 import MetadataExtractor from "./MetadataExtractor";
 import TikaExtractor from "./TikaExtractor";
 
-class HierarchyCollector {
-    private static instance: HierarchyCollector;
+class FedoraDataCollector {
+    private static instance: FedoraDataCollector;
 
     fedora: Fedora;
     extractor: MetadataExtractor;
@@ -19,25 +19,25 @@ class HierarchyCollector {
         this.tika = tika;
     }
 
-    public static getInstance(): HierarchyCollector {
-        if (!HierarchyCollector.instance) {
-            HierarchyCollector.instance = new HierarchyCollector(
+    public static getInstance(): FedoraDataCollector {
+        if (!FedoraDataCollector.instance) {
+            FedoraDataCollector.instance = new FedoraDataCollector(
                 Fedora.getInstance(),
                 MetadataExtractor.getInstance(),
                 Config.getInstance(),
                 TikaExtractor.getInstance()
             );
         }
-        return HierarchyCollector.instance;
+        return FedoraDataCollector.instance;
     }
 
-    async getFedoraData(pid: string): Promise<FedoraData> {
+    async getSingleObject(pid: string): Promise<FedoraDataCollection> {
         // Use Fedora to get data
         const DCPromise = this.fedora.getDublinCore(pid);
         const RDFPromise = this.fedora.getRdf(pid, false);
         const [DC, RDF] = await Promise.all([DCPromise, RDFPromise]);
 
-        return new FedoraData(
+        return new FedoraDataCollection(
             pid,
             this.extractor.extractMetadata(DC),
             this.extractor.extractFedoraDetails(RDF),
@@ -48,8 +48,8 @@ class HierarchyCollector {
         );
     }
 
-    async getHierarchy(pid: string): Promise<FedoraData> {
-        const result = await this.getFedoraData(pid);
+    async getHierarchy(pid: string): Promise<FedoraDataCollection> {
+        const result = await this.getSingleObject(pid);
         // Create promises to retrieve parents asynchronously...
         const promises = (result.fedoraDetails.isMemberOf ?? []).map(async (resource) => {
             const parentPid = resource.split("/").pop();
@@ -63,4 +63,4 @@ class HierarchyCollector {
     }
 }
 
-export default HierarchyCollector;
+export default FedoraDataCollector;
