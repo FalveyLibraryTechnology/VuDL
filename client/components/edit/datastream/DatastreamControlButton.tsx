@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { LoadingButton } from "@mui/lab";
-import { Tooltip } from "@mui/material";
-import { UploadFile, Delete, Download } from "@mui/icons-material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import Tooltip from "@mui/material/Tooltip";
+import Download from "@mui/icons-material/Download";
+import Delete from "@mui/icons-material/Delete";
+import UploadFile from "@mui/icons-material/UploadFile";
 import { useEditorContext } from "../../../context/EditorContext";
 import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 

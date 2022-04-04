@@ -1,5 +1,7 @@
 import React from "react";
-import { Snackbar, Alert, IconButton } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEditorContext } from "../../context/EditorContext";
 

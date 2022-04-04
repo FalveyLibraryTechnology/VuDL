@@ -1,5 +1,5 @@
 import React from "react";
-import { DialogContent } from "@mui/material";
+import DialogContent from "@mui/material/DialogContent";
 import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 
 const DatastreamUploadModalContent = () => {

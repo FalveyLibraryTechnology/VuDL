@@ -19,7 +19,17 @@
         "usePrettierrc": true
       }
     ],
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          "@mui/icons-material",
+          "@mui/lab",
+          "@mui/material"
+        ]
+      }
+    ]
   },
   "settings": {
     "react": {
