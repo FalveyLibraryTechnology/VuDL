@@ -4,23 +4,30 @@ import fs = require("fs");
 import tmp = require("tmp");
 
 class TikaExtractor {
-    protected filename: string;
+    private static instance: TikaExtractor;
     protected config: Config;
 
-    constructor(data: Buffer, config: Config) {
+    constructor(config: Config) {
         this.config = config;
-        // Write the data to a temporary file:
-        const tmpobj = tmp.fileSync();
-        this.filename = tmpobj.name;
-        fs.writeSync(tmpobj.fd, data);
     }
 
-    extractText(): string {
+    public static getInstance(): TikaExtractor {
+        if (!TikaExtractor.instance) {
+            TikaExtractor.instance = new TikaExtractor(Config.getInstance());
+        }
+        return TikaExtractor.instance;
+    }
+
+    extractText(data: Buffer): string {
+        // Write the data to a temporary file:
+        const tmpobj = tmp.fileSync();
+        const filename = tmpobj.name;
+        fs.writeSync(tmpobj.fd, data);
         const javaPath = this.config.javaPath;
         const tikaPath = this.config.tikaPath;
-        const tikaCommand = javaPath + " -jar " + tikaPath + " --text -eUTF8 " + this.filename;
+        const tikaCommand = javaPath + " -jar " + tikaPath + " --text -eUTF8 " + filename;
         const result = execSync(tikaCommand).toString();
-        fs.rmSync(this.filename); // clean up temp file; we're done now!
+        fs.rmSync(filename); // clean up temp file; we're done now!
         return result;
     }
 }

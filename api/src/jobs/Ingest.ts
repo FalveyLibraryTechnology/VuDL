@@ -15,19 +15,23 @@ import QueueJobInterface from "./QueueJobInterface";
 import winston = require("winston");
 import xmlescape = require("xml-escape");
 
-class IngestProcessor {
+export class IngestProcessor {
     protected job: Job;
     protected category: Category;
     protected logger: winston.Logger;
     protected config: Config;
     protected objectFactory: FedoraObjectFactory;
 
-    constructor(dir: string, config: Config, objectFactory: FedoraObjectFactory) {
+    constructor(dir: string, config: Config, objectFactory: FedoraObjectFactory, logger: winston.Logger) {
         this.config = config;
         this.objectFactory = objectFactory;
         this.job = Job.build(dir);
         this.category = new Category(path.dirname(dir));
-        this.logger = winston.createLogger({
+        this.logger = logger;
+    }
+
+    public static build(dir: string): IngestProcessor {
+        const logger = winston.createLogger({
             level: "info",
             format: winston.format.combine(
                 winston.format.timestamp(),
@@ -38,10 +42,7 @@ class IngestProcessor {
                 new winston.transports.Console(),
             ],
         });
-    }
-
-    public static build(dir: string): IngestProcessor {
-        return new IngestProcessor(dir, Config.getInstance(), FedoraObjectFactory.getInstance());
+        return new IngestProcessor(dir, Config.getInstance(), FedoraObjectFactory.getInstance(), logger);
     }
 
     async addDatastreamsToPage(page: Page, imageData: FedoraObject): Promise<void> {

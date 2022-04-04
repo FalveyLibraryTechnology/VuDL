@@ -2,14 +2,14 @@ import FedoraData from "./FedoraData";
 
 let fedoraData;
 beforeEach(() => {
-    fedoraData = new FedoraData("foo:123", {}, {}, [], {});
+    fedoraData = FedoraData.build("foo:123");
 });
 
 describe("FedoraData", () => {
     describe("addParent", () => {
         it("adds a parent", () => {
             expect(fedoraData.parents).toEqual([]);
-            const parent = new FedoraData("parent:123", {}, {}, [], {});
+            const parent = FedoraData.build("parent:123");
             fedoraData.addParent(parent);
             expect(fedoraData.parents).toEqual([parent]);
         });
