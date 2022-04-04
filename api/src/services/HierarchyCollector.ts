@@ -10,11 +10,13 @@ class HierarchyCollector {
     fedora: Fedora;
     extractor: MetadataExtractor;
     config: Config;
+    tika: TikaExtractor;
 
-    constructor(fedora: Fedora, extractor: MetadataExtractor, config: Config) {
+    constructor(fedora: Fedora, extractor: MetadataExtractor, config: Config, tika: TikaExtractor) {
         this.fedora = fedora;
         this.extractor = extractor;
         this.config = config;
+        this.tika = tika;
     }
 
     public static getInstance(): HierarchyCollector {
@@ -22,7 +24,8 @@ class HierarchyCollector {
             HierarchyCollector.instance = new HierarchyCollector(
                 Fedora.getInstance(),
                 MetadataExtractor.getInstance(),
-                Config.getInstance()
+                Config.getInstance(),
+                TikaExtractor.getInstance()
             );
         }
         return HierarchyCollector.instance;
@@ -33,51 +36,16 @@ class HierarchyCollector {
         const DCPromise = this.fedora.getDublinCore(pid);
         const RDFPromise = this.fedora.getRdf(pid, false);
         const [DC, RDF] = await Promise.all([DCPromise, RDFPromise]);
-        const datastreams = this.extractor.extractFedoraDatastreams(RDF);
 
-        const data = new FedoraData(
+        return new FedoraData(
             pid,
             this.extractor.extractMetadata(DC),
             this.extractor.extractFedoraDetails(RDF),
-            datastreams,
-            {}
+            this.extractor.extractFedoraDatastreams(RDF),
+            this.fedora,
+            this.extractor,
+            this.tika
         );
-        data.extraDetails = await this.getExtraDetails(pid, datastreams, data.models);
-        return data;
-    }
-
-    async getExtraDetails(
-        pid: string,
-        datastreams: Array<string>,
-        models: Array<string>
-    ): Promise<Record<string, Record<string, Array<string>>>> {
-        // Fetch license details if appropriate/available:
-        const extraDetails: Record<string, Record<string, Array<string>>> = {};
-        if (datastreams.includes("LICENSE")) {
-            const licenseStream = await this.fedora.getDatastreamAsString(pid, "LICENSE");
-            extraDetails.license = { url: [this.extractor.extractLicense(licenseStream)] };
-        }
-        if (datastreams.includes("AGENTS")) {
-            const agentsStream = await this.fedora.getDatastreamAsString(pid, "AGENTS");
-            extraDetails.agents = this.extractor.extractAgents(agentsStream);
-        }
-        if (datastreams.includes("THUMBNAIL")) {
-            const thumbRdf = await this.fedora.getRdf(pid + "/THUMBNAIL/fcr:metadata");
-            extraDetails.thumbnails = this.extractor.extractThumbnailDetails(thumbRdf);
-        }
-        if (datastreams.includes("MASTER-MD")) {
-            const fitsXml = await this.fedora.getDatastreamAsString(pid, "MASTER-MD");
-            extraDetails.fitsData = this.extractor.extractFitsData(fitsXml);
-        }
-        extraDetails.fullText = {};
-        if (datastreams.includes("OCR-DIRTY")) {
-            extraDetails.fullText.ocrDirty = [await this.fedora.getDatastreamAsString(pid, "OCR-DIRTY")];
-        }
-        if (models.includes("vudl-system:DOCData") || models.includes("vudl-system:PDFData")) {
-            const extractor = new TikaExtractor((await this.fedora.getDatastream(pid, "MASTER")).body, this.config);
-            extraDetails.fullText.fromDocument = [extractor.extractText()];
-        }
-        return extraDetails;
     }
 
     async getHierarchy(pid: string): Promise<FedoraData> {
