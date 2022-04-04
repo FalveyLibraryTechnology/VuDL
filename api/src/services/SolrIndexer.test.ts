@@ -2,9 +2,7 @@ import Config from "../models/Config";
 import Fedora from "./Fedora";
 import FedoraData from "../models/FedoraData";
 import HierarchyCollector from "./HierarchyCollector";
-import { IncomingMessage } from "http";
 import { NeedleResponse } from "./interfaces";
-import { Socket } from "net";
 import SolrIndexer from "./SolrIndexer";
 import TikaExtractor from "./TikaExtractor";
 
