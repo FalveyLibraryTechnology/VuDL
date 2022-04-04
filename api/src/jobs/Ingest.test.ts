@@ -20,7 +20,6 @@ describe("IngestProcessor", () => {
     let logger: winston.Logger;
     let dir: string;
     let jobName: string;
-    let fedora: Fedora;
     let job: Job;
     beforeEach(() => {
         dir = "/my/fake/dir";
@@ -30,7 +29,6 @@ describe("IngestProcessor", () => {
             level: "error", // we don't want to see info messages while testing
             transports: [new winston.transports.Console()],
         });
-        fedora = new Fedora(config);
         job = new Job(dir + "/" + jobName, config, new QueueManager());
         jest.spyOn(Job, "build").mockReturnValue(job);
         ingest = new IngestProcessor(dir, config, new FedoraObjectFactory(config), logger);
