@@ -1,5 +1,6 @@
 import FedoraCatalog from "./FedoraCatalog";
 import { FedoraObject } from "../models/FedoraObject";
+import MetadataExtractor from "./MetadataExtractor";
 import DatastreamManager from "./DatastreamManager";
 import Config from "../models/Config";
 
@@ -72,6 +73,79 @@ describe("DatastreamManager", () => {
 
         it("returns true for any subtype", () => {
             expect(datastreamManager.hasValidMimeType("MEDIUM", "test1/anythingworks")).toBeTruthy();
+        });
+    });
+
+    describe("getMetadata", () => {
+        let getDatastreamMetadataSpy;
+        let pid;
+        let stream;
+        let xml;
+
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            xml = "test3";
+            getDatastreamMetadataSpy = jest.spyOn(FedoraObject.prototype, "getDatastreamMetadata");
+        });
+
+        it("gets the datastream metadata", async () => {
+            getDatastreamMetadataSpy.mockResolvedValue(xml);
+            const metadata = await datastreamManager.getMetadata(pid, stream);
+            expect(metadata).toEqual(xml);
+            expect(getDatastreamMetadataSpy).toHaveBeenCalledWith(stream);
+        });
+    });
+
+    describe("getMimeType", () => {
+        let getMetadataSpy;
+        let extractEbuNodeSpy;
+        let pid;
+        let stream;
+        let xml;
+        let mimeType;
+
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            xml = "test3";
+            mimeType = "test4";
+            getMetadataSpy = jest.spyOn(datastreamManager, "getMetadata");
+            extractEbuNodeSpy = jest.spyOn(MetadataExtractor.prototype, "extractEbuCore");
+        });
+
+        it("gets the datastream metadata", async () => {
+            getMetadataSpy.mockResolvedValue(xml);
+            extractEbuNodeSpy.mockReturnValue({
+                hasMimeType: [mimeType],
+            });
+
+            expect(await datastreamManager.getMimeType(pid, stream)).toEqual(mimeType);
+
+            expect(getMetadataSpy).toHaveBeenCalledWith(pid, stream);
+            expect(extractEbuNodeSpy).toHaveBeenCalledWith(xml, "//ebucore:hasMimeType");
+        });
+    });
+
+    describe("downloadBuffer", () => {
+        let getDatastreamAsBufferSpy;
+        let pid;
+        let stream;
+        let buffer;
+
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            buffer = "test3";
+            getDatastreamAsBufferSpy = jest.spyOn(FedoraObject.prototype, "getDatastreamAsBuffer");
+        });
+
+        it("gets the datastream as a buffer", async () => {
+            getDatastreamAsBufferSpy.mockResolvedValue(buffer);
+            const response = await datastreamManager.downloadBuffer(pid, stream);
+
+            expect(response).toEqual(buffer);
+            expect(getDatastreamAsBufferSpy).toHaveBeenCalledWith(stream);
         });
     });
 

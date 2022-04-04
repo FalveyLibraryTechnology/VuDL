@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box, ButtonGroup } from "@mui/material";
+import Box from "@mui/material/Box";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import { DatastreamModalStates } from "../../../context/EditorContext";
 import DatastreamControlButton from "./DatastreamControlButton";
 

@@ -2,9 +2,8 @@ import fs = require("fs");
 import winston = require("winston");
 import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
-import { DOMParser } from "@xmldom/xmldom";
+import MetadataExtractor from "../services/MetadataExtractor";
 import { execSync } from "child_process";
-import xpath = require("xpath");
 
 export interface ObjectParameters {
     label?: string;
@@ -25,16 +24,30 @@ export class FedoraObject {
     protected config: Config;
     protected fedora: Fedora;
     protected logger: winston.Logger;
+    protected metadataExtractor: MetadataExtractor;
 
-    constructor(pid: string, config: Config, fedora: Fedora, logger: winston.Logger = null) {
+    constructor(
+        pid: string,
+        config: Config,
+        fedora: Fedora,
+        metadataExtractor: MetadataExtractor,
+        logger: winston.Logger = null
+    ) {
         this.pid = pid;
         this.config = config;
         this.fedora = fedora;
         this.logger = logger;
+        this.metadataExtractor = metadataExtractor;
     }
 
     public static build(pid: string, logger: winston.Logger = null, config: Config = null): FedoraObject {
-        return new FedoraObject(pid, config ?? Config.getInstance(), Fedora.getInstance(), logger);
+        return new FedoraObject(
+            pid,
+            config ?? Config.getInstance(),
+            Fedora.getInstance(),
+            MetadataExtractor.getInstance(),
+            logger
+        );
     }
 
     get namespace(): string {
@@ -97,7 +110,7 @@ export class FedoraObject {
 
     async addRelationship(subject: string, predicate: string, obj: string, isLiteral = false): Promise<void> {
         this.log("Adding relationship " + [subject, predicate, obj].join(" ") + " to " + this.pid);
-        return this.fedora.addRelsExtRelationship(this.pid, subject, predicate, obj, isLiteral);
+        return this.fedora.addRelationship(this.pid, subject, predicate, obj, isLiteral);
     }
 
     async addModelRelationship(model: string): Promise<void> {
@@ -166,6 +179,10 @@ export class FedoraObject {
         return this.fedora.getDatastreamAsBuffer(this.pid, datastream);
     }
 
+    async getDatastreamMetadata(datastream: string): Promise<string> {
+        return await this.fedora.getRdf(`${this.pid}/${datastream}/fcr:metadata`);
+    }
+
     fitsMasterMetadata(filename: string): string {
         const targetXml = filename + ".fits.xml";
         if (!fs.existsSync(targetXml)) {
@@ -198,15 +215,12 @@ export class FedoraObject {
 
     async getSort(): Promise<string> {
         let sort = "title"; // default
-        // If we can find a RELS-EXT, let's check for non-default values:
-        const rels = await this.fedora.getDatastreamAsString(this.pid, "RELS-EXT", false, true);
-        if (rels.length > 0) {
-            const xmlParser = new DOMParser();
-            const xml = xmlParser.parseFromString(rels, "text/xml");
-            const rdfXPath = xpath.useNamespaces({ "vudl-rel": "http://vudl.org/relationships#" });
-            rdfXPath("//vudl-rel:sortOn/text()", xml).forEach((node: Node) => {
-                sort = node.nodeValue;
-            });
+        const rdf = await this.fedora.getRdf(this.pid);
+        if (rdf.length > 0) {
+            const details = this.metadataExtractor.extractFedoraDetails(rdf);
+            if ((details?.sortOn ?? []).length > 0) {
+                sort = details.sortOn[0];
+            }
         }
         return sort;
     }

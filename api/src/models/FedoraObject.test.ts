@@ -1,5 +1,6 @@
 import { FedoraObject } from "./FedoraObject";
 import { Fedora } from "../services/Fedora";
+import MetadataExtractor from "../services/MetadataExtractor";
 import * as fs from "fs";
 import Config from "../models/Config";
 
@@ -23,6 +24,45 @@ describe("FedoraObject", () => {
         fedoraObject = FedoraObject.build(pid);
     });
 
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    describe("addRelationship", () => {
+        it("proxies a call to the fedora service", () => {
+            const config = new Config({});
+            const fedora = new Fedora(config);
+            const spy = jest.spyOn(fedora, "addRelationship").mockImplementation(jest.fn());
+            fedoraObject = new FedoraObject(pid, config, fedora, MetadataExtractor.getInstance());
+            fedoraObject.addRelationship("subject", "predicate", "object", true);
+            expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy).toHaveBeenCalledWith(pid, "subject", "predicate", "object", true);
+        });
+    });
+
+    describe("getSort", () => {
+        it("defaults to title", async () => {
+            const config = new Config({});
+            const fedora = new Fedora(config);
+            jest.spyOn(fedora, "getRdf").mockResolvedValue("");
+            fedoraObject = new FedoraObject(pid, config, fedora, MetadataExtractor.getInstance());
+            expect(await fedoraObject.getSort()).toEqual("title");
+        });
+
+        it("uses the metadata extractor to obtain data", async () => {
+            const config = new Config({});
+            const fedora = new Fedora(config);
+            const extractor = MetadataExtractor.getInstance();
+            const fakeRDF = "<rdf />";
+            jest.spyOn(fedora, "getRdf").mockResolvedValue(fakeRDF);
+            const extractorSpy = jest.spyOn(extractor, "extractFedoraDetails").mockReturnValue({ sortOn: ["title"] });
+            fedoraObject = new FedoraObject(pid, config, fedora, extractor);
+            expect(await fedoraObject.getSort()).toEqual("title");
+            expect(extractorSpy).toHaveBeenCalledTimes(1);
+            expect(extractorSpy).toHaveBeenCalledWith(fakeRDF);
+        });
+    });
+
     describe("updateDatastreamFromFile", () => {
         let addDatastreamFromStringOrBufferSpy;
         it("updates datastream and tracks status 201 and 204", async () => {
@@ -33,6 +73,18 @@ describe("FedoraObject", () => {
 
             expect(fs.readFileSync).toHaveBeenCalledWith(filename);
             expect(addDatastreamFromStringOrBufferSpy).toHaveBeenCalledWith(buffer, stream, mimeType, [201, 204]);
+        });
+    });
+
+    describe("getDatastreamMetadata", () => {
+        let getRdfSpy;
+        it("gets the datastream metadata", async () => {
+            getRdfSpy = jest.spyOn(Fedora.prototype, "getRdf").mockResolvedValue("test");
+
+            const metadata = await fedoraObject.getDatastreamMetadata(stream);
+
+            expect(metadata).toEqual("test");
+            expect(getRdfSpy).toHaveBeenCalledWith(`${pid}/${stream}/fcr:metadata`);
         });
     });
 

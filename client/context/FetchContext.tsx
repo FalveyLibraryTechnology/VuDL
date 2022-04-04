@@ -132,11 +132,30 @@ export const useFetchContext = () => {
         throw new Error(response.statusText);
     };
 
+    /**
+     * Return a blob response when making a request
+     * @param {string} url - The http url of the request
+     * @param {Object} params - The request parameters
+     * @param {Object} headers - The request parameter headers
+     */
+    const fetchBlob = async (url, params = {}, headers = {}) => {
+        const response = await makeRequest(url, params, headers);
+        if (response.ok) {
+            const blob = await response.blob();
+            return {
+                headers: response.headers,
+                blob
+            };
+        }
+        throw new Error(response.statusText);
+    };
+
     return {
         state: {
             token,
         },
         action: {
+            fetchBlob,
             fetchJSON,
             fetchText,
             makeRequest,

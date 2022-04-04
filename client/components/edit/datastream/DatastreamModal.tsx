@@ -1,5 +1,8 @@
 import React from "react";
-import { Dialog, DialogTitle, Grid, IconButton } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEditorContext } from "../../../context/EditorContext";
 import DatastreamUploadModalContent from "./DatastreamUploadModalContent";
@@ -9,7 +12,6 @@ const contentMapping = {
     Upload: <DatastreamUploadModalContent />,
     View: null,
     Metadata: null,
-    Download: null,
     Delete: <DatastreamDeleteModalContent />,
 };
 

@@ -7,22 +7,19 @@ interface TreeNode {
 class FedoraData {
     public metadata: Record<string, Array<string>>;
     public pid: string;
-    public relations: Record<string, Array<string>>;
     public fedoraDetails: Record<string, Array<string>>;
     public fedoraDatastreams: Array<string>;
     public parents: Array<FedoraData> = [];
-    protected extraDetails: Record<string, Record<string, Array<string>>>;
+    public extraDetails: Record<string, Record<string, Array<string>>>;
 
     constructor(
         pid: string,
-        relations: Record<string, Array<string>>,
         metadata: Record<string, Array<string>>,
         fedoraDetails: Record<string, Array<string>>,
         fedoraDatastreams: Array<string>,
-        extraDetails: Record<string, Record<string, Array<string>>>
+        extraDetails: Record<string, Record<string, Array<string>>> = {}
     ) {
         this.pid = pid;
-        this.relations = relations;
         this.metadata = metadata;
         this.fedoraDetails = fedoraDetails;
         this.fedoraDatastreams = fedoraDatastreams;
@@ -156,14 +153,14 @@ class FedoraData {
     }
 
     get models(): Array<string> {
-        // Strip off "info:fedora/" prefix:
-        return (this.relations.hasModel ?? []).map((model) => {
-            return model.substring("info:fedora/".length);
+        // Separate identifier from URI prefix
+        return (this.fedoraDetails.hasModel ?? []).map((model) => {
+            return model.split("/").pop();
         });
     }
 
     get sequences(): Array<string> {
-        return this.relations.sequence ?? [];
+        return this.fedoraDetails.sequence ?? [];
     }
 
     get title(): string {

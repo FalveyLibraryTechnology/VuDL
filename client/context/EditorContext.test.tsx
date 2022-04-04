@@ -22,6 +22,10 @@ describe("useEditorContext", () => {
         );
     });
 
+    afterEach(() => {
+        jest.resetAllMocks();
+    });
+
     describe("setCurrentPid", () => {
         it("successfully calls fetch", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
@@ -96,7 +100,7 @@ describe("useEditorContext", () => {
         });
 
         it("throws an error", async () => {
-            const errorSpy = jest.spyOn(global.console, "error");
+            const errorSpy = jest.spyOn(global.console, "error").mockImplementation(jest.fn());
             fetchValues.action.fetchJSON.mockRejectedValue("test1");
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
@@ -150,7 +154,7 @@ describe("useEditorContext", () => {
         });
 
         it("throws an error", async () => {
-            const errorSpy = jest.spyOn(global.console, "error");
+            const errorSpy = jest.spyOn(global.console, "error").mockImplementation(jest.fn());
             fetchValues.action.fetchJSON.mockRejectedValue("test1");
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 

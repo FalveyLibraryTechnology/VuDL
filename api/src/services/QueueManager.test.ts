@@ -25,6 +25,9 @@ describe("QueueManager", () => {
             getJobsSpy = jest.spyOn(Queue.prototype, "getJobs").mockResolvedValue(jobs);
             addSpy = jest.spyOn(Queue.prototype, "add");
         });
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
 
         it("will not queue a metadata operation if it already exists", async () => {
             jobs.push({
@@ -34,9 +37,11 @@ describe("QueueManager", () => {
                     action: "add",
                 },
             });
-
+            const consoleSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
             await queueManager.queueMetadataOperation("123", "add");
             expect(addSpy).not.toHaveBeenCalledWith("metadata", { pid: "123", action: "add" });
+            expect(consoleSpy).toHaveBeenCalledTimes(1);
+            expect(consoleSpy).toHaveBeenCalledWith("Skipping queue; 123 is already awaiting add.");
         });
 
         it("will queue a metadata operation", async () => {
