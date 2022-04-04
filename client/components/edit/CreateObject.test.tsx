@@ -9,14 +9,16 @@ import { FetchContextProvider } from "../../context/FetchContext";
 
 let nodeSelectFunction = null;
 let treeItems = null;
-jest.mock("@mui/lab", function () {
-    return {
-        TreeView: ({ onNodeSelect, children }) => {
-            nodeSelectFunction = onNodeSelect;
-            treeItems = children;
-            return children;
-        },
-        TreeItem: () => "TreeItem",
+
+jest.mock("@mui/lab/TreeItem", function () {
+    return () => "TreeItem";
+});
+
+jest.mock("@mui/lab/TreeView", function () {
+    return ({ onNodeSelect, children }) => {
+        nodeSelectFunction = onNodeSelect;
+        treeItems = children;
+        return children;
     };
 });
 

@@ -16,6 +16,7 @@ describe("DateSanitizer", () => {
         ["1888-05-99", "1888-05-01T00:00:00Z", "Year-month-illegal day, numeric format"],
         ["1888--05--12", "1888-05-12T00:00:00Z", "Year--month--day, with double dashes"],
         ["693-01-07", "0693-01-01T00:00:00Z", "Year-month-day, with three-digit year"],
+        ["693-1-7", "0693-01-01T00:00:00Z", "Year-month-day, with no leading zeroes"],
     ])("DateSanitizer.sanitize(%s) => %s. Description: %s", (testInput, expectedValue) => {
         expect(DateSanitizer.sanitize(testInput)).toEqual(expectedValue);
     });
