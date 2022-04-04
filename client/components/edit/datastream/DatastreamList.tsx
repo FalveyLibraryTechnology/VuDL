@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Datastream from "./Datastream";
-import { List } from "@mui/material";
+import List from "@mui/material/List";
 import { useEditorContext } from "../../../context/EditorContext";
 
 const DatastreamList = () => {

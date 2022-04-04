@@ -1,5 +1,8 @@
 import React from "react";
-import { Button, DialogContent, DialogActions, DialogContentText } from "@mui/material";
+import Button from "@mui/material/Button";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContentText from "@mui/material/DialogContentText";
 import { useEditorContext } from "../../../context/EditorContext";
 import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 
