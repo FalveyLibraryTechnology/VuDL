@@ -40,7 +40,7 @@ describe("IngestProcessor", () => {
     });
     describe("finalizeTitle", () => {
         it("creates a title based on the directory path", async () => {
-            const fedoraObject = new FedoraObject("foo:123", config, fedora);
+            const fedoraObject = FedoraObject.build("foo:123", null, config);
             const labelSpy = jest.spyOn(fedoraObject, "modifyObjectLabel").mockImplementation(jest.fn());
             const datastreamSpy = jest
                 .spyOn(fedoraObject, "getDatastream")
