@@ -31,7 +31,7 @@ class FedoraDataCollector {
         return FedoraDataCollector.instance;
     }
 
-    async getSingleObject(pid: string): Promise<FedoraDataCollection> {
+    async getObjectData(pid: string): Promise<FedoraDataCollection> {
         // Use Fedora to get data
         const DCPromise = this.fedora.getDublinCore(pid);
         const RDFPromise = this.fedora.getRdf(pid, false);
@@ -49,7 +49,7 @@ class FedoraDataCollector {
     }
 
     async getHierarchy(pid: string): Promise<FedoraDataCollection> {
-        const result = await this.getSingleObject(pid);
+        const result = await this.getObjectData(pid);
         // Create promises to retrieve parents asynchronously...
         const promises = (result.fedoraDetails.isMemberOf ?? []).map(async (resource) => {
             const parentPid = resource.split("/").pop();

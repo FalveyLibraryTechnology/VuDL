@@ -61,7 +61,7 @@ edit.post("/object/new", requireToken, bodyParser.json(), async function (req, r
         const collector = FedoraDataCollector.getInstance();
         let parent: FedoraDataCollection;
         try {
-            parent = await collector.getSingleObject(parentPid);
+            parent = await collector.getObjectData(parentPid);
         } catch (e) {
             res.status(404).send("Error loading parent PID: " + parentPid);
             return;
@@ -123,7 +123,7 @@ function uploadFile(req, res, next) {
 
 edit.get("/object/modelsdatastreams/:pid", requireToken, pidSanitizer, async function (req, res) {
     try {
-        const data = await FedoraDataCollector.getInstance().getSingleObject(req.params.pid);
+        const data = await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
         res.json({ models: data.models, datastreams: data.fedoraDatastreams });
     } catch (error) {
         console.error(error);

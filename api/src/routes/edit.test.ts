@@ -62,7 +62,7 @@ describe("edit", () => {
         it("will fail if parent does not have collection model", async () => {
             const mockData = FedoraDataCollection.build("pid:123");
             const collector = FedoraDataCollector.getInstance();
-            const dataSpy = jest.spyOn(collector, "getSingleObject").mockResolvedValue(mockData);
+            const dataSpy = jest.spyOn(collector, "getObjectData").mockResolvedValue(mockData);
             const response = await request(app)
                 .post("/edit/object/new")
                 .send({ model: "vudl-system:foo", title: "bar", state: "Active", parent: "pid:123" })
@@ -82,7 +82,7 @@ describe("edit", () => {
                 ],
             };
             const collector = FedoraDataCollector.getInstance();
-            const dataSpy = jest.spyOn(collector, "getSingleObject").mockResolvedValue(mockData);
+            const dataSpy = jest.spyOn(collector, "getObjectData").mockResolvedValue(mockData);
             const factory = FedoraObjectFactory.getInstance();
             const newObject = FedoraObject.build("child:123");
             const factorySpy = jest.spyOn(factory, "build").mockResolvedValue(newObject);
