@@ -1,5 +1,5 @@
 import Fedora from "../services/Fedora";
-import FedoraData from "./FedoraData";
+import FedoraDataCollection from "./FedoraDataCollection";
 import MetadataExtractor from "../services/MetadataExtractor";
 import TikaExtractor from "../services/TikaExtractor";
 
@@ -8,7 +8,7 @@ interface LicenseData {
 }
 
 class FedoraDatastreamDetails {
-    protected data: FedoraData;
+    protected data: FedoraDataCollection;
     protected fedora: Fedora;
     protected extractor: MetadataExtractor;
     protected tika: TikaExtractor;
@@ -18,7 +18,7 @@ class FedoraDatastreamDetails {
     protected fitsData: Record<string, Array<string>>;
     protected fullText: Record<string, Array<string>>;
 
-    constructor(data: FedoraData, fedora: Fedora, extractor: MetadataExtractor, tika: TikaExtractor) {
+    constructor(data: FedoraDataCollection, fedora: Fedora, extractor: MetadataExtractor, tika: TikaExtractor) {
         this.data = data;
         this.fedora = fedora;
         this.extractor = extractor;

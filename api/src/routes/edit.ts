@@ -6,13 +6,13 @@ import FedoraCatalog from "../services/FedoraCatalog";
 import { FedoraObject } from "../models/FedoraObject";
 import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
-import HierarchyCollector from "../services/HierarchyCollector";
+import FedoraDataCollector from "../services/FedoraDataCollector";
 import MetadataExtractor from "../services/MetadataExtractor";
 import { requireToken } from "./auth";
 import { datastreamSanitizer, pidSanitizer } from "./sanitize";
 import * as formidable from "formidable";
 import Solr from "../services/Solr";
-import FedoraData from "../models/FedoraData";
+import FedoraDataCollection from "../models/FedoraDataCollection";
 const edit = express.Router();
 
 edit.get("/models", requireToken, function (req, res) {
@@ -58,10 +58,10 @@ edit.post("/object/new", requireToken, bodyParser.json(), async function (req, r
 
     // Validate parent PID, if set:
     if (parentPid !== null) {
-        const collector = HierarchyCollector.getInstance();
-        let parent: FedoraData;
+        const collector = FedoraDataCollector.getInstance();
+        let parent: FedoraDataCollection;
         try {
-            parent = await collector.getFedoraData(parentPid);
+            parent = await collector.getObjectData(parentPid);
         } catch (e) {
             res.status(404).send("Error loading parent PID: " + parentPid);
             return;
@@ -123,7 +123,7 @@ function uploadFile(req, res, next) {
 
 edit.get("/object/modelsdatastreams/:pid", requireToken, pidSanitizer, async function (req, res) {
     try {
-        const data = await HierarchyCollector.getInstance().getFedoraData(req.params.pid);
+        const data = await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
         res.json({ models: data.models, datastreams: data.fedoraDatastreams });
     } catch (error) {
         console.error(error);
@@ -144,7 +144,7 @@ edit.get("/object/details/:pid", requireToken, pidSanitizer, async function (req
 
 edit.get("/object/parents/:pid", pidSanitizer, requireToken, async function (req, res) {
     try {
-        const fedoraData = await HierarchyCollector.getInstance().getHierarchy(req.params.pid);
+        const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(req.params.pid);
         res.json(fedoraData.getParentTree());
     } catch (e) {
         console.error("Error retrieving breadcrumbs: " + e);

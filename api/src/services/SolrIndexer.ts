@@ -1,7 +1,7 @@
 import Config from "../models/Config";
 import DateSanitizer from "./DateSanitizer";
-import FedoraData from "../models/FedoraData";
-import HierarchyCollector from "./HierarchyCollector";
+import FedoraDataCollection from "../models/FedoraDataCollection";
+import FedoraDataCollector from "./FedoraDataCollector";
 import http = require("needle");
 import { NeedleResponse } from "./interfaces";
 import Solr from "./Solr";
@@ -13,11 +13,11 @@ interface SolrFields {
 class SolrIndexer {
     private static instance: SolrIndexer;
     config: Config;
-    hierarchyCollector: HierarchyCollector;
+    fedoraDataCollector: FedoraDataCollector;
     solr: Solr;
 
-    constructor(hierarchyCollector: HierarchyCollector, solr: Solr, config: Config) {
-        this.hierarchyCollector = hierarchyCollector;
+    constructor(fedoraDataCollector: FedoraDataCollector, solr: Solr, config: Config) {
+        this.fedoraDataCollector = fedoraDataCollector;
         this.config = config;
         this.solr = solr;
     }
@@ -25,7 +25,7 @@ class SolrIndexer {
     public static getInstance(): SolrIndexer {
         if (!SolrIndexer.instance) {
             SolrIndexer.instance = new SolrIndexer(
-                HierarchyCollector.getInstance(),
+                FedoraDataCollector.getInstance(),
                 Solr.getInstance(),
                 Config.getInstance()
             );
@@ -71,14 +71,14 @@ class SolrIndexer {
         // Empty out Fedora cache data to be sure we get the latest
         // information while indexing.
         // TODO: review datastream caching logic; do we need it? Is there a better way?
-        this.hierarchyCollector.fedora.clearCache(pid);
+        this.fedoraDataCollector.fedora.clearCache(pid);
         const fedoraFields = await this.getFields(pid);
         return await this.solr.indexRecord(this.config.solrCore, fedoraFields);
     }
 
     async getFields(pid: string): Promise<SolrFields> {
         // Collect hierarchy data
-        const fedoraData = await this.hierarchyCollector.getHierarchy(pid);
+        const fedoraData = await this.fedoraDataCollector.getHierarchy(pid);
 
         // Start with basic data:
         const fields: SolrFields = {
@@ -110,8 +110,8 @@ class SolrIndexer {
 
         // Process parent data (note that hierarchyParents makes some special exceptions for VuFind;
         // fedoraParents exactly maintains the hierarchy as represented in Fedora):
-        const hierarchyParents: Array<FedoraData> = [];
-        const fedoraParents: Array<FedoraData> = [];
+        const hierarchyParents: Array<FedoraDataCollection> = [];
+        const fedoraParents: Array<FedoraDataCollection> = [];
         const hierarchySequences: Array<string> = [];
         for (const parent of fedoraData.parents) {
             // Fedora parents should directly reflect the repository without any
@@ -132,7 +132,7 @@ class SolrIndexer {
                 hierarchySequences.push(this.padNumber(sequenceIndex[parent.pid] ?? 0));
             }
         }
-        const hierarchyTops: Array<FedoraData> = fedoraData.getAllHierarchyTops();
+        const hierarchyTops: Array<FedoraDataCollection> = fedoraData.getAllHierarchyTops();
         if (hierarchyTops.length > 0) {
             fields.hierarchy_top_id = [];
             fields.hierarchy_top_title = [];
@@ -174,7 +174,7 @@ class SolrIndexer {
             // to look them up manually in Fedora. Perhaps this can be optimized or
             // simplified somehow...
             const titlePromises = ((fields.hierarchy_parent_id ?? []) as Array<string>).map(async (id) => {
-                const currentObject = await this.hierarchyCollector.getFedoraData(id);
+                const currentObject = await this.fedoraDataCollector.getObjectData(id);
                 return currentObject.title;
             });
             fields.hierarchy_parent_title = await Promise.all(titlePromises);

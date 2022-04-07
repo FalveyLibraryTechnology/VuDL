@@ -9,12 +9,12 @@ interface TreeNode {
     parents: Array<TreeNode>;
 }
 
-class FedoraData {
+class FedoraDataCollection {
     public metadata: Record<string, Array<string>>;
     public pid: string;
     public fedoraDetails: Record<string, Array<string>>;
     public fedoraDatastreams: Array<string>;
-    public parents: Array<FedoraData> = [];
+    public parents: Array<FedoraDataCollection> = [];
     public datastreamDetails: FedoraDatastreamDetails;
 
     constructor(
@@ -41,8 +41,8 @@ class FedoraData {
         fedora: Fedora = null,
         extractor: MetadataExtractor = null,
         tika: TikaExtractor = null
-    ): FedoraData {
-        return new FedoraData(
+    ): FedoraDataCollection {
+        return new FedoraDataCollection(
             pid,
             metadata,
             fedoraDetails,
@@ -53,18 +53,18 @@ class FedoraData {
         );
     }
 
-    addParent(parent: FedoraData): void {
+    addParent(parent: FedoraDataCollection): void {
         this.parents.push(parent);
     }
 
-    getAllHierarchyTops(): Array<FedoraData> {
+    getAllHierarchyTops(): Array<FedoraDataCollection> {
         // If we have no parents, we ARE the top:
         if (this.parents.length === 0) {
             return [this];
         }
 
         // Otherwise, let's collect data from our parents:
-        const tops: Array<FedoraData> = [];
+        const tops: Array<FedoraDataCollection> = [];
         for (const parent of this.parents) {
             for (const top of parent.getAllHierarchyTops()) {
                 if (!tops.includes(top)) {
@@ -177,4 +177,4 @@ class FedoraData {
     }
 }
 
-export default FedoraData;
+export default FedoraDataCollection;

@@ -5,9 +5,9 @@ import edit from "./edit";
 import Config from "../models/Config";
 import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
-import HierarchyCollector from "../services/HierarchyCollector";
+import FedoraDataCollector from "../services/FedoraDataCollector";
 import * as Database from "../services/Database";
-import FedoraData from "../models/FedoraData";
+import FedoraDataCollection from "../models/FedoraDataCollection";
 import { FedoraObject } from "../models/FedoraObject";
 
 jest.mock("../models/Config");
@@ -60,9 +60,9 @@ describe("edit", () => {
             expect(response.text).toEqual("Missing state parameter.");
         });
         it("will fail if parent does not have collection model", async () => {
-            const mockData = FedoraData.build("pid:123");
-            const collector = HierarchyCollector.getInstance();
-            const dataSpy = jest.spyOn(collector, "getFedoraData").mockResolvedValue(mockData);
+            const mockData = FedoraDataCollection.build("pid:123");
+            const collector = FedoraDataCollector.getInstance();
+            const dataSpy = jest.spyOn(collector, "getObjectData").mockResolvedValue(mockData);
             const response = await request(app)
                 .post("/edit/object/new")
                 .send({ model: "vudl-system:foo", title: "bar", state: "Active", parent: "pid:123" })
@@ -73,7 +73,7 @@ describe("edit", () => {
             expect(dataSpy).toHaveBeenCalledWith("pid:123");
         });
         it("will succeed if parent has collection model", async () => {
-            const mockData = FedoraData.build("pid:123");
+            const mockData = FedoraDataCollection.build("pid:123");
             mockData.fedoraDetails = {
                 hasModel: [
                     "http://localhost:8080/rest/vudl-system:FolderModel",
@@ -81,8 +81,8 @@ describe("edit", () => {
                     "http://localhost:8080/rest/vudl-system:CollectionModel",
                 ],
             };
-            const collector = HierarchyCollector.getInstance();
-            const dataSpy = jest.spyOn(collector, "getFedoraData").mockResolvedValue(mockData);
+            const collector = FedoraDataCollector.getInstance();
+            const dataSpy = jest.spyOn(collector, "getObjectData").mockResolvedValue(mockData);
             const factory = FedoraObjectFactory.getInstance();
             const newObject = FedoraObject.build("child:123");
             const factorySpy = jest.spyOn(factory, "build").mockResolvedValue(newObject);

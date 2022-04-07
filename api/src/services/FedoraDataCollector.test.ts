@@ -1,11 +1,11 @@
 import Fedora from "./Fedora";
-import HierarchyCollector from "./HierarchyCollector";
+import FedoraDataCollector from "./FedoraDataCollector";
 import MetadataExtractor from "./MetadataExtractor";
 
-describe("HierarchyCollector", () => {
+describe("FedoraDataCollector", () => {
     let collector;
     beforeEach(() => {
-        collector = HierarchyCollector.getInstance();
+        collector = FedoraDataCollector.getInstance();
     });
 
     afterEach(() => {

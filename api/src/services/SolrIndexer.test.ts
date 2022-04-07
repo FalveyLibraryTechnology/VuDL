@@ -1,7 +1,7 @@
 import Config from "../models/Config";
 import Fedora from "./Fedora";
-import FedoraData from "../models/FedoraData";
-import HierarchyCollector from "./HierarchyCollector";
+import FedoraDataCollection from "../models/FedoraDataCollection";
+import FedoraDataCollector from "./FedoraDataCollector";
 import { NeedleResponse } from "./interfaces";
 import SolrIndexer from "./SolrIndexer";
 import TikaExtractor from "./TikaExtractor";
@@ -25,8 +25,8 @@ describe("SolrIndexer", () => {
     it("returns reasonable results in response to almost-empty input", async () => {
         const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
         const pid = "test:123";
-        const collector = HierarchyCollector.getInstance();
-        const record = FedoraData.build(pid);
+        const collector = FedoraDataCollector.getInstance();
+        const record = FedoraDataCollection.build(pid);
         const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
         const result = await indexer.getFields(pid);
         expect(result).toEqual({
@@ -59,22 +59,22 @@ describe("SolrIndexer", () => {
         const pid = "test:123";
         const parentPid = "test:122";
         const grandparentPid = "test:121";
-        const collector = HierarchyCollector.getInstance();
+        const collector = FedoraDataCollector.getInstance();
         const recordDetails = {
             hasModel: ["vudl-system:CoreModel", "vudl-system:DataModel", "vudl-system:ImageData"],
             sequence: [parentPid + "#1"],
         };
-        const record = FedoraData.build(pid, { "dc:title": ["page"] }, recordDetails);
+        const record = FedoraDataCollection.build(pid, { "dc:title": ["page"] }, recordDetails);
         const parentRecordDetails = {
             hasModel: ["vudl-system:CoreModel", "vudl-system:CollectionModel", "vudl-system:ListCollection"],
             sortOn: ["custom"],
         };
-        const parentRecord = FedoraData.build(parentPid, { "dc:title": ["page list"] }, parentRecordDetails);
+        const parentRecord = FedoraDataCollection.build(parentPid, { "dc:title": ["page list"] }, parentRecordDetails);
         record.addParent(parentRecord);
         const grandparentRecordDetails = {
             hasModel: ["vudl-system:CoreModel", "vudl-system:CollectionModel", "vudl-system:ResourceCollection"],
         };
-        const grandparentRecord = FedoraData.build(
+        const grandparentRecord = FedoraDataCollection.build(
             grandparentPid,
             { "dc:title": ["test record"] },
             grandparentRecordDetails
@@ -164,8 +164,8 @@ describe("SolrIndexer", () => {
         const metadata = {
             "dc:title": [title, altTitle],
         };
-        const collector = HierarchyCollector.getInstance();
-        const record = FedoraData.build(pid, metadata);
+        const collector = FedoraDataCollector.getInstance();
+        const record = FedoraDataCollection.build(pid, metadata);
         const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
         const result = await indexer.getFields(pid);
         expect(result).toEqual({
@@ -219,8 +219,8 @@ describe("SolrIndexer", () => {
             "dc:relation": ["Relation"],
             "dc:date": ["1979-12-06"],
         };
-        const collector = HierarchyCollector.getInstance();
-        const record = FedoraData.build(pid, metadata);
+        const collector = FedoraDataCollector.getInstance();
+        const record = FedoraDataCollection.build(pid, metadata);
         const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
         const result = await indexer.getFields(pid);
         expect(result).toEqual({
@@ -300,8 +300,8 @@ describe("SolrIndexer", () => {
     it("processes agent data correctly", async () => {
         const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
         const pid = "test:123";
-        const collector = HierarchyCollector.getInstance();
-        const record = FedoraData.build(pid, {}, {}, ["AGENTS"]);
+        const collector = FedoraDataCollector.getInstance();
+        const record = FedoraDataCollection.build(pid, {}, {}, ["AGENTS"]);
         const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
         const fedora = Fedora.getInstance();
         const agentXml = `<METS:metsHdr xmlns:METS="http://www.loc.gov/METS/" CREATEDATE="2012-08-16T02:28:47.698Z" LASTMODDATE="2012-08-17T20:25:54.802Z" RECORDSTATUS="PUBLISHED">
@@ -348,8 +348,8 @@ describe("SolrIndexer", () => {
     it("processes license data correctly", async () => {
         const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
         const pid = "test:123";
-        const collector = HierarchyCollector.getInstance();
-        const record = FedoraData.build(pid, {}, {}, ["LICENSE"]);
+        const collector = FedoraDataCollector.getInstance();
+        const record = FedoraDataCollection.build(pid, {}, {}, ["LICENSE"]);
         const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
         const fedora = Fedora.getInstance();
         const licenseXml = `<METS:rightsMD xmlns:METS="http://www.loc.gov/METS/" ID="0">
@@ -388,8 +388,8 @@ describe("SolrIndexer", () => {
     it("processes FITS data correctly", async () => {
         const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
         const pid = "test:123";
-        const collector = HierarchyCollector.getInstance();
-        const record = FedoraData.build(pid, {}, {}, ["MASTER-MD"]);
+        const collector = FedoraDataCollector.getInstance();
+        const record = FedoraDataCollection.build(pid, {}, {}, ["MASTER-MD"]);
         const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
         const fedora = Fedora.getInstance();
         const fitsXml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -477,8 +477,8 @@ describe("SolrIndexer", () => {
     it("processes thumbnail data correctly", async () => {
         const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
         const pid = "test:123";
-        const collector = HierarchyCollector.getInstance();
-        const record = FedoraData.build(pid, {}, {}, ["THUMBNAIL"]);
+        const collector = FedoraDataCollector.getInstance();
+        const record = FedoraDataCollection.build(pid, {}, {}, ["THUMBNAIL"]);
         const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
         const fedora = Fedora.getInstance();
         const agentXml = `<rdf:RDF
@@ -539,8 +539,11 @@ describe("SolrIndexer", () => {
     it("processes full text data correctly", async () => {
         const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
         const pid = "test:123";
-        const collector = HierarchyCollector.getInstance();
-        const record = FedoraData.build(pid, {}, { hasModel: ["vudl-system:PDFData"] }, ["MASTER", "OCR-DIRTY"]);
+        const collector = FedoraDataCollector.getInstance();
+        const record = FedoraDataCollection.build(pid, {}, { hasModel: ["vudl-system:PDFData"] }, [
+            "MASTER",
+            "OCR-DIRTY",
+        ]);
         const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
         const fedora = Fedora.getInstance();
         const getStreamSpy = jest.spyOn(fedora, "getDatastreamAsString").mockResolvedValue("dirty OCR");
