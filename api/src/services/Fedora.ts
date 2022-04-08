@@ -30,7 +30,6 @@ export interface DC {
 export class Fedora {
     private static instance: Fedora;
     config: Config;
-    cache: Record<string, Record<string, string>> = {};
 
     constructor(config: Config) {
         this.config = config;
@@ -74,56 +73,17 @@ export class Fedora {
      *
      * @param pid PID to look up
      */
-    async getRdf(pid: string, allowCaching = true): Promise<string> {
-        const cacheKey = "RDF";
-        let data = allowCaching ? this.getCache(pid, cacheKey) : null;
-        if (!data) {
-            const options = {
-                parse_response: false,
-                headers: { Accept: "application/rdf+xml" },
-            };
-            const result = await this._request("get", pid, null, options);
-            data = result.body.toString();
-            if (allowCaching) {
-                this.setCache(pid, cacheKey, data);
-            }
-        }
-        return data;
+    async getRdf(pid: string): Promise<string> {
+        const options = {
+            parse_response: false,
+            headers: { Accept: "application/rdf+xml" },
+        };
+        const result = await this._request("get", pid, null, options);
+        return result.body.toString();
     }
 
-    public clearCache(pid: string): void {
-        this.cache[pid] = {};
-    }
-
-    protected getCache(pid: string, key: string): string {
-        if (typeof this.cache[pid] === "undefined" || typeof this.cache[pid][key] === "undefined") {
-            return null;
-        }
-        return this.cache[pid][key];
-    }
-
-    protected setCache(pid: string, key: string, data: string): void {
-        if (typeof this.cache[pid] === "undefined") {
-            this.cache[pid] = {};
-        }
-        this.cache[pid][key] = data;
-    }
-
-    async getDatastreamAsString(
-        pid: string,
-        datastream: string,
-        allowCaching = true,
-        treatMissingAsEmpty = false
-    ): Promise<string> {
-        const cacheKey = "stream_" + datastream;
-        let data = allowCaching ? this.getCache(pid, cacheKey) : null;
-        if (!data) {
-            data = (await this.getDatastreamAsBuffer(pid, datastream, treatMissingAsEmpty)).toString();
-            if (allowCaching) {
-                this.setCache(pid, cacheKey, data);
-            }
-        }
-        return data;
+    async getDatastreamAsString(pid: string, datastream: string, treatMissingAsEmpty = false): Promise<string> {
+        return (await this.getDatastreamAsBuffer(pid, datastream, treatMissingAsEmpty)).toString();
     }
 
     async getDatastreamAsBuffer(pid: string, datastream: string, treatMissingAsEmpty = false): Promise<Buffer> {
@@ -206,20 +166,9 @@ export class Fedora {
      *
      * @param pid Record id
      */
-    async getDublinCore(pid: string, allowCaching = true): Promise<DC> {
-        const cacheKey = "DC";
-        const data = allowCaching ? this.getCache(pid, cacheKey) : null;
-        if (data) {
-            // If we found data in the cache, we need to decode it:
-            return JSON.parse(data);
-        }
+    async getDublinCore(pid: string): Promise<DC> {
         const requestOptions = { parse_response: true };
-        const dublinCore = <DC>(await this.getDatastream(pid, "DC", requestOptions)).body;
-        if (allowCaching) {
-            // The cache stores strings, so we need to encode our DC data to JSON:
-            this.setCache(pid, cacheKey, JSON.stringify(dublinCore));
-        }
-        return dublinCore;
+        return <DC>(await this.getDatastream(pid, "DC", requestOptions)).body;
     }
 
     /**

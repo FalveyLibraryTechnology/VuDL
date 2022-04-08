@@ -48,8 +48,8 @@ describe("FedoraDataCollector", () => {
         expect(dublinCoreSpy).toHaveBeenNthCalledWith(1, pid);
         expect(dublinCoreSpy).toHaveBeenNthCalledWith(2, parentPid);
         expect(rdfSpy).toHaveBeenCalledTimes(2);
-        expect(rdfSpy).toHaveBeenNthCalledWith(1, pid, false);
-        expect(rdfSpy).toHaveBeenNthCalledWith(2, parentPid, false);
+        expect(rdfSpy).toHaveBeenNthCalledWith(1, pid);
+        expect(rdfSpy).toHaveBeenNthCalledWith(2, parentPid);
         expect(extraMetadataSpy).toHaveBeenCalledTimes(2);
         expect(extraMetadataSpy).toHaveBeenNthCalledWith(1, dc1);
         expect(extraMetadataSpy).toHaveBeenNthCalledWith(2, dc2);

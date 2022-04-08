@@ -34,7 +34,7 @@ class FedoraDataCollector {
     async getObjectData(pid: string): Promise<FedoraDataCollection> {
         // Use Fedora to get data
         const DCPromise = this.fedora.getDublinCore(pid);
-        const RDFPromise = this.fedora.getRdf(pid, false);
+        const RDFPromise = this.fedora.getRdf(pid);
         const [DC, RDF] = await Promise.all([DCPromise, RDFPromise]);
 
         return new FedoraDataCollection(
