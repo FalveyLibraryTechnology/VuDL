@@ -108,9 +108,9 @@ class SolrIndexer {
             fields[dynamic_sequence_field_name] = this.padNumber(seqNum);
         }
 
-        // Process parent data (note that hierarchyParents makes some special exceptions for VuFind;
+        // Process parent data (note that vufindParents makes some special exceptions for VuFind;
         // fedoraParents exactly maintains the hierarchy as represented in Fedora):
-        const hierarchyParents: Array<FedoraDataCollection> = [];
+        const vufindParents: Array<FedoraDataCollection> = [];
         const fedoraParents: Array<FedoraDataCollection> = [];
         const hierarchySequences: Array<string> = [];
         for (const parent of fedoraData.parents) {
@@ -122,13 +122,13 @@ class SolrIndexer {
             // to (skip the List object):
             if (fedoraData.models.includes("vudl-system:DataModel")) {
                 for (const grandParent of parent.parents) {
-                    hierarchyParents.push(grandParent);
+                    vufindParents.push(grandParent);
                     hierarchySequences.push(this.padNumber(sequenceIndex[grandParent.pid] ?? 0));
                 }
             } else if (!this.config.topLevelPids.includes(pid)) {
                 // ...for non-Data objects, store the immediate parent (Folder most likely)
                 // as long as the current pid is not marked as a top-level one:
-                hierarchyParents.push(parent);
+                vufindParents.push(parent);
                 hierarchySequences.push(this.padNumber(sequenceIndex[parent.pid] ?? 0));
             }
         }
@@ -144,15 +144,15 @@ class SolrIndexer {
             }
         }
         fields.fedora_parent_id_str_mv = fedoraParents.map((parent) => parent.pid);
-        if (hierarchyParents.length > 0) {
+        if (vufindParents.length > 0) {
             // This is what we are collapsing on:
             fields.hierarchy_first_parent_id_str = fedoraData.models.includes("vudl-system:DataModel")
-                ? hierarchyParents[0].pid
+                ? vufindParents[0].pid
                 : pid;
             fields.hierarchy_browse = [];
             fields.hierarchy_parent_id = [];
             fields.hierarchy_parent_title = [];
-            for (const parent of hierarchyParents) {
+            for (const parent of vufindParents) {
                 if (!fields.hierarchy_parent_id.includes(parent.pid)) {
                     fields.hierarchy_browse.push(parent.title + "{{{_ID_}}}" + parent.pid);
                     fields.hierarchy_parent_id.push(parent.pid);
@@ -246,7 +246,7 @@ class SolrIndexer {
 
         // If this is a data model, we want to pull the date from its parent.
         const dateString = fedoraData.models.includes("vudl-system:DataModel")
-            ? (hierarchyParents[0]?.metadata["dc:date"] ?? [])[0] ?? ""
+            ? (vufindParents[0]?.metadata["dc:date"] ?? [])[0] ?? ""
             : (fields["dc.date_txt_mv"] ?? [])[0] ?? "";
         const strippedDate = parseInt(dateString.substring(0, 4));
         if (strippedDate > this.config.minimumValidYear) {
