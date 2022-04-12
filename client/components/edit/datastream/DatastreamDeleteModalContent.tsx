@@ -6,7 +6,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import { useEditorContext } from "../../../context/EditorContext";
 import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 
-const DatastreamDeleteModalContent = () => {
+const DatastreamDeleteModalContent = (): React.ReactElement => {
     const {
         action: { toggleDatastreamModal },
     } = useEditorContext();

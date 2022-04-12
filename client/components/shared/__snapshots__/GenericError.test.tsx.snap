@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GenericError renders 1`] = `
+<ForwardRef(Box)
+  alignItems="center"
+  display="flex"
+  flexDirection="row"
+  justifyContent="center"
+  minHeight="100vh"
+>
+  <Memo(ForwardRef(SentimentVeryDissatisfiedIcon))
+    sx={
+      Object {
+        "color": "red",
+        "fontSize": "100px",
+      }
+    }
+  />
+  <br />
+  <ForwardRef(Box)
+    width="300px"
+  >
+    <ForwardRef(Box)
+      sx={
+        Object {
+          "fontSize": "24px",
+          "padding": "4px",
+        }
+      }
+    >
+      A generic error occurred. Please return 
+      <Link
+        href="/"
+      >
+        home.
+      </Link>
+    </ForwardRef(Box)>
+    <ForwardRef(Box)
+      sx={
+        Object {
+          "fontSize": "16px",
+          "padding": "4px",
+        }
+      }
+    >
+      Error details: 
+      Test error
+    </ForwardRef(Box)>
+  </ForwardRef(Box)>
+</ForwardRef(Box)>
+`;

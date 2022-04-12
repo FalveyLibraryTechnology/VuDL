@@ -1,12 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-const PaginatorPreview = ({ img }) => {
+interface PaginatorPreviewProps {
+    img: string | boolean;
+}
+
+const PaginatorPreview = ({ img }: PaginatorPreviewProps): React.ReactElement => {
     return <div className="preview">{img ? <img className="preview-image" src={img} alt="" /> : ""}</div>;
-};
-
-PaginatorPreview.propTypes = {
-    img: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };
 
 export default PaginatorPreview;

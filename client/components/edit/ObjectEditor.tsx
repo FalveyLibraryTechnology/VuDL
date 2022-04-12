@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import ChildList from "./ChildList";
 import Breadcrumbs from "./Breadcrumbs";
 import ObjectSummary from "./ObjectSummary";
@@ -11,7 +10,11 @@ import DatastreamModal from "./datastream/DatastreamModal";
 import { useEditorContext } from "../../context/EditorContext";
 import EditorSnackbar from "./EditorSnackbar";
 
-const ObjectEditor = ({ pid }) => {
+interface ObjectEditorProps {
+    pid: string;
+}
+
+const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
     const {
         action: { setCurrentPid, initializeModelsCatalog },
     } = useEditorContext();
@@ -52,10 +55,6 @@ const ObjectEditor = ({ pid }) => {
             <EditorSnackbar />
         </div>
     );
-};
-
-ObjectEditor.propTypes = {
-    pid: PropTypes.string,
 };
 
 export default ObjectEditor;

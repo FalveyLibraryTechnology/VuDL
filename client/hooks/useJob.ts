@@ -3,6 +3,17 @@ import { useRef, useState } from "react";
 import { getDerivUrl, getIngestUrl, getStatusUrl } from "../util/routes";
 import { getAgeString } from "../util/useJobHelper";
 
+interface JobStatus {
+    derivatives: Record<string, unknown>;
+    minutes_since_upload: number;
+    file_problems: Record<string, Array<string>>;
+    published: boolean;
+    ingesting: boolean;
+    documents: number;
+    audio: number;
+    ingest_info: string;
+}
+
 const useJob = ({ category, children }) => {
     const {
         action: { makeRequest, fetchJSON },
@@ -53,7 +64,14 @@ const useJob = ({ category, children }) => {
             ...getPublishedStatusText({ derivatives, ingesting, published }),
         ];
     };
-    const getStatusText = ({ derivatives, minutes_since_upload, documents, audio, ingesting, published }) => {
+    const getStatusText = ({
+        derivatives,
+        minutes_since_upload,
+        documents,
+        audio,
+        ingesting,
+        published
+    }: JobStatus) => {
         if (typeof derivatives !== "undefined") {
             if (minutes_since_upload < 10) {
                 setClickWarning(
@@ -106,7 +124,7 @@ const useJob = ({ category, children }) => {
         setClickable(false);
         setClickWarning("");
         setAction(null);
-        await updateStatus();
+        await updateStatus(e);
     };
 
     const updateStatus = async (e) => {

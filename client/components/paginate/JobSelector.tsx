@@ -5,7 +5,7 @@ import { ingestApiUrl } from "../../util/routes";
 
 import { useFetchContext } from "../../context/FetchContext";
 
-const JobSelector = () => {
+const JobSelector = (): React.ReactElement => {
     const {
         action: { fetchJSON },
     } = useFetchContext();

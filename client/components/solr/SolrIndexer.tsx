@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { baseUrl } from "../../util/routes";
 import { useFetchContext } from "../../context/FetchContext";
-const SolrIndexer = () => {
+const SolrIndexer = (): React.ReactElement => {
     const [pid, setPid] = useState("");
     const [results, setResults] = useState("");
     const {
         action: { fetchText },
     } = useFetchContext();
 
-    const doApiCall = async (method) => {
+    const doApiCall = async (method: string) => {
         try {
             setResults(await fetchText(`${baseUrl}/messenger/solrindex/${encodeURIComponent(pid)}`, { method }));
         } catch (error) {

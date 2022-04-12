@@ -2,6 +2,11 @@ import React, { createContext, useContext, useReducer } from "react";
 import { editObjectCatalogUrl, getObjectModelsDatastreamsUrl } from "../util/routes";
 import { useFetchContext } from "./FetchContext";
 
+interface SnackbarState {
+    open: boolean,
+    message: string,
+    severity: string
+}
 /**
  * Pass a shared entity to react components,
  * specifically a way to make api requests.
@@ -45,7 +50,7 @@ const reducerMapping = {
 /**
  * Update the shared states of react components.
  */
-const editorReducer = (state, { type, payload }) => {
+const editorReducer = (state: string, { type, payload }: { type: string, payload: SnackbarState | unknown}) => {
     if(Object.keys(reducerMapping).includes(type)){
         return {
             ...state,

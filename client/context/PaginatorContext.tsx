@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useReducer } from "react";
-import PropTypes from "prop-types";
+import React, { createContext, ReactNode, useContext, useReducer } from "react";
 import MagicLabeler from "../util/MagicLabeler";
 import { useFetchContext } from "./FetchContext";
 import {
@@ -52,7 +51,11 @@ const paginatorReducer = (state, { type, payload }) => {
     }
 };
 
-export const PaginatorContextProvider = ({ children }) => {
+interface PaginatorContextProviderProps {
+    children: ReactNode
+}
+
+export const PaginatorContextProvider = ({ children }: PaginatorContextProviderProps) => {
     const [state, dispatch] = useReducer(paginatorReducer, paginatorContextParams);
     const value = { state, dispatch };
     return <PaginatorContext.Provider value={value}>{children}</PaginatorContext.Provider>;
@@ -117,7 +120,7 @@ export const usePaginatorContext = () => {
             payload: currentPage,
         });
 
-    const setPage = (page) => {
+    const setPage = (page: number) => {
         if (page >= 0 && page < order.length) {
             setCurrentPage(page);
         }
@@ -290,10 +293,6 @@ export const usePaginatorContext = () => {
             toggleZoom,
         },
     };
-};
-
-PaginatorContextProvider.propTypes = {
-    children: PropTypes.node,
 };
 
 export default { PaginatorContextProvider, usePaginatorContext };

@@ -2,7 +2,7 @@ import React from "react";
 import ChildList from "./ChildList";
 import Link from "next/link";
 
-const EditHome = () => {
+const EditHome = (): React.ReactElement => {
     return (
         <div>
             <h1>Editor</h1>
@@ -13,7 +13,7 @@ const EditHome = () => {
                 </li>
             </ul>
             <h2>Contents</h2>
-            <ChildList />
+            <ChildList pid="" />
         </div>
     );
 };

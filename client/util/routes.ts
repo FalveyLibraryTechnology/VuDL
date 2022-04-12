@@ -7,45 +7,46 @@ const ingestApiUrl = `${apiUrl}/ingest`;
 const loginUrl = `${authApiUrl}/login`;
 const logoutUrl = `${authApiUrl}/logout`;
 const editObjectUrl = `${apiUrl}/edit/object`;
+const newEditObjectUrl = `${editObjectUrl}/new`;
 const datastreamsUrl = `${editObjectUrl}/datastreams`;
 const editObjectCatalogUrl = `${apiUrl}/edit/catalog`;
 
-const getJobUrl = (category, job, extra = "") => {
+const getJobUrl = (category: string, job: string, extra = ""): string => {
     return `${ingestApiUrl}/${encodeURIComponent(category)}/${encodeURIComponent(job)}${extra}`;
 };
-const getImageUrl = (category, job, filename, size) => {
+const getImageUrl = (category: string, job: string, filename: string, size: string): string => {
     return getJobUrl(category, job, `/${encodeURIComponent(filename)}/${encodeURIComponent(size)}`);
 };
 
-const getDerivUrl = (category, children) => {
+const getDerivUrl = (category: string, children: string): string => {
     return getJobUrl(category, children, "/derivatives");
 };
 
-const getIngestUrl = (category, children) => {
+const getIngestUrl = (category: string, children: string): string => {
     return getJobUrl(category, children, "/ingest");
 };
 
-const getStatusUrl = (category, children) => {
+const getStatusUrl = (category: string, children: string): string => {
     return getJobUrl(category, children, "/status");
 };
 
-const getObjectModelsDatastreamsUrl = (pid) => {
+const getObjectModelsDatastreamsUrl = (pid: string): string => {
     return `${editObjectUrl}/modelsdatastreams/${pid}`;
 }
 
-const postObjectDatastreamUrl = (pid) => {
+const postObjectDatastreamUrl = (pid: string): string => {
     return `${editObjectUrl}/${pid}`;
 }
 
-const deleteObjectDatastreamUrl = (pid, datastream: string) => {
+const deleteObjectDatastreamUrl = (pid: string, datastream: string): string => {
     return `${editObjectUrl}/${pid}/datastream/${datastream}`;
 }
 
-const downloadObjectDatastreamUrl = (pid, datastream: string) => {
+const downloadObjectDatastreamUrl = (pid: string, datastream: string) => {
     return `${editObjectUrl}/${pid}/datastream/${datastream}/download`;
 }
 
-const getObjectDatastreamMetadataUrl = (pid, datastream: string) => {
+const getObjectDatastreamMetadataUrl = (pid: string, datastream: string) => {
     return `${editObjectUrl}/${pid}/datastream/${datastream}/metadata`;
 }
 
@@ -56,6 +57,7 @@ export {
     ingestApiUrl,
     loginUrl,
     logoutUrl,
+    newEditObjectUrl,
     datastreamsUrl,
     editObjectCatalogUrl,
     getJobUrl,

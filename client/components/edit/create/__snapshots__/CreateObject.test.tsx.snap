@@ -67,11 +67,6 @@ exports[`CreateObject renders appropriately with editing disabled 1`] = `
       value=""
     />
   </label>
-  <input
-    name="parent"
-    type="hidden"
-    value="foo:1234"
-  />
   <label>
     Active
     <input

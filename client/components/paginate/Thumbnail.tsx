@@ -1,8 +1,13 @@
 import React, { useEffect, forwardRef } from "react";
-import PropTypes from "prop-types";
 import { usePaginatorContext } from "../../context/PaginatorContext";
 
-const Thumbnail = forwardRef(({ scrollTo, selected, number }, ref) => {
+interface ThumbnailProps {
+    scrollTo: () => void;
+    number: number;
+    selected: boolean;
+}
+
+const Thumbnail = forwardRef(({ scrollTo, number, selected }: ThumbnailProps, ref): React.ReactElement => {
     const {
         state: { order },
         action: { getLabel, getMagicLabel, setPage, getJobImageUrl },
@@ -22,10 +27,5 @@ const Thumbnail = forwardRef(({ scrollTo, selected, number }, ref) => {
     );
 });
 Thumbnail.displayName = "Thumbnail";
-Thumbnail.propTypes = {
-    scrollTo: PropTypes.func,
-    number: PropTypes.number,
-    selected: PropTypes.bool,
-};
 
 export default Thumbnail;

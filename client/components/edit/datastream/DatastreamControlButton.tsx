@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Tooltip from "@mui/material/Tooltip";
 import Download from "@mui/icons-material/Download";
@@ -16,7 +15,17 @@ const Icons = {
     Delete: <Delete />,
 };
 
-const DatastreamControlButton = ({ modalState, datastream, disabled }) => {
+interface DatastreamControlButtonProps {
+    modalState: string;
+    datastream: string;
+    disabled: boolean;
+}
+
+const DatastreamControlButton = ({
+    modalState,
+    datastream,
+    disabled,
+}: DatastreamControlButtonProps): React.ReactElement => {
     const [isLoading, setLoading] = useState(false);
     const {
         action: { toggleDatastreamModal, setActiveDatastream, setDatastreamModalState },
@@ -53,9 +62,4 @@ const DatastreamControlButton = ({ modalState, datastream, disabled }) => {
     );
 };
 
-DatastreamControlButton.propTypes = {
-    modalState: PropTypes.string,
-    disabled: PropTypes.bool,
-    datastream: PropTypes.string,
-};
 export default DatastreamControlButton;

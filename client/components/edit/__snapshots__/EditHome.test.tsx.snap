@@ -20,6 +20,8 @@ exports[`EditHome renders 1`] = `
   <h2>
     Contents
   </h2>
-  <ChildList />
+  <ChildList
+    pid=""
+  />
 </div>
 `;

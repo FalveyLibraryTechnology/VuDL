@@ -6,7 +6,7 @@ import MagicLabeler from "../../util/MagicLabeler";
 import PaginatorControlGroup from "./PaginatorControlGroup";
 import ZoomToggleButton from "./ZoomToggleButton";
 
-const PaginatorControls = () => {
+const PaginatorControls = (): React.ReactElement => {
     const {
         state: { currentPage, zoom, order },
         action: {

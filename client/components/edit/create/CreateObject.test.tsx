@@ -5,7 +5,7 @@ import { waitFor } from "@testing-library/react";
 import { mount, render } from "enzyme";
 import toJson from "enzyme-to-json";
 import CreateObject from "./CreateObject";
-import { FetchContextProvider } from "../../context/FetchContext";
+import { FetchContextProvider } from "../../../context/FetchContext";
 
 let nodeSelectFunction = null;
 let treeItems = null;
@@ -65,7 +65,7 @@ describe("CreateObject", () => {
     }
 
     it("renders appropriately with default settings", async () => {
-        const wrapper = render(getCreateObjectToTest(props));
+        const wrapper = render(getCreateObjectToTest({}));
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
@@ -80,22 +80,6 @@ describe("CreateObject", () => {
         props.allowChangeParentPid = false;
         const wrapper = render(getCreateObjectToTest(props));
         expect(toJson(wrapper)).toMatchSnapshot();
-    });
-
-    it("disallows all empty pid settings", () => {
-        props.allowChangeParentPid = false;
-        expect(() => render(getCreateObjectToTest(props))).toThrowError(
-            "allowChangeParentPid and allowNoParentPid cannot both be false when parentPid is empty."
-        );
-    });
-
-    it("disallows incompatible allowNoParentPid/allowChangeParentPid settings", () => {
-        props.allowNoParentPid = true;
-        props.allowChangeParentPid = false;
-        props.parentPid = "foo:pid";
-        expect(() => render(getCreateObjectToTest(props))).toThrowError(
-            "allowNoParentPid=true requires allowChangeParentPid to be true when parentPid is non-empty."
-        );
     });
 
     it("submits appropriate data in default case", async () => {
@@ -114,6 +98,7 @@ describe("CreateObject", () => {
             await waitFor(() => {
                 wrapper.find("form").simulate("submit");
             });
+            wrapper.update();
         });
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
         expect(submittedData).toEqual({
@@ -131,6 +116,7 @@ describe("CreateObject", () => {
             method: "POST",
             mode: "cors",
         });
+        expect(wrapper.text()).toContain("Object created:");
     });
 
     it("pre-fills parent pid using parentPid property", async () => {

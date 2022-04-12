@@ -1,11 +1,14 @@
 import styles from "./ObjectSummary.module.css";
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import HtmlReactParser from "html-react-parser";
 import { useFetchContext } from "../../context/FetchContext";
 import { apiUrl } from "../../util/routes";
 
-const ObjectSummary = ({ pid = null }) => {
+interface ObjectSummaryProps {
+    pid: string;
+}
+
+const ObjectSummary = ({ pid = "" }: ObjectSummaryProps): React.ReactElement => {
     const {
         action: { fetchJSON },
     } = useFetchContext();
@@ -38,10 +41,6 @@ const ObjectSummary = ({ pid = null }) => {
             <div>{HtmlReactParser(description)}</div>
         </div>
     );
-};
-
-ObjectSummary.propTypes = {
-    pid: PropTypes.string,
 };
 
 export default ObjectSummary;

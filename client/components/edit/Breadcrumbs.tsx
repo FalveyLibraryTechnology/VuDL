@@ -1,6 +1,5 @@
 import styles from "./Breadcrumbs.module.css";
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { useFetchContext } from "../../context/FetchContext";
 import { apiUrl } from "../../util/routes";
 import Link from "next/link";
@@ -22,11 +21,19 @@ interface BreadcrumbTrail {
     path: Array<TreeNode>;
 }
 
-const Breadcrumbs = ({ pid = null }) => {
+interface BreadcrumbsProps {
+    pid: string;
+}
+
+const Breadcrumbs = ({ pid = "" }: BreadcrumbsProps): React.ReactElement => {
     const {
         action: { fetchJSON },
     } = useFetchContext();
-    const [treeData, setTreeData] = useState([]);
+    const [treeData, setTreeData] = useState<TreeData>({
+        topNodes: [],
+        childLookups: {},
+        records: {},
+    });
 
     /**
      * Analyze the raw breadcrumb data, identifying top-level nodes (i.e. nodes with
@@ -57,7 +64,7 @@ const Breadcrumbs = ({ pid = null }) => {
             });
         }
         return {
-            topNodes: [...new Set(topNodes)], // deduplicate
+            topNodes: Array.from(new Set(topNodes)), // deduplicate
             records,
             childLookups,
         };
@@ -137,10 +144,6 @@ const Breadcrumbs = ({ pid = null }) => {
         );
     });
     return <>{contents}</>;
-};
-
-Breadcrumbs.propTypes = {
-    pid: PropTypes.string,
 };
 
 export default Breadcrumbs;
