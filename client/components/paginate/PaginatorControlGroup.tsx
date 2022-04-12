@@ -1,7 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-const PaginatorControlGroup = ({ callback, children, label }) => {
+interface PaginatorControlGroupProps {
+    callback: (item: string) => void;
+    children: Array<string>;
+    label: string;
+}
+
+const PaginatorControlGroup = ({ callback, children, label }: PaginatorControlGroupProps): React.ReactElement => {
     return (
         <div className="group" id={label}>
             {children.map((item) => (
@@ -11,12 +16,6 @@ const PaginatorControlGroup = ({ callback, children, label }) => {
             ))}
         </div>
     );
-};
-
-PaginatorControlGroup.propTypes = {
-    callback: PropTypes.func,
-    children: PropTypes.arrayOf(PropTypes.string),
-    label: PropTypes.string,
 };
 
 export default PaginatorControlGroup;

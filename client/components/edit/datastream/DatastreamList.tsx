@@ -3,7 +3,7 @@ import Datastream from "./Datastream";
 import List from "@mui/material/List";
 import { useEditorContext } from "../../../context/EditorContext";
 
-const DatastreamList = () => {
+const DatastreamList = (): React.ReactElement => {
     const {
         state: { currentPid, modelsDatastreams },
         action: { getCurrentModelsDatastreams },

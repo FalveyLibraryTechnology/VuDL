@@ -1,11 +1,15 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { DatastreamModalStates } from "../../../context/EditorContext";
 import DatastreamControlButton from "./DatastreamControlButton";
 
-const DatastreamControls = ({ datastream, disabled }) => {
+interface DatastreamControlsProps {
+    datastream: string;
+    disabled: boolean;
+}
+
+const DatastreamControls = ({ datastream, disabled }: DatastreamControlsProps): React.ReactElement => {
     return (
         <Box className="datastreamControls">
             <ButtonGroup variant="text">
@@ -23,8 +27,5 @@ const DatastreamControls = ({ datastream, disabled }) => {
         </Box>
     );
 };
-DatastreamControls.propTypes = {
-    datastream: PropTypes.string,
-    disabled: PropTypes.bool,
-};
+
 export default DatastreamControls;

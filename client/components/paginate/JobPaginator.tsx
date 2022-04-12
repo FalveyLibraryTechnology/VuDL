@@ -1,11 +1,15 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import JobPaginatorZoomToggle from "./JobPaginatorZoomToggle";
 import PaginatorControls from "./PaginatorControls";
 import PaginatorList from "./PaginatorList";
 import { usePaginatorContext } from "../../context/PaginatorContext";
 
-const JobPaginator = ({ initialCategory, initialJob }) => {
+interface JobPaginatorProps {
+    initialCategory: string;
+    initialJob: string;
+}
+
+const JobPaginator = ({ initialCategory, initialJob }: JobPaginatorProps): React.ReactElement => {
     const {
         state: { category, job },
         action: { loadJob },
@@ -31,11 +35,6 @@ const JobPaginator = ({ initialCategory, initialJob }) => {
             </div>
         </div>
     );
-};
-
-JobPaginator.propTypes = {
-    initialCategory: PropTypes.string,
-    initialJob: PropTypes.string,
 };
 
 export default JobPaginator;

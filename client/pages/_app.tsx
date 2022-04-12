@@ -10,7 +10,7 @@ import "../styles/justgrid.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import LogoutButton from "../components/LogoutButton";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: { Component: React.ReactNode }): React.ReactElement {
     return (
         <PaginatorContextProvider>
             <div className="logout">
@@ -22,5 +22,4 @@ function MyApp({ Component, pageProps }) {
         </PaginatorContextProvider>
     );
 }
-
 export default MyApp;

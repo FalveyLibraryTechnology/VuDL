@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "check-types": "tsc --noemit",
     "format": "next lint --fix",
     "lint": "next lint",
     "prod": "next start",

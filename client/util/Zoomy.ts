@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 var Zoomy = {
     mouseDown: false,
     mouseOnMap: null,

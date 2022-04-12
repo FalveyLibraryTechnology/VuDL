@@ -38,7 +38,7 @@
     "format": "concurrently npm:client:format npm:backend:format",
     "lint": "concurrently npm:client:lint npm:backend:lint",
     "setup": "concurrently npm:api:setup npm:client:setup",
-    "start": "concurrently -c 'cyan,green,gray' npm:client:dev npm:api npm:queue",
+    "start": "concurrently -c 'cyan,green,gray' npm:client npm:api npm:queue",
     "test": "concurrently npm:client:test npm:api:test",
     "watch": "cd api && tsc --watch"
   },

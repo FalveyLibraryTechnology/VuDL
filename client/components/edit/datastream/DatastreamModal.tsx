@@ -15,11 +15,11 @@ const contentMapping = {
     Delete: <DatastreamDeleteModalContent />,
 };
 
-const DatastreamModalContent = ({ datastreamModalState }) => {
+const DatastreamModalContent = ({ datastreamModalState }: { datastreamModalState: string }) => {
     return datastreamModalState ? contentMapping[datastreamModalState] : null;
 };
 
-const DatastreamModal = () => {
+const DatastreamModal = (): React.ReactElement => {
     const {
         state: { datastreamModalState, isDatastreamModalOpen },
         action: { toggleDatastreamModal },

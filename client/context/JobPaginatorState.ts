@@ -1,4 +1,4 @@
-const confirmSavedMagicLabels = (count) => {
+const confirmSavedMagicLabels = (count: number) => {
     return window.confirm("You will be saving " + count + " unreviewed, auto-generated label(s). Are you sure?");
 };
 
@@ -9,7 +9,7 @@ const findNewPagePosition = (page, list) => {
     return foundIndex === -1 ? list.length : foundIndex;
 };
 
-const deletePageValidation = (order) => {
+const deletePageValidation = (order: Array) => {
     if (order.length < 2) {
         alert("You cannot delete the last page in a job.");
         return false;
@@ -38,7 +38,7 @@ const getLabel = (order, imageNumber) => {
     return typeof order[imageNumber] === "undefined" ? null : order[imageNumber].label;
 };
 
-const countMagicLabels = (order, startAt) => {
+const countMagicLabels = (order, startAt: number) => {
     let count = 0;
     for (let startIndex = startAt; startIndex < order.length; startIndex++) {
         if (null === getLabel(order, startIndex)) {

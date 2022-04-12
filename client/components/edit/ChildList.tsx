@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { useFetchContext } from "../../context/FetchContext";
 import { apiUrl } from "../../util/routes";
 import Link from "next/link";
 
-const ChildList = ({ pid = null }) => {
+interface ChildListProps {
+    pid: string;
+}
+interface Children {
+    numFound: number;
+    start: number;
+    docs: Record<string, string>[];
+}
+
+const ChildList = ({ pid = "" }: ChildListProps): React.ReactElement => {
     const {
         action: { fetchJSON },
     } = useFetchContext();
-    const [children, setChildren] = useState([]);
+    const [children, setChildren] = useState<Children>({
+        numFound: 0,
+        start: 0,
+        docs: [],
+    });
 
     useEffect(() => {
         async function loadData() {
             let data = [];
-            const url = apiUrl + "/edit/object/children" + (pid === null ? "" : "/" + pid);
+            const url = apiUrl + "/edit/object/children/" + pid;
             try {
                 data = await fetchJSON(url);
             } catch (e) {
@@ -25,16 +37,12 @@ const ChildList = ({ pid = null }) => {
     }, []);
     const contents = (children?.docs ?? []).map((child) => {
         return (
-            <li key={(pid ?? "root") + "child" + child.id}>
+            <li key={(pid || "root") + "child" + child.id}>
                 <Link href={"/edit/object/" + child.id}>{(child.title ?? "-") + " [" + child.id + "]"}</Link>
             </li>
         );
     });
     return <ul>{contents}</ul>;
-};
-
-ChildList.propTypes = {
-    pid: PropTypes.string,
 };
 
 export default ChildList;

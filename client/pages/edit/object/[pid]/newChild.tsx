@@ -1,9 +1,12 @@
 import React from "react";
 import { useRouter } from "next/router";
-import CreateObject from "../../../../components/edit/CreateObject";
+import CreateObject from "../../../../components/edit/create/CreateObject";
 
-export default function CreateObjectChild() {
+export default function CreateObjectChild(): React.ReactElement {
     const router = useRouter();
     const { pid } = router.query;
-    return <CreateObject parentPid={pid} allowNoParentPid={false} allowChangeParentPid={false} />;
+    if (router.isReady) {
+        return <CreateObject parentPid={pid} allowNoParentPid={false} allowChangeParentPid={false} />;
+    }
+    return <React.Fragment />;
 }

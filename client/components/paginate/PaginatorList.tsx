@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 
 import { usePaginatorContext } from "../../context/PaginatorContext";
 import Thumbnail from "./Thumbnail";
-const PaginatorList = () => {
+const PaginatorList = (): React.ReactElement => {
     const {
         state: { order, currentPage },
     } = usePaginatorContext();
@@ -11,7 +11,7 @@ const PaginatorList = () => {
     const thumbRefs = useRef([]);
     const scrollTo = (number) => {
         const pageListOffset = pageList.current.offsetTop;
-        var listOffset = pageListOffset + (thumbRefs.current[0].offsetTop - pageListOffset);
+        const listOffset = pageListOffset + (thumbRefs.current[0].offsetTop - pageListOffset);
         pageList.current.scrollTop = thumbRefs.current[number].offsetTop - listOffset;
     };
     const pages = [];

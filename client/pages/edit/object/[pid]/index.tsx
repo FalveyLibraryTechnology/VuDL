@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import ObjectEditor from "../../../../components/edit/ObjectEditor";
 import { EditorContextProvider } from "../../../../context/EditorContext";
 
-export default function Object() {
+export default function Object(): React.ReactElement {
     const router = useRouter();
     const { pid } = router.query;
     if (router.isReady) {
@@ -13,5 +13,5 @@ export default function Object() {
             </EditorContextProvider>
         );
     }
-    return null;
+    return <React.Fragment />;
 }

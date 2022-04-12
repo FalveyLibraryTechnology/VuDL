@@ -1,13 +1,17 @@
 import React from "react";
-import PropTypes from "prop-types";
-
 import Link from "next/link";
 
-const JobClickable = ({ category, children, clickable, clickWarning }) => {
-    const handleClick = (e) => {
+interface JobClickableProps {
+    category: string;
+    children: string;
+    clickable: boolean;
+    clickWarning: string;
+}
+
+const JobClickable = ({ category, children, clickable, clickWarning }: JobClickableProps): React.ReactElement => {
+    const handleClick = (e: React.MouseEvent) => {
         if (clickWarning && !window.confirm(clickWarning)) {
             e.preventDefault();
-            return false;
         }
     };
     return clickable ? (
@@ -19,10 +23,4 @@ const JobClickable = ({ category, children, clickable, clickWarning }) => {
     );
 };
 
-JobClickable.propTypes = {
-    category: PropTypes.string,
-    children: PropTypes.string,
-    clickable: PropTypes.bool,
-    clickWarning: PropTypes.string,
-};
 export default JobClickable;
