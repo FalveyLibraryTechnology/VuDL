@@ -29,9 +29,8 @@ const useDatastreamOperation = () => {
                 throw new Error(`Illegal mime type: ${file.type}`);
             }
             const body = new FormData();
-            body.append("stream", activeDatastream);
             body.append("file", file);
-            const text = await fetchText(postObjectDatastreamUrl(currentPid), {
+            const text = await fetchText(postObjectDatastreamUrl(currentPid, activeDatastream), {
                 method: "POST",
                 body,
             });

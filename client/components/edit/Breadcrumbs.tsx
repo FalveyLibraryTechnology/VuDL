@@ -1,7 +1,7 @@
 import styles from "./Breadcrumbs.module.css";
 import React, { useEffect, useState } from "react";
 import { useFetchContext } from "../../context/FetchContext";
-import { apiUrl } from "../../util/routes";
+import { getObjectParentsUrl } from "../../util/routes";
 import Link from "next/link";
 
 interface TreeNode {
@@ -77,7 +77,7 @@ const Breadcrumbs = ({ pid = "" }: BreadcrumbsProps): React.ReactElement => {
                 childLookups: {},
                 records: {},
             };
-            const url = apiUrl + "/edit/object/parents/" + encodeURIComponent(pid);
+            const url = getObjectParentsUrl(pid);
             try {
                 data = processBreadcrumbData(await fetchJSON(url));
             } catch (e) {
