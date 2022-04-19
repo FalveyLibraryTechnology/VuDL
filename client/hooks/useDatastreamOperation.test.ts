@@ -67,7 +67,7 @@ describe("useDatastreamOperation", () => {
 
 
             expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
-                expect.stringContaining(editorValues.state.currentPid),
+                "http://localhost:9000/api/edit/object/vudl%3A123",
                 expect.objectContaining({
                     method: "POST",
                     body: expect.any(FormData),
@@ -119,7 +119,7 @@ describe("useDatastreamOperation", () => {
             await deleteDatastream()
 
             expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
-                expect.stringContaining(editorValues.state.currentPid),
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/THUMBNAIL",
                 expect.objectContaining({
                     method: "DELETE",
                 })
@@ -141,7 +141,7 @@ describe("useDatastreamOperation", () => {
             await deleteDatastream()
 
             expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
-                expect.stringContaining(editorValues.state.currentPid),
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/THUMBNAIL",
                 expect.objectContaining({
                     method: "DELETE",
                 })
@@ -220,7 +220,7 @@ describe("useDatastreamOperation", () => {
             await downloadDatastream("test1");
 
             expect(fetchValues.action.fetchBlob).toHaveBeenCalledWith(
-                expect.stringContaining(editorValues.state.currentPid)
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/test1/download"
             );
 
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
@@ -241,7 +241,7 @@ describe("useDatastreamOperation", () => {
             await downloadDatastream("test1");
 
             expect(fetchValues.action.fetchBlob).toHaveBeenCalledWith(
-                expect.stringContaining(editorValues.state.currentPid)
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/test1/download"
             );
 
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
@@ -260,7 +260,7 @@ describe("useDatastreamOperation", () => {
             await downloadDatastream("test1");
 
             expect(fetchValues.action.fetchBlob).toHaveBeenCalledWith(
-                expect.stringContaining(editorValues.state.currentPid)
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/test1/download"
             );
 
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(

@@ -30,24 +30,36 @@ const getStatusUrl = (category: string, children: string): string => {
     return getJobUrl(category, children, "/status");
 };
 
+const getObjectChildrenUrl = (pid: string): string => {
+    return pid.length > 0 ? `${editObjectUrl}/${encodeURIComponent(pid)}/children` : `${apiUrl}/edit/treeTop`;
+}
+
+const getObjectDetailsUrl = (pid: string): string => {
+    return `${editObjectUrl}/${encodeURIComponent(pid)}/details`;
+}
+
 const getObjectModelsDatastreamsUrl = (pid: string): string => {
-    return `${editObjectUrl}/modelsdatastreams/${pid}`;
+    return `${editObjectUrl}/${encodeURIComponent(pid)}/modelsdatastreams`;
+}
+
+const getObjectParentsUrl = (pid: string): string => {
+    return `${editObjectUrl}/${encodeURIComponent(pid)}/parents`;
 }
 
 const postObjectDatastreamUrl = (pid: string): string => {
-    return `${editObjectUrl}/${pid}`;
+    return `${editObjectUrl}/${encodeURIComponent(pid)}`;
 }
 
 const deleteObjectDatastreamUrl = (pid: string, datastream: string): string => {
-    return `${editObjectUrl}/${pid}/datastream/${datastream}`;
+    return `${editObjectUrl}/${encodeURIComponent(pid)}/datastream/${encodeURIComponent(datastream)}`;
 }
 
 const downloadObjectDatastreamUrl = (pid: string, datastream: string) => {
-    return `${editObjectUrl}/${pid}/datastream/${datastream}/download`;
+    return `${editObjectUrl}/${encodeURIComponent(pid)}/datastream/${encodeURIComponent(datastream)}/download`;
 }
 
 const getObjectDatastreamMetadataUrl = (pid: string, datastream: string) => {
-    return `${editObjectUrl}/${pid}/datastream/${datastream}/metadata`;
+    return `${editObjectUrl}/${encodeURIComponent(pid)}/datastream/${encodeURIComponent(datastream)}/metadata`;
 }
 
 export {
@@ -65,7 +77,10 @@ export {
     getDerivUrl,
     getIngestUrl,
     getStatusUrl,
+    getObjectChildrenUrl,
+    getObjectDetailsUrl,
     getObjectModelsDatastreamsUrl,
+    getObjectParentsUrl,
     postObjectDatastreamUrl,
     deleteObjectDatastreamUrl,
     downloadObjectDatastreamUrl,

@@ -120,8 +120,9 @@ function uploadFile(req, res, next) {
         }
     });
 }
+edit.post("/object/:pid", requireToken, pidSanitizer, uploadFile);
 
-edit.get("/object/modelsdatastreams/:pid", requireToken, pidSanitizer, async function (req, res) {
+edit.get("/object/:pid/modelsdatastreams", requireToken, pidSanitizer, async function (req, res) {
     try {
         const data = await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
         res.json({ models: data.models, datastreams: data.fedoraDatastreams });
@@ -130,10 +131,9 @@ edit.get("/object/modelsdatastreams/:pid", requireToken, pidSanitizer, async fun
         res.status(500).send(error.message);
     }
 });
-edit.post("/object/:pid", requireToken, pidSanitizer, uploadFile);
-edit.get("/object/children", requireToken, getChildren);
-edit.get("/object/children/:pid", requireToken, pidSanitizer, getChildren);
-edit.get("/object/details/:pid", requireToken, pidSanitizer, async function (req, res) {
+edit.get("/treeTop", requireToken, getChildren);
+edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
+edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
     const pid = req.params.pid;
     const obj = FedoraObject.build(pid);
     const sort = await obj.getSort();
@@ -142,7 +142,7 @@ edit.get("/object/details/:pid", requireToken, pidSanitizer, async function (req
     res.json({ pid, sort, metadata: extractedMetadata });
 });
 
-edit.get("/object/parents/:pid", pidSanitizer, requireToken, async function (req, res) {
+edit.get("/object/:pid/parents", pidSanitizer, requireToken, async function (req, res) {
     try {
         const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(req.params.pid);
         res.json(fedoraData.getParentTree());

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useFetchContext } from "../../context/FetchContext";
-import { apiUrl } from "../../util/routes";
+import { getObjectChildrenUrl } from "../../util/routes";
 import Link from "next/link";
 
 interface ChildListProps {
@@ -25,7 +25,7 @@ const ChildList = ({ pid = "" }: ChildListProps): React.ReactElement => {
     useEffect(() => {
         async function loadData() {
             let data = [];
-            const url = apiUrl + "/edit/object/children/" + pid;
+            const url = getObjectChildrenUrl(pid);
             try {
                 data = await fetchJSON(url);
             } catch (e) {

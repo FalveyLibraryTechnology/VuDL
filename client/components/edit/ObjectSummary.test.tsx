@@ -39,7 +39,7 @@ describe("ObjectSummary", () => {
             </FetchContextProvider>
         );
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/details/foo%3A123");
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
@@ -55,7 +55,7 @@ describe("ObjectSummary", () => {
             </FetchContextProvider>
         );
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/details/foo%3A123");
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });

@@ -2,7 +2,7 @@ import styles from "./ObjectSummary.module.css";
 import React, { useEffect, useState } from "react";
 import HtmlReactParser from "html-react-parser";
 import { useFetchContext } from "../../context/FetchContext";
-import { apiUrl } from "../../util/routes";
+import { getObjectDetailsUrl } from "../../util/routes";
 
 interface ObjectSummaryProps {
     pid: string;
@@ -22,7 +22,7 @@ const ObjectSummary = ({ pid = "" }: ObjectSummaryProps): React.ReactElement => 
     useEffect(() => {
         async function loadData() {
             let data = [];
-            const url = apiUrl + "/edit/object/details/" + encodeURIComponent(pid);
+            const url = getObjectDetailsUrl(pid);
             try {
                 data = await fetchJSON(url);
             } catch (e) {
