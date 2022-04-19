@@ -1,7 +1,4 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { UploadFile } from "@mui/icons-material";
-import { renderHook, act } from "@testing-library/react-hooks";
-import { deleteObjectDatastreamUrl, downloadObjectDatastreamUrl, postObjectDatastreamUrl } from "../util/routes";
 import useDatastreamOperation from "./useDatastreamOperation";
 
 const mockUseFetchContext = jest.fn();
@@ -67,7 +64,7 @@ describe("useDatastreamOperation", () => {
 
 
             expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
-                "http://localhost:9000/api/edit/object/vudl%3A123",
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/THUMBNAIL",
                 expect.objectContaining({
                     method: "POST",
                     body: expect.any(FormData),

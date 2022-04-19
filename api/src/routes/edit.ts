@@ -101,7 +101,7 @@ async function getChildren(req, res) {
 }
 
 function uploadFile(req, res, next) {
-    const { pid } = req.params;
+    const { pid, stream } = req.params;
     const form = formidable({ multiples: true });
 
     form.parse(req, async (err, fields, files) => {
@@ -111,7 +111,6 @@ function uploadFile(req, res, next) {
         }
         try {
             const datastream = DatastreamManager.getInstance();
-            const { stream } = fields;
             const { filepath, mimetype } = files?.file;
             await datastream.uploadFile(pid, stream, filepath, mimetype);
             res.status(200).send("Upload success");
@@ -120,7 +119,7 @@ function uploadFile(req, res, next) {
         }
     });
 }
-edit.post("/object/:pid", requireToken, pidSanitizer, uploadFile);
+edit.post("/object/:pid/datastream/:stream", requireToken, datastreamSanitizer, uploadFile);
 
 edit.get("/object/:pid/modelsdatastreams", requireToken, pidSanitizer, async function (req, res) {
     try {

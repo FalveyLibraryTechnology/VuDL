@@ -46,8 +46,8 @@ const getObjectParentsUrl = (pid: string): string => {
     return `${editObjectUrl}/${encodeURIComponent(pid)}/parents`;
 }
 
-const postObjectDatastreamUrl = (pid: string): string => {
-    return `${editObjectUrl}/${encodeURIComponent(pid)}`;
+const postObjectDatastreamUrl = (pid: string, datastream: string): string => {
+    return `${editObjectUrl}/${encodeURIComponent(pid)}/datastream/${encodeURIComponent(datastream)}`;
 }
 
 const deleteObjectDatastreamUrl = (pid: string, datastream: string): string => {
