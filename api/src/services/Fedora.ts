@@ -376,6 +376,9 @@ export class Fedora {
         const xml =
             '<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">' +
             "\n" +
+            "  <dc:identifier>" +
+            xmlescape(pid) +
+            "</dc:identifier>\n" +
             "  <dc:title>" +
             xmlescape(label) +
             "</dc:title>\n" +
