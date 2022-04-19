@@ -35,7 +35,7 @@ const getPidActionUrl = (pid: string, action: string): string => {
 }
 
 const getObjectChildrenUrl = (pid: string): string => {
-    return pid.length > 0 ? getPidActionUrl(pid, "children") : `${apiUrl}/edit/treeTop`;
+    return pid.length > 0 ? getPidActionUrl(pid, "children") : `${apiUrl}/edit/topLevelObjects`;
 }
 
 const getObjectDetailsUrl = (pid: string): string => {

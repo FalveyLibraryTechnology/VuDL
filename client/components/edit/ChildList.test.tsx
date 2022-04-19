@@ -31,7 +31,7 @@ describe("ChildList", () => {
             </FetchContextProvider>
         );
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/treeTop");
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects");
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
