@@ -13,13 +13,14 @@
     "testWatch": "jest --watch --coverage"
   },
   "dependencies": {
+    "@emotion/styled": "^11.8.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.73",
     "@mui/material": "^5.3.0",
     "html-react-parser": "^1.4.6",
     "identity-obj-proxy": "^3.0.0",
-    "next": "12.0.7",
+    "next": "12.1.5",
     "react": "17.0.2",
     "roman-numerals": "^0.3.2"
   },
