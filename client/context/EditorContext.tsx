@@ -92,7 +92,7 @@ export const useEditorContext = () => {
         const name = model.split(":")?.[1];
         return [
             ...acc,
-            ...(name ? Object.keys(modelsCatalog[name].datastreams) : [])
+            ...(name && modelsCatalog.hasOwnProperty(name) ? Object.keys(modelsCatalog[name].datastreams) : [])
         ];
     }, []).map((stream) => {
         return {
@@ -193,6 +193,7 @@ export const useEditorContext = () => {
             datastreamModalState,
             datastreamsCatalog,
             modelsDatastreams,
+            modelsCatalog,
             snackbarState
         },
         action: {
