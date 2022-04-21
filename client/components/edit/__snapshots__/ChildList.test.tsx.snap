@@ -1,5 +1,171 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ChildList displays a paginator when appropriate 1`] = `
+<FetchContextProvider>
+  <ChildList>
+    <Component
+      count={1000}
+      onChange={[Function]}
+      page={1}
+    >
+      Pagination
+    </Component>
+    <ul>
+      <li
+        key="rootchildfoo:124"
+      >
+        <Link
+          href="/edit/object/foo:124"
+        >
+          <a
+            href="/edit/object/foo:124"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            hello1 [foo:124]
+          </a>
+        </Link>
+      </li>
+      <li
+        key="rootchildfoo:125"
+      >
+        <Link
+          href="/edit/object/foo:125"
+        >
+          <a
+            href="/edit/object/foo:125"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            hello2 [foo:125]
+          </a>
+        </Link>
+      </li>
+      <li
+        key="rootchildfoo:126"
+      >
+        <Link
+          href="/edit/object/foo:126"
+        >
+          <a
+            href="/edit/object/foo:126"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            hello3 [foo:126]
+          </a>
+        </Link>
+      </li>
+      <li
+        key="rootchildfoo:127"
+      >
+        <Link
+          href="/edit/object/foo:127"
+        >
+          <a
+            href="/edit/object/foo:127"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            hello4 [foo:127]
+          </a>
+        </Link>
+      </li>
+      <li
+        key="rootchildfoo:128"
+      >
+        <Link
+          href="/edit/object/foo:128"
+        >
+          <a
+            href="/edit/object/foo:128"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            hello5 [foo:128]
+          </a>
+        </Link>
+      </li>
+      <li
+        key="rootchildfoo:129"
+      >
+        <Link
+          href="/edit/object/foo:129"
+        >
+          <a
+            href="/edit/object/foo:129"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            hello6 [foo:129]
+          </a>
+        </Link>
+      </li>
+      <li
+        key="rootchildfoo:130"
+      >
+        <Link
+          href="/edit/object/foo:130"
+        >
+          <a
+            href="/edit/object/foo:130"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            hello7 [foo:130]
+          </a>
+        </Link>
+      </li>
+      <li
+        key="rootchildfoo:131"
+      >
+        <Link
+          href="/edit/object/foo:131"
+        >
+          <a
+            href="/edit/object/foo:131"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            hello8 [foo:131]
+          </a>
+        </Link>
+      </li>
+      <li
+        key="rootchildfoo:132"
+      >
+        <Link
+          href="/edit/object/foo:132"
+        >
+          <a
+            href="/edit/object/foo:132"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            hello9 [foo:132]
+          </a>
+        </Link>
+      </li>
+      <li
+        key="rootchildfoo:133"
+      >
+        <Link
+          href="/edit/object/foo:133"
+        >
+          <a
+            href="/edit/object/foo:133"
+            onClick={[Function]}
+            onMouseEnter={[Function]}
+          >
+            hello10 [foo:133]
+          </a>
+        </Link>
+      </li>
+    </ul>
+  </ChildList>
+</FetchContextProvider>
+`;
+
 exports[`ChildList renders using ajax-loaded object data 1`] = `
 <FetchContextProvider>
   <ChildList

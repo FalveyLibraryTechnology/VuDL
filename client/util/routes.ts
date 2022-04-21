@@ -34,8 +34,9 @@ const getPidActionUrl = (pid: string, action: string): string => {
     return `${editObjectUrl}/${encodeURIComponent(pid)}/${action}`;
 }
 
-const getObjectChildrenUrl = (pid: string): string => {
-    return pid.length > 0 ? getPidActionUrl(pid, "children") : `${apiUrl}/edit/topLevelObjects`;
+const getObjectChildrenUrl = (pid: string, start = 0, rows = 10): string => {
+    const base = pid.length > 0 ? getPidActionUrl(pid, "children") : `${apiUrl}/edit/topLevelObjects`;
+    return `${base}?start=${start}&rows=${rows}`;
 }
 
 const getObjectDetailsUrl = (pid: string): string => {

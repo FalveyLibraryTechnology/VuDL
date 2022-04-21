@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useFetchContext } from "../../context/FetchContext";
 import { getObjectChildrenUrl } from "../../util/routes";
 import Link from "next/link";
+import Pagination from "@mui/material/Pagination";
 
 interface ChildListProps {
     pid: string;
+    pageSize: number;
 }
 interface Children {
     numFound: number;
@@ -12,7 +14,7 @@ interface Children {
     docs: Record<string, string>[];
 }
 
-const ChildList = ({ pid = "" }: ChildListProps): React.ReactElement => {
+const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.ReactElement => {
     const {
         action: { fetchJSON },
     } = useFetchContext();
@@ -21,11 +23,12 @@ const ChildList = ({ pid = "" }: ChildListProps): React.ReactElement => {
         start: 0,
         docs: [],
     });
+    const [page, setPage] = useState<number>(1);
 
     useEffect(() => {
         async function loadData() {
             let data = [];
-            const url = getObjectChildrenUrl(pid);
+            const url = getObjectChildrenUrl(pid, (page - 1) * pageSize, pageSize);
             try {
                 data = await fetchJSON(url);
             } catch (e) {
@@ -34,7 +37,7 @@ const ChildList = ({ pid = "" }: ChildListProps): React.ReactElement => {
             setChildren(data);
         }
         loadData();
-    }, []);
+    }, [page]);
     const contents = (children?.docs ?? []).map((child) => {
         return (
             <li key={(pid || "root") + "child" + child.id}>
@@ -42,7 +45,25 @@ const ChildList = ({ pid = "" }: ChildListProps): React.ReactElement => {
             </li>
         );
     });
-    return <ul>{contents}</ul>;
+    const pageCount = Math.ceil(children.numFound / pageSize);
+    const paginator =
+        pageCount > 1 ? (
+            <Pagination
+                count={pageCount}
+                page={page}
+                onChange={(e, page) => {
+                    setPage(page);
+                }}
+            />
+        ) : (
+            ""
+        );
+    return (
+        <>
+            {paginator}
+            <ul>{contents}</ul>
+        </>
+    );
 };
 
 export default ChildList;
