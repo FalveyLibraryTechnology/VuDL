@@ -87,7 +87,7 @@ async function getChildren(req, res) {
     let sort;
     if ((req.params.pid ?? "").length > 0) {
         const cleanPid = req.params.pid.replace('"', "");
-        query = `fedora_parent_id_str_mv:"${cleanPid}"`
+        query = `fedora_parent_id_str_mv:"${cleanPid}"`;
         sort = `sequence_${cleanPid.replace(":", "_")}_str ASC,title ASC`;
     } else {
         query = "-fedora_parent_id_str_mv:*";
