@@ -22,16 +22,20 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-    Database.getInstance().getUserBy("id", id).then((user) => {
-        done(null, user);
-    });
+    Database.getInstance()
+        .getUserBy("id", id)
+        .then((user) => {
+            done(null, user);
+        });
 });
 
 passport.use(
     new hash.Strategy(function (hash, done) {
-        Database.getInstance().getUserBy("hash", hash).then((user) => {
-            done(null, user);
-        });
+        Database.getInstance()
+            .getUserBy("hash", hash)
+            .then((user) => {
+                done(null, user);
+            });
     })
 );
 
