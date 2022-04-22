@@ -27,7 +27,6 @@ jest.mock("nanoid", () => {
 });
 
 describe("Database", () => {
-    let consoleLogSpy;
     beforeEach(() => {
         Config.setInstance(
             new Config({
@@ -38,7 +37,7 @@ describe("Database", () => {
             })
         );
         // Database code is currently "chatty" but we don't want the tests to be noisy
-        consoleLogSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
+        jest.spyOn(console, "log").mockImplementation(jest.fn());
     });
 
     afterEach(() => {

@@ -53,7 +53,7 @@ class Database {
         console.log("Database:ready");
     }
 
-    protected async initialize(db): Promise<void> {
+    protected async initialize(db: Knex): Promise<void> {
         // Special case: if we're using a disk-based database, make sure the containing directory exists:
         if (this.config.databaseClient === "sqlite3") {
             const dbFilename = this.config.databaseConnectionSettings.filename as string;
