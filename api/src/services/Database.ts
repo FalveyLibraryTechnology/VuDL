@@ -40,18 +40,15 @@ class Database {
     protected async connect(): Promise<void> {
         console.log("Database:connect");
 
-        // TODO: config
-        const dbFilename = "./data/auth.sqlite3";
         const config: Knex.Config = {
-            client: "sqlite3",
-            connection: {
-                filename: dbFilename,
-            },
+            client: this.config.databaseClient,
+            connection: this.config.databaseConnectionSettings,
             useNullAsDefault: true,
         };
 
         this.connection = await knex(config);
 
+        const dbFilename = this.config.databaseConnectionSettings.filename as string;
         if (!fs.existsSync(dbFilename)) {
             const dataDir = path.dirname(dbFilename);
             if (!fs.existsSync(dataDir)) {

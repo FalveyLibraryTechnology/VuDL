@@ -81,6 +81,16 @@ articles_to_strip[] = "a "
 articles_to_strip[] = "an "
 articles_to_strip[] = "the "
 
+# Database settings
+[Database]
+# Supported values: sqlite3
+client = sqlite3
+
+# Database connection settings (required values vary based on client setting above)
+[Database.connection]
+# Required when client = sqlite3; filename of database, relative to api directory
+filename = "./data/auth.sqlite3"
+
 # Mapping of language codes to display names; used for indexing
 [LanguageMap]
 ab = Abkhazian
