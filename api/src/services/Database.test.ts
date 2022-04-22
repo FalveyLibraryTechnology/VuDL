@@ -3,13 +3,13 @@ import Database from "./Database";
 
 const schema = {
     createTable: jest.fn(),
-    dropTableIfExists: jest.fn()
+    dropTableIfExists: jest.fn(),
 };
 const databaseFunctions = {
-    now: jest.fn()
+    now: jest.fn(),
 };
 const table = {
-    insert: jest.fn()
+    insert: jest.fn(),
 };
 const connection = () => table;
 connection.schema = schema;
@@ -22,7 +22,7 @@ jest.mock("knex", () => {
 });
 jest.mock("nanoid", () => {
     return {
-        nanoid: jest.fn(() => "nanoid")
+        nanoid: jest.fn(() => "nanoid"),
     };
 });
 
@@ -34,7 +34,7 @@ describe("Database", () => {
                 Database: {
                     client: "fake",
                     connection: {},
-                }
+                },
             })
         );
         // Database code is currently "chatty" but we don't want the tests to be noisy
@@ -50,7 +50,9 @@ describe("Database", () => {
 
     it("initializes the database appropriately", async () => {
         const database = await Database.getInstance();
-        const userSpy = jest.spyOn(database, "getUserBy").mockImplementation(() => { throw new Error("no such table")});
+        const userSpy = jest.spyOn(database, "getUserBy").mockImplementation(() => {
+            throw new Error("no such table");
+        });
         const token = await database.makeToken({ id: 1, username: "foo", password: "bar", hash: "xyzzy" });
         expect(token).toEqual("nanoid");
         expect(userSpy).toHaveBeenCalledTimes(1);
@@ -60,7 +62,7 @@ describe("Database", () => {
         expect(databaseFunctions.now).toHaveBeenCalledTimes(1);
     });
 
-    it("does not re-initialize the database unnecessarily", async() => {
+    it("does not re-initialize the database unnecessarily", async () => {
         const database = await Database.getInstance();
         const userSpy = jest.spyOn(database, "getUserBy").mockResolvedValue(null);
         const token = await database.makeToken({ id: 1, username: "foo", password: "bar", hash: "xyzzy" });
