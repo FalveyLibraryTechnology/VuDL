@@ -3,6 +3,7 @@ import Job from "../models/Job";
 import { FedoraObject } from "../models/FedoraObject";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import { IngestProcessor } from "./Ingest";
+import Database from "../services/Database";
 import QueueManager from "../services/QueueManager";
 import fs = require("fs");
 import winston = require("winston");
@@ -31,7 +32,7 @@ describe("IngestProcessor", () => {
         });
         job = new Job(dir + "/" + jobName, config, new QueueManager());
         jest.spyOn(Job, "build").mockReturnValue(job);
-        ingest = new IngestProcessor(dir, config, new FedoraObjectFactory(config), logger);
+        ingest = new IngestProcessor(dir, config, new FedoraObjectFactory(config, {} as Database), logger);
     });
     afterEach(() => {
         jest.clearAllMocks();
