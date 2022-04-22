@@ -83,15 +83,21 @@ edit.post("/object/new", requireToken, bodyParser.json(), async function (req, r
 });
 
 async function getChildren(req, res) {
-    const query =
-        (req.params.pid ?? "").length > 0
-            ? `fedora_parent_id_str_mv:"${req.params.pid.replace('"', "")}"`
-            : "-fedora_parent_id_str_mv:*";
+    let query;
+    let sort;
+    if ((req.params.pid ?? "").length > 0) {
+        const cleanPid = req.params.pid.replace('"', "");
+        query = `fedora_parent_id_str_mv:"${cleanPid}"`;
+        sort = `sequence_${cleanPid.replace(":", "_")}_str ASC,title ASC`;
+    } else {
+        query = "-fedora_parent_id_str_mv:*";
+        sort = "title ASC";
+    }
     const config = Config.getInstance();
     const solr = Solr.getInstance();
     const rows = parseInt(req.query.rows ?? "100000").toString();
     const start = parseInt(req.query.start ?? "0").toString();
-    const result = await solr.query(config.solrCore, query, { fl: "id,title", rows, start });
+    const result = await solr.query(config.solrCore, query, { sort, fl: "id,title", rows, start });
     if (result.statusCode !== 200) {
         res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
         return;
