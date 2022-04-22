@@ -71,7 +71,7 @@ class Database {
             return;
         } catch (e) {
             // Not the expected error message -- rethrow!
-            if (!e.message.match(/no such table/)) {
+            if (!e.message.match(/no such table|Table .* doesn't exist/)) {
                 throw e;
             }
             console.log("Database:createTables");
@@ -127,9 +127,15 @@ class Database {
 
     public async confirmToken(token: string): Promise<boolean> {
         const db = await this.getConnection();
-        const rows = await db<Token>("tokens").where("token", token);
+        const rows = await db<Token>("tokens").select("*", db.raw('? as ??', [db.fn.now(), 'now'])).where("token", token);
         const check = (rows ?? [null])[0];
-        if (!check || check.created_at + this.tokenLifetime < Date.now()) {
+        // Failed check -- something is wrong!
+        if (!check) {
+            return false;
+        }
+        // If token has expired, clear it out:
+        const timePassedInSeconds = (new Date(check.now).getTime() - new Date(check.created_at).getTime()) / 1000;
+        if (timePassedInSeconds > this.tokenLifetime) {
             await db("tokens").where("token", token).delete();
             return false;
         }
@@ -170,7 +176,7 @@ class Database {
         await db("tokens").insert({
             token,
             user_id: user.id,
-            created_at: Date.now(),
+            created_at: db.fn.now(),
         });
         return token;
     }

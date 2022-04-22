@@ -83,13 +83,19 @@ articles_to_strip[] = "the "
 
 # Database settings
 [Database]
-# Supported values: sqlite3
+# Supported values: mysql, sqlite3
 client = sqlite3
 
 # Database connection settings (required values vary based on client setting above)
 [Database.connection]
 # Required when client = sqlite3; filename of database, relative to api directory
 filename = "./data/auth.sqlite3"
+# Required when client = mysql
+#host = 127.0.0.1
+#port = 3306
+#user = your_database_user
+#password = your_database_password
+#database = vudl
 
 # Mapping of language codes to display names; used for indexing
 [LanguageMap]
