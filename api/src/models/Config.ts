@@ -170,11 +170,11 @@ class Config {
     }
 
     get databaseClient(): string {
-        return this.databaseSettings["client"] as string ?? "sqlite3";
+        return (this.databaseSettings["client"] as string) ?? "sqlite3";
     }
 
     get databaseConnectionSettings(): ConfigRecord {
-        return this.databaseSettings["connection"] as ConfigRecord ?? { filename: "./data/auth.sqlite3" };
+        return (this.databaseSettings["connection"] as ConfigRecord) ?? { filename: "./data/auth.sqlite3" };
     }
 }
 
