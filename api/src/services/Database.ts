@@ -127,7 +127,9 @@ class Database {
 
     public async confirmToken(token: string): Promise<boolean> {
         const db = await this.getConnection();
-        const rows = await db<Token>("tokens").select("*", db.raw('? as ??', [db.fn.now(), 'now'])).where("token", token);
+        const rows = await db<Token>("tokens")
+            .select("*", db.raw("? as ??", [db.fn.now(), "now"]))
+            .where("token", token);
         const check = (rows ?? [null])[0];
         // Failed check -- something is wrong!
         if (!check) {
