@@ -48,20 +48,35 @@ class Database {
 
         this.connection = await knex(config);
 
-        const dbFilename = this.config.databaseConnectionSettings.filename as string;
-        if (!fs.existsSync(dbFilename)) {
-            const dataDir = path.dirname(dbFilename);
-            if (!fs.existsSync(dataDir)) {
-                fs.mkdirSync(dataDir);
-            }
-            await this.initialize(this.connection);
-        }
+        await this.initialize(this.connection);
 
         console.log("Database:ready");
     }
 
     protected async initialize(db): Promise<void> {
-        console.log("Database:createTables");
+        // Special case: if we're using a disk-based database, make sure the containing directory exists:
+        if (this.config.databaseClient === "sqlite3") {
+            const dbFilename = this.config.databaseConnectionSettings.filename as string;
+            const dataDir = path.dirname(dbFilename);
+            if (!fs.existsSync(dataDir)) {
+                fs.mkdirSync(dataDir);
+            }
+        }
+
+        // If the database has already been initialized, we are done!
+        try {
+            // Try to select from the user table; if this throws an exception, we probably need to initialize.
+            await this.getUserBy("id", -1);
+            // If we got this far, the database is already initialized.
+            return;
+        } catch (e) {
+            // Not the expected error message -- rethrow!
+            if (!e.message.match(/no such table/)) {
+                throw e;
+            }
+            console.log("Database:createTables");
+        }
+
         await db.schema.dropTableIfExists("users");
         await db.schema.createTable("users", (table) => {
             table.increments("id");
