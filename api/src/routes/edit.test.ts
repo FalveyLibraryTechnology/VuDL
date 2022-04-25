@@ -6,12 +6,11 @@ import Config from "../models/Config";
 import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import FedoraDataCollector from "../services/FedoraDataCollector";
-import * as Database from "../services/Database";
+import Database from "../services/Database";
 import FedoraDataCollection from "../models/FedoraDataCollection";
 import { FedoraObject } from "../models/FedoraObject";
 
 jest.mock("../models/Config");
-jest.mock("../services/Database");
 jest.mock("../services/DatastreamManager");
 
 describe("edit", () => {
@@ -31,7 +30,7 @@ describe("edit", () => {
 
     describe("post /object/new", () => {
         beforeEach(() => {
-            jest.spyOn(Database, "confirmToken").mockResolvedValue(true);
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
         });
         afterEach(() => {
             jest.clearAllMocks();
@@ -105,7 +104,7 @@ describe("edit", () => {
             datastreamManager = {
                 deleteDatastream: jest.fn(),
             };
-            jest.spyOn(Database, "confirmToken").mockResolvedValue(true);
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
             jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
         });
 
@@ -132,7 +131,7 @@ describe("edit", () => {
                 getMimeType: jest.fn(),
                 downloadBuffer: jest.fn(),
             };
-            jest.spyOn(Database, "confirmToken").mockResolvedValue(true);
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
             jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
         });
 

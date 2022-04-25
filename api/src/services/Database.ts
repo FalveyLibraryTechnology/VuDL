@@ -4,10 +4,6 @@ import Config from "../models/Config";
 import { Knex, knex } from "knex";
 import { nanoid } from "nanoid";
 
-// TODO: Config
-const dbFilename = "./data/auth.sqlite3";
-const tokenLifetime = 24 * 60 * 60 * 1000;
-
 interface User {
     id: number;
     username: string;
@@ -24,126 +20,168 @@ interface Pid {
     pid: number;
 }
 
-async function createDatabase(db): Promise<void> {
-    console.log("Database:createTables");
-    await db.schema.dropTableIfExists("users");
-    await db.schema.createTable("users", (table) => {
-        table.increments("id");
-        table.string("username");
-        table.string("password");
-        table.string("hash");
-    });
-    await db.schema.dropTableIfExists("tokens");
-    await db.schema.createTable("tokens", (table) => {
-        table.string("token").primary();
-        table.timestamp("created_at").notNullable();
-        table.integer("user_id").unsigned().references("users.id");
-    });
-    await db.schema.dropTableIfExists("pids");
-    await db.schema.createTable("pids", (table) => {
-        table.string("namespace").primary();
-        table.integer("pid");
-    });
-    const config = Config.getInstance();
-    const initialPid: Pid = {
-        namespace: config.fedoraPidNameSpace,
-        pid: config.initialPidValue,
-    };
-    await db("pids").insert(initialPid);
+class Database {
+    private static instance: Database;
+    config: Config;
+    connection: Knex = null;
+    tokenLifetime = 24 * 60 * 60 * 1000;
 
-    const users = [
-        { username: "geoff", password: "earth", hash: "CuhFfwkebs3RKr1Zo_Do_" },
-        { username: "chris", password: "air", hash: "V1StGXR8_Z5jdHi6B-myT" },
-        { username: "dkatz", password: "avatar", hash: "_HPZZ6uCouEU5jy-AYrDd" },
-    ];
-    for (const user of users) {
-        console.log(`Database:insert: ${user.username}`);
-        await db("users").insert(user);
+    constructor(config: Config) {
+        this.config = config;
     }
-}
 
-let db: Knex = null;
-const REBUILD_DB = false;
-async function getDatabase(): Promise<Knex> {
-    if (db === null) {
+    public static getInstance(): Database {
+        if (!Database.instance) {
+            Database.instance = new Database(Config.getInstance());
+        }
+        return Database.instance;
+    }
+
+    protected async connect(): Promise<void> {
         console.log("Database:connect");
 
         const config: Knex.Config = {
-            client: "sqlite3",
-            connection: {
-                filename: dbFilename,
-            },
+            client: this.config.databaseClient,
+            connection: this.config.databaseConnectionSettings,
             useNullAsDefault: true,
         };
 
-        db = await knex(config);
+        this.connection = await knex(config);
 
-        if (REBUILD_DB || !fs.existsSync(dbFilename)) {
-            const dataDir = path.dirname(dbFilename);
-            if (!fs.existsSync(dataDir)) {
-                fs.mkdirSync(dataDir);
-            }
-            await createDatabase(db);
-        }
+        await this.initialize(this.connection);
 
         console.log("Database:ready");
     }
 
-    return db;
-}
-
-export async function getUserBy(key: string, val: string | number): Promise<User> {
-    const db = await getDatabase();
-    const users = await db<User>("users").where(key, val);
-    return users[0] ?? null;
-}
-
-export async function confirmToken(token: string): Promise<boolean> {
-    const db = await getDatabase();
-    const rows = await db<Token>("tokens").where("token", token);
-    const check = (rows ?? [null])[0];
-    if (!check || check.created_at + tokenLifetime < Date.now()) {
-        await db("tokens").where("token", token).delete();
-        return false;
-    }
-    return true;
-}
-
-export async function getNextPid(namespace: string): Promise<string> {
-    const db = await getDatabase();
-    let pid = "";
-    // We don't want to create a duplicate PID or get out of sync, so we need to
-    // do this as a transcation!
-    await db.transaction(async function (trx) {
-        // Get the latest PID, and fail if we can't find it:
-        const current = await trx<Pid>("pids").where("namespace", namespace);
-        if (current.length < 1) {
-            throw new Error("Cannot find PID for namespace: " + namespace);
+    protected async initialize(db: Knex): Promise<void> {
+        // Special case: if we're using a disk-based database, make sure the containing directory exists:
+        if (this.config.databaseClient === "sqlite3") {
+            const dbFilename = this.config.databaseConnectionSettings.filename as string;
+            const dataDir = path.dirname(dbFilename);
+            if (!fs.existsSync(dataDir)) {
+                fs.mkdirSync(dataDir);
+            }
         }
-        // Increment the PID and update the database:
-        const numericPortion = current[0].pid + 1;
-        await trx("pids").where("namespace", namespace).update("pid", numericPortion);
-        // Commit the transaction:
-        await trx.commit();
-        // Only update the variable AFTER everything has been successful:
-        pid = namespace + ":" + numericPortion;
-    });
-    if (pid.length === 0) {
-        throw new Error("Unexpected pid generation error.");
+
+        // If the database has already been initialized, we are done!
+        try {
+            // Try to select from the user table; if this throws an exception, we probably need to initialize.
+            await this.getUserBy("id", -1);
+            // If we got this far, the database is already initialized.
+            return;
+        } catch (e) {
+            // Not the expected error message -- rethrow!
+            if (!e.message.match(/no such table|Table .* doesn't exist/)) {
+                throw e;
+            }
+            console.log("Database:createTables");
+        }
+
+        await db.schema.dropTableIfExists("users");
+        await db.schema.createTable("users", (table) => {
+            table.increments("id");
+            table.string("username");
+            table.string("password");
+            table.string("hash");
+        });
+        await db.schema.dropTableIfExists("tokens");
+        await db.schema.createTable("tokens", (table) => {
+            table.string("token").primary();
+            table.timestamp("created_at").notNullable();
+            table.integer("user_id").unsigned().references("users.id");
+        });
+        await db.schema.dropTableIfExists("pids");
+        await db.schema.createTable("pids", (table) => {
+            table.string("namespace").primary();
+            table.integer("pid");
+        });
+        const initialPid: Pid = {
+            namespace: this.config.fedoraPidNameSpace,
+            pid: this.config.initialPidValue,
+        };
+        await db("pids").insert(initialPid);
+
+        const users = [
+            { username: "geoff", password: "earth", hash: "CuhFfwkebs3RKr1Zo_Do_" },
+            { username: "chris", password: "air", hash: "V1StGXR8_Z5jdHi6B-myT" },
+            { username: "dkatz", password: "avatar", hash: "_HPZZ6uCouEU5jy-AYrDd" },
+        ];
+        for (const user of users) {
+            console.log(`Database:insert: ${user.username}`);
+            await db("users").insert(user);
+        }
     }
-    return pid;
+
+    protected async getConnection(): Promise<Knex> {
+        if (this.connection === null) {
+            await this.connect();
+        }
+        return this.connection;
+    }
+
+    public async getUserBy(key: string, val: string | number): Promise<User> {
+        const db = await this.getConnection();
+        const users = await db<User>("users").where(key, val);
+        return users[0] ?? null;
+    }
+
+    public async confirmToken(token: string): Promise<boolean> {
+        const db = await this.getConnection();
+        const rows = await db<Token>("tokens")
+            .select("*", db.raw("? as ??", [db.fn.now(), "now"]))
+            .where("token", token);
+        const check = (rows ?? [null])[0];
+        // Failed check -- something is wrong!
+        if (!check) {
+            return false;
+        }
+        // If token has expired, clear it out:
+        const timePassedInSeconds = (new Date(check.now).getTime() - new Date(check.created_at).getTime()) / 1000;
+        if (timePassedInSeconds > this.tokenLifetime) {
+            await db("tokens").where("token", token).delete();
+            return false;
+        }
+        return true;
+    }
+
+    public async getNextPid(namespace: string): Promise<string> {
+        const db = await this.getConnection();
+        let pid = "";
+        // We don't want to create a duplicate PID or get out of sync, so we need to
+        // do this as a transcation!
+        await db.transaction(async function (trx) {
+            // Get the latest PID, and fail if we can't find it:
+            const current = await trx<Pid>("pids").where("namespace", namespace);
+            if (current.length < 1) {
+                throw new Error("Cannot find PID for namespace: " + namespace);
+            }
+            // Increment the PID and update the database:
+            const numericPortion = current[0].pid + 1;
+            await trx("pids").where("namespace", namespace).update("pid", numericPortion);
+            // Commit the transaction:
+            await trx.commit();
+            // Only update the variable AFTER everything has been successful:
+            pid = namespace + ":" + numericPortion;
+        });
+        if (pid.length === 0) {
+            throw new Error("Unexpected pid generation error.");
+        }
+        return pid;
+    }
+
+    public async makeToken(user: User): Promise<string> {
+        if (user === null) {
+            return null;
+        }
+        const db = await this.getConnection();
+        const token = nanoid();
+        await db("tokens").insert({
+            token,
+            user_id: user.id,
+            created_at: db.fn.now(),
+        });
+        return token;
+    }
 }
 
-export async function makeToken(user: User): Promise<string> {
-    if (user === null) {
-        return null;
-    }
-    const db = await getDatabase();
-    const token = nanoid();
-    await db("tokens").insert({
-        token,
-        user_id: user.id,
-        created_at: Date.now(),
-    });
-    return token;
-}
+export default Database;

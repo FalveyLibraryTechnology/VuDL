@@ -81,6 +81,26 @@ articles_to_strip[] = "a "
 articles_to_strip[] = "an "
 articles_to_strip[] = "the "
 
+# Database settings
+[Database]
+# Supported values: mysql, sqlite3
+client = sqlite3
+
+# Database connection settings (required values vary based on client setting above)
+[Database.connection]
+# Required when client = sqlite3; filename of database, relative to api directory
+filename = "./data/auth.sqlite3"
+# Required when client = mysql
+# To set up a MySQL/MariaDB database, run these commands in the database client:
+#    create database vudl;
+#    create user 'your_database_user'@'localhost' identified by 'your_database_password';
+#    grant all on vudl.* to 'vudl'@'localhost';
+#host = 127.0.0.1
+#port = 3306
+#user = your_database_user
+#password = your_database_password
+#database = vudl
+
 # Mapping of language codes to display names; used for indexing
 [LanguageMap]
 ab = Abkhazian

@@ -164,6 +164,18 @@ class Config {
     get models(): Record<string, FedoraModel> {
         return this.ini["models"] || {};
     }
+
+    get databaseSettings(): ConfigRecord {
+        return this.ini["Database"] ?? {};
+    }
+
+    get databaseClient(): string {
+        return (this.databaseSettings["client"] as string) ?? "sqlite3";
+    }
+
+    get databaseConnectionSettings(): ConfigRecord {
+        return (this.databaseSettings["connection"] as ConfigRecord) ?? { filename: "./data/auth.sqlite3" };
+    }
 }
 
 export default Config;

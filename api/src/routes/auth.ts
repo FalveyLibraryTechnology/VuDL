@@ -9,7 +9,7 @@ import passport = require("passport");
 import hash = require("passport-hash");
 
 import Config from "../models/Config";
-import { getUserBy, confirmToken, makeToken } from "../services/Database";
+import Database from "../services/Database";
 
 interface NextFunction {
     (err?: Error): void;
@@ -22,16 +22,20 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-    getUserBy("id", id).then((user) => {
-        done(null, user);
-    });
+    Database.getInstance()
+        .getUserBy("id", id)
+        .then((user) => {
+            done(null, user);
+        });
 });
 
 passport.use(
     new hash.Strategy(function (hash, done) {
-        getUserBy("hash", hash).then((user) => {
-            done(null, user);
-        });
+        Database.getInstance()
+            .getUserBy("hash", hash)
+            .then((user) => {
+                done(null, user);
+            });
     })
 );
 
@@ -61,7 +65,7 @@ export async function requireToken(req: Request, res: Response, next?: NextFunct
     // Check for API key in header or session
     const userToken = req.header("Authorization") ? req.header("Authorization").slice(6) : req.session.token ?? null;
 
-    if (await confirmToken(userToken)) {
+    if (await Database.getInstance().confirmToken(userToken)) {
         return next();
     }
 
@@ -93,7 +97,7 @@ router.get("/login", async function (req, res) {
     if (req.query.referer ?? false) {
         req.session.referer = req.query.referer;
     }
-    const user = await getUserBy("username", "chris");
+    const user = await Database.getInstance().getUserBy("username", "chris");
     res.render("../../views/login-test", { user });
 });
 
@@ -114,7 +118,7 @@ router.get("/user/confirm/:hash", authenticate, function (req: Request, res: Res
 });
 
 router.get("/token/confirm/:token", async function (req: Request, res: Response) {
-    const isGood = await confirmToken(req.params.token);
+    const isGood = await Database.getInstance().confirmToken(req.params.token);
     res.sendStatus(isGood ? 200 : 401);
 });
 
@@ -122,7 +126,7 @@ router.get("/token/mint", async function (req: Request, res: Response) {
     if (!req.user) {
         return res.sendStatus(401);
     }
-    const token = await makeToken(req.user);
+    const token = await Database.getInstance().makeToken(req.user);
     req.session.token = token;
     res.json(token);
 });
