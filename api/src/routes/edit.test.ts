@@ -162,7 +162,7 @@ describe("edit", () => {
                 getMimeType: jest.fn(),
                 downloadBuffer: jest.fn(),
             };
-            jest.spyOn(Database, "confirmToken").mockResolvedValue(true);
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
             jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
         });
 
