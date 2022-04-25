@@ -91,6 +91,10 @@ client = sqlite3
 # Required when client = sqlite3; filename of database, relative to api directory
 filename = "./data/auth.sqlite3"
 # Required when client = mysql
+# To set up a MySQL/MariaDB database, run these commands in the database client:
+#    create database vudl;
+#    create user 'your_database_user'@'localhost' identified by 'your_database_password';
+#    grant all on vudl.* to 'vudl'@'localhost';
 #host = 127.0.0.1
 #port = 3306
 #user = your_database_user
