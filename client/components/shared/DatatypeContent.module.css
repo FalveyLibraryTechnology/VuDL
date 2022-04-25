@@ -1,0 +1,20 @@
+.viewContentImage {
+    width: 100%;
+}
+
+.viewContentText {
+    width: 100%;
+}
+
+.viewContentAudio {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+}
+
+.viewContentObject {
+    width: 100%;
+    min-height: 50vh;
+}

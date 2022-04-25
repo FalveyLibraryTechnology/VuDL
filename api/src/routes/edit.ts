@@ -158,10 +158,10 @@ edit.get("/object/:pid/parents", pidSanitizer, requireToken, async function (req
 });
 
 edit.get("/object/:pid/datastream/:stream/download", datastreamSanitizer, requireToken, async function (req, res) {
-    const pid = req.params.pid;
-    const stream = req.params.stream;
-    const datastream = DatastreamManager.getInstance();
     try {
+        const pid = req.params.pid;
+        const stream = req.params.stream;
+        const datastream = DatastreamManager.getInstance();
         const mimeType = await datastream.getMimeType(pid, stream);
         const fileType = mimeType?.split("/")?.[1];
         const fileName = `${pid.replace(/:/g, "_")}_${stream}.${fileType}`;
@@ -186,6 +186,37 @@ edit.delete("/object/:pid/datastream/:stream", requireToken, datastreamSanitizer
     try {
         await datastreamManager.deleteDatastream(pid, stream);
         res.status(200).send("Datastream successfully deleted");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
+
+edit.get("/object/:pid/datastream/:stream/view", requireToken, datastreamSanitizer, async function (req, res) {
+    try {
+        const pid = req.params.pid;
+        const stream = req.params.stream;
+        const datastream = DatastreamManager.getInstance();
+        const mimeType = await datastream.getMimeType(pid, stream);
+        const buffer = await datastream.downloadBuffer(pid, stream);
+        res.header({
+            "Content-Disposition": "inline",
+            "Content-Type": mimeType,
+        });
+        res.status(200).send(buffer);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
+
+edit.get("/object/:pid/datastream/:stream/mimetype", requireToken, datastreamSanitizer, async function (req, res) {
+    try {
+        const pid = req.params.pid;
+        const stream = req.params.stream;
+        const datastream = DatastreamManager.getInstance();
+        const mimeType = await datastream.getMimeType(pid, stream);
+        res.status(200).send(mimeType);
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);

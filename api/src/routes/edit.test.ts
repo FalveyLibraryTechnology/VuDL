@@ -151,4 +151,35 @@ describe("edit", () => {
             expect(datastreamManager.downloadBuffer).toHaveBeenCalledWith(pid, datastream);
         });
     });
+
+    describe("get /object/:pid/datastream/:stream/view", () => {
+        let datastreamManager;
+        let mimeType;
+        let buffer;
+        beforeEach(() => {
+            mimeType = "text/xml";
+            buffer = Buffer.from("test2");
+            datastreamManager = {
+                getMimeType: jest.fn(),
+                downloadBuffer: jest.fn(),
+            };
+            jest.spyOn(Database, "confirmToken").mockResolvedValue(true);
+            jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+
+        it("will view the datastream content", async () => {
+            datastreamManager.getMimeType.mockResolvedValue(mimeType);
+            datastreamManager.downloadBuffer.mockResolvedValue(buffer);
+
+            await request(app)
+                .get(`/edit/object/${pid}/datastream/${datastream}/view`)
+                .set("Authorization", "Bearer test")
+                .expect("Content-Disposition", "inline")
+                .expect("Content-Type", mimeType + "; charset=utf-8")
+                .expect(StatusCodes.OK);
+
+            expect(datastreamManager.getMimeType).toHaveBeenCalledWith(pid, datastream);
+            expect(datastreamManager.downloadBuffer).toHaveBeenCalledWith(pid, datastream);
+        });
+    });
 });

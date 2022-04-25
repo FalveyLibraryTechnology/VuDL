@@ -28,7 +28,7 @@ const editorContextParams = {
 
 export const DatastreamModalStates = {
     UPLOAD: "Upload",
-    // VIEW: "View",
+    VIEW: "View",
     // METADATA: "Metadata",
     DOWNLOAD: "Download",
     DELETE: "Delete"

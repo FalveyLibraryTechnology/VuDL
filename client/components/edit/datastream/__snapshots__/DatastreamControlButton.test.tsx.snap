@@ -4,15 +4,17 @@ exports[`DatastreamControlButton renders 1`] = `
 <ForwardRef(Tooltip)
   title="Upload"
 >
-  <ForwardRef(LoadingButton)
-    aria-label="Upload"
-    className="datastreamControlButton"
-    disabled={false}
-    loading={false}
-    onClick={[Function]}
-    size="small"
-  >
-    <Memo(ForwardRef(UploadFileIcon)) />
-  </ForwardRef(LoadingButton)>
+  <span>
+    <ForwardRef(LoadingButton)
+      aria-label="Upload"
+      className="datastreamControlButton"
+      disabled={false}
+      loading={false}
+      onClick={[Function]}
+      size="small"
+    >
+      <Memo(ForwardRef(UploadFileIcon)) />
+    </ForwardRef(LoadingButton)>
+  </span>
 </ForwardRef(Tooltip)>
 `;

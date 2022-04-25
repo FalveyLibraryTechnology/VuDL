@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Tooltip from "@mui/material/Tooltip";
 import Download from "@mui/icons-material/Download";
 import Delete from "@mui/icons-material/Delete";
+import Preview from "@mui/icons-material/Preview";
 import UploadFile from "@mui/icons-material/UploadFile";
 import { useEditorContext } from "../../../context/EditorContext";
 import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 
 const Icons = {
     Upload: <UploadFile />,
-    // VIEW: ,
-    // METADATA: ,
+    View: <Preview />,
+    // Metadata: ,
     Download: <Download />,
     Delete: <Delete />,
 };
@@ -27,10 +28,24 @@ const DatastreamControlButton = ({
     disabled,
 }: DatastreamControlButtonProps): React.ReactElement => {
     const [isLoading, setLoading] = useState(false);
+    const [disabledMimetype, setDisabledMimetype] = useState(false);
     const {
         action: { toggleDatastreamModal, setActiveDatastream, setDatastreamModalState },
     } = useEditorContext();
-    const { downloadDatastream } = useDatastreamOperation();
+    const { downloadDatastream, getDatastreamMimetype } = useDatastreamOperation();
+    useEffect(() => {
+        const enableButton = async () => {
+            setLoading(true);
+            const mimeType = await getDatastreamMimetype(datastream);
+            if (mimeType == "image/tiff") {
+                setDisabledMimetype(true);
+            }
+            setLoading(false);
+        };
+        if (modalState === "View") {
+            enableButton();
+        }
+    }, []);
     const onClick = (modalState) => {
         if (modalState !== "Download") {
             return () => {
@@ -45,19 +60,20 @@ const DatastreamControlButton = ({
             setLoading(false);
         };
     };
-
     return (
         <Tooltip title={modalState}>
-            <LoadingButton
-                className="datastreamControlButton"
-                loading={isLoading}
-                aria-label={modalState}
-                disabled={modalState !== "Upload" && disabled}
-                onClick={onClick(modalState)}
-                size="small"
-            >
-                {Icons[modalState]}
-            </LoadingButton>
+            <span>
+                <LoadingButton
+                    className="datastreamControlButton"
+                    loading={isLoading}
+                    aria-label={modalState}
+                    disabled={(modalState !== "Upload" && disabled) || disabledMimetype}
+                    onClick={onClick(modalState)}
+                    size="small"
+                >
+                    {Icons[modalState]}
+                </LoadingButton>
+            </span>
         </Tooltip>
     );
 };

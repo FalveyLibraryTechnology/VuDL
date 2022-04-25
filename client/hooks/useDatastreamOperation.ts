@@ -1,6 +1,6 @@
 import { useFetchContext } from "../context/FetchContext";
 import { useEditorContext } from "../context/EditorContext";
-import { deleteObjectDatastreamUrl, downloadObjectDatastreamUrl, postObjectDatastreamUrl } from "../util/routes";
+import { deleteObjectDatastreamUrl, downloadObjectDatastreamUrl, getObjectDatastreamMimetypeUrl, postObjectDatastreamUrl, viewObjectDatastreamUrl } from "../util/routes";
 
 const useDatastreamOperation = () => {
     const {
@@ -93,10 +93,49 @@ const useDatastreamOperation = () => {
         }
     };
 
+    const viewDatastream = async (): Promise<{ data: string; mimeType: string; }> => {
+        try {
+            const response =  await fetchBlob(viewObjectDatastreamUrl(currentPid, activeDatastream));
+            const mimeType: string = response?.headers?.get("Content-Type").split(";")[0];
+            const data = mimeType.match(/text\/[-+.\w]+/)
+                ? await response.blob.text()
+                : URL.createObjectURL(response?.blob);
+            return {
+                data,
+                mimeType: /audio\/x-flac/.test(mimeType)? "audio/flac" : mimeType
+            };
+        } catch(err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
+        }
+        return {
+            data: "",
+            mimeType: ""
+        }
+    };
+
+    const getDatastreamMimetype = async (datastream: string):Promise<string> => {
+        try {
+            return (await fetchText(getObjectDatastreamMimetypeUrl(currentPid, datastream))).split(";")[0];
+        } catch(err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
+        }
+        return  "";
+    };
+
     return {
         uploadFile,
         deleteDatastream,
-        downloadDatastream
+        downloadDatastream,
+        viewDatastream,
+        getDatastreamMimetype
     };
 };
 

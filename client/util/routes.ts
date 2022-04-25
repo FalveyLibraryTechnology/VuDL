@@ -66,6 +66,14 @@ const downloadObjectDatastreamUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "download");
 }
 
+const viewObjectDatastreamUrl = (pid: string, datastream: string) => {
+    return getDatastreamActionUrl(pid, datastream, "view");
+};
+
+const getObjectDatastreamMimetypeUrl = (pid: string, datastream: string) => {
+    return getDatastreamActionUrl(pid, datastream, "mimetype");
+};
+
 const getObjectDatastreamMetadataUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "metadata");
 }
@@ -92,5 +100,7 @@ export {
     postObjectDatastreamUrl,
     deleteObjectDatastreamUrl,
     downloadObjectDatastreamUrl,
+    viewObjectDatastreamUrl,
+    getObjectDatastreamMimetypeUrl,
     getObjectDatastreamMetadataUrl
 };
