@@ -155,13 +155,14 @@ describe("useDatastreamOperation", () => {
     });
 
     describe("downloadDatastream", () => {
-        let blob;
+        let blob: Blob;
         let headers;
         let createObjectURL;
         let createElement;
         let link;
         let body;
         beforeEach(() => {
+
             blob = new Blob(["test"], {type: 'text/pdf'});
             headers = new Headers();
             createObjectURL = jest.fn().mockReturnValue("test3");
@@ -270,4 +271,65 @@ describe("useDatastreamOperation", () => {
         });
     });
 
+    describe("viewDatastream", () => {
+        let blob: Blob;
+        let headers: Headers;
+        let createObjectURL: string;
+        beforeEach(() => {
+            blob = new Blob(["test"], {type: 'text/plain'});
+            blob.text = jest.fn().mockResolvedValue("test4");
+            headers = new Headers();
+            createObjectURL = jest.fn().mockReturnValue("test3");
+            Object.defineProperty(global, "URL", {
+                value: {
+                    createObjectURL
+                },
+                writable: true,
+            });
+        });
+
+        it("success", async () => {
+            headers.append("Content-Type", "image/jpeg");
+            fetchValues.action.fetchBlob.mockResolvedValue({
+                headers,
+                blob
+            });
+            const { viewDatastream } = useDatastreamOperation();
+            const response = await viewDatastream();
+
+            expect(createObjectURL).toHaveBeenCalledWith(blob);
+            expect(response.data).toEqual("test3");
+            expect(response.mimeType).toEqual("image/jpeg");
+        });
+
+        it("calls text value", async () => {
+            headers.append("Content-Type", "text/xml");
+            fetchValues.action.fetchBlob.mockResolvedValue({
+                headers,
+                blob
+            });
+            const { viewDatastream } = useDatastreamOperation();
+            const response = await viewDatastream();
+
+            expect(createObjectURL).not.toHaveBeenCalledWith(blob);
+            expect(response.mimeType).toEqual("text/xml");
+            expect(response.data).toEqual("test4");
+        });
+
+
+        it("error", async () => {
+            fetchValues.action.fetchBlob.mockRejectedValue(new Error("Download failure!"));
+
+            const { viewDatastream } = useDatastreamOperation();
+            await viewDatastream();
+
+            expect(fetchValues.action.fetchBlob).toHaveBeenCalled();
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    open: true,
+                    severity: "error",
+                })
+            );
+        });
+    });
 });

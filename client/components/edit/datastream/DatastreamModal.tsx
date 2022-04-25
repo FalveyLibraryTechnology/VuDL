@@ -7,10 +7,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useEditorContext } from "../../../context/EditorContext";
 import DatastreamUploadModalContent from "./DatastreamUploadModalContent";
 import DatastreamDeleteModalContent from "./DatastreamDeleteModalContent";
+import DatastreamViewModalContent from "./DatastreamViewModalContent";
 
 const contentMapping = {
     Upload: <DatastreamUploadModalContent />,
-    View: null,
+    View: <DatastreamViewModalContent />,
     Metadata: null,
     Delete: <DatastreamDeleteModalContent />,
 };
