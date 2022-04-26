@@ -18,6 +18,7 @@ class Authentication {
 
     public hashPassword(password: string): string {
         const hash = crypto.createHash(this.config.authenticationHashAlgorithm);
+        // TODO: add salt
         hash.update(password);
         return hash.digest("hex");
     }
