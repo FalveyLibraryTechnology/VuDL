@@ -1,6 +1,9 @@
 # URL of React client:
 client_url = "http://localhost:3000"
 
+# Base URL of the backend code:
+backend_url = "http://localhost:9000"
+
 # Credentials for connecting to a Fedora backend:
 fedora_username = "fedoraAdmin"
 fedora_password = "fedoraAdmin"

@@ -49,20 +49,21 @@ class Authentication {
                 })
             );
         } else if (authStrategy === "saml") {
-            passport.use(
-                new saml.Strategy(
-                    {
-                        path: "/login",
-                        entryPoint: this.config.samlEntryPoint,
-                        issuer: this.config.clientUrl,
-                        cert: this.config.samlCertificate,
-                    },
-                    function (profile, done) {
-                        console.log(profile);
-                        //done(null, false);
-                    }
-                )
+            const samlStrategy = new saml.Strategy(
+                {
+                    path: "/login",
+                    callbackUrl: `${this.config.backendUrl}/login`,
+                    entryPoint: this.config.samlEntryPoint,
+                    issuer: this.config.backendUrl,
+                    cert: this.config.samlCertificate,
+                },
+                function (profile, done) {
+                    console.log(profile);
+                    //done(null, false);
+                }
             );
+            console.log(samlStrategy.generateServiceProviderMetadata("", ""));
+            passport.use(samlStrategy);
         } else {
             throw new Error(`Unsupported auth strategy: ${authStrategy}`);
         }

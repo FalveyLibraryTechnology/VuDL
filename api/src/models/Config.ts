@@ -36,6 +36,10 @@ class Config {
         Config.instance = config;
     }
 
+    get backendUrl(): string {
+        return this.ini["backend_url"] ?? "http://localhost:9000";
+    }
+
     get clientUrl(): string {
         return this.ini["client_url"];
     }
