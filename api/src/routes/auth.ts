@@ -64,23 +64,29 @@ router.use(function (req, res, next) {
     next();
 });
 
-router.get("/login", function (req, res) {
+function showLoginForm(req, res) {
     if (req.query.referer ?? false) {
         req.session.referer = req.query.referer;
     }
     res.render("../../views/login-test");
-});
+}
+
+function postLoginRedirect(req, res) {
+    const referral = req.query.referer ?? req.session.referer;
+    console.log("> goto login referral: " + referral);
+    res.redirect(referral ?? Config.getInstance().clientUrl);
+    req.session.referer = null;
+}
+
+// We have a different login flow depending on whether or not there's a login screen...
+const loginFlow = authStrategy === "saml" ? [authenticate, postLoginRedirect] : [showLoginForm];
+router.get("/login", ...loginFlow);
 
 // Use passport.authenticate() as route middleware to authenticate the
 // request.  If authentication fails, the user will be redirected back to the
 // login page.  Otherwise, the primary route function will be called,
 // which, in this example, will redirect the user to the referring URL.
-router.post("/login", authenticate, function (req, res) {
-    const referral = req.query.referer ?? req.session.referer;
-    console.log("> goto login referral: " + referral);
-    res.redirect(referral ?? Config.getInstance().clientUrl);
-    req.session.referer = null;
-});
+router.post("/login", authenticate, postLoginRedirect);
 
 router.get("/logout", function (req, res) {
     req.logout();
