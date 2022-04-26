@@ -6,9 +6,10 @@
  */
 import { Request, Response, Router } from "express"; // Types
 import passport = require("passport");
-import hash = require("passport-hash");
+import LocalStrategy = require("passport-local");
 
 import Config from "../models/Config";
+import Authentication from "../services/Authentication";
 import Database from "../services/Database";
 
 interface NextFunction {
@@ -29,18 +30,23 @@ passport.deserializeUser(function (id, done) {
         });
 });
 
-passport.use(
-    new hash.Strategy(function (hash, done) {
-        Database.getInstance()
-            .getUserBy("hash", hash)
-            .then((user) => {
-                done(null, user);
-            });
-    })
-);
+const authStrategy = Config.getInstance().authenticationStrategy;
+if (authStrategy === "local") {
+    passport.use(
+        new LocalStrategy(async function (username, password, done) {
+            const user = await Database.getInstance().getUserBy("username", username);
+            if (user?.hash === Authentication.getInstance().hashPassword(password)) {
+                return done(null, user);
+            }
+            return done(null, false);
+        })
+    );
+} else {
+    throw new Error(`Unsupported auth strategy: ${authStrategy}`);
+}
 
 export function authenticate(req: Request, res: Response, next?: NextFunction): void {
-    const authMethod = passport.authenticate("hash", { failureRedirect: loginPath });
+    const authMethod = passport.authenticate(authStrategy, { failureRedirect: loginPath });
     // we can switch tactics here
     if (req.header("Authorization")) {
         console.log("Authorization", req.header("Authorization"));
@@ -93,28 +99,27 @@ router.use(function (req, res, next) {
     next();
 });
 
-router.get("/login", async function (req, res) {
+router.get("/login", function (req, res) {
     if (req.query.referer ?? false) {
         req.session.referer = req.query.referer;
     }
-    const user = await Database.getInstance().getUserBy("username", "chris");
-    res.render("../../views/login-test", { user });
+    res.render("../../views/login-test");
+});
+
+// Use passport.authenticate() as route middleware to authenticate the
+// request.  If authentication fails, the user will be redirected back to the
+// login page.  Otherwise, the primary route function will be called,
+// which, in this example, will redirect the user to the referring URL.
+router.post("/login", authenticate, function (req, res) {
+    const referral = req.query.referer ?? req.session.referer;
+    console.log("> goto login referral: " + referral);
+    res.redirect(referral ?? Config.getInstance().clientUrl);
+    req.session.referer = null;
 });
 
 router.get("/logout", function (req, res) {
     req.logout();
     res.redirect(Config.getInstance().clientUrl);
-});
-
-// Use passport.authenticate() as route middleware to authenticate the
-// request.  If authentication fails, the user will be redirected back to the
-// login page.  Otherwise, the primary route function function will be called,
-// which, in this example, will redirect the user to the home page.
-router.get("/user/confirm/:hash", authenticate, function (req: Request, res: Response) {
-    const referral = req.query.referer ?? req.session.referer;
-    console.log("> goto login referral: " + referral);
-    res.redirect(referral ?? Config.getInstance().clientUrl);
-    req.session.referer = null;
 });
 
 router.get("/token/confirm/:token", async function (req: Request, res: Response) {

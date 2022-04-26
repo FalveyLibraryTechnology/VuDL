@@ -176,6 +176,22 @@ class Config {
     get databaseConnectionSettings(): ConfigRecord {
         return (this.databaseSettings["connection"] as ConfigRecord) ?? { filename: "./data/auth.sqlite3" };
     }
+
+    get authenticationSettings(): ConfigRecord {
+        return this.ini["Authentication"] ?? [];
+    }
+
+    get authenticationStrategy(): string {
+        return (this.authenticationSettings["strategy"] as string) ?? "local";
+    }
+
+    get authenticationHashAlgorithm(): string {
+        return (this.authenticationSettings["hash_algorithm"] as string) ?? "sha1";
+    }
+
+    get databaseInitialUsers(): Record<string, string> {
+        return (this.authenticationSettings["initial_users"] ?? []) as Record<string, string>;
+    }
 }
 
 export default Config;

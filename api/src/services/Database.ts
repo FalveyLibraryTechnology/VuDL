@@ -3,6 +3,7 @@ import path = require("path");
 import Config from "../models/Config";
 import { Knex, knex } from "knex";
 import { nanoid } from "nanoid";
+import Authentication from "./Authentication";
 
 interface User {
     id: number;
@@ -23,16 +24,18 @@ interface Pid {
 class Database {
     private static instance: Database;
     config: Config;
+    auth: Authentication;
     connection: Knex = null;
     tokenLifetime = 24 * 60 * 60 * 1000;
 
-    constructor(config: Config) {
+    constructor(config: Config, auth: Authentication) {
         this.config = config;
+        this.auth = auth;
     }
 
     public static getInstance(): Database {
         if (!Database.instance) {
-            Database.instance = new Database(Config.getInstance());
+            Database.instance = new Database(Config.getInstance(), Authentication.getInstance());
         }
         return Database.instance;
     }
@@ -81,7 +84,6 @@ class Database {
         await db.schema.createTable("users", (table) => {
             table.increments("id");
             table.string("username");
-            table.string("password");
             table.string("hash");
         });
         await db.schema.dropTableIfExists("tokens");
@@ -101,14 +103,12 @@ class Database {
         };
         await db("pids").insert(initialPid);
 
-        const users = [
-            { username: "geoff", password: "earth", hash: "CuhFfwkebs3RKr1Zo_Do_" },
-            { username: "chris", password: "air", hash: "V1StGXR8_Z5jdHi6B-myT" },
-            { username: "dkatz", password: "avatar", hash: "_HPZZ6uCouEU5jy-AYrDd" },
-        ];
-        for (const user of users) {
-            console.log(`Database:insert: ${user.username}`);
-            await db("users").insert(user);
+        const users = this.config.databaseInitialUsers;
+        for (const username in users) {
+            const pass = users[username];
+            const hash = this.auth.hashPassword(pass);
+            console.log(`Database:insert: ${username}`);
+            await db("users").insert({ username, hash });
         }
     }
 

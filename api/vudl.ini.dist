@@ -81,6 +81,17 @@ articles_to_strip[] = "a "
 articles_to_strip[] = "an "
 articles_to_strip[] = "the "
 
+# Authentication settings
+[Authentication]
+# Type of authentication to use (local = local database)
+strategy = local
+# Algorithm to use for hashing passwords (when strategy = local)
+hash_algorithm = sha1
+
+# Defines user account(s) to be created in the database when the database is initialized:
+[Authentication.initial_users]
+admin_user = admin_password
+
 # Database settings
 [Database]
 # Supported values: mysql, sqlite3
