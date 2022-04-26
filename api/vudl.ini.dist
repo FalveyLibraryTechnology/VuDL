@@ -83,10 +83,14 @@ articles_to_strip[] = "the "
 
 # Authentication settings
 [Authentication]
-# Type of authentication to use (local = local database)
+# Type of authentication to use (local = local database; saml = SAML)
 strategy = local
 # Algorithm to use for hashing passwords (when strategy = local)
 hash_algorithm = sha1
+# SAML Entry point URL (required when strategy = saml)
+#saml_entry_point = "https://my-idp"
+# Certificate for use in SAML transactions (required when strategy = saml; must be single line)
+#saml_certificate = "MIICizCCAfQCCQCY8tKaMc0BMjANBgkqh ... W=="
 
 # Defines user account(s) to be created in the database when the database is initialized:
 [Authentication.initial_users]

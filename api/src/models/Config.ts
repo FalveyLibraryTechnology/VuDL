@@ -192,6 +192,14 @@ class Config {
     get databaseInitialUsers(): Record<string, string> {
         return (this.authenticationSettings["initial_users"] ?? []) as Record<string, string>;
     }
+
+    get samlCertificate(): string {
+        return (this.authenticationSettings["saml_certificate"] as string) ?? "";
+    }
+
+    get samlEntryPoint(): string {
+        return (this.authenticationSettings["saml_entry_point"] as string) ?? "";
+    }
 }
 
 export default Config;

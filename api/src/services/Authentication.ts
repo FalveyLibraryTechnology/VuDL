@@ -1,5 +1,6 @@
 import crypto = require("crypto");
 import passport = require("passport");
+import saml = require("passport-saml");
 import LocalStrategy = require("passport-local");
 import Config from "../models/Config";
 import Database from "./Database";
@@ -46,6 +47,21 @@ class Authentication {
                     }
                     return done(null, false);
                 })
+            );
+        } else if (authStrategy === "saml") {
+            passport.use(
+                new saml.Strategy(
+                    {
+                        path: '/login/callback',
+                        entryPoint: this.config.samlEntryPoint,
+                        issuer: 'passport-saml',
+                        cert: this.config.samlCertificate,
+                    },
+                    function(profile, done) {
+                        console.log(profile);
+                        done(null, false);
+                    }
+                )
             );
         } else {
             throw new Error(`Unsupported auth strategy: ${authStrategy}`);
