@@ -52,12 +52,12 @@ class Authentication {
             passport.use(
                 new saml.Strategy(
                     {
-                        path: '/login/callback',
+                        path: "/login/callback",
                         entryPoint: this.config.samlEntryPoint,
-                        issuer: 'passport-saml',
+                        issuer: "passport-saml",
                         cert: this.config.samlCertificate,
                     },
-                    function(profile, done) {
+                    function (profile, done) {
                         console.log(profile);
                         done(null, false);
                     }
