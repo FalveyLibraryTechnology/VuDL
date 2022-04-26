@@ -1,15 +1,6 @@
-/**
- * TODO: Multiple levels of permission
- * - Mint keys at user level or below
- * - Allow different levels in one easy function
- * - Three easy payments of $19.95
- */
 import { Request, Response, Router } from "express"; // Types
 import passport = require("passport");
-import LocalStrategy = require("passport-local");
-
 import Config from "../models/Config";
-import Authentication from "../services/Authentication";
 import Database from "../services/Database";
 
 interface NextFunction {
@@ -17,33 +8,7 @@ interface NextFunction {
 }
 
 const loginPath = "/api/auth/login";
-
-passport.serializeUser(function (user, done) {
-    done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-    Database.getInstance()
-        .getUserBy("id", id)
-        .then((user) => {
-            done(null, user);
-        });
-});
-
 const authStrategy = Config.getInstance().authenticationStrategy;
-if (authStrategy === "local") {
-    passport.use(
-        new LocalStrategy(async function (username, password, done) {
-            const user = await Database.getInstance().getUserBy("username", username);
-            if (user?.hash === Authentication.getInstance().hashPassword(password)) {
-                return done(null, user);
-            }
-            return done(null, false);
-        })
-    );
-} else {
-    throw new Error(`Unsupported auth strategy: ${authStrategy}`);
-}
 
 export function authenticate(req: Request, res: Response, next?: NextFunction): void {
     const authMethod = passport.authenticate(authStrategy, { failureRedirect: loginPath });

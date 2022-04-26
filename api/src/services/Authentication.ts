@@ -1,5 +1,8 @@
 import crypto = require("crypto");
+import passport = require("passport");
+import LocalStrategy = require("passport-local");
 import Config from "../models/Config";
+import Database from "./Database";
 
 class Authentication {
     private static instance: Authentication;
@@ -21,6 +24,32 @@ class Authentication {
         // TODO: add salt
         hash.update(password);
         return hash.digest("hex");
+    }
+
+    public initializePassport(): void {
+        passport.serializeUser(function (user, done) {
+            done(null, user.id);
+        });
+
+        passport.deserializeUser(async function (id, done) {
+            const user = await Database.getInstance().getUserBy("id", id);
+            done(null, user);
+        });
+
+        const authStrategy = Config.getInstance().authenticationStrategy;
+        if (authStrategy === "local") {
+            passport.use(
+                new LocalStrategy(async function (username, password, done) {
+                    const user = await Database.getInstance().getUserBy("username", username);
+                    if (user?.hash === Authentication.getInstance().hashPassword(password)) {
+                        return done(null, user);
+                    }
+                    return done(null, false);
+                })
+            );
+        } else {
+            throw new Error(`Unsupported auth strategy: ${authStrategy}`);
+        }
     }
 }
 
