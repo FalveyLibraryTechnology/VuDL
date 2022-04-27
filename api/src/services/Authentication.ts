@@ -29,9 +29,12 @@ class Authentication {
                 issuer: this.config.backendUrl,
                 cert: this.config.samlCertificate,
             },
-            function (profile, done) {
-                console.log(profile);
-                //done(null, false);
+            async function (profile, done) {
+                const db = Database.getInstance();
+                const user = await db.getOrCreateUser(profile.nameID);
+                // There is a problem with types in passport-saml, which the below casting works around.
+                // TODO: find better solution; see https://github.com/node-saml/passport-saml/issues/549
+                (done as any)(null, user);
             }
         );
     }

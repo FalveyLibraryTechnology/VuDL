@@ -119,6 +119,16 @@ class Database {
         return this.connection;
     }
 
+    public async getOrCreateUser(username: string): Promise<User> {
+        let user = await this.getUserBy("username", username);
+        if (user === null) {
+            const db = await this.getConnection();
+            await db("users").insert({ username });
+            user = await this.getUserBy("username", username);
+        }
+        return user;
+    }
+
     public async getUserBy(key: string, val: string | number): Promise<User> {
         const db = await this.getConnection();
         const users = await db<User>("users").where(key, val);
