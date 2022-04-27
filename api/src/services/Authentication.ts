@@ -51,8 +51,8 @@ class Authentication {
         } else if (authStrategy === "saml") {
             const samlStrategy = new saml.Strategy(
                 {
-                    path: "/login",
-                    callbackUrl: `${this.config.backendUrl}/login`,
+                    path: "/api/auth/login",
+                    callbackUrl: `${this.config.backendUrl}/api/auth/login`,
                     entryPoint: this.config.samlEntryPoint,
                     issuer: this.config.backendUrl,
                     cert: this.config.samlCertificate,
