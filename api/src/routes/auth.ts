@@ -64,10 +64,14 @@ router.use(function (req, res, next) {
     next();
 });
 
-function showLoginForm(req, res) {
+function saveReferer(req, res, next) {
     if (req.query.referer ?? false) {
         req.session.referer = req.query.referer;
     }
+    next();
+}
+
+function showLoginForm(req, res) {
     res.render("../../views/login-test");
 }
 
@@ -79,7 +83,7 @@ function postLoginRedirect(req, res) {
 }
 
 // We have a different login flow depending on whether or not there's a login screen...
-const loginFlow = authStrategy === "saml" ? [authenticate, postLoginRedirect] : [showLoginForm];
+const loginFlow = authStrategy === "saml" ? [saveReferer, authenticate, postLoginRedirect] : [saveReferer, showLoginForm];
 router.get("/login", ...loginFlow);
 
 // Use passport.authenticate() as route middleware to authenticate the
