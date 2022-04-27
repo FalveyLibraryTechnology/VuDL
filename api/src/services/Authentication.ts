@@ -20,6 +20,22 @@ class Authentication {
         return Authentication.instance;
     }
 
+    public getSamlStrategy(): saml.Strategy {
+        return new saml.Strategy(
+            {
+                path: "/api/auth/login",
+                callbackUrl: `${this.config.backendUrl}/api/auth/login`,
+                entryPoint: this.config.samlEntryPoint,
+                issuer: this.config.backendUrl,
+                cert: this.config.samlCertificate,
+            },
+            function (profile, done) {
+                console.log(profile);
+                //done(null, false);
+            }
+        );
+    }
+
     public hashPassword(password: string): string {
         const hash = crypto.createHash(this.config.authenticationHashAlgorithm);
         // TODO: add salt
@@ -49,20 +65,7 @@ class Authentication {
                 })
             );
         } else if (authStrategy === "saml") {
-            const samlStrategy = new saml.Strategy(
-                {
-                    path: "/api/auth/login",
-                    callbackUrl: `${this.config.backendUrl}/api/auth/login`,
-                    entryPoint: this.config.samlEntryPoint,
-                    issuer: this.config.backendUrl,
-                    cert: this.config.samlCertificate,
-                },
-                function (profile, done) {
-                    console.log(profile);
-                    //done(null, false);
-                }
-            );
-            console.log(samlStrategy.generateServiceProviderMetadata("", ""));
+            const samlStrategy = this.getSamlStrategy();
             passport.use(samlStrategy);
         } else {
             throw new Error(`Unsupported auth strategy: ${authStrategy}`);

@@ -11,6 +11,7 @@
     "api:build": "cd api && tsc",
     "api:dev": "cd api && npm run start:serverWatch",
     "api:lint": "eslint api/*.js api/src/ --ext .ts,.js,.jsx",
+    "api:saml:metadata": "cd api && npm run saml:metadata",
     "api:setup": "cd api && npm ci",
     "api:test": "cd api && npm test",
     "api:testWatch": "cd api && npm run testWatch",
