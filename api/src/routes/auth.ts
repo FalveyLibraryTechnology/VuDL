@@ -83,7 +83,8 @@ function postLoginRedirect(req, res) {
 }
 
 // We have a different login flow depending on whether or not there's a login screen...
-const loginFlow = authStrategy === "saml" ? [saveReferer, authenticate, postLoginRedirect] : [saveReferer, showLoginForm];
+const loginFlow =
+    authStrategy === "saml" ? [saveReferer, authenticate, postLoginRedirect] : [saveReferer, showLoginForm];
 router.get("/login", ...loginFlow);
 
 // Use passport.authenticate() as route middleware to authenticate the
