@@ -7,8 +7,8 @@ describe("Authentication", () => {
         Config.setInstance(
             new Config({
                 Authentication: {
-                    salt: "my-salt-value"
-                }
+                    salt: "my-salt-value",
+                },
             })
         );
     });
@@ -18,9 +18,9 @@ describe("Authentication", () => {
     });
 
     it("hashes passwords correctly", () => {
-        const fakeHash = ({ update: jest.fn(), digest: jest.fn() } as unknown) as crypto.Hash;
+        const fakeHash = { update: jest.fn(), digest: jest.fn() } as unknown as crypto.Hash;
         const createSpy = jest.spyOn(crypto, "createHash").mockReturnValue(fakeHash);
-    
+
         const auth = Authentication.getInstance();
         const updateSpy = jest.spyOn(fakeHash, "update");
         const digestSpy = jest.spyOn(fakeHash, "digest").mockReturnValue("fakeHash");
