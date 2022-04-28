@@ -193,6 +193,10 @@ class Config {
         return (this.authenticationSettings["hash_algorithm"] as string) ?? "sha1";
     }
 
+    get authenticationLegalUsernames(): Array<string> {
+        return (this.authenticationSettings["legal_usernames"] as Array<string>) ?? [];
+    }
+
     get authenticationRequirePasswords(): boolean {
         if (typeof this.authenticationSettings["require_passwords"] === "boolean") {
             return this.authenticationSettings["require_passwords"];

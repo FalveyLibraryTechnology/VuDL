@@ -5,7 +5,7 @@ import { Knex, knex } from "knex";
 import { nanoid } from "nanoid";
 import Authentication from "./Authentication";
 
-interface User {
+export interface User {
     id: number;
     username: string;
     password: string;
@@ -21,7 +21,7 @@ interface Pid {
     pid: number;
 }
 
-class Database {
+export class Database {
     private static instance: Database;
     config: Config;
     auth: Authentication;

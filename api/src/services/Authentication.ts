@@ -3,7 +3,7 @@ import passport = require("passport");
 import saml = require("passport-saml");
 import LocalStrategy = require("passport-local");
 import Config from "../models/Config";
-import Database from "./Database";
+import { User, Database } from "./Database";
 
 class Authentication {
     private static instance: Authentication;
@@ -20,21 +20,35 @@ class Authentication {
         return Authentication.instance;
     }
 
+    protected isLegalUsername(username: string): boolean {
+        const legalUsers = this.config.authenticationLegalUsernames;
+        // If there is no legal user list, then all users are legal:
+        if (legalUsers.length === 0) {
+            return true;
+        }
+        return legalUsers.includes(username);
+    }
+
     protected getLocalStrategy(): LocalStrategy {
         const db = Database.getInstance();
         const passwordRequired = this.config.authenticationRequirePasswords;
-        return new LocalStrategy(async function (username, password, done) {
-            if (passwordRequired) {
-                const user = await db.getUserBy("username", username);
-                if (user?.hash === Authentication.getInstance().hashPassword(password)) {
+        return new LocalStrategy(
+            async function (username, password, done) {
+                if (!this.isLegalUsername(username)) {
+                    return done(null, false);
+                }
+                if (passwordRequired) {
+                    const user = await db.getUserBy("username", username);
+                    if (user?.hash === Authentication.getInstance().hashPassword(password)) {
+                        return done(null, user);
+                    }
+                } else {
+                    const user = await db.getOrCreateUser(username);
                     return done(null, user);
                 }
-            } else {
-                const user = await db.getOrCreateUser(username);
-                return done(null, user);
-            }
-            return done(null, false);
-        });
+                return done(null, false);
+            }.bind(this)
+        );
     }
 
     public getSamlStrategy(): saml.Strategy {
@@ -47,12 +61,15 @@ class Authentication {
                 cert: this.config.samlCertificate,
             },
             async function (profile, done) {
-                const db = Database.getInstance();
-                const user = await db.getOrCreateUser(profile.nameID);
+                let user: User | boolean = false;
+                if (this.isLegalUsername(profile.nameID)) {
+                    const db = Database.getInstance();
+                    user = await db.getOrCreateUser(profile.nameID);
+                }
                 // There is a problem with types in passport-saml, which the below casting works around.
                 // TODO: find better solution; see https://github.com/node-saml/passport-saml/issues/549
-                (done as unknown as (bool, User) => void)(null, user);
-            }
+                (done as unknown as (x, user: User | boolean) => void)(null, user);
+            }.bind(this)
         );
     }
 
