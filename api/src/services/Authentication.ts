@@ -34,7 +34,7 @@ class Authentication {
                 const user = await db.getOrCreateUser(profile.nameID);
                 // There is a problem with types in passport-saml, which the below casting works around.
                 // TODO: find better solution; see https://github.com/node-saml/passport-saml/issues/549
-                (done as any)(null, user);
+                (done as unknown as (bool, User) => void)(null, user);
             }
         );
     }
