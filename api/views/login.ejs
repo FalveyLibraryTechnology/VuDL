@@ -1,3 +1,6 @@
+<% if (failed) { %>
+    <p><b>Login failed; please try again.</b></p>
+<% } %>
 <form action="/api/auth/login" method="post">
     <label>
         Username

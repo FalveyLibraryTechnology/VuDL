@@ -11,7 +11,7 @@ const loginPath = "/api/auth/login";
 const authStrategy = Config.getInstance().authenticationStrategy;
 
 export function authenticate(req: Request, res: Response, next?: NextFunction): void {
-    const authMethod = passport.authenticate(authStrategy, { failureRedirect: loginPath });
+    const authMethod = passport.authenticate(authStrategy, { failureRedirect: loginPath + '?fail=true' });
     // we can switch tactics here
     if (req.header("Authorization")) {
         console.log("Authorization", req.header("Authorization"));
@@ -72,7 +72,9 @@ function saveReferer(req, res, next) {
 }
 
 function showLoginForm(req, res) {
-    res.render("../../views/login", { requirePasswords: Config.getInstance().authenticationRequirePasswords });
+    const requirePasswords = Config.getInstance().authenticationRequirePasswords;
+    const failed = (req.query.fail ?? "").length > 0;
+    res.render("../../views/login", { requirePasswords, failed });
 }
 
 function postLoginRedirect(req, res) {
