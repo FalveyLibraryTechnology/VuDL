@@ -1,3 +1,4 @@
+import Config from "../models/Config";
 import Fedora from "./Fedora";
 import FedoraDataCollector from "./FedoraDataCollector";
 import MetadataExtractor from "./MetadataExtractor";
@@ -5,6 +6,7 @@ import MetadataExtractor from "./MetadataExtractor";
 describe("FedoraDataCollector", () => {
     let collector;
     beforeEach(() => {
+        Config.setInstance(new Config({}));
         collector = FedoraDataCollector.getInstance();
     });
 

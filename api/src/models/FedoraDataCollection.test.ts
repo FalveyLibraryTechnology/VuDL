@@ -1,7 +1,9 @@
+import Config from "./Config";
 import FedoraDataCollection from "./FedoraDataCollection";
 
 let fedoraData;
 beforeEach(() => {
+    Config.setInstance(new Config({}));
     fedoraData = FedoraDataCollection.build("foo:123");
 });
 
