@@ -11,7 +11,7 @@ const loginPath = "/api/auth/login";
 const authStrategy = Config.getInstance().authenticationStrategy;
 
 export function authenticate(req: Request, res: Response, next?: NextFunction): void {
-    const authMethod = passport.authenticate(authStrategy, { failureRedirect: loginPath + '?fail=true' });
+    const authMethod = passport.authenticate(authStrategy, { failureRedirect: loginPath + "?fail=true" });
     // we can switch tactics here
     if (req.header("Authorization")) {
         console.log("Authorization", req.header("Authorization"));
