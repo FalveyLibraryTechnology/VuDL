@@ -20,6 +20,23 @@ class Authentication {
         return Authentication.instance;
     }
 
+    protected getLocalStrategy(): LocalStrategy {
+        const db = Database.getInstance();
+        const passwordRequired = this.config.authenticationRequirePasswords;
+        return new LocalStrategy(async function (username, password, done) {
+            if (passwordRequired) {
+                const user = await db.getUserBy("username", username);
+                if (user?.hash === Authentication.getInstance().hashPassword(password)) {
+                    return done(null, user);
+                }
+            } else {
+                const user = await db.getOrCreateUser(username);
+                return done(null, user);
+            }
+            return done(null, false);
+        })
+    }
+
     public getSamlStrategy(): saml.Strategy {
         return new saml.Strategy(
             {
@@ -57,15 +74,7 @@ class Authentication {
 
         const authStrategy = Config.getInstance().authenticationStrategy;
         if (authStrategy === "local") {
-            passport.use(
-                new LocalStrategy(async function (username, password, done) {
-                    const user = await Database.getInstance().getUserBy("username", username);
-                    if (user?.hash === Authentication.getInstance().hashPassword(password)) {
-                        return done(null, user);
-                    }
-                    return done(null, false);
-                })
-            );
+            passport.use(this.getLocalStrategy());
         } else if (authStrategy === "saml") {
             const samlStrategy = this.getSamlStrategy();
             passport.use(samlStrategy);

@@ -72,7 +72,7 @@ function saveReferer(req, res, next) {
 }
 
 function showLoginForm(req, res) {
-    res.render("../../views/login-test");
+    res.render("../../views/login", { requirePasswords: Config.getInstance().authenticationRequirePasswords });
 }
 
 function postLoginRedirect(req, res) {

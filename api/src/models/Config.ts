@@ -193,6 +193,14 @@ class Config {
         return (this.authenticationSettings["hash_algorithm"] as string) ?? "sha1";
     }
 
+    get authenticationRequirePasswords(): boolean {
+        if (typeof this.authenticationSettings["require_passwords"] === "boolean") {
+            return this.authenticationSettings["require_passwords"];
+        }
+        const stringValue = (this.authenticationSettings["require_passwords"] as string) ?? "true";
+        return stringValue.trim().toLowerCase() !== "false";
+    }
+
     get authenticationSalt(): string {
         return (this.authenticationSettings["salt"] as string) ?? "VuDLSaltValue";
     }
