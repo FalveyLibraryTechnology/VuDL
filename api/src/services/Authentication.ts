@@ -20,7 +20,7 @@ class Authentication {
         return Authentication.instance;
     }
 
-    protected isLegalUsername(username: string): boolean {
+    public isLegalUsername(username: string): boolean {
         const legalUsers = this.config.authenticationLegalUsernames;
         // If there is no legal user list, then all users are legal:
         if (legalUsers.length === 0) {
