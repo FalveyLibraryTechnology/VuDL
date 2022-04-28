@@ -16,9 +16,7 @@ describe("index", () => {
     });
 
     it("displays a login form by default", async () => {
-        const response = await request(app)
-            .get('/auth/login')
-            .expect(StatusCodes.OK);
+        const response = await request(app).get("/auth/login").expect(StatusCodes.OK);
         expect(response.text).toContain(`<form action="/api/auth/login" method="post">`);
         expect(response.text).toContain("Username");
         expect(response.text).toContain("Password");
