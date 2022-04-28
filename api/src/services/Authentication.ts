@@ -34,7 +34,7 @@ class Authentication {
                 return done(null, user);
             }
             return done(null, false);
-        })
+        });
     }
 
     public getSamlStrategy(): saml.Strategy {
