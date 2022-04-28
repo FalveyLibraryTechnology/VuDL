@@ -122,7 +122,7 @@ class Config {
     }
 
     get allowedOrigins(): string[] {
-        return this.ini["allowed_origins"];
+        return this.ini["allowed_origins"] ?? [];
     }
 
     get pidNamespace(): string {
