@@ -7,6 +7,7 @@
     "start:workerWatch": "nodemon --watch 'vudl.ini' --watch '**/*.ts' src/worker-start.ts",
     "start:server": "ts-node src/server.ts",
     "start:worker": "ts-node src/worker-start.ts",
+    "saml:metadata": "ts-node src/saml-metadata.ts",
     "test": "jest --coverage",
     "testWatch": "jest --watch"
   },
@@ -39,7 +40,8 @@
     "needle": "^2.6.0",
     "node-tesseract-ocr": "^2.0.0",
     "passport": "^0.4.1",
-    "passport-hash": "^0.6.1",
+    "passport-local": "^1.0.0",
+    "passport-saml": "^3.2.1",
     "pdfkit": "^0.12.1",
     "sqlite3": "^5.0.2",
     "tmp": "^0.2.1",

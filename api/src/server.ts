@@ -14,7 +14,8 @@ import messengerRouter from "./routes/messenger";
 import ingestRouter from "./routes/ingest";
 import queueRouter from "./routes/queue";
 import indexRouter from "./routes/index";
-import { requireLogin, router } from "./routes/auth";
+import { requireLogin, authRouter } from "./routes/auth";
+import Authentication from "./services/Authentication";
 
 // TODO: Config?
 const sess = {
@@ -25,9 +26,10 @@ const sess = {
 
 // Passport dependencies and integration
 app.use(session(sess));
+Authentication.getInstance().initializePassport();
 
 app.use("/", indexRouter);
-app.use("/api/auth", router);
+app.use("/api/auth", authRouter);
 app.use("/api/ingest", ingestRouter);
 app.use("/api/edit", editRouter);
 app.use("/messenger", messengerRouter);

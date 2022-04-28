@@ -1,6 +1,9 @@
 # URL of React client:
 client_url = "http://localhost:3000"
 
+# Base URL of the backend code:
+backend_url = "http://localhost:9000"
+
 # Credentials for connecting to a Fedora backend:
 fedora_username = "fedoraAdmin"
 fedora_password = "fedoraAdmin"
@@ -80,6 +83,28 @@ minimum_valid_year = 1000
 articles_to_strip[] = "a "
 articles_to_strip[] = "an "
 articles_to_strip[] = "the "
+
+# Authentication settings
+[Authentication]
+# Type of authentication to use (local = local database; saml = SAML)
+strategy = local
+# Algorithm to use for hashing passwords (when strategy = local)
+hash_algorithm = sha1
+# Salt value for hashing passwords (when strategy = local)
+salt = "AnyMadeUpValueYouLike"
+# Set to false to disable passwords (and allow username-only logins) when strategy = local; recommended for testing only.
+require_passwords = true
+# SAML Entry point URL (required when strategy = saml)
+#saml_entry_point = "https://my-idp"
+# Certificate for use in SAML transactions (required when strategy = saml; must be single line)
+#saml_certificate = "MIICizCCAfQCCQCY8tKaMc0BMjANBgkqh ... W=="
+# Uncomment this list to restrict the usernames allowed to access the system; if the setting is omitted, all valid users will be accepted.
+#legal_usernames[] = "allowedUsername1"
+#legal_usernames[] = "allowedUsername2"
+
+# Defines user account(s) to be created in the database when the database is initialized:
+[Authentication.initial_users]
+admin_user = admin_password
 
 # Database settings
 [Database]

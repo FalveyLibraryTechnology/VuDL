@@ -10,7 +10,6 @@ import Database from "../services/Database";
 import FedoraDataCollection from "../models/FedoraDataCollection";
 import { FedoraObject } from "../models/FedoraObject";
 
-jest.mock("../models/Config");
 jest.mock("../services/DatastreamManager");
 
 describe("edit", () => {
@@ -20,12 +19,12 @@ describe("edit", () => {
     beforeAll(() => {
         app.use("/edit", edit);
         config = {
-            restBaseUrl: "www.test.com",
-            allowedOrigins: ["http://localhost:3000", "http://localhost:9000"],
+            base_url: "www.test.com",
+            allowed_origins: ["http://localhost:3000", "http://localhost:9000"],
         };
+        Config.setInstance(new Config(config));
         pid = "vudl:123";
         datastream = "test1";
-        jest.spyOn(Config, "getInstance").mockReturnValue(config);
     });
 
     describe("post /object/new", () => {

@@ -1,16 +1,20 @@
-<form action="/api/auth/login">
+<% if (failed) { %>
+    <p><b>Login failed; please try again.</b></p>
+<% } %>
+<form action="/api/auth/login" method="post">
     <label>
         Username
         <input type="text" name="username" />
     </label>
+    <% if (requirePasswords) { %>
     <label>
         Password
         <input type="password" name="password" />
     </label>
+    <% } else { %>
+        <input type="hidden" name="password" value="placeholder" />
+    <% } %>
     <button type="submit" class="primary">
         Submit
     </button>
-    <a class="button" href="/api/auth/user/confirm/<%=user.hash %>">
-        just log in as <%=user.username %>...
-    </a>
 </form>

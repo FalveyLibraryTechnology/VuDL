@@ -95,6 +95,7 @@ After a few moments, a new tab should automatically open in your browser pointin
 | api:build | Build api Typescript |
 | api:dev | run api server, restart server on changes |
 | api:lint | lint only the api code |
+| api:saml:metadata | output SAML SP metadata to share with an IdP |
 | api:setup | install npm dependencies in api/ |
 | api:wsl | run api server, restart on changes (use if on WSL or `api:dev` isn't working) |
 | | |

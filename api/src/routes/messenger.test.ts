@@ -5,7 +5,6 @@ import messenger from "./messenger";
 import Config from "../models/Config";
 import QueueManager from "../services/QueueManager";
 
-jest.mock("../models/Config");
 jest.mock("../services/QueueManager");
 
 describe("messenger", () => {
@@ -15,16 +14,14 @@ describe("messenger", () => {
     beforeAll(() => {
         app.use("/messenger", messenger);
         config = {
-            restBaseUrl: "www.test.com",
-            allowedOrigins: ["http://localhost:3000", "http://localhost:9000"],
+            allowed_origins: ["http://localhost:3000", "http://localhost:9000"],
         };
+        Config.setInstance(new Config(config));
         pid = "vudl:123";
         body = {
             id: `www.test.com/${pid}/MASTER`,
             type: "#Create",
         };
-
-        jest.spyOn(Config, "getInstance").mockReturnValue(config);
     });
 
     describe("/camel", () => {

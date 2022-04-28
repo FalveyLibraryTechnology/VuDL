@@ -36,6 +36,10 @@ class Config {
         Config.instance = config;
     }
 
+    get backendUrl(): string {
+        return this.ini["backend_url"] ?? "http://localhost:9000";
+    }
+
     get clientUrl(): string {
         return this.ini["client_url"];
     }
@@ -118,7 +122,7 @@ class Config {
     }
 
     get allowedOrigins(): string[] {
-        return this.ini["allowed_origins"];
+        return this.ini["allowed_origins"] ?? [];
     }
 
     get pidNamespace(): string {
@@ -175,6 +179,46 @@ class Config {
 
     get databaseConnectionSettings(): ConfigRecord {
         return (this.databaseSettings["connection"] as ConfigRecord) ?? { filename: "./data/auth.sqlite3" };
+    }
+
+    get authenticationSettings(): ConfigRecord {
+        return this.ini["Authentication"] ?? [];
+    }
+
+    get authenticationStrategy(): string {
+        return (this.authenticationSettings["strategy"] as string) ?? "local";
+    }
+
+    get authenticationHashAlgorithm(): string {
+        return (this.authenticationSettings["hash_algorithm"] as string) ?? "sha1";
+    }
+
+    get authenticationLegalUsernames(): Array<string> {
+        return (this.authenticationSettings["legal_usernames"] as Array<string>) ?? [];
+    }
+
+    get authenticationRequirePasswords(): boolean {
+        if (typeof this.authenticationSettings["require_passwords"] === "boolean") {
+            return this.authenticationSettings["require_passwords"];
+        }
+        const stringValue = (this.authenticationSettings["require_passwords"] as string) ?? "true";
+        return stringValue.trim().toLowerCase() !== "false";
+    }
+
+    get authenticationSalt(): string {
+        return (this.authenticationSettings["salt"] as string) ?? "VuDLSaltValue";
+    }
+
+    get databaseInitialUsers(): Record<string, string> {
+        return (this.authenticationSettings["initial_users"] ?? []) as Record<string, string>;
+    }
+
+    get samlCertificate(): string {
+        return (this.authenticationSettings["saml_certificate"] as string) ?? "";
+    }
+
+    get samlEntryPoint(): string {
+        return (this.authenticationSettings["saml_entry_point"] as string) ?? "";
     }
 }
 

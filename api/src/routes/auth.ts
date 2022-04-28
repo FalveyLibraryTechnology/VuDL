@@ -1,13 +1,5 @@
-/**
- * TODO: Multiple levels of permission
- * - Mint keys at user level or below
- * - Allow different levels in one easy function
- * - Three easy payments of $19.95
- */
 import { Request, Response, Router } from "express"; // Types
 import passport = require("passport");
-import hash = require("passport-hash");
-
 import Config from "../models/Config";
 import Database from "../services/Database";
 
@@ -16,41 +8,15 @@ interface NextFunction {
 }
 
 const loginPath = "/api/auth/login";
-
-passport.serializeUser(function (user, done) {
-    done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-    Database.getInstance()
-        .getUserBy("id", id)
-        .then((user) => {
-            done(null, user);
-        });
-});
-
-passport.use(
-    new hash.Strategy(function (hash, done) {
-        Database.getInstance()
-            .getUserBy("hash", hash)
-            .then((user) => {
-                done(null, user);
-            });
-    })
-);
+const authStrategy = Config.getInstance().authenticationStrategy;
 
 export function authenticate(req: Request, res: Response, next?: NextFunction): void {
-    const authMethod = passport.authenticate("hash", { failureRedirect: loginPath });
-    // we can switch tactics here
-    if (req.header("Authorization")) {
-        console.log("Authorization", req.header("Authorization"));
-    }
+    const authMethod = passport.authenticate(authStrategy, { failureRedirect: loginPath + "?fail=true" });
     authMethod(req, res, next);
 }
 
 function saveSessionReferer(req: Request) {
     req.session.referer = req.originalUrl;
-    console.log("< save login referral: " + req.session.referer);
 }
 
 export function requireLogin(req: Request, res: Response, next?: NextFunction): void {
@@ -75,16 +41,15 @@ export async function requireToken(req: Request, res: Response, next?: NextFunct
 }
 
 // Express session settings
-export const router = Router();
-router.use(passport.initialize());
-router.use(passport.session());
+export const authRouter = Router();
+authRouter.use(passport.initialize());
+authRouter.use(passport.session());
 
 // Debug sessions
-router.use(function (req, res, next) {
+authRouter.use(function (req, res, next) {
     if (req.method === "OPTIONS") {
         return next();
     }
-    console.log(`${req.originalUrl} (Session: ${req.sessionID})`);
     for (const key in req.session) {
         if (key == "cookie") {
             continue;
@@ -93,36 +58,47 @@ router.use(function (req, res, next) {
     next();
 });
 
-router.get("/login", async function (req, res) {
+function saveReferer(req, res, next) {
     if (req.query.referer ?? false) {
         req.session.referer = req.query.referer;
     }
-    const user = await Database.getInstance().getUserBy("username", "chris");
-    res.render("../../views/login-test", { user });
-});
+    next();
+}
 
-router.get("/logout", function (req, res) {
+function showLoginForm(req, res) {
+    const requirePasswords = Config.getInstance().authenticationRequirePasswords;
+    const failed = (req.query.fail ?? "").length > 0;
+    res.render("../../views/login", { requirePasswords, failed });
+}
+
+function postLoginRedirect(req, res) {
+    const referral = req.query.referer ?? req.session.referer;
+    res.redirect(referral ?? Config.getInstance().clientUrl);
+    req.session.referer = null;
+}
+
+// We have a different login flow depending on whether or not there's a login screen...
+const loginFlow =
+    authStrategy === "saml" ? [saveReferer, authenticate, postLoginRedirect] : [saveReferer, showLoginForm];
+authRouter.get("/login", ...loginFlow);
+
+// Use passport.authenticate() as route middleware to authenticate the
+// request.  If authentication fails, the user will be redirected back to the
+// login page.  Otherwise, the primary route function will be called,
+// which, in this example, will redirect the user to the referring URL.
+authRouter.post("/login", authenticate, postLoginRedirect);
+
+authRouter.get("/logout", function (req, res) {
     req.logout();
     res.redirect(Config.getInstance().clientUrl);
 });
 
-// Use passport.authenticate() as route middleware to authenticate the
-// request.  If authentication fails, the user will be redirected back to the
-// login page.  Otherwise, the primary route function function will be called,
-// which, in this example, will redirect the user to the home page.
-router.get("/user/confirm/:hash", authenticate, function (req: Request, res: Response) {
-    const referral = req.query.referer ?? req.session.referer;
-    console.log("> goto login referral: " + referral);
-    res.redirect(referral ?? Config.getInstance().clientUrl);
-    req.session.referer = null;
-});
-
-router.get("/token/confirm/:token", async function (req: Request, res: Response) {
+authRouter.get("/token/confirm/:token", async function (req: Request, res: Response) {
     const isGood = await Database.getInstance().confirmToken(req.params.token);
     res.sendStatus(isGood ? 200 : 401);
 });
 
-router.get("/token/mint", async function (req: Request, res: Response) {
+authRouter.get("/token/mint", async function (req: Request, res: Response) {
     if (!req.user) {
         return res.sendStatus(401);
     }
