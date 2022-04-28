@@ -193,6 +193,10 @@ class Config {
         return (this.authenticationSettings["hash_algorithm"] as string) ?? "sha1";
     }
 
+    get authenticationSalt(): string {
+        return (this.authenticationSettings["salt"] as string) ?? "VuDLSaltValue";
+    }
+
     get databaseInitialUsers(): Record<string, string> {
         return (this.authenticationSettings["initial_users"] ?? []) as Record<string, string>;
     }
