@@ -5,13 +5,9 @@ import { useEditorContext } from "../../context/EditorContext";
 
 const ObjectSummary = (): React.ReactElement => {
     const {
-        state: { currentPid, loading },
-        action: { extractFirstMetadataValue, getCurrentObjectDetails },
+        state: { loading },
+        action: { extractFirstMetadataValue },
     } = useEditorContext();
-
-    useEffect(() => {
-        getCurrentObjectDetails();
-    }, [currentPid]);
 
     const title = loading ? "Loading..." : extractFirstMetadataValue("dc:title", "Title not available");
     const description = extractFirstMetadataValue("dc:description", "");

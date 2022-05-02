@@ -20,7 +20,6 @@ describe("ObjectSummary", () => {
                 loading: false,
             },
             action: {
-                getCurrentObjectDetails: jest.fn(),
                 extractFirstMetadataValue: jest.fn(),
             },
         };

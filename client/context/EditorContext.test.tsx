@@ -112,7 +112,7 @@ describe("useEditorContext", () => {
         });
     });
 
-    describe("getCurrentObjectDetails", () => {
+    describe("loadCurrentObjectDetails", () => {
         it("calls the current object details request", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
@@ -146,7 +146,7 @@ describe("useEditorContext", () => {
             });
 
             await act(async () => {
-                await result.current.action.getCurrentObjectDetails();
+                await result.current.action.loadCurrentObjectDetails();
             });
 
             expect(fetchValues.action.fetchJSON).toHaveBeenCalled();
@@ -163,7 +163,7 @@ describe("useEditorContext", () => {
             });
 
             await act(async () => {
-                await result.current.action.getCurrentObjectDetails();
+                await result.current.action.loadCurrentObjectDetails();
             });
 
             expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("Problem fetching object details"));
@@ -212,7 +212,7 @@ describe("useEditorContext", () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
             await act(async () => {
                 await result.current.action.setCurrentPid("test:123");
-                await result.current.action.getCurrentObjectDetails();
+                await result.current.action.loadCurrentObjectDetails();
             });
             expect(result.current.action.extractFirstMetadataValue("field", "default")).toEqual("foo");
         });

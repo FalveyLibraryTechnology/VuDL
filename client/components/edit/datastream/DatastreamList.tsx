@@ -5,13 +5,8 @@ import { useEditorContext } from "../../../context/EditorContext";
 
 const DatastreamList = (): React.ReactElement => {
     const {
-        state: { currentPid, modelsCatalog, modelsDatastreams },
-        action: { getCurrentObjectDetails },
+        state: { modelsDatastreams },
     } = useEditorContext();
-
-    useEffect(() => {
-        getCurrentObjectDetails();
-    }, [currentPid, modelsCatalog]);
 
     return (
         <List>

@@ -46,7 +46,7 @@ describe("useDatastreamOperation", () => {
             action: {
                 setSnackbarState: jest.fn(),
                 toggleDatastreamModal: jest.fn(),
-                getCurrentObjectDetails: jest.fn()
+                loadCurrentObjectDetails: jest.fn()
             },
         };
         mockUseFetchContext.mockReturnValue(fetchValues);
@@ -70,7 +70,7 @@ describe("useDatastreamOperation", () => {
                     body: expect.any(FormData),
                 })
             );
-            expect(editorValues.action.getCurrentObjectDetails).toHaveBeenCalled();
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload worked",
@@ -121,7 +121,7 @@ describe("useDatastreamOperation", () => {
                     method: "DELETE",
                 })
             );
-            expect(editorValues.action.getCurrentObjectDetails).toHaveBeenCalled();
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,

@@ -195,18 +195,24 @@ export const useEditorContext = () => {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
         }
     };
-    const getCurrentObjectDetails = async () => {
+    const loadObjectDetails = async (pid: string) => {
         try {
-            const response = currentPid === null ?
+            setLoading(true);
+            setCurrentPid(pid);
+            const response = pid === null ?
                 {} :
-                (await fetchJSON(getObjectDetailsUrl(currentPid)));
+                (await fetchJSON(getObjectDetailsUrl(pid)));
             setCurrentMetadata(response.metadata || {});
             setCurrentModels(response.models || []);
             setCurrentDatastreams(response.datastreams || []);
             setLoading(false);
         } catch(err) {
-            console.error("Problem fetching object details from " + getObjectDetailsUrl(currentPid));
+            console.error("Problem fetching object details from " + getObjectDetailsUrl(pid));
         }
+    };
+
+    const loadCurrentObjectDetails = async () => {
+        return await loadObjectDetails(currentPid);
     };
 
     const extractFirstMetadataValue = function (field: string, defaultValue: string) {
@@ -229,7 +235,8 @@ export const useEditorContext = () => {
         action: {
             initializeModelsCatalog,
             setCurrentPid,
-            getCurrentObjectDetails,
+            loadObjectDetails,
+            loadCurrentObjectDetails,
             setActiveDatastream,
             setDatastreamModalState,
             toggleDatastreamModal,

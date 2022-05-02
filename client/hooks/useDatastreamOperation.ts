@@ -8,7 +8,7 @@ const useDatastreamOperation = () => {
     } = useFetchContext();
     const {
         state: { currentPid, activeDatastream, datastreamsCatalog },
-        action: { setSnackbarState, toggleDatastreamModal, getCurrentObjectDetails },
+        action: { setSnackbarState, toggleDatastreamModal, loadCurrentObjectDetails },
     } = useEditorContext();
 
     const isAllowedMimeType = (mimeType) => {
@@ -34,7 +34,7 @@ const useDatastreamOperation = () => {
                 method: "POST",
                 body,
             });
-            await getCurrentObjectDetails();
+            await loadCurrentObjectDetails();
             setSnackbarState({
                 open: true,
                 message: text,
@@ -56,7 +56,7 @@ const useDatastreamOperation = () => {
             const text = await fetchText(deleteObjectDatastreamUrl(currentPid, activeDatastream), {
                 method: "DELETE",
             });
-            await getCurrentObjectDetails();
+            await loadCurrentObjectDetails();
             setSnackbarState({
                 open: true,
                 message: text,
