@@ -1,12 +1,13 @@
 import * as request from "supertest";
 import { StatusCodes } from "http-status-codes";
 import app from "../app";
-import { authRouter } from "./auth";
+import { getAuthRouter } from "./auth";
 import Config from "../models/Config";
 
 describe("index", () => {
     beforeAll(() => {
-        app.use("/auth", authRouter);
+        Config.setInstance(new Config({}));
+        app.use("/auth", getAuthRouter());
     });
     beforeEach(() => {
         Config.setInstance(new Config({}));
