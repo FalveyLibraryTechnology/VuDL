@@ -2,7 +2,7 @@ import fs = require("fs");
 import winston = require("winston");
 import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
-import MetadataExtractor from "../services/MetadataExtractor";
+import FedoraDataCollector from "../services/FedoraDataCollector";
 import { execSync } from "child_process";
 
 export interface ObjectParameters {
@@ -24,20 +24,20 @@ export class FedoraObject {
     protected config: Config;
     protected fedora: Fedora;
     protected logger: winston.Logger;
-    protected metadataExtractor: MetadataExtractor;
+    protected fedoraDataCollector: FedoraDataCollector;
 
     constructor(
         pid: string,
         config: Config,
         fedora: Fedora,
-        metadataExtractor: MetadataExtractor,
+        fedoraDataCollector: FedoraDataCollector,
         logger: winston.Logger = null
     ) {
         this.pid = pid;
         this.config = config;
         this.fedora = fedora;
         this.logger = logger;
-        this.metadataExtractor = metadataExtractor;
+        this.fedoraDataCollector = fedoraDataCollector;
     }
 
     public static build(pid: string, logger: winston.Logger = null, config: Config = null): FedoraObject {
@@ -45,7 +45,7 @@ export class FedoraObject {
             pid,
             config ?? Config.getInstance(),
             Fedora.getInstance(),
-            MetadataExtractor.getInstance(),
+            FedoraDataCollector.getInstance(),
             logger
         );
     }
@@ -214,14 +214,6 @@ export class FedoraObject {
     }
 
     async getSort(): Promise<string> {
-        let sort = "title"; // default
-        const rdf = await this.fedora.getRdf(this.pid);
-        if (rdf.length > 0) {
-            const details = this.metadataExtractor.extractFedoraDetails(rdf);
-            if ((details?.sortOn ?? []).length > 0) {
-                sort = details.sortOn[0];
-            }
-        }
-        return sort;
+        return (await this.fedoraDataCollector.getObjectData(this.pid)).sort;
     }
 }

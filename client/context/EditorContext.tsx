@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { editObjectCatalogUrl, getObjectModelsDatastreamsUrl } from "../util/routes";
+import { editObjectCatalogUrl, getObjectDetailsUrl } from "../util/routes";
 import { useFetchContext } from "./FetchContext";
 
 interface SnackbarState {
@@ -177,11 +177,11 @@ export const useEditorContext = () => {
         try {
             const response = currentPid === null ?
                 {} :
-                (await fetchJSON(getObjectModelsDatastreamsUrl(currentPid)));
+                (await fetchJSON(getObjectDetailsUrl(currentPid)));
             setCurrentModels(response.models || []);
             setCurrentDatastreams(response.datastreams || []);
         } catch(err) {
-            console.error("Problem fetching object models and datastreams from " + getObjectModelsDatastreamsUrl(currentPid));
+            console.error("Problem fetching object models and datastreams from " + getObjectDetailsUrl(currentPid));
         }
     };
 
