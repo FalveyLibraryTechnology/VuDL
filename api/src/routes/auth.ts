@@ -8,10 +8,11 @@ interface NextFunction {
 }
 
 const loginPath = "/api/auth/login";
-const authStrategy = Config.getInstance().authenticationStrategy;
 
 export function authenticate(req: Request, res: Response, next?: NextFunction): void {
-    const authMethod = passport.authenticate(authStrategy, { failureRedirect: loginPath + "?fail=true" });
+    const authMethod = passport.authenticate(Config.getInstance().authenticationStrategy, {
+        failureRedirect: loginPath + "?fail=true",
+    });
     authMethod(req, res, next);
 }
 
@@ -41,68 +42,73 @@ export async function requireToken(req: Request, res: Response, next?: NextFunct
 }
 
 // Express session settings
-export const authRouter = Router();
-authRouter.use(passport.initialize());
-authRouter.use(passport.session());
+export function getAuthRouter(): Router {
+    const authRouter = Router();
+    authRouter.use(passport.initialize());
+    authRouter.use(passport.session());
 
-// Debug sessions
-authRouter.use(function (req, res, next) {
-    if (req.method === "OPTIONS") {
-        return next();
-    }
-    for (const key in req.session) {
-        if (key == "cookie") {
-            continue;
+    // Debug sessions
+    authRouter.use(function (req, res, next) {
+        if (req.method === "OPTIONS") {
+            return next();
         }
+        for (const key in req.session) {
+            if (key == "cookie") {
+                continue;
+            }
+        }
+        next();
+    });
+
+    function saveReferer(req, res, next) {
+        if (req.query.referer ?? false) {
+            req.session.referer = req.query.referer;
+        }
+        next();
     }
-    next();
-});
 
-function saveReferer(req, res, next) {
-    if (req.query.referer ?? false) {
-        req.session.referer = req.query.referer;
+    function showLoginForm(req, res) {
+        const requirePasswords = Config.getInstance().authenticationRequirePasswords;
+        const failed = (req.query.fail ?? "").length > 0;
+        res.render("../../views/login", { requirePasswords, failed });
     }
-    next();
-}
 
-function showLoginForm(req, res) {
-    const requirePasswords = Config.getInstance().authenticationRequirePasswords;
-    const failed = (req.query.fail ?? "").length > 0;
-    res.render("../../views/login", { requirePasswords, failed });
-}
-
-function postLoginRedirect(req, res) {
-    const referral = req.query.referer ?? req.session.referer;
-    res.redirect(referral ?? Config.getInstance().clientUrl);
-    req.session.referer = null;
-}
-
-// We have a different login flow depending on whether or not there's a login screen...
-const loginFlow =
-    authStrategy === "saml" ? [saveReferer, authenticate, postLoginRedirect] : [saveReferer, showLoginForm];
-authRouter.get("/login", ...loginFlow);
-
-// Use passport.authenticate() as route middleware to authenticate the
-// request.  If authentication fails, the user will be redirected back to the
-// login page.  Otherwise, the primary route function will be called,
-// which, in this example, will redirect the user to the referring URL.
-authRouter.post("/login", authenticate, postLoginRedirect);
-
-authRouter.get("/logout", function (req, res) {
-    req.logout();
-    res.redirect(Config.getInstance().clientUrl);
-});
-
-authRouter.get("/token/confirm/:token", async function (req: Request, res: Response) {
-    const isGood = await Database.getInstance().confirmToken(req.params.token);
-    res.sendStatus(isGood ? 200 : 401);
-});
-
-authRouter.get("/token/mint", async function (req: Request, res: Response) {
-    if (!req.user) {
-        return res.sendStatus(401);
+    function postLoginRedirect(req, res) {
+        const referral = req.query.referer ?? req.session.referer;
+        res.redirect(referral ?? Config.getInstance().clientUrl);
+        req.session.referer = null;
     }
-    const token = await Database.getInstance().makeToken(req.user);
-    req.session.token = token;
-    res.json(token);
-});
+
+    // We have a different login flow depending on whether or not there's a login screen...
+    const loginFlow =
+        Config.getInstance().authenticationStrategy === "saml"
+            ? [saveReferer, authenticate, postLoginRedirect]
+            : [saveReferer, showLoginForm];
+    authRouter.get("/login", ...loginFlow);
+
+    // Use passport.authenticate() as route middleware to authenticate the
+    // request.  If authentication fails, the user will be redirected back to the
+    // login page.  Otherwise, the primary route function will be called,
+    // which, in this example, will redirect the user to the referring URL.
+    authRouter.post("/login", authenticate, postLoginRedirect);
+
+    authRouter.get("/logout", function (req, res) {
+        req.logout();
+        res.redirect(Config.getInstance().clientUrl);
+    });
+
+    authRouter.get("/token/confirm/:token", async function (req: Request, res: Response) {
+        const isGood = await Database.getInstance().confirmToken(req.params.token);
+        res.sendStatus(isGood ? 200 : 401);
+    });
+
+    authRouter.get("/token/mint", async function (req: Request, res: Response) {
+        if (!req.user) {
+            return res.sendStatus(401);
+        }
+        const token = await Database.getInstance().makeToken(req.user);
+        req.session.token = token;
+        res.json(token);
+    });
+    return authRouter;
+}
