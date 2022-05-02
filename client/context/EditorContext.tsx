@@ -14,11 +14,13 @@ interface SnackbarState {
 const editorContextParams = {
     modelsCatalog: {},
     currentPid: null,
+    currentMetadata: {},
     currentModels: [],
     currentDatastreams: [],
     activeDatastream: null,
     isDatastreamModalOpen: false,
     datastreamModalState: null,
+    loading: true,
     snackbarState: {
         open: false,
         message: "",
@@ -40,12 +42,14 @@ const EditorContext = createContext({});
 const reducerMapping = {
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_PID: "currentPid",
+    SET_CURRENT_METADATA: "currentMetadata",
     SET_CURRENT_MODELS: "currentModels",
     SET_CURRENT_DATASTREAMS: "currentDatastreams",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
     SET_DATASTREAM_MODAL_STATE: "datastreamModalState",
-    SET_SNACKBAR_STATE: "snackbarState"
+    SET_SNACKBAR_STATE: "snackbarState",
+    SET_LOADING: "loading"
 };
 /**
  * Update the shared states of react components.
@@ -77,11 +81,13 @@ export const useEditorContext = () => {
     const {
         state: {
             currentPid,
+            currentMetadata,
             currentModels,
             currentDatastreams,
             activeDatastream,
             isDatastreamModalOpen,
             datastreamModalState,
+            loading,
             modelsCatalog,
             snackbarState
         },
@@ -109,10 +115,19 @@ export const useEditorContext = () => {
         });
     };
 
-    const setCurrentPid = (pid) => {
+    const setCurrentPid = (pid: string) => {
+        // When we change the PID, we should flip to "loading..." status to prevent confusing displays:
+        setLoading(true);
         dispatch({
             type: "SET_CURRENT_PID",
             payload: pid
+        });
+    };
+
+    const setCurrentMetadata = (metadata) => {
+        dispatch({
+            type: "SET_CURRENT_METADATA",
+            payload: metadata
         });
     };
 
@@ -158,6 +173,13 @@ export const useEditorContext = () => {
         });
     };
 
+    const setLoading = (state: boolean) => {
+        dispatch({
+            type: "SET_LOADING",
+            payload: state
+        });
+    };
+
     const datastreamsCatalog = Object.values(modelsCatalog).reduce((acc, model) => {
         return {
             ...acc,
@@ -173,17 +195,24 @@ export const useEditorContext = () => {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
         }
     };
-    const getCurrentModelsDatastreams = async () => {
+    const getCurrentObjectDetails = async () => {
         try {
             const response = currentPid === null ?
                 {} :
                 (await fetchJSON(getObjectDetailsUrl(currentPid)));
+            setCurrentMetadata(response.metadata || {});
             setCurrentModels(response.models || []);
             setCurrentDatastreams(response.datastreams || []);
+            setLoading(false);
         } catch(err) {
-            console.error("Problem fetching object models and datastreams from " + getObjectDetailsUrl(currentPid));
+            console.error("Problem fetching object details from " + getObjectDetailsUrl(currentPid));
         }
     };
+
+    const extractFirstMetadataValue = function (field: string, defaultValue: string) {
+        const values = typeof currentMetadata[field] === "undefined" ? [] : currentMetadata[field];
+        return values.length > 0 ? values[0] : defaultValue;
+    }
 
     return {
         state: {
@@ -194,16 +223,18 @@ export const useEditorContext = () => {
             datastreamsCatalog,
             modelsDatastreams,
             modelsCatalog,
+            loading,
             snackbarState
         },
         action: {
             initializeModelsCatalog,
             setCurrentPid,
-            getCurrentModelsDatastreams,
+            getCurrentObjectDetails,
             setActiveDatastream,
             setDatastreamModalState,
             toggleDatastreamModal,
-            setSnackbarState
+            setSnackbarState,
+            extractFirstMetadataValue
         },
     };
 }

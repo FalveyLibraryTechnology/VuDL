@@ -23,7 +23,7 @@ describe("DatastreamDeleteModalContent", () => {
                 activeDatastream: "THUMBNAIL",
             },
             action: {
-                getCurrentModelsDatastreams: jest.fn().mockResolvedValue({}),
+                getCurrentObjectDetails: jest.fn().mockResolvedValue({}),
                 setSnackbarState: jest.fn(),
                 toggleDatastreamModal: jest.fn(),
             },

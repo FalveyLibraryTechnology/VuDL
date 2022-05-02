@@ -1,62 +1,49 @@
 import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import ObjectSummary from "./ObjectSummary";
-import { FetchContextProvider } from "../../context/FetchContext";
+
+const mockUseEditorContext = jest.fn();
+jest.mock("../../context/EditorContext", () => ({
+    useEditorContext: () => {
+        return mockUseEditorContext();
+    },
+}));
 
 describe("ObjectSummary", () => {
-    let props;
-    let lastRequestUrl;
-    let apiResponse;
-
+    let editorValues;
     beforeEach(() => {
-        props = {
-            pid: "foo:123",
+        editorValues = {
+            state: {
+                currentPid: "foo:123",
+                loading: false,
+            },
+            action: {
+                getCurrentObjectDetails: jest.fn(),
+                extractFirstMetadataValue: jest.fn(),
+            },
         };
-        apiResponse = {
-            pid: "foo:123",
-            sort: "title",
-            metadata: [],
-        };
-        global.fetch = jest.fn((url) => {
-            lastRequestUrl = url;
-            return {
-                ok: true,
-                status: 200,
-                json: async function () {
-                    return apiResponse;
-                },
-            };
-        });
+        mockUseEditorContext.mockReturnValue(editorValues);
     });
 
-    it("renders defaults when no metadata is present", async () => {
-        const wrapper = mount(
-            <FetchContextProvider>
-                <ObjectSummary {...props} />
-            </FetchContextProvider>
-        );
-        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
+    it("displays loading message when appropriate", async () => {
+        editorValues.state.loading = true;
+        jest.spyOn(editorValues.action, "extractFirstMetadataValue").mockReturnValue("");
+        const wrapper = mount(<ObjectSummary />);
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it("renders information from metadata when available", async () => {
-        apiResponse.metadata = {
-            "dc:title": ["My title"],
-            "dc:description": ["<p>Hello <b>world</b>!</p>"],
-        };
-        const wrapper = mount(
-            <FetchContextProvider>
-                <ObjectSummary {...props} />
-            </FetchContextProvider>
-        );
-        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
+        const metaSpy = jest.spyOn(editorValues.action, "extractFirstMetadataValue")
+            .mockReturnValueOnce("My title")
+            .mockReturnValueOnce("<p>Hello <b>world</b>!</p>");
+        const wrapper = mount(<ObjectSummary />);
         wrapper.update();
+        expect(metaSpy).toHaveBeenCalledTimes(2);
+        expect(metaSpy).toHaveBeenNthCalledWith(1, "dc:title", "Title not available");
+        expect(metaSpy).toHaveBeenNthCalledWith(2, "dc:description", "");
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 });
