@@ -43,6 +43,7 @@ describe("FedoraObject", () => {
     describe("getSort", () => {
         it("defaults to title", async () => {
             const fedora = Fedora.getInstance();
+            jest.spyOn(fedora, "getDublinCore").mockResolvedValue(null);
             jest.spyOn(fedora, "getRdf").mockResolvedValue("<rdf />");
             fedoraObject = FedoraObject.build(pid);
             expect(await fedoraObject.getSort()).toEqual("title");
