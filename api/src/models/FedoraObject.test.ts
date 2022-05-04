@@ -40,13 +40,13 @@ describe("FedoraObject", () => {
         });
     });
 
-    describe("getSort", () => {
+    describe("getSortOn", () => {
         it("defaults to title", async () => {
             const fedora = Fedora.getInstance();
             jest.spyOn(fedora, "getDublinCore").mockResolvedValue(null);
             jest.spyOn(fedora, "getRdf").mockResolvedValue("<rdf />");
             fedoraObject = FedoraObject.build(pid);
-            expect(await fedoraObject.getSort()).toEqual("title");
+            expect(await fedoraObject.getSortOn()).toEqual("title");
         });
 
         it("uses the data collector to obtain sort data", async () => {
@@ -54,7 +54,7 @@ describe("FedoraObject", () => {
             const collection = FedoraDataCollection.build(pid, {}, { sortOn: ["custom"] });
             const collectorSpy = jest.spyOn(collector, "getObjectData").mockResolvedValue(collection);
             fedoraObject = FedoraObject.build(pid);
-            expect(await fedoraObject.getSort()).toEqual("custom");
+            expect(await fedoraObject.getSortOn()).toEqual("custom");
             expect(collectorSpy).toHaveBeenCalledTimes(1);
             expect(collectorSpy).toHaveBeenCalledWith(pid);
         });

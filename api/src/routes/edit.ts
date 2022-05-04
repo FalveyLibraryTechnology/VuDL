@@ -128,9 +128,9 @@ edit.get("/topLevelObjects", requireToken, getChildren);
 edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
 edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
     try {
-        const { fedoraDatastreams, metadata, models, pid, sort } =
+        const { fedoraDatastreams, metadata, models, pid, sortOn } =
             await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
-        res.json({ datastreams: fedoraDatastreams, metadata, models, pid, sort });
+        res.json({ datastreams: fedoraDatastreams, metadata, models, pid, sortOn });
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);

@@ -213,7 +213,7 @@ export class FedoraObject {
         }
     }
 
-    async getSort(): Promise<string> {
-        return (await this.fedoraDataCollector.getObjectData(this.pid)).sort;
+    async getSortOn(): Promise<string> {
+        return (await this.fedoraDataCollector.getObjectData(this.pid)).sortOn;
     }
 }

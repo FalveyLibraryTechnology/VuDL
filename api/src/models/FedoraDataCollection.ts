@@ -172,7 +172,7 @@ class FedoraDataCollection {
         return this.fedoraDetails.sequence ?? [];
     }
 
-    get sort(): string {
+    get sortOn(): string {
         if ((this.fedoraDetails?.sortOn ?? []).length > 0) {
             return this.fedoraDetails.sortOn[0];
         }
