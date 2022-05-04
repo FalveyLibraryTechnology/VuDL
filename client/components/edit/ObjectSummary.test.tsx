@@ -35,7 +35,8 @@ describe("ObjectSummary", () => {
     });
 
     it("renders information from metadata when available", async () => {
-        const metaSpy = jest.spyOn(editorValues.action, "extractFirstMetadataValue")
+        const metaSpy = jest
+            .spyOn(editorValues.action, "extractFirstMetadataValue")
             .mockReturnValueOnce("My title")
             .mockReturnValueOnce("<p>Hello <b>world</b>!</p>");
         const wrapper = mount(<ObjectSummary />);

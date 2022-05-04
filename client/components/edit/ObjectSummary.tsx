@@ -1,5 +1,5 @@
 import styles from "./ObjectSummary.module.css";
-import React, { useEffect } from "react";
+import React from "react";
 import HtmlReactParser from "html-react-parser";
 import { useEditorContext } from "../../context/EditorContext";
 

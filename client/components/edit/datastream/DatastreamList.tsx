@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Datastream from "./Datastream";
 import List from "@mui/material/List";
 import { useEditorContext } from "../../../context/EditorContext";
