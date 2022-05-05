@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { editObjectCatalogUrl, getObjectModelsDatastreamsUrl } from "../util/routes";
+import { editObjectCatalogUrl, getObjectDetailsUrl } from "../util/routes";
 import { useFetchContext } from "./FetchContext";
 
 interface SnackbarState {
@@ -13,12 +13,15 @@ interface SnackbarState {
  */
 const editorContextParams = {
     modelsCatalog: {},
+    licensesCatalog: {},
     currentPid: null,
+    currentMetadata: {},
     currentModels: [],
     currentDatastreams: [],
     activeDatastream: null,
     isDatastreamModalOpen: false,
     datastreamModalState: null,
+    loading: true,
     snackbarState: {
         open: false,
         message: "",
@@ -29,7 +32,7 @@ const editorContextParams = {
 export const DatastreamModalStates = {
     UPLOAD: "Upload",
     VIEW: "View",
-    // METADATA: "Metadata",
+    METADATA: "Metadata",
     DOWNLOAD: "Download",
     DELETE: "Delete"
 };
@@ -38,14 +41,17 @@ export const DatastreamModalStates = {
 const EditorContext = createContext({});
 
 const reducerMapping = {
+    SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_PID: "currentPid",
+    SET_CURRENT_METADATA: "currentMetadata",
     SET_CURRENT_MODELS: "currentModels",
     SET_CURRENT_DATASTREAMS: "currentDatastreams",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
     SET_DATASTREAM_MODAL_STATE: "datastreamModalState",
-    SET_SNACKBAR_STATE: "snackbarState"
+    SET_SNACKBAR_STATE: "snackbarState",
+    SET_LOADING: "loading"
 };
 /**
  * Update the shared states of react components.
@@ -77,12 +83,15 @@ export const useEditorContext = () => {
     const {
         state: {
             currentPid,
+            currentMetadata,
             currentModels,
             currentDatastreams,
             activeDatastream,
             isDatastreamModalOpen,
             datastreamModalState,
+            licensesCatalog,
             modelsCatalog,
+            loading,
             snackbarState
         },
         dispatch,
@@ -109,10 +118,26 @@ export const useEditorContext = () => {
         });
     };
 
-    const setCurrentPid = (pid) => {
+    const setLicensesCatalog = (licensesCatalog) => {
+        dispatch({
+            type: "SET_LICENSES_CATALOG",
+            payload: licensesCatalog
+        });
+    };
+
+    const setCurrentPid = (pid: string) => {
+        // When we change the PID, we should flip to "loading..." status to prevent confusing displays:
+        setLoading(true);
         dispatch({
             type: "SET_CURRENT_PID",
             payload: pid
+        });
+    };
+
+    const setCurrentMetadata = (metadata) => {
+        dispatch({
+            type: "SET_CURRENT_METADATA",
+            payload: metadata
         });
     };
 
@@ -158,6 +183,13 @@ export const useEditorContext = () => {
         });
     };
 
+    const setLoading = (state: boolean) => {
+        dispatch({
+            type: "SET_LOADING",
+            payload: state
+        });
+    };
+
     const datastreamsCatalog = Object.values(modelsCatalog).reduce((acc, model) => {
         return {
             ...acc,
@@ -165,45 +197,64 @@ export const useEditorContext = () => {
         };
     }, {});
 
-    const initializeModelsCatalog = async () => {
+    const initializeCatalog = async () => {
         try {
             const response = await fetchJSON(editObjectCatalogUrl);
             setModelsCatalog(response.models || {});
+            setLicensesCatalog(response.licenses || {});
         } catch(err) {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
         }
     };
-    const getCurrentModelsDatastreams = async () => {
+    const loadObjectDetails = async (pid: string) => {
         try {
-            const response = currentPid === null ?
+            setLoading(true);
+            setCurrentPid(pid);
+            const response = pid === null ?
                 {} :
-                (await fetchJSON(getObjectModelsDatastreamsUrl(currentPid)));
+                (await fetchJSON(getObjectDetailsUrl(pid)));
+            setCurrentMetadata(response.metadata || {});
             setCurrentModels(response.models || []);
             setCurrentDatastreams(response.datastreams || []);
+            setLoading(false);
         } catch(err) {
-            console.error("Problem fetching object models and datastreams from " + getObjectModelsDatastreamsUrl(currentPid));
+            console.error("Problem fetching object details from " + getObjectDetailsUrl(pid));
         }
     };
+
+    const loadCurrentObjectDetails = async () => {
+        return await loadObjectDetails(currentPid);
+    };
+
+    const extractFirstMetadataValue = function (field: string, defaultValue: string) {
+        const values = typeof currentMetadata[field] === "undefined" ? [] : currentMetadata[field];
+        return values.length > 0 ? values[0] : defaultValue;
+    }
 
     return {
         state: {
             currentPid,
+            currentDatastreams,
             activeDatastream,
             isDatastreamModalOpen,
             datastreamModalState,
             datastreamsCatalog,
             modelsDatastreams,
             modelsCatalog,
+            licensesCatalog,
+            loading,
             snackbarState
         },
         action: {
-            initializeModelsCatalog,
+            initializeCatalog,
             setCurrentPid,
-            getCurrentModelsDatastreams,
+            loadObjectDetails,
+            loadCurrentObjectDetails,
             setActiveDatastream,
             setDatastreamModalState,
             toggleDatastreamModal,
-            setSnackbarState
+            setSnackbarState,
+            extractFirstMetadataValue
         },
     };
 }

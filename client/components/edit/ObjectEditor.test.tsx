@@ -22,8 +22,8 @@ describe("ObjectEditor", () => {
     beforeEach(() => {
         editorValues = {
             action: {
-                setCurrentPid: jest.fn(),
-                initializeModelsCatalog: jest.fn(),
+                initializeCatalog: jest.fn(),
+                loadObjectDetails: jest.fn(),
             },
         };
         mockUseEditorContext.mockReturnValue(editorValues);
@@ -33,8 +33,9 @@ describe("ObjectEditor", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("calls initializeModelsCatalog", () => {
+    it("calls initializeCatalog", () => {
         mount(<ObjectEditor pid="foo:123" />);
-        expect(editorValues.action.initializeModelsCatalog).toHaveBeenCalled();
+        expect(editorValues.action.initializeCatalog).toHaveBeenCalled();
+        expect(editorValues.action.loadObjectDetails).toHaveBeenCalledWith("foo:123");
     });
 });

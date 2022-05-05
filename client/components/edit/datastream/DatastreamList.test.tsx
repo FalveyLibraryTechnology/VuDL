@@ -23,9 +23,6 @@ describe("DatastreamList", () => {
             state: {
                 modelsDatastreams: ["test1"],
             },
-            action: {
-                getCurrentModelsDatastreams: jest.fn(),
-            },
         };
         mockUseEditorContext.mockReturnValue(editorValues);
     });
@@ -36,6 +33,5 @@ describe("DatastreamList", () => {
         expect(mockDatastream).toHaveBeenCalledWith({
             datastream: "test1",
         });
-        expect(editorValues.action.getCurrentModelsDatastreams).toHaveBeenCalled();
     });
 });

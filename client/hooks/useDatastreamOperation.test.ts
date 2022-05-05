@@ -18,10 +18,12 @@ describe("useDatastreamOperation", () => {
     let fetchValues;
     let editorValues;
     let currentPid;
+    let currentDatastreams;
     let activeDatastream;
     let datastreamsCatalog;
     beforeEach(() => {
         currentPid =  "vudl:123";
+        currentDatastreams = ["THUMBNAIL", "testDatastream"];
         activeDatastream = "THUMBNAIL";
         datastreamsCatalog = {
             THUMBNAIL: {
@@ -40,13 +42,14 @@ describe("useDatastreamOperation", () => {
         editorValues = {
             state: {
                 currentPid,
+                currentDatastreams,
                 activeDatastream,
                 datastreamsCatalog
             },
             action: {
                 setSnackbarState: jest.fn(),
                 toggleDatastreamModal: jest.fn(),
-                getCurrentModelsDatastreams: jest.fn()
+                loadCurrentObjectDetails: jest.fn()
             },
         };
         mockUseFetchContext.mockReturnValue(fetchValues);
@@ -70,7 +73,7 @@ describe("useDatastreamOperation", () => {
                     body: expect.any(FormData),
                 })
             );
-            expect(editorValues.action.getCurrentModelsDatastreams).toHaveBeenCalled();
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload worked",
@@ -108,6 +111,57 @@ describe("useDatastreamOperation", () => {
         });
     });
 
+    describe("uploadLicense", () => {
+        beforeEach(() => {
+            editorValues.state.activeDatastream = "LICENSE";
+        });
+
+        it("uploads a license with success", async () => {
+            fetchValues.action.fetchText.mockResolvedValue("upload license works");
+
+            const { uploadLicense } = useDatastreamOperation();
+            await uploadLicense("testLicenseKey");
+
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/LICENSE/license",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({licenseKey: "testLicenseKey"}),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+                open: true,
+                message: "upload license works",
+                severity: "success",
+            });
+        });
+
+        it("fails to upload the license", async () => {
+            fetchValues.action.fetchText.mockRejectedValue(new Error("Upload failure!"));
+
+            const { uploadLicense } = useDatastreamOperation();
+            await uploadLicense("testLicenseKey");
+
+            expect(editorValues.action.loadCurrentObjectDetails).not.toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/vudl%3A123/datastream/LICENSE/license",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({licenseKey: "testLicenseKey"}),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    open: true,
+                    message: "Upload failure!",
+                    severity: "error"
+                })
+            );
+        });
+    });
+
     describe("deleteDatastream", () => {
         it("deletes with success", async () => {
             fetchValues.action.fetchText.mockResolvedValue("Delete success!");
@@ -121,7 +175,7 @@ describe("useDatastreamOperation", () => {
                     method: "DELETE",
                 })
             );
-            expect(editorValues.action.getCurrentModelsDatastreams).toHaveBeenCalled();
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
@@ -330,6 +384,43 @@ describe("useDatastreamOperation", () => {
                     severity: "error",
                 })
             );
+        });
+    });
+
+    describe("getLicenseKey", () => {
+
+        beforeEach(() => {
+            editorValues.state.activeDatastream = "LICENSE";
+            editorValues.state.currentDatastreams = ["LICENSE"];
+        });
+
+        it("returns a license key for the active datastream", async () => {
+            fetchValues.action.fetchText.mockResolvedValue("testLicense1");
+
+            const { getLicenseKey } = useDatastreamOperation();
+            const licenseKey = await getLicenseKey();
+
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/LICENSE/license"
+            );
+            expect(licenseKey).toEqual("testLicense1");
+        });
+
+
+        it("fails to fetch the license key", async () => {
+            fetchValues.action.fetchText.mockRejectedValue(new Error("fetch license failed"));
+
+            const { getLicenseKey } = useDatastreamOperation();
+            await getLicenseKey();
+
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/LICENSE/license"
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+                open: true,
+                message: "fetch license failed",
+                severity: "error"
+            });
         });
     });
 });

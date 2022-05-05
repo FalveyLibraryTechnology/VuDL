@@ -1,6 +1,7 @@
 import { FedoraObject } from "./FedoraObject";
 import { Fedora } from "../services/Fedora";
-import MetadataExtractor from "../services/MetadataExtractor";
+import FedoraDataCollector from "../services/FedoraDataCollector";
+import FedoraDataCollection from "./FedoraDataCollection";
 import * as fs from "fs";
 import Config from "../models/Config";
 
@@ -20,7 +21,7 @@ describe("FedoraObject", () => {
         stream = "test2";
         mimeType = "test3";
         jest.spyOn(fs, "readFileSync").mockReturnValue(buffer);
-        jest.spyOn(Config, "getInstance").mockReturnValue(null);
+        Config.setInstance(new Config({}));
         fedoraObject = FedoraObject.build(pid);
     });
 
@@ -28,38 +29,53 @@ describe("FedoraObject", () => {
         jest.clearAllMocks();
     });
 
+    describe("modifyLicense", () => {
+        it("adds a datastream for a license", async () => {
+            const config = new Config({
+                licenses: {
+                    licenseKey1: {
+                        uri: "license1Url",
+                    },
+                },
+            });
+            const fedora = new Fedora(config);
+            fedoraObject = new FedoraObject(pid, config, fedora, FedoraDataCollector.getInstance());
+            const spy = jest.spyOn(fedoraObject, "addDatastreamFromStringOrBuffer").mockImplementation(jest.fn());
+
+            await fedoraObject.modifyLicense(stream, "licenseKey1");
+
+            expect(spy).toHaveBeenCalledWith(expect.stringContaining("license1Url"), stream, "text/xml", [201, 204]);
+        });
+    });
+
     describe("addRelationship", () => {
         it("proxies a call to the fedora service", () => {
-            const config = new Config({});
-            const fedora = new Fedora(config);
+            const fedora = Fedora.getInstance();
             const spy = jest.spyOn(fedora, "addRelationship").mockImplementation(jest.fn());
-            fedoraObject = new FedoraObject(pid, config, fedora, MetadataExtractor.getInstance());
+            fedoraObject = FedoraObject.build(pid);
             fedoraObject.addRelationship("subject", "predicate", "object", true);
             expect(spy).toHaveBeenCalledTimes(1);
             expect(spy).toHaveBeenCalledWith(pid, "subject", "predicate", "object", true);
         });
     });
 
-    describe("getSort", () => {
+    describe("getSortOn", () => {
         it("defaults to title", async () => {
-            const config = new Config({});
-            const fedora = new Fedora(config);
-            jest.spyOn(fedora, "getRdf").mockResolvedValue("");
-            fedoraObject = new FedoraObject(pid, config, fedora, MetadataExtractor.getInstance());
-            expect(await fedoraObject.getSort()).toEqual("title");
+            const fedora = Fedora.getInstance();
+            jest.spyOn(fedora, "getDublinCore").mockResolvedValue(null);
+            jest.spyOn(fedora, "getRdf").mockResolvedValue("<rdf />");
+            fedoraObject = FedoraObject.build(pid);
+            expect(await fedoraObject.getSortOn()).toEqual("title");
         });
 
-        it("uses the metadata extractor to obtain data", async () => {
-            const config = new Config({});
-            const fedora = new Fedora(config);
-            const extractor = MetadataExtractor.getInstance();
-            const fakeRDF = "<rdf />";
-            jest.spyOn(fedora, "getRdf").mockResolvedValue(fakeRDF);
-            const extractorSpy = jest.spyOn(extractor, "extractFedoraDetails").mockReturnValue({ sortOn: ["title"] });
-            fedoraObject = new FedoraObject(pid, config, fedora, extractor);
-            expect(await fedoraObject.getSort()).toEqual("title");
-            expect(extractorSpy).toHaveBeenCalledTimes(1);
-            expect(extractorSpy).toHaveBeenCalledWith(fakeRDF);
+        it("uses the data collector to obtain sort data", async () => {
+            const collector = FedoraDataCollector.getInstance();
+            const collection = FedoraDataCollection.build(pid, {}, { sortOn: ["custom"] });
+            const collectorSpy = jest.spyOn(collector, "getObjectData").mockResolvedValue(collection);
+            fedoraObject = FedoraObject.build(pid);
+            expect(await fedoraObject.getSortOn()).toEqual("custom");
+            expect(collectorSpy).toHaveBeenCalledTimes(1);
+            expect(collectorSpy).toHaveBeenCalledWith(pid);
         });
     });
 
@@ -79,7 +95,7 @@ describe("FedoraObject", () => {
     describe("getDatastreamMetadata", () => {
         let getRdfSpy;
         it("gets the datastream metadata", async () => {
-            getRdfSpy = jest.spyOn(Fedora.prototype, "getRdf").mockResolvedValue("test");
+            getRdfSpy = jest.spyOn(Fedora.getInstance(), "getRdf").mockResolvedValue("test");
 
             const metadata = await fedoraObject.getDatastreamMetadata(stream);
 
@@ -92,9 +108,9 @@ describe("FedoraObject", () => {
         let deleteDatastreamSpy;
         let deleteDatastreamTombstoneSpy;
         it("deletes datastream and tombstone", async () => {
-            deleteDatastreamSpy = jest.spyOn(Fedora.prototype, "deleteDatastream").mockImplementation(jest.fn());
+            deleteDatastreamSpy = jest.spyOn(Fedora.getInstance(), "deleteDatastream").mockImplementation(jest.fn());
             deleteDatastreamTombstoneSpy = jest
-                .spyOn(Fedora.prototype, "deleteDatastreamTombstone")
+                .spyOn(Fedora.getInstance(), "deleteDatastreamTombstone")
                 .mockImplementation(jest.fn());
 
             await fedoraObject.deleteDatastream(stream);
@@ -108,7 +124,7 @@ describe("FedoraObject", () => {
         let deleteDatastreamTombstoneSpy;
         it("deletes tombstone", async () => {
             deleteDatastreamTombstoneSpy = jest
-                .spyOn(Fedora.prototype, "deleteDatastreamTombstone")
+                .spyOn(Fedora.getInstance(), "deleteDatastreamTombstone")
                 .mockImplementation(jest.fn());
 
             await fedoraObject.deleteDatastreamTombstone(stream);

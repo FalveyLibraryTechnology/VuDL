@@ -1,3 +1,4 @@
+import Config from "../models/Config";
 import { FedoraObject } from "../models/FedoraObject";
 import FedoraCatalog from "./FedoraCatalog";
 import MetadataExtractor from "./MetadataExtractor";
@@ -5,14 +6,16 @@ import MetadataExtractor from "./MetadataExtractor";
 class DatastreamManager {
     private static instance: DatastreamManager;
     fedoraCatalog: FedoraCatalog;
+    config: Config;
 
-    constructor(fedoraCatalog: FedoraCatalog) {
+    constructor(fedoraCatalog: FedoraCatalog, config: Config) {
+        this.config = config;
         this.fedoraCatalog = fedoraCatalog;
     }
 
     static getInstance(): DatastreamManager {
         if (!DatastreamManager.instance) {
-            DatastreamManager.instance = new DatastreamManager(FedoraCatalog.getInstance());
+            DatastreamManager.instance = new DatastreamManager(FedoraCatalog.getInstance(), Config.getInstance());
         }
         return DatastreamManager.instance;
     }
@@ -51,6 +54,22 @@ class DatastreamManager {
         } else {
             throw new Error(`Invalid mime type: ${mimeType}`);
         }
+    }
+
+    async uploadLicense(pid: string, stream: string, licenseKey: string): Promise<void> {
+        const fedoraObject = FedoraObject.build(pid);
+        await fedoraObject.modifyLicense(stream, licenseKey);
+    }
+
+    async getLicenseKey(pid: string, stream: string): Promise<string> {
+        const fedoraObject = FedoraObject.build(pid);
+        const xml = await fedoraObject.getDatastream(stream);
+        const metadataExtractor = MetadataExtractor.getInstance();
+        const license = metadataExtractor.extractLicense(xml) || "";
+        const licenseMapping = Object.entries(this.config.licenses).find((configLicense) => {
+            return configLicense[1]?.uri == license;
+        });
+        return licenseMapping?.[0] || "";
     }
 
     async deleteDatastream(pid: string, stream: string): Promise<void> {

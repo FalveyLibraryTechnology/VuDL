@@ -1,13 +1,10 @@
 import express = require("express");
 import bodyParser = require("body-parser");
 import Config from "../models/Config";
-import Fedora from "../services/Fedora";
 import FedoraCatalog from "../services/FedoraCatalog";
-import { FedoraObject } from "../models/FedoraObject";
 import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import FedoraDataCollector from "../services/FedoraDataCollector";
-import MetadataExtractor from "../services/MetadataExtractor";
 import { requireToken } from "./auth";
 import { datastreamSanitizer, pidSanitizer } from "./sanitize";
 import * as formidable from "formidable";
@@ -20,7 +17,7 @@ edit.get("/models", requireToken, function (req, res) {
 });
 
 edit.get("/catalog", requireToken, function (req, res) {
-    res.json({ models: FedoraCatalog.getInstance().getCompleteCatalog() });
+    res.json(FedoraCatalog.getInstance().getCompleteCatalog());
 });
 
 edit.get("/catalog/models", requireToken, function (req, res) {
@@ -126,25 +123,58 @@ function uploadFile(req, res, next) {
     });
 }
 edit.post("/object/:pid/datastream/:stream", requireToken, datastreamSanitizer, uploadFile);
+edit.post(
+    "/object/:pid/datastream/:stream/license",
+    requireToken,
+    bodyParser.json(),
+    datastreamSanitizer,
+    async function (req, res) {
+        const { pid, stream } = req.params;
+        const { licenseKey } = req.body;
+        try {
+            const datastream = DatastreamManager.getInstance();
+            await datastream.uploadLicense(pid, stream, licenseKey);
+            res.status(200).send("Upload license success");
+        } catch (error) {
+            console.log("error", error);
+            res.status(500).send(error.message);
+        }
+    }
+);
 
-edit.get("/object/:pid/modelsdatastreams", requireToken, pidSanitizer, async function (req, res) {
+edit.get("/object/:pid/datastream/:stream/license", requireToken, datastreamSanitizer, async (req, res) => {
     try {
-        const data = await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
-        res.json({ models: data.models, datastreams: data.fedoraDatastreams });
+        const { pid, stream } = req.params;
+        const datastream = DatastreamManager.getInstance();
+        const licenseKey = await datastream.getLicenseKey(pid, stream);
+        res.status(200).send(licenseKey);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+edit.get("/object/:pid/datastream/:stream/metadata", requireToken, datastreamSanitizer, async (req, res) => {
+    try {
+        const { pid, stream } = req.params;
+        const datastream = DatastreamManager.getInstance();
+        const metadata = await datastream.getMetadata(pid, stream);
+        res.status(200).send(metadata);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+edit.get("/topLevelObjects", requireToken, getChildren);
+edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
+edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
+    try {
+        const { fedoraDatastreams, metadata, models, pid, sortOn } =
+            await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
+        res.json({ datastreams: fedoraDatastreams, metadata, models, pid, sortOn });
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);
     }
-});
-edit.get("/topLevelObjects", requireToken, getChildren);
-edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
-edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
-    const pid = req.params.pid;
-    const obj = FedoraObject.build(pid);
-    const sort = await obj.getSort();
-    const metadata = await Fedora.getInstance().getDublinCore(pid);
-    const extractedMetadata = MetadataExtractor.getInstance().extractMetadata(metadata);
-    res.json({ pid, sort, metadata: extractedMetadata });
 });
 
 edit.get("/object/:pid/parents", pidSanitizer, requireToken, async function (req, res) {

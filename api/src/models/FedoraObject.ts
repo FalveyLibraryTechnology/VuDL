@@ -1,8 +1,9 @@
 import fs = require("fs");
 import winston = require("winston");
+import xmlescape = require("xml-escape");
 import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
-import MetadataExtractor from "../services/MetadataExtractor";
+import FedoraDataCollector from "../services/FedoraDataCollector";
 import { execSync } from "child_process";
 
 export interface ObjectParameters {
@@ -24,20 +25,20 @@ export class FedoraObject {
     protected config: Config;
     protected fedora: Fedora;
     protected logger: winston.Logger;
-    protected metadataExtractor: MetadataExtractor;
+    protected fedoraDataCollector: FedoraDataCollector;
 
     constructor(
         pid: string,
         config: Config,
         fedora: Fedora,
-        metadataExtractor: MetadataExtractor,
+        fedoraDataCollector: FedoraDataCollector,
         logger: winston.Logger = null
     ) {
         this.pid = pid;
         this.config = config;
         this.fedora = fedora;
         this.logger = logger;
-        this.metadataExtractor = metadataExtractor;
+        this.fedoraDataCollector = fedoraDataCollector;
     }
 
     public static build(pid: string, logger: winston.Logger = null, config: Config = null): FedoraObject {
@@ -45,7 +46,7 @@ export class FedoraObject {
             pid,
             config ?? Config.getInstance(),
             Fedora.getInstance(),
-            MetadataExtractor.getInstance(),
+            FedoraDataCollector.getInstance(),
             logger
         );
     }
@@ -128,6 +129,20 @@ export class FedoraObject {
             parentPid + "#" + position,
             true
         );
+    }
+
+    async modifyLicense(stream: string, licenseKey: string): Promise<void> {
+        const licenses = this.config.licenses;
+        const url = licenses[licenseKey]?.uri;
+        const licenseXml = `
+            <METS:rightsMD xmlns:METS="http://www.loc.gov/METS/" ID="0">
+                <METS:mdRef xmlns:xlink="http://www.w3.org/1999/xlink" LOCTYPE="URL" MDTYPE="OTHER" MIMETYPE="text/html" OTHERMDTYPE="HTML" xlink:href="${xmlescape(
+                    url
+                )}">
+                </METS:mdRef>
+            </METS:rightsMD>
+        `;
+        await this.addDatastreamFromStringOrBuffer(licenseXml, stream, "text/xml", [201, 204]);
     }
 
     async addSortRelationship(sort: string): Promise<void> {
@@ -213,15 +228,7 @@ export class FedoraObject {
         }
     }
 
-    async getSort(): Promise<string> {
-        let sort = "title"; // default
-        const rdf = await this.fedora.getRdf(this.pid);
-        if (rdf.length > 0) {
-            const details = this.metadataExtractor.extractFedoraDetails(rdf);
-            if ((details?.sortOn ?? []).length > 0) {
-                sort = details.sortOn[0];
-            }
-        }
-        return sort;
+    async getSortOn(): Promise<string> {
+        return (await this.fedoraDataCollector.getObjectData(this.pid)).sortOn;
     }
 }

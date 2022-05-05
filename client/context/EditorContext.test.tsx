@@ -82,7 +82,7 @@ describe("useEditorContext", () => {
         });
     });
 
-    describe("initializeModelsCatalog", () => {
+    describe("initializeCatalog", () => {
         it("initializes the models catalog", async () => {
             fetchValues.action.fetchJSON.mockResolvedValue({
                 models: {
@@ -93,7 +93,7 @@ describe("useEditorContext", () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
             await act(async () => {
-                await result.current.action.initializeModelsCatalog();
+                await result.current.action.initializeCatalog();
             });
 
             expect(fetchValues.action.fetchJSON).toHaveBeenCalled();
@@ -105,15 +105,15 @@ describe("useEditorContext", () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
             await act(async () => {
-                await result.current.action.initializeModelsCatalog();
+                await result.current.action.initializeCatalog();
             });
 
             expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("Problem fetching object catalog"));
         });
     });
 
-    describe("getCurrentModelsDatastreams", () => {
-        it("calls the current model datastreams request", async () => {
+    describe("loadCurrentObjectDetails", () => {
+        it("calls the current object details request", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
             expect(result.current.state.modelsDatastreams.length).toBe(0);
@@ -136,7 +136,7 @@ describe("useEditorContext", () => {
             });
 
             await act(async () => {
-                await result.current.action.initializeModelsCatalog();
+                await result.current.action.initializeCatalog();
             });
 
             fetchValues.action.fetchJSON.mockResolvedValueOnce({
@@ -146,7 +146,7 @@ describe("useEditorContext", () => {
             });
 
             await act(async () => {
-                await result.current.action.getCurrentModelsDatastreams();
+                await result.current.action.loadCurrentObjectDetails();
             });
 
             expect(fetchValues.action.fetchJSON).toHaveBeenCalled();
@@ -163,10 +163,10 @@ describe("useEditorContext", () => {
             });
 
             await act(async () => {
-                await result.current.action.getCurrentModelsDatastreams();
+                await result.current.action.loadCurrentObjectDetails();
             });
 
-            expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("Problem fetching object models and datastreams"));
+            expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("Problem fetching object details"));
         });
     });
 
@@ -195,5 +195,26 @@ describe("useEditorContext", () => {
             });
         });
 
+    });
+
+    describe("extractFirstMetadataValue", () => {
+        it("returns a default value if no matching field is found", async () => {
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+            expect(result.current.action.extractFirstMetadataValue("field", "default")).toEqual("default");
+        });
+
+        it("extracts the first value when a matching field is found", async () => {
+            fetchValues.action.fetchJSON.mockResolvedValue({
+                metadata: {
+                    field: ["foo", "bar"],
+                },
+            });
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+            await act(async () => {
+                await result.current.action.setCurrentPid("test:123");
+                await result.current.action.loadCurrentObjectDetails();
+            });
+            expect(result.current.action.extractFirstMetadataValue("field", "default")).toEqual("foo");
+        });
     });
 });

@@ -43,10 +43,6 @@ const getObjectDetailsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "details");
 }
 
-const getObjectModelsDatastreamsUrl = (pid: string): string => {
-    return getPidActionUrl(pid, "modelsdatastreams");
-}
-
 const getObjectParentsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "parents");
 }
@@ -79,6 +75,10 @@ const getObjectDatastreamMetadataUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "metadata");
 }
 
+const objectDatastreamLicenseUrl = (pid: string, datastream: string) => {
+    return getDatastreamActionUrl(pid, datastream, "license");
+};
+
 export {
     baseUrl,
     apiUrl,
@@ -96,12 +96,12 @@ export {
     getStatusUrl,
     getObjectChildrenUrl,
     getObjectDetailsUrl,
-    getObjectModelsDatastreamsUrl,
     getObjectParentsUrl,
     postObjectDatastreamUrl,
     deleteObjectDatastreamUrl,
     downloadObjectDatastreamUrl,
     viewObjectDatastreamUrl,
     getObjectDatastreamMimetypeUrl,
-    getObjectDatastreamMetadataUrl
+    getObjectDatastreamMetadataUrl,
+    objectDatastreamLicenseUrl
 };
