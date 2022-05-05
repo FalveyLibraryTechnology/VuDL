@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useFetchContext } from "../../../context/FetchContext";
 import { getObjectDetailsUrl } from "../../../util/routes";
+import ChildList from "./ChildList";
 import Link from "next/link";
 
 export interface ChildProps {
@@ -8,12 +9,13 @@ export interface ChildProps {
     initialTitle: string;
 }
 
-export const Child = ({ pid , initialTitle }: ChildProps): React.ReactElement => {
+export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => {
     const {
         action: { fetchJSON },
     } = useFetchContext();
     const [details, setDetails] = useState({});
     const [loading, setLoading] = useState<boolean>(true);
+    const [expanded, setExpanded] = useState<boolean>(false);
 
     // TODO: refactor this to share code with the ObjectSummary component:
     function extractMetadata(metadata, field, defaultValue) {
@@ -37,10 +39,14 @@ export const Child = ({ pid , initialTitle }: ChildProps): React.ReactElement =>
     }, []);
     const title = loading ? initialTitle : extractMetadata(details?.metadata ?? {}, "dc:title", "-");
     const loadingMessage = loading ? <p>Loading details...</p> : "";
+    const expandControl = <button onClick={() => setExpanded(!expanded)}>{expanded ? "[-]" : "[+]"}</button>;
+    const childList = expanded ? <ChildList pid={pid} pageSize={10} /> : "";
     return (
         <>
-            <Link href={"/edit/object/" + pid}>{(title.length >  0 ? title : "-") + " [" + pid + "]"}</Link>
-            { loadingMessage }
+            {expandControl}
+            <Link href={"/edit/object/" + pid}>{(title.length > 0 ? title : "-") + " [" + pid + "]"}</Link>
+            {loadingMessage}
+            {childList}
         </>
     );
 };

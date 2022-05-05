@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useFetchContext } from "../../../context/FetchContext";
 import { getObjectChildrenUrl } from "../../../util/routes";
 import Child from "./Child";
-import Link from "next/link";
 import Pagination from "@mui/material/Pagination";
 
 export interface ChildListProps {
