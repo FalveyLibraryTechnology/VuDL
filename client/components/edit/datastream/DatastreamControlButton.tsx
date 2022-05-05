@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Tooltip from "@mui/material/Tooltip";
+import DataObject from "@mui/icons-material/DataObject";
 import Download from "@mui/icons-material/Download";
 import Delete from "@mui/icons-material/Delete";
 import Preview from "@mui/icons-material/Preview";
@@ -11,7 +12,7 @@ import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 const Icons = {
     Upload: <UploadFile />,
     View: <Preview />,
-    // Metadata: ,
+    Metadata: <DataObject />,
     Download: <Download />,
     Delete: <Delete />,
 };

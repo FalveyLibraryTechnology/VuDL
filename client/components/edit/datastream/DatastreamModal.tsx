@@ -8,11 +8,12 @@ import { useEditorContext } from "../../../context/EditorContext";
 import DatastreamUploadModalContent from "./DatastreamUploadModalContent";
 import DatastreamDeleteModalContent from "./DatastreamDeleteModalContent";
 import DatastreamViewModalContent from "./DatastreamViewModalContent";
+import DatastreamMetadataModalContent from "./DatastreamMetadataModalContent";
 
 const contentMapping = {
     Upload: <DatastreamUploadModalContent />,
     View: <DatastreamViewModalContent />,
-    Metadata: null,
+    Metadata: <DatastreamMetadataModalContent />,
     Delete: <DatastreamDeleteModalContent />,
 };
 

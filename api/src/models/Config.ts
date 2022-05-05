@@ -1,6 +1,6 @@
 import fs = require("fs");
 import ini = require("ini");
-import { FedoraModel } from "../services/FedoraCatalog";
+import { FedoraModel, License } from "../services/FedoraCatalog";
 
 type ConfigValue = string | string[] | ConfigRecord;
 interface ConfigRecord {
@@ -219,6 +219,10 @@ class Config {
 
     get samlEntryPoint(): string {
         return (this.authenticationSettings["saml_entry_point"] as string) ?? "";
+    }
+
+    get licenses(): Record<string, License> {
+        return this.ini["licenses"] || {};
     }
 }
 

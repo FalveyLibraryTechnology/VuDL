@@ -5,11 +5,26 @@ import DatastreamManager from "./DatastreamManager";
 import Config from "../models/Config";
 
 describe("DatastreamManager", () => {
+    let config;
+    let fedoraObjectBuildSpy;
+    let modifyLicenseSpy;
+    let getDatastreamSpy;
     let updateDatastreamFromFileSpy;
     let datastreamManager;
     let datastreamsSpy;
     beforeEach(() => {
-        jest.spyOn(Config, "getInstance").mockReturnValue(null);
+        config = {
+            licenses: {
+                testLicenseKey: {
+                    name: "testLicense",
+                    uri: "testLicense.com",
+                },
+            },
+        };
+        jest.spyOn(Config, "getInstance").mockReturnValue(config);
+        fedoraObjectBuildSpy = jest.spyOn(FedoraObject, "build");
+        getDatastreamSpy = jest.spyOn(FedoraObject.prototype, "getDatastream");
+        modifyLicenseSpy = jest.spyOn(FedoraObject.prototype, "modifyLicense");
         updateDatastreamFromFileSpy = jest.spyOn(FedoraObject.prototype, "updateDatastreamFromFile");
         datastreamsSpy = jest.spyOn(FedoraCatalog.prototype, "getDatastreamMimetypes");
         datastreamManager = DatastreamManager.getInstance();
@@ -92,6 +107,8 @@ describe("DatastreamManager", () => {
         it("gets the datastream metadata", async () => {
             getDatastreamMetadataSpy.mockResolvedValue(xml);
             const metadata = await datastreamManager.getMetadata(pid, stream);
+
+            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
             expect(metadata).toEqual(xml);
             expect(getDatastreamMetadataSpy).toHaveBeenCalledWith(stream);
         });
@@ -122,6 +139,7 @@ describe("DatastreamManager", () => {
 
             expect(await datastreamManager.getMimeType(pid, stream)).toEqual(mimeType);
 
+            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
             expect(getMetadataSpy).toHaveBeenCalledWith(pid, stream);
             expect(extractEbuNodeSpy).toHaveBeenCalledWith(xml, "//ebucore:hasMimeType");
         });
@@ -144,6 +162,7 @@ describe("DatastreamManager", () => {
             getDatastreamAsBufferSpy.mockResolvedValue(buffer);
             const response = await datastreamManager.downloadBuffer(pid, stream);
 
+            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
             expect(response).toEqual(buffer);
             expect(getDatastreamAsBufferSpy).toHaveBeenCalledWith(stream);
         });
@@ -169,6 +188,7 @@ describe("DatastreamManager", () => {
 
             await datastreamManager.uploadFile(pid, stream, filepath, mimeType);
 
+            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
             expect(hasValidMimeTypeSpy).toHaveBeenCalledWith(stream, mimeType);
             expect(updateDatastreamFromFileSpy).toHaveBeenCalledWith(filepath, stream, mimeType);
         });
@@ -178,6 +198,61 @@ describe("DatastreamManager", () => {
             expect(datastreamManager.uploadFile(pid, stream, filepath, mimeType)).rejects.toThrowError(
                 "Invalid mime type: " + mimeType
             );
+        });
+    });
+
+    describe("uploadLicense", () => {
+        let pid;
+        let stream;
+        let licenseKey;
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            licenseKey = "testLicenseKey";
+        });
+
+        it("calls uploadLicense with success", async () => {
+            modifyLicenseSpy.mockResolvedValue("");
+
+            await datastreamManager.uploadLicense(pid, stream, licenseKey);
+
+            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
+            expect(modifyLicenseSpy).toHaveBeenCalledWith(stream, licenseKey);
+        });
+    });
+
+    describe("getLicenseKey", () => {
+        let pid;
+        let stream;
+        let extractLicenseSpy;
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            extractLicenseSpy = jest.spyOn(MetadataExtractor.prototype, "extractLicense");
+        });
+
+        it("returns a licenseKey", async () => {
+            getDatastreamSpy.mockReturnValue("testXml");
+            extractLicenseSpy.mockReturnValue("testLicense.com");
+
+            const response = await datastreamManager.getLicenseKey(pid, stream);
+
+            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
+            expect(getDatastreamSpy).toHaveBeenCalledWith(stream);
+            expect(extractLicenseSpy).toHaveBeenCalledWith("testXml");
+            expect(response).toEqual("testLicenseKey");
+        });
+
+        it("returns an empty string when an unrecognized URI is provided", async () => {
+            getDatastreamSpy.mockReturnValue("testXml");
+            extractLicenseSpy.mockReturnValue("notALicense");
+
+            const response = await datastreamManager.getLicenseKey(pid, stream);
+
+            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
+            expect(getDatastreamSpy).toHaveBeenCalledWith(stream);
+            expect(extractLicenseSpy).toHaveBeenCalledWith("testXml");
+            expect(response).toEqual("");
         });
     });
 
@@ -196,6 +271,7 @@ describe("DatastreamManager", () => {
 
             await datastreamManager.deleteDatastream(pid, stream);
 
+            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
             expect(deleteDatastreamSpy).toHaveBeenCalledWith(stream);
         });
     });

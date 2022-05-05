@@ -20,7 +20,7 @@ edit.get("/models", requireToken, function (req, res) {
 });
 
 edit.get("/catalog", requireToken, function (req, res) {
-    res.json({ models: FedoraCatalog.getInstance().getCompleteCatalog() });
+    res.json(FedoraCatalog.getInstance().getCompleteCatalog());
 });
 
 edit.get("/catalog/models", requireToken, function (req, res) {
@@ -126,6 +126,46 @@ function uploadFile(req, res, next) {
     });
 }
 edit.post("/object/:pid/datastream/:stream", requireToken, datastreamSanitizer, uploadFile);
+edit.post(
+    "/object/:pid/datastream/:stream/license",
+    requireToken,
+    bodyParser.json(),
+    datastreamSanitizer,
+    async function (req, res) {
+        const { pid, stream } = req.params;
+        const { licenseKey } = req.body;
+        try {
+            const datastream = DatastreamManager.getInstance();
+            await datastream.uploadLicense(pid, stream, licenseKey);
+            res.status(200).send("Upload license success");
+        } catch (error) {
+            console.log("error", error);
+            res.status(500).send(error.message);
+        }
+    }
+);
+
+edit.get("/object/:pid/datastream/:stream/license", requireToken, datastreamSanitizer, async (req, res) => {
+    try {
+        const { pid, stream } = req.params;
+        const datastream = DatastreamManager.getInstance();
+        const licenseKey = await datastream.getLicenseKey(pid, stream);
+        res.status(200).send(licenseKey);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+edit.get("/object/:pid/datastream/:stream/metadata", requireToken, datastreamSanitizer, async (req, res) => {
+    try {
+        const { pid, stream } = req.params;
+        const datastream = DatastreamManager.getInstance();
+        const metadata = await datastream.getMetadata(pid, stream);
+        res.status(200).send(metadata);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
 
 edit.get("/object/:pid/modelsdatastreams", requireToken, pidSanitizer, async function (req, res) {
     try {
