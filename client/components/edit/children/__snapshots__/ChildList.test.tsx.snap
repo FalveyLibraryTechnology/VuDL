@@ -17,152 +17,102 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
       <li
         key="rootchildfoo:124"
       >
-        <Link
-          href="/edit/object/foo:124"
+        <Component
+          initialTitle="hello1"
+          pid="foo:124"
         >
-          <a
-            href="/edit/object/foo:124"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello1 [foo:124]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
       <li
         key="rootchildfoo:125"
       >
-        <Link
-          href="/edit/object/foo:125"
+        <Component
+          initialTitle="hello2"
+          pid="foo:125"
         >
-          <a
-            href="/edit/object/foo:125"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello2 [foo:125]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
       <li
         key="rootchildfoo:126"
       >
-        <Link
-          href="/edit/object/foo:126"
+        <Component
+          initialTitle="hello3"
+          pid="foo:126"
         >
-          <a
-            href="/edit/object/foo:126"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello3 [foo:126]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
       <li
         key="rootchildfoo:127"
       >
-        <Link
-          href="/edit/object/foo:127"
+        <Component
+          initialTitle="hello4"
+          pid="foo:127"
         >
-          <a
-            href="/edit/object/foo:127"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello4 [foo:127]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
       <li
         key="rootchildfoo:128"
       >
-        <Link
-          href="/edit/object/foo:128"
+        <Component
+          initialTitle="hello5"
+          pid="foo:128"
         >
-          <a
-            href="/edit/object/foo:128"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello5 [foo:128]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
       <li
         key="rootchildfoo:129"
       >
-        <Link
-          href="/edit/object/foo:129"
+        <Component
+          initialTitle="hello6"
+          pid="foo:129"
         >
-          <a
-            href="/edit/object/foo:129"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello6 [foo:129]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
       <li
         key="rootchildfoo:130"
       >
-        <Link
-          href="/edit/object/foo:130"
+        <Component
+          initialTitle="hello7"
+          pid="foo:130"
         >
-          <a
-            href="/edit/object/foo:130"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello7 [foo:130]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
       <li
         key="rootchildfoo:131"
       >
-        <Link
-          href="/edit/object/foo:131"
+        <Component
+          initialTitle="hello8"
+          pid="foo:131"
         >
-          <a
-            href="/edit/object/foo:131"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello8 [foo:131]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
       <li
         key="rootchildfoo:132"
       >
-        <Link
-          href="/edit/object/foo:132"
+        <Component
+          initialTitle="hello9"
+          pid="foo:132"
         >
-          <a
-            href="/edit/object/foo:132"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello9 [foo:132]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
       <li
         key="rootchildfoo:133"
       >
-        <Link
-          href="/edit/object/foo:133"
+        <Component
+          initialTitle="hello10"
+          pid="foo:133"
         >
-          <a
-            href="/edit/object/foo:133"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello10 [foo:133]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
     </ul>
   </ChildList>
@@ -179,17 +129,12 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
       <li
         key="foo:123childfoo:124"
       >
-        <Link
-          href="/edit/object/foo:124"
+        <Component
+          initialTitle="hello"
+          pid="foo:124"
         >
-          <a
-            href="/edit/object/foo:124"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello [foo:124]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
     </ul>
   </ChildList>
@@ -206,17 +151,12 @@ exports[`ChildList renders using ajax-loaded root data 1`] = `
       <li
         key="rootchildfoo:124"
       >
-        <Link
-          href="/edit/object/foo:124"
+        <Component
+          initialTitle="hello"
+          pid="foo:124"
         >
-          <a
-            href="/edit/object/foo:124"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
-          >
-            hello [foo:124]
-          </a>
-        </Link>
+          Child
+        </Component>
       </li>
     </ul>
   </ChildList>

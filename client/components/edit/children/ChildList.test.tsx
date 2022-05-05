@@ -7,6 +7,7 @@ import { ChildListProps, ChildList } from "./ChildList";
 import { FetchContextProvider } from "../../../context/FetchContext";
 
 jest.mock("@mui/material/Pagination", () => () => "Pagination");
+jest.mock("./Child", () => () => "Child");
 
 describe("ChildList", () => {
     let props: ChildListProps;
