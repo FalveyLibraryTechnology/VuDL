@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamLicenseContent renders 1`] = `
+<Fragment>
+  <ForwardRef(DialogContent)>
+    <ForwardRef(FormControl)>
+      <ForwardRef(FormLabel)>
+        Choose License
+      </ForwardRef(FormLabel)>
+      <Component
+        onChange={[Function]}
+        value=""
+      >
+        <ForwardRef(FormControlLabel)
+          control={<ForwardRef(Radio) />}
+          key="testLicenseKey"
+          label="testLicense"
+          sx={
+            Object {
+              "margin": "0",
+            }
+          }
+          value="testLicenseKey"
+        />
+      </Component>
+    </ForwardRef(FormControl)>
+  </ForwardRef(DialogContent)>
+  <ForwardRef(DialogActions)>
+    <ForwardRef(Button)
+      className="uploadLicenseButton"
+      onClick={[Function]}
+    >
+      Save
+    </ForwardRef(Button)>
+    <ForwardRef(Button)
+      onClick={[MockFunction]}
+    >
+      Cancel
+    </ForwardRef(Button)>
+  </ForwardRef(DialogActions)>
+</Fragment>
+`;

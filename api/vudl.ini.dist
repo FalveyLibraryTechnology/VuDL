@@ -311,3 +311,26 @@ allowedSubtypes = "xml"
 
 # XLSData
 [models.XLSData.datastreams]
+
+# Licenses
+[licenses.ATTRIBUTION]
+name = "Attribution"
+uri = "http://creativecommons.org/licenses/by/4.0/"
+[licenses.ATTRIBUTION_SHARE_ALIKE]
+name = "Attribution-ShareAlike"
+uri = "http://creativecommons.org/licenses/by-sa/4.0/"
+[licenses.ATTRIBUTION_NO_DERIVS]
+name = "Attribution-NoDerivs"
+uri = "http://creativecommons.org/licenses/by-nd/4.0/"
+[licenses.ATTRIBUTION_NON_COMMERCIAL]
+name = "Attribution-NonCommercial"
+uri = "http://creativecommons.org/licenses/by-nc/4.0/"
+[licenses.ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE]
+name = "Attribution-NonCommercial-ShareAlike"
+uri = "http://creativecommons.org/licenses/by-nc-sa/4.0/"
+[licenses.ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS]
+name = "Attribution-NonCommercial-NoDerivs"
+uri = "http://creativecommons.org/licenses/by-nc-nd/4.0/"
+[licenses.PUBLIC_DOMAIN]
+name = "CC0 1.0 Universal (Public Domain)"
+uri = "https://creativecommons.org/publicdomain/zero/1.0/"

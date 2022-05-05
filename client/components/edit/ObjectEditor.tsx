@@ -16,12 +16,12 @@ interface ObjectEditorProps {
 
 const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
     const {
-        action: { initializeModelsCatalog, loadObjectDetails },
+        action: { initializeCatalog, loadObjectDetails },
     } = useEditorContext();
 
     useEffect(() => {
         loadObjectDetails(pid);
-        initializeModelsCatalog();
+        initializeCatalog();
     }, []);
 
     return (

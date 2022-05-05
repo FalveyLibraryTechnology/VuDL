@@ -97,6 +97,68 @@ describe("edit", () => {
         });
     });
 
+    describe("post /object/:pid/datastream/:stream/license", () => {
+        let datastreamManager;
+        let licenseKey;
+        beforeEach(() => {
+            datastreamManager = {
+                uploadLicense: jest.fn(),
+            };
+            licenseKey = "testLicenseKey";
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+            jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+
+        it("uploads a license", async () => {
+            datastreamManager.uploadLicense.mockResolvedValue({});
+
+            await request(app)
+                .post(`/edit/object/${pid}/datastream/${datastream}/license`)
+                .set("Authorization", "Bearer test")
+                .send({ licenseKey })
+                .set("Accept", "application/json")
+                .expect(StatusCodes.OK);
+
+            expect(datastreamManager.uploadLicense).toHaveBeenCalledWith(pid, datastream, licenseKey);
+        });
+    });
+
+    describe("get /object/:pid/datastream/:stream/license", () => {
+        let datastreamManager;
+        let licenseKey;
+        beforeEach(() => {
+            datastreamManager = {
+                getLicenseKey: jest.fn(),
+            };
+            licenseKey = "testLicenseKey";
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+            jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("gets the license key", async () => {
+            datastreamManager.getLicenseKey.mockResolvedValue(licenseKey);
+
+            const response = await request(app)
+                .get(`/edit/object/${pid}/datastream/${datastream}/license`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(licenseKey);
+            expect(datastreamManager.getLicenseKey).toHaveBeenCalledWith(pid, datastream);
+        });
+
+        it("sends an error status code", async () => {
+            datastreamManager.getLicenseKey.mockRejectedValue("get license key fails");
+
+            await request(app)
+                .get(`/edit/object/${pid}/datastream/${datastream}/license`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+    });
+
     describe("delete /object/:pid/datastream/:stream", () => {
         let datastreamManager;
         beforeEach(() => {
@@ -105,6 +167,9 @@ describe("edit", () => {
             };
             jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
             jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
         });
 
         it("will delete a datastream", async () => {
@@ -132,6 +197,9 @@ describe("edit", () => {
             };
             jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
             jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
         });
 
         it("will download the datastream content", async () => {
@@ -163,6 +231,9 @@ describe("edit", () => {
             };
             jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
             jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
         });
 
         it("will view the datastream content", async () => {

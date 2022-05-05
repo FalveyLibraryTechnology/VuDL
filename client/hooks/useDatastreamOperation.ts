@@ -1,13 +1,21 @@
 import { useFetchContext } from "../context/FetchContext";
 import { useEditorContext } from "../context/EditorContext";
-import { deleteObjectDatastreamUrl, downloadObjectDatastreamUrl, getObjectDatastreamMimetypeUrl, postObjectDatastreamUrl, viewObjectDatastreamUrl } from "../util/routes";
+import {
+    deleteObjectDatastreamUrl,
+    downloadObjectDatastreamUrl,
+    getObjectDatastreamMimetypeUrl,
+    objectDatastreamLicenseUrl,
+    postObjectDatastreamUrl,
+    viewObjectDatastreamUrl,
+    getObjectDatastreamMetadataUrl
+ } from "../util/routes";
 
 const useDatastreamOperation = () => {
     const {
         action: { fetchBlob, fetchText },
     } = useFetchContext();
     const {
-        state: { currentPid, activeDatastream, datastreamsCatalog },
+        state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams },
         action: { setSnackbarState, toggleDatastreamModal, loadCurrentObjectDetails },
     } = useEditorContext();
 
@@ -49,6 +57,30 @@ const useDatastreamOperation = () => {
             });
             toggleDatastreamModal();
         }
+    };
+
+    const uploadLicense = async (licenseKey) => {
+        try {
+            const text = await fetchText(objectDatastreamLicenseUrl(currentPid, activeDatastream), {
+                method: "POST",
+                body: JSON.stringify({
+                    licenseKey
+                })
+            }, { "Content-Type": "application/json" });
+            await loadCurrentObjectDetails();
+            setSnackbarState({
+                open: true,
+                message: text,
+                severity: "success",
+            });
+        } catch (err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
+        }
+        toggleDatastreamModal();
     };
 
     const deleteDatastream = async () => {
@@ -117,6 +149,26 @@ const useDatastreamOperation = () => {
         }
     };
 
+    const viewMetadata = async (): Promise<{ data: string; mimeType: string; }> => {
+        try {
+            const data =  await fetchText(getObjectDatastreamMetadataUrl(currentPid, activeDatastream));
+            return {
+                data,
+                mimeType: "text/xml"
+            };
+        } catch(err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
+        }
+        return {
+            data: "",
+            mimeType: ""
+        }
+    };
+
     const getDatastreamMimetype = async (datastream: string):Promise<string> => {
         try {
             return (await fetchText(getObjectDatastreamMimetypeUrl(currentPid, datastream))).split(";")[0];
@@ -130,12 +182,30 @@ const useDatastreamOperation = () => {
         return  "";
     };
 
+    const getLicenseKey = async (): Promise<string> => {
+        if(currentDatastreams.includes(activeDatastream)) {
+            try {
+                return await fetchText(objectDatastreamLicenseUrl(currentPid, activeDatastream));
+            } catch(err) {
+                setSnackbarState({
+                    open: true,
+                    message: err.message,
+                    severity: "error",
+                });
+            }
+        }
+        return  "";
+    };
+
     return {
         uploadFile,
+        uploadLicense,
         deleteDatastream,
         downloadDatastream,
         viewDatastream,
-        getDatastreamMimetype
+        viewMetadata,
+        getDatastreamMimetype,
+        getLicenseKey
     };
 };
 

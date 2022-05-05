@@ -13,6 +13,7 @@ interface SnackbarState {
  */
 const editorContextParams = {
     modelsCatalog: {},
+    licensesCatalog: {},
     currentPid: null,
     currentMetadata: {},
     currentModels: [],
@@ -31,7 +32,7 @@ const editorContextParams = {
 export const DatastreamModalStates = {
     UPLOAD: "Upload",
     VIEW: "View",
-    // METADATA: "Metadata",
+    METADATA: "Metadata",
     DOWNLOAD: "Download",
     DELETE: "Delete"
 };
@@ -40,6 +41,7 @@ export const DatastreamModalStates = {
 const EditorContext = createContext({});
 
 const reducerMapping = {
+    SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_PID: "currentPid",
     SET_CURRENT_METADATA: "currentMetadata",
@@ -87,8 +89,9 @@ export const useEditorContext = () => {
             activeDatastream,
             isDatastreamModalOpen,
             datastreamModalState,
-            loading,
+            licensesCatalog,
             modelsCatalog,
+            loading,
             snackbarState
         },
         dispatch,
@@ -112,6 +115,13 @@ export const useEditorContext = () => {
         dispatch({
             type: "SET_MODELS_CATALOG",
             payload: modelsCatalog
+        });
+    };
+
+    const setLicensesCatalog = (licensesCatalog) => {
+        dispatch({
+            type: "SET_LICENSES_CATALOG",
+            payload: licensesCatalog
         });
     };
 
@@ -187,10 +197,11 @@ export const useEditorContext = () => {
         };
     }, {});
 
-    const initializeModelsCatalog = async () => {
+    const initializeCatalog = async () => {
         try {
             const response = await fetchJSON(editObjectCatalogUrl);
             setModelsCatalog(response.models || {});
+            setLicensesCatalog(response.licenses || {});
         } catch(err) {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
         }
@@ -223,17 +234,19 @@ export const useEditorContext = () => {
     return {
         state: {
             currentPid,
+            currentDatastreams,
             activeDatastream,
             isDatastreamModalOpen,
             datastreamModalState,
             datastreamsCatalog,
             modelsDatastreams,
             modelsCatalog,
+            licensesCatalog,
             loading,
             snackbarState
         },
         action: {
-            initializeModelsCatalog,
+            initializeCatalog,
             setCurrentPid,
             loadObjectDetails,
             loadCurrentObjectDetails,

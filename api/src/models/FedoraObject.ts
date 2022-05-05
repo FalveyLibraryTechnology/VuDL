@@ -1,5 +1,6 @@
 import fs = require("fs");
 import winston = require("winston");
+import xmlescape = require("xml-escape");
 import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
 import FedoraDataCollector from "../services/FedoraDataCollector";
@@ -128,6 +129,20 @@ export class FedoraObject {
             parentPid + "#" + position,
             true
         );
+    }
+
+    async modifyLicense(stream: string, licenseKey: string): Promise<void> {
+        const licenses = this.config.licenses;
+        const url = licenses[licenseKey]?.uri;
+        const licenseXml = `
+            <METS:rightsMD xmlns:METS="http://www.loc.gov/METS/" ID="0">
+                <METS:mdRef xmlns:xlink="http://www.w3.org/1999/xlink" LOCTYPE="URL" MDTYPE="OTHER" MIMETYPE="text/html" OTHERMDTYPE="HTML" xlink:href="${xmlescape(
+                    url
+                )}">
+                </METS:mdRef>
+            </METS:rightsMD>
+        `;
+        await this.addDatastreamFromStringOrBuffer(licenseXml, stream, "text/xml", [201, 204]);
     }
 
     async addSortRelationship(sort: string): Promise<void> {

@@ -29,6 +29,25 @@ describe("FedoraObject", () => {
         jest.clearAllMocks();
     });
 
+    describe("modifyLicense", () => {
+        it("adds a datastream for a license", async () => {
+            const config = new Config({
+                licenses: {
+                    licenseKey1: {
+                        uri: "license1Url",
+                    },
+                },
+            });
+            const fedora = new Fedora(config);
+            fedoraObject = new FedoraObject(pid, config, fedora, FedoraDataCollector.getInstance());
+            const spy = jest.spyOn(fedoraObject, "addDatastreamFromStringOrBuffer").mockImplementation(jest.fn());
+
+            await fedoraObject.modifyLicense(stream, "licenseKey1");
+
+            expect(spy).toHaveBeenCalledWith(expect.stringContaining("license1Url"), stream, "text/xml", [201, 204]);
+        });
+    });
+
     describe("addRelationship", () => {
         it("proxies a call to the fedora service", () => {
             const fedora = Fedora.getInstance();
