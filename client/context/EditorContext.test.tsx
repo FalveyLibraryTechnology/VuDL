@@ -82,7 +82,7 @@ describe("useEditorContext", () => {
         });
     });
 
-    describe("initializeModelsCatalog", () => {
+    describe("initializeCatalog", () => {
         it("initializes the models catalog", async () => {
             fetchValues.action.fetchJSON.mockResolvedValue({
                 models: {
@@ -93,7 +93,7 @@ describe("useEditorContext", () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
             await act(async () => {
-                await result.current.action.initializeModelsCatalog();
+                await result.current.action.initializeCatalog();
             });
 
             expect(fetchValues.action.fetchJSON).toHaveBeenCalled();
@@ -105,7 +105,7 @@ describe("useEditorContext", () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
             await act(async () => {
-                await result.current.action.initializeModelsCatalog();
+                await result.current.action.initializeCatalog();
             });
 
             expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("Problem fetching object catalog"));
@@ -136,7 +136,7 @@ describe("useEditorContext", () => {
             });
 
             await act(async () => {
-                await result.current.action.initializeModelsCatalog();
+                await result.current.action.initializeCatalog();
             });
 
             fetchValues.action.fetchJSON.mockResolvedValueOnce({

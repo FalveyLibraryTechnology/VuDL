@@ -11,6 +11,15 @@ export interface FedoraModel {
     datastreams?: Record<string, FedoraDatastream>;
 }
 
+export interface License {
+    name: string;
+    uri: string;
+}
+export interface CompleteCatalog {
+    licenses: Record<string, License>;
+    models: Record<string, FedoraModel>;
+}
+
 class FedoraCatalog {
     private static instance: FedoraCatalog;
 
@@ -27,8 +36,12 @@ class FedoraCatalog {
         return FedoraCatalog.instance;
     }
 
-    getCompleteCatalog(): Record<string, FedoraModel> {
-        return this.config.models;
+    getCompleteCatalog(): CompleteCatalog {
+        const { models, licenses } = this.config;
+        return {
+            models,
+            licenses,
+        };
     }
 
     getModelCatalog(): Array<string> {

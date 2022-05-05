@@ -1,18 +1,21 @@
 import React from "react";
-import DialogContent from "@mui/material/DialogContent";
-import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
+import { useEditorContext } from "../../../context/EditorContext";
+import DatastreamLicenseContent from "./DatastreamLicenseContent";
+import DatastreamUploadContent from "./DatastreamUploadContent";
+
+const uploadModalMapping = {
+    LICENSE: <DatastreamLicenseContent />,
+};
 
 const DatastreamUploadModalContent = (): React.ReactElement => {
-    const { uploadFile } = useDatastreamOperation();
-    const onChange = (event) => {
-        uploadFile(event.target.files[0]);
-    };
+    const {
+        state: { activeDatastream },
+    } = useEditorContext();
 
-    return (
-        <DialogContent>
-            <input className="uploadFileButton" type="file" onChange={onChange} />
-        </DialogContent>
-    );
+    if (Object.keys(uploadModalMapping).includes(activeDatastream)) {
+        return uploadModalMapping[activeDatastream];
+    }
+    return <DatastreamUploadContent />;
 };
 
 export default DatastreamUploadModalContent;
