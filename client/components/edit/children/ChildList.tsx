@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useFetchContext } from "../../../context/FetchContext";
 import { getObjectChildrenUrl } from "../../../util/routes";
+import Child from "./Child";
 import Link from "next/link";
 import Pagination from "@mui/material/Pagination";
 
@@ -41,7 +42,7 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
     const contents = (children?.docs ?? []).map((child) => {
         return (
             <li key={(pid || "root") + "child" + child.id}>
-                <Link href={"/edit/object/" + child.id}>{(child.title ?? "-") + " [" + child.id + "]"}</Link>
+                <Child pid={child.id} initialTitle={child.title ?? "-"} />
             </li>
         );
     });
