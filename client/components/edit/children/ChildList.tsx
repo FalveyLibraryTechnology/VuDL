@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useFetchContext } from "../../context/FetchContext";
-import { getObjectChildrenUrl } from "../../util/routes";
+import { useFetchContext } from "../../../context/FetchContext";
+import { getObjectChildrenUrl } from "../../../util/routes";
 import Link from "next/link";
 import Pagination from "@mui/material/Pagination";
 
-interface ChildListProps {
+export interface ChildListProps {
     pid: string;
     pageSize: number;
 }
@@ -14,7 +14,7 @@ interface Children {
     docs: Record<string, string>[];
 }
 
-const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.ReactElement => {
+export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.ReactElement => {
     const {
         action: { fetchJSON },
     } = useFetchContext();

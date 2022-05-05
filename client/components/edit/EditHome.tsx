@@ -1,5 +1,5 @@
 import React from "react";
-import ChildList from "./ChildList";
+import ChildList from "./children/ChildList";
 import Link from "next/link";
 
 const EditHome = (): React.ReactElement => {

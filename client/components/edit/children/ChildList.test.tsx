@@ -3,21 +3,21 @@ import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
-import ChildList from "./ChildList";
-import { FetchContextProvider } from "../../context/FetchContext";
+import { ChildListProps, ChildList } from "./ChildList";
+import { FetchContextProvider } from "../../../context/FetchContext";
 
 jest.mock("@mui/material/Pagination", () => () => "Pagination");
 
 describe("ChildList", () => {
-    let props;
-    let lastRequestUrl;
+    let props: ChildListProps;
+    let lastRequestUrl: string;
     let response;
 
     beforeEach(() => {
-        props = {};
+        props = { pid: "", pageSize: 10 };
         response = { numFound: 1, start: 0, docs: [{ id: "foo:124", title: "hello" }] };
         global.fetch = jest.fn((url) => {
-            lastRequestUrl = url;
+            lastRequestUrl = url as string;
             return {
                 ok: true,
                 status: 200,

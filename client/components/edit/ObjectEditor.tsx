@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ChildList from "./ChildList";
+import ChildList from "./children/ChildList";
 import Breadcrumbs from "./Breadcrumbs";
 import ObjectSummary from "./ObjectSummary";
 import Box from "@mui/material/Box";

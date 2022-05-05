@@ -2,7 +2,10 @@
 
 exports[`ChildList displays a paginator when appropriate 1`] = `
 <FetchContextProvider>
-  <ChildList>
+  <ChildList
+    pageSize={10}
+    pid=""
+  >
     <Component
       count={1000}
       onChange={[Function]}
@@ -169,6 +172,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
 exports[`ChildList renders using ajax-loaded object data 1`] = `
 <FetchContextProvider>
   <ChildList
+    pageSize={10}
     pid="foo:123"
   >
     <ul>
@@ -194,7 +198,10 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
 
 exports[`ChildList renders using ajax-loaded root data 1`] = `
 <FetchContextProvider>
-  <ChildList>
+  <ChildList
+    pageSize={10}
+    pid=""
+  >
     <ul>
       <li
         key="rootchildfoo:124"
