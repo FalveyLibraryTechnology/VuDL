@@ -43,10 +43,6 @@ const getObjectDetailsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "details");
 }
 
-const getObjectModelsDatastreamsUrl = (pid: string): string => {
-    return getPidActionUrl(pid, "modelsdatastreams");
-}
-
 const getObjectParentsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "parents");
 }
@@ -100,7 +96,6 @@ export {
     getStatusUrl,
     getObjectChildrenUrl,
     getObjectDetailsUrl,
-    getObjectModelsDatastreamsUrl,
     getObjectParentsUrl,
     postObjectDatastreamUrl,
     deleteObjectDatastreamUrl,

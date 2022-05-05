@@ -1,13 +1,10 @@
 import express = require("express");
 import bodyParser = require("body-parser");
 import Config from "../models/Config";
-import Fedora from "../services/Fedora";
 import FedoraCatalog from "../services/FedoraCatalog";
-import { FedoraObject } from "../models/FedoraObject";
 import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import FedoraDataCollector from "../services/FedoraDataCollector";
-import MetadataExtractor from "../services/MetadataExtractor";
 import { requireToken } from "./auth";
 import { datastreamSanitizer, pidSanitizer } from "./sanitize";
 import * as formidable from "formidable";
@@ -167,24 +164,17 @@ edit.get("/object/:pid/datastream/:stream/metadata", requireToken, datastreamSan
     }
 });
 
-edit.get("/object/:pid/modelsdatastreams", requireToken, pidSanitizer, async function (req, res) {
+edit.get("/topLevelObjects", requireToken, getChildren);
+edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
+edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
     try {
-        const data = await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
-        res.json({ models: data.models, datastreams: data.fedoraDatastreams });
+        const { fedoraDatastreams, metadata, models, pid, sortOn } =
+            await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
+        res.json({ datastreams: fedoraDatastreams, metadata, models, pid, sortOn });
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);
     }
-});
-edit.get("/topLevelObjects", requireToken, getChildren);
-edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
-edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
-    const pid = req.params.pid;
-    const obj = FedoraObject.build(pid);
-    const sort = await obj.getSort();
-    const metadata = await Fedora.getInstance().getDublinCore(pid);
-    const extractedMetadata = MetadataExtractor.getInstance().extractMetadata(metadata);
-    res.json({ pid, sort, metadata: extractedMetadata });
 });
 
 edit.get("/object/:pid/parents", pidSanitizer, requireToken, async function (req, res) {

@@ -1,17 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Datastream from "./Datastream";
 import List from "@mui/material/List";
 import { useEditorContext } from "../../../context/EditorContext";
 
 const DatastreamList = (): React.ReactElement => {
     const {
-        state: { currentPid, modelsCatalog, modelsDatastreams },
-        action: { getCurrentModelsDatastreams },
+        state: { modelsDatastreams },
     } = useEditorContext();
-
-    useEffect(() => {
-        getCurrentModelsDatastreams();
-    }, [currentPid, modelsCatalog]);
 
     return (
         <List>

@@ -16,11 +16,11 @@ interface ObjectEditorProps {
 
 const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
     const {
-        action: { setCurrentPid, initializeCatalog },
+        action: { initializeCatalog, loadObjectDetails },
     } = useEditorContext();
 
     useEffect(() => {
-        setCurrentPid(pid);
+        loadObjectDetails(pid);
         initializeCatalog();
     }, []);
 
@@ -29,7 +29,7 @@ const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
             <Breadcrumbs pid={pid} />
             <h1>Editor: Object {pid}</h1>
             <h2>Tools</h2>
-            <ObjectSummary pid={pid} />
+            <ObjectSummary />
             <Grid container>
                 <Grid item xs={4}>
                     <Box>

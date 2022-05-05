@@ -1,45 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ObjectSummary renders defaults when no metadata is present 1`] = `
-<FetchContextProvider>
-  <ObjectSummary
-    pid="foo:123"
+exports[`ObjectSummary displays loading message when appropriate 1`] = `
+<ObjectSummary>
+  <div
+    className="infobox"
   >
-    <div
-      className="infobox"
-    >
-      <h2>
-        Title not available
-      </h2>
-      <div />
-    </div>
-  </ObjectSummary>
-</FetchContextProvider>
+    <h2>
+      Loading...
+    </h2>
+    <div />
+  </div>
+</ObjectSummary>
 `;
 
 exports[`ObjectSummary renders information from metadata when available 1`] = `
-<FetchContextProvider>
-  <ObjectSummary
-    pid="foo:123"
+<ObjectSummary>
+  <div
+    className="infobox"
   >
-    <div
-      className="infobox"
-    >
-      <h2>
-        My title
-      </h2>
-      <div>
-        <p>
-          Hello 
-          <b
-            key="1"
-          >
-            world
-          </b>
-          !
-        </p>
-      </div>
+    <h2>
+      My title
+    </h2>
+    <div>
+      <p>
+        Hello 
+        <b
+          key="1"
+        >
+          world
+        </b>
+        !
+      </p>
     </div>
-  </ObjectSummary>
-</FetchContextProvider>
+  </div>
+</ObjectSummary>
 `;

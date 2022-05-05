@@ -16,7 +16,7 @@ const useDatastreamOperation = () => {
     } = useFetchContext();
     const {
         state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams },
-        action: { setSnackbarState, toggleDatastreamModal, getCurrentModelsDatastreams },
+        action: { setSnackbarState, toggleDatastreamModal, loadCurrentObjectDetails },
     } = useEditorContext();
 
     const isAllowedMimeType = (mimeType) => {
@@ -42,7 +42,7 @@ const useDatastreamOperation = () => {
                 method: "POST",
                 body,
             });
-            await getCurrentModelsDatastreams();
+            await loadCurrentObjectDetails();
             setSnackbarState({
                 open: true,
                 message: text,
@@ -67,7 +67,7 @@ const useDatastreamOperation = () => {
                     licenseKey
                 })
             }, { "Content-Type": "application/json" });
-            await getCurrentModelsDatastreams();
+            await loadCurrentObjectDetails();
             setSnackbarState({
                 open: true,
                 message: text,
@@ -88,7 +88,7 @@ const useDatastreamOperation = () => {
             const text = await fetchText(deleteObjectDatastreamUrl(currentPid, activeDatastream), {
                 method: "DELETE",
             });
-            await getCurrentModelsDatastreams();
+            await loadCurrentObjectDetails();
             setSnackbarState({
                 open: true,
                 message: text,

@@ -172,6 +172,13 @@ class FedoraDataCollection {
         return this.fedoraDetails.sequence ?? [];
     }
 
+    get sortOn(): string {
+        if ((this.fedoraDetails?.sortOn ?? []).length > 0) {
+            return this.fedoraDetails.sortOn[0];
+        }
+        return "title";
+    }
+
     get title(): string {
         return (this.metadata["dc:title"] ?? [])[0] ?? "";
     }

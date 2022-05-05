@@ -12,9 +12,7 @@ exports[`ObjectEditor renders 1`] = `
   <h2>
     Tools
   </h2>
-  <Component
-    pid="foo:123"
-  />
+  <Component />
   <ForwardRef(Grid)
     container={true}
   >

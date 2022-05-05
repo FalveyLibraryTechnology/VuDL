@@ -49,7 +49,7 @@ describe("useDatastreamOperation", () => {
             action: {
                 setSnackbarState: jest.fn(),
                 toggleDatastreamModal: jest.fn(),
-                getCurrentModelsDatastreams: jest.fn()
+                loadCurrentObjectDetails: jest.fn()
             },
         };
         mockUseFetchContext.mockReturnValue(fetchValues);
@@ -73,7 +73,7 @@ describe("useDatastreamOperation", () => {
                     body: expect.any(FormData),
                 })
             );
-            expect(editorValues.action.getCurrentModelsDatastreams).toHaveBeenCalled();
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload worked",
@@ -122,7 +122,7 @@ describe("useDatastreamOperation", () => {
             const { uploadLicense } = useDatastreamOperation();
             await uploadLicense("testLicenseKey");
 
-            expect(editorValues.action.getCurrentModelsDatastreams).toHaveBeenCalled();
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
             expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/LICENSE/license",
                 expect.objectContaining({
@@ -144,7 +144,7 @@ describe("useDatastreamOperation", () => {
             const { uploadLicense } = useDatastreamOperation();
             await uploadLicense("testLicenseKey");
 
-            expect(editorValues.action.getCurrentModelsDatastreams).not.toHaveBeenCalled();
+            expect(editorValues.action.loadCurrentObjectDetails).not.toHaveBeenCalled();
             expect(fetchValues.action.fetchText).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/vudl%3A123/datastream/LICENSE/license",
                 expect.objectContaining({
                     method: "POST",
@@ -175,7 +175,7 @@ describe("useDatastreamOperation", () => {
                     method: "DELETE",
                 })
             );
-            expect(editorValues.action.getCurrentModelsDatastreams).toHaveBeenCalled();
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
