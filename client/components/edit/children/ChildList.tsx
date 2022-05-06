@@ -38,13 +38,15 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
         }
         loadData();
     }, [page]);
-    const contents = (children?.docs ?? []).map((child) => {
-        return (
-            <li key={(pid || "root") + "child" + child.id}>
-                <Child pid={child.id} initialTitle={child.title ?? "-"} />
-            </li>
-        );
-    });
+    const childDocs = children?.docs ?? [];
+    const contents = childDocs.length > 0
+        ? (childDocs).map((child) => {
+            return (
+                <li key={(pid || "root") + "child" + child.id}>
+                    <Child pid={child.id} initialTitle={child.title ?? "-"} />
+                </li>
+            );
+        }) : <p>Empty.</p>;
     const pageCount = Math.ceil(children.numFound / pageSize);
     const paginator =
         pageCount > 1 ? (
