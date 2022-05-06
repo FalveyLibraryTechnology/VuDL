@@ -4,10 +4,21 @@ import { waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import { ChildListProps, ChildList } from "./ChildList";
+import { ChildListContextProvider } from "../../../context/ChildListContext";
 import { FetchContextProvider } from "../../../context/FetchContext";
 
 jest.mock("@mui/material/Pagination", () => () => "Pagination");
 jest.mock("./Child", () => () => "Child");
+
+function getMountedChildListComponent(props: ChildListProps) {
+    return mount(
+        <FetchContextProvider>
+            <ChildListContextProvider>
+                <ChildList {...props} />
+            </ChildListContextProvider>
+        </FetchContextProvider>
+    );
+}
 
 describe("ChildList", () => {
     let props: ChildListProps;
@@ -30,11 +41,7 @@ describe("ChildList", () => {
     });
 
     it("renders using ajax-loaded root data", async () => {
-        const wrapper = mount(
-            <FetchContextProvider>
-                <ChildList {...props} />
-            </FetchContextProvider>
-        );
+        const wrapper = getMountedChildListComponent(props);
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
         wrapper.update();
@@ -60,11 +67,7 @@ describe("ChildList", () => {
                 { id: "foo:133", title: "hello10" },
             ],
         };
-        const wrapper = mount(
-            <FetchContextProvider>
-                <ChildList {...props} />
-            </FetchContextProvider>
-        );
+        const wrapper = getMountedChildListComponent(props);
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
         wrapper.update();
@@ -73,11 +76,7 @@ describe("ChildList", () => {
 
     it("renders using ajax-loaded object data", async () => {
         props.pid = "foo:123";
-        const wrapper = mount(
-            <FetchContextProvider>
-                <ChildList {...props} />
-            </FetchContextProvider>
-        );
+        const wrapper = getMountedChildListComponent(props);
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/children?start=0&rows=10");
         wrapper.update();
