@@ -28,9 +28,9 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
     const childDocs = children.docs;
     const contents =
         childDocs.length > 0 ? (
-            childDocs.map((child) => {
+            childDocs.map((child: Record<string, string>) => {
                 return (
-                    <li key={(pid || "root") + "child" + child.id}>
+                    <li key={`${pid}_child_${child.id}`}>
                         <Child pid={child.id} initialTitle={child.title ?? "-"} />
                     </li>
                 );
