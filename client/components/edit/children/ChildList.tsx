@@ -15,7 +15,7 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
     } = useChildListContext();
     const [page, setPage] = useState<number>(1);
     const key = getChildStorageKey(pid, page, pageSize);
-    const loaded = childStorage.hasOwnProperty(key);
+    const loaded = Object.prototype.hasOwnProperty.call(childStorage, key);
     useEffect(() => {
         if (!loaded) {
             loadChildrenIntoStorage(pid, page, pageSize);
