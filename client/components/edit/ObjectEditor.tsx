@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import ChildList from "./children/ChildList";
+import { ChildListContextProvider } from "../../context/ChildListContext";
 import Breadcrumbs from "./Breadcrumbs";
 import ObjectSummary from "./ObjectSummary";
 import Box from "@mui/material/Box";
@@ -50,7 +51,9 @@ const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
 
             <DatastreamModal />
             <h2>Contents</h2>
-            <ChildList pid={pid} />
+            <ChildListContextProvider>
+                <ChildList pid={pid} />
+            </ChildListContextProvider>
             <EditorSnackbar />
         </div>
     );

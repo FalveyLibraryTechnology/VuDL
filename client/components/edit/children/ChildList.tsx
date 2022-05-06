@@ -1,52 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { useFetchContext } from "../../../context/FetchContext";
-import { getObjectChildrenUrl } from "../../../util/routes";
+import { useChildListContext } from "../../../context/ChildListContext";
 import Child from "./Child";
 import Pagination from "@mui/material/Pagination";
 
 export interface ChildListProps {
-    pid: string;
-    pageSize: number;
-}
-interface Children {
-    numFound: number;
-    start: number;
-    docs: Record<string, string>[];
+    pid?: string;
+    pageSize?: number;
 }
 
 export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.ReactElement => {
     const {
-        action: { fetchJSON },
-    } = useFetchContext();
-    const [children, setChildren] = useState<Children>({
-        numFound: 0,
-        start: 0,
-        docs: [],
-    });
+        state: { childStorage },
+        action: { getChildStorageKey, loadChildrenIntoStorage },
+    } = useChildListContext();
     const [page, setPage] = useState<number>(1);
-
+    const key = getChildStorageKey(pid, page, pageSize);
+    const notLoaded = typeof childStorage[key] === "undefined";
     useEffect(() => {
-        async function loadData() {
-            let data = [];
-            const url = getObjectChildrenUrl(pid, (page - 1) * pageSize, pageSize);
-            try {
-                data = await fetchJSON(url);
-            } catch (e) {
-                console.error("Problem fetching tree data from " + url);
-            }
-            setChildren(data);
+        if (notLoaded) {
+            loadChildrenIntoStorage(pid, page, pageSize);
         }
-        loadData();
-    }, [page]);
-    const childDocs = children?.docs ?? [];
-    const contents = childDocs.length > 0
-        ? (childDocs).map((child) => {
-            return (
-                <li key={(pid || "root") + "child" + child.id}>
-                    <Child pid={child.id} initialTitle={child.title ?? "-"} />
-                </li>
-            );
-        }) : <p>Empty.</p>;
+    }, []);
+    if (notLoaded) {
+        return <p>Loading...</p>;
+    }
+    const children = childStorage[key];
+    const childDocs = children.docs;
+    const contents =
+        childDocs.length > 0 ? (
+            childDocs.map((child) => {
+                return (
+                    <li key={(pid || "root") + "child" + child.id}>
+                        <Child pid={child.id} initialTitle={child.title ?? "-"} />
+                    </li>
+                );
+            })
+        ) : (
+            <p>Empty.</p>
+        );
     const pageCount = Math.ceil(children.numFound / pageSize);
     const paginator =
         pageCount > 1 ? (
