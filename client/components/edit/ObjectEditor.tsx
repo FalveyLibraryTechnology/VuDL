@@ -28,12 +28,11 @@ const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
         <div>
             <Breadcrumbs pid={pid} />
             <h1>Editor: Object {pid}</h1>
-            <h2>Tools</h2>
             <ObjectSummary />
             <Grid container>
                 <Grid item xs={4}>
                     <Box>
-                        <h3>Object</h3>
+                        <h3>Object Tools</h3>
                         <ul>
                             <li>
                                 <Link href={`/edit/object/${pid}/newChild`}>Create New Child Object</Link>
