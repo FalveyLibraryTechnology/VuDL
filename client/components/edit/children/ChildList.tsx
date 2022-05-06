@@ -15,13 +15,13 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
     } = useChildListContext();
     const [page, setPage] = useState<number>(1);
     const key = getChildStorageKey(pid, page, pageSize);
-    const notLoaded = typeof childStorage[key] === "undefined";
+    const loaded = childStorage.hasOwnProperty(key);
     useEffect(() => {
-        if (notLoaded) {
+        if (!loaded) {
             loadChildrenIntoStorage(pid, page, pageSize);
         }
     }, []);
-    if (notLoaded) {
+    if (!loaded) {
         return <p>Loading...</p>;
     }
     const children = childStorage[key];
