@@ -9,11 +9,11 @@ interface Children {
 }
 
 interface ChildListState {
-    childStorage: Record<string, Children>;
+    childListStorage: Record<string, Children>;
 }
 
 const childListContextParams: ChildListState = {
-    childStorage: {},
+    childListStorage: {},
 };
 
 const ChildListContext = createContext({});
@@ -25,15 +25,15 @@ const reducerMapping: Record<string, string> = {
  * Update the shared states of react components.
  */
 const childListReducer = (state: ChildListState, { type, payload }: { type: string, payload: unknown}) => {
-    if (type === "ADD_TO_CHILD_STORAGE") {
+    if (type === "ADD_TO_CHILD_LIST_STORAGE") {
         const { key, children } = payload;
-        const childStorage = {
-            ...state.childStorage,
+        const childListStorage = {
+            ...state.childListStorage,
         };
-        childStorage[key] = children;
+        childListStorage[key] = children;
         return {
             ...state,
-            childStorage
+            childListStorage
         };
     } else if (Object.keys(reducerMapping).includes(type)){
         return {
@@ -60,27 +60,27 @@ export const useChildListContext = () => {
     }= useFetchContext();
     const {
         state: {
-            childStorage
+            childListStorage
         },
         dispatch,
     } = useContext(ChildListContext);
 
-    const addToChildStorage = (key: string, children: Children) => {
+    const addToChildListStorage = (key: string, children: Children) => {
         dispatch({
-            type: "ADD_TO_CHILD_STORAGE",
+            type: "ADD_TO_CHILD_LIST_STORAGE",
             payload: { key, children },
         });
     };
 
-    const getChildStorageKey = (pid: string, page: number, pageSize: number): string => {
+    const getChildListStorageKey = (pid: string, page: number, pageSize: number): string => {
         return `${pid}_${page}_${pageSize}`;
     }
 
     const loadChildrenIntoStorage = async (pid: string, page: number, pageSize: number) => {
-        const key = getChildStorageKey(pid, page, pageSize);
+        const key = getChildListStorageKey(pid, page, pageSize);
         const url = getObjectChildrenUrl(pid, (page - 1) * pageSize, pageSize);
         try {
-            addToChildStorage(key, await fetchJSON(url));
+            addToChildListStorage(key, await fetchJSON(url));
         } catch (e) {
             console.error("Problem fetching tree data from " + url);
         }
@@ -88,10 +88,10 @@ export const useChildListContext = () => {
 
     return {
         state: {
-            childStorage,
+            childListStorage,
         },
         action: {
-            getChildStorageKey,
+            getChildListStorageKey,
             loadChildrenIntoStorage,
         },
     };

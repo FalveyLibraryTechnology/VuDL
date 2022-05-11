@@ -10,12 +10,12 @@ export interface ChildListProps {
 
 export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.ReactElement => {
     const {
-        state: { childStorage },
-        action: { getChildStorageKey, loadChildrenIntoStorage },
+        state: { childListStorage },
+        action: { getChildListStorageKey, loadChildrenIntoStorage },
     } = useChildListContext();
     const [page, setPage] = useState<number>(1);
-    const key = getChildStorageKey(pid, page, pageSize);
-    const loaded = Object.prototype.hasOwnProperty.call(childStorage, key);
+    const key = getChildListStorageKey(pid, page, pageSize);
+    const loaded = Object.prototype.hasOwnProperty.call(childListStorage, key);
     useEffect(() => {
         if (!loaded) {
             loadChildrenIntoStorage(pid, page, pageSize);
@@ -24,7 +24,7 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
     if (!loaded) {
         return <p>Loading...</p>;
     }
-    const children = childStorage[key];
+    const children = childListStorage[key];
     const childDocs = children.docs;
     const contents =
         childDocs.length > 0 ? (
