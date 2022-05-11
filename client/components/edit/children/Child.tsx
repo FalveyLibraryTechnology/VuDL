@@ -3,6 +3,8 @@ import { useFetchContext } from "../../../context/FetchContext";
 import { getObjectDetailsUrl } from "../../../util/routes";
 import ChildList from "./ChildList";
 import Link from "next/link";
+import AddBox from "@mui/icons-material/AddBox";
+import IndeterminateCheckBox from "@mui/icons-material/IndeterminateCheckBox";
 
 export interface ChildProps {
     pid: string;
@@ -39,7 +41,7 @@ export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => 
     }, []);
     const title = loading ? initialTitle : extractMetadata(details?.metadata ?? {}, "dc:title", "-");
     const loadingMessage = loading ? <p>Loading details...</p> : "";
-    const expandControl = <button onClick={() => setExpanded(!expanded)}>{expanded ? "[-]" : "[+]"}</button>;
+    const expandControl = <span onClick={() => setExpanded(!expanded)}>{expanded ? <IndeterminateCheckBox titleAccess="Collapse Tree" /> : <AddBox titleAccess="Expand Tree" />}</span>;
     const childList = expanded ? <ChildList pid={pid} pageSize={10} /> : "";
     return (
         <>
