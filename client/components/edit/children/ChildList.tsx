@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useChildListContext } from "../../../context/ChildListContext";
 import Child from "./Child";
+import CircularProgress from "@mui/material/CircularProgress";
 import Pagination from "@mui/material/Pagination";
 
 export interface ChildListProps {
@@ -22,7 +23,7 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
         }
     }, []);
     if (!loaded) {
-        return <p>Loading...</p>;
+        return <p><CircularProgress size="1em" /> Loading...</p>;
     }
     const children = childListStorage[key];
     const childDocs = children.docs;
