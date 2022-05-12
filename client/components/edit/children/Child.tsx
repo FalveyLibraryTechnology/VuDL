@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useFetchContext } from "../../../context/FetchContext";
-import { getObjectDetailsUrl } from "../../../util/routes";
+import { useChildListContext } from "../../../context/ChildListContext";
 import ChildList from "./ChildList";
 import Link from "next/link";
 import AddBox from "@mui/icons-material/AddBox";
@@ -13,11 +12,12 @@ export interface ChildProps {
 
 export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => {
     const {
-        action: { fetchJSON },
-    } = useFetchContext();
-    const [details, setDetails] = useState({});
-    const [loading, setLoading] = useState<boolean>(true);
+        state: { childDetailsStorage },
+        action: { loadChildDetailsIntoStorage },
+    } = useChildListContext();
     const [expanded, setExpanded] = useState<boolean>(false);
+    const loaded = Object.prototype.hasOwnProperty.call(childDetailsStorage, pid);
+    const details = loaded ? childDetailsStorage[pid] : {};
 
     // TODO: refactor this to share code with the ObjectSummary component:
     function extractMetadata(metadata, field, defaultValue) {
@@ -26,21 +26,12 @@ export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => 
     }
 
     useEffect(() => {
-        async function loadData() {
-            let data = [];
-            const url = getObjectDetailsUrl(pid);
-            try {
-                data = await fetchJSON(url);
-            } catch (e) {
-                console.error("Problem fetching tree data from " + url);
-            }
-            setDetails(data);
-            setLoading(false);
+        if (!loaded) {
+            loadChildDetailsIntoStorage(pid);
         }
-        loadData();
     }, []);
-    const title = loading ? initialTitle : extractMetadata(details?.metadata ?? {}, "dc:title", "-");
-    const loadingMessage = loading ? <p>Loading details...</p> : "";
+    const title = !loaded ? initialTitle : extractMetadata(details?.metadata ?? {}, "dc:title", "-");
+    const loadingMessage = !loaded ? <p>Loading details...</p> : "";
     const expandControl = <span onClick={() => setExpanded(!expanded)}>{expanded ? <IndeterminateCheckBox titleAccess="Collapse Tree" /> : <AddBox titleAccess="Expand Tree" />}</span>;
     const childList = expanded ? <ChildList pid={pid} pageSize={10} /> : "";
     return (

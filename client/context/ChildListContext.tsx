@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { getObjectChildrenUrl } from "../util/routes";
+import { getObjectChildrenUrl, getObjectDetailsUrl } from "../util/routes";
 import { useFetchContext } from "./FetchContext";
+
+interface ChildDetails {
+};
 
 interface Children {
     numFound?: number;
@@ -9,10 +12,12 @@ interface Children {
 }
 
 interface ChildListState {
+    childDetailsStorage: Record<string, ChildDetails>;
     childListStorage: Record<string, Children>;
 }
 
 const childListContextParams: ChildListState = {
+    childDetailsStorage: {},
     childListStorage: {},
 };
 
@@ -25,7 +30,17 @@ const reducerMapping: Record<string, string> = {
  * Update the shared states of react components.
  */
 const childListReducer = (state: ChildListState, { type, payload }: { type: string, payload: unknown}) => {
-    if (type === "ADD_TO_CHILD_LIST_STORAGE") {
+    if (type === "ADD_TO_CHILD_DETAILS_STORAGE") {
+        const { key, child } = payload;
+        const childDetailsStorage = {
+            ...state.childDetailsStorage,
+        };
+        childDetailsStorage[key] = child;
+        return {
+            ...state,
+            childDetailsStorage
+        };
+    } else if (type === "ADD_TO_CHILD_LIST_STORAGE") {
         const { key, children } = payload;
         const childListStorage = {
             ...state.childListStorage,
@@ -60,10 +75,18 @@ export const useChildListContext = () => {
     }= useFetchContext();
     const {
         state: {
-            childListStorage
+            childDetailsStorage,
+            childListStorage,
         },
         dispatch,
     } = useContext(ChildListContext);
+
+    const addToChildDetailsStorage = (key: string, child: ChildDetails) => {
+        dispatch({
+            type: "ADD_TO_CHILD_DETAILS_STORAGE",
+            payload: { key, child },
+        });
+    };
 
     const addToChildListStorage = (key: string, children: Children) => {
         dispatch({
@@ -74,7 +97,16 @@ export const useChildListContext = () => {
 
     const getChildListStorageKey = (pid: string, page: number, pageSize: number): string => {
         return `${pid}_${page}_${pageSize}`;
-    }
+    };
+
+    const loadChildDetailsIntoStorage = async (pid: string) => {
+        const url = getObjectDetailsUrl(pid);
+        try {
+            addToChildDetailsStorage(pid, await fetchJSON(url));
+        } catch (e) {
+            console.error("Problem fetching details from " + url);
+        }
+    };
 
     const loadChildrenIntoStorage = async (pid: string, page: number, pageSize: number) => {
         const key = getChildListStorageKey(pid, page, pageSize);
@@ -84,14 +116,16 @@ export const useChildListContext = () => {
         } catch (e) {
             console.error("Problem fetching tree data from " + url);
         }
-    }
+    };
 
     return {
         state: {
+            childDetailsStorage,
             childListStorage,
         },
         action: {
             getChildListStorageKey,
+            loadChildDetailsIntoStorage,
             loadChildrenIntoStorage,
         },
     };
