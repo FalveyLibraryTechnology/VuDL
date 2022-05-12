@@ -23,7 +23,11 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
         }
     }, []);
     if (!loaded) {
-        return <p><CircularProgress size="1em" /> Loading...</p>;
+        return (
+            <p>
+                <CircularProgress size="1em" /> Loading...
+            </p>
+        );
     }
     const children = childListStorage[key];
     const childDocs = children.docs;

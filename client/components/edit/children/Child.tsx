@@ -27,8 +27,19 @@ export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => 
         }
     }, []);
     const title = !loaded ? initialTitle : extractFirstMetadataValue(details?.metadata ?? {}, "dc:title", "-");
-    const loadingMessage = !loaded ? <>&nbsp;<CircularProgress size="1em" /></> : "";
-    const expandControl = <span onClick={() => setExpanded(!expanded)}>{expanded ? <IndeterminateCheckBox titleAccess="Collapse Tree" /> : <AddBox titleAccess="Expand Tree" />}</span>;
+    const loadingMessage = !loaded ? (
+        <>
+            &nbsp;
+            <CircularProgress size="1em" />
+        </>
+    ) : (
+        ""
+    );
+    const expandControl = (
+        <span onClick={() => setExpanded(!expanded)}>
+            {expanded ? <IndeterminateCheckBox titleAccess="Collapse Tree" /> : <AddBox titleAccess="Expand Tree" />}
+        </span>
+    );
     const childList = expanded ? <ChildList pid={pid} pageSize={10} /> : "";
     return (
         <>
