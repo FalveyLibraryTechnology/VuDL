@@ -5,6 +5,7 @@ import ChildList from "./ChildList";
 import Link from "next/link";
 import AddBox from "@mui/icons-material/AddBox";
 import IndeterminateCheckBox from "@mui/icons-material/IndeterminateCheckBox";
+import { extractFirstMetadataValue } from "../../../util/metadata";
 
 export interface ChildProps {
     pid: string;
@@ -20,18 +21,12 @@ export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => 
     const loaded = Object.prototype.hasOwnProperty.call(childDetailsStorage, pid);
     const details = loaded ? childDetailsStorage[pid] : {};
 
-    // TODO: refactor this to share code with the ObjectSummary component:
-    function extractMetadata(metadata, field, defaultValue) {
-        const values = typeof metadata[field] === "undefined" ? [] : metadata[field];
-        return values.length > 0 ? values[0] : defaultValue;
-    }
-
     useEffect(() => {
         if (!loaded) {
             loadChildDetailsIntoStorage(pid);
         }
     }, []);
-    const title = !loaded ? initialTitle : extractMetadata(details?.metadata ?? {}, "dc:title", "-");
+    const title = !loaded ? initialTitle : extractFirstMetadataValue(details?.metadata ?? {}, "dc:title", "-");
     const loadingMessage = !loaded ? <>&nbsp;<CircularProgress size="1em" /></> : "";
     const expandControl = <span onClick={() => setExpanded(!expanded)}>{expanded ? <IndeterminateCheckBox titleAccess="Collapse Tree" /> : <AddBox titleAccess="Expand Tree" />}</span>;
     const childList = expanded ? <ChildList pid={pid} pageSize={10} /> : "";
