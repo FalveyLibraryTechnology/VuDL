@@ -7,11 +7,42 @@ interface SnackbarState {
     message: string,
     severity: string
 }
+
+export interface FedoraDatastream {
+    mimetype?: {
+        allowedType: string;
+        allowedSubtypes: string;
+    };
+}
+
+export interface FedoraModel {
+    datastreams?: Record<string, FedoraDatastream>;
+}
+
+export interface License {
+    name: string;
+    uri: string;
+}
+
+interface EditorState {
+    modelsCatalog: Record<string, FedoraModel>;
+    licensesCatalog: Record<string, License>;
+    currentPid: string | null;
+    currentMetadata: Record<string, Array<string>>;
+    currentModels: Array<string>;
+    currentDatastreams: Array<string>;
+    activeDatastream: string | null;
+    isDatastreamModalOpen: boolean;
+    datastreamModalState: string | null;
+    loading: boolean;
+    snackbarState: SnackbarState;
+}
+
 /**
  * Pass a shared entity to react components,
  * specifically a way to make api requests.
  */
-const editorContextParams = {
+const editorContextParams: EditorState = {
     modelsCatalog: {},
     licensesCatalog: {},
     currentPid: null,
@@ -40,7 +71,7 @@ export const DatastreamModalStates = {
 
 const EditorContext = createContext({});
 
-const reducerMapping = {
+const reducerMapping: Record<string, string> = {
     SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_PID: "currentPid",
@@ -53,10 +84,11 @@ const reducerMapping = {
     SET_SNACKBAR_STATE: "snackbarState",
     SET_LOADING: "loading"
 };
+
 /**
  * Update the shared states of react components.
  */
-const editorReducer = (state: string, { type, payload }: { type: string, payload: SnackbarState | unknown}) => {
+const editorReducer = (state: EditorState, { type, payload }: { type: string, payload: SnackbarState | unknown}) => {
     if(Object.keys(reducerMapping).includes(type)){
         return {
             ...state,
@@ -97,13 +129,13 @@ export const useEditorContext = () => {
         dispatch,
     } = useContext(EditorContext);
 
-    const modelsDatastreams = currentModels.reduce((acc, model) => {
+    const modelsDatastreams = currentModels.reduce((acc: Array<string>, model: string) => {
         const name = model.split(":")?.[1];
         return [
             ...acc,
             ...(name && modelsCatalog.hasOwnProperty(name) ? Object.keys(modelsCatalog[name].datastreams) : [])
         ];
-    }, []).map((stream) => {
+    }, []).map((stream: string) => {
         return {
             disabled: !currentDatastreams.includes(stream),
             stream
@@ -111,14 +143,14 @@ export const useEditorContext = () => {
     });
 
 
-    const setModelsCatalog = (modelsCatalog) => {
+    const setModelsCatalog = (modelsCatalog: Record<string, FedoraModel>) => {
         dispatch({
             type: "SET_MODELS_CATALOG",
             payload: modelsCatalog
         });
     };
 
-    const setLicensesCatalog = (licensesCatalog) => {
+    const setLicensesCatalog = (licensesCatalog: Record<string, License>) => {
         dispatch({
             type: "SET_LICENSES_CATALOG",
             payload: licensesCatalog
@@ -134,21 +166,21 @@ export const useEditorContext = () => {
         });
     };
 
-    const setCurrentMetadata = (metadata) => {
+    const setCurrentMetadata = (metadata: Record<string, Array<string>>) => {
         dispatch({
             type: "SET_CURRENT_METADATA",
             payload: metadata
         });
     };
 
-    const setCurrentModels = (models) => {
+    const setCurrentModels = (models: Array<string>) => {
         dispatch({
             type: "SET_CURRENT_MODELS",
             payload: models
         });
     };
 
-    const setCurrentDatastreams = (datastreams) => {
+    const setCurrentDatastreams = (datastreams: Array<string>) => {
         dispatch({
             type: "SET_CURRENT_DATASTREAMS",
             payload: datastreams
@@ -162,21 +194,21 @@ export const useEditorContext = () => {
         });
     };
 
-    const setDatastreamModalState = (datastreamModalState) => {
+    const setDatastreamModalState = (datastreamModalState: boolean) => {
         dispatch({
             type: "SET_DATASTREAM_MODAL_STATE",
             payload: datastreamModalState
         });
     };
 
-    const setActiveDatastream = (datastream) => {
+    const setActiveDatastream = (datastream: string) => {
         dispatch({
             type: "SET_ACTIVE_DATASTREAM",
             payload: datastream
         })
     };
 
-    const setSnackbarState = (snackbarState) => {
+    const setSnackbarState = (snackbarState: SnackbarState) => {
         dispatch({
             type: "SET_SNACKBAR_STATE",
             payload: snackbarState
@@ -190,10 +222,10 @@ export const useEditorContext = () => {
         });
     };
 
-    const datastreamsCatalog = Object.values(modelsCatalog).reduce((acc, model) => {
+    const datastreamsCatalog = Object.values(modelsCatalog).reduce((acc: Record<string, FedoraDatastream>, model) => {
         return {
             ...acc,
-            ...model.datastreams
+            ...(model as FedoraModel).datastreams
         };
     }, {});
 
@@ -226,7 +258,7 @@ export const useEditorContext = () => {
         return await loadObjectDetails(currentPid);
     };
 
-    const extractFirstMetadataValue = function (field: string, defaultValue: string) {
+    const extractFirstMetadataValue = function (field: string, defaultValue: string): string {
         const values = typeof currentMetadata[field] === "undefined" ? [] : currentMetadata[field];
         return values.length > 0 ? values[0] : defaultValue;
     }
