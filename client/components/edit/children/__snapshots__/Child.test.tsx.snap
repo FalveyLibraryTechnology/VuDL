@@ -1,0 +1,230 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Child renders using ajax-loaded data 1`] = `
+<FetchContextProvider>
+  <ChildListContextProvider>
+    <Child
+      initialTitle="initial title"
+      pid="foo:123"
+    >
+      <span
+        onClick={[Function]}
+      >
+        <ForwardRef(AddBoxIcon)
+          titleAccess="Expand Tree"
+        >
+          <ForwardRef(SvgIcon)
+            data-testid="AddBoxIcon"
+            titleAccess="Expand Tree"
+          >
+            <MuiSvgIconRoot
+              as="svg"
+              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+              data-testid="AddBoxIcon"
+              focusable="false"
+              ownerState={
+                Object {
+                  "children": <path
+                    d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+                  />,
+                  "color": "inherit",
+                  "component": "svg",
+                  "data-testid": "AddBoxIcon",
+                  "fontSize": "medium",
+                  "inheritViewBox": false,
+                  "instanceFontSize": undefined,
+                  "titleAccess": "Expand Tree",
+                  "viewBox": "0 0 24 24",
+                }
+              }
+              role="img"
+              viewBox="0 0 24 24"
+            >
+              <Insertion
+                cache={
+                  Object {
+                    "insert": [Function],
+                    "inserted": Object {
+                      "176wh8e-MuiCircularProgress-circle": true,
+                      "18lrjg1-MuiCircularProgress-root": true,
+                      "1idz92c-MuiCircularProgress-svg": true,
+                      "animation-1p2h4ri": true,
+                      "animation-61bdi0": true,
+                      "i4bv87-MuiSvgIcon-root": true,
+                    },
+                    "key": "css",
+                    "nonce": undefined,
+                    "registered": Object {},
+                    "sheet": StyleSheet {
+                      "_alreadyInsertedOrderInsensitiveRule": true,
+                      "_insertTag": [Function],
+                      "before": null,
+                      "container": <head>
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          .css-i4bv87-MuiSvgIcon-root{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;width:1em;height:1em;display:inline-block;fill:currentColor;-webkit-flex-shrink:0;-ms-flex-negative:0;flex-shrink:0;-webkit-transition:fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;transition:fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;font-size:1.5rem;}
+                        </style>
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          .css-18lrjg1-MuiCircularProgress-root{display:inline-block;color:#1976d2;-webkit-animation:animation-61bdi0 1.4s linear infinite;animation:animation-61bdi0 1.4s linear infinite;}
+                        </style>
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          @-webkit-keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                        </style>
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          @keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                        </style>
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          .css-1idz92c-MuiCircularProgress-svg{display:block;}
+                        </style>
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          .css-176wh8e-MuiCircularProgress-circle{stroke:currentColor;stroke-dasharray:80px,200px;stroke-dashoffset:0;-webkit-animation:animation-1p2h4ri 1.4s ease-in-out infinite;animation:animation-1p2h4ri 1.4s ease-in-out infinite;}
+                        </style>
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          @-webkit-keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                        </style>
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          @keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                        </style>
+                      </head>,
+                      "ctr": 8,
+                      "insertionPoint": undefined,
+                      "isSpeedy": false,
+                      "key": "css",
+                      "nonce": undefined,
+                      "prepend": undefined,
+                      "tags": Array [
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          .css-i4bv87-MuiSvgIcon-root{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;width:1em;height:1em;display:inline-block;fill:currentColor;-webkit-flex-shrink:0;-ms-flex-negative:0;flex-shrink:0;-webkit-transition:fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;transition:fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;font-size:1.5rem;}
+                        </style>,
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          .css-18lrjg1-MuiCircularProgress-root{display:inline-block;color:#1976d2;-webkit-animation:animation-61bdi0 1.4s linear infinite;animation:animation-61bdi0 1.4s linear infinite;}
+                        </style>,
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          @-webkit-keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                        </style>,
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          @keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                        </style>,
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          .css-1idz92c-MuiCircularProgress-svg{display:block;}
+                        </style>,
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          .css-176wh8e-MuiCircularProgress-circle{stroke:currentColor;stroke-dasharray:80px,200px;stroke-dashoffset:0;-webkit-animation:animation-1p2h4ri 1.4s ease-in-out infinite;animation:animation-1p2h4ri 1.4s ease-in-out infinite;}
+                        </style>,
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          @-webkit-keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                        </style>,
+                        <style
+                          data-emotion="css"
+                          data-s=""
+                        >
+                          
+                          @keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                        </style>,
+                      ],
+                    },
+                  }
+                }
+                isStringTag={true}
+                serialized={
+                  Object {
+                    "map": undefined,
+                    "name": "i4bv87-MuiSvgIcon-root",
+                    "next": undefined,
+                    "styles": "label:MuiSvgIcon-root;user-select:none;width:1em;height:1em;display:inline-block;fill:currentColor;flex-shrink:0;transition:fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;font-size:1.5rem;",
+                    "toString": [Function],
+                  }
+                }
+              />
+              <svg
+                className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                data-testid="AddBoxIcon"
+                focusable="false"
+                role="img"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+                />
+                <title>
+                  Expand Tree
+                </title>
+              </svg>
+            </MuiSvgIconRoot>
+          </ForwardRef(SvgIcon)>
+        </ForwardRef(AddBoxIcon)>
+      </span>
+      <Link
+        href="/edit/object/foo:123"
+      >
+        <a
+          href="/edit/object/foo:123"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+        >
+          ajax-loaded title [foo:123]
+        </a>
+      </Link>
+    </Child>
+  </ChildListContextProvider>
+</FetchContextProvider>
+`;
