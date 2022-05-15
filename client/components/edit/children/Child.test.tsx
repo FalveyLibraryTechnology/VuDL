@@ -55,6 +55,16 @@ describe("Child", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
+    it("handles empty titles appropriately", async () => {
+        props.initialTitle = "";
+        response.metadata = {};
+        const wrapper = getMountedChildComponent(props);
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
+        wrapper.update();
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
     it("can be expanded to show children", async () => {
         const wrapper = getMountedChildComponent(props);
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
