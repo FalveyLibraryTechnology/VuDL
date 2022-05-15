@@ -10,7 +10,7 @@ jest.mock("../../context/EditorContext", () => ({
         return mockUseEditorContext();
     },
 }));
-jest.mock("./ChildList", () => () => "ChildList");
+jest.mock("./children/ChildList", () => () => "ChildList");
 
 describe("EditorSnackbar", () => {
     let editorValues;

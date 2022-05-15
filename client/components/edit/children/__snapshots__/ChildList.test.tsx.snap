@@ -1,0 +1,170 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChildList displays a paginator when appropriate 1`] = `
+<FetchContextProvider>
+  <ChildListContextProvider>
+    <ChildList
+      pageSize={10}
+      pid=""
+    >
+      <Component
+        count={1000}
+        onChange={[Function]}
+        page={1}
+      >
+        Pagination
+      </Component>
+      <ul>
+        <li
+          key="_child_foo:124"
+        >
+          <Component
+            initialTitle="hello1"
+            pid="foo:124"
+          >
+            Child
+          </Component>
+        </li>
+        <li
+          key="_child_foo:125"
+        >
+          <Component
+            initialTitle="hello2"
+            pid="foo:125"
+          >
+            Child
+          </Component>
+        </li>
+        <li
+          key="_child_foo:126"
+        >
+          <Component
+            initialTitle="hello3"
+            pid="foo:126"
+          >
+            Child
+          </Component>
+        </li>
+        <li
+          key="_child_foo:127"
+        >
+          <Component
+            initialTitle="hello4"
+            pid="foo:127"
+          >
+            Child
+          </Component>
+        </li>
+        <li
+          key="_child_foo:128"
+        >
+          <Component
+            initialTitle="hello5"
+            pid="foo:128"
+          >
+            Child
+          </Component>
+        </li>
+        <li
+          key="_child_foo:129"
+        >
+          <Component
+            initialTitle="hello6"
+            pid="foo:129"
+          >
+            Child
+          </Component>
+        </li>
+        <li
+          key="_child_foo:130"
+        >
+          <Component
+            initialTitle="hello7"
+            pid="foo:130"
+          >
+            Child
+          </Component>
+        </li>
+        <li
+          key="_child_foo:131"
+        >
+          <Component
+            initialTitle="hello8"
+            pid="foo:131"
+          >
+            Child
+          </Component>
+        </li>
+        <li
+          key="_child_foo:132"
+        >
+          <Component
+            initialTitle="hello9"
+            pid="foo:132"
+          >
+            Child
+          </Component>
+        </li>
+        <li
+          key="_child_foo:133"
+        >
+          <Component
+            initialTitle="hello10"
+            pid="foo:133"
+          >
+            Child
+          </Component>
+        </li>
+      </ul>
+    </ChildList>
+  </ChildListContextProvider>
+</FetchContextProvider>
+`;
+
+exports[`ChildList renders using ajax-loaded object data 1`] = `
+<FetchContextProvider>
+  <ChildListContextProvider>
+    <ChildList
+      pageSize={10}
+      pid="foo:123"
+    >
+      <ul>
+        <li
+          key="foo:123_child_foo:124"
+        >
+          <Component
+            initialTitle="hello"
+            pid="foo:124"
+          >
+            Child
+          </Component>
+        </li>
+      </ul>
+    </ChildList>
+  </ChildListContextProvider>
+</FetchContextProvider>
+`;
+
+exports[`ChildList renders using ajax-loaded root data 1`] = `
+<FetchContextProvider>
+  <ChildListContextProvider>
+    <ChildList
+      pageSize={10}
+      pid=""
+    >
+      <ul>
+        <li
+          key="_child_foo:124"
+        >
+          <Component
+            initialTitle="hello"
+            pid="foo:124"
+          >
+            Child
+          </Component>
+        </li>
+      </ul>
+    </ChildList>
+  </ChildListContextProvider>
+</FetchContextProvider>
+`;

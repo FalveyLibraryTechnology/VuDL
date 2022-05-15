@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { editObjectCatalogUrl, getObjectDetailsUrl } from "../util/routes";
 import { useFetchContext } from "./FetchContext";
+import { extractFirstMetadataValue as utilExtractFirstMetadataValue } from "../util/metadata";
 
 interface SnackbarState {
     open: boolean,
@@ -259,8 +260,7 @@ export const useEditorContext = () => {
     };
 
     const extractFirstMetadataValue = function (field: string, defaultValue: string): string {
-        const values = typeof currentMetadata[field] === "undefined" ? [] : currentMetadata[field];
-        return values.length > 0 ? values[0] : defaultValue;
+        return utilExtractFirstMetadataValue(currentMetadata, field, defaultValue);
     }
 
     return {
