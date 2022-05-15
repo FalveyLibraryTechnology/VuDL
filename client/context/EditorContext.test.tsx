@@ -27,7 +27,7 @@ describe("useEditorContext", () => {
     });
 
     describe("setCurrentPid", () => {
-        it("successfully calls fetch", async () => {
+        it("sets the current pid", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
             expect(result.current.state.currentPid).toBeNull();
