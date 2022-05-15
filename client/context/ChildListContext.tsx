@@ -23,9 +23,6 @@ const childListContextParams: ChildListState = {
 
 const ChildListContext = createContext({});
 
-const reducerMapping: Record<string, string> = {
-};
-
 /**
  * Update the shared states of react components.
  */
@@ -49,11 +46,6 @@ const childListReducer = (state: ChildListState, { type, payload }: { type: stri
         return {
             ...state,
             childListStorage
-        };
-    } else if (Object.keys(reducerMapping).includes(type)){
-        return {
-            ...state,
-            [reducerMapping[type]]: payload
         };
     } else {
         console.error(`fetch action type: ${type} does not exist`);
