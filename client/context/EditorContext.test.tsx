@@ -225,14 +225,14 @@ describe("useEditorContext", () => {
         });
     });
 
-    describe("loadChildDetailsIntoStorage", () => {
+    describe("loadObjectDetailsIntoStorage", () => {
         it("successfully calls fetch", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
-            expect(Object.keys(result.current.state.childDetailsStorage)).toEqual([]);
+            expect(Object.keys(result.current.state.objectDetailsStorage)).toEqual([]);
             await act(async () => {
-                await result.current.action.loadChildDetailsIntoStorage("test:123");
+                await result.current.action.loadObjectDetailsIntoStorage("test:123");
             });
-            expect(Object.keys(result.current.state.childDetailsStorage)).toEqual(["test:123"]);
+            expect(Object.keys(result.current.state.objectDetailsStorage)).toEqual(["test:123"]);
             expect(fetchValues.action.fetchJSON).toHaveBeenCalledTimes(1);
             expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/test%3A123/details");
         });
@@ -242,7 +242,7 @@ describe("useEditorContext", () => {
             const consoleSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
             await act(async () => {
-                await result.current.action.loadChildDetailsIntoStorage("test:123");
+                await result.current.action.loadObjectDetailsIntoStorage("test:123");
             });
             expect(fetchSpy).toHaveBeenCalledTimes(1);
             expect(consoleSpy).toHaveBeenCalledWith("Problem fetching details from http://localhost:9000/api/edit/object/test%3A123/details");

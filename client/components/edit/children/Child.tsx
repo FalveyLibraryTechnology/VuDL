@@ -14,16 +14,16 @@ export interface ChildProps {
 
 export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => {
     const {
-        state: { childDetailsStorage },
-        action: { loadChildDetailsIntoStorage },
+        state: { objectDetailsStorage },
+        action: { loadObjectDetailsIntoStorage },
     } = useEditorContext();
     const [expanded, setExpanded] = useState<boolean>(false);
-    const loaded = Object.prototype.hasOwnProperty.call(childDetailsStorage, pid);
-    const details = loaded ? childDetailsStorage[pid] : {};
+    const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, pid);
+    const details = loaded ? objectDetailsStorage[pid] : {};
 
     useEffect(() => {
         if (!loaded) {
-            loadChildDetailsIntoStorage(pid);
+            loadObjectDetailsIntoStorage(pid);
         }
     }, []);
     const title = !loaded ? initialTitle : extractFirstMetadataValue(details?.metadata ?? {}, "dc:title", "-");
