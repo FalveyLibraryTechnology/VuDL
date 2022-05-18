@@ -38,13 +38,9 @@ interface EditorState {
     modelsCatalog: Record<string, FedoraModel>;
     licensesCatalog: Record<string, License>;
     currentPid: string | null;
-    currentMetadata: Record<string, Array<string>>;
-    currentModels: Array<string>;
-    currentDatastreams: Array<string>;
     activeDatastream: string | null;
     isDatastreamModalOpen: boolean;
     datastreamModalState: string | null;
-    loading: boolean;
     snackbarState: SnackbarState;
     objectDetailsStorage: Record<string, ObjectDetails>;
     childListStorage: Record<string, Children>;
@@ -58,13 +54,9 @@ const editorContextParams: EditorState = {
     modelsCatalog: {},
     licensesCatalog: {},
     currentPid: null,
-    currentMetadata: {},
-    currentModels: [],
-    currentDatastreams: [],
     activeDatastream: null,
     isDatastreamModalOpen: false,
     datastreamModalState: null,
-    loading: true,
     snackbarState: {
         open: false,
         message: "",
@@ -89,14 +81,10 @@ const reducerMapping: Record<string, string> = {
     SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_PID: "currentPid",
-    SET_CURRENT_METADATA: "currentMetadata",
-    SET_CURRENT_MODELS: "currentModels",
-    SET_CURRENT_DATASTREAMS: "currentDatastreams",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
     SET_DATASTREAM_MODAL_STATE: "datastreamModalState",
     SET_SNACKBAR_STATE: "snackbarState",
-    SET_LOADING: "loading"
 };
 
 /**
@@ -149,15 +137,11 @@ export const useEditorContext = () => {
     const {
         state: {
             currentPid,
-            currentMetadata,
-            currentModels,
-            currentDatastreams,
             activeDatastream,
             isDatastreamModalOpen,
             datastreamModalState,
             licensesCatalog,
             modelsCatalog,
-            loading,
             snackbarState,
             objectDetailsStorage,
             childListStorage,
@@ -165,6 +149,8 @@ export const useEditorContext = () => {
         dispatch,
     } = useContext(EditorContext);
 
+    const currentDatastreams = objectDetailsStorage?.[currentPid]?.datastreams ?? [];
+    const currentModels = objectDetailsStorage?.[currentPid]?.models ?? [];
     const modelsDatastreams = currentModels.reduce((acc: Array<string>, model: string) => {
         const name = model.split(":")?.[1];
         return [
@@ -230,32 +216,9 @@ export const useEditorContext = () => {
     };
 
     const setCurrentPid = (pid: string) => {
-        // When we change the PID, we should flip to "loading..." status to prevent confusing displays:
-        setLoading(true);
         dispatch({
             type: "SET_CURRENT_PID",
             payload: pid
-        });
-    };
-
-    const setCurrentMetadata = (metadata: Record<string, Array<string>>) => {
-        dispatch({
-            type: "SET_CURRENT_METADATA",
-            payload: metadata
-        });
-    };
-
-    const setCurrentModels = (models: Array<string>) => {
-        dispatch({
-            type: "SET_CURRENT_MODELS",
-            payload: models
-        });
-    };
-
-    const setCurrentDatastreams = (datastreams: Array<string>) => {
-        dispatch({
-            type: "SET_CURRENT_DATASTREAMS",
-            payload: datastreams
         });
     };
 
@@ -287,13 +250,6 @@ export const useEditorContext = () => {
         });
     };
 
-    const setLoading = (state: boolean) => {
-        dispatch({
-            type: "SET_LOADING",
-            payload: state
-        });
-    };
-
     const datastreamsCatalog = Object.values(modelsCatalog).reduce((acc: Record<string, FedoraDatastream>, model) => {
         return {
             ...acc,
@@ -310,27 +266,13 @@ export const useEditorContext = () => {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
         }
     };
-    const loadObjectDetails = async (pid: string) => {
-        try {
-            setLoading(true);
-            setCurrentPid(pid);
-            const response = pid === null ?
-                {} :
-                (await fetchJSON(getObjectDetailsUrl(pid)));
-            setCurrentMetadata(response.metadata || {});
-            setCurrentModels(response.models || []);
-            setCurrentDatastreams(response.datastreams || []);
-            setLoading(false);
-        } catch(err) {
-            console.error("Problem fetching object details from " + getObjectDetailsUrl(pid));
-        }
-    };
 
     const loadCurrentObjectDetails = async () => {
-        return await loadObjectDetails(currentPid);
+        return await loadObjectDetailsIntoStorage(currentPid);
     };
 
     const extractFirstMetadataValue = function (field: string, defaultValue: string): string {
+        const currentMetadata = objectDetailsStorage?.[currentPid]?.metadata ?? {};
         return utilExtractFirstMetadataValue(currentMetadata, field, defaultValue);
     }
 
@@ -345,7 +287,6 @@ export const useEditorContext = () => {
             modelsDatastreams,
             modelsCatalog,
             licensesCatalog,
-            loading,
             snackbarState,
             objectDetailsStorage,
             childListStorage,
@@ -353,7 +294,6 @@ export const useEditorContext = () => {
         action: {
             initializeCatalog,
             setCurrentPid,
-            loadObjectDetails,
             loadCurrentObjectDetails,
             setActiveDatastream,
             setDatastreamModalState,

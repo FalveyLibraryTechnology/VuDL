@@ -17,24 +17,32 @@ describe("ObjectSummary", () => {
         editorValues = {
             state: {
                 currentPid: "foo:123",
-                loading: false,
+                objectDetailsStorage: {},
             },
             action: {
                 extractFirstMetadataValue: jest.fn(),
+                loadCurrentObjectDetails: jest.fn(),
             },
         };
         mockUseEditorContext.mockReturnValue(editorValues);
     });
 
     it("displays loading message when appropriate", async () => {
-        editorValues.state.loading = true;
         jest.spyOn(editorValues.action, "extractFirstMetadataValue").mockReturnValue("");
+        const loadSpy = jest.spyOn(editorValues.action, "loadCurrentObjectDetails");
         const wrapper = mount(<ObjectSummary />);
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
+        expect(loadSpy).toHaveBeenCalledTimes(1);
     });
 
     it("renders information from metadata when available", async () => {
+        editorValues.state.objectDetailsStorage["foo:123"] = {
+            metadata: {
+                "dc:title": ["My title"],
+                "dc:description": ["<p>Hello <b>world</b>!</p>"],
+            }
+        };
         const metaSpy = jest
             .spyOn(editorValues.action, "extractFirstMetadataValue")
             .mockReturnValueOnce("My title")

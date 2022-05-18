@@ -166,7 +166,7 @@ describe("useEditorContext", () => {
                 await result.current.action.loadCurrentObjectDetails();
             });
 
-            expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("Problem fetching object details"));
+            expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("Problem fetching details"));
         });
     });
 
