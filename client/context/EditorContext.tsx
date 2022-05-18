@@ -1,7 +1,16 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { editObjectCatalogUrl, getObjectDetailsUrl } from "../util/routes";
+import { editObjectCatalogUrl, getObjectChildrenUrl, getObjectDetailsUrl } from "../util/routes";
 import { useFetchContext } from "./FetchContext";
 import { extractFirstMetadataValue as utilExtractFirstMetadataValue } from "../util/metadata";
+
+interface ChildDetails {
+};
+
+interface Children {
+    numFound?: number;
+    start?: number;
+    docs?: Record<string, string>[];
+}
 
 interface SnackbarState {
     open: boolean,
@@ -37,6 +46,8 @@ interface EditorState {
     datastreamModalState: string | null;
     loading: boolean;
     snackbarState: SnackbarState;
+    childDetailsStorage: Record<string, ChildDetails>;
+    childListStorage: Record<string, Children>;
 }
 
 /**
@@ -58,7 +69,9 @@ const editorContextParams: EditorState = {
         open: false,
         message: "",
         severity: "info"
-    }
+    },
+    childDetailsStorage: {},
+    childListStorage: {},
 };
 
 export const DatastreamModalStates = {
@@ -90,7 +103,27 @@ const reducerMapping: Record<string, string> = {
  * Update the shared states of react components.
  */
 const editorReducer = (state: EditorState, { type, payload }: { type: string, payload: SnackbarState | unknown}) => {
-    if(Object.keys(reducerMapping).includes(type)){
+    if (type === "ADD_TO_CHILD_DETAILS_STORAGE") {
+        const { key, child } = payload;
+        const childDetailsStorage = {
+            ...state.childDetailsStorage,
+        };
+        childDetailsStorage[key] = child;
+        return {
+            ...state,
+            childDetailsStorage
+        };
+    } else if (type === "ADD_TO_CHILD_LIST_STORAGE") {
+        const { key, children } = payload;
+        const childListStorage = {
+            ...state.childListStorage,
+        };
+        childListStorage[key] = children;
+        return {
+            ...state,
+            childListStorage
+        };
+    } else if(Object.keys(reducerMapping).includes(type)){
         return {
             ...state,
             [reducerMapping[type]]: payload
@@ -125,7 +158,9 @@ export const useEditorContext = () => {
             licensesCatalog,
             modelsCatalog,
             loading,
-            snackbarState
+            snackbarState,
+            childDetailsStorage,
+            childListStorage,
         },
         dispatch,
     } = useContext(EditorContext);
@@ -143,6 +178,42 @@ export const useEditorContext = () => {
         };
     });
 
+    const addToChildDetailsStorage = (key: string, child: ChildDetails) => {
+        dispatch({
+            type: "ADD_TO_CHILD_DETAILS_STORAGE",
+            payload: { key, child },
+        });
+    };
+
+    const addToChildListStorage = (key: string, children: Children) => {
+        dispatch({
+            type: "ADD_TO_CHILD_LIST_STORAGE",
+            payload: { key, children },
+        });
+    };
+
+    const getChildListStorageKey = (pid: string, page: number, pageSize: number): string => {
+        return `${pid}_${page}_${pageSize}`;
+    };
+
+    const loadChildDetailsIntoStorage = async (pid: string) => {
+        const url = getObjectDetailsUrl(pid);
+        try {
+            addToChildDetailsStorage(pid, await fetchJSON(url));
+        } catch (e) {
+            console.error("Problem fetching details from " + url);
+        }
+    };
+
+    const loadChildrenIntoStorage = async (pid: string, page: number, pageSize: number) => {
+        const key = getChildListStorageKey(pid, page, pageSize);
+        const url = getObjectChildrenUrl(pid, (page - 1) * pageSize, pageSize);
+        try {
+            addToChildListStorage(key, await fetchJSON(url));
+        } catch (e) {
+            console.error("Problem fetching tree data from " + url);
+        }
+    };
 
     const setModelsCatalog = (modelsCatalog: Record<string, FedoraModel>) => {
         dispatch({
@@ -275,7 +346,9 @@ export const useEditorContext = () => {
             modelsCatalog,
             licensesCatalog,
             loading,
-            snackbarState
+            snackbarState,
+            childDetailsStorage,
+            childListStorage,
         },
         action: {
             initializeCatalog,
@@ -286,7 +359,10 @@ export const useEditorContext = () => {
             setDatastreamModalState,
             toggleDatastreamModal,
             setSnackbarState,
-            extractFirstMetadataValue
+            extractFirstMetadataValue,
+            getChildListStorageKey,
+            loadChildDetailsIntoStorage,
+            loadChildrenIntoStorage,
         },
     };
 }

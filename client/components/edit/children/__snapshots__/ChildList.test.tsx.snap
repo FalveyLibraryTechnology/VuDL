@@ -2,7 +2,7 @@
 
 exports[`ChildList displays a paginator when appropriate 1`] = `
 <FetchContextProvider>
-  <ChildListContextProvider>
+  <EditorContextProvider>
     <ChildList
       pageSize={10}
       pid=""
@@ -117,13 +117,13 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
         </li>
       </ul>
     </ChildList>
-  </ChildListContextProvider>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;
 
 exports[`ChildList renders using ajax-loaded object data 1`] = `
 <FetchContextProvider>
-  <ChildListContextProvider>
+  <EditorContextProvider>
     <ChildList
       pageSize={10}
       pid="foo:123"
@@ -141,13 +141,13 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
         </li>
       </ul>
     </ChildList>
-  </ChildListContextProvider>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;
 
 exports[`ChildList renders using ajax-loaded root data 1`] = `
 <FetchContextProvider>
-  <ChildListContextProvider>
+  <EditorContextProvider>
     <ChildList
       pageSize={10}
       pid=""
@@ -165,6 +165,6 @@ exports[`ChildList renders using ajax-loaded root data 1`] = `
         </li>
       </ul>
     </ChildList>
-  </ChildListContextProvider>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;

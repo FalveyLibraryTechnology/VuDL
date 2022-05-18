@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useChildListContext } from "../../../context/ChildListContext";
+import { useEditorContext } from "../../../context/EditorContext";
 import CircularProgress from "@mui/material/CircularProgress";
 import ChildList from "./ChildList";
 import Link from "next/link";
@@ -16,7 +16,7 @@ export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => 
     const {
         state: { childDetailsStorage },
         action: { loadChildDetailsIntoStorage },
-    } = useChildListContext();
+    } = useEditorContext();
     const [expanded, setExpanded] = useState<boolean>(false);
     const loaded = Object.prototype.hasOwnProperty.call(childDetailsStorage, pid);
     const details = loaded ? childDetailsStorage[pid] : {};
