@@ -20,8 +20,10 @@ exports[`EditHome renders 1`] = `
   <h2>
     Contents
   </h2>
-  <ChildList
-    pid=""
-  />
+  <EditorContextProvider>
+    <ChildList
+      pid=""
+    />
+  </EditorContextProvider>
 </div>
 `;
