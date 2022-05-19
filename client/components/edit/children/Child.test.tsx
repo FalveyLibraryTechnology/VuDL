@@ -4,12 +4,12 @@ import { waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import { ChildProps, Child } from "./Child";
-import { EditorContextProvider } from "../../../context/EditorContext";
+import { EditorContextProvider, ObjectDetails } from "../../../context/EditorContext";
 import { FetchContextProvider } from "../../../context/FetchContext";
 
 jest.mock("./ChildList", () => () => "ChildList");
 
-function getMountedChildComponent(props: ChildListProps) {
+function getMountedChildComponent(props: ChildProps) {
     return mount(
         <FetchContextProvider>
             <EditorContextProvider>
@@ -22,7 +22,7 @@ function getMountedChildComponent(props: ChildListProps) {
 describe("Child", () => {
     let props: ChildProps;
     let lastRequestUrl: string;
-    let response;
+    let response: ObjectDetails;
 
     beforeEach(() => {
         props = { pid: "foo:123", initialTitle: "initial title" };

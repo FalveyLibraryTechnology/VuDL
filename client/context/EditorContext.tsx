@@ -3,7 +3,12 @@ import { editObjectCatalogUrl, getObjectChildrenUrl, getObjectDetailsUrl } from 
 import { useFetchContext } from "./FetchContext";
 import { extractFirstMetadataValue as utilExtractFirstMetadataValue } from "../util/metadata";
 
-interface ObjectDetails {
+export interface ObjectDetails {
+    fedoraDatastreams: Array<string>;
+    metadata: Record<string, Array<string>>;
+    models: Array<string>;
+    pid: string;
+    sortOn: string;
 };
 
 interface Children {
@@ -92,7 +97,7 @@ const reducerMapping: Record<string, string> = {
  */
 const editorReducer = (state: EditorState, { type, payload }: { type: string, payload: SnackbarState | unknown}) => {
     if (type === "ADD_TO_OBJECT_DETAILS_STORAGE") {
-        const { key, details } = payload;
+        const { key, details } = payload as { key: string; details: ObjectDetails };
         const objectDetailsStorage = {
             ...state.objectDetailsStorage,
         };
@@ -102,7 +107,7 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
             objectDetailsStorage
         };
     } else if (type === "ADD_TO_CHILD_LIST_STORAGE") {
-        const { key, children } = payload;
+        const { key, children } = payload as { key: string; children: Children };
         const childListStorage = {
             ...state.childListStorage,
         };

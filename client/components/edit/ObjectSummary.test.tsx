@@ -41,7 +41,7 @@ describe("ObjectSummary", () => {
             metadata: {
                 "dc:title": ["My title"],
                 "dc:description": ["<p>Hello <b>world</b>!</p>"],
-            }
+            },
         };
         const metaSpy = jest
             .spyOn(editorValues.action, "extractFirstMetadataValue")
