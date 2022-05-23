@@ -9,6 +9,10 @@ const usePaginatorControls = (currentPage: number, getMagicLabel: (page: number)
 
     const setControlsLabel = (label: string): void => {
         setLabel(currentPage, label);
+        // After saving the label, clear the input so we defer to the magic labeler;
+        // otherwise, the system can get into a confused state (where, for example,
+        // toggling brackets after entering a number by hand will not work).
+        setLabelInput("");
     };
 
     const approveCurrentPageLabel = (): void => {
@@ -44,7 +48,6 @@ const usePaginatorControls = (currentPage: number, getMagicLabel: (page: number)
     };
 
     const updateCurrentPageLabel = (event): void => {
-        setLabelInput(event.target.value);
         setControlsLabel(event.target.value);
     };
 
