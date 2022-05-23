@@ -2,7 +2,7 @@ import React, { useEffect, forwardRef } from "react";
 import { usePaginatorContext } from "../../context/PaginatorContext";
 
 interface ThumbnailProps {
-    scrollTo: () => void;
+    scrollTo: (i: number) => void;
     number: number;
     selected: boolean;
 }
@@ -18,9 +18,11 @@ const Thumbnail = forwardRef(({ scrollTo, number, selected }: ThumbnailProps, re
         }
     }, [selected]);
 
+    const url = getJobImageUrl(order[number], "thumb");
+    const img = url ? <img alt="" src={getJobImageUrl(order[number], "thumb")} /> : "";
     return (
         <div onClick={() => setPage(number)} className={"thumbnail" + (selected ? " selected" : "")} ref={ref}>
-            <img alt="" src={getJobImageUrl(order[number], "thumb")} />
+            {img}
             <div className="number">{number + 1}</div>
             <div className={"label" + (getLabel(number) === null ? " magic" : "")}>{getMagicLabel(number)}</div>
         </div>
