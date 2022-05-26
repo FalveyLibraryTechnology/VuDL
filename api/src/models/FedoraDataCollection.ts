@@ -179,6 +179,13 @@ class FedoraDataCollection {
         return "title";
     }
 
+    get state(): string {
+        if ((this.fedoraDetails?.state ?? []).length > 0) {
+            return this.fedoraDetails.state[0];
+        }
+        return "Unknown";
+    }
+
     get title(): string {
         return (this.metadata["dc:title"] ?? [])[0] ?? "";
     }
