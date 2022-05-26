@@ -59,5 +59,5 @@ describe("FedoraDataCollection", () => {
             };
             expect(fedoraData.state).toEqual("Active");
         });
-    })
+    });
 });
