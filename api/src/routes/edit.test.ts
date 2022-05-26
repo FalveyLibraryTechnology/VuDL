@@ -261,7 +261,6 @@ describe("edit", () => {
                 .set("Content-Type", "text/plain")
                 .send("Illegal")
                 .expect(StatusCodes.BAD_REQUEST);
-            console.log(response);
             expect(response.error.text).toEqual("Illegal state: Illegal");
         });
 
