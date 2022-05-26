@@ -102,4 +102,21 @@ describe("Fedora", () => {
             expect(addDatastreamSpy).toHaveBeenCalledWith("foo:123", "DC", expectedParams, expectedXml, [201]);
         });
     });
+
+    describe("modifyObjectState", () => {
+        beforeEach(() => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
+        });
+
+        it("will modify object state", async () => {
+            fedora.modifyObjectState(pid, "Active");
+            expect(requestSpy).toHaveBeenCalledWith(
+                "patch",
+                "/" + pid,
+                "DELETE { <> <info:fedora/fedora-system:def/model#state> ?any . } INSERT { <> <info:fedora/fedora-system:def/model#state> \"Active\".\n" +
+                " } WHERE { ?id <info:fedora/fedora-system:def/model#state> ?any }",
+                { headers: { "Content-Type": "application/sparql-update" } }
+            );
+        });
+    });
 });
