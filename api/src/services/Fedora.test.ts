@@ -113,8 +113,8 @@ describe("Fedora", () => {
             expect(requestSpy).toHaveBeenCalledWith(
                 "patch",
                 "/" + pid,
-                "DELETE { <> <info:fedora/fedora-system:def/model#state> ?any . } INSERT { <> <info:fedora/fedora-system:def/model#state> \"Active\".\n" +
-                " } WHERE { ?id <info:fedora/fedora-system:def/model#state> ?any }",
+                'DELETE { <> <info:fedora/fedora-system:def/model#state> ?any . } INSERT { <> <info:fedora/fedora-system:def/model#state> "Active".\n' +
+                    " } WHERE { ?id <info:fedora/fedora-system:def/model#state> ?any }",
                 { headers: { "Content-Type": "application/sparql-update" } }
             );
         });
