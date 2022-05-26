@@ -267,6 +267,24 @@ export class Fedora {
     }
 
     /**
+     * Change the state of an object
+     *
+     * @param pid   PID of object to modify
+     * @param state New state to set
+     */
+    async modifyObjectState(pid: string, state: string): Promise<void> {
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#state"), literal(state));
+        const insertClause = this.getOutputFromWriter(writer);
+        const deleteClause = "<> <info:fedora/fedora-system:def/model#state> ?any .";
+        const whereClause = "?id <info:fedora/fedora-system:def/model#state> ?any";
+        const response = await this.patchRdf("/" + pid, insertClause, deleteClause, whereClause);
+        if (response.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + response.statusCode);
+        }
+    }
+
+    /**
      * Add a triple to the Fedora object.
      *
      * @param pid        PID to update

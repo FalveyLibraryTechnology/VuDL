@@ -1,6 +1,7 @@
 import express = require("express");
 import bodyParser = require("body-parser");
 import Config from "../models/Config";
+import Fedora from "../services/Fedora";
 import FedoraCatalog from "../services/FedoraCatalog";
 import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
@@ -247,6 +248,24 @@ edit.get("/object/:pid/datastream/:stream/mimetype", requireToken, datastreamSan
         const datastream = DatastreamManager.getInstance();
         const mimeType = await datastream.getMimeType(pid, stream);
         res.status(200).send(mimeType);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
+
+edit.put("/object/:pid/state", requireToken, pidSanitizer, bodyParser.text(), async function (req, res) {
+    try {
+        const pid = req.params.pid;
+        const fedora = Fedora.getInstance();
+        const state = req.body;
+        const legalStates = ["Active", "Deleted", "Inactive"];
+        if (!legalStates.includes(state)) {
+            res.status(400).send(`Illegal state: ${state}`);
+            return;
+        }
+        await fedora.modifyObjectState(pid, state);
+        res.status(200).send("ok");
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);
