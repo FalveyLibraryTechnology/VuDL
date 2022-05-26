@@ -47,4 +47,17 @@ describe("FedoraDataCollection", () => {
             expect(fedoraData.sequences).toEqual(sequences);
         });
     });
+
+    describe("state", () => {
+        it("returns an unknown status when data is absent", () => {
+            expect(fedoraData.state).toEqual("Unknown");
+        });
+
+        it("returns appropriate state data when present", () => {
+            fedoraData.fedoraDetails = {
+                state: ["Active"],
+            };
+            expect(fedoraData.state).toEqual("Active");
+        });
+    })
 });
