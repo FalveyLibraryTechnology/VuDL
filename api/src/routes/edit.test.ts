@@ -4,6 +4,7 @@ import app from "../app";
 import edit from "./edit";
 import Config from "../models/Config";
 import DatastreamManager from "../services/DatastreamManager";
+import Fedora from "../services/Fedora";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import FedoraDataCollector from "../services/FedoraDataCollector";
 import Database from "../services/Database";
@@ -249,6 +250,33 @@ describe("edit", () => {
 
             expect(datastreamManager.getMimeType).toHaveBeenCalledWith(pid, datastream);
             expect(datastreamManager.downloadBuffer).toHaveBeenCalledWith(pid, datastream);
+        });
+    });
+
+    describe("put /object/:pid/state", () => {
+        it("will reject invalid states", async () => {
+            const response = await request(app)
+                .put(`/edit/object/${pid}/state`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("Illegal")
+                .expect(StatusCodes.BAD_REQUEST);
+            console.log(response);
+            expect(response.error.text).toEqual("Illegal state: Illegal");
+        });
+
+        it("will accept a valid state", async () => {
+            const fedora = Fedora.getInstance();
+            const stateSpy = jest.spyOn(fedora, "modifyObjectState").mockImplementation(jest.fn());
+
+            await request(app)
+                .put(`/edit/object/${pid}/state`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("Active")
+                .expect(StatusCodes.OK);
+
+            expect(stateSpy).toHaveBeenCalledWith(pid, "Active");
         });
     });
 });
