@@ -310,11 +310,7 @@ export class Fedora {
         }
     }
 
-    async updateSequenceRelationship(
-        pid: string,
-        parentPid: string,
-        newPosition: number
-    ): Promise <void> {
+    async updateSequenceRelationship(pid: string, parentPid: string, newPosition: number): Promise<void> {
         // TODO: add validation (legal parent, proper ordering, etc.)
         const subject = "info:fedora/" + pid;
         const predicate = "http://vudl.org/relationships#sequence";

@@ -273,17 +273,23 @@ edit.put("/object/:pid/state", requireToken, pidSanitizer, bodyParser.text(), as
 });
 
 const pidAndParentPidSanitizer = sanitizeParameters({ pid: pidSanitizeRegEx, parentPid: pidSanitizeRegEx });
-edit.put("/object/:pid/positionInParent/:parentPid", requireToken, pidAndParentPidSanitizer, bodyParser.text(), async function (req, res) {
-    try {
-        const pid = req.params.pid;
-        const parent = req.params.parentPid;
-        const fedora = Fedora.getInstance();
-        const pos = req.body;
-        fedora.updateSequenceRelationship(pid, parent, pos);
-        res.status(200).send("ok");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
+edit.put(
+    "/object/:pid/positionInParent/:parentPid",
+    requireToken,
+    pidAndParentPidSanitizer,
+    bodyParser.text(),
+    async function (req, res) {
+        try {
+            const pid = req.params.pid;
+            const parent = req.params.parentPid;
+            const fedora = Fedora.getInstance();
+            const pos = req.body;
+            fedora.updateSequenceRelationship(pid, parent, pos);
+            res.status(200).send("ok");
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
     }
-});
+);
 export default edit;
