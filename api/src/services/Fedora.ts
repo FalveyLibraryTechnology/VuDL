@@ -310,6 +310,27 @@ export class Fedora {
         }
     }
 
+    async updateSequenceRelationship(
+        pid: string,
+        parentPid: string,
+        newPosition: number
+    ): Promise <void> {
+        // TODO: add validation (legal parent, proper ordering, etc.)
+        const subject = "info:fedora/" + pid;
+        const predicate = "http://vudl.org/relationships#sequence";
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(subject), namedNode(predicate), literal(parentPid + "#" + newPosition));
+        const insertClause = this.getOutputFromWriter(writer);
+        const targetPath = "/" + pid;
+        // TODO: delete prior position in parent without deleting positions in other parents:
+        //const deleteClause = "TODO";
+        //const whereClause = "TODO";
+        const patchResponse = await this.patchRdf(targetPath, insertClause /*, deleteClause, whereClause */);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
     /**
      * Patch the RDF of a resource in Fedora.
      *

@@ -7,7 +7,7 @@ import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import FedoraDataCollector from "../services/FedoraDataCollector";
 import { requireToken } from "./auth";
-import { datastreamSanitizer, pidSanitizer } from "./sanitize";
+import { datastreamSanitizer, pidSanitizer, pidSanitizeRegEx, sanitizeParameters } from "./sanitize";
 import * as formidable from "formidable";
 import Solr from "../services/Solr";
 import FedoraDataCollection from "../models/FedoraDataCollection";
@@ -272,4 +272,18 @@ edit.put("/object/:pid/state", requireToken, pidSanitizer, bodyParser.text(), as
     }
 });
 
+const pidAndParentPidSanitizer = sanitizeParameters({ pid: pidSanitizeRegEx, parentPid: pidSanitizeRegEx });
+edit.put("/object/:pid/positionInParent/:parentPid", requireToken, pidAndParentPidSanitizer, bodyParser.text(), async function (req, res) {
+    try {
+        const pid = req.params.pid;
+        const parent = req.params.parentPid;
+        const fedora = Fedora.getInstance();
+        const pos = req.body;
+        fedora.updateSequenceRelationship(pid, parent, pos);
+        res.status(200).send("ok");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
 export default edit;
