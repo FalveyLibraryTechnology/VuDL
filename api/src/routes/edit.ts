@@ -294,7 +294,7 @@ edit.put(
                 res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
                 return;
             }
-            var parentSort = (legalParent as FedoraDataCollection).sortOn;
+            const parentSort = (legalParent as FedoraDataCollection).sortOn;
             if (parentSort !== "custom") {
                 res.status(400).send(`${parent} has sort value of ${parentSort}; custom is required.`);
                 return;
