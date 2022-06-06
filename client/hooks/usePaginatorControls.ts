@@ -1,44 +1,45 @@
 import { useState } from "react";
 import MagicLabeler from "../util/MagicLabeler";
 
-const usePaginatorControls = (currentPage, getMagicLabel, setLabel) => {
+const usePaginatorControls = (currentPage: number, getMagicLabel: (page: number) => string, setLabel: (page: number, label: string) => void) => {
     const [labelInput, setLabelInput] = useState("");
-    const getControlsLabel = (useMagic) => {
-        if (typeof useMagic === "undefined") {
-            useMagic = true;
-        }
-        return labelInput.length === 0 && useMagic ? getMagicLabel(currentPage) : labelInput;
+    const getControlsLabel = (): string => {
+        return labelInput.length === 0 ? getMagicLabel(currentPage) : labelInput;
     };
 
-    const setControlsLabel = (label) => {
+    const setControlsLabel = (label: string): void => {
         setLabel(currentPage, label);
+        // After saving the label, clear the input so we defer to the magic labeler;
+        // otherwise, the system can get into a confused state (where, for example,
+        // toggling brackets after entering a number by hand will not work).
+        setLabelInput("");
     };
 
-    const approveCurrentPageLabel = () => {
-        setControlsLabel(getControlsLabel(true));
+    const approveCurrentPageLabel = (): void => {
+        setControlsLabel(getControlsLabel());
     };
 
-    const setLabelPrefix = (str) => {
+    const setLabelPrefix = (str: string): void => {
         setControlsLabel(MagicLabeler.replaceLabelPart(getControlsLabel(), "prefix", str, true));
     };
 
-    const setLabelBody = (str) => {
+    const setLabelBody = (str: string): void => {
         setControlsLabel(MagicLabeler.replaceLabelPart(getControlsLabel(), "label", str));
     };
 
-    const setLabelSuffix = (str) => {
+    const setLabelSuffix = (str: string): void => {
         setControlsLabel(MagicLabeler.replaceLabelPart(getControlsLabel(), "suffix", str, true));
     };
 
-    const toggleBrackets = () => {
+    const toggleBrackets = (): void => {
         setControlsLabel(MagicLabeler.toggleBrackets(getControlsLabel()));
     };
 
-    const toggleCase = () => {
+    const toggleCase = (): void => {
         setControlsLabel(MagicLabeler.toggleCase(getControlsLabel()));
     };
 
-    const toggleRoman = () => {
+    const toggleRoman = (): void => {
         var label = MagicLabeler.toggleRoman(getControlsLabel());
         if (label === false) {
             return alert("Roman numeral toggle not supported for this label.");
@@ -46,8 +47,7 @@ const usePaginatorControls = (currentPage, getMagicLabel, setLabel) => {
         setControlsLabel(label);
     };
 
-    const updateCurrentPageLabel = (event) => {
-        setLabelInput(event.target.value);
+    const updateCurrentPageLabel = (event): void => {
         setControlsLabel(event.target.value);
     };
 
