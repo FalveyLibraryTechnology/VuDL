@@ -310,8 +310,15 @@ export class Fedora {
         }
     }
 
+    /**
+     * This method adds or changes the sequential position of a pid within a specified parent pid.
+     * It is the responsibility of the caller to ensure that parentPid is a legal parent of pid.
+     *
+     * @param pid         PID to update
+     * @param parentPid   Parent PID to update
+     * @param newPosition New position to set
+     */
     async updateSequenceRelationship(pid: string, parentPid: string, newPosition: number): Promise<void> {
-        // TODO: add validation (legal parent, proper ordering, etc.)
         const subject = "info:fedora/" + pid;
         const predicate = "http://vudl.org/relationships#sequence";
         const writer = new N3.Writer({ format: "text/turtle" });

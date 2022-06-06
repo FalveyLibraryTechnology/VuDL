@@ -284,6 +284,21 @@ edit.put(
             const parent = req.params.parentPid;
             const fedora = Fedora.getInstance();
             const pos = req.body;
+
+            // Validate the input
+            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
+            const legalParent = fedoraData.parents.reduce((previous, current) => { return previous || (current.pid === parent ? current : false); }, false);
+            if (!legalParent) {
+                res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
+                return;
+            }
+            var parentSort = (legalParent as FedoraDataCollection).sortOn;
+            if (parentSort !== "custom") {
+                res.status(400).send(`${parent} has sort value of ${parentSort}; custom is required.`)
+                return;
+            }
+
+            // If we got this far, we can safely update things
             await fedora.updateSequenceRelationship(pid, parent, pos);
             res.status(200).send("ok");
         } catch (error) {
