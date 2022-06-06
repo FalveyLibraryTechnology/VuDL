@@ -287,14 +287,16 @@ edit.put(
 
             // Validate the input
             const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
-            const legalParent = fedoraData.parents.reduce((previous, current) => { return previous || (current.pid === parent ? current : false); }, false);
+            const legalParent = fedoraData.parents.reduce((previous, current) => {
+                return previous || (current.pid === parent ? current : false);
+            }, false);
             if (!legalParent) {
                 res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
                 return;
             }
             var parentSort = (legalParent as FedoraDataCollection).sortOn;
             if (parentSort !== "custom") {
-                res.status(400).send(`${parent} has sort value of ${parentSort}; custom is required.`)
+                res.status(400).send(`${parent} has sort value of ${parentSort}; custom is required.`);
                 return;
             }
 
