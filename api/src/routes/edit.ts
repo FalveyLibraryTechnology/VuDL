@@ -284,7 +284,7 @@ edit.put(
             const parent = req.params.parentPid;
             const fedora = Fedora.getInstance();
             const pos = req.body;
-            fedora.updateSequenceRelationship(pid, parent, pos);
+            await fedora.updateSequenceRelationship(pid, parent, pos);
             res.status(200).send("ok");
         } catch (error) {
             console.error(error);
