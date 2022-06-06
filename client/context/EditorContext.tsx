@@ -11,10 +11,10 @@ export interface ObjectDetails {
     sortOn: string;
 };
 
-interface Children {
+interface ChildrenResultPage {
     numFound?: number;
     start?: number;
-    docs?: Record<string, string>[];
+    docs?: Record<string, string|string[]>[];
 }
 
 interface SnackbarState {
@@ -48,7 +48,7 @@ interface EditorState {
     datastreamModalState: string | null;
     snackbarState: SnackbarState;
     objectDetailsStorage: Record<string, ObjectDetails>;
-    childListStorage: Record<string, Children>;
+    childListStorage: Record<string, ChildrenResultPage>;
 }
 
 /**
@@ -107,7 +107,7 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
             objectDetailsStorage
         };
     } else if (type === "ADD_TO_CHILD_LIST_STORAGE") {
-        const { key, children } = payload as { key: string; children: Children };
+        const { key, children } = payload as { key: string; children: ChildrenResultPage };
         const childListStorage = {
             ...state.childListStorage,
         };
@@ -176,7 +176,7 @@ export const useEditorContext = () => {
         });
     };
 
-    const addToChildListStorage = (key: string, children: Children) => {
+    const addToChildListStorage = (key: string, children: ChildrenResultPage) => {
         dispatch({
             type: "ADD_TO_CHILD_LIST_STORAGE",
             payload: { key, children },
