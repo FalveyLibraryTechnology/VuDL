@@ -315,15 +315,21 @@ export class Fedora {
         const subject = "info:fedora/" + pid;
         const predicate = "http://vudl.org/relationships#sequence";
         const writer = new N3.Writer({ format: "text/turtle" });
-        writer.addQuad(namedNode(subject), namedNode(predicate), literal(parentPid + "#" + newPosition));
+        writer.addQuad(namedNode(subject), namedNode(predicate), literal(`${parentPid}#${newPosition}`));
         const insertClause = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid;
-        // TODO: delete prior position in parent without deleting positions in other parents:
-        //const deleteClause = "TODO";
-        //const whereClause = "TODO";
-        const patchResponse = await this.patchRdf(targetPath, insertClause /*, deleteClause, whereClause */);
-        if (patchResponse.statusCode !== 204) {
-            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        const deleteClause = `<> <${predicate}> ?pos .`;
+        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#"))`;
+        // First we'll add the new position, and then we'll delete any old positions matching the same parent, to
+        // ensure that we have only one position per parent.
+        // TODO: do this in one step!
+        const patchResponse1 = await this.patchRdf(targetPath, insertClause);
+        if (patchResponse1.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse1.statusCode);
+        }
+        const patchResponse2 = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse2.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse2.statusCode);
         }
     }
 
