@@ -96,6 +96,8 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "A200": "#eeeeee",
               "A400": "#bdbdbd",
               "A700": "#616161",
+              "dark": "#616161",
+              "darkChannel": "97 97 97",
             },
             "info": Object {
               "contrastText": "#fff",
@@ -125,7 +127,9 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
             "text": Object {
               "disabled": "rgba(0, 0, 0, 0.38)",
               "primary": "rgba(0, 0, 0, 0.87)",
+              "primaryChannel": "0 0 0",
               "secondary": "rgba(0, 0, 0, 0.6)",
+              "secondaryChannel": "0 0 0",
             },
             "tonalOffset": 0.2,
             "warning": Object {
@@ -494,6 +498,8 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "A200": "#eeeeee",
               "A400": "#bdbdbd",
               "A700": "#616161",
+              "dark": "#616161",
+              "darkChannel": "97 97 97",
             },
             "info": Object {
               "contrastText": "#fff",
@@ -523,7 +529,9 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
             "text": Object {
               "disabled": "rgba(0, 0, 0, 0.38)",
               "primary": "rgba(0, 0, 0, 0.87)",
+              "primaryChannel": "0 0 0",
               "secondary": "rgba(0, 0, 0, 0.6)",
+              "secondaryChannel": "0 0 0",
             },
             "tonalOffset": 0.2,
             "warning": Object {
