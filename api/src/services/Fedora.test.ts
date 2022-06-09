@@ -119,4 +119,21 @@ describe("Fedora", () => {
             );
         });
     });
+
+    describe("updateSequenceRelationship", () => {
+        beforeEach(() => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
+        });
+
+        it("will modify sequence relationship", async () => {
+            fedora.updateSequenceRelationship(pid, "foo:100", 2);
+            expect(requestSpy).toHaveBeenCalledWith(
+                "patch",
+                "/" + pid,
+                'DELETE { <> <http://vudl.org/relationships#sequence> ?pos . } INSERT { <info:fedora/test4> <http://vudl.org/relationships#sequence> "foo:100#2".\n' +
+                    ' } WHERE { ?id <http://vudl.org/relationships#sequence> ?pos . FILTER(REGEX(?pos, "foo:100#")) }',
+                { headers: { "Content-Type": "application/sparql-update" } }
+            );
+        });
+    });
 });
