@@ -24,7 +24,7 @@ describe("edit", () => {
             allowed_origins: ["http://localhost:3000", "http://localhost:9000"],
         };
         Config.setInstance(new Config(config));
-        pid = "vudl:123";
+        pid = "foo:123";
         datastream = "test1";
     });
 
@@ -210,7 +210,7 @@ describe("edit", () => {
             await request(app)
                 .get(`/edit/object/${pid}/datastream/${datastream}/download`)
                 .set("Authorization", "Bearer test")
-                .expect("Content-Disposition", `attachment; filename=vudl_123_${datastream}.xml`)
+                .expect("Content-Disposition", `attachment; filename=foo_123_${datastream}.xml`)
                 .expect("Content-Type", mimeType + "; charset=utf-8")
                 .expect(StatusCodes.OK);
 
@@ -276,6 +276,56 @@ describe("edit", () => {
                 .expect(StatusCodes.OK);
 
             expect(stateSpy).toHaveBeenCalledWith(pid, "Active");
+        });
+    });
+
+    describe("put /object/:pid/positionInParent/:parentPid", () => {
+        let parentPid: string;
+        let mockData: FedoraDataCollection;
+        let sequenceSpy;
+        beforeEach(() => {
+            parentPid = "foo:100";
+            mockData = FedoraDataCollection.build(pid);
+            const collector = FedoraDataCollector.getInstance();
+            jest.spyOn(collector, "getHierarchy").mockResolvedValue(mockData);
+            const fedora = Fedora.getInstance();
+            sequenceSpy = jest.spyOn(fedora, "updateSequenceRelationship").mockImplementation(jest.fn());
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will reject an illegal parent/child pair", async () => {
+            const response = await request(app)
+                .put(`/edit/object/${pid}/positionInParent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("foo:100 is not an immediate parent of foo:123.");
+        });
+
+        it("will reject setting a position in an un-ordered parent", async () => {
+            mockData.addParent(FedoraDataCollection.build(parentPid));
+            const response = await request(app)
+                .put(`/edit/object/${pid}/positionInParent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("foo:100 has sort value of title; custom is required.");
+        });
+
+        it("updates sequence when appropriate preconditions are met", async () => {
+            const parent = FedoraDataCollection.build(parentPid);
+            parent.fedoraDetails.sortOn = ["custom"];
+            mockData.addParent(parent);
+            await request(app)
+                .put(`/edit/object/${pid}/positionInParent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.OK);
+            expect(sequenceSpy).toHaveBeenCalledWith(pid, parentPid, 2);
         });
     });
 });
