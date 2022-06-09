@@ -4,7 +4,7 @@ import { waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import { ChildListProps, ChildList } from "./ChildList";
-import { ChildListContextProvider } from "../../../context/ChildListContext";
+import { EditorContextProvider } from "../../../context/EditorContext";
 import { FetchContextProvider } from "../../../context/FetchContext";
 
 jest.mock("@mui/material/Pagination", () => () => "Pagination");
@@ -13,9 +13,9 @@ jest.mock("./Child", () => () => "Child");
 function getMountedChildListComponent(props: ChildListProps) {
     return mount(
         <FetchContextProvider>
-            <ChildListContextProvider>
+            <EditorContextProvider>
                 <ChildList {...props} />
-            </ChildListContextProvider>
+            </EditorContextProvider>
         </FetchContextProvider>
     );
 }

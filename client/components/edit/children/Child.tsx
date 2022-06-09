@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useChildListContext } from "../../../context/ChildListContext";
+import { useEditorContext } from "../../../context/EditorContext";
 import CircularProgress from "@mui/material/CircularProgress";
 import ChildList from "./ChildList";
 import Link from "next/link";
@@ -14,16 +14,16 @@ export interface ChildProps {
 
 export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => {
     const {
-        state: { childDetailsStorage },
-        action: { loadChildDetailsIntoStorage },
-    } = useChildListContext();
+        state: { objectDetailsStorage },
+        action: { loadObjectDetailsIntoStorage },
+    } = useEditorContext();
     const [expanded, setExpanded] = useState<boolean>(false);
-    const loaded = Object.prototype.hasOwnProperty.call(childDetailsStorage, pid);
-    const details = loaded ? childDetailsStorage[pid] : {};
+    const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, pid);
+    const details = loaded ? objectDetailsStorage[pid] : {};
 
     useEffect(() => {
         if (!loaded) {
-            loadChildDetailsIntoStorage(pid);
+            loadObjectDetailsIntoStorage(pid);
         }
     }, []);
     const title = !loaded ? initialTitle : extractFirstMetadataValue(details?.metadata ?? {}, "dc:title", "-");

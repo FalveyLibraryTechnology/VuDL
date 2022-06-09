@@ -48,11 +48,9 @@ exports[`ObjectEditor renders 1`] = `
   <h2>
     Contents
   </h2>
-  <ChildListContextProvider>
-    <Component
-      pid="foo:123"
-    />
-  </ChildListContextProvider>
+  <Component
+    pid="foo:123"
+  />
   <Component />
 </div>
 `;
