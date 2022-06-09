@@ -283,7 +283,7 @@ edit.put(
             const pid = req.params.pid;
             const parent = req.params.parentPid;
             const fedora = Fedora.getInstance();
-            const pos = req.body;
+            const pos = parseInt(req.body);
 
             // Validate the input
             const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
