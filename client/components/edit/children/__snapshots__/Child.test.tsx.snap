@@ -2,7 +2,7 @@
 
 exports[`Child can be expanded to show children 1`] = `
 <FetchContextProvider>
-  <ChildListContextProvider>
+  <EditorContextProvider>
     <Child
       initialTitle="initial title"
       pid="foo:123"
@@ -231,13 +231,13 @@ exports[`Child can be expanded to show children 1`] = `
         ChildList
       </Component>
     </Child>
-  </ChildListContextProvider>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;
 
 exports[`Child handles empty titles appropriately 1`] = `
 <FetchContextProvider>
-  <ChildListContextProvider>
+  <EditorContextProvider>
     <Child
       initialTitle=""
       pid="foo:123"
@@ -460,13 +460,13 @@ exports[`Child handles empty titles appropriately 1`] = `
         </a>
       </Link>
     </Child>
-  </ChildListContextProvider>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;
 
 exports[`Child renders using ajax-loaded data 1`] = `
 <FetchContextProvider>
-  <ChildListContextProvider>
+  <EditorContextProvider>
     <Child
       initialTitle="initial title"
       pid="foo:123"
@@ -689,6 +689,6 @@ exports[`Child renders using ajax-loaded data 1`] = `
         </a>
       </Link>
     </Child>
-  </ChildListContextProvider>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;

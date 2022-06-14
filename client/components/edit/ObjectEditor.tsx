@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import ChildList from "./children/ChildList";
-import { ChildListContextProvider } from "../../context/ChildListContext";
 import Breadcrumbs from "./Breadcrumbs";
 import ObjectSummary from "./ObjectSummary";
 import Box from "@mui/material/Box";
@@ -17,11 +16,12 @@ interface ObjectEditorProps {
 
 const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
     const {
-        action: { initializeCatalog, loadObjectDetails },
+        action: { initializeCatalog, loadCurrentObjectDetails, setCurrentPid },
     } = useEditorContext();
 
     useEffect(() => {
-        loadObjectDetails(pid);
+        setCurrentPid(pid);
+        loadCurrentObjectDetails();
         initializeCatalog();
     }, []);
 
@@ -51,9 +51,7 @@ const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
 
             <DatastreamModal />
             <h2>Contents</h2>
-            <ChildListContextProvider>
-                <ChildList pid={pid} />
-            </ChildListContextProvider>
+            <ChildList pid={pid} />
             <EditorSnackbar />
         </div>
     );

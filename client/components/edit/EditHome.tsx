@@ -1,6 +1,6 @@
 import React from "react";
 import ChildList from "./children/ChildList";
-import { ChildListContextProvider } from "../../context/ChildListContext";
+import { EditorContextProvider } from "../../context/EditorContext";
 import Link from "next/link";
 
 const EditHome = (): React.ReactElement => {
@@ -14,9 +14,9 @@ const EditHome = (): React.ReactElement => {
                 </li>
             </ul>
             <h2>Contents</h2>
-            <ChildListContextProvider>
+            <EditorContextProvider>
                 <ChildList pid="" />
-            </ChildListContextProvider>
+            </EditorContextProvider>
         </div>
     );
 };

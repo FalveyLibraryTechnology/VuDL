@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useChildListContext } from "../../../context/ChildListContext";
+import { useEditorContext } from "../../../context/EditorContext";
 import Child from "./Child";
 import CircularProgress from "@mui/material/CircularProgress";
 import Pagination from "@mui/material/Pagination";
@@ -13,7 +13,7 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
     const {
         state: { childListStorage },
         action: { getChildListStorageKey, loadChildrenIntoStorage },
-    } = useChildListContext();
+    } = useEditorContext();
     const [page, setPage] = useState<number>(1);
     const key = getChildListStorageKey(pid, page, pageSize);
     const loaded = Object.prototype.hasOwnProperty.call(childListStorage, key);
