@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useEditorContext } from "../../../context/EditorContext";
 import CircularProgress from "@mui/material/CircularProgress";
 import ChildList from "./ChildList";
+import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import AddBox from "@mui/icons-material/AddBox";
 import IndeterminateCheckBox from "@mui/icons-material/IndeterminateCheckBox";
 import { extractFirstMetadataValue } from "../../../util/metadata";
+import ObjectStatus from "../ObjectStatus";
 
 export interface ChildProps {
     pid: string;
@@ -43,9 +45,16 @@ export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => 
     const childList = expanded ? <ChildList pid={pid} pageSize={10} /> : "";
     return (
         <>
-            {expandControl}
-            <Link href={"/edit/object/" + pid}>{(title.length > 0 ? title : "-") + " [" + pid + "]"}</Link>
-            {loadingMessage}
+            <Grid container>
+                <Grid item xs={8}>
+                    {expandControl}
+                    <Link href={"/edit/object/" + pid}>{(title.length > 0 ? title : "-") + " [" + pid + "]"}</Link>
+                </Grid>
+                <Grid item xs={4}>
+                    {loaded ? <ObjectStatus pid={pid} /> : ""}
+                    {loadingMessage}
+                </Grid>
+            </Grid>
             {childList}
         </>
     );

@@ -1,0 +1,19 @@
+.active .indicator {
+    color: green;
+}
+
+.inactive .indicator {
+    color: yellow;
+}
+
+.deleted .indicator {
+    color: red;
+}
+
+.unknown .indicator {
+    color: gray;
+}
+
+.indicator {
+    text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+}

@@ -32,6 +32,11 @@ exports[`ObjectSummary renders information from metadata when available 1`] = `
         !
       </p>
     </div>
+    <Component
+      pid="foo:123"
+    >
+      ObjectStatus
+    </Component>
   </div>
 </ObjectSummary>
 `;

@@ -1,3 +1,4 @@
+import styles from "./ChildList.module.css";
 import React, { useEffect, useState } from "react";
 import { useEditorContext } from "../../../context/EditorContext";
 import Child from "./Child";
@@ -59,7 +60,7 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
     return (
         <>
             {paginator}
-            <ul>{contents}</ul>
+            <ul className={styles.childlist}>{contents}</ul>
         </>
     );
 };
