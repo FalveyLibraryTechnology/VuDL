@@ -9,6 +9,7 @@ export interface ObjectDetails {
     models: Array<string>;
     pid: string;
     sortOn: string;
+    state: string;
 };
 
 interface ChildrenResultPage {
