@@ -28,9 +28,10 @@ export const ObjectStatus = ({ pid }: ObjectStatusProps): React.ReactElement => 
     ) : (
         ""
     );
+    const stateTxt = details.state ?? "Unknown";
     const stateMsg = loaded
-        ? <span className={styles[(details.state ?? "").toLowerCase()] ?? styles.unknown}><span className={styles.indicator}>&#9673;</span>&nbsp;
-            {details.state}
+        ? <span className={styles[stateTxt.toLowerCase()] ?? styles.unknown}><span className={styles.indicator}>&#9673;</span>&nbsp;
+            {stateTxt}
         </span>
         : "";
     return (
