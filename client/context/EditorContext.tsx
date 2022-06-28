@@ -48,6 +48,7 @@ interface EditorState {
     isDatastreamModalOpen: boolean;
     isStateModalOpen: boolean;
     datastreamModalState: string | null;
+    stateModalActivePid: string | null;
     snackbarState: SnackbarState;
     objectDetailsStorage: Record<string, ObjectDetails>;
     childListStorage: Record<string, ChildrenResultPage>;
@@ -65,6 +66,7 @@ const editorContextParams: EditorState = {
     isDatastreamModalOpen: false,
     isStateModalOpen: false,
     datastreamModalState: null,
+    stateModalActivePid: null,
     snackbarState: {
         open: false,
         message: "",
@@ -93,6 +95,7 @@ const reducerMapping: Record<string, string> = {
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
     SET_IS_STATE_MODAL_OPEN: "isStateModalOpen",
     SET_DATASTREAM_MODAL_STATE: "datastreamModalState",
+    SET_STATE_MODAL_ACTIVE_PID: "stateModalActivePid",
     SET_SNACKBAR_STATE: "snackbarState",
 };
 
@@ -150,6 +153,7 @@ export const useEditorContext = () => {
             isDatastreamModalOpen,
             isStateModalOpen,
             datastreamModalState,
+            stateModalActivePid,
             licensesCatalog,
             modelsCatalog,
             snackbarState,
@@ -253,6 +257,13 @@ export const useEditorContext = () => {
         });
     };
 
+    const setStateModalActivePid = (pid: string) => {
+        dispatch({
+            type: "SET_STATE_MODAL_ACTIVE_PID",
+            payload: pid
+        });
+    };
+
     const setActiveDatastream = (datastream: string) => {
         dispatch({
             type: "SET_ACTIVE_DATASTREAM",
@@ -301,6 +312,7 @@ export const useEditorContext = () => {
             isDatastreamModalOpen,
             isStateModalOpen,
             datastreamModalState,
+            stateModalActivePid,
             datastreamsCatalog,
             modelsDatastreams,
             modelsCatalog,
@@ -315,6 +327,7 @@ export const useEditorContext = () => {
             loadCurrentObjectDetails,
             setActiveDatastream,
             setDatastreamModalState,
+            setStateModalActivePid,
             toggleDatastreamModal,
             toggleStateModal,
             setSnackbarState,
