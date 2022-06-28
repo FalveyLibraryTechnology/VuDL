@@ -46,6 +46,7 @@ interface EditorState {
     currentPid: string | null;
     activeDatastream: string | null;
     isDatastreamModalOpen: boolean;
+    isStateModalOpen: boolean;
     datastreamModalState: string | null;
     snackbarState: SnackbarState;
     objectDetailsStorage: Record<string, ObjectDetails>;
@@ -62,6 +63,7 @@ const editorContextParams: EditorState = {
     currentPid: null,
     activeDatastream: null,
     isDatastreamModalOpen: false,
+    isStateModalOpen: false,
     datastreamModalState: null,
     snackbarState: {
         open: false,
@@ -89,6 +91,7 @@ const reducerMapping: Record<string, string> = {
     SET_CURRENT_PID: "currentPid",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
+    SET_IS_STATE_MODAL_OPEN: "isStateModalOpen",
     SET_DATASTREAM_MODAL_STATE: "datastreamModalState",
     SET_SNACKBAR_STATE: "snackbarState",
 };
@@ -145,6 +148,7 @@ export const useEditorContext = () => {
             currentPid,
             activeDatastream,
             isDatastreamModalOpen,
+            isStateModalOpen,
             datastreamModalState,
             licensesCatalog,
             modelsCatalog,
@@ -235,6 +239,13 @@ export const useEditorContext = () => {
         });
     };
 
+    const toggleStateModal = () => {
+        dispatch({
+            type: "SET_IS_STATE_MODAL_OPEN",
+            payload: !isStateModalOpen
+        });
+    };
+
     const setDatastreamModalState = (datastreamModalState: boolean) => {
         dispatch({
             type: "SET_DATASTREAM_MODAL_STATE",
@@ -288,6 +299,7 @@ export const useEditorContext = () => {
             currentDatastreams,
             activeDatastream,
             isDatastreamModalOpen,
+            isStateModalOpen,
             datastreamModalState,
             datastreamsCatalog,
             modelsDatastreams,
@@ -304,6 +316,7 @@ export const useEditorContext = () => {
             setActiveDatastream,
             setDatastreamModalState,
             toggleDatastreamModal,
+            toggleStateModal,
             setSnackbarState,
             extractFirstMetadataValue,
             getChildListStorageKey,
