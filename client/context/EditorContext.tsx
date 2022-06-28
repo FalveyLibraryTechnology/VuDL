@@ -189,7 +189,6 @@ export const useEditorContext = () => {
     });
 
     const addToObjectDetailsStorage = (key: string, details: ObjectDetails) => {
-        console.log("add");
         dispatch({
             type: "ADD_TO_OBJECT_DETAILS_STORAGE",
             payload: { key, details },
@@ -197,7 +196,6 @@ export const useEditorContext = () => {
     };
 
     const removeFromObjectDetailsStorage = (key: string) => {
-        console.log("remove");
         dispatch({
             type: "REMOVE_FROM_OBJECT_DETAILS_STORAGE",
             payload: { key },
@@ -216,7 +214,6 @@ export const useEditorContext = () => {
     };
 
     const loadObjectDetailsIntoStorage = async (pid: string) => {
-        console.log("load");
         // Ignore null values:
         if (pid === null) {
             return;
