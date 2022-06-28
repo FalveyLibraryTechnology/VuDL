@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -77,22 +78,26 @@ const StateModal = (): React.ReactElement => {
     const contents = isSaving ? (
         <p>Saving...</p>
     ) : (
-        <>
-            <FormControl>
-                <FormLabel id="state-modal-group-label">State</FormLabel>
-                <RadioGroup
-                    aria-labelledby="state-modal-group-label"
-                    value={selectedValue}
-                    name="state-modal-group"
-                    onChange={handleChange}
-                >
-                    <FormControlLabel value="Active" control={<Radio />} label="Active" />
-                    <FormControlLabel value="Inactive" control={<Radio />} label="Inactive" />
-                    <FormControlLabel value="Deleted" control={<Radio />} label="Deleted" />
-                </RadioGroup>
-            </FormControl>
-            <button onClick={save}>Save</button>
-        </>
+        <Grid container>
+            <Grid item xs={12}>
+                <FormControl>
+                    <FormLabel id="state-modal-group-label">State</FormLabel>
+                    <RadioGroup
+                        aria-labelledby="state-modal-group-label"
+                        value={selectedValue}
+                        name="state-modal-group"
+                        onChange={handleChange}
+                    >
+                        <FormControlLabel value="Active" control={<Radio />} label="Active" />
+                        <FormControlLabel value="Inactive" control={<Radio />} label="Inactive" />
+                        <FormControlLabel value="Deleted" control={<Radio />} label="Deleted" />
+                    </RadioGroup>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+                <button onClick={save}>Save</button>
+            </Grid>
+        </Grid>
     );
     return (
         <Dialog className="stateModal" open={isStateModalOpen} onClose={toggleStateModal} fullWidth={true}>
@@ -108,8 +113,10 @@ const StateModal = (): React.ReactElement => {
                     </Grid>
                 </Grid>
             </DialogTitle>
-            {loadingMessage}
-            {contents}
+            <DialogContent>
+                {loadingMessage}
+                {contents}
+            </DialogContent>
         </Dialog>
     );
 };
