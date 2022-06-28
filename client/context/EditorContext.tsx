@@ -113,6 +113,16 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
             ...state,
             objectDetailsStorage
         };
+    } else if (type === "REMOVE_FROM_OBJECT_DETAILS_STORAGE") {
+        const { key } = payload as { key: string };
+        const objectDetailsStorage = {
+            ...state.objectDetailsStorage,
+        };
+        delete objectDetailsStorage[key];
+        return {
+            ...state,
+            objectDetailsStorage
+        };
     } else if (type === "ADD_TO_CHILD_LIST_STORAGE") {
         const { key, children } = payload as { key: string; children: ChildrenResultPage };
         const childListStorage = {
@@ -179,9 +189,18 @@ export const useEditorContext = () => {
     });
 
     const addToObjectDetailsStorage = (key: string, details: ObjectDetails) => {
+        console.log("add");
         dispatch({
             type: "ADD_TO_OBJECT_DETAILS_STORAGE",
             payload: { key, details },
+        });
+    };
+
+    const removeFromObjectDetailsStorage = (key: string) => {
+        console.log("remove");
+        dispatch({
+            type: "REMOVE_FROM_OBJECT_DETAILS_STORAGE",
+            payload: { key },
         });
     };
 
@@ -197,6 +216,11 @@ export const useEditorContext = () => {
     };
 
     const loadObjectDetailsIntoStorage = async (pid: string) => {
+        console.log("load");
+        // Ignore null values:
+        if (pid === null) {
+            return;
+        }
         const url = getObjectDetailsUrl(pid);
         try {
             addToObjectDetailsStorage(pid, await fetchJSON(url));
@@ -335,6 +359,7 @@ export const useEditorContext = () => {
             getChildListStorageKey,
             loadObjectDetailsIntoStorage,
             loadChildrenIntoStorage,
+            removeFromObjectDetailsStorage,
         },
     };
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import ChildList from "./children/ChildList";
 import StateModal from "./StateModal";
+import EditorSnackbar from "./EditorSnackbar";
 import { EditorContextProvider } from "../../context/EditorContext";
 import Link from "next/link";
 
@@ -18,6 +19,7 @@ const EditHome = (): React.ReactElement => {
             <EditorContextProvider>
                 <StateModal />
                 <ChildList pid="" />
+                <EditorSnackbar />
             </EditorContextProvider>
         </div>
     );

@@ -47,6 +47,10 @@ const getObjectParentsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "parents");
 }
 
+const getObjectStateUrl = (pid: string): string => {
+    return getPidActionUrl(pid, "state");
+}
+
 const getDatastreamActionUrl = (pid: string, datastream: string, action = ""): string => {
     return getPidActionUrl(pid, `datastream/${encodeURIComponent(datastream)}` + (action.length > 0 ? `/${action}` : ""));
 }
@@ -97,6 +101,7 @@ export {
     getObjectChildrenUrl,
     getObjectDetailsUrl,
     getObjectParentsUrl,
+    getObjectStateUrl,
     postObjectDatastreamUrl,
     deleteObjectDatastreamUrl,
     downloadObjectDatastreamUrl,
