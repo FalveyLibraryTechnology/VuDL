@@ -33,11 +33,14 @@ export const ObjectStatus = ({ pid }: ObjectStatusProps): React.ReactElement => 
         setStateModalActivePid(pid);
         toggleStateModal();
     };
-    const stateMsg = loaded
-        ? <button onClick={clickAction} className={styles[stateTxt.toLowerCase()]}><span className={styles.indicator}>&#9673;</span>&nbsp;
+    const stateMsg = loaded ? (
+        <button onClick={clickAction} className={styles[stateTxt.toLowerCase()]}>
+            <span className={styles.indicator}>&#9673;</span>&nbsp;
             {stateTxt}
         </button>
-        : "";
+    ) : (
+        ""
+    );
     return (
         <>
             {loadingMessage}

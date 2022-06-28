@@ -45,13 +45,11 @@ const StateModal = (): React.ReactElement => {
     };
 
     const showSnackbarMessage = (message: string, severity: string) => {
-        setSnackbarState(
-            {
-                open: true,
-                message,
-                severity
-            }
-        )
+        setSnackbarState({
+            open: true,
+            message,
+            severity,
+        });
     };
 
     const save = async () => {
@@ -76,8 +74,10 @@ const StateModal = (): React.ReactElement => {
         }
     };
 
-    const contents = isSaving ? <p>Saving...</p>
-        : <>
+    const contents = isSaving ? (
+        <p>Saving...</p>
+    ) : (
+        <>
             <FormControl>
                 <FormLabel id="state-modal-group-label">State</FormLabel>
                 <RadioGroup
@@ -92,14 +92,10 @@ const StateModal = (): React.ReactElement => {
                 </RadioGroup>
             </FormControl>
             <button onClick={save}>Save</button>
-        </>;
+        </>
+    );
     return (
-        <Dialog
-            className="stateModal"
-            open={isStateModalOpen}
-            onClose={toggleStateModal}
-            fullWidth={true}
-        >
+        <Dialog className="stateModal" open={isStateModalOpen} onClose={toggleStateModal} fullWidth={true}>
             <DialogTitle>
                 <Grid container>
                     <Grid item xs={11}>

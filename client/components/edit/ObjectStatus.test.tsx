@@ -24,8 +24,7 @@ describe("ObjectStatus", () => {
 
     beforeEach(() => {
         props = { pid: "foo:123" };
-        response = {
-        };
+        response = {};
         global.fetch = jest.fn((url) => {
             lastRequestUrl = url as string;
             return {
