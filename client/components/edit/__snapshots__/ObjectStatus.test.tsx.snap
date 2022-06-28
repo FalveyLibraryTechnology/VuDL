@@ -6,8 +6,9 @@ exports[`ObjectStatus defaults to unknown state 1`] = `
     <ObjectStatus
       pid="foo:123"
     >
-      <span
+      <button
         className="unknown"
+        onClick={[Function]}
       >
         <span
           className="indicator"
@@ -16,7 +17,7 @@ exports[`ObjectStatus defaults to unknown state 1`] = `
         </span>
          
         Unknown
-      </span>
+      </button>
     </ObjectStatus>
   </EditorContextProvider>
 </FetchContextProvider>
@@ -28,8 +29,9 @@ exports[`ObjectStatus displays the state found in the response 1`] = `
     <ObjectStatus
       pid="foo:123"
     >
-      <span
+      <button
         className="inactive"
+        onClick={[Function]}
       >
         <span
           className="indicator"
@@ -38,7 +40,7 @@ exports[`ObjectStatus displays the state found in the response 1`] = `
         </span>
          
         Inactive
-      </span>
+      </button>
     </ObjectStatus>
   </EditorContextProvider>
 </FetchContextProvider>
