@@ -39,6 +39,11 @@ const getObjectChildrenUrl = (pid: string, start = 0, rows = 10): string => {
     return `${base}?start=${start}&rows=${rows}`;
 }
 
+const getObjectRecursiveChildPidsUrl = (pid: string, start = 0, rows = 10): string => {
+    const base = getPidActionUrl(pid, "recursiveChildPids");
+    return `${base}?start=${start}&rows=${rows}`;
+}
+
 const getObjectDetailsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "details");
 }
@@ -101,6 +106,7 @@ export {
     getObjectChildrenUrl,
     getObjectDetailsUrl,
     getObjectParentsUrl,
+    getObjectRecursiveChildPidsUrl,
     getObjectStateUrl,
     postObjectDatastreamUrl,
     deleteObjectDatastreamUrl,
