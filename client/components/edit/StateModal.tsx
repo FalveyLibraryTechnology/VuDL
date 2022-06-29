@@ -30,11 +30,12 @@ const StateModal = (): React.ReactElement => {
     const [childPidResponse, setChildPidResponse] = useState({ loading: true });
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, stateModalActivePid);
     const details = loaded ? objectDetailsStorage[stateModalActivePid] : {};
+    const childPageSize = 1000;
     useEffect(() => {
         async function loadChildren() {
             setChildPidResponse({ loading: true });
             setIncludeChildren(false);
-            const url = getObjectRecursiveChildPidsUrl(details.pid);
+            const url = getObjectRecursiveChildPidsUrl(details.pid, 0, childPageSize);
             const response = await fetchJSON(url);
             setChildPidResponse(response);
         }
@@ -71,14 +72,31 @@ const StateModal = (): React.ReactElement => {
         return result;
     };
 
-    const saveChildren = async (): Promise<boolean> => {
-        for (let i = 0; i < childPidResponse.docs.length; i++) {
-            const result = await updateStatus(childPidResponse.docs[i].id);
+    const saveChildPage = async (response): Promise<boolean> => {
+        for (let i = 0; i < response.docs.length; i++) {
+            const result = await updateStatus(response.docs[i].id);
             if (result !== "ok") {
                 showSnackbarMessage(`Status failed to save; "${result}"`, "error");
                 toggleStateModal();
                 setStatusMessage("");
                 return false;
+            }
+        }
+        return true;
+    };
+
+    const saveChildren = async (): Promise<boolean> => {
+        const expectedTotal = childPidResponse.numFound;
+        let found = 0;
+        let nextResponse = childPidResponse;
+        while (found < expectedTotal) {
+            if (!(await saveChildPage(nextResponse))) {
+                return false;
+            }
+            found += nextResponse.docs.length;
+            if (found < expectedTotal) {
+                const url = getObjectRecursiveChildPidsUrl(details.pid, found, childPageSize);
+                nextResponse = await fetchJSON(url);
             }
         }
         return true;
