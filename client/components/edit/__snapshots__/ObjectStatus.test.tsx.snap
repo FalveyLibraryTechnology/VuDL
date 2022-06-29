@@ -6,6 +6,9 @@ exports[`ObjectStatus defaults to unknown state 1`] = `
     <ObjectStatus
       pid="foo:123"
     >
+      <ObjectLoader
+        pid="foo:123"
+      />
       <button
         className="unknown"
         onClick={[Function]}
@@ -29,6 +32,9 @@ exports[`ObjectStatus displays the state found in the response 1`] = `
     <ObjectStatus
       pid="foo:123"
     >
+      <ObjectLoader
+        pid="foo:123"
+      />
       <button
         className="inactive"
         onClick={[Function]}
