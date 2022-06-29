@@ -24,9 +24,12 @@ const StateModal = (): React.ReactElement => {
         action: { fetchText },
     } = useFetchContext();
     const [isSaving, setIsSaving] = useState<bool>(false);
+    const [selectedValue, setSelectedValue] = useState<string>("Inactive");
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, stateModalActivePid);
     const details = loaded ? objectDetailsStorage[stateModalActivePid] : {};
-    const [selectedValue, setSelectedValue] = useState<string>(loaded ? details.state : "Inactive");
+    useEffect(() => {
+        setSelectedValue(details.state ?? "Inactive");
+    }, [details]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedValue(event.target.value);
