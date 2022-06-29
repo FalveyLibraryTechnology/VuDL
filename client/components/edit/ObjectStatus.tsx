@@ -1,7 +1,7 @@
 import styles from "./ObjectStatus.module.css";
-import React, { useEffect } from "react";
+import React from "react";
 import { useEditorContext } from "../../context/EditorContext";
-import CircularProgress from "@mui/material/CircularProgress";
+import ObjectLoader from "./ObjectLoader";
 
 export interface ObjectStatusProps {
     pid: string;
@@ -10,24 +10,11 @@ export interface ObjectStatusProps {
 export const ObjectStatus = ({ pid }: ObjectStatusProps): React.ReactElement => {
     const {
         state: { objectDetailsStorage },
-        action: { loadObjectDetailsIntoStorage, setStateModalActivePid, toggleStateModal },
+        action: { setStateModalActivePid, toggleStateModal },
     } = useEditorContext();
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, pid);
     const details = loaded ? objectDetailsStorage[pid] : {};
 
-    useEffect(() => {
-        if (!loaded) {
-            loadObjectDetailsIntoStorage(pid);
-        }
-    }, []);
-    const loadingMessage = !loaded ? (
-        <>
-            &nbsp;
-            <CircularProgress size="1em" />
-        </>
-    ) : (
-        ""
-    );
     const stateTxt = details.state ?? "Unknown";
     const clickAction = () => {
         setStateModalActivePid(pid);
@@ -43,7 +30,7 @@ export const ObjectStatus = ({ pid }: ObjectStatusProps): React.ReactElement => 
     );
     return (
         <>
-            {loadingMessage}
+            <ObjectLoader pid={pid} />
             {stateMsg}
         </>
     );

@@ -13,12 +13,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useEditorContext } from "../../context/EditorContext";
 import { getObjectStateUrl } from "../../util/routes";
 import { useFetchContext } from "../../context/FetchContext";
-import CircularProgress from "@mui/material/CircularProgress";
+import ObjectLoader from "./ObjectLoader";
 
 const StateModal = (): React.ReactElement => {
     const {
         state: { isStateModalOpen, objectDetailsStorage, stateModalActivePid },
-        action: { loadObjectDetailsIntoStorage, removeFromObjectDetailsStorage, setSnackbarState, toggleStateModal },
+        action: { removeFromObjectDetailsStorage, setSnackbarState, toggleStateModal },
     } = useEditorContext();
     const {
         action: { fetchText },
@@ -27,19 +27,6 @@ const StateModal = (): React.ReactElement => {
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, stateModalActivePid);
     const details = loaded ? objectDetailsStorage[stateModalActivePid] : {};
     const [selectedValue, setSelectedValue] = useState<string>(loaded ? details.state : "Inactive");
-    useEffect(() => {
-        if (!loaded) {
-            loadObjectDetailsIntoStorage(stateModalActivePid);
-        }
-    }, []);
-    const loadingMessage = !loaded ? (
-        <>
-            &nbsp;
-            <CircularProgress size="1em" />
-        </>
-    ) : (
-        ""
-    );
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedValue(event.target.value);
@@ -66,10 +53,7 @@ const StateModal = (): React.ReactElement => {
             toggleStateModal();
             setIsSaving(false);
             // Clear and reload the cached object, since it has now changed!
-            // TODO: figure out why removing from storage doesn't automatically trigger a reload.
-            // In theory, the loadObjectDetailsIntoStorage call should not be necessary here.
             removeFromObjectDetailsStorage(stateModalActivePid);
-            loadObjectDetailsIntoStorage(stateModalActivePid);
         } else {
             showSnackbarMessage("No changes were made.", "info");
         }
@@ -114,7 +98,7 @@ const StateModal = (): React.ReactElement => {
                 </Grid>
             </DialogTitle>
             <DialogContent>
-                {loadingMessage}
+                {stateModalActivePid ? <ObjectLoader pid={stateModalActivePid} /> : ""}
                 {contents}
             </DialogContent>
         </Dialog>
