@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
 import { useEditorContext } from "../../../context/EditorContext";
+import { useFetchContext } from "../../../context/FetchContext";
+import { getPositionInParentUrl } from "../../../util/routes";
 
 export interface ChildPositionProps {
     pid: string;
@@ -9,7 +12,12 @@ export interface ChildPositionProps {
 export const ChildPosition = ({ pid, parentPid }: ChildPositionProps): React.ReactElement => {
     const {
         state: { objectDetailsStorage },
+        action: { clearPidFromChildListStorage, removeFromObjectDetailsStorage },
     } = useEditorContext();
+    const {
+        action: { fetchText },
+    } = useFetchContext();
+    const [statusMessage, setStatusMessage] = useState<string>("");
 
     // Important: this component assumes it will be called in a context where pid and parent pid
     // details are already loaded into the context; it will not cause a load to occur by itself.
@@ -33,7 +41,38 @@ export const ChildPosition = ({ pid, parentPid }: ChildPositionProps): React.Rea
     }
 
     const sequence = findSequence(details.sequences ?? []);
-    return sequence === false ? <></> : <>{sequence}.&nbsp;</>;
+    async function saveChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const newValue = parseInt(event.target.value);
+        if (newValue === sequence) {
+            // Don't save if nothing has changed:
+            return;
+        }
+        setStatusMessage("Saving...");
+        const target = getPositionInParentUrl(pid, parentPid);
+        const result = await fetchText(target, { method: "PUT", body: newValue });
+        if (result === "ok") {
+            // Clear and reload the cached object, since it has now changed!
+            removeFromObjectDetailsStorage(pid);
+            // Clear any cached lists belonging to the parent PID, because the
+            // order has potentially changed!
+            clearPidFromChildListStorage(parentPid);
+        }
+        setStatusMessage("");
+    }
+    if (statusMessage.length > 0) {
+        return <>{statusMessage}</>;
+    }
+    return sequence === false ? (
+        <></>
+    ) : (
+        <TextField
+            sx={{ width: "5em", marginRight: 1 }}
+            size="small"
+            aria-label={`Position in ${parentPid}`}
+            defaultValue={sequence}
+            onBlur={saveChange}
+        />
+    );
 };
 
 export default ChildPosition;

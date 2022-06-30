@@ -88,6 +88,10 @@ const objectDatastreamLicenseUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "license");
 };
 
+const getPositionInParentUrl = (pid: string, parentPid: string) => {
+    return getPidActionUrl(pid, `positionInParent/${encodeURIComponent(parentPid)}`);
+};
+
 export {
     baseUrl,
     apiUrl,
@@ -108,6 +112,7 @@ export {
     getObjectParentsUrl,
     getObjectRecursiveChildPidsUrl,
     getObjectStateUrl,
+    getPositionInParentUrl,
     postObjectDatastreamUrl,
     deleteObjectDatastreamUrl,
     downloadObjectDatastreamUrl,

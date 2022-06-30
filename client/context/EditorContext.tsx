@@ -133,6 +133,18 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
             ...state,
             childListStorage
         };
+    } else if (type === "CLEAR_PID_FROM_CHILD_LIST_STORAGE") {
+        const { pid } = payload as { pid: string };
+        const childListStorage: Record<string, ChildrenResultPage> = {};
+        for (const key in state.childListStorage) {
+            if (!key.startsWith(pid + "_")) {
+                childListStorage[key] = state.childListStorage[key];
+            }
+        }
+        return {
+            ...state,
+            childListStorage
+        };
     } else if(Object.keys(reducerMapping).includes(type)){
         return {
             ...state,
@@ -225,6 +237,13 @@ export const useEditorContext = () => {
             console.error("Problem fetching details from " + url);
         }
     };
+
+    const clearPidFromChildListStorage = (pid: string) => {
+        dispatch({
+            type: "CLEAR_PID_FROM_CHILD_LIST_STORAGE",
+            payload: { pid },
+        });
+    }
 
     const loadChildrenIntoStorage = async (pid: string, page: number, pageSize: number) => {
         const key = getChildListStorageKey(pid, page, pageSize);
@@ -357,6 +376,7 @@ export const useEditorContext = () => {
             loadObjectDetailsIntoStorage,
             loadChildrenIntoStorage,
             removeFromObjectDetailsStorage,
+            clearPidFromChildListStorage,
         },
     };
 }
