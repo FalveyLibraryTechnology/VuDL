@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useEditorContext } from "../../../context/EditorContext";
 import ChildList from "./ChildList";
+import ChildPosition from "./ChildPosition";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import AddBox from "@mui/icons-material/AddBox";
@@ -11,10 +12,11 @@ import ObjectStatus from "../ObjectStatus";
 
 export interface ChildProps {
     pid: string;
+    parentPid: string;
     initialTitle: string;
 }
 
-export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => {
+export const Child = ({ pid, parentPid = "", initialTitle }: ChildProps): React.ReactElement => {
     const {
         state: { objectDetailsStorage },
     } = useEditorContext();
@@ -34,6 +36,7 @@ export const Child = ({ pid, initialTitle }: ChildProps): React.ReactElement => 
             <Grid container>
                 <Grid item xs={8}>
                     {expandControl}
+                    <ChildPosition pid={pid} parentPid={parentPid} />
                     <Link href={"/edit/object/" + pid}>{(title.length > 0 ? title : "-") + " [" + pid + "]"}</Link>
                 </Grid>
                 <Grid item xs={4}>

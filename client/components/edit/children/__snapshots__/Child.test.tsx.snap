@@ -27,6 +27,10 @@ exports[`Child can be expanded to show children 1`] = `
                       titleAccess="Collapse Tree"
                     />
                   </span>
+                  <ChildPosition
+                    parentPid=""
+                    pid="foo:123"
+                  />
                   <Link
                     href="/edit/object/foo:123"
                   >
@@ -395,6 +399,10 @@ exports[`Child can be expanded to show children 1`] = `
                           titleAccess="Collapse Tree"
                         />
                       </span>,
+                      <ChildPosition
+                        parentPid=""
+                        pid="foo:123"
+                      />,
                       <Link
                         href="/edit/object/foo:123"
                       >
@@ -1097,6 +1105,10 @@ exports[`Child can be expanded to show children 1`] = `
                       </ForwardRef(SvgIcon)>
                     </ForwardRef(IndeterminateCheckBoxIcon)>
                   </span>
+                  <ChildPosition
+                    parentPid=""
+                    pid="foo:123"
+                  />
                   <Link
                     href="/edit/object/foo:123"
                   >
@@ -1513,6 +1525,10 @@ exports[`Child handles empty titles appropriately 1`] = `
                       titleAccess="Expand Tree"
                     />
                   </span>
+                  <ChildPosition
+                    parentPid=""
+                    pid="foo:123"
+                  />
                   <Link
                     href="/edit/object/foo:123"
                   >
@@ -1881,6 +1897,10 @@ exports[`Child handles empty titles appropriately 1`] = `
                           titleAccess="Expand Tree"
                         />
                       </span>,
+                      <ChildPosition
+                        parentPid=""
+                        pid="foo:123"
+                      />,
                       <Link
                         href="/edit/object/foo:123"
                       >
@@ -2583,6 +2603,10 @@ exports[`Child handles empty titles appropriately 1`] = `
                       </ForwardRef(SvgIcon)>
                     </ForwardRef(AddBoxIcon)>
                   </span>
+                  <ChildPosition
+                    parentPid=""
+                    pid="foo:123"
+                  />
                   <Link
                     href="/edit/object/foo:123"
                   >
@@ -2993,6 +3017,10 @@ exports[`Child renders using ajax-loaded data 1`] = `
                       titleAccess="Expand Tree"
                     />
                   </span>
+                  <ChildPosition
+                    parentPid=""
+                    pid="foo:123"
+                  />
                   <Link
                     href="/edit/object/foo:123"
                   >
@@ -3361,6 +3389,10 @@ exports[`Child renders using ajax-loaded data 1`] = `
                           titleAccess="Expand Tree"
                         />
                       </span>,
+                      <ChildPosition
+                        parentPid=""
+                        pid="foo:123"
+                      />,
                       <Link
                         href="/edit/object/foo:123"
                       >
@@ -4063,6 +4095,10 @@ exports[`Child renders using ajax-loaded data 1`] = `
                       </ForwardRef(SvgIcon)>
                     </ForwardRef(AddBoxIcon)>
                   </span>
+                  <ChildPosition
+                    parentPid=""
+                    pid="foo:123"
+                  />
                   <Link
                     href="/edit/object/foo:123"
                   >
