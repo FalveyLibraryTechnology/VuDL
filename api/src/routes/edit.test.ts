@@ -255,6 +255,44 @@ describe("edit", () => {
         });
     });
 
+    describe("get /topLevelObjects", () => {
+        let querySpy;
+        beforeEach(() => {
+            const solrResponse = { statusCode: 200, body: { response: { foo: "bar" } } };
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue(solrResponse as NeedleResponse);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will run an appropriate Solr query with default params", async () => {
+            const response = await request(app)
+                .get(`/edit/topLevelObjects`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", '-fedora_parent_id_str_mv:*', {
+                fl: "id,title",
+                rows: "100000",
+                sort: "title ASC",
+                start: "0",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+        it("allows start and rows to be overridden", async () => {
+            const response = await request(app)
+                .get(`/edit/topLevelObjects`)
+                .query({ rows: "100", start: "200" })
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", '-fedora_parent_id_str_mv:*', {
+                fl: "id,title",
+                rows: "100",
+                sort: "title ASC",
+                start: "200",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+    });
+
     describe("get /object/:pid/recursiveChildPids", () => {
         let querySpy;
         beforeEach(() => {
