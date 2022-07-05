@@ -10,6 +10,8 @@ import FedoraDataCollector from "../services/FedoraDataCollector";
 import Database from "../services/Database";
 import FedoraDataCollection from "../models/FedoraDataCollection";
 import { FedoraObject } from "../models/FedoraObject";
+import Solr from "../services/Solr";
+import { NeedleResponse } from "../services/interfaces";
 
 jest.mock("../services/DatastreamManager");
 
@@ -250,6 +252,44 @@ describe("edit", () => {
 
             expect(datastreamManager.getMimeType).toHaveBeenCalledWith(pid, datastream);
             expect(datastreamManager.downloadBuffer).toHaveBeenCalledWith(pid, datastream);
+        });
+    });
+
+    describe("get /object/:pid/recursiveChildPids", () => {
+        let querySpy;
+        beforeEach(() => {
+            const solrResponse = { statusCode: 200, body: { response: { foo: "bar" } } };
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue(solrResponse as NeedleResponse);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will run an appropriate Solr query with default params", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/recursiveChildPids`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'hierarchy_all_parents_str_mv:"foo:123"', {
+                fl: "id",
+                rows: "100000",
+                sort: "id ASC",
+                start: "0",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+        it("allows start and rows to be overridden", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/recursiveChildPids`)
+                .query({ rows: "100", start: "200" })
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'hierarchy_all_parents_str_mv:"foo:123"', {
+                fl: "id",
+                rows: "100",
+                sort: "id ASC",
+                start: "200",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
         });
     });
 
