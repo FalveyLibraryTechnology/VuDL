@@ -293,6 +293,44 @@ describe("edit", () => {
         });
     });
 
+    describe("get /object/:pid/children", () => {
+        let querySpy;
+        beforeEach(() => {
+            const solrResponse = { statusCode: 200, body: { response: { foo: "bar" } } };
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue(solrResponse as NeedleResponse);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will run an appropriate Solr query with default params", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/children`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
+                fl: "id,title",
+                rows: "100000",
+                sort: "sequence_foo_123_str ASC,title ASC",
+                start: "0",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+        it("allows start and rows to be overridden", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/children`)
+                .query({ rows: "100", start: "200" })
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
+                fl: "id,title",
+                rows: "100",
+                sort: "sequence_foo_123_str ASC,title ASC",
+                start: "200",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+    });
+
     describe("get /object/:pid/recursiveChildPids", () => {
         let querySpy;
         beforeEach(() => {
