@@ -269,7 +269,7 @@ describe("edit", () => {
                 .get(`/edit/topLevelObjects`)
                 .set("Authorization", "Bearer test")
                 .expect(StatusCodes.OK);
-            expect(querySpy).toHaveBeenCalledWith("biblio", '-fedora_parent_id_str_mv:*', {
+            expect(querySpy).toHaveBeenCalledWith("biblio", "-fedora_parent_id_str_mv:*", {
                 fl: "id,title",
                 rows: "100000",
                 sort: "title ASC",
@@ -283,7 +283,7 @@ describe("edit", () => {
                 .query({ rows: "100", start: "200" })
                 .set("Authorization", "Bearer test")
                 .expect(StatusCodes.OK);
-            expect(querySpy).toHaveBeenCalledWith("biblio", '-fedora_parent_id_str_mv:*', {
+            expect(querySpy).toHaveBeenCalledWith("biblio", "-fedora_parent_id_str_mv:*", {
                 fl: "id,title",
                 rows: "100",
                 sort: "title ASC",
