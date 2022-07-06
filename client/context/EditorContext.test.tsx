@@ -237,6 +237,16 @@ describe("useEditorContext", () => {
             expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/test%3A123/details");
         });
 
+        it("ignores null pids", async () => {
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+            expect(Object.keys(result.current.state.objectDetailsStorage)).toEqual([]);
+            await act(async () => {
+                await result.current.action.loadObjectDetailsIntoStorage(null);
+            });
+            expect(Object.keys(result.current.state.objectDetailsStorage)).toEqual([]);
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalledTimes(0);
+        });
+
         it("handles exceptions", async () => {
             const fetchSpy = jest.spyOn(fetchValues.action, "fetchJSON").mockImplementation(() => { throw new Error("kaboom"); });
             const consoleSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
@@ -246,6 +256,23 @@ describe("useEditorContext", () => {
             });
             expect(fetchSpy).toHaveBeenCalledTimes(1);
             expect(consoleSpy).toHaveBeenCalledWith("Problem fetching details from http://localhost:9000/api/edit/object/test%3A123/details");
+        });
+    });
+
+    describe("removeFromObjectDetailsStorage", () => {
+        it("removes the specified record without impacting others", async () => {
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+            expect(Object.keys(result.current.state.objectDetailsStorage)).toEqual([]);
+            await act(async () => {
+                await result.current.action.loadObjectDetailsIntoStorage("test:123");
+                await result.current.action.loadObjectDetailsIntoStorage("test:124");
+                await result.current.action.loadObjectDetailsIntoStorage("test:125");
+            });
+            expect(Object.keys(result.current.state.objectDetailsStorage)).toEqual(["test:123", "test:124", "test:125"]);
+            await act(async () => {
+                await result.current.action.removeFromObjectDetailsStorage("test:124");
+            });
+            expect(Object.keys(result.current.state.objectDetailsStorage)).toEqual(["test:123", "test:125"]);
         });
     });
 
@@ -270,6 +297,51 @@ describe("useEditorContext", () => {
             });
             expect(fetchSpy).toHaveBeenCalledTimes(1);
             expect(consoleSpy).toHaveBeenCalledWith("Problem fetching tree data from http://localhost:9000/api/edit/object/test%3A123/children?start=0&rows=10");
+        });
+    });
+
+    describe("clearPidFromChildListStorage", () => {
+        it("removes all pages of appropriate data", async () => {
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+            expect(Object.keys(result.current.state.childListStorage)).toEqual([]);
+            await act(async () => {
+                await result.current.action.loadChildrenIntoStorage("test:123", 1, 10);
+                await result.current.action.loadChildrenIntoStorage("test:123", 11, 10);
+                await result.current.action.loadChildrenIntoStorage("test:1234", 1, 10);
+            });
+            expect(Object.keys(result.current.state.childListStorage)).toEqual(["test:123_1_10", "test:123_11_10", "test:1234_1_10"]);
+            await act(async () => {
+                await result.current.action.clearPidFromChildListStorage("test:123");
+            });
+            expect(Object.keys(result.current.state.childListStorage)).toEqual(["test:1234_1_10"]);
+        });
+    });
+
+    describe("toggleStateModal ", () => {
+        it("toggles the modal", async () => {
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+
+            expect(result.current.state.isStateModalOpen).toBeFalsy();
+
+            await act(async () => {
+                await result.current.action.toggleStateModal();
+            });
+
+            expect(result.current.state.isStateModalOpen).toBeTruthy();
+        });
+    });
+
+    describe("setStateModalActivePid", () => {
+        it("sets the modal's active pid value", async () => {
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+
+            expect(result.current.state.stateModalActivePid).toBeNull();
+
+            await act(async () => {
+                await result.current.action.setStateModalActivePid("test:1");
+            });
+
+            expect(result.current.state.stateModalActivePid).toEqual("test:1");
         });
     });
 });
