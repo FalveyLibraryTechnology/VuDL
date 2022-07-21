@@ -23,9 +23,7 @@ export const ObjectLoader = ({ pid }: ObjectLoaderProps): React.ReactElement => 
             &nbsp;
             <CircularProgress size="1em" />
         </>
-    ) : (
-        <></>
-    );
+    ) : null;
 };
 
 export default ObjectLoader;
