@@ -31,8 +31,7 @@ describe("StateModal", () => {
                 isStateModalOpen: true,
                 objectDetailsStorage: {},
             },
-            action: {
-            },
+            action: {},
         };
         mockUseEditorContext.mockReturnValue(editorValues);
         fetchContextValues = {
