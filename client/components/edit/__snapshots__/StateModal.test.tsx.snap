@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StateModal renders correctly when closed 1`] = `
+<ForwardRef(Dialog)
+  className="stateModal"
+  fullWidth={true}
+  open={false}
+>
+  <ForwardRef(DialogTitle)>
+    <ForwardRef(Grid)
+      container={true}
+    >
+      <ForwardRef(Grid)
+        item={true}
+        xs={11}
+      >
+        State Editor (
+        )
+      </ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        item={true}
+        xs={1}
+      >
+        <ForwardRef(IconButton)
+          className="closeButton"
+        >
+          <Memo(ForwardRef(CloseIcon)) />
+        </ForwardRef(IconButton)>
+      </ForwardRef(Grid)>
+    </ForwardRef(Grid)>
+  </ForwardRef(DialogTitle)>
+  <ForwardRef(DialogContent)>
+    <ForwardRef(Grid)
+      container={true}
+    >
+      <ForwardRef(Grid)
+        item={true}
+        xs={12}
+      >
+        <ForwardRef(FormControl)>
+          <ForwardRef(FormLabel)
+            id="state-modal-group-label"
+          >
+            State
+          </ForwardRef(FormLabel)>
+          <ForwardRef(RadioGroup)
+            aria-labelledby="state-modal-group-label"
+            name="state-modal-group"
+            onChange={[Function]}
+            value="Inactive"
+          >
+            <ForwardRef(FormControlLabel)
+              control={<ForwardRef(Radio) />}
+              label="Active"
+              value="Active"
+            />
+            <ForwardRef(FormControlLabel)
+              control={<ForwardRef(Radio) />}
+              label="Inactive"
+              value="Inactive"
+            />
+            <ForwardRef(FormControlLabel)
+              control={<ForwardRef(Radio) />}
+              label="Deleted"
+              value="Deleted"
+            />
+          </ForwardRef(RadioGroup)>
+        </ForwardRef(FormControl)>
+      </ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        item={true}
+        xs={12}
+      >
+        <p>
+          Loading...
+        </p>
+      </ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        item={true}
+        xs={12}
+      >
+        <button
+          onClick={[Function]}
+        >
+          Save
+        </button>
+      </ForwardRef(Grid)>
+    </ForwardRef(Grid)>
+  </ForwardRef(DialogContent)>
+</ForwardRef(Dialog)>
+`;
+
+exports[`StateModal renders correctly when open 1`] = `
+<ForwardRef(Dialog)
+  className="stateModal"
+  fullWidth={true}
+  open={true}
+>
+  <ForwardRef(DialogTitle)>
+    <ForwardRef(Grid)
+      container={true}
+    >
+      <ForwardRef(Grid)
+        item={true}
+        xs={11}
+      >
+        State Editor (
+        )
+      </ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        item={true}
+        xs={1}
+      >
+        <ForwardRef(IconButton)
+          className="closeButton"
+        >
+          <Memo(ForwardRef(CloseIcon)) />
+        </ForwardRef(IconButton)>
+      </ForwardRef(Grid)>
+    </ForwardRef(Grid)>
+  </ForwardRef(DialogTitle)>
+  <ForwardRef(DialogContent)>
+    <ForwardRef(Grid)
+      container={true}
+    >
+      <ForwardRef(Grid)
+        item={true}
+        xs={12}
+      >
+        <ForwardRef(FormControl)>
+          <ForwardRef(FormLabel)
+            id="state-modal-group-label"
+          >
+            State
+          </ForwardRef(FormLabel)>
+          <ForwardRef(RadioGroup)
+            aria-labelledby="state-modal-group-label"
+            name="state-modal-group"
+            onChange={[Function]}
+            value="Inactive"
+          >
+            <ForwardRef(FormControlLabel)
+              control={<ForwardRef(Radio) />}
+              label="Active"
+              value="Active"
+            />
+            <ForwardRef(FormControlLabel)
+              control={<ForwardRef(Radio) />}
+              label="Inactive"
+              value="Inactive"
+            />
+            <ForwardRef(FormControlLabel)
+              control={<ForwardRef(Radio) />}
+              label="Deleted"
+              value="Deleted"
+            />
+          </ForwardRef(RadioGroup)>
+        </ForwardRef(FormControl)>
+      </ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        item={true}
+        xs={12}
+      >
+        <p>
+          Loading...
+        </p>
+      </ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        item={true}
+        xs={12}
+      >
+        <button
+          onClick={[Function]}
+        >
+          Save
+        </button>
+      </ForwardRef(Grid)>
+    </ForwardRef(Grid)>
+  </ForwardRef(DialogContent)>
+</ForwardRef(Dialog)>
+`;
