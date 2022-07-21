@@ -48,6 +48,51 @@ describe("FedoraObject", () => {
         });
     });
 
+    describe("modifyAgents", () => {
+        let agents;
+        let dates;
+        beforeEach(() => {
+            dates = {
+                createDate: "test",
+                modifiedDate: "test",
+            };
+            agents = [
+                {
+                    role: "test1",
+                    type: "test2",
+                    name: "test3",
+                    notes: ["test4"],
+                },
+            ];
+        });
+        test.each([
+            ["zero", [], ""],
+            ["one", ["test4"], "<METS:note>test4</METS:note>"],
+            [
+                "multiple",
+                ["test4", "test5", "test6"],
+                "<METS:note>test4</METS:note><METS:note>test5</METS:note><METS:note>test6</METS:note>",
+            ],
+            ["doubleQuotes", [`""`], "<METS:note>&quot;&quot;</METS:note>"],
+        ])("adds a datastream for an agent with %s notes", async (numString, testInput, notesXml) => {
+            const config = new Config({});
+            const fedora = new Fedora(config);
+            fedoraObject = new FedoraObject(pid, config, fedora, FedoraDataCollector.getInstance());
+            const spy = jest.spyOn(fedoraObject, "addDatastreamFromStringOrBuffer").mockImplementation(jest.fn());
+            agents[0].notes = testInput;
+            const expectedXml =
+                `<METS:agent ROLE="test1" TYPE="test2">` + `<METS:name>test3</METS:name>${notesXml}</METS:agent>`;
+            await fedoraObject.modifyAgents(stream, agents, dates);
+
+            expect(spy).toHaveBeenCalledWith(
+                expect.stringContaining(expectedXml.trim()),
+                stream,
+                "text/xml",
+                [201, 204]
+            );
+        });
+    });
+
     describe("addRelationship", () => {
         it("proxies a call to the fedora service", () => {
             const fedora = Fedora.getInstance();

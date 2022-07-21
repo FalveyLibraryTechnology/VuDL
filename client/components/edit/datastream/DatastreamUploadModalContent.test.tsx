@@ -47,6 +47,15 @@ describe("DatastreamUploadModalContent", () => {
         expect(wrapper.text()).toContain("DatastreamLicenseContent");
     });
 
+    it("renders DatastreamAgentContent", () => {
+        editorValues.state.activeDatastream = "LICENSE";
+
+        const wrapper = mount(<DatastreamUploadModalContent />);
+
+        expect(toJson(wrapper)).toMatchSnapshot();
+        expect(wrapper.text()).toContain("DatastreamLicenseContent");
+    });
+
     it("calls uploadFile on click", async () => {
         datastreamOperationValues.uploadFile.mockResolvedValue("upload worked");
         const wrapper = mount(<DatastreamUploadModalContent />);

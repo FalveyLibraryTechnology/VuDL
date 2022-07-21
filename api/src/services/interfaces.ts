@@ -5,3 +5,10 @@ export interface NeedleResponse extends IncomingMessage {
     raw: Buffer;
     bytes: number;
 }
+
+export interface Agent {
+    role: string;
+    type: string;
+    name: string;
+    notes: Array<string>;
+}

@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamAgentsContent renders 1`] = `
+<Fragment>
+  <ForwardRef(Grid)
+    container={true}
+    spacing={1}
+    sx={
+      Object {
+        "padding": "20px 24px",
+      }
+    }
+  >
+    <ForwardRef(Grid)
+      container={true}
+      item={true}
+      xs={3}
+    >
+      Role
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
+      container={true}
+      item={true}
+      xs={3}
+    >
+      Type
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
+      container={true}
+      item={true}
+      xs={5}
+    >
+      Name
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
+      container={true}
+      item={true}
+      xs={1}
+    >
+      Actions
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
+  <ForwardRef(DialogContent)
+    sx={
+      Object {
+        "minHeight": "50vh",
+        "width": "100%",
+      }
+    }
+  >
+    <ForwardRef(Box)
+      alignItems="center"
+      display="flex"
+      justifyContent="center"
+      minHeight="50vh"
+    >
+      <ForwardRef(CircularProgress) />
+    </ForwardRef(Box)>
+  </ForwardRef(DialogContent)>
+  <ForwardRef(Divider) />
+  <ForwardRef(DialogActions)
+    sx={
+      Object {
+        "padding": "20px 24px",
+      }
+    }
+  >
+    <ForwardRef(Grid)
+      container={true}
+      justifyContent="flex-end"
+      spacing={1}
+    >
+      <ForwardRef(Grid)
+        container={true}
+        item={true}
+        xs={6}
+      />
+      <ForwardRef(Grid)
+        container={true}
+        item={true}
+        justifyContent="flex-end"
+        xs={6}
+      >
+        <ForwardRef(Button)
+          className="agentsCancelButton"
+          onClick={[Function]}
+        >
+          Cancel
+        </ForwardRef(Button)>
+      </ForwardRef(Grid)>
+    </ForwardRef(Grid)>
+  </ForwardRef(DialogActions)>
+</Fragment>
+`;

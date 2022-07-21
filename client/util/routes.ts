@@ -84,12 +84,16 @@ const getObjectDatastreamMetadataUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "metadata");
 }
 
+const getPositionInParentUrl = (pid: string, parentPid: string) => {
+    return getPidActionUrl(pid, `positionInParent/${encodeURIComponent(parentPid)}`);
+}
+
 const objectDatastreamLicenseUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "license");
 };
 
-const getPositionInParentUrl = (pid: string, parentPid: string) => {
-    return getPidActionUrl(pid, `positionInParent/${encodeURIComponent(parentPid)}`);
+const objectDatastreamAgentsUrl = (pid: string, datastream: string) => {
+    return getDatastreamActionUrl(pid, datastream, "agents")
 };
 
 export {
@@ -119,5 +123,6 @@ export {
     viewObjectDatastreamUrl,
     getObjectDatastreamMimetypeUrl,
     getObjectDatastreamMetadataUrl,
-    objectDatastreamLicenseUrl
+    objectDatastreamLicenseUrl,
+    objectDatastreamAgentsUrl
 };

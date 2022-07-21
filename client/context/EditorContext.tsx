@@ -43,6 +43,8 @@ export interface License {
 interface EditorState {
     modelsCatalog: Record<string, FedoraModel>;
     licensesCatalog: Record<string, License>;
+    agentsCatalog: Record<string, Object>;
+    currentAgents: Array<Object>;
     currentPid: string | null;
     activeDatastream: string | null;
     isDatastreamModalOpen: boolean;
@@ -61,6 +63,8 @@ interface EditorState {
 const editorContextParams: EditorState = {
     modelsCatalog: {},
     licensesCatalog: {},
+    agentsCatalog: {},
+    currentAgents: [],
     currentPid: null,
     activeDatastream: null,
     isDatastreamModalOpen: false,
@@ -88,8 +92,10 @@ export const DatastreamModalStates = {
 const EditorContext = createContext({});
 
 const reducerMapping: Record<string, string> = {
+    SET_AGENTS_CATALOG: "agentsCatalog",
     SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
+    SET_CURRENT_AGENTS: "currentAgents",
     SET_CURRENT_PID: "currentPid",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
@@ -170,12 +176,14 @@ export const useEditorContext = () => {
     }= useFetchContext();
     const {
         state: {
+            currentAgents,
             currentPid,
             activeDatastream,
             isDatastreamModalOpen,
             isStateModalOpen,
             datastreamModalState,
             stateModalActivePid,
+            agentsCatalog,
             licensesCatalog,
             modelsCatalog,
             snackbarState,
@@ -211,6 +219,20 @@ export const useEditorContext = () => {
         dispatch({
             type: "REMOVE_FROM_OBJECT_DETAILS_STORAGE",
             payload: { key },
+        });
+    };
+
+    const setCurrentAgents = (currentAgents) => {
+        dispatch({
+            type: "SET_CURRENT_AGENTS",
+            payload: currentAgents
+        });
+    };
+
+    const setAgentsCatalog = (agentsCatalog) => {
+        dispatch({
+            type: "SET_AGENTS_CATALOG",
+            payload: agentsCatalog
         });
     };
 
@@ -330,6 +352,7 @@ export const useEditorContext = () => {
             const response = await fetchJSON(editObjectCatalogUrl);
             setModelsCatalog(response.models || {});
             setLicensesCatalog(response.licenses || {});
+            setAgentsCatalog(response.agents || {});
         } catch(err) {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
         }
@@ -346,6 +369,7 @@ export const useEditorContext = () => {
 
     return {
         state: {
+            currentAgents,
             currentPid,
             currentDatastreams,
             activeDatastream,
@@ -355,6 +379,7 @@ export const useEditorContext = () => {
             stateModalActivePid,
             datastreamsCatalog,
             modelsDatastreams,
+            agentsCatalog,
             modelsCatalog,
             licensesCatalog,
             snackbarState,
@@ -363,6 +388,7 @@ export const useEditorContext = () => {
         },
         action: {
             initializeCatalog,
+            setCurrentAgents,
             setCurrentPid,
             loadCurrentObjectDetails,
             setActiveDatastream,

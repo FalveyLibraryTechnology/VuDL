@@ -222,7 +222,19 @@ class Config {
     }
 
     get licenses(): Record<string, License> {
-        return this.ini["licenses"] || {};
+        return this.ini["licenses"] ?? {};
+    }
+
+    get agentDefaults(): Record<string, string> {
+        return this.ini["agent"]["defaults"] ?? {};
+    }
+
+    get agentRoles(): Array<string> {
+        return this.ini["agent"]["roles"] ?? [];
+    }
+
+    get agentTypes(): Array<string> {
+        return this.ini["agent"]["types"] ?? [];
     }
 }
 
