@@ -1,6 +1,7 @@
 import Config from "../models/Config";
 import { FedoraObject } from "../models/FedoraObject";
 import FedoraCatalog from "./FedoraCatalog";
+import { Agent } from "./interfaces";
 import MetadataExtractor from "./MetadataExtractor";
 
 class DatastreamManager {
@@ -61,6 +62,16 @@ class DatastreamManager {
         await fedoraObject.modifyLicense(stream, licenseKey);
     }
 
+    async uploadAgents(pid: string, stream: string, agents: Array<Agent>): Promise<void> {
+        const fedoraObject = FedoraObject.build(pid);
+        const xml = await fedoraObject.getDatastream(stream, true);
+        const metadataExtractor = MetadataExtractor.getInstance();
+        const agentsAttributes = xml
+            ? metadataExtractor.extractAgentsAttributes(xml)
+            : { createDate: "", modifiedDate: "", recordStatus: "" };
+        await fedoraObject.modifyAgents(stream, agents, agentsAttributes);
+    }
+
     async getLicenseKey(pid: string, stream: string): Promise<string> {
         const fedoraObject = FedoraObject.build(pid);
         const xml = await fedoraObject.getDatastream(stream);
@@ -70,6 +81,13 @@ class DatastreamManager {
             return configLicense[1]?.uri == license;
         });
         return licenseMapping?.[0] || "";
+    }
+
+    async getAgents(pid: string, stream: string): Promise<Array<Agent>> {
+        const fedoraObject = FedoraObject.build(pid);
+        const xml = await fedoraObject.getDatastream(stream);
+        const metadataExtractor = MetadataExtractor.getInstance();
+        return metadataExtractor.getAgents(xml);
     }
 
     async deleteDatastream(pid: string, stream: string): Promise<void> {

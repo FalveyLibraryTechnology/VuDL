@@ -153,6 +153,35 @@ edit.get("/object/:pid/datastream/:stream/license", requireToken, datastreamSani
     }
 });
 
+edit.post(
+    "/object/:pid/datastream/:stream/agents",
+    requireToken,
+    bodyParser.json(),
+    datastreamSanitizer,
+    async (req, res) => {
+        try {
+            const { pid, stream } = req.params;
+            const { agents } = req.body;
+            const datastream = DatastreamManager.getInstance();
+            await datastream.uploadAgents(pid, stream, agents);
+            res.status(200).send("Upload agents success");
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
+);
+
+edit.get("/object/:pid/datastream/:stream/agents", requireToken, datastreamSanitizer, async (req, res) => {
+    try {
+        const { pid, stream } = req.params;
+        const datastream = DatastreamManager.getInstance();
+        const agents = await datastream.getAgents(pid, stream);
+        res.status(200).send(agents);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 edit.get("/object/:pid/datastream/:stream/metadata", requireToken, datastreamSanitizer, async (req, res) => {
     try {
         const { pid, stream } = req.params;

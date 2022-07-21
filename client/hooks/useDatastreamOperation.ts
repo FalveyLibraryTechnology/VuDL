@@ -7,12 +7,13 @@ import {
     objectDatastreamLicenseUrl,
     postObjectDatastreamUrl,
     viewObjectDatastreamUrl,
-    getObjectDatastreamMetadataUrl
+    getObjectDatastreamMetadataUrl,
+    objectDatastreamAgentsUrl
  } from "../util/routes";
 
 const useDatastreamOperation = () => {
     const {
-        action: { fetchBlob, fetchText },
+        action: { fetchBlob, fetchJSON, fetchText },
     } = useFetchContext();
     const {
         state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams },
@@ -56,6 +57,29 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
             toggleDatastreamModal();
+        }
+    };
+
+    const uploadAgents = async (agents) => {
+        try {
+            const text = await fetchText(objectDatastreamAgentsUrl(currentPid, activeDatastream), {
+                method: "POST",
+                body: JSON.stringify({
+                    agents
+                })
+            }, { "Content-Type": "application/json" });
+            await loadCurrentObjectDetails();
+            setSnackbarState({
+                open: true,
+                message: text,
+                severity: "success",
+            });
+        } catch (err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
         }
     };
 
@@ -196,8 +220,22 @@ const useDatastreamOperation = () => {
         }
         return  "";
     };
-
+    const getAgents = async (): Promise<Array<object>> => {
+        if(currentDatastreams.includes(activeDatastream)) {
+            try {
+                return await fetchJSON(objectDatastreamAgentsUrl(currentPid, activeDatastream));
+            } catch(err) {
+                setSnackbarState({
+                    open: true,
+                    message: err.message,
+                    severity: "error",
+                });
+            }
+        }
+        return  [];
+    };
     return {
+        uploadAgents,
         uploadFile,
         uploadLicense,
         deleteDatastream,
@@ -205,7 +243,8 @@ const useDatastreamOperation = () => {
         viewDatastream,
         viewMetadata,
         getDatastreamMimetype,
-        getLicenseKey
+        getLicenseKey,
+        getAgents
     };
 };
 

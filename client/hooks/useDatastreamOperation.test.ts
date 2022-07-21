@@ -36,6 +36,7 @@ describe("useDatastreamOperation", () => {
         fetchValues = {
             action: {
                 fetchBlob: jest.fn(),
+                fetchJSON: jest.fn(),
                 fetchText: jest.fn()
             }
         };
@@ -108,6 +109,64 @@ describe("useDatastreamOperation", () => {
                 severity: "error",
             });
             expect(editorValues.action.toggleDatastreamModal).toHaveBeenCalled();
+        });
+    });
+
+    describe("uploadAgents", () => {
+        let agents;
+        beforeEach(() => {
+            editorValues.state.activeDatastream = "AGENTS";
+            agents = [{
+                note: "test1",
+                type: "test2",
+                name: "test3",
+                notes: [ "test4" ]
+            }];
+        });
+
+        it("uploads an agent with success", async () => {
+            fetchValues.action.fetchText.mockResolvedValue("upload agents worked");
+
+            const { uploadAgents } = useDatastreamOperation();
+            await uploadAgents(agents);
+
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/AGENTS/agents",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({ agents }),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+                open: true,
+                message: "upload agents worked",
+                severity: "success",
+            });
+        });
+
+        it("fails to upload the agents", async () => {
+            fetchValues.action.fetchText.mockRejectedValue(new Error("Upload failure!"));
+
+            const { uploadAgents } = useDatastreamOperation();
+            await uploadAgents(agents);
+
+            expect(editorValues.action.loadCurrentObjectDetails).not.toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/vudl%3A123/datastream/AGENTS/agents",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({ agents }),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    open: true,
+                    message: "Upload failure!",
+                    severity: "error"
+                })
+            );
         });
     });
 
@@ -419,6 +478,49 @@ describe("useDatastreamOperation", () => {
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "fetch license failed",
+                severity: "error"
+            });
+        });
+    });
+
+    describe("getAgents", () => {
+        let expectedAgents;
+        beforeEach(() => {
+            expectedAgents = [{
+                note: "test1",
+                type: "test2",
+                name: "test3",
+                notes: [ "test4" ]
+            }];
+            editorValues.state.activeDatastream = "AGENTS";
+            editorValues.state.currentDatastreams = ["AGENTS"];
+        });
+
+        it("returns agents for the active datastream", async () => {
+            fetchValues.action.fetchJSON.mockResolvedValue(expectedAgents);
+
+            const { getAgents } = useDatastreamOperation();
+            const agents = await getAgents();
+
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/AGENTS/agents"
+            );
+            expect(agents).toEqual(expectedAgents);
+        });
+
+
+        it("fails to fetch the license key", async () => {
+            fetchValues.action.fetchJSON.mockRejectedValue(new Error("fetch agents failed"));
+
+            const { getAgents } = useDatastreamOperation();
+            await getAgents();
+
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/AGENTS/agents"
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+                open: true,
+                message: "fetch agents failed",
                 severity: "error"
             });
         });

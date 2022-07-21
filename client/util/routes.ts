@@ -79,6 +79,10 @@ const objectDatastreamLicenseUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "license");
 };
 
+const objectDatastreamAgentsUrl = (pid: string, datastream: string) => {
+    return getDatastreamActionUrl(pid, datastream, "agents")
+};
+
 export {
     baseUrl,
     apiUrl,
@@ -103,5 +107,6 @@ export {
     viewObjectDatastreamUrl,
     getObjectDatastreamMimetypeUrl,
     getObjectDatastreamMetadataUrl,
-    objectDatastreamLicenseUrl
+    objectDatastreamLicenseUrl,
+    objectDatastreamAgentsUrl
 };

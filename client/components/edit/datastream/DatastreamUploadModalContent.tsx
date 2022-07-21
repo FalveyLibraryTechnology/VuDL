@@ -1,10 +1,12 @@
 import React from "react";
 import { useEditorContext } from "../../../context/EditorContext";
+import DatastreamAgentsContent from "./DatastreamAgentsContent";
 import DatastreamLicenseContent from "./DatastreamLicenseContent";
 import DatastreamUploadContent from "./DatastreamUploadContent";
 
 const uploadModalMapping = {
     LICENSE: <DatastreamLicenseContent />,
+    AGENTS: <DatastreamAgentsContent />,
 };
 
 const DatastreamUploadModalContent = (): React.ReactElement => {

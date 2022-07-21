@@ -25,7 +25,20 @@ describe("useEditorContext", () => {
     afterEach(() => {
         jest.resetAllMocks();
     });
+    describe("setCurrentAgents", () => {
+        it("sets the current agents", async () => {
+            const agents = [{ role: "test1", type: "test2", name: "test3", notes: [ "test4" ]}];
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
+            expect(result.current.state.currentAgents).toHaveLength(0);
+
+            await act(async () => {
+                await result.current.action.setCurrentAgents(agents);
+            });
+
+            expect(result.current.state.currentAgents).toEqual(agents);
+        });
+    });
     describe("setCurrentPid", () => {
         it("sets the current pid", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });

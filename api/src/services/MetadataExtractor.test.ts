@@ -94,4 +94,36 @@ describe("MetadataExtractor", () => {
             });
         });
     });
+
+    describe("getAges", () => {
+        let xml;
+        let xpathQuery;
+        let rdfXml;
+        let parseFromStringSpy;
+        beforeEach(() => {
+            xml = "test1";
+            xpathQuery = "test2";
+            rdfXml = "test3";
+            parseFromStringSpy = jest.spyOn(DOMParser.prototype, "parseFromString");
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("gets the datastream agents", async () => {
+            parseFromStringSpy.mockReturnValue(rdfXml);
+            const extractRDFXMLSpy = jest.spyOn(metadataExtractor, "extractRDFXML").mockReturnValue({
+                test: ["test4"],
+            });
+
+            const response = metadataExtractor.extractEbuCore(xml, xpathQuery);
+
+            expect(parseFromStringSpy).toHaveBeenCalledWith(xml, "text/xml");
+            expect(extractRDFXMLSpy).toHaveBeenCalled();
+            expect(response).toEqual({
+                test: ["test4"],
+            });
+        });
+    });
 });

@@ -123,6 +123,93 @@ describe("edit", () => {
         });
     });
 
+    describe("post /object/:pid/datastream/:stream/agents", () => {
+        let datastreamManager;
+        let agents;
+        beforeEach(() => {
+            datastreamManager = {
+                uploadAgents: jest.fn(),
+            };
+            agents = [
+                {
+                    role: "test1",
+                    type: "test2",
+                    name: "test3",
+                    notes: ["test4", "test5"],
+                },
+            ];
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+            jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+
+        it("uploads agents", async () => {
+            datastreamManager.uploadAgents.mockResolvedValue({});
+
+            await request(app)
+                .post(`/edit/object/${pid}/datastream/${datastream}/agents`)
+                .set("Authorization", "Bearer test")
+                .send({ agents })
+                .set("Accept", "application/json")
+                .expect(StatusCodes.OK);
+
+            expect(datastreamManager.uploadAgents).toHaveBeenCalledWith(pid, datastream, agents);
+        });
+
+        it("sends an error status code", async () => {
+            datastreamManager.uploadAgents.mockRejectedValue("upload agents failed");
+
+            await request(app)
+                .post(`/edit/object/${pid}/datastream/${datastream}/agents`)
+                .set("Authorization", "Bearer test")
+                .send({ agents })
+                .set("Accept", "application/json")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+    });
+
+    describe("get /object/:pid/datastream/:stream/agents", () => {
+        let datastreamManager;
+        let agents;
+        beforeEach(() => {
+            datastreamManager = {
+                getAgents: jest.fn(),
+            };
+            agents = [
+                {
+                    role: "test1",
+                    type: "test2",
+                    name: "test3",
+                    notes: ["test4"],
+                },
+            ];
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+            jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("gets the agents", async () => {
+            datastreamManager.getAgents.mockResolvedValue(agents);
+
+            const response = await request(app)
+                .get(`/edit/object/${pid}/datastream/${datastream}/agents`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.body).toEqual(agents);
+            expect(datastreamManager.getAgents).toHaveBeenCalledWith(pid, datastream);
+        });
+
+        it("sends an error status code", async () => {
+            datastreamManager.getAgents.mockRejectedValue("get license key fails");
+
+            await request(app)
+                .get(`/edit/object/${pid}/datastream/${datastream}/license`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+    });
+
     describe("get /object/:pid/datastream/:stream/license", () => {
         let datastreamManager;
         let licenseKey;

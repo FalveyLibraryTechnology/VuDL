@@ -2,6 +2,14 @@
 
 exports[`DatastreamUploadModalContent renders 1`] = `<DatastreamUploadContent />`;
 
+exports[`DatastreamUploadModalContent renders DatastreamAgentContent 1`] = `
+<DatastreamUploadModalContent>
+  <Component>
+    DatastreamLicenseContent
+  </Component>
+</DatastreamUploadModalContent>
+`;
+
 exports[`DatastreamUploadModalContent renders DatastreamLicenseContent 1`] = `
 <DatastreamUploadModalContent>
   <Component>
