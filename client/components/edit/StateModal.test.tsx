@@ -1,6 +1,8 @@
 import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { shallow, mount } from "enzyme";
+import { act } from "react-dom/test-utils";
+import { waitFor } from "@testing-library/react";
 import toJson from "enzyme-to-json";
 import StateModal from "./StateModal";
 
@@ -21,9 +23,11 @@ jest.mock("../../context/FetchContext", () => ({
 describe("StateModal", () => {
     let editorValues;
     let fetchContextValues;
+    const pid = "foo:123";
     beforeEach(() => {
         editorValues = {
             state: {
+                stateModalActivePid: pid,
                 isStateModalOpen: true,
                 objectDetailsStorage: {},
             },
@@ -42,12 +46,24 @@ describe("StateModal", () => {
 
     it("renders correctly when closed", () => {
         editorValues.state.isStateModalOpen = false;
-        const wrapper = shallow(<StateModal pid="foo:123" />);
+        const wrapper = shallow(<StateModal pid={pid} />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("renders correctly when open", () => {
-        const wrapper = shallow(<StateModal pid="foo:123" />);
+    it("renders correctly for a pending object", () => {
+        const wrapper = shallow(<StateModal pid={pid} />);
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders correctly for a loaded object", async () => {
+        editorValues.state.objectDetailsStorage[pid] = { pid, state: "Active" };
+        fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 100 });
+        let wrapper;
+        await act(async () => {
+            wrapper = mount(<StateModal pid={pid} />);
+        });
+        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+        wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 });
