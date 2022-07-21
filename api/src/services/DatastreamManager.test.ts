@@ -8,6 +8,7 @@ describe("DatastreamManager", () => {
     let config;
     let fedoraObjectBuildSpy;
     let modifyLicenseSpy;
+    let modifyAgentsSpy;
     let getDatastreamSpy;
     let updateDatastreamFromFileSpy;
     let datastreamManager;
@@ -25,6 +26,7 @@ describe("DatastreamManager", () => {
         fedoraObjectBuildSpy = jest.spyOn(FedoraObject, "build");
         getDatastreamSpy = jest.spyOn(FedoraObject.prototype, "getDatastream");
         modifyLicenseSpy = jest.spyOn(FedoraObject.prototype, "modifyLicense");
+        modifyAgentsSpy = jest.spyOn(FedoraObject.prototype, "modifyAgents");
         updateDatastreamFromFileSpy = jest.spyOn(FedoraObject.prototype, "updateDatastreamFromFile");
         datastreamsSpy = jest.spyOn(FedoraCatalog.prototype, "getDatastreamMimetypes");
         datastreamManager = DatastreamManager.getInstance();
@@ -221,6 +223,33 @@ describe("DatastreamManager", () => {
         });
     });
 
+    describe("uploadAgents", () => {
+        let pid;
+        let stream;
+        let agents;
+        let agentsAttributes;
+        let extractAgentsAttributesSpy;
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            agents = ["test3"];
+            agentsAttributes = { createDate: "test4", modifyDate: "test5", recordStatus: "test6" };
+            extractAgentsAttributesSpy = jest.spyOn(MetadataExtractor.prototype, "extractAgentsAttributes");
+        });
+
+        it("calls uploadAgents with success", async () => {
+            getDatastreamSpy.mockReturnValue("testXml");
+            extractAgentsAttributesSpy.mockReturnValue(agentsAttributes);
+            modifyAgentsSpy.mockResolvedValue("");
+
+            await datastreamManager.uploadAgents(pid, stream, agents);
+
+            expect(getDatastreamSpy).toHaveBeenCalledWith(stream, true);
+            expect(extractAgentsAttributesSpy).toHaveBeenCalledWith("testXml");
+            expect(modifyAgentsSpy).toHaveBeenCalledWith(stream, agents, agentsAttributes);
+        });
+    });
+
     describe("getLicenseKey", () => {
         let pid;
         let stream;
@@ -253,6 +282,37 @@ describe("DatastreamManager", () => {
             expect(getDatastreamSpy).toHaveBeenCalledWith(stream);
             expect(extractLicenseSpy).toHaveBeenCalledWith("testXml");
             expect(response).toEqual("");
+        });
+    });
+
+    describe("getAgents", () => {
+        let pid;
+        let stream;
+        let getAgentsSpy;
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            getAgentsSpy = jest.spyOn(MetadataExtractor.prototype, "getAgents");
+        });
+
+        it("returns a licenseKey", async () => {
+            const agents = [
+                {
+                    role: "test3",
+                    type: "test4",
+                    name: "test5",
+                    notes: ["test6"],
+                },
+            ];
+            getDatastreamSpy.mockReturnValue("testXml");
+            getAgentsSpy.mockReturnValue(agents);
+
+            const response = await datastreamManager.getAgents(pid, stream);
+
+            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
+            expect(getDatastreamSpy).toHaveBeenCalledWith(stream);
+            expect(getAgentsSpy).toHaveBeenCalledWith("testXml");
+            expect(response).toEqual(agents);
         });
     });
 

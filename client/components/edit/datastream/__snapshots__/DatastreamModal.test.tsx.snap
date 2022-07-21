@@ -4,6 +4,7 @@ exports[`DatastreamModal renders 1`] = `
 <ForwardRef(Dialog)
   className="datastreamModal"
   fullWidth={true}
+  maxWidth="lg"
   onClose={[MockFunction]}
   open={true}
 >
@@ -16,7 +17,9 @@ exports[`DatastreamModal renders 1`] = `
         xs={11}
       />
       <ForwardRef(Grid)
+        display="flex"
         item={true}
+        justifyContent="flex-end"
         xs={1}
       >
         <ForwardRef(IconButton)

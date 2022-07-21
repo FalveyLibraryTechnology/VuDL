@@ -334,3 +334,22 @@ uri = "http://creativecommons.org/licenses/by-nc-nd/4.0/"
 [licenses.PUBLIC_DOMAIN]
 name = "CC0 1.0 Universal (Public Domain)"
 uri = "https://creativecommons.org/publicdomain/zero/1.0/"
+
+# Agent
+[agent]
+
+roles[] = "EDITOR"
+roles[] = "ARCHIVIST"
+roles[] = "PRESERVATION"
+roles[] = "DISSEMINATOR"
+roles[] = "CUSTODIAN"
+roles[] = "IPOWNER"
+roles[] = "CREATOR"
+
+types[] = "ORGANIZATION"
+types[] = "INDIVIDUAL"
+
+[agent.defaults]
+name = "My Library, My University"
+role = "DISSEMINATOR"
+type = "ORGANIZATION"

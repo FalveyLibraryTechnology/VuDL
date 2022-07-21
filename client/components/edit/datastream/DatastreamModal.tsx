@@ -33,13 +33,14 @@ const DatastreamModal = (): React.ReactElement => {
             open={isDatastreamModalOpen}
             onClose={toggleDatastreamModal}
             fullWidth={true}
+            maxWidth={"lg"}
         >
             <DialogTitle>
                 <Grid container>
                     <Grid item xs={11}>
                         {datastreamModalState}
                     </Grid>
-                    <Grid item xs={1}>
+                    <Grid item xs={1} display="flex" justifyContent="flex-end">
                         <IconButton className="closeButton" onClick={toggleDatastreamModal}>
                             <CloseIcon />
                         </IconButton>

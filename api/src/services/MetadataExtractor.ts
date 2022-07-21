@@ -1,6 +1,7 @@
 import { DC } from "./Fedora";
 import { DOMParser } from "@xmldom/xmldom";
 import xpath = require("xpath");
+import { Agent } from "./interfaces";
 
 class MetadataExtractor {
     private static instance: MetadataExtractor;
@@ -163,6 +164,73 @@ class MetadataExtractor {
                 METS: "http://www.loc.gov/METS/",
             },
             "//METS:agent/*"
+        );
+    }
+    /**
+     * Extract agent details from the AGENTS datastream.
+     *
+     * @param xml AGENTS datastream XML
+     * @returns   List of agent details
+     */
+    public getAgents(xml: string): Array<Agent> {
+        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml");
+        const namespaces = {
+            rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+            METS: "http://www.loc.gov/METS/",
+        };
+        const rdfXPath = xpath.useNamespaces(namespaces);
+
+        return rdfXPath("//METS:agent", parsedXml).reduce((acc, relation: Element) => {
+            const agent = {
+                role: "",
+                type: "",
+                name: "",
+                notes: [],
+            };
+            Object.values(relation.attributes).forEach((attr) => {
+                if (attr.nodeName == "ROLE") {
+                    agent.role = attr.nodeValue;
+                }
+                if (attr.nodeName == "TYPE") {
+                    agent.type = attr.nodeValue;
+                }
+            });
+            Object.values(relation.childNodes).forEach((childNode) => {
+                if (childNode.nodeName == "METS:name") {
+                    agent.name = childNode?.firstChild?.nodeValue || "";
+                }
+                if (childNode.nodeName == "METS:note") {
+                    agent.notes.push(childNode?.firstChild?.nodeValue || "");
+                }
+            });
+            return [...acc, agent];
+        }, []);
+    }
+
+    public extractAgentsAttributes(xml: string): Record<string, string> {
+        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml");
+        const namespaces = {
+            rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+            METS: "http://www.loc.gov/METS/",
+        };
+        const rdfXPath = xpath.useNamespaces(namespaces);
+
+        return rdfXPath("//METS:metsHdr", parsedXml).reduce(
+            (acc, relation: Element) => {
+                Object.values(relation.attributes).forEach((attr) => {
+                    if (attr.nodeName == "CREATEDATE") {
+                        acc.createDate = attr.nodeValue;
+                    }
+                    if (attr.nodeName == "LASTMODDATE") {
+                        acc.modifiedDate = attr.nodeValue;
+                    }
+                    if (attr.nodeName == "RECORDSTATUS") {
+                        acc.recordStatus = attr.nodeValue;
+                    }
+                });
+                return acc;
+            },
+            { createDate: "", modifiedDate: "", recordStatus: "" }
         );
     }
 

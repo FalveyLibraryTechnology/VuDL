@@ -5,6 +5,7 @@ import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
 import FedoraDataCollector from "../services/FedoraDataCollector";
 import { execSync } from "child_process";
+import { Agent } from "../services/interfaces";
 
 export interface ObjectParameters {
     label?: string;
@@ -145,6 +146,29 @@ export class FedoraObject {
         await this.addDatastreamFromStringOrBuffer(licenseXml, stream, "text/xml", [201, 204]);
     }
 
+    async modifyAgents(stream: string, agents: Array<Agent>, agentsAttributes: Record<string, string>): Promise<void> {
+        const { createDate, recordStatus } = agentsAttributes;
+        const agentsXml = agents.reduce((acc, agent) => {
+            const { role, type, name, notes } = agent;
+            const notesXml = notes.reduce((acc, note) => {
+                return acc + `<METS:note>${xmlescape(note)}</METS:note>`;
+            }, "");
+            const agentXml = `<METS:agent ROLE="${xmlescape(role)}" TYPE="${xmlescape(type)}"><METS:name>${xmlescape(
+                name
+            )}</METS:name>${notesXml.trim()}</METS:agent>`.trim();
+            return acc + agentXml;
+        }, "");
+        const documentXml = `
+            <?xml version="1.0" encoding="UTF-8"?>
+            <METS:metsHdr xmlns:METS="http://www.loc.gov/METS/" CREATEDATE="${xmlescape(
+                createDate || new Date().toISOString()
+            )}"${createDate ? ` LASTMODDATE="${xmlescape(new Date().toISOString())}"` : ""}${
+            recordStatus ? ` RECORDSTATUS="${xmlescape(recordStatus)}"` : ""
+        }>${agentsXml}</METS:metsHdr>
+        `.trim();
+        await this.addDatastreamFromStringOrBuffer(documentXml, stream, "text/xml", [201, 204]);
+    }
+
     async addSortRelationship(sort: string): Promise<void> {
         return this.addRelationship("info:fedora/" + this.pid, "http://vudl.org/relationships#sortOn", sort, true);
     }
@@ -186,8 +210,8 @@ export class FedoraObject {
         }
     }
 
-    async getDatastream(datastream: string): Promise<string> {
-        return this.fedora.getDatastreamAsString(this.pid, datastream);
+    async getDatastream(datastream: string, treatMissingAsEmpty = false): Promise<string> {
+        return this.fedora.getDatastreamAsString(this.pid, datastream, treatMissingAsEmpty);
     }
 
     async getDatastreamAsBuffer(datastream: string): Promise<Buffer> {
