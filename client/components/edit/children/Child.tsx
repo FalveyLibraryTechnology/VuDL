@@ -36,7 +36,7 @@ export const Child = ({ pid, parentPid = "", initialTitle }: ChildProps): React.
             <Grid container>
                 <Grid item xs={8}>
                     {expandControl}
-                    <ChildPosition pid={pid} parentPid={parentPid} />
+                    {loaded && parentPid ? <ChildPosition pid={pid} parentPid={parentPid} /> : ""}
                     <Link href={"/edit/object/" + pid}>{(title.length > 0 ? title : "-") + " [" + pid + "]"}</Link>
                 </Grid>
                 <Grid item xs={4}>
