@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import DatastreamList from "./datastream/DatastreamList";
 import DatastreamModal from "./datastream/DatastreamModal";
+import StateModal from "./StateModal";
 import { useEditorContext } from "../../context/EditorContext";
 import EditorSnackbar from "./EditorSnackbar";
 
@@ -50,6 +51,7 @@ const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
             </Grid>
 
             <DatastreamModal />
+            <StateModal />
             <h2>Contents</h2>
             <ChildList pid={pid} />
             <EditorSnackbar />

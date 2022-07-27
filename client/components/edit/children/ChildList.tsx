@@ -1,3 +1,4 @@
+import styles from "./ChildList.module.css";
 import React, { useEffect, useState } from "react";
 import { useEditorContext } from "../../../context/EditorContext";
 import Child from "./Child";
@@ -21,7 +22,7 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
         if (!loaded) {
             loadChildrenIntoStorage(pid, page, pageSize);
         }
-    }, []);
+    }, [loaded]);
     if (!loaded) {
         return (
             <p>
@@ -36,7 +37,7 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
             childDocs.map((child: Record<string, string>) => {
                 return (
                     <li key={`${pid}_child_${child.id}`}>
-                        <Child pid={child.id} initialTitle={child.title ?? "-"} />
+                        <Child pid={child.id} parentPid={pid} initialTitle={child.title ?? "-"} />
                     </li>
                 );
             })
@@ -59,7 +60,7 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
     return (
         <>
             {paginator}
-            <ul>{contents}</ul>
+            <ul className={styles.childlist}>{contents}</ul>
         </>
     );
 };

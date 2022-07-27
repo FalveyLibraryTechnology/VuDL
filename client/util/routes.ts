@@ -39,12 +39,21 @@ const getObjectChildrenUrl = (pid: string, start = 0, rows = 10): string => {
     return `${base}?start=${start}&rows=${rows}`;
 }
 
+const getObjectRecursiveChildPidsUrl = (pid: string, start = 0, rows = 10): string => {
+    const base = getPidActionUrl(pid, "recursiveChildPids");
+    return `${base}?start=${start}&rows=${rows}`;
+}
+
 const getObjectDetailsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "details");
 }
 
 const getObjectParentsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "parents");
+}
+
+const getObjectStateUrl = (pid: string): string => {
+    return getPidActionUrl(pid, "state");
 }
 
 const getDatastreamActionUrl = (pid: string, datastream: string, action = ""): string => {
@@ -75,6 +84,10 @@ const getObjectDatastreamMetadataUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "metadata");
 }
 
+const getPositionInParentUrl = (pid: string, parentPid: string) => {
+    return getPidActionUrl(pid, `positionInParent/${encodeURIComponent(parentPid)}`);
+}
+
 const objectDatastreamLicenseUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "license");
 };
@@ -101,6 +114,9 @@ export {
     getObjectChildrenUrl,
     getObjectDetailsUrl,
     getObjectParentsUrl,
+    getObjectRecursiveChildPidsUrl,
+    getObjectStateUrl,
+    getPositionInParentUrl,
     postObjectDatastreamUrl,
     deleteObjectDatastreamUrl,
     downloadObjectDatastreamUrl,

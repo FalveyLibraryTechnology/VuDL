@@ -4,11 +4,14 @@ import app from "../app";
 import edit from "./edit";
 import Config from "../models/Config";
 import DatastreamManager from "../services/DatastreamManager";
+import Fedora from "../services/Fedora";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import FedoraDataCollector from "../services/FedoraDataCollector";
 import Database from "../services/Database";
 import FedoraDataCollection from "../models/FedoraDataCollection";
 import { FedoraObject } from "../models/FedoraObject";
+import Solr from "../services/Solr";
+import { NeedleResponse } from "../services/interfaces";
 
 jest.mock("../services/DatastreamManager");
 
@@ -23,7 +26,7 @@ describe("edit", () => {
             allowed_origins: ["http://localhost:3000", "http://localhost:9000"],
         };
         Config.setInstance(new Config(config));
-        pid = "vudl:123";
+        pid = "foo:123";
         datastream = "test1";
     });
 
@@ -296,7 +299,7 @@ describe("edit", () => {
             await request(app)
                 .get(`/edit/object/${pid}/datastream/${datastream}/download`)
                 .set("Authorization", "Bearer test")
-                .expect("Content-Disposition", `attachment; filename=vudl_123_${datastream}.xml`)
+                .expect("Content-Disposition", `attachment; filename=foo_123_${datastream}.xml`)
                 .expect("Content-Type", mimeType + "; charset=utf-8")
                 .expect(StatusCodes.OK);
 
@@ -336,6 +339,196 @@ describe("edit", () => {
 
             expect(datastreamManager.getMimeType).toHaveBeenCalledWith(pid, datastream);
             expect(datastreamManager.downloadBuffer).toHaveBeenCalledWith(pid, datastream);
+        });
+    });
+
+    describe("get /topLevelObjects", () => {
+        let querySpy;
+        beforeEach(() => {
+            const solrResponse = { statusCode: 200, body: { response: { foo: "bar" } } };
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue(solrResponse as NeedleResponse);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will run an appropriate Solr query with default params", async () => {
+            const response = await request(app)
+                .get(`/edit/topLevelObjects`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", "-fedora_parent_id_str_mv:*", {
+                fl: "id,title",
+                rows: "100000",
+                sort: "title ASC",
+                start: "0",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+        it("allows start and rows to be overridden", async () => {
+            const response = await request(app)
+                .get(`/edit/topLevelObjects`)
+                .query({ rows: "100", start: "200" })
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", "-fedora_parent_id_str_mv:*", {
+                fl: "id,title",
+                rows: "100",
+                sort: "title ASC",
+                start: "200",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+    });
+
+    describe("get /object/:pid/children", () => {
+        let querySpy;
+        beforeEach(() => {
+            const solrResponse = { statusCode: 200, body: { response: { foo: "bar" } } };
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue(solrResponse as NeedleResponse);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will run an appropriate Solr query with default params", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/children`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
+                fl: "id,title",
+                rows: "100000",
+                sort: "sequence_foo_123_str ASC,title ASC",
+                start: "0",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+        it("allows start and rows to be overridden", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/children`)
+                .query({ rows: "100", start: "200" })
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
+                fl: "id,title",
+                rows: "100",
+                sort: "sequence_foo_123_str ASC,title ASC",
+                start: "200",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+    });
+
+    describe("get /object/:pid/recursiveChildPids", () => {
+        let querySpy;
+        beforeEach(() => {
+            const solrResponse = { statusCode: 200, body: { response: { foo: "bar" } } };
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue(solrResponse as NeedleResponse);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will run an appropriate Solr query with default params", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/recursiveChildPids`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'hierarchy_all_parents_str_mv:"foo:123"', {
+                fl: "id",
+                rows: "100000",
+                sort: "id ASC",
+                start: "0",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+        it("allows start and rows to be overridden", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/recursiveChildPids`)
+                .query({ rows: "100", start: "200" })
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'hierarchy_all_parents_str_mv:"foo:123"', {
+                fl: "id",
+                rows: "100",
+                sort: "id ASC",
+                start: "200",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+    });
+
+    describe("put /object/:pid/state", () => {
+        it("will reject invalid states", async () => {
+            const response = await request(app)
+                .put(`/edit/object/${pid}/state`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("Illegal")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("Illegal state: Illegal");
+        });
+
+        it("will accept a valid state", async () => {
+            const fedora = Fedora.getInstance();
+            const stateSpy = jest.spyOn(fedora, "modifyObjectState").mockImplementation(jest.fn());
+
+            await request(app)
+                .put(`/edit/object/${pid}/state`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("Active")
+                .expect(StatusCodes.OK);
+
+            expect(stateSpy).toHaveBeenCalledWith(pid, "Active");
+        });
+    });
+
+    describe("put /object/:pid/positionInParent/:parentPid", () => {
+        let parentPid: string;
+        let mockData: FedoraDataCollection;
+        let sequenceSpy;
+        beforeEach(() => {
+            parentPid = "foo:100";
+            mockData = FedoraDataCollection.build(pid);
+            const collector = FedoraDataCollector.getInstance();
+            jest.spyOn(collector, "getHierarchy").mockResolvedValue(mockData);
+            const fedora = Fedora.getInstance();
+            sequenceSpy = jest.spyOn(fedora, "updateSequenceRelationship").mockImplementation(jest.fn());
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will reject an illegal parent/child pair", async () => {
+            const response = await request(app)
+                .put(`/edit/object/${pid}/positionInParent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("foo:100 is not an immediate parent of foo:123.");
+        });
+
+        it("will reject setting a position in an un-ordered parent", async () => {
+            mockData.addParent(FedoraDataCollection.build(parentPid));
+            const response = await request(app)
+                .put(`/edit/object/${pid}/positionInParent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("foo:100 has sort value of title; custom is required.");
+        });
+
+        it("updates sequence when appropriate preconditions are met", async () => {
+            const parent = FedoraDataCollection.build(parentPid);
+            parent.fedoraDetails.sortOn = ["custom"];
+            mockData.addParent(parent);
+            await request(app)
+                .put(`/edit/object/${pid}/positionInParent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.OK);
+            expect(sequenceSpy).toHaveBeenCalledWith(pid, parentPid, 2);
         });
     });
 });

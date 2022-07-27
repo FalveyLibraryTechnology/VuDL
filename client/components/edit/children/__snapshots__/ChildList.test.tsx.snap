@@ -14,12 +14,15 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
       >
         Pagination
       </Component>
-      <ul>
+      <ul
+        className="childlist"
+      >
         <li
           key="_child_foo:124"
         >
           <Component
             initialTitle="hello1"
+            parentPid=""
             pid="foo:124"
           >
             Child
@@ -30,6 +33,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
         >
           <Component
             initialTitle="hello2"
+            parentPid=""
             pid="foo:125"
           >
             Child
@@ -40,6 +44,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
         >
           <Component
             initialTitle="hello3"
+            parentPid=""
             pid="foo:126"
           >
             Child
@@ -50,6 +55,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
         >
           <Component
             initialTitle="hello4"
+            parentPid=""
             pid="foo:127"
           >
             Child
@@ -60,6 +66,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
         >
           <Component
             initialTitle="hello5"
+            parentPid=""
             pid="foo:128"
           >
             Child
@@ -70,6 +77,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
         >
           <Component
             initialTitle="hello6"
+            parentPid=""
             pid="foo:129"
           >
             Child
@@ -80,6 +88,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
         >
           <Component
             initialTitle="hello7"
+            parentPid=""
             pid="foo:130"
           >
             Child
@@ -90,6 +99,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
         >
           <Component
             initialTitle="hello8"
+            parentPid=""
             pid="foo:131"
           >
             Child
@@ -100,6 +110,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
         >
           <Component
             initialTitle="hello9"
+            parentPid=""
             pid="foo:132"
           >
             Child
@@ -110,6 +121,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
         >
           <Component
             initialTitle="hello10"
+            parentPid=""
             pid="foo:133"
           >
             Child
@@ -128,12 +140,15 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
       pageSize={10}
       pid="foo:123"
     >
-      <ul>
+      <ul
+        className="childlist"
+      >
         <li
           key="foo:123_child_foo:124"
         >
           <Component
             initialTitle="hello"
+            parentPid="foo:123"
             pid="foo:124"
           >
             Child
@@ -152,12 +167,15 @@ exports[`ChildList renders using ajax-loaded root data 1`] = `
       pageSize={10}
       pid=""
     >
-      <ul>
+      <ul
+        className="childlist"
+      >
         <li
           key="_child_foo:124"
         >
           <Component
             initialTitle="hello"
+            parentPid=""
             pid="foo:124"
           >
             Child

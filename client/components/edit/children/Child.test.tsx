@@ -8,6 +8,7 @@ import { EditorContextProvider, ObjectDetails } from "../../../context/EditorCon
 import { FetchContextProvider } from "../../../context/FetchContext";
 
 jest.mock("./ChildList", () => () => "ChildList");
+jest.mock("../ObjectStatus", () => () => "ObjectStatus");
 
 function getMountedChildComponent(props: ChildProps) {
     return mount(

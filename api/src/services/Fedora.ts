@@ -267,6 +267,24 @@ export class Fedora {
     }
 
     /**
+     * Change the state of an object
+     *
+     * @param pid   PID of object to modify
+     * @param state New state to set
+     */
+    async modifyObjectState(pid: string, state: string): Promise<void> {
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#state"), literal(state));
+        const insertClause = this.getOutputFromWriter(writer);
+        const deleteClause = "<> <info:fedora/fedora-system:def/model#state> ?any .";
+        const whereClause = "?id <info:fedora/fedora-system:def/model#state> ?any";
+        const response = await this.patchRdf("/" + pid, insertClause, deleteClause, whereClause);
+        if (response.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + response.statusCode);
+        }
+    }
+
+    /**
      * Add a triple to the Fedora object.
      *
      * @param pid        PID to update
@@ -287,6 +305,30 @@ export class Fedora {
         const turtle = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid;
         const patchResponse = await this.patchRdf(targetPath, turtle);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
+    /**
+     * This method changes the sequential position of a pid within a specified parent pid.
+     * It is the responsibility of the caller to ensure that parentPid is a legal parent of pid.
+     * This will NOT insert a new position; it only updates existing values.
+     *
+     * @param pid         PID to update
+     * @param parentPid   Parent PID to update
+     * @param newPosition New position to set
+     */
+    async updateSequenceRelationship(pid: string, parentPid: string, newPosition: number): Promise<void> {
+        const subject = "info:fedora/" + pid;
+        const predicate = "http://vudl.org/relationships#sequence";
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(subject), namedNode(predicate), literal(`${parentPid}#${newPosition}`));
+        const insertClause = this.getOutputFromWriter(writer);
+        const targetPath = "/" + pid;
+        const deleteClause = `<> <${predicate}> ?pos .`;
+        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#"))`;
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
         if (patchResponse.statusCode !== 204) {
             throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
         }

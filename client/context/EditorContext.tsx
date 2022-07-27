@@ -9,6 +9,7 @@ export interface ObjectDetails {
     models: Array<string>;
     pid: string;
     sortOn: string;
+    state: string;
 };
 
 interface ChildrenResultPage {
@@ -47,7 +48,9 @@ interface EditorState {
     currentPid: string | null;
     activeDatastream: string | null;
     isDatastreamModalOpen: boolean;
+    isStateModalOpen: boolean;
     datastreamModalState: string | null;
+    stateModalActivePid: string | null;
     snackbarState: SnackbarState;
     objectDetailsStorage: Record<string, ObjectDetails>;
     childListStorage: Record<string, ChildrenResultPage>;
@@ -65,7 +68,9 @@ const editorContextParams: EditorState = {
     currentPid: null,
     activeDatastream: null,
     isDatastreamModalOpen: false,
+    isStateModalOpen: false,
     datastreamModalState: null,
+    stateModalActivePid: null,
     snackbarState: {
         open: false,
         message: "",
@@ -94,7 +99,9 @@ const reducerMapping: Record<string, string> = {
     SET_CURRENT_PID: "currentPid",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
+    SET_IS_STATE_MODAL_OPEN: "isStateModalOpen",
     SET_DATASTREAM_MODAL_STATE: "datastreamModalState",
+    SET_STATE_MODAL_ACTIVE_PID: "stateModalActivePid",
     SET_SNACKBAR_STATE: "snackbarState",
 };
 
@@ -112,12 +119,34 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
             ...state,
             objectDetailsStorage
         };
+    } else if (type === "REMOVE_FROM_OBJECT_DETAILS_STORAGE") {
+        const { key } = payload as { key: string };
+        const objectDetailsStorage = {
+            ...state.objectDetailsStorage,
+        };
+        delete objectDetailsStorage[key];
+        return {
+            ...state,
+            objectDetailsStorage
+        };
     } else if (type === "ADD_TO_CHILD_LIST_STORAGE") {
         const { key, children } = payload as { key: string; children: ChildrenResultPage };
         const childListStorage = {
             ...state.childListStorage,
         };
         childListStorage[key] = children;
+        return {
+            ...state,
+            childListStorage
+        };
+    } else if (type === "CLEAR_PID_FROM_CHILD_LIST_STORAGE") {
+        const { pid } = payload as { pid: string };
+        const childListStorage: Record<string, ChildrenResultPage> = {};
+        for (const key in state.childListStorage) {
+            if (!key.startsWith(pid + "_")) {
+                childListStorage[key] = state.childListStorage[key];
+            }
+        }
         return {
             ...state,
             childListStorage
@@ -151,7 +180,9 @@ export const useEditorContext = () => {
             currentPid,
             activeDatastream,
             isDatastreamModalOpen,
+            isStateModalOpen,
             datastreamModalState,
+            stateModalActivePid,
             agentsCatalog,
             licensesCatalog,
             modelsCatalog,
@@ -184,11 +215,18 @@ export const useEditorContext = () => {
         });
     };
 
+    const removeFromObjectDetailsStorage = (key: string) => {
+        dispatch({
+            type: "REMOVE_FROM_OBJECT_DETAILS_STORAGE",
+            payload: { key },
+        });
+    };
+
     const setCurrentAgents = (currentAgents) => {
         dispatch({
             type: "SET_CURRENT_AGENTS",
             payload: currentAgents
-        })
+        });
     };
 
     const setAgentsCatalog = (agentsCatalog) => {
@@ -210,6 +248,10 @@ export const useEditorContext = () => {
     };
 
     const loadObjectDetailsIntoStorage = async (pid: string) => {
+        // Ignore null values:
+        if (pid === null) {
+            return;
+        }
         const url = getObjectDetailsUrl(pid);
         try {
             addToObjectDetailsStorage(pid, await fetchJSON(url));
@@ -217,6 +259,13 @@ export const useEditorContext = () => {
             console.error("Problem fetching details from " + url);
         }
     };
+
+    const clearPidFromChildListStorage = (pid: string) => {
+        dispatch({
+            type: "CLEAR_PID_FROM_CHILD_LIST_STORAGE",
+            payload: { pid },
+        });
+    }
 
     const loadChildrenIntoStorage = async (pid: string, page: number, pageSize: number) => {
         const key = getChildListStorageKey(pid, page, pageSize);
@@ -256,10 +305,24 @@ export const useEditorContext = () => {
         });
     };
 
+    const toggleStateModal = () => {
+        dispatch({
+            type: "SET_IS_STATE_MODAL_OPEN",
+            payload: !isStateModalOpen
+        });
+    };
+
     const setDatastreamModalState = (datastreamModalState: boolean) => {
         dispatch({
             type: "SET_DATASTREAM_MODAL_STATE",
             payload: datastreamModalState
+        });
+    };
+
+    const setStateModalActivePid = (pid: string) => {
+        dispatch({
+            type: "SET_STATE_MODAL_ACTIVE_PID",
+            payload: pid
         });
     };
 
@@ -311,7 +374,9 @@ export const useEditorContext = () => {
             currentDatastreams,
             activeDatastream,
             isDatastreamModalOpen,
+            isStateModalOpen,
             datastreamModalState,
+            stateModalActivePid,
             datastreamsCatalog,
             modelsDatastreams,
             agentsCatalog,
@@ -328,12 +393,16 @@ export const useEditorContext = () => {
             loadCurrentObjectDetails,
             setActiveDatastream,
             setDatastreamModalState,
+            setStateModalActivePid,
             toggleDatastreamModal,
+            toggleStateModal,
             setSnackbarState,
             extractFirstMetadataValue,
             getChildListStorageKey,
             loadObjectDetailsIntoStorage,
             loadChildrenIntoStorage,
+            removeFromObjectDetailsStorage,
+            clearPidFromChildListStorage,
         },
     };
 }

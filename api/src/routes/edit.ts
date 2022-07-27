@@ -1,12 +1,13 @@
 import express = require("express");
 import bodyParser = require("body-parser");
 import Config from "../models/Config";
+import Fedora from "../services/Fedora";
 import FedoraCatalog from "../services/FedoraCatalog";
 import DatastreamManager from "../services/DatastreamManager";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import FedoraDataCollector from "../services/FedoraDataCollector";
 import { requireToken } from "./auth";
-import { datastreamSanitizer, pidSanitizer } from "./sanitize";
+import { datastreamSanitizer, pidSanitizer, pidSanitizeRegEx, sanitizeParameters } from "./sanitize";
 import * as formidable from "formidable";
 import Solr from "../services/Solr";
 import FedoraDataCollection from "../models/FedoraDataCollection";
@@ -195,11 +196,28 @@ edit.get("/object/:pid/datastream/:stream/metadata", requireToken, datastreamSan
 
 edit.get("/topLevelObjects", requireToken, getChildren);
 edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
+async function getRecursiveChildPids(req, res) {
+    const cleanPid = req.params.pid.replace('"', "");
+    const query = `hierarchy_all_parents_str_mv:"${cleanPid}"`;
+    const sort = `id ASC`;
+    const config = Config.getInstance();
+    const solr = Solr.getInstance();
+    const rows = parseInt(req.query.rows ?? "100000").toString();
+    const start = parseInt(req.query.start ?? "0").toString();
+    const result = await solr.query(config.solrCore, query, { sort, fl: "id", rows, start });
+    if (result.statusCode !== 200) {
+        res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
+        return;
+    }
+    const response = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
+    res.json(response);
+}
+edit.get("/object/:pid/recursiveChildPids", requireToken, pidSanitizer, getRecursiveChildPids);
 edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
     try {
-        const { fedoraDatastreams, metadata, models, pid, sortOn } =
+        const { fedoraDatastreams, metadata, models, pid, sortOn, sequences, state } =
             await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
-        res.json({ datastreams: fedoraDatastreams, metadata, models, pid, sortOn });
+        res.json({ datastreams: fedoraDatastreams, metadata, models, pid, sortOn, sequences, state });
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);
@@ -282,4 +300,59 @@ edit.get("/object/:pid/datastream/:stream/mimetype", requireToken, datastreamSan
     }
 });
 
+edit.put("/object/:pid/state", requireToken, pidSanitizer, bodyParser.text(), async function (req, res) {
+    try {
+        const pid = req.params.pid;
+        const fedora = Fedora.getInstance();
+        const state = req.body;
+        const legalStates = ["Active", "Deleted", "Inactive"];
+        if (!legalStates.includes(state)) {
+            res.status(400).send(`Illegal state: ${state}`);
+            return;
+        }
+        await fedora.modifyObjectState(pid, state);
+        res.status(200).send("ok");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
+
+const pidAndParentPidSanitizer = sanitizeParameters({ pid: pidSanitizeRegEx, parentPid: pidSanitizeRegEx });
+edit.put(
+    "/object/:pid/positionInParent/:parentPid",
+    requireToken,
+    pidAndParentPidSanitizer,
+    bodyParser.text(),
+    async function (req, res) {
+        try {
+            const pid = req.params.pid;
+            const parent = req.params.parentPid;
+            const fedora = Fedora.getInstance();
+            const pos = parseInt(req.body);
+
+            // Validate the input
+            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
+            const legalParent = fedoraData.parents.reduce((previous, current) => {
+                return previous || (current.pid === parent ? current : false);
+            }, false);
+            if (!legalParent) {
+                res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
+                return;
+            }
+            const parentSort = (legalParent as FedoraDataCollection).sortOn;
+            if (parentSort !== "custom") {
+                res.status(400).send(`${parent} has sort value of ${parentSort}; custom is required.`);
+                return;
+            }
+
+            // If we got this far, we can safely update things
+            await fedora.updateSequenceRelationship(pid, parent, pos);
+            res.status(200).send("ok");
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
+    }
+);
 export default edit;
