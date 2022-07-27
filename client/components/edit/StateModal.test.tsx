@@ -5,6 +5,7 @@ import { act } from "react-dom/test-utils";
 import { waitFor } from "@testing-library/react";
 import toJson from "enzyme-to-json";
 import StateModal from "./StateModal";
+import RadioGroup from "@mui/material/RadioGroup";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../context/EditorContext", () => ({
@@ -31,7 +32,11 @@ describe("StateModal", () => {
                 isStateModalOpen: true,
                 objectDetailsStorage: {},
             },
-            action: {},
+            action: {
+                removeFromObjectDetailsStorage: jest.fn(),
+                setSnackbarState: jest.fn(),
+                toggleStateModal: jest.fn(),
+            },
         };
         mockUseEditorContext.mockReturnValue(editorValues);
         fetchContextValues = {
@@ -76,5 +81,39 @@ describe("StateModal", () => {
         await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("saves data correctly", async () => {
+        editorValues.state.objectDetailsStorage[pid] = { pid, state: "Inactive" };
+        fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 0 });
+        fetchContextValues.action.fetchText.mockResolvedValue("ok");
+        let wrapper;
+        await act(async () => {
+            wrapper = mount(<StateModal />);
+        });
+        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+        wrapper.update();
+        await act(async () => {
+            wrapper
+                .find(RadioGroup)
+                .props()
+                .onChange({ target: { value: "Active" } });
+        });
+        await act(async () => {
+            wrapper.find("button").at(1).simulate("click");
+        });
+        await waitFor(() =>
+            expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/foo%3A123/state",
+                { body: "Active", method: "PUT" }
+            )
+        );
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "Status saved successfully.",
+            open: true,
+            severity: "success",
+        });
+        expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.toggleStateModal).toHaveBeenCalled();
     });
 });
