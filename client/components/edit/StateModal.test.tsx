@@ -5,6 +5,7 @@ import { act } from "react-dom/test-utils";
 import { waitFor } from "@testing-library/react";
 import toJson from "enzyme-to-json";
 import StateModal from "./StateModal";
+import Checkbox from "@mui/material/Checkbox";
 import RadioGroup from "@mui/material/RadioGroup";
 
 const mockUseEditorContext = jest.fn();
@@ -173,6 +174,93 @@ describe("StateModal", () => {
             severity: "error",
         });
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.toggleStateModal).toHaveBeenCalled();
+    });
+
+    it("handles child save failure gracefully", async () => {
+        editorValues.state.objectDetailsStorage[pid] = { pid, state: "Inactive" };
+        fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 1, docs: [{ id: "foo:125" }] });
+        fetchContextValues.action.fetchText.mockResolvedValue("not ok");
+        let wrapper;
+        await act(async () => {
+            wrapper = mount(<StateModal />);
+        });
+        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+        wrapper.update();
+        await act(async () => {
+            wrapper
+                .find(RadioGroup)
+                .props()
+                .onChange({ target: { value: "Active" } });
+        });
+        await act(async () => {
+            wrapper
+                .find(Checkbox)
+                .props()
+                .onChange({ target: { checked: true } });
+        });
+        await act(async () => {
+            wrapper.find("button").at(1).simulate("click");
+        });
+        await waitFor(() =>
+            expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/foo%3A125/state",
+                { body: "Active", method: "PUT" }
+            )
+        );
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: 'Status failed to save; "not ok"',
+            open: true,
+            severity: "error",
+        });
+        expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.toggleStateModal).toHaveBeenCalled();
+    });
+
+    it("updates children correctly", async () => {
+        editorValues.state.objectDetailsStorage[pid] = { pid, state: "Inactive" };
+        fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 1, docs: [{ id: "foo:125" }] });
+        fetchContextValues.action.fetchText.mockResolvedValue("ok");
+        let wrapper;
+        await act(async () => {
+            wrapper = mount(<StateModal />);
+        });
+        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+        wrapper.update();
+        await act(async () => {
+            wrapper
+                .find(RadioGroup)
+                .props()
+                .onChange({ target: { value: "Active" } });
+        });
+        await act(async () => {
+            wrapper
+                .find(Checkbox)
+                .props()
+                .onChange({ target: { checked: true } });
+        });
+        await act(async () => {
+            wrapper.find("button").at(1).simulate("click");
+        });
+        await waitFor(() =>
+            expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/foo%3A123/state",
+                { body: "Active", method: "PUT" }
+            )
+        );
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "Status saved successfully.",
+            open: true,
+            severity: "success",
+        });
+        expect(fetchContextValues.action.fetchText).toHaveBeenNthCalledWith(
+            1,
+            "http://localhost:9000/api/edit/object/foo%3A125/state",
+            { body: "Active", method: "PUT" }
+        );
+        expect(fetchContextValues.action.fetchText).toHaveBeenCalledTimes(2);
+        expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenNthCalledWith(1, "foo:125");
+        expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenNthCalledWith(2, pid);
         expect(editorValues.action.toggleStateModal).toHaveBeenCalled();
     });
 });
