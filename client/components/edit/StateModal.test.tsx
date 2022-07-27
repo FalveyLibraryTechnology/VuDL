@@ -116,4 +116,63 @@ describe("StateModal", () => {
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.toggleStateModal).toHaveBeenCalled();
     });
+
+    it("does not save when nothing changes", async () => {
+        editorValues.state.objectDetailsStorage[pid] = { pid, state: "Inactive" };
+        fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 0 });
+        fetchContextValues.action.fetchText.mockResolvedValue("ok");
+        let wrapper;
+        await act(async () => {
+            wrapper = mount(<StateModal />);
+        });
+        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+        wrapper.update();
+        await act(async () => {
+            wrapper.find("button").at(1).simulate("click");
+        });
+        await waitFor(() =>
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+                message: "No changes were made.",
+                open: true,
+                severity: "info",
+            })
+        );
+        expect(fetchContextValues.action.fetchText).not.toHaveBeenCalled();
+        expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.toggleStateModal).not.toHaveBeenCalled();
+    });
+
+    it("handles save failure gracefully", async () => {
+        editorValues.state.objectDetailsStorage[pid] = { pid, state: "Inactive" };
+        fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 0 });
+        fetchContextValues.action.fetchText.mockResolvedValue("not ok");
+        let wrapper;
+        await act(async () => {
+            wrapper = mount(<StateModal />);
+        });
+        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+        wrapper.update();
+        await act(async () => {
+            wrapper
+                .find(RadioGroup)
+                .props()
+                .onChange({ target: { value: "Active" } });
+        });
+        await act(async () => {
+            wrapper.find("button").at(1).simulate("click");
+        });
+        await waitFor(() =>
+            expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/foo%3A123/state",
+                { body: "Active", method: "PUT" }
+            )
+        );
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: 'Status failed to save; "not ok"',
+            open: true,
+            severity: "error",
+        });
+        expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.toggleStateModal).toHaveBeenCalled();
+    });
 });
