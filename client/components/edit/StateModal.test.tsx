@@ -54,9 +54,21 @@ describe("StateModal", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("renders correctly for a loaded object", async () => {
+    it("renders correctly for a loaded object with children", async () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, state: "Active" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 100 });
+        let wrapper;
+        await act(async () => {
+            wrapper = mount(<StateModal />);
+        });
+        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+        wrapper.update();
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders correctly for a loaded object without children", async () => {
+        editorValues.state.objectDetailsStorage[pid] = { pid, state: "Active" };
+        fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 0 });
         let wrapper;
         await act(async () => {
             wrapper = mount(<StateModal />);
