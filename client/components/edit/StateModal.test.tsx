@@ -45,12 +45,12 @@ describe("StateModal", () => {
 
     it("renders correctly when closed", () => {
         editorValues.state.isStateModalOpen = false;
-        const wrapper = shallow(<StateModal pid={pid} />);
+        const wrapper = shallow(<StateModal />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it("renders correctly for a pending object", () => {
-        const wrapper = shallow(<StateModal pid={pid} />);
+        const wrapper = shallow(<StateModal />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
@@ -59,7 +59,7 @@ describe("StateModal", () => {
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 100 });
         let wrapper;
         await act(async () => {
-            wrapper = mount(<StateModal pid={pid} />);
+            wrapper = mount(<StateModal />);
         });
         await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
         wrapper.update();
