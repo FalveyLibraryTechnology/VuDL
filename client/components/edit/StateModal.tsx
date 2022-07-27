@@ -122,7 +122,7 @@ const StateModal = (): React.ReactElement => {
         }
     };
 
-    let childrenCheckbox = <></>;
+    let childrenCheckbox = null;
     if (childPidResponse.loading ?? false) {
         childrenCheckbox = <p>Loading...</p>;
     } else if ((childPidResponse.numFound ?? 0) > 0) {
