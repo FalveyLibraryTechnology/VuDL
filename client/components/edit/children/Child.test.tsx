@@ -69,7 +69,7 @@ describe("Child", () => {
     it("can be expanded to show children", async () => {
         const wrapper = getMountedChildComponent(props);
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        const expandIcon = wrapper.find("svg title");
+        const expandIcon = wrapper.find("svg title").at(0);
         expect(expandIcon.text()).toEqual("Expand Tree");
         expandIcon.simulate("click");
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
