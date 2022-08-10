@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ChildList from "./children/ChildList";
 
 interface PidPickerProps {
     selected: string;
@@ -14,9 +15,11 @@ const PidPicker = ({ selected, setSelected }: PidPickerProps): React.ReactElemen
     ) : (
         <>
             <label>
-                PID: <input type="text" value={textboxPid} onChange={(e) => setTextboxPid(e.target.value)} />
+                Enter PID: <input type="text" value={textboxPid} onChange={(e) => setTextboxPid(e.target.value)} />
             </label>
             <button onClick={() => setSelected(textboxPid)}>Set</button>
+            <label>Choose PID from Tree:</label>
+            <ChildList selectCallback={setSelected} />
         </>
     );
 };
