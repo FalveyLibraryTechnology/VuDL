@@ -9,6 +9,8 @@ const ParentPicker = (): React.ReactElement => {
         action: { setSnackbarState },
     } = useEditorContext();
     const [selectedPid, setSelectedPid] = useState<string>("");
+    const [position, setPosition] = useState<string>("");
+
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, selectedPid);
     const details = loaded ? objectDetailsStorage[selectedPid] : null;
 
@@ -25,24 +27,24 @@ const ParentPicker = (): React.ReactElement => {
         setSelectedPid("");
     };
 
+    const positionRequired = details && (details.sortOn ?? "") == "custom";
+    const positionControl = positionRequired
+        ? <label>Position: <input type="text" value={position} onChange={(e) => setPosition(e.target.value)} /></label>
+        : null;
+
+    let error = "";
+    if (positionRequired && position.length == 0) {
+        error = "Please enter a position.";
+    } else if (!details) {
+        error = "Please select a valid PID.";
+    }
     return (
         <>
             {selectedPid.length > 0 ? <ObjectLoader pid={selectedPid} errorCallback={errorCallback} /> : null}
             <PidPicker selected={selectedPid} setSelected={setSelectedPid} />
             <br />
-            <label>
-                Position:{" "}
-                {details ? (
-                    details.sortOn == "custom" ? (
-                        <input type="text"></input>
-                    ) : (
-                        `Sorted by ${details.sortOn}`
-                    )
-                ) : (
-                    "Waiting for PID selection..."
-                )}
-            </label>
-            {details ? <button>Add</button> : "Please select a valid PID."}
+            {positionControl}
+            {error.length == 0 ? <button>Add</button> : error}
         </>
     );
 };
