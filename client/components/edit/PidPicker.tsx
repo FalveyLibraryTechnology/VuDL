@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 
-const PidPicker = (): React.ReactElement => {
-    const [selectedPid, setSelectedPid] = useState<string>("");
+interface PidPickerProps {
+    selected: string;
+    setSelected: (string) => void;
+}
+
+const PidPicker = ({ selected, setSelected }: PidPickerProps): React.ReactElement => {
     const [textboxPid, setTextboxPid] = useState<string>("");
-    return selectedPid.length > 0 ? (
+    return selected.length > 0 ? (
         <>
-            Selected pid: {selectedPid}. <button onClick={() => setSelectedPid("")}>Clear</button>
+            Selected pid: {selected}. <button onClick={() => setSelected("")}>Clear</button>
         </>
     ) : (
         <>
-            PID: <input type="text" value={textboxPid} onChange={(e) => setTextboxPid(e.target.value)} />
-            <button onClick={() => setSelectedPid(textboxPid)}>Set</button>
+            <label>
+                PID: <input type="text" value={textboxPid} onChange={(e) => setTextboxPid(e.target.value)} />
+            </label>
+            <button onClick={() => setSelected(textboxPid)}>Set</button>
         </>
     );
 };
