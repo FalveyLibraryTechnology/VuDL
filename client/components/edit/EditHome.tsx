@@ -1,5 +1,6 @@
 import React from "react";
 import ChildList from "./children/ChildList";
+import ParentsModal from "./ParentsModal";
 import StateModal from "./StateModal";
 import EditorSnackbar from "./EditorSnackbar";
 import { EditorContextProvider } from "../../context/EditorContext";
@@ -17,6 +18,7 @@ const EditHome = (): React.ReactElement => {
             </ul>
             <h2>Contents</h2>
             <EditorContextProvider>
+                <ParentsModal />
                 <StateModal />
                 <ChildList pid="" />
                 <EditorSnackbar />

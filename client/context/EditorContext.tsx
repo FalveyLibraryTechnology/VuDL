@@ -48,8 +48,10 @@ interface EditorState {
     currentPid: string | null;
     activeDatastream: string | null;
     isDatastreamModalOpen: boolean;
+    isParentsModalOpen: boolean;
     isStateModalOpen: boolean;
     datastreamModalState: string | null;
+    parentsModalActivePid: string | null;
     stateModalActivePid: string | null;
     snackbarState: SnackbarState;
     objectDetailsStorage: Record<string, ObjectDetails>;
@@ -68,8 +70,10 @@ const editorContextParams: EditorState = {
     currentPid: null,
     activeDatastream: null,
     isDatastreamModalOpen: false,
+    isParentsModalOpen: false,
     isStateModalOpen: false,
     datastreamModalState: null,
+    parentsModalActivePid: null,
     stateModalActivePid: null,
     snackbarState: {
         open: false,
@@ -99,8 +103,10 @@ const reducerMapping: Record<string, string> = {
     SET_CURRENT_PID: "currentPid",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
+    SET_IS_PARENTS_MODAL_OPEN: "isParentsModalOpen",
     SET_IS_STATE_MODAL_OPEN: "isStateModalOpen",
     SET_DATASTREAM_MODAL_STATE: "datastreamModalState",
+    SET_PARENTS_MODAL_ACTIVE_PID: "parentsModalActivePid",
     SET_STATE_MODAL_ACTIVE_PID: "stateModalActivePid",
     SET_SNACKBAR_STATE: "snackbarState",
 };
@@ -180,8 +186,10 @@ export const useEditorContext = () => {
             currentPid,
             activeDatastream,
             isDatastreamModalOpen,
+            isParentsModalOpen,
             isStateModalOpen,
             datastreamModalState,
+            parentsModalActivePid,
             stateModalActivePid,
             agentsCatalog,
             licensesCatalog,
@@ -305,6 +313,13 @@ export const useEditorContext = () => {
         });
     };
 
+    const toggleParentsModal = () => {
+        dispatch({
+            type: "SET_IS_PARENTS_MODAL_OPEN",
+            payload: !isParentsModalOpen
+        });
+    };
+
     const toggleStateModal = () => {
         dispatch({
             type: "SET_IS_STATE_MODAL_OPEN",
@@ -316,6 +331,13 @@ export const useEditorContext = () => {
         dispatch({
             type: "SET_DATASTREAM_MODAL_STATE",
             payload: datastreamModalState
+        });
+    };
+
+    const setParentsModalActivePid = (pid: string) => {
+        dispatch({
+            type: "SET_PARENTS_MODAL_ACTIVE_PID",
+            payload: pid
         });
     };
 
@@ -374,8 +396,10 @@ export const useEditorContext = () => {
             currentDatastreams,
             activeDatastream,
             isDatastreamModalOpen,
+            isParentsModalOpen,
             isStateModalOpen,
             datastreamModalState,
+            parentsModalActivePid,
             stateModalActivePid,
             datastreamsCatalog,
             modelsDatastreams,
@@ -393,8 +417,10 @@ export const useEditorContext = () => {
             loadCurrentObjectDetails,
             setActiveDatastream,
             setDatastreamModalState,
+            setParentsModalActivePid,
             setStateModalActivePid,
             toggleDatastreamModal,
+            toggleParentsModal,
             toggleStateModal,
             setSnackbarState,
             extractFirstMetadataValue,
