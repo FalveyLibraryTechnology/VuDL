@@ -28,9 +28,11 @@ const ParentPicker = (): React.ReactElement => {
     };
 
     const positionRequired = details && (details.sortOn ?? "") == "custom";
-    const positionControl = positionRequired
-        ? <label>Position: <input type="text" value={position} onChange={(e) => setPosition(e.target.value)} /></label>
-        : null;
+    const positionControl = positionRequired ? (
+        <label>
+            Position: <input type="text" value={position} onChange={(e) => setPosition(e.target.value)} />
+        </label>
+    ) : null;
 
     let error = "";
     if (positionRequired && position.length == 0) {

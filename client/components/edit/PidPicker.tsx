@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import ChildList from "./children/ChildList";
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 interface PidPickerProps {
     selected: string;
@@ -26,7 +26,8 @@ const PidPicker = ({ selected, setSelected }: PidPickerProps): React.ReactElemen
                 <AccordionDetails>
                     <Typography>
                         <label>
-                            Enter PID: <input type="text" value={textboxPid} onChange={(e) => setTextboxPid(e.target.value)} />
+                            Enter PID:{" "}
+                            <input type="text" value={textboxPid} onChange={(e) => setTextboxPid(e.target.value)} />
                         </label>
                         <button onClick={() => setSelected(textboxPid)}>Set</button>
                     </Typography>
