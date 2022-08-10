@@ -14,10 +14,10 @@ import { TreeNode } from "../../util/Breadcrumbs";
 const ParentsModal = (): React.ReactElement => {
     const {
         state: { isParentsModalOpen, objectDetailsStorage, parentsModalActivePid },
-        action: { removeFromObjectDetailsStorage, setSnackbarState, toggleParentsModal },
+        action: { setSnackbarState, toggleParentsModal },
     } = useEditorContext();
     const {
-        action: { fetchJSON, fetchText },
+        action: { fetchJSON },
     } = useFetchContext();
     const [parentData, setParentData] = useState<TreeNode>({});
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, parentsModalActivePid);
@@ -44,7 +44,6 @@ const ParentsModal = (): React.ReactElement => {
         loadData();
     }, [isParentsModalOpen, parentsModalActivePid]);
 
-
     const showSnackbarMessage = (message: string, severity: string) => {
         setSnackbarState({
             open: true,
@@ -60,17 +59,33 @@ const ParentsModal = (): React.ReactElement => {
             parentChain = nextNode.title + (parentChain.length ? "/" : "") + parentChain;
             nextNode = (nextNode.parents ?? [])[0] ?? null;
         }
-        return <tr key={"parentmodal_" + parentsModalActivePid + "_" + parent.pid}>
-            <td><button onClick={() => showSnackbarMessage("TODO", "info")}>X</button></td>
-            <td>{parent.pid ?? ""}</td>
-            <td>{parent.title ?? "Unknown title"}</td>
-            <td>{parentChain}</td>
-        </tr>;
+        return (
+            <tr key={"parentmodal_" + parentsModalActivePid + "_" + parent.pid}>
+                <td>
+                    <button onClick={() => showSnackbarMessage("TODO", "info")}>X</button>
+                </td>
+                <td>{parent.pid ?? ""}</td>
+                <td>{parent.title ?? "Unknown title"}</td>
+                <td>{parentChain}</td>
+            </tr>
+        );
     });
-    const contents = <>
-        <h3>Parents</h3>
-        <table border="1"><tbody>{parents.length > 0 ? parents : <tr key={"parentmodal_" + parentsModalActivePid + "_null"}><td>No parents defined.</td></tr>}</tbody></table>
-    </>;
+    const contents = (
+        <>
+            <h3>Parents</h3>
+            <table border="1">
+                <tbody>
+                    {parents.length > 0 ? (
+                        parents
+                    ) : (
+                        <tr key={"parentmodal_" + parentsModalActivePid + "_null"}>
+                            <td>No parents defined.</td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </>
+    );
 
     return (
         <Dialog className="parentsModal" open={isParentsModalOpen} onClose={toggleParentsModal} fullWidth={true}>

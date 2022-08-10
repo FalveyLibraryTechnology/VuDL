@@ -17,9 +17,7 @@ export const EditParentsButton = ({ pid }: ObjectStatusProps): React.ReactElemen
         setParentsModalActivePid(pid);
         toggleParentsModal();
     };
-    const button = loaded ? (
-        <button onClick={clickAction}>Edit Parents</button>
-    ) : null;
+    const button = loaded ? <button onClick={clickAction}>Edit Parents</button> : null;
     return (
         <>
             <ObjectLoader pid={pid} />
