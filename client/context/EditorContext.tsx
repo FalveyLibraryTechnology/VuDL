@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { editObjectCatalogUrl, getObjectChildrenUrl, getObjectDetailsUrl } from "../util/routes";
+import { editObjectCatalogUrl, getObjectChildrenUrl, getObjectDetailsUrl, getObjectParentsUrl } from "../util/routes";
 import { useFetchContext } from "./FetchContext";
 import { extractFirstMetadataValue as utilExtractFirstMetadataValue } from "../util/metadata";
+import { TreeNode } from "../util/Breadcrumbs";
 
 export interface ObjectDetails {
     fedoraDatastreams: Array<string>;
@@ -55,6 +56,7 @@ interface EditorState {
     stateModalActivePid: string | null;
     snackbarState: SnackbarState;
     objectDetailsStorage: Record<string, ObjectDetails>;
+    parentDetailsStorage: Record<string, TreeNode>;
     childListStorage: Record<string, ChildrenResultPage>;
 }
 
@@ -81,6 +83,7 @@ const editorContextParams: EditorState = {
         severity: "info"
     },
     objectDetailsStorage: {},
+    parentDetailsStorage: {},
     childListStorage: {},
 };
 
@@ -134,6 +137,26 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
         return {
             ...state,
             objectDetailsStorage
+        };
+    } else if (type === "ADD_TO_PARENT_DETAILS_STORAGE") {
+        const { key, details } = payload as { key: string; details: TreeNode };
+        const parentDetailsStorage = {
+            ...state.parentDetailsStorage,
+        };
+        parentDetailsStorage[key] = details;
+        return {
+            ...state,
+            parentDetailsStorage
+        };
+    } else if (type === "REMOVE_FROM_PARENT_DETAILS_STORAGE") {
+        const { key } = payload as { key: string };
+        const parentDetailsStorage = {
+            ...state.parentDetailsStorage,
+        };
+        delete parentDetailsStorage[key];
+        return {
+            ...state,
+            parentDetailsStorage
         };
     } else if (type === "ADD_TO_CHILD_LIST_STORAGE") {
         const { key, children } = payload as { key: string; children: ChildrenResultPage };
@@ -196,6 +219,7 @@ export const useEditorContext = () => {
             modelsCatalog,
             snackbarState,
             objectDetailsStorage,
+            parentDetailsStorage,
             childListStorage,
         },
         dispatch,
@@ -226,6 +250,20 @@ export const useEditorContext = () => {
     const removeFromObjectDetailsStorage = (key: string) => {
         dispatch({
             type: "REMOVE_FROM_OBJECT_DETAILS_STORAGE",
+            payload: { key },
+        });
+    };
+
+    const addToParentDetailsStorage = (key: string, details: TreeNode) => {
+        dispatch({
+            type: "ADD_TO_PARENT_DETAILS_STORAGE",
+            payload: { key, details },
+        });
+    };
+
+    const removeFromParentDetailsStorage = (key: string) => {
+        dispatch({
+            type: "REMOVE_FROM_PARENT_DETAILS_STORAGE",
             payload: { key },
         });
     };
@@ -268,6 +306,22 @@ export const useEditorContext = () => {
                 errorCallback(pid);
             }
             console.error("Problem fetching details from " + url);
+        }
+    };
+
+    const loadParentDetailsIntoStorage = async (pid: string, errorCallback: ((pid: string) => void) | null = null) => {
+        // Ignore null values:
+        if (pid === null) {
+            return;
+        }
+        const url = getObjectParentsUrl(pid);
+        try {
+            addToParentDetailsStorage(pid, await fetchJSON(url));
+        } catch (e) {
+            if (errorCallback) {
+                errorCallback(pid);
+            }
+            console.error("Problem fetching parent details from " + url);
         }
     };
 
@@ -411,6 +465,7 @@ export const useEditorContext = () => {
             licensesCatalog,
             snackbarState,
             objectDetailsStorage,
+            parentDetailsStorage,
             childListStorage,
         },
         action: {
@@ -429,8 +484,10 @@ export const useEditorContext = () => {
             extractFirstMetadataValue,
             getChildListStorageKey,
             loadObjectDetailsIntoStorage,
+            loadParentDetailsIntoStorage,
             loadChildrenIntoStorage,
             removeFromObjectDetailsStorage,
+            removeFromParentDetailsStorage,
             clearPidFromChildListStorage,
         },
     };

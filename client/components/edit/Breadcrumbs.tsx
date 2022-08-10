@@ -1,8 +1,7 @@
 import styles from "./Breadcrumbs.module.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { TreeData, generateBreadcrumbTrails, processBreadcrumbData } from "../../util/Breadcrumbs";
-import { useFetchContext } from "../../context/FetchContext";
-import { getObjectParentsUrl } from "../../util/routes";
+import { useEditorContext } from "../../context/EditorContext";
 import Link from "next/link";
 
 interface BreadcrumbsProps {
@@ -11,34 +10,27 @@ interface BreadcrumbsProps {
 
 const Breadcrumbs = ({ pid = "" }: BreadcrumbsProps): React.ReactElement => {
     const {
-        action: { fetchJSON },
-    } = useFetchContext();
-    const [treeData, setTreeData] = useState<TreeData>({
-        topNodes: [],
-        childLookups: {},
-        records: {},
-    });
+        state: { parentDetailsStorage },
+        action: { loadParentDetailsIntoStorage },
+    } = useEditorContext();
+    const loaded = Object.prototype.hasOwnProperty.call(parentDetailsStorage, pid);
 
     useEffect(() => {
-        async function loadData() {
-            let data: TreeData = {
-                topNodes: [],
-                childLookups: {},
-                records: {},
-            };
-            const url = getObjectParentsUrl(pid);
-            try {
-                data = processBreadcrumbData(await fetchJSON(url));
-            } catch (e) {
-                console.error("Problem fetching breadcrumb data from " + url);
-            }
-            setTreeData(data);
+        if (!loaded) {
+            loadParentDetailsIntoStorage(pid);
         }
-        loadData();
-    }, []);
+    }, [loaded]);
+
+    const treeData: TreeData = loaded
+        ? processBreadcrumbData(parentDetailsStorage[pid])
+        : {
+              topNodes: [],
+              childLookups: {},
+              records: {},
+          };
 
     const allTrails = generateBreadcrumbTrails(treeData, pid);
-    const contents = allTrails.map((trail, trailIndex) => {
+    const contents = allTrails.map((trail, trailIndex: number) => {
         const breadcrumbs = trail.map((breadcrumb) => {
             return (
                 <li key={"breadcrumb_" + breadcrumb.pid + "_" + trailIndex}>
