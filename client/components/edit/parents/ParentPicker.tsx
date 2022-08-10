@@ -6,15 +6,28 @@ import { useEditorContext } from "../../../context/EditorContext";
 const ParentPicker = (): React.ReactElement => {
     const {
         state: { objectDetailsStorage },
-        //action: { loadObjectDetailsIntoStorage },
+        action: { setSnackbarState },
     } = useEditorContext();
     const [selectedPid, setSelectedPid] = useState<string>("");
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, selectedPid);
     const details = loaded ? objectDetailsStorage[selectedPid] : null;
-    console.log(loaded, details);
+
+    const showSnackbarMessage = (message: string, severity: string) => {
+        setSnackbarState({
+            open: true,
+            message,
+            severity,
+        });
+    };
+
+    const errorCallback = (pid: string) => {
+        showSnackbarMessage(`Cannot load details for ${pid}. Are you sure this is a valid PID?`, "error");
+        setSelectedPid("");
+    };
+
     return (
         <>
-            {selectedPid.length > 0 ? <ObjectLoader pid={selectedPid} /> : null}
+            {selectedPid.length > 0 ? <ObjectLoader pid={selectedPid} errorCallback={errorCallback} /> : null}
             <PidPicker selected={selectedPid} setSelected={setSelectedPid} />
             <br />
             <label>

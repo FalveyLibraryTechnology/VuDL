@@ -35,8 +35,14 @@ describe("ObjectLoader", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("loads the object as needed", () => {
+    it("loads the object as needed when optional callback is omitted", () => {
         mount(<ObjectLoader pid="foo:123" />);
-        expect(editorValues.action.loadObjectDetailsIntoStorage).toHaveBeenCalledWith("foo:123");
+        expect(editorValues.action.loadObjectDetailsIntoStorage).toHaveBeenCalledWith("foo:123", null);
+    });
+
+    it("loads the object as needed when optional callback is provided", () => {
+        const callback = (pid: string) => {};
+        mount(<ObjectLoader pid="foo:123" errorCallback={callback} />);
+        expect(editorValues.action.loadObjectDetailsIntoStorage).toHaveBeenCalledWith("foo:123", callback);
     });
 });
