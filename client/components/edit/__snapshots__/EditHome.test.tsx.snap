@@ -21,6 +21,7 @@ exports[`EditHome renders 1`] = `
     Contents
   </h2>
   <EditorContextProvider>
+    <ParentsModal />
     <StateModal />
     <ChildList
       pid=""
