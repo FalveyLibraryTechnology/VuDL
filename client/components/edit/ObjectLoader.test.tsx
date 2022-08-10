@@ -41,7 +41,7 @@ describe("ObjectLoader", () => {
     });
 
     it("loads the object as needed when optional callback is provided", () => {
-        const callback = (pid: string) => {};
+        const callback = jest.fn();
         mount(<ObjectLoader pid="foo:123" errorCallback={callback} />);
         expect(editorValues.action.loadObjectDetailsIntoStorage).toHaveBeenCalledWith("foo:123", callback);
     });

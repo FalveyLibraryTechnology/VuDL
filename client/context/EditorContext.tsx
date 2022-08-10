@@ -255,7 +255,7 @@ export const useEditorContext = () => {
         return `${pid}_${page}_${pageSize}`;
     };
 
-    const loadObjectDetailsIntoStorage = async (pid: string) => {
+    const loadObjectDetailsIntoStorage = async (pid: string, errorCallback: ((pid: string) => void) | null = null) => {
         // Ignore null values:
         if (pid === null) {
             return;
@@ -264,6 +264,9 @@ export const useEditorContext = () => {
         try {
             addToObjectDetailsStorage(pid, await fetchJSON(url));
         } catch (e) {
+            if (errorCallback) {
+                errorCallback(pid);
+            }
             console.error("Problem fetching details from " + url);
         }
     };
