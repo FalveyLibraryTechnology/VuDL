@@ -316,7 +316,7 @@ export class Fedora {
      * @param pid       PID to update
      * @param parentPid Parent PID to update
      */
-     async deleteParentRelationship(pid: string, parentPid: string): Promise<void> {
+    async deleteParentRelationship(pid: string, parentPid: string): Promise<void> {
         const predicate = "info:fedora/fedora-system:def/relations-external#isMemberOf";
         const targetPath = "/" + pid;
         const insertClause = "";
@@ -334,7 +334,7 @@ export class Fedora {
      * @param pid       PID to update
      * @param parentPid Parent PID to update
      */
-     async deleteSequenceRelationship(pid: string, parentPid: string): Promise<void> {
+    async deleteSequenceRelationship(pid: string, parentPid: string): Promise<void> {
         const predicate = "http://vudl.org/relationships#sequence";
         const targetPath = "/" + pid;
         const insertClause = "";
@@ -355,7 +355,7 @@ export class Fedora {
      * @param parentPid   Parent PID to update
      * @param newPosition New position to set
      */
-     async updateSequenceRelationship(pid: string, parentPid: string, newPosition: number): Promise<void> {
+    async updateSequenceRelationship(pid: string, parentPid: string, newPosition: number): Promise<void> {
         const subject = "info:fedora/" + pid;
         const predicate = "http://vudl.org/relationships#sequence";
         const writer = new N3.Writer({ format: "text/turtle" });
