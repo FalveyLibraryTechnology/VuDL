@@ -332,10 +332,20 @@ edit.put(
             const parent = req.params.parentPid;
             const pos = parseInt(req.body);
 
-            // TODO: Validate the input
-            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
-            console.log("Existing parents: " + fedoraData.parents.length);
-            const parentData = await FedoraDataCollector.getInstance().getObjectData(parent);
+            // Validate the input
+            if (pid == parent) {
+                res.status(400).send("Object cannot be its own parent.");
+                return;
+            }
+            const parentData = await FedoraDataCollector.getInstance().getHierarchy(parent);
+            if (parentData.getAllParents().includes(pid)) {
+                res.status(400).send("Object cannot be its own grandparent.");
+                return;
+            }
+            if (!parentData.models.includes("vudl-system:CollectionModel")) {
+                res.status(400).send("Illegal parent " + parent + "; not a collection!");
+                return;
+            }
 
             // If we got this far, we can safely update things
             const fedoraObject = FedoraObject.build(pid);
