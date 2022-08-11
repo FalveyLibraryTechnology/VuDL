@@ -130,7 +130,7 @@ export const useFetchContext = () => {
         if (response?.ok) {
             return body;
         }
-        throw new Error(response.statusText + (body.length > 0 ? ": " + body : ""));
+        throw new Error(response.statusText + ((body ?? "").length > 0 ? ": " + body : ""));
     };
 
     /**
