@@ -45,7 +45,12 @@ const ParentPicker = ({ pid }: ParentPickerProps): React.ReactElement => {
     const addParent = async () => {
         setStatusMessage("Saving...");
         const target = getParentUrl(pid, selectedParentPid);
-        const result = await fetchText(target, { method: "PUT", body: position });
+        let result: string;
+        try {
+            result = await fetchText(target, { method: "PUT", body: position });
+        } catch (e) {
+            result = (e as Error).message ?? "Unexpected error";
+        }
         if (result === "ok") {
             // Clear and reload the cached object and its parents, since these have now changed!
             removeFromObjectDetailsStorage(pid);

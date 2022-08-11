@@ -126,10 +126,11 @@ export const useFetchContext = () => {
      */
     const fetchText = async (url = ingestApiUrl, params = {}, headers = {}) => {
         const response = await makeRequest(url, params, headers);
-        if (response.ok) {
-            return await response.text();
+        const body = response ? await response.text() : "";
+        if (response?.ok) {
+            return body;
         }
-        throw new Error(response.statusText);
+        throw new Error(response.statusText + (body.length > 0 ? ": " + body : ""));
     };
 
     /**
