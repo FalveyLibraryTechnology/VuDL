@@ -19,8 +19,8 @@ edit.get("/models", requireToken, function (req, res) {
     res.json({ CollectionModels: Config.getInstance().collectionModels, DataModels: Config.getInstance().dataModels });
 });
 
-edit.get("/catalog", requireToken, function (req, res) {
-    res.json(FedoraCatalog.getInstance().getCompleteCatalog());
+edit.get("/catalog", requireToken, async function (req, res) {
+    res.json(await FedoraCatalog.getInstance().getCompleteCatalog());
 });
 
 edit.get("/catalog/models", requireToken, function (req, res) {
@@ -33,6 +33,10 @@ edit.get("/catalog/datastreams", requireToken, function (req, res) {
 
 edit.get("/catalog/datastreammimetypes", requireToken, function (req, res) {
     res.json(FedoraCatalog.getInstance().getDatastreamMimetypes());
+});
+
+edit.get("/catalog/favoritePids", requireToken, async function (req, res) {
+    res.json(await FedoraCatalog.getInstance().getFavoritePids());
 });
 
 edit.post("/object/new", requireToken, bodyParser.json(), async function (req, res) {

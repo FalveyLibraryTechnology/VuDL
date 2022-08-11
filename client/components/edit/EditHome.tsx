@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ChildList from "./children/ChildList";
 import ParentsModal from "./ParentsModal";
 import StateModal from "./StateModal";
 import EditorSnackbar from "./EditorSnackbar";
-import { EditorContextProvider } from "../../context/EditorContext";
 import Link from "next/link";
+import { useEditorContext } from "../../context/EditorContext";
 
 const EditHome = (): React.ReactElement => {
+    const {
+        action: { initializeCatalog },
+    } = useEditorContext();
+
+    useEffect(() => {
+        initializeCatalog();
+    }, []);
     return (
         <div>
             <h1>Editor</h1>
@@ -17,12 +24,10 @@ const EditHome = (): React.ReactElement => {
                 </li>
             </ul>
             <h2>Contents</h2>
-            <EditorContextProvider>
-                <ParentsModal />
-                <StateModal />
-                <ChildList pid="" />
-                <EditorSnackbar />
-            </EditorContextProvider>
+            <ParentsModal />
+            <StateModal />
+            <ChildList pid="" />
+            <EditorSnackbar />
         </div>
     );
 };

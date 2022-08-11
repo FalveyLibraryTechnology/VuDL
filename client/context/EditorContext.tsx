@@ -45,6 +45,7 @@ interface EditorState {
     modelsCatalog: Record<string, FedoraModel>;
     licensesCatalog: Record<string, License>;
     agentsCatalog: Record<string, Object>;
+    favoritePidsCatalog: Record<string, string>;
     currentAgents: Array<Object>;
     currentPid: string | null;
     activeDatastream: string | null;
@@ -68,6 +69,7 @@ const editorContextParams: EditorState = {
     modelsCatalog: {},
     licensesCatalog: {},
     agentsCatalog: {},
+    favoritePidsCatalog: {},
     currentAgents: [],
     currentPid: null,
     activeDatastream: null,
@@ -100,6 +102,7 @@ const EditorContext = createContext({});
 
 const reducerMapping: Record<string, string> = {
     SET_AGENTS_CATALOG: "agentsCatalog",
+    SET_FAVORITE_PIDS_CATALOG: "favoritePidsCatalog",
     SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_AGENTS: "currentAgents",
@@ -215,6 +218,7 @@ export const useEditorContext = () => {
             parentsModalActivePid,
             stateModalActivePid,
             agentsCatalog,
+            favoritePidsCatalog,
             licensesCatalog,
             modelsCatalog,
             snackbarState,
@@ -342,6 +346,13 @@ export const useEditorContext = () => {
         }
     };
 
+    const setFavoritePidsCatalog = (favoritePidsCatalog: Record<string, string>) => {
+        dispatch({
+            type: "SET_FAVORITE_PIDS_CATALOG",
+            payload: favoritePidsCatalog
+        });
+    }
+
     const setModelsCatalog = (modelsCatalog: Record<string, FedoraModel>) => {
         dispatch({
             type: "SET_MODELS_CATALOG",
@@ -431,6 +442,7 @@ export const useEditorContext = () => {
             const response = await fetchJSON(editObjectCatalogUrl);
             setModelsCatalog(response.models || {});
             setLicensesCatalog(response.licenses || {});
+            setFavoritePidsCatalog(response.favoritePids || {});
             setAgentsCatalog(response.agents || {});
         } catch(err) {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
@@ -461,6 +473,7 @@ export const useEditorContext = () => {
             datastreamsCatalog,
             modelsDatastreams,
             agentsCatalog,
+            favoritePidsCatalog,
             modelsCatalog,
             licensesCatalog,
             snackbarState,

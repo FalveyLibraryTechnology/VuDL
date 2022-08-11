@@ -157,6 +157,10 @@ class Config {
         return this.ini["articles_to_strip"] ?? [];
     }
 
+    get favoritePids(): Array<string> {
+        return this.ini["favorite_pids"] ?? [];
+    }
+
     get languageMap(): Record<string, string> {
         return this.ini["LanguageMap"] ?? {};
     }

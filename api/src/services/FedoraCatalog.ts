@@ -1,4 +1,5 @@
 import Config from "../models/Config";
+import Solr from "./Solr";
 
 export interface FedoraDatastream {
     mimetype?: {
@@ -24,25 +25,28 @@ export interface CompleteCatalog {
     agents: Agents;
     licenses: Record<string, License>;
     models: Record<string, FedoraModel>;
+    favoritePids: Record<string, string>;
 }
 
 class FedoraCatalog {
     private static instance: FedoraCatalog;
 
     config: Config;
+    solr: Solr;
 
-    constructor(config: Config) {
+    constructor(config: Config, solr: Solr) {
         this.config = config;
+        this.solr = solr;
     }
 
     public static getInstance(): FedoraCatalog {
         if (!FedoraCatalog.instance) {
-            FedoraCatalog.instance = new FedoraCatalog(Config.getInstance());
+            FedoraCatalog.instance = new FedoraCatalog(Config.getInstance(), Solr.getInstance());
         }
         return FedoraCatalog.instance;
     }
 
-    getCompleteCatalog(): CompleteCatalog {
+    async getCompleteCatalog(): Promise<CompleteCatalog> {
         const { models, licenses, agentDefaults, agentRoles, agentTypes } = this.config;
         return {
             agents: {
@@ -50,6 +54,7 @@ class FedoraCatalog {
                 roles: agentRoles,
                 types: agentTypes,
             },
+            favoritePids: await this.getFavoritePids(),
             models,
             licenses,
         };
@@ -69,6 +74,30 @@ class FedoraCatalog {
         return Object.values(this.config.models).reduce((acc: Record<string, FedoraDatastream>, model: FedoraModel) => {
             return { ...acc, ...model.datastreams };
         }, {});
+    }
+
+    async getFavoritePids(): Promise<Record<string, string>> {
+        const pids = this.config.favoritePids;
+        const result = {};
+        if (pids.length > 0) {
+            const queryParts = pids.map((pid) => {
+                return `id:"${pid.replace('"', "")}"`;
+            });
+            const query = queryParts.join(" OR ");
+            const solrResponse = await this.solr.query(this.config.solrCore, query, {
+                fl: "id,title",
+                rows: queryParts.length.toString(),
+            });
+            const docs = solrResponse?.body?.response?.docs ?? [];
+            const titleMap = {};
+            docs.forEach((doc) => {
+                titleMap[doc.id] = `${doc.title ?? "-"} [${doc.id}]`;
+            });
+            pids.forEach((pid) => {
+                result[pid] = titleMap[pid] ?? pid;
+            });
+        }
+        return result;
     }
 }
 

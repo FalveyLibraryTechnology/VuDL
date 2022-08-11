@@ -5,14 +5,40 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useEditorContext } from "../../context/EditorContext";
 
 interface PidPickerProps {
     selected: string;
-    setSelected: (string) => void;
+    setSelected: (pid: string) => void;
 }
 
 const PidPicker = ({ selected, setSelected }: PidPickerProps): React.ReactElement => {
+    const {
+        state: { favoritePidsCatalog },
+    } = useEditorContext();
     const [textboxPid, setTextboxPid] = useState<string>("");
+    const favorites = [];
+    for (const pid in favoritePidsCatalog) {
+        favorites[favorites.length] = (
+            <li key={`favorite_${pid}`}>
+                <button onClick={() => setSelected(pid)}>{favoritePidsCatalog[pid]}</button>
+            </li>
+        );
+    }
+    const favoritesAccordion =
+        favorites.length > 0 ? (
+            <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography>Choose PID from Favorites</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Typography>
+                        <ul>{favorites}</ul>
+                    </Typography>
+                </AccordionDetails>
+            </Accordion>
+        ) : null;
+
     return selected.length > 0 ? (
         <>
             Selected pid: {selected}. <button onClick={() => setSelected("")}>Clear</button>
@@ -43,6 +69,7 @@ const PidPicker = ({ selected, setSelected }: PidPickerProps): React.ReactElemen
                     </Typography>
                 </AccordionDetails>
             </Accordion>
+            {favoritesAccordion}
         </>
     );
 };
