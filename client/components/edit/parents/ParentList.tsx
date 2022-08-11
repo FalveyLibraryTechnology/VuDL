@@ -39,6 +39,9 @@ const ParentList = ({ pid }: ParentListProps): React.ReactElement => {
     };
 
     const deleteParent = async (parentPid: string) => {
+        if (!confirm("Are you sure you wish to remove this parent?")) {
+            return;
+        }
         const target = getParentUrl(pid, parentPid);
         let result: string;
         try {
