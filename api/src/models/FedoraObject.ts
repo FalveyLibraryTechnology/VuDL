@@ -123,6 +123,14 @@ export class FedoraObject {
         );
     }
 
+    async addParentRelationship(parentPid: string): Promise<void> {
+        return this.addRelationship(
+            "info:fedora/" + this.pid,
+            "info:fedora/fedora-system:def/relations-external#isMemberOf",
+            "info:fedora/" + parentPid
+        );
+    }
+
     async addSequenceRelationship(parentPid: string, position: number): Promise<void> {
         return this.addRelationship(
             "info:fedora/" + this.pid,
@@ -202,11 +210,7 @@ export class FedoraObject {
         }
         // Attach parent if present:
         if (this.parentPid !== null) {
-            await this.addRelationship(
-                "info:fedora/" + this.pid,
-                "info:fedora/fedora-system:def/relations-external#isMemberOf",
-                "info:fedora/" + this.parentPid
-            );
+            await this.addParentRelationship(this.parentPid);
         }
     }
 

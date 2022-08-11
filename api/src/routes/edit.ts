@@ -11,6 +11,8 @@ import { datastreamSanitizer, pidSanitizer, pidSanitizeRegEx, sanitizeParameters
 import * as formidable from "formidable";
 import Solr from "../services/Solr";
 import FedoraDataCollection from "../models/FedoraDataCollection";
+import { FedoraObject } from "../models/FedoraObject";
+
 const edit = express.Router();
 
 edit.get("/models", requireToken, function (req, res) {
@@ -319,6 +321,35 @@ edit.put("/object/:pid/state", requireToken, pidSanitizer, bodyParser.text(), as
 });
 
 const pidAndParentPidSanitizer = sanitizeParameters({ pid: pidSanitizeRegEx, parentPid: pidSanitizeRegEx });
+edit.put(
+    "/object/:pid/parent/:parentPid",
+    requireToken,
+    pidAndParentPidSanitizer,
+    bodyParser.text(),
+    async function (req, res) {
+        try {
+            const pid = req.params.pid;
+            const parent = req.params.parentPid;
+            const pos = parseInt(req.body);
+
+            // TODO: Validate the input
+            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
+            console.log("Existing parents: " + fedoraData.parents.length);
+            const parentData = await FedoraDataCollector.getInstance().getObjectData(parent);
+
+            // If we got this far, we can safely update things
+            const fedoraObject = FedoraObject.build(pid);
+            await fedoraObject.addParentRelationship(parent);
+            if (parentData.sortOn === "custom") {
+                await fedoraObject.addSequenceRelationship(parent, pos);
+            }
+            res.status(200).send("ok");
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
+    }
+);
 edit.put(
     "/object/:pid/positionInParent/:parentPid",
     requireToken,

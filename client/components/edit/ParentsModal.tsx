@@ -20,7 +20,7 @@ const ParentsModal = (): React.ReactElement => {
     const contents = (
         <>
             <h3>Add New Parent:</h3>
-            <ParentPicker />
+            <ParentPicker pid={parentsModalActivePid} />
             <h3>Parents</h3>
             {parentsModalActivePid ? <ParentList pid={parentsModalActivePid} /> : ""}
         </>

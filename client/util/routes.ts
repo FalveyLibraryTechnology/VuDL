@@ -84,6 +84,10 @@ const getObjectDatastreamMetadataUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "metadata");
 }
 
+const getParentUrl = (pid: string, parentPid: string) => {
+    return getPidActionUrl(pid, `parent/${encodeURIComponent(parentPid)}`);
+}
+
 const getPositionInParentUrl = (pid: string, parentPid: string) => {
     return getPidActionUrl(pid, `positionInParent/${encodeURIComponent(parentPid)}`);
 }
@@ -116,6 +120,7 @@ export {
     getObjectParentsUrl,
     getObjectRecursiveChildPidsUrl,
     getObjectStateUrl,
+    getParentUrl,
     getPositionInParentUrl,
     postObjectDatastreamUrl,
     deleteObjectDatastreamUrl,
