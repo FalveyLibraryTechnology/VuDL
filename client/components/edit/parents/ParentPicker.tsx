@@ -3,7 +3,7 @@ import ObjectLoader from "../ObjectLoader";
 import PidPicker from "../PidPicker";
 import { useEditorContext } from "../../../context/EditorContext";
 import { useFetchContext } from "../../../context/FetchContext";
-import { getParentUrl } from "../../../util/routes";
+import { getObjectLastChildPositionUrl, getParentUrl } from "../../../util/routes";
 
 interface ParentPickerProps {
     pid: string;
@@ -65,11 +65,25 @@ const ParentPicker = ({ pid }: ParentPickerProps): React.ReactElement => {
         setStatusMessage("");
     };
 
+    const setToLastPosition = async () => {
+        const target = getObjectLastChildPositionUrl(selectedParentPid);
+        let result: string;
+        try {
+            result = await fetchText(target, { method: "GET" });
+        } catch (e) {
+            result = "0";
+        }
+        setPosition(parseInt(result) + 1);
+    };
+
     const positionRequired = details && (details.sortOn ?? "") == "custom";
     const positionControl = positionRequired ? (
-        <label>
-            Position: <input type="text" value={position} onChange={(e) => setPosition(e.target.value)} />
-        </label>
+        <div>
+            <label>
+                Position: <input type="text" value={position} onChange={(e) => setPosition(e.target.value)} />
+            </label>
+            <button onClick={setToLastPosition}>Set to Last Position in Parent</button>
+        </div>
     ) : null;
 
     let visibleMessage = "";

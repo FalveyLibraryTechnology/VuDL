@@ -48,6 +48,10 @@ const getObjectDetailsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "details");
 }
 
+const getObjectLastChildPositionUrl = (pid: string): string => {
+    return getPidActionUrl(pid, "lastChildPosition");
+}
+
 const getObjectParentsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "parents");
 }
@@ -117,6 +121,7 @@ export {
     getStatusUrl,
     getObjectChildrenUrl,
     getObjectDetailsUrl,
+    getObjectLastChildPositionUrl,
     getObjectParentsUrl,
     getObjectRecursiveChildPidsUrl,
     getObjectStateUrl,

@@ -198,6 +198,23 @@ edit.get("/object/:pid/datastream/:stream/metadata", requireToken, datastreamSan
 
 edit.get("/topLevelObjects", requireToken, getChildren);
 edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
+edit.get("/object/:pid/lastChildPosition", requireToken, pidSanitizer, async (req, res) => {
+    const cleanPid = req.params.pid.replace('"', "");
+    const query = `fedora_parent_id_str_mv:"${cleanPid}"`;
+    const sequenceField = `sequence_${cleanPid.replace(":", "_")}_str`;
+    const sort = `${sequenceField} DESC`;
+    const config = Config.getInstance();
+    const solr = Solr.getInstance();
+    const rows = "1";
+    const result = await solr.query(config.solrCore, query, { sort, fl: sequenceField, rows });
+    if (result.statusCode !== 200) {
+        res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
+        return;
+    }
+    const docs = result?.body?.response?.docs ?? [];
+    console.log(docs);
+    res.status(200).send(docs?.[0]?.[sequenceField] ?? "0");
+});
 async function getRecursiveChildPids(req, res) {
     const cleanPid = req.params.pid.replace('"', "");
     const query = `hierarchy_all_parents_str_mv:"${cleanPid}"`;
