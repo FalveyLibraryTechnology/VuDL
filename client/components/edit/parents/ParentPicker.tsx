@@ -72,14 +72,13 @@ const ParentPicker = ({ pid }: ParentPickerProps): React.ReactElement => {
         </label>
     ) : null;
 
-    let error = "";
+    let visibleMessage = "";
     if (positionRequired && position.length == 0) {
-        error = "Please enter a position.";
+        visibleMessage = "Please enter a position.";
     } else if (!details) {
-        error = "Please select a valid PID.";
-    }
-    if (error != statusMessage) {
-        setStatusMessage(error);
+        visibleMessage = "Please select a valid PID.";
+    } else {
+        visibleMessage = statusMessage;
     }
     return (
         <>
@@ -89,7 +88,7 @@ const ParentPicker = ({ pid }: ParentPickerProps): React.ReactElement => {
             <PidPicker selected={selectedParentPid} setSelected={setSelectedParentPid} />
             <br />
             {positionControl}
-            {statusMessage.length == 0 ? <button onClick={addParent}>Add</button> : statusMessage}
+            {visibleMessage.length == 0 ? <button onClick={addParent}>Add</button> : visibleMessage}
         </>
     );
 };
