@@ -607,6 +607,88 @@ describe("edit", () => {
         });
     });
 
+    describe("put /object/:pid/parent/:parentPid", () => {
+        let parentPid: string;
+        let mockData: FedoraDataCollection;
+        let mockObject;
+        let buildSpy;
+        beforeEach(() => {
+            parentPid = "foo:100";
+            mockData = FedoraDataCollection.build(parentPid);
+            const collector = FedoraDataCollector.getInstance();
+            jest.spyOn(collector, "getHierarchy").mockResolvedValue(mockData);
+            mockObject = {
+                addParentRelationship: jest.fn(),
+                addSequenceRelationship: jest.fn(),
+            };
+            buildSpy = jest.spyOn(FedoraObject, "build").mockReturnValue(mockObject);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will not make an object its own parent", async () => {
+            const response = await request(app)
+                .put(`/edit/object/${pid}/parent/${pid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("Object cannot be its own parent.");
+            expect(buildSpy).not.toHaveBeenCalled();
+        });
+
+        it("will not make an object its own grandparent", async () => {
+            mockData.addParent(FedoraDataCollection.build(pid));
+            const response = await request(app)
+                .put(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("Object cannot be its own grandparent.");
+            expect(buildSpy).not.toHaveBeenCalled();
+        });
+
+        it("will not add a child to a non-collection object", async () => {
+            const response = await request(app)
+                .put(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("Illegal parent foo:100; not a collection!");
+            expect(buildSpy).not.toHaveBeenCalled();
+        });
+
+        it("adds parent when appropriate preconditions are met", async () => {
+            jest.spyOn(mockData, "models", "get").mockReturnValue(["vudl-system:CollectionModel"]);
+            await request(app)
+                .put(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.OK);
+            expect(buildSpy).toHaveBeenCalled();
+            expect(mockObject.addParentRelationship).toHaveBeenCalledWith(parentPid);
+            // no sequence because no custom sort
+            expect(mockObject.addSequenceRelationship).not.toHaveBeenCalled();
+        });
+
+        it("adds parent and sequence when appropriate preconditions are met", async () => {
+            jest.spyOn(mockData, "models", "get").mockReturnValue(["vudl-system:CollectionModel"]);
+            jest.spyOn(mockData, "sortOn", "get").mockReturnValue("custom");
+            await request(app)
+                .put(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.OK);
+            expect(buildSpy).toHaveBeenCalled();
+            expect(mockObject.addParentRelationship).toHaveBeenCalledWith(parentPid);
+            expect(mockObject.addSequenceRelationship).toHaveBeenCalledWith(parentPid, 2);
+        });
+    });
+
     describe("put /object/:pid/positionInParent/:parentPid", () => {
         let parentPid: string;
         let mockData: FedoraDataCollection;
