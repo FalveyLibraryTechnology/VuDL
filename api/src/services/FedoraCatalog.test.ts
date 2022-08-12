@@ -22,12 +22,29 @@ describe("FedoraCatalog", () => {
                 solrParams = sP;
                 return solrResponse;
             });
-            jest.spyOn(Config, "getInstance").mockReturnValue(config);
+            jest.spyOn(Config, "getInstance").mockImplementation(() => config);
             jest.spyOn(Solr, "getInstance").mockReturnValue(solr);
         });
 
         afterEach(() => {
             jest.restoreAllMocks();
+        });
+
+        it("returns a catalog with appropriate agent information", async () => {
+            config = new Config({
+                agent: { roles: ["A", "B"], types: ["C", "D"], defaults: { name: "E", role: "A", type: "C" } },
+            });
+            const expectedCatalog = {
+                agents: {
+                    defaults: { name: "E", role: "A", type: "C" },
+                    roles: ["A", "B"],
+                    types: ["C", "D"],
+                },
+                favoritePids: {},
+                licenses: {},
+                models: {},
+            };
+            expect(await FedoraCatalog.getInstance().getCompleteCatalog()).toEqual(expectedCatalog);
         });
 
         it("returns a catalog based on the configuration, tolerating empty Solr PIDS response", async () => {
@@ -44,7 +61,8 @@ describe("FedoraCatalog", () => {
                 licenses: {},
                 models: {},
             };
-            expect(await FedoraCatalog.getInstance().getCompleteCatalog()).toEqual(expectedCatalog);
+            const catalog = new FedoraCatalog(config, solr);
+            expect(await catalog.getCompleteCatalog()).toEqual(expectedCatalog);
         });
 
         it("returns a catalog based on the configuration, utilizing non-empty Solr PIDS response", async () => {
@@ -64,7 +82,8 @@ describe("FedoraCatalog", () => {
                 licenses: {},
                 models: {},
             };
-            expect(await FedoraCatalog.getInstance().getCompleteCatalog()).toEqual(expectedCatalog);
+            const catalog = new FedoraCatalog(config, solr);
+            expect(await catalog.getCompleteCatalog()).toEqual(expectedCatalog);
             expect(core).toEqual("biblio");
             expect(query).toEqual('id:"foo:123" OR id:"foo:124"');
             expect(solrParams).toEqual({ fl: "id,title", rows: "2" });
