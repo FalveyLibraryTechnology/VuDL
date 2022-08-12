@@ -5,6 +5,8 @@ import edit from "./edit";
 import Config from "../models/Config";
 import DatastreamManager from "../services/DatastreamManager";
 import Fedora from "../services/Fedora";
+import FedoraCatalog from "../services/FedoraCatalog";
+import { CompleteCatalog } from "../services/FedoraCatalog";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import FedoraDataCollector from "../services/FedoraDataCollector";
 import Database from "../services/Database";
@@ -28,6 +30,106 @@ describe("edit", () => {
         Config.setInstance(new Config(config));
         pid = "foo:123";
         datastream = "test1";
+    });
+
+    describe("get /catalog", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the complete catalog", async () => {
+            const fakeCatalog: CompleteCatalog = {
+                agents: { defaults: {}, roles: [], types: [] },
+                licenses: {},
+                models: {},
+                favoritePids: {},
+            };
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getCompleteCatalog").mockResolvedValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("get /catalog/models", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the catalog of models", async () => {
+            const fakeCatalog = ["foo", "bar"];
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getModelCatalog").mockReturnValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog/models")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("get /catalog/datastreams", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the catalog of datastreams", async () => {
+            const fakeCatalog = ["foo", "bar"];
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getDatastreamCatalog").mockReturnValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog/datastreams")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("get /catalog/datastreammimetypes", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the catalog of datastream MIME types", async () => {
+            const fakeCatalog = { foo: {} };
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getDatastreamMimetypes").mockReturnValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog/datastreammimetypes")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("get /catalog/favoritePids", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the catalog of favorite PIDs", async () => {
+            const fakeCatalog = { foo: "bar" };
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getFavoritePids").mockResolvedValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog/favoritePids")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe("post /object/new", () => {
