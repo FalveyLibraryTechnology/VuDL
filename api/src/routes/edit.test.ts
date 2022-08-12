@@ -520,6 +520,29 @@ describe("edit", () => {
         });
     });
 
+    describe("get /object/:pid/lastChildPosition", () => {
+        let querySpy;
+        beforeEach(() => {
+            const solrResponse = { statusCode: 200, body: { response: { docs: [{ sequence_foo_123_str: "100" }] } } };
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue(solrResponse as NeedleResponse);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will run an appropriate Solr query and parse the response", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/lastChildPosition`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
+                fl: "sequence_foo_123_str",
+                rows: "1",
+                sort: "sequence_foo_123_str DESC",
+            });
+            expect(response.text).toEqual("100");
+        });
+    });
+
     describe("get /object/:pid/recursiveChildPids", () => {
         let querySpy;
         beforeEach(() => {
