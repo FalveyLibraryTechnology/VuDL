@@ -104,6 +104,23 @@ describe("FedoraObject", () => {
         });
     });
 
+    describe("addParentRelationship", () => {
+        it("proxies a call to the fedora service", () => {
+            const fedora = Fedora.getInstance();
+            const spy = jest.spyOn(fedora, "addRelationship").mockImplementation(jest.fn());
+            fedoraObject = FedoraObject.build(pid);
+            fedoraObject.addParentRelationship("foo:999");
+            expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy).toHaveBeenCalledWith(
+                pid,
+                "info:fedora/" + pid,
+                "info:fedora/fedora-system:def/relations-external#isMemberOf",
+                "info:fedora/foo:999",
+                false
+            );
+        });
+    });
+
     describe("getSortOn", () => {
         it("defaults to title", async () => {
             const fedora = Fedora.getInstance();
