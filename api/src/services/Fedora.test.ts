@@ -120,6 +120,38 @@ describe("Fedora", () => {
         });
     });
 
+    describe("deleteParentRelationship", () => {
+        beforeEach(() => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
+        });
+
+        it("will delete parent relationship", async () => {
+            fedora.deleteParentRelationship(pid, "foo:100");
+            expect(requestSpy).toHaveBeenCalledWith(
+                "patch",
+                "/" + pid,
+                "DELETE { <> <info:fedora/fedora-system:def/relations-external#isMemberOf> <info:fedora/foo:100> . } WHERE {  }",
+                { headers: { "Content-Type": "application/sparql-update" } }
+            );
+        });
+    });
+
+    describe("deleteSequenceRelationship", () => {
+        beforeEach(() => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
+        });
+
+        it("will delete sequence relationship", async () => {
+            fedora.deleteSequenceRelationship(pid, "foo:100");
+            expect(requestSpy).toHaveBeenCalledWith(
+                "patch",
+                "/" + pid,
+                'DELETE { <> <http://vudl.org/relationships#sequence> ?pos . } WHERE { ?id <http://vudl.org/relationships#sequence> ?pos . FILTER(REGEX(?pos, "foo:100#")) }',
+                { headers: { "Content-Type": "application/sparql-update" } }
+            );
+        });
+    });
+
     describe("updateSequenceRelationship", () => {
         beforeEach(() => {
             requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
