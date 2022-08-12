@@ -216,7 +216,6 @@ edit.get("/object/:pid/lastChildPosition", requireToken, pidSanitizer, async (re
         return;
     }
     const docs = result?.body?.response?.docs ?? [];
-    console.log(docs);
     res.status(200).send(docs?.[0]?.[sequenceField] ?? "0");
 });
 async function getRecursiveChildPids(req, res) {
