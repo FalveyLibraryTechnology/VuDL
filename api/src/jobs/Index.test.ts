@@ -51,6 +51,33 @@ describe("Index", () => {
             expect(indexer.deletePid).toHaveBeenCalledWith(job.data.pid);
         });
 
+        it("handles empty job gracefully", async () => {
+            jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
+
+            await expect(index.run(null)).rejects.toThrow(/No pid provided/);
+        });
+
+        it("handles empty data gracefully", async () => {
+            job.data = {};
+            jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
+
+            await expect(index.run(job)).rejects.toThrow(/No pid provided/);
+        });
+
+        it("handles missing pid gracefully", async () => {
+            job.data = { action: "index" };
+            jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
+
+            await expect(index.run(job)).rejects.toThrow(/No pid provided/);
+        });
+
+        it("handles missing action gracefully", async () => {
+            delete job.data.action;
+            jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
+
+            await expect(index.run(job)).rejects.toThrow(/Unexpected index action: undefined/);
+        });
+
         it("indexes the pid", async () => {
             job.data.action = "index";
             jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);

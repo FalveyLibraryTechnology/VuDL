@@ -4,7 +4,10 @@ import SolrIndexer from "../services/SolrIndexer";
 
 class Index implements QueueJob {
     async run(job: Job): Promise<void> {
-        console.log("Indexing...", job.data);
+        console.log("Indexing...", job?.data);
+        if (typeof job?.data?.pid === "undefined") {
+            throw new Error("No pid provided!");
+        }
         const indexer = SolrIndexer.getInstance();
         let result = null;
         switch (job.data.action) {
@@ -19,11 +22,7 @@ class Index implements QueueJob {
         }
         if (result.statusCode !== 200) {
             const msg =
-                "Problem performing " +
-                job.data.action +
-                " on " +
-                job.data.pid +
-                ": " +
+                `Problem performing ${job.data.action} on ${job.data.pid}: ` +
                 (((result.body ?? {}).error ?? {}).msg ?? "unspecified error");
             console.error(msg);
             throw new Error(msg);
