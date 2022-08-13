@@ -9,7 +9,7 @@
     "start:worker": "ts-node src/worker-start.ts",
     "saml:metadata": "ts-node src/saml-metadata.ts",
     "test": "jest --coverage",
-    "testWatch": "jest --watch"
+    "testWatch": "jest --watch --coverage"
   },
   "dependencies": {
     "@stomp/stompjs": "^6.1.0",
