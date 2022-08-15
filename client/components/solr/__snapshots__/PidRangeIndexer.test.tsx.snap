@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PidRangeIndexer renders 1`] = `
+<PidRangeIndexer
+  setResults={[MockFunction]}
+>
+  <label>
+    Prefix:
+    <input
+      id="pidRangePrefix"
+      onChange={[Function]}
+      type="text"
+      value="vudl:"
+    />
+  </label>
+  <label>
+    From (number):
+    <input
+      id="pidRangeFrom"
+      onChange={[Function]}
+      type="text"
+      value=""
+    />
+  </label>
+  <label>
+    To (number): 
+    <input
+      id="pidRangeTo"
+      onChange={[Function]}
+      type="text"
+      value=""
+    />
+  </label>
+  <button
+    onClick={[Function]}
+  >
+    Queue Range
+  </button>
+</PidRangeIndexer>
+`;

@@ -29,13 +29,15 @@ const PidRangeIndexer = ({ setResults }: PidRangeIndexerProps): React.ReactEleme
     return (
         <>
             <label>
-                Prefix: <input type="text" value={prefix} onChange={(e) => setPrefix(e.target.value)} />
+                Prefix:
+                <input id="pidRangePrefix" type="text" value={prefix} onChange={(e) => setPrefix(e.target.value)} />
             </label>
             <label>
-                From (number): <input type="text" value={from} onChange={(e) => setFrom(e.target.value)} />
+                From (number):
+                <input id="pidRangeFrom" type="text" value={from} onChange={(e) => setFrom(e.target.value)} />
             </label>
             <label>
-                To (number): <input type="text" value={to} onChange={(e) => setTo(e.target.value)} />
+                To (number): <input id="pidRangeTo" type="text" value={to} onChange={(e) => setTo(e.target.value)} />
             </label>
             <button onClick={() => doApiCall()}>Queue Range</button>
         </>

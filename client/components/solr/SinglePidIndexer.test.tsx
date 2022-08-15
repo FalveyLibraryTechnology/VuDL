@@ -49,11 +49,9 @@ describe("SinglePidIndexer", () => {
                     value: "testPid",
                 },
             });
-            wrapper.update();
+            await wrapper.update();
             wrapper.find("#solrIndexPreviewButton").simulate("click");
         });
-
-        await Promise.resolve();
 
         expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(expect.stringMatching(/solrindex/), {
             method: "GET",
@@ -70,11 +68,9 @@ describe("SinglePidIndexer", () => {
                     value: "testPid",
                 },
             });
-            wrapper.update();
+            await wrapper.update();
             wrapper.find("#solrIndexIndexButton").simulate("click");
         });
-
-        await Promise.resolve();
 
         expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(expect.stringMatching(/solrindex/), {
             method: "POST",
@@ -95,8 +91,6 @@ describe("SinglePidIndexer", () => {
             });
             wrapper.find("#solrIndexPreviewButton").simulate("click");
         });
-
-        await Promise.resolve();
 
         expect(fetchContextValues.action.fetchText).toHaveBeenCalled();
         expect(setResults).toHaveBeenCalledWith("testError");
