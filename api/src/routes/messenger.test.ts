@@ -23,6 +23,21 @@ describe("messenger", () => {
         jest.clearAllMocks();
     });
 
+    describe("post /pdfgenerator/:pid", () => {
+        let queueManager;
+        it("will forward requests to the queue manager", async () => {
+            const generatePdf = jest.fn();
+            queueManager = { generatePdf };
+            jest.spyOn(QueueManager, "getInstance").mockReturnValue(queueManager);
+            await request(app)
+                .post("/messenger/pdfgenerator/foo:123")
+                .set("Authorization", "Bearer test")
+                .send()
+                .expect(StatusCodes.OK);
+            expect(generatePdf).toHaveBeenCalledWith("foo:123");
+        });
+    });
+
     describe("post /queuesolrindex", () => {
         let body;
         let queueManager;
