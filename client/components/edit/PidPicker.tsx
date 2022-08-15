@@ -3,7 +3,6 @@ import ChildList from "./children/ChildList";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEditorContext } from "../../context/EditorContext";
 
@@ -28,13 +27,9 @@ const PidPicker = ({ selected, setSelected }: PidPickerProps): React.ReactElemen
     const favoritesAccordion =
         favorites.length > 0 ? (
             <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography>Choose PID from Favorites</Typography>
-                </AccordionSummary>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>Choose PID from Favorites</AccordionSummary>
                 <AccordionDetails>
-                    <Typography>
-                        <ul>{favorites}</ul>
-                    </Typography>
+                    <ul>{favorites}</ul>
                 </AccordionDetails>
             </Accordion>
         ) : null;
@@ -46,27 +41,19 @@ const PidPicker = ({ selected, setSelected }: PidPickerProps): React.ReactElemen
     ) : (
         <>
             <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography>Enter PID manually</Typography>
-                </AccordionSummary>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>Enter PID manually</AccordionSummary>
                 <AccordionDetails>
-                    <Typography>
-                        <label>
-                            Enter PID:{" "}
-                            <input type="text" value={textboxPid} onChange={(e) => setTextboxPid(e.target.value)} />
-                        </label>
-                        <button onClick={() => setSelected(textboxPid)}>Set</button>
-                    </Typography>
+                    <label>
+                        Enter PID:{" "}
+                        <input type="text" value={textboxPid} onChange={(e) => setTextboxPid(e.target.value)} />
+                    </label>
+                    <button onClick={() => setSelected(textboxPid)}>Set</button>
                 </AccordionDetails>
             </Accordion>
             <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography>Choose PID from Tree</Typography>
-                </AccordionSummary>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>Choose PID from Tree</AccordionSummary>
                 <AccordionDetails>
-                    <Typography>
-                        <ChildList selectCallback={setSelected} />
-                    </Typography>
+                    <ChildList selectCallback={setSelected} />
                 </AccordionDetails>
             </Accordion>
             {favoritesAccordion}
