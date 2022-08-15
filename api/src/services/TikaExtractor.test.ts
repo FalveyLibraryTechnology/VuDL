@@ -31,6 +31,6 @@ describe("TikaExtractor", () => {
         expect(deleteSpy).toHaveBeenCalledTimes(1);
         expect(deleteSpy).toHaveBeenCalledWith(filename);
         expect(execSync).toHaveBeenCalledTimes(1);
-        expect(execSync).toHaveBeenCalledWith("java -jar /tika.jar --text -eUTF8 foo");
+        expect(execSync).toHaveBeenCalledWith("java -jar /tika.jar --text -eUTF8 foo", { maxBuffer: Infinity });
     });
 });

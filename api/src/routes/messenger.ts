@@ -67,16 +67,24 @@ messenger.post("/queuesolrindex", requireToken, bodyParser.text(), async functio
 
 messenger.post("/camel", bodyParser.json(), async function (req, res) {
     const fedoraBase = Config.getInstance().restBaseUrl;
-    const idParts = req?.body?.id.replace(fedoraBase, "").split("/");
-    if (idParts === null) {
+    const id = req?.body?.id ?? null;
+    if (id === null) {
         res.status(400).send("Missing id in body");
         return;
     }
+    const idParts = id.replace(fedoraBase, "").split("/");
     const pid = idParts[1];
     const datastream = idParts[2] ?? null;
-    let action = req?.body?.type.split("#").pop();
-    if (action === null) {
+    const actionUri = req?.body?.type ?? null;
+    if (actionUri === null) {
         res.status(400).send("Missing type in body");
+        return;
+    }
+    let action = actionUri.split("#").pop();
+
+    // If we got a URL without a PID in it, there's nothing to do:
+    if (pid.length < 1) {
+        res.status(200).send("ok - nothing to process");
         return;
     }
 
