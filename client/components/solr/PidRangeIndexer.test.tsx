@@ -65,7 +65,8 @@ describe("PidRangeIndexer", () => {
             {
                 method: "POST",
                 body: '{"prefix":"foo:","to":"5","from":"1"}',
-            }
+            },
+            { "Content-Type": "application/json" }
         );
         expect(setResults).toHaveBeenCalledWith("testText");
     });

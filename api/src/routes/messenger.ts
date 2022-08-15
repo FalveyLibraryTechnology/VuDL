@@ -36,8 +36,8 @@ messenger.post("/solrindex/:pid", pidSanitizer, requireToken, async function (re
     }
 });
 
-messenger.post("/queuesolrindex", requireToken, bodyParser.text(), async function (req, res) {
-    const body = JSON.parse(req?.body ?? "{}");
+messenger.post("/queuesolrindex", requireToken, bodyParser.json(), async function (req, res) {
+    const body = req?.body ?? {};
     const prefix = body?.prefix ?? null;
     const from = body?.from ?? null;
     const to = body?.to ?? null;

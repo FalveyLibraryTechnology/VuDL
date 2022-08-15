@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import app from "../app";
 import messenger from "./messenger";
 import Config from "../models/Config";
+import Database from "../services/Database";
 import QueueManager from "../services/QueueManager";
 
 jest.mock("../services/QueueManager");
@@ -15,9 +16,62 @@ describe("messenger", () => {
             allowed_origins: ["http://localhost:3000", "http://localhost:9000"],
         };
         Config.setInstance(new Config(config));
+        jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
     });
 
-    describe("/camel", () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    describe("post /queuesolrindex", () => {
+        let body;
+        let queueManager;
+        beforeEach(() => {
+            body = {
+                prefix: "foo:",
+                from: "3",
+                to: "5",
+            };
+            queueManager = {
+                performIndexOperation: jest.fn(),
+            };
+            jest.spyOn(QueueManager, "getInstance").mockReturnValue(queueManager);
+        });
+        it("will handle missing parameters appropriately", async () => {
+            body = {};
+            const response = await request(app)
+                .post("/messenger/queuesolrindex")
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "application/json")
+                .send(JSON.stringify(body))
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.text).toEqual("Parameter(s) missing; expected prefix, from and to");
+        });
+        it("will handle out of order range parameters appropriately", async () => {
+            body.from = "7";
+            const response = await request(app)
+                .post("/messenger/queuesolrindex")
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "application/json")
+                .send(JSON.stringify(body))
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.text).toEqual("from value must be lower than to value");
+        });
+        it("will process valid parameters correctly", async () => {
+            await request(app)
+                .post("/messenger/queuesolrindex")
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "application/json")
+                .send(JSON.stringify(body))
+                .expect(StatusCodes.OK);
+            expect(queueManager.performIndexOperation).toHaveBeenCalledTimes(3);
+            expect(queueManager.performIndexOperation).toHaveBeenNthCalledWith(1, "foo:3", "index");
+            expect(queueManager.performIndexOperation).toHaveBeenNthCalledWith(2, "foo:4", "index");
+            expect(queueManager.performIndexOperation).toHaveBeenNthCalledWith(3, "foo:5", "index");
+        });
+    });
+
+    describe("post /camel", () => {
         let body;
         let pid;
         let queueManager;

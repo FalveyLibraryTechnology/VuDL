@@ -16,10 +16,14 @@ const PidRangeIndexer = ({ setResults }: PidRangeIndexerProps): React.ReactEleme
         setResults("Loading...");
         try {
             setResults(
-                await fetchText(`${baseUrl}/messenger/queuesolrindex`, {
-                    method: "POST",
-                    body: JSON.stringify({ prefix, to, from }),
-                })
+                await fetchText(
+                    `${baseUrl}/messenger/queuesolrindex`,
+                    {
+                        method: "POST",
+                        body: JSON.stringify({ prefix, to, from }),
+                    },
+                    { "Content-Type": "application/json" }
+                )
             );
         } catch (error) {
             setResults((error as Error).message);
