@@ -26,7 +26,7 @@ class TikaExtractor {
         const javaPath = this.config.javaPath;
         const tikaPath = this.config.tikaPath;
         const tikaCommand = javaPath + " -jar " + tikaPath + " --text -eUTF8 " + filename;
-        const result = execSync(tikaCommand).toString();
+        const result = execSync(tikaCommand, { maxBuffer: Infinity }).toString();
         fs.rmSync(filename); // clean up temp file; we're done now!
         return result;
     }
