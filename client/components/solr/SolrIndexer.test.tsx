@@ -1,7 +1,7 @@
 import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { act } from "react-dom/test-utils";
-import { mount, render } from "enzyme";
+import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import SolrIndexer from "./SolrIndexer";
 
@@ -24,7 +24,7 @@ describe("SolrIndexer", () => {
     });
 
     it("renders", () => {
-        const wrapper = render(<SolrIndexer />);
+        const wrapper = mount(<SolrIndexer />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
