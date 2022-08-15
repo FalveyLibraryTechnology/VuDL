@@ -36,6 +36,35 @@ messenger.post("/solrindex/:pid", pidSanitizer, requireToken, async function (re
     }
 });
 
+messenger.post("/queuesolrindex", requireToken, bodyParser.json(), async function (req, res) {
+    const body = req?.body ?? {};
+    const prefix = body?.prefix ?? null;
+    const from = body?.from ?? null;
+    const to = body?.to ?? null;
+    if (
+        from === null ||
+        to === null ||
+        prefix === null ||
+        from.length === 0 ||
+        to.length === 0 ||
+        prefix.length === 0
+    ) {
+        res.status(400).send("Parameter(s) missing; expected prefix, from and to");
+        return;
+    }
+    const fromNumber = parseInt(from);
+    const toNumber = parseInt(to);
+    if (fromNumber > toNumber) {
+        res.status(400).send("from value must be lower than to value");
+        return;
+    }
+    for (let x = fromNumber; x <= toNumber; x++) {
+        const pid = prefix + x;
+        await QueueManager.getInstance().performIndexOperation(pid, "index");
+    }
+    res.status(200).send("ok");
+});
+
 messenger.post("/camel", bodyParser.json(), async function (req, res) {
     const fedoraBase = Config.getInstance().restBaseUrl;
     const id = req?.body?.id ?? null;
