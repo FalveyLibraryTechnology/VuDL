@@ -18,7 +18,7 @@ messenger.get("/solrindex/:pid", pidSanitizer, requireToken, async function (req
         const fedoraFields = await indexer.getFields(req.params.pid);
         res.send(JSON.stringify(fedoraFields, null, "\t"));
     } catch (e) {
-        console.log(e);
+        console.error(e);
         res.status(500).send(e.message);
     }
 });
@@ -31,7 +31,7 @@ messenger.post("/solrindex/:pid", pidSanitizer, requireToken, async function (re
             result.statusCode === 200 ? "ok" : ((result.body ?? {}).error ?? {}).msg ?? "error"
         );
     } catch (e) {
-        console.log(e);
+        console.error(e);
         res.status(500).send(e.message);
     }
 });

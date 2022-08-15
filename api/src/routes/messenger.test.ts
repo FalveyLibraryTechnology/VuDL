@@ -5,8 +5,10 @@ import messenger from "./messenger";
 import Config from "../models/Config";
 import Database from "../services/Database";
 import QueueManager from "../services/QueueManager";
+import SolrIndexer from "../services/SolrIndexer";
 
 jest.mock("../services/QueueManager");
+jest.mock("../services/SolrIndexer");
 
 describe("messenger", () => {
     let config;
@@ -35,6 +37,82 @@ describe("messenger", () => {
                 .send()
                 .expect(StatusCodes.OK);
             expect(generatePdf).toHaveBeenCalledWith("foo:123");
+        });
+    });
+
+    describe("get /solrindex/:pid", () => {
+        let solrIndexer;
+        beforeEach(() => {
+            solrIndexer = {
+                getFields: jest.fn(),
+            };
+            jest.spyOn(SolrIndexer, "getInstance").mockReturnValue(solrIndexer);
+        });
+        it("will display indexing results", async () => {
+            solrIndexer.getFields.mockResolvedValue({ foo: "bar" });
+            const response = await request(app)
+                .get("/messenger/solrindex/foo:123")
+                .set("Authorization", "Bearer test")
+                .send()
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual('{\n\t"foo": "bar"\n}');
+            expect(solrIndexer.getFields).toHaveBeenCalledWith("foo:123");
+        });
+        it("will handle exceptions gracefully", async () => {
+            const consoleSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
+            solrIndexer.getFields.mockImplementation(() => {
+                throw new Error("kaboom");
+            });
+            const response = await request(app)
+                .get("/messenger/solrindex/foo:123")
+                .set("Authorization", "Bearer test")
+                .send()
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+            expect(response.text).toEqual("kaboom");
+            expect(consoleSpy).toHaveBeenCalled();
+        });
+    });
+
+    describe("post /solrindex/:pid", () => {
+        let solrIndexer;
+        beforeEach(() => {
+            solrIndexer = {
+                indexPid: jest.fn(),
+            };
+            jest.spyOn(SolrIndexer, "getInstance").mockReturnValue(solrIndexer);
+        });
+        it("will display indexing results", async () => {
+            solrIndexer.indexPid.mockResolvedValue({ statusCode: 200 });
+            const response = await request(app)
+                .post("/messenger/solrindex/foo:123")
+                .set("Authorization", "Bearer test")
+                .send()
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual("ok");
+            expect(solrIndexer.indexPid).toHaveBeenCalledWith("foo:123");
+        });
+        it("will proxy error statuses", async () => {
+            solrIndexer.indexPid.mockResolvedValue({ statusCode: 400, body: { error: { msg: "kaboom" } } });
+            const response = await request(app)
+                .post("/messenger/solrindex/foo:123")
+                .set("Authorization", "Bearer test")
+                .send()
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.text).toEqual("kaboom");
+            expect(solrIndexer.indexPid).toHaveBeenCalledWith("foo:123");
+        });
+        it("will handle exceptions gracefully", async () => {
+            const consoleSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
+            solrIndexer.indexPid.mockImplementation(() => {
+                throw new Error("kaboom");
+            });
+            const response = await request(app)
+                .post("/messenger/solrindex/foo:123")
+                .set("Authorization", "Bearer test")
+                .send()
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+            expect(response.text).toEqual("kaboom");
+            expect(consoleSpy).toHaveBeenCalled();
         });
     });
 
