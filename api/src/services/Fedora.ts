@@ -79,6 +79,9 @@ export class Fedora {
             headers: { Accept: "application/rdf+xml" },
         };
         const result = await this._request("get", pid, null, options);
+        if (result.statusCode !== 200) {
+            throw new Error("Unexpected status code: " + result.statusCode);
+        }
         return result.body.toString();
     }
 
@@ -168,7 +171,11 @@ export class Fedora {
      */
     async getDublinCore(pid: string): Promise<DC> {
         const requestOptions = { parse_response: true };
-        return <DC>(await this.getDatastream(pid, "DC", requestOptions)).body;
+        const response = await this.getDatastream(pid, "DC", requestOptions);
+        if (response.statusCode !== 200) {
+            throw new Error("Unexpected status code: " + response.statusCode);
+        }
+        return <DC>response.body;
     }
 
     /**

@@ -25,6 +25,39 @@ describe("Fedora", () => {
         jest.restoreAllMocks();
     });
 
+    describe("getDublinCore", () => {
+        it("will fail if an unexpected status code is received", async () => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 404, body: "not found" });
+            expect(async () => await fedora.getDublinCore("foo:123")).rejects.toThrowError(
+                "Unexpected status code: 404"
+            );
+        });
+
+        it("will return an appropriate response body when data exists", async () => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 200, body: "foo response" });
+            expect(await fedora.getDublinCore("foo:123")).toEqual("foo response");
+            expect(requestSpy).toHaveBeenCalledWith("get", "foo:123/DC", null, { parse_response: true });
+        });
+    });
+
+    describe("getRdf", () => {
+        it("will fail if an unexpected status code is received", async () => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 404, body: "not found" });
+            expect(async () => await fedora.getRdf("foo:123")).rejects.toThrowError("Unexpected status code: 404");
+        });
+
+        it("will return an appropriate response body when data exists", async () => {
+            requestSpy = jest
+                .spyOn(fedora, "_request")
+                .mockResolvedValue({ statusCode: 200, body: { toString: () => "foo response" } });
+            expect(await fedora.getRdf("foo:123")).toEqual("foo response");
+            expect(requestSpy).toHaveBeenCalledWith("get", "foo:123", null, {
+                headers: { Accept: "application/rdf+xml" },
+                parse_response: false,
+            });
+        });
+    });
+
     describe("addRelationship", () => {
         beforeEach(() => {
             requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
