@@ -18,7 +18,7 @@ exports[`SolrIndexer renders 1`] = `
                 Index Single PID:
               </ForwardRef(AccordionSummary)>,
               <ForwardRef(AccordionDetails)>
-                <SinglePidIndexer
+                <Unknown
                   setResults={[Function]}
                 />
               </ForwardRef(AccordionDetails)>,
@@ -845,7 +845,7 @@ exports[`SolrIndexer renders 1`] = `
                       role="region"
                     >
                       <ForwardRef(AccordionDetails)>
-                        <SinglePidIndexer
+                        <Unknown
                           setResults={[Function]}
                         />
                       </ForwardRef(AccordionDetails)>
@@ -5765,24 +5765,7 @@ exports[`SolrIndexer renders 1`] = `
                               <div
                                 class="MuiAccordionDetails-root css-15v22id-MuiAccordionDetails-root"
                               >
-                                <label>
-                                  PID: 
-                                  <input
-                                    id="solrIndexPid"
-                                    type="text"
-                                    value=""
-                                  />
-                                </label>
-                                <button
-                                  id="solrIndexPreviewButton"
-                                >
-                                  Preview
-                                </button>
-                                <button
-                                  id="solrIndexIndexButton"
-                                >
-                                  Index
-                                </button>
+                                SinglePidIndexer
                               </div>
                             </div>
                           </div>
@@ -5808,7 +5791,7 @@ exports[`SolrIndexer renders 1`] = `
                           role="region"
                         >
                           <ForwardRef(AccordionDetails)>
-                            <SinglePidIndexer
+                            <Unknown
                               setResults={[Function]}
                             />
                           </ForwardRef(AccordionDetails)>
@@ -6622,7 +6605,7 @@ exports[`SolrIndexer renders 1`] = `
                               role="region"
                             >
                               <ForwardRef(AccordionDetails)>
-                                <SinglePidIndexer
+                                <Unknown
                                   setResults={[Function]}
                                 />
                               </ForwardRef(AccordionDetails)>
@@ -7426,7 +7409,7 @@ exports[`SolrIndexer renders 1`] = `
                                   role="region"
                                 >
                                   <ForwardRef(AccordionDetails)>
-                                    <SinglePidIndexer
+                                    <Unknown
                                       setResults={[Function]}
                                     />
                                   </ForwardRef(AccordionDetails)>
@@ -8232,7 +8215,7 @@ exports[`SolrIndexer renders 1`] = `
                                     className="MuiAccordionDetails-root"
                                     ownerState={
                                       Object {
-                                        "children": <SinglePidIndexer
+                                        "children": <Unknown
                                           setResults={[Function]}
                                         />,
                                       }
@@ -9020,31 +9003,11 @@ exports[`SolrIndexer renders 1`] = `
                                     <div
                                       className="MuiAccordionDetails-root css-15v22id-MuiAccordionDetails-root"
                                     >
-                                      <SinglePidIndexer
+                                      <Component
                                         setResults={[Function]}
                                       >
-                                        <label>
-                                          PID: 
-                                          <input
-                                            id="solrIndexPid"
-                                            onChange={[Function]}
-                                            type="text"
-                                            value=""
-                                          />
-                                        </label>
-                                        <button
-                                          id="solrIndexPreviewButton"
-                                          onClick={[Function]}
-                                        >
-                                          Preview
-                                        </button>
-                                        <button
-                                          id="solrIndexIndexButton"
-                                          onClick={[Function]}
-                                        >
-                                          Index
-                                        </button>
-                                      </SinglePidIndexer>
+                                        SinglePidIndexer
+                                      </Component>
                                     </div>
                                   </MuiAccordionDetailsRoot>
                                 </ForwardRef(AccordionDetails)>
@@ -9074,7 +9037,7 @@ exports[`SolrIndexer renders 1`] = `
                 Index Range of PIDs:
               </ForwardRef(AccordionSummary)>,
               <ForwardRef(AccordionDetails)>
-                <PidRangeIndexer
+                <Unknown
                   setResults={[Function]}
                 />
               </ForwardRef(AccordionDetails)>,
@@ -9901,7 +9864,7 @@ exports[`SolrIndexer renders 1`] = `
                       role="region"
                     >
                       <ForwardRef(AccordionDetails)>
-                        <PidRangeIndexer
+                        <Unknown
                           setResults={[Function]}
                         />
                       </ForwardRef(AccordionDetails)>
@@ -14821,30 +14784,7 @@ exports[`SolrIndexer renders 1`] = `
                               <div
                                 class="MuiAccordionDetails-root css-15v22id-MuiAccordionDetails-root"
                               >
-                                <label>
-                                  Prefix: 
-                                  <input
-                                    type="text"
-                                    value="vudl:"
-                                  />
-                                </label>
-                                <label>
-                                  From (number): 
-                                  <input
-                                    type="text"
-                                    value=""
-                                  />
-                                </label>
-                                <label>
-                                  To (number): 
-                                  <input
-                                    type="text"
-                                    value=""
-                                  />
-                                </label>
-                                <button>
-                                  Queue Range
-                                </button>
+                                PidRangeIndexer
                               </div>
                             </div>
                           </div>
@@ -14870,7 +14810,7 @@ exports[`SolrIndexer renders 1`] = `
                           role="region"
                         >
                           <ForwardRef(AccordionDetails)>
-                            <PidRangeIndexer
+                            <Unknown
                               setResults={[Function]}
                             />
                           </ForwardRef(AccordionDetails)>
@@ -15684,7 +15624,7 @@ exports[`SolrIndexer renders 1`] = `
                               role="region"
                             >
                               <ForwardRef(AccordionDetails)>
-                                <PidRangeIndexer
+                                <Unknown
                                   setResults={[Function]}
                                 />
                               </ForwardRef(AccordionDetails)>
@@ -16488,7 +16428,7 @@ exports[`SolrIndexer renders 1`] = `
                                   role="region"
                                 >
                                   <ForwardRef(AccordionDetails)>
-                                    <PidRangeIndexer
+                                    <Unknown
                                       setResults={[Function]}
                                     />
                                   </ForwardRef(AccordionDetails)>
@@ -17294,7 +17234,7 @@ exports[`SolrIndexer renders 1`] = `
                                     className="MuiAccordionDetails-root"
                                     ownerState={
                                       Object {
-                                        "children": <PidRangeIndexer
+                                        "children": <Unknown
                                           setResults={[Function]}
                                         />,
                                       }
@@ -18082,39 +18022,11 @@ exports[`SolrIndexer renders 1`] = `
                                     <div
                                       className="MuiAccordionDetails-root css-15v22id-MuiAccordionDetails-root"
                                     >
-                                      <PidRangeIndexer
+                                      <Component
                                         setResults={[Function]}
                                       >
-                                        <label>
-                                          Prefix: 
-                                          <input
-                                            onChange={[Function]}
-                                            type="text"
-                                            value="vudl:"
-                                          />
-                                        </label>
-                                        <label>
-                                          From (number): 
-                                          <input
-                                            onChange={[Function]}
-                                            type="text"
-                                            value=""
-                                          />
-                                        </label>
-                                        <label>
-                                          To (number): 
-                                          <input
-                                            onChange={[Function]}
-                                            type="text"
-                                            value=""
-                                          />
-                                        </label>
-                                        <button
-                                          onClick={[Function]}
-                                        >
-                                          Queue Range
-                                        </button>
-                                      </PidRangeIndexer>
+                                        PidRangeIndexer
+                                      </Component>
                                     </div>
                                   </MuiAccordionDetailsRoot>
                                 </ForwardRef(AccordionDetails)>
