@@ -11,9 +11,17 @@ class JobQueue {
     workers: { [key: string]: QueueJob } = {};
     manager: Worker;
     queueManager: QueueManager;
+    private static instance: JobQueue;
 
     constructor(queueManager: QueueManager) {
         this.queueManager = queueManager;
+    }
+
+    public static getInstance(): JobQueue {
+        if (!JobQueue.instance) {
+            JobQueue.instance = new JobQueue(QueueManager.getInstance());
+        }
+        return JobQueue.instance;
     }
 
     start(): void {
