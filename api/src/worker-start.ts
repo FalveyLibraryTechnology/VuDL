@@ -1,3 +1,3 @@
 import JobQueue from "./services/JobQueue";
 
-new JobQueue.getInstance().start();
+JobQueue.getInstance().start();
