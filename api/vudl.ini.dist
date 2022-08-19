@@ -367,5 +367,4 @@ lockDuration = 30000
 [queue.connection]
 host = "localhost"
 port = 6379
-#username = "myuser"
 #password = "mypass"
