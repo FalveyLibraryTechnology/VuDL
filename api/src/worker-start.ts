@@ -1,3 +1,4 @@
 import JobQueue from "./services/JobQueue";
+import QueueManager from "./services/QueueManager";
 
-new JobQueue(/* TODO: params? */).start();
+new JobQueue(QueueManager.getInstance()).start();

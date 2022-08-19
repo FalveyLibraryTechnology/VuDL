@@ -1,18 +1,46 @@
-import { Queue, Job } from "bullmq";
+import { Queue, Job, Worker, WorkerOptions } from "bullmq";
+import Config from "../models/Config";
 
 class QueueManager {
     private static instance: QueueManager;
-    protected defaultQueueName = "vudl";
+    protected config: Config;
+
+    constructor(config: Config) {
+        this.config = config;
+    }
 
     public static getInstance(): QueueManager {
         if (!QueueManager.instance) {
-            QueueManager.instance = new QueueManager();
+            QueueManager.instance = new QueueManager(Config.getInstance());
         }
         return QueueManager.instance;
     }
 
+    protected get queueBaseOptions() {
+        return {
+            connection: this.config.redisConnectionSettings,
+        };
+    }
+
+    protected getQueue(queueName: string = null): Queue {
+        return new Queue(
+            queueName ?? this.config.redisDefaultQueueName,
+            this.queueBaseOptions
+        );
+    }
+
+    public getWorker(callback, queueName: string = null): Worker {
+        const options = this.queueBaseOptions as WorkerOptions;
+        options.lockDuration = this.config.redisLockDuration;
+        return new Worker(
+            queueName ?? this.config.redisDefaultQueueName,
+            callback,
+            options
+        );
+    }
+
     protected async addToQueue(jobName: string, data: Record<string, string>, queueName: string = null): Promise<void> {
-        const q = new Queue(queueName ?? this.defaultQueueName);
+        const q = this.getQueue(queueName);
         await q.add(jobName, data);
         q.close();
     }
@@ -33,7 +61,7 @@ class QueueManager {
         // Fedora often fires many change events about the same object in rapid succession;
         // we don't want to index more times than we have to, so let's not re-queue anything
         // that is already awaiting indexing.
-        const q = new Queue(this.defaultQueueName);
+        const q = this.getQueue();
         const jobs = await q.getJobs("wait");
         const queueJob = { pid, action };
         if (this.isAlreadyAwaitingAction(jobs, "index", queueJob)) {
@@ -52,7 +80,7 @@ class QueueManager {
     }
 
     public async queueMetadataOperation(pid: string, action: string): Promise<void> {
-        const q = new Queue(this.defaultQueueName);
+        const q = this.getQueue();
         const jobs = await q.getJobs("wait");
         const queueJob = { pid, action };
         if (this.isAlreadyAwaitingAction(jobs, "metadata", queueJob)) {
