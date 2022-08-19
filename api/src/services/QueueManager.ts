@@ -16,7 +16,7 @@ class QueueManager {
         return QueueManager.instance;
     }
 
-    protected get queueBaseOptions() {
+    protected get queueBaseOptions(): Record<string, Record<string, string>> {
         return {
             connection: this.config.redisConnectionSettings,
         };
@@ -26,7 +26,7 @@ class QueueManager {
         return new Queue(queueName ?? this.config.redisDefaultQueueName, this.queueBaseOptions);
     }
 
-    public getWorker(callback, queueName: string = null): Worker {
+    public getWorker(callback: (job: Record<string, string>) => void, queueName: string = null): Worker {
         const options = this.queueBaseOptions as WorkerOptions;
         options.lockDuration = this.config.redisLockDuration;
         return new Worker(queueName ?? this.config.redisDefaultQueueName, callback, options);
