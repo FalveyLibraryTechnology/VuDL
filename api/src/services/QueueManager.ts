@@ -23,20 +23,13 @@ class QueueManager {
     }
 
     protected getQueue(queueName: string = null): Queue {
-        return new Queue(
-            queueName ?? this.config.redisDefaultQueueName,
-            this.queueBaseOptions
-        );
+        return new Queue(queueName ?? this.config.redisDefaultQueueName, this.queueBaseOptions);
     }
 
     public getWorker(callback, queueName: string = null): Worker {
         const options = this.queueBaseOptions as WorkerOptions;
         options.lockDuration = this.config.redisLockDuration;
-        return new Worker(
-            queueName ?? this.config.redisDefaultQueueName,
-            callback,
-            options
-        );
+        return new Worker(queueName ?? this.config.redisDefaultQueueName, callback, options);
     }
 
     protected async addToQueue(jobName: string, data: Record<string, string>, queueName: string = null): Promise<void> {
