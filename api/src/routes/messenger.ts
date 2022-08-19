@@ -60,7 +60,12 @@ messenger.post("/queuesolrindex", requireToken, bodyParser.json(), async functio
     }
     for (let x = fromNumber; x <= toNumber; x++) {
         const pid = prefix + x;
-        await QueueManager.getInstance().performIndexOperation(pid, "index");
+        try {
+            await QueueManager.getInstance().performIndexOperation(pid, "index");
+        } catch (e) {
+            res.status(500).send(`Index operation failed, iteration ${x}, error: ${e.message}`);
+            return;
+        }
     }
     res.status(200).send("ok");
 });
