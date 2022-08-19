@@ -107,7 +107,7 @@ export class FedoraObject {
             logMessage: "Initial Ingest addDatastream - MASTER-MD",
         };
         const fitsXml = this.fitsMasterMetadata(filename);
-        await this.addDatastream("MASTER-MD", params, fitsXml, [201]);
+        await this.addDatastream("MASTER-MD", params, fitsXml, [201, 204]);
     }
 
     async addRelationship(subject: string, predicate: string, obj: string, isLiteral = false): Promise<void> {
