@@ -30,7 +30,7 @@ describe("IngestProcessor", () => {
             level: "error", // we don't want to see info messages while testing
             transports: [new winston.transports.Console()],
         });
-        job = new Job(dir + "/" + jobName, config, new QueueManager());
+        job = new Job(dir + "/" + jobName, config, new QueueManager(config));
         jest.spyOn(Job, "build").mockReturnValue(job);
         ingest = new IngestProcessor(dir, config, new FedoraObjectFactory(config, {} as Database), logger);
     });
