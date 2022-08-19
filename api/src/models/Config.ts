@@ -238,15 +238,15 @@ class Config {
     }
 
     get redisConnectionSettings(): Record<string, string> {
-        return this.ini?.["redis"]?.["connection"] ?? {};
+        return this.ini?.["queue"]?.["connection"] ?? {};
     }
 
     get redisDefaultQueueName(): string {
-        return this.ini?.["redis"]?.["defaultQueueName"] ?? "vudl";
+        return this.ini?.["queue"]?.["defaultQueueName"] ?? "vudl";
     }
 
     get redisLockDuration(): number {
-        return parseInt(this.ini?.["redis"]?.["lockDuration"] ?? "30000");
+        return parseInt(this.ini?.["queue"]?.["lockDuration"] ?? "30000");
     }
 }
 
