@@ -1,4 +1,4 @@
-import { Queue, Job, Worker, WorkerOptions } from "bullmq";
+import { Queue, Job, Worker, WorkerOptions, Processor } from "bullmq";
 import Config from "../models/Config";
 
 class QueueManager {
@@ -26,7 +26,7 @@ class QueueManager {
         return new Queue(queueName ?? this.config.redisDefaultQueueName, this.queueBaseOptions);
     }
 
-    public getWorker(callback: (job: Record<string, string>) => void, queueName: string = null): Worker {
+    public getWorker(callback: Processor, queueName: string = null): Worker {
         const options = this.queueBaseOptions as WorkerOptions;
         options.lockDuration = this.config.redisLockDuration;
         return new Worker(queueName ?? this.config.redisDefaultQueueName, callback, options);
