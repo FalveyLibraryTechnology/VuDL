@@ -13,7 +13,7 @@ async function processLineByLine(filename) {
 
     for await (const pid of rl) {
         if (pid.length > 0) {
-            queue.performIndexOperation(pid, "index", true);
+            await queue.performIndexOperation(pid, "index", true);
         }
     }
 }
