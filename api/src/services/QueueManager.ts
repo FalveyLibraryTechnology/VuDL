@@ -29,7 +29,7 @@ class QueueManager {
         return await this.addToQueue("ingest", { dir });
     }
 
-    public async performIndexOperation(pid: string, action: string, force: boolean = false): Promise<void> {
+    public async performIndexOperation(pid: string, action: string, force = false): Promise<void> {
         // Fedora often fires many change events about the same object in rapid succession;
         // we don't want to index more times than we have to, so let's not re-queue anything
         // that is already awaiting indexing.
