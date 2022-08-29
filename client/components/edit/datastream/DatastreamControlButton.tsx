@@ -43,7 +43,7 @@ const DatastreamControlButton = ({
             }
             setLoading(false);
         };
-        if (modalState === "View") {
+        if (modalState === "View" && !disabled) {
             enableButton();
         }
     }, []);
