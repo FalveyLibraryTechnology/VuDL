@@ -260,7 +260,7 @@ describe("SolrIndexer", () => {
             dc_relation_str: "Relation",
             dc_source_str_mv: ["Source"],
             dc_title_str: title,
-            description: ["Description"],
+            description: "Description",
             fedora_parent_id_str_mv: [],
             format: ["Book"],
             has_order_str: "no",
