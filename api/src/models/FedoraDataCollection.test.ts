@@ -1,3 +1,4 @@
+import { assert } from "console";
 import Config from "./Config";
 import FedoraDataCollection from "./FedoraDataCollection";
 
@@ -27,6 +28,35 @@ describe("FedoraDataCollection", () => {
                 title: "",
                 parents: [{ pid: "parent:123", title: "", parents: [] }],
             });
+        });
+    });
+
+    describe("getAllHierarchyTops", () => {
+        it("returns the current object when it has no parents", () => {
+            expect(fedoraData.getAllHierarchyTops()).toEqual([fedoraData]);
+        });
+
+        it("recurses to the top of the tree when an object has parents", () => {
+            const parent = FedoraDataCollection.build("parent:123");
+            fedoraData.addParent(parent);
+            expect(fedoraData.getAllHierarchyTops()).toEqual([parent]);
+        });
+
+        it("recurses to the top of the tree when an object has grandparents", () => {
+            const grandparent = FedoraDataCollection.build("grandparent:123");
+            const parent = FedoraDataCollection.build("parent:123");
+            parent.addParent(grandparent);
+            fedoraData.addParent(parent);
+            expect(fedoraData.getAllHierarchyTops()).toEqual([grandparent]);
+        });
+
+        it("cuts tree traversal short when it encounters a top-level pid", () => {
+            Config.setInstance(new Config({ top_level_pids: ["grandparent:123"] }));
+            const grandparent = FedoraDataCollection.build("grandparent:123");
+            const parent = FedoraDataCollection.build("parent:123");
+            parent.addParent(grandparent);
+            fedoraData.addParent(parent);
+            expect(fedoraData.getAllHierarchyTops()).toEqual([parent]);
         });
     });
 
