@@ -1,4 +1,3 @@
-import { assert } from "console";
 import Config from "./Config";
 import FedoraDataCollection from "./FedoraDataCollection";
 
