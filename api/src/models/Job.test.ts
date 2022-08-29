@@ -7,7 +7,7 @@ jest.mock("../services/QueueManager");
 
 // We have an indirect dependency on ImageFile, but we don't really want
 // to load it for the context of this test.
-jest.mock("./ImageFile.ts", () => {
+jest.mock("./ImageFile", () => {
     return {};
 });
 
