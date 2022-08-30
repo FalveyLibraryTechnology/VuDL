@@ -26,7 +26,10 @@ class TikaExtractor {
         const javaPath = this.config.javaPath;
         const tikaPath = this.config.tikaPath;
         const tikaCommand = javaPath + " -jar " + tikaPath + " --text -eUTF8 " + filename;
-        const result = execSync(tikaCommand).toString();
+        const result = execSync(tikaCommand, { maxBuffer: Infinity }).toString();
+        // Sometimes node.js hangs on to file handles longer than expected; let's empty
+        // the file to free up disk space before deleting it, in case this happens:
+        fs.truncateSync(filename, 0);
         fs.rmSync(filename); // clean up temp file; we're done now!
         return result;
     }

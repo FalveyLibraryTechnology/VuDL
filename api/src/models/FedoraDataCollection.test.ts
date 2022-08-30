@@ -17,6 +17,19 @@ describe("FedoraDataCollection", () => {
         });
     });
 
+    describe("getParentTree", () => {
+        it("returns an appropriate parent tree", () => {
+            expect(fedoraData.getParentTree()).toEqual({ pid: "foo:123", title: "", parents: [] });
+            const parent = FedoraDataCollection.build("parent:123");
+            fedoraData.addParent(parent);
+            expect(fedoraData.getParentTree()).toEqual({
+                pid: "foo:123",
+                title: "",
+                parents: [{ pid: "parent:123", title: "", parents: [] }],
+            });
+        });
+    });
+
     describe("models", () => {
         it("strips model prefixes correctly", () => {
             fedoraData.fedoraDetails = {
