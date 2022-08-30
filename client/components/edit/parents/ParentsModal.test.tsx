@@ -18,7 +18,7 @@ describe("ParentsModal", () => {
     let editorValues;
     let pid: string;
     beforeEach(() => {
-        pid = "foo:123"
+        pid = "foo:123";
         editorValues = {
             state: {
                 objectDetailsStorage: {},
