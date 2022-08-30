@@ -16,7 +16,7 @@ jest.mock("./datastream/DatastreamList", () => () => "DatastreamList");
 jest.mock("./datastream/DatastreamModal", () => () => "DatastreamModal");
 jest.mock("./ObjectSummary", () => () => "ObjectSummary");
 jest.mock("./EditorSnackbar", () => () => "EditorSnackbar");
-jest.mock("./ParentsModal", () => () => "ParentsModal");
+jest.mock("./parents/ParentsModal", () => () => "ParentsModal");
 jest.mock("./StateModal", () => () => "StateModal");
 
 describe("ObjectEditor", () => {

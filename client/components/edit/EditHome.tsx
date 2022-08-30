@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ChildList from "./children/ChildList";
-import ParentsModal from "./ParentsModal";
+import ParentsModal from "./parents/ParentsModal";
 import StateModal from "./StateModal";
 import EditorSnackbar from "./EditorSnackbar";
 import Link from "next/link";

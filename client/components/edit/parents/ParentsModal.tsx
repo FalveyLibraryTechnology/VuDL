@@ -5,10 +5,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { useEditorContext } from "../../context/EditorContext";
-import ObjectLoader from "./ObjectLoader";
-import ParentList from "./parents/ParentList";
-import ParentPicker from "./parents/ParentPicker";
+import { useEditorContext } from "../../../context/EditorContext";
+import ObjectLoader from "../ObjectLoader";
+import ParentList from "./ParentList";
+import ParentPicker from "./ParentPicker";
 
 const ParentsModal = (): React.ReactElement => {
     const {
