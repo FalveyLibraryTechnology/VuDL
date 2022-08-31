@@ -25,7 +25,11 @@ describe("ParentList", () => {
         pid = "foo:123";
         editorValues = {
             state: {
-                parentDetailsStorage: {},
+                parentDetailsStorage: {
+                    "foo:123": {
+                        parents: [],
+                    },
+                },
             },
             action: {
                 clearPidFromChildListStorage: jest.fn(),
@@ -45,7 +49,13 @@ describe("ParentList", () => {
     });
 
     it("triggers a data load if necessary", () => {
+        editorValues.state.parentDetailsStorage = {};
         const wrapper = mount(<ParentList pid={pid} />);
         expect(editorValues.action.loadParentDetailsIntoStorage).toHaveBeenCalledWith(pid);
+    });
+
+    it("renders an empty list correctly", () => {
+        const wrapper = shallow(<ParentList pid={pid} />);
+        expect(toJson(wrapper)).toMatchSnapshot();
     });
 });

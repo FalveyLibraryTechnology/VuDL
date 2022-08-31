@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ParentList renders an empty list correctly 1`] = `
+<table
+  border="1"
+>
+  <tbody>
+    <tr
+      key="parentlist_foo:123_null"
+    >
+      <td>
+        No parents defined.
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
