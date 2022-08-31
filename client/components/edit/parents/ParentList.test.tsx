@@ -67,6 +67,10 @@ describe("ParentList", () => {
         mockUseFetchContext.mockReturnValue(fetchValues);
     });
 
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     it("triggers a data load if necessary", () => {
         editorValues.state.parentDetailsStorage = {};
         mount(<ParentList pid={pid} />);
@@ -88,8 +92,8 @@ describe("ParentList", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("deletes parents on button click", async () => {
-        const confirmSpy = jest.spyOn(window, "confirm").mockResolvedValue(true);
+    it("deletes parents on button click plus confirmation", async () => {
+        const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(true);
         fetchValues.action.fetchText.mockResolvedValue("ok");
         const wrapper = mount(<ParentList pid={pid} />);
         wrapper.find("button").simulate("click");
@@ -106,6 +110,58 @@ describe("ParentList", () => {
             message: "Successfully removed foo:123 from foo:122",
             open: true,
             severity: "info",
+        });
+    });
+
+    it("does not delete parents if confirmation is canceled", () => {
+        const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(false);
+        const wrapper = mount(<ParentList pid={pid} />);
+        wrapper.find("button").simulate("click");
+        expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
+        expect(fetchValues.action.fetchText).not.toHaveBeenCalled();
+    });
+
+    it("handles bad return statuses", async () => {
+        const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(true);
+        fetchValues.action.fetchText.mockResolvedValue("not ok");
+        const wrapper = mount(<ParentList pid={pid} />);
+        wrapper.find("button").simulate("click");
+        expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
+        expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+            "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
+            { method: "DELETE" }
+        );
+        await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+        expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.removeFromParentDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.clearPidFromChildListStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "not ok",
+            open: true,
+            severity: "error",
+        });
+    });
+
+    it("handles exceptions on fetchText call", async () => {
+        const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(true);
+        fetchValues.action.fetchText.mockImplementation(() => {
+            throw new Error("boom");
+        });
+        const wrapper = mount(<ParentList pid={pid} />);
+        wrapper.find("button").simulate("click");
+        expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
+        expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+            "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
+            { method: "DELETE" }
+        );
+        await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+        expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.removeFromParentDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.clearPidFromChildListStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "boom",
+            open: true,
+            severity: "error",
         });
     });
 });
