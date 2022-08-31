@@ -27,7 +27,25 @@ describe("ParentList", () => {
             state: {
                 parentDetailsStorage: {
                     "foo:123": {
-                        parents: [],
+                        parents: [
+                            {
+                                pid: "foo:122",
+                                title: "Parent",
+                                parents: [
+                                    {
+                                        pid: "foo:121",
+                                        title: "Grandparent",
+                                        parents: [
+                                            {
+                                                pid: "foo:120",
+                                                title: "Great-grandparent",
+                                                parents: [],
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
                     },
                 },
             },
@@ -55,6 +73,16 @@ describe("ParentList", () => {
     });
 
     it("renders an empty list correctly", () => {
+        editorValues.state.parentDetailsStorage = {
+            "foo:123": {
+                parents: [],
+            }
+        };
+        const wrapper = shallow(<ParentList pid={pid} />);
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders a populated parent list correctly", () => {
         const wrapper = shallow(<ParentList pid={pid} />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });

@@ -1,5 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ParentList renders a populated parent list correctly 1`] = `
+<table
+  border="1"
+>
+  <tbody>
+    <tr
+      key="parentlist_foo:123_foo:122"
+    >
+      <td>
+        <button
+          onClick={[Function]}
+        >
+          <Memo(ForwardRef(DeleteIcon))
+            titleAccess="Delete parent foo:122"
+          />
+        </button>
+      </td>
+      <td>
+        foo:122
+      </td>
+      <td>
+        Parent
+      </td>
+      <td>
+        Great-grandparent/Grandparent
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
+
 exports[`ParentList renders an empty list correctly 1`] = `
 <table
   border="1"
