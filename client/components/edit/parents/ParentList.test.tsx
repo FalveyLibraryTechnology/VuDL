@@ -60,7 +60,7 @@ describe("ParentList", () => {
         fetchValues = {
             action: {
                 fetchText: jest.fn(),
-            }
+            },
         };
         mockUseEditorContext.mockReturnValue(editorValues);
         mockUseFetchContext.mockReturnValue(fetchValues);
@@ -68,7 +68,7 @@ describe("ParentList", () => {
 
     it("triggers a data load if necessary", () => {
         editorValues.state.parentDetailsStorage = {};
-        const wrapper = mount(<ParentList pid={pid} />);
+        mount(<ParentList pid={pid} />);
         expect(editorValues.action.loadParentDetailsIntoStorage).toHaveBeenCalledWith(pid);
     });
 
@@ -76,7 +76,7 @@ describe("ParentList", () => {
         editorValues.state.parentDetailsStorage = {
             "foo:123": {
                 parents: [],
-            }
+            },
         };
         const wrapper = shallow(<ParentList pid={pid} />);
         expect(toJson(wrapper)).toMatchSnapshot();
