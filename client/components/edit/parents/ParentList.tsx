@@ -70,7 +70,7 @@ const ParentList = ({ pid }: ParentListProps): React.ReactElement => {
             nextNode = (nextNode.parents ?? [])[0] ?? null;
         }
         return (
-            <tr key={"parentmodal_" + pid + "_" + parent.pid}>
+            <tr key={"parentlist_" + pid + "_" + parent.pid}>
                 <td>
                     <button onClick={() => deleteParent(parent.pid)}>
                         <Delete titleAccess={`Delete parent ${parent.pid}`} />
@@ -88,7 +88,7 @@ const ParentList = ({ pid }: ParentListProps): React.ReactElement => {
                 {parents.length > 0 ? (
                     parents
                 ) : (
-                    <tr key={"parentmodal_" + pid + "_null"}>
+                    <tr key={"parentlist_" + pid + "_null"}>
                         <td>{loaded ? "No parents defined." : "Loading..."}</td>
                     </tr>
                 )}
