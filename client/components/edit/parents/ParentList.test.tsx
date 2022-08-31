@@ -3,6 +3,7 @@ import { describe, beforeEach, expect, it, jest } from "@jest/globals";
 import { shallow, mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import ParentList from "./ParentList";
+import { waitFor } from "@testing-library/dom";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
@@ -85,5 +86,26 @@ describe("ParentList", () => {
     it("renders a populated parent list correctly", () => {
         const wrapper = shallow(<ParentList pid={pid} />);
         expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("deletes parents on button click", async () => {
+        const confirmSpy = jest.spyOn(window, "confirm").mockResolvedValue(true);
+        fetchValues.action.fetchText.mockResolvedValue("ok");
+        const wrapper = mount(<ParentList pid={pid} />);
+        wrapper.find("button").simulate("click");
+        expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
+        expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+            "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
+            { method: "DELETE" }
+        );
+        await waitFor(() => expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalled());
+        expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith("foo:122");
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "Successfully removed foo:123 from foo:122",
+            open: true,
+            severity: "info",
+        });
     });
 });
