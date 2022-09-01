@@ -112,6 +112,60 @@ describe("ParentPicker", () => {
         });
     });
 
+    it("handles save failure (exception) gracefully", async () => {
+        fetchValues.action.fetchText.mockImplementation(() => {
+            throw new Error("kaboom");
+        });
+        editorValues.state.objectDetailsStorage[parentPid] = {
+            sortOn: "title",
+        };
+        const wrapper = mount(<ParentPicker pid={pid} />);
+        act(() => setSelected(parentPid));
+        wrapper.update();
+        await act(async () => {
+            wrapper.find("button").simulate("click");
+            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+        });
+        expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+            "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
+            { body: "", method: "PUT" }
+        );
+        expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.removeFromParentDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.clearPidFromChildListStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "kaboom",
+            open: true,
+            severity: "error",
+        });
+    });
+
+    it("handles save failure (bad response) gracefully", async () => {
+        fetchValues.action.fetchText.mockResolvedValue("not ok");
+        editorValues.state.objectDetailsStorage[parentPid] = {
+            sortOn: "title",
+        };
+        const wrapper = mount(<ParentPicker pid={pid} />);
+        act(() => setSelected(parentPid));
+        wrapper.update();
+        await act(async () => {
+            wrapper.find("button").simulate("click");
+            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+        });
+        expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+            "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
+            { body: "", method: "PUT" }
+        );
+        expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.removeFromParentDetailsStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.clearPidFromChildListStorage).not.toHaveBeenCalled();
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "not ok",
+            open: true,
+            severity: "error",
+        });
+    });
+
     it("renders correctly with a selected, loaded, custom-sorted parent", async () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "custom",
