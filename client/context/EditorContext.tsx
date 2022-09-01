@@ -449,8 +449,8 @@ export const useEditorContext = () => {
         }
     };
 
-    const loadCurrentObjectDetails = async () => {
-        return await loadObjectDetailsIntoStorage(currentPid);
+    const loadCurrentObjectDetails = async (errorCallback: ((pid: string) => void) | null = null) => {
+        return await loadObjectDetailsIntoStorage(currentPid, errorCallback);
     };
 
     const extractFirstMetadataValue = function (field: string, defaultValue: string): string {
