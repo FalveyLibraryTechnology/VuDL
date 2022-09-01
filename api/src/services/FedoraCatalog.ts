@@ -80,9 +80,11 @@ class FedoraCatalog {
         const pids = this.config.favoritePids;
         const result = {};
         if (pids.length > 0) {
-            const query = pids.map((pid) => {
-                return `id:"${pid.replace('"', "")}"`;
-            }).join(" OR ");
+            const query = pids
+                .map((pid) => {
+                    return `id:"${pid.replace('"', "")}"`;
+                })
+                .join(" OR ");
             const solrResponse = await this.solr.query(this.config.solrCore, query, {
                 fl: "id,title",
                 rows: pids.length.toString(),
