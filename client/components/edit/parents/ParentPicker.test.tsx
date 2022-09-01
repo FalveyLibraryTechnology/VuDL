@@ -4,6 +4,7 @@ import { mount, shallow } from "enzyme";
 import { act } from "react-dom/test-utils";
 import toJson from "enzyme-to-json";
 import ParentPicker from "./ParentPicker";
+import { waitFor } from "@testing-library/dom";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
@@ -31,9 +32,9 @@ jest.mock("../PidPicker", () => (args) => {
 describe("ParentPicker", () => {
     let editorValues;
     let fetchValues;
-    let pid: string;
+    const pid = "foo:123";
+    const parentPid = "foo:122";
     beforeEach(() => {
-        pid = "foo:123";
         editorValues = {
             state: {
                 objectDetailsStorage: {},
@@ -65,27 +66,53 @@ describe("ParentPicker", () => {
 
     it("renders correctly with a selected but unloaded parent", async () => {
         const wrapper = mount(<ParentPicker pid={pid} />);
-        act(() => setSelected("foo:122"));
+        act(() => setSelected(parentPid));
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it("renders correctly with a selected, loaded, title-sorted parent", async () => {
-        editorValues.state.objectDetailsStorage["foo:122"] = {
+        editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "title",
         };
         const wrapper = mount(<ParentPicker pid={pid} />);
-        act(() => setSelected("foo:122"));
+        act(() => setSelected(parentPid));
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
+    it("adds a title-sorted parent", async () => {
+        fetchValues.action.fetchText.mockResolvedValue("ok");
+        editorValues.state.objectDetailsStorage[parentPid] = {
+            sortOn: "title",
+        };
+        const wrapper = mount(<ParentPicker pid={pid} />);
+        act(() => setSelected(parentPid));
+        wrapper.update();
+        await act(async () => {
+            wrapper.find("button").simulate("click");
+            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+        });
+        expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+            "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
+            { body: "", method: "PUT" }
+        );
+        expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith(parentPid);
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "Successfully added foo:123 to foo:122",
+            open: true,
+            severity: "info",
+        });
+    });
+
     it("renders correctly with a selected, loaded, custom-sorted parent", async () => {
-        editorValues.state.objectDetailsStorage["foo:122"] = {
+        editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "custom",
         };
         const wrapper = mount(<ParentPicker pid={pid} />);
-        act(() => setSelected("foo:122"));
+        act(() => setSelected(parentPid));
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
