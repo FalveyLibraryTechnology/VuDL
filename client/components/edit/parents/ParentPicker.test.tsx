@@ -116,4 +116,71 @@ describe("ParentPicker", () => {
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
+
+    it("adds a custom-sorted parent with manual position entry", async () => {
+        fetchValues.action.fetchText.mockResolvedValue("ok");
+        editorValues.state.objectDetailsStorage[parentPid] = {
+            sortOn: "custom",
+        };
+        const wrapper = mount(<ParentPicker pid={pid} />);
+        act(() => setSelected(parentPid));
+        wrapper.update();
+        await act(async () => {
+            wrapper.find("input").simulate("change", { target: { value: "100" } });
+            await Promise.resolve();
+            wrapper.update();
+            wrapper.find("button").at(1).simulate("click");
+            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+        });
+        expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+            "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
+            { body: "100", method: "PUT" }
+        );
+        expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith(parentPid);
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "Successfully added foo:123 to foo:122",
+            open: true,
+            severity: "info",
+        });
+    });
+
+    it("adds a custom-sorted parent using the 'last position' button", async () => {
+        fetchValues.action.fetchText.mockResolvedValueOnce("999");
+        fetchValues.action.fetchText.mockResolvedValue("ok");
+        editorValues.state.objectDetailsStorage[parentPid] = {
+            sortOn: "custom",
+        };
+        const wrapper = mount(<ParentPicker pid={pid} />);
+        act(() => setSelected(parentPid));
+        wrapper.update();
+        await act(async () => {
+            wrapper.find("button").simulate("click");
+            await waitFor(() => expect(fetchValues.action.fetchText).toHaveBeenCalled());
+        });
+        wrapper.update();
+        await act(async () => {
+            wrapper.find("button").at(1).simulate("click");
+            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+        });
+        expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
+            1,
+            "http://localhost:9000/api/edit/object/foo%3A122/lastChildPosition",
+            { method: "GET" }
+        );
+        expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
+            2,
+            "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
+            { body: 1000, method: "PUT" }
+        );
+        expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith(parentPid);
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "Successfully added foo:123 to foo:122",
+            open: true,
+            severity: "info",
+        });
+    });
 });
