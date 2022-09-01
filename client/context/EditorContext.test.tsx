@@ -67,6 +67,20 @@ describe("useEditorContext", () => {
         });
     });
 
+    describe("toggleParentsModal", () => {
+        it("toggles the modal", async () => {
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+
+            expect(result.current.state.isParentsModalOpen).toBeFalsy();
+
+            await act(async () => {
+                await result.current.action.toggleParentsModal();
+            });
+
+            expect(result.current.state.isParentsModalOpen).toBeTruthy();
+        });
+    });
+
     describe("setDatastreamModalState", () => {
         it("sets the modal state", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
@@ -78,6 +92,20 @@ describe("useEditorContext", () => {
             });
 
             expect(result.current.state.datastreamModalState).toEqual("test1");
+        });
+    });
+
+    describe("setParentsModalActivePid", () => {
+        it("sets the active PID", async () => {
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+
+            expect(result.current.state.parentsModalActivePid).toBeNull();
+
+            await act(async () => {
+                await result.current.action.setParentsModalActivePid("test1");
+            });
+
+            expect(result.current.state.parentsModalActivePid).toEqual("test1");
         });
     });
 
@@ -360,14 +388,39 @@ describe("useEditorContext", () => {
         });
     });
 
-    describe("removeFromParentDetailsStorage ", () => {
+    describe("loadParentDetailsIntoStorage", () => {
+        it("ignores null PIDs", async () => {
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+            expect(Object.keys(result.current.state.parentDetailsStorage)).toEqual([]);
+            await act(async () => {
+                await result.current.action.loadParentDetailsIntoStorage("test:123");
+                await result.current.action.loadParentDetailsIntoStorage(null);
+                await result.current.action.loadParentDetailsIntoStorage("test:125");
+            });
+            expect(Object.keys(result.current.state.parentDetailsStorage)).toEqual(["test:123", "test:125"]);
+        });
+    
+        it("handles errors", async () => {
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+            const callback = jest.fn();
+            const errorSpy = jest.spyOn(global.console, "error").mockImplementation(jest.fn());
+            fetchValues.action.fetchJSON.mockRejectedValue("test1");
+            await act(async () => {
+                await result.current.action.loadParentDetailsIntoStorage("test:123", callback);
+            });
+            expect(callback).toHaveBeenCalledWith("test:123");
+            expect(errorSpy).toHaveBeenCalledWith("Problem fetching parent details from http://localhost:9000/api/edit/object/test%3A123/parents");
+        });
+    });
+
+    describe("removeFromParentDetailsStorage", () => {
         it("removes the specified record without impacting others", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
             expect(Object.keys(result.current.state.parentDetailsStorage)).toEqual([]);
             await act(async () => {
-                await result.current.action.loadParentDetailsIntoStorage ("test:123");
-                await result.current.action.loadParentDetailsIntoStorage ("test:124");
-                await result.current.action.loadParentDetailsIntoStorage ("test:125");
+                await result.current.action.loadParentDetailsIntoStorage("test:123");
+                await result.current.action.loadParentDetailsIntoStorage("test:124");
+                await result.current.action.loadParentDetailsIntoStorage("test:125");
             });
             expect(Object.keys(result.current.state.parentDetailsStorage)).toEqual(["test:123", "test:124", "test:125"]);
             await act(async () => {
