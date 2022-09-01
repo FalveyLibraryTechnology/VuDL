@@ -243,6 +243,46 @@ describe("ParentPicker", () => {
         });
     });
 
+    it("defaults to 1 if the 'last position' request fails", async () => {
+        fetchValues.action.fetchText.mockImplementationOnce(() => {
+            throw new Error("kaboom");
+        });
+        fetchValues.action.fetchText.mockResolvedValue("ok");
+        editorValues.state.objectDetailsStorage[parentPid] = {
+            sortOn: "custom",
+        };
+        const wrapper = mount(<ParentPicker pid={pid} />);
+        act(() => setSelected(parentPid));
+        wrapper.update();
+        await act(async () => {
+            wrapper.find("button").simulate("click");
+            await waitFor(() => expect(fetchValues.action.fetchText).toHaveBeenCalled());
+        });
+        wrapper.update();
+        await act(async () => {
+            wrapper.find("button").at(1).simulate("click");
+            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+        });
+        expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
+            1,
+            "http://localhost:9000/api/edit/object/foo%3A122/lastChildPosition",
+            { method: "GET" }
+        );
+        expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
+            2,
+            "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
+            { body: 1, method: "PUT" }
+        );
+        expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith(parentPid);
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "Successfully added foo:123 to foo:122",
+            open: true,
+            severity: "info",
+        });
+    });
+
     it("handles object loading errors gracefully", async () => {
         const wrapper = mount(<ParentPicker pid={pid} />);
         await act(async () => {
