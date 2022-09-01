@@ -1,5 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ParentPicker handles object loading errors gracefully 1`] = `
+<ParentPicker
+  pid="foo:123"
+>
+  <Component
+    selected=""
+    setSelected={[Function]}
+  >
+    PidPicker
+  </Component>
+  <br />
+  Please select a valid PID.
+</ParentPicker>
+`;
+
 exports[`ParentPicker renders correctly with a selected but unloaded parent 1`] = `
 <ParentPicker
   pid="foo:123"

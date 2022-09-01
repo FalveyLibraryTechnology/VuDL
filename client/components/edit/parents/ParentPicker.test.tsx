@@ -18,12 +18,17 @@ jest.mock("../../../context/FetchContext", () => ({
         return mockUseFetchContext();
     },
 }));
-jest.mock("../ObjectLoader", () => () => "ObjectLoader");
-let setSelected = (pid: string) => {
+const placeholderFunction = (pid: string) => {
     // This placeholder function should never get called,
     // but we'll implement it as a safety fallback.
     throw new Error("Unexpected call: " + pid);
 };
+let errorCallback = placeholderFunction;
+jest.mock("../ObjectLoader", () => (args) => {
+    errorCallback = args.errorCallback;
+    return "ObjectLoader";
+});
+let setSelected = placeholderFunction;
 jest.mock("../PidPicker", () => (args) => {
     setSelected = args.setSelected;
     return "PidPicker";
@@ -182,5 +187,22 @@ describe("ParentPicker", () => {
             open: true,
             severity: "info",
         });
+    });
+
+    it("handles object loading errors gracefully", async () => {
+        const wrapper = mount(<ParentPicker pid={pid} />);
+        await act(async () => {
+            setSelected(parentPid);
+            await Promise.resolve();
+            errorCallback(parentPid);
+            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+        });
+        wrapper.update();
+        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            message: "Cannot load details for foo:122. Are you sure this is a valid PID?",
+            open: true,
+            severity: "error",
+        });
+        expect(toJson(wrapper)).toMatchSnapshot();
     });
 });
