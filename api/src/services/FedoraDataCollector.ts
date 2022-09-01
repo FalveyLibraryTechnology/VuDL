@@ -44,7 +44,8 @@ class FedoraDataCollector {
             this.extractor.extractFedoraDatastreams(RDF),
             this.fedora,
             this.extractor,
-            this.tika
+            this.tika,
+            this.config
         );
     }
 
