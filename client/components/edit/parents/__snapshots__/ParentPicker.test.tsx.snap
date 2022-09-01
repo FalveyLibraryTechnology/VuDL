@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ParentPicker renders correctly with no data loaded 1`] = `
+<Fragment>
+  <Component
+    selected=""
+    setSelected={[Function]}
+  />
+  <br />
+  Please select a valid PID.
+</Fragment>
+`;
