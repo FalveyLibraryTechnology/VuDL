@@ -1,5 +1,87 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ParentPicker renders correctly with a selected but unloaded parent 1`] = `
+<ParentPicker
+  pid="foo:123"
+>
+  <Component
+    errorCallback={[Function]}
+    pid="foo:122"
+  >
+    ObjectLoader
+  </Component>
+  <Component
+    selected="foo:122"
+    setSelected={[Function]}
+  >
+    PidPicker
+  </Component>
+  <br />
+  Please select a valid PID.
+</ParentPicker>
+`;
+
+exports[`ParentPicker renders correctly with a selected, loaded, custom-sorted parent 1`] = `
+<ParentPicker
+  pid="foo:123"
+>
+  <Component
+    errorCallback={[Function]}
+    pid="foo:122"
+  >
+    ObjectLoader
+  </Component>
+  <Component
+    selected="foo:122"
+    setSelected={[Function]}
+  >
+    PidPicker
+  </Component>
+  <br />
+  <div>
+    <label>
+      Position: 
+      <input
+        onChange={[Function]}
+        type="text"
+        value=""
+      />
+    </label>
+    <button
+      onClick={[Function]}
+    >
+      Set to Last Position in Parent
+    </button>
+  </div>
+  Please enter a position.
+</ParentPicker>
+`;
+
+exports[`ParentPicker renders correctly with a selected, loaded, title-sorted parent 1`] = `
+<ParentPicker
+  pid="foo:123"
+>
+  <Component
+    errorCallback={[Function]}
+    pid="foo:122"
+  >
+    ObjectLoader
+  </Component>
+  <Component
+    selected="foo:122"
+    setSelected={[Function]}
+  >
+    PidPicker
+  </Component>
+  <br />
+  <button
+    onClick={[Function]}
+  >
+    Add
+  </button>
+</ParentPicker>
+`;
+
 exports[`ParentPicker renders correctly with no data loaded 1`] = `
 <Fragment>
   <Component
