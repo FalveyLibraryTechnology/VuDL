@@ -348,30 +348,29 @@ edit.put(
     bodyParser.text(),
     async function (req, res) {
         try {
-            const pid = req.params.pid;
-            const parent = req.params.parentPid;
+            const { pid, parentPid } = req.params;
             const pos = parseInt(req.body);
 
             // Validate the input
-            if (pid == parent) {
+            if (pid == parentPid) {
                 res.status(400).send("Object cannot be its own parent.");
                 return;
             }
-            const parentData = await FedoraDataCollector.getInstance().getHierarchy(parent);
+            const parentData = await FedoraDataCollector.getInstance().getHierarchy(parentPid);
             if (parentData.getAllParents().includes(pid)) {
                 res.status(400).send("Object cannot be its own grandparent.");
                 return;
             }
             if (!parentData.models.includes("vudl-system:CollectionModel")) {
-                res.status(400).send("Illegal parent " + parent + "; not a collection!");
+                res.status(400).send(`Illegal parent ${parentPid}; not a collection!`);
                 return;
             }
 
             // If we got this far, we can safely update things
             const fedoraObject = FedoraObject.build(pid);
-            await fedoraObject.addParentRelationship(parent);
+            await fedoraObject.addParentRelationship(parentPid);
             if (parentData.sortOn === "custom") {
-                await fedoraObject.addSequenceRelationship(parent, pos);
+                await fedoraObject.addSequenceRelationship(parentPid, pos);
             }
             res.status(200).send("ok");
         } catch (error) {
