@@ -387,7 +387,7 @@ edit.delete("/object/:pid/parent/:parentPid", requireToken, pidAndParentPidSanit
 
         // Validate the input
         const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
-        const legalParent = fedoraData.parents.find((current) => (current.pid === parent));
+        const legalParent = fedoraData.parents.find((current) => current.pid === parent);
         if (!legalParent) {
             res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
             return;
