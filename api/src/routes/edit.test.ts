@@ -687,6 +687,22 @@ describe("edit", () => {
             expect(mockObject.addParentRelationship).toHaveBeenCalledWith(parentPid);
             expect(mockObject.addSequenceRelationship).toHaveBeenCalledWith(parentPid, 2);
         });
+
+        it("handles exceptions gracefully", async () => {
+            const exception = new Error("kaboom");
+            jest.spyOn(mockData, "models", "get").mockImplementation(() => {
+                throw exception;
+            });
+            const errorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
+            const response = await request(app)
+                .put(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+            expect(errorSpy).toHaveBeenCalledWith(exception);
+            expect(response.error.text).toEqual("kaboom");
+        });
     });
 
     describe("delete /object/:pid/parent/:parentPid", () => {
