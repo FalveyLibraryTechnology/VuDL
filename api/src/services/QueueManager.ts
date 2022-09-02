@@ -37,7 +37,7 @@ class QueueManager {
         const jobs = await q.getJobs("wait");
         const queueJob = { pid, action };
         if (!force && this.isAlreadyAwaitingAction(jobs, "index", queueJob)) {
-            console.log("Skipping queue; " + pid + " is already awaiting " + action + ".");
+            console.log(`Skipping queue; ${pid} is already awaiting ${action}.`);
         } else {
             await q.add("index", { pid, action });
         }
@@ -51,12 +51,12 @@ class QueueManager {
         return matchingJob ? matchingJob?.data?.action === action : false;
     }
 
-    public async queueMetadataOperation(pid: string, action: string): Promise<void> {
+    public async queueMetadataOperation(pid: string, action: string, force = false): Promise<void> {
         const q = new Queue(this.defaultQueueName);
         const jobs = await q.getJobs("wait");
         const queueJob = { pid, action };
-        if (this.isAlreadyAwaitingAction(jobs, "metadata", queueJob)) {
-            console.log("Skipping queue; " + pid + " is already awaiting " + action + ".");
+        if (!force && this.isAlreadyAwaitingAction(jobs, "metadata", queueJob)) {
+            console.log(`Skipping queue; ${pid} is already awaiting ${action}.`);
         } else {
             await q.add("metadata", queueJob);
         }
