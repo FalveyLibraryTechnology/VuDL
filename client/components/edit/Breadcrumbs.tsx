@@ -1,6 +1,6 @@
 import styles from "./Breadcrumbs.module.css";
 import React, { useEffect } from "react";
-import { TreeData, generateBreadcrumbTrails, processBreadcrumbData } from "../../util/Breadcrumbs";
+import { TreeNode, processBreadcrumbData } from "../../util/Breadcrumbs";
 import { useEditorContext } from "../../context/EditorContext";
 import Link from "next/link";
 
@@ -8,7 +8,7 @@ interface BreadcrumbsProps {
     pid: string;
 }
 
-const Breadcrumbs = ({ pid = "" }: BreadcrumbsProps): React.ReactElement => {
+const Breadcrumbs = ({ pid }: BreadcrumbsProps): React.ReactElement => {
     const {
         state: { parentDetailsStorage },
         action: { loadParentDetailsIntoStorage },
@@ -21,16 +21,9 @@ const Breadcrumbs = ({ pid = "" }: BreadcrumbsProps): React.ReactElement => {
         }
     }, [loaded]);
 
-    const treeData: TreeData = loaded
-        ? processBreadcrumbData(parentDetailsStorage[pid])
-        : {
-              topNodes: [],
-              childLookups: {},
-              records: {},
-          };
+    const treeData: Array<Array<TreeNode>> = loaded ? processBreadcrumbData(parentDetailsStorage[pid]).paths : [];
 
-    const allTrails = generateBreadcrumbTrails(treeData, pid);
-    const contents = allTrails.map((trail, trailIndex: number) => {
+    const contents = treeData.map((trail, trailIndex: number) => {
         const breadcrumbs = trail.map((breadcrumb) => {
             return (
                 <li key={"breadcrumb_" + breadcrumb.pid + "_" + trailIndex}>
