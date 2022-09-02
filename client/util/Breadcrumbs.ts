@@ -22,7 +22,7 @@ interface BreadcrumbTrail {
  */
 export function processBreadcrumbData(data: TreeNode): TreeData {
     const queue: Array<TreeNode> = [data];
-    const topNodes: Array<string> = [];
+    const topNodes: Set<string> = new Set(); // use set to avoid duplicates
     const childLookups: Record<string, Array<string>> = {};
     const records: Record<string, TreeNode> = {};
     while (queue.length > 0) {
@@ -31,7 +31,7 @@ export function processBreadcrumbData(data: TreeNode): TreeData {
             break;
         }
         if (current.parents.length === 0) {
-            topNodes.push(current.pid);
+            topNodes.add(current.pid);
         }
         records[current.pid] = { pid: current.pid, title: current.title, parents: [] };
         current.parents.forEach((parent) => {
@@ -44,7 +44,7 @@ export function processBreadcrumbData(data: TreeNode): TreeData {
         });
     }
     return {
-        topNodes: Array.from(new Set(topNodes)), // deduplicate
+        topNodes: Array.from(topNodes),
         records,
         childLookups,
     };
