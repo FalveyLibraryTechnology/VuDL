@@ -25,6 +25,39 @@ describe("Fedora", () => {
         jest.restoreAllMocks();
     });
 
+    describe("getDublinCore", () => {
+        it("will fail if an unexpected status code is received", async () => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 404, body: "not found" });
+            expect(async () => await fedora.getDublinCore("foo:123")).rejects.toThrowError(
+                "Unexpected status code: 404"
+            );
+        });
+
+        it("will return an appropriate response body when data exists", async () => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 200, body: "foo response" });
+            expect(await fedora.getDublinCore("foo:123")).toEqual("foo response");
+            expect(requestSpy).toHaveBeenCalledWith("get", "foo:123/DC", null, { parse_response: true });
+        });
+    });
+
+    describe("getRdf", () => {
+        it("will fail if an unexpected status code is received", async () => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 404, body: "not found" });
+            expect(async () => await fedora.getRdf("foo:123")).rejects.toThrowError("Unexpected status code: 404");
+        });
+
+        it("will return an appropriate response body when data exists", async () => {
+            requestSpy = jest
+                .spyOn(fedora, "_request")
+                .mockResolvedValue({ statusCode: 200, body: { toString: () => "foo response" } });
+            expect(await fedora.getRdf("foo:123")).toEqual("foo response");
+            expect(requestSpy).toHaveBeenCalledWith("get", "foo:123", null, {
+                headers: { Accept: "application/rdf+xml" },
+                parse_response: false,
+            });
+        });
+    });
+
     describe("addRelationship", () => {
         beforeEach(() => {
             requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
@@ -115,6 +148,38 @@ describe("Fedora", () => {
                 "/" + pid,
                 'DELETE { <> <info:fedora/fedora-system:def/model#state> ?any . } INSERT { <> <info:fedora/fedora-system:def/model#state> "Active".\n' +
                     " } WHERE { ?id <info:fedora/fedora-system:def/model#state> ?any }",
+                { headers: { "Content-Type": "application/sparql-update" } }
+            );
+        });
+    });
+
+    describe("deleteParentRelationship", () => {
+        beforeEach(() => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
+        });
+
+        it("will delete parent relationship", async () => {
+            fedora.deleteParentRelationship(pid, "foo:100");
+            expect(requestSpy).toHaveBeenCalledWith(
+                "patch",
+                "/" + pid,
+                "DELETE { <> <info:fedora/fedora-system:def/relations-external#isMemberOf> <info:fedora/foo:100> . } WHERE {  }",
+                { headers: { "Content-Type": "application/sparql-update" } }
+            );
+        });
+    });
+
+    describe("deleteSequenceRelationship", () => {
+        beforeEach(() => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
+        });
+
+        it("will delete sequence relationship", async () => {
+            fedora.deleteSequenceRelationship(pid, "foo:100");
+            expect(requestSpy).toHaveBeenCalledWith(
+                "patch",
+                "/" + pid,
+                'DELETE { <> <http://vudl.org/relationships#sequence> ?pos . } WHERE { ?id <http://vudl.org/relationships#sequence> ?pos . FILTER(REGEX(?pos, "foo:100#")) }',
                 { headers: { "Content-Type": "application/sparql-update" } }
             );
         });

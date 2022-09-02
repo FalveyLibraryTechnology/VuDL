@@ -79,6 +79,9 @@ export class Fedora {
             headers: { Accept: "application/rdf+xml" },
         };
         const result = await this._request("get", pid, null, options);
+        if (result.statusCode !== 200) {
+            throw new Error("Unexpected status code: " + result.statusCode);
+        }
         return result.body.toString();
     }
 
@@ -168,7 +171,11 @@ export class Fedora {
      */
     async getDublinCore(pid: string): Promise<DC> {
         const requestOptions = { parse_response: true };
-        return <DC>(await this.getDatastream(pid, "DC", requestOptions)).body;
+        const response = await this.getDatastream(pid, "DC", requestOptions);
+        if (response.statusCode !== 200) {
+            throw new Error("Unexpected status code: " + response.statusCode);
+        }
+        return <DC>response.body;
     }
 
     /**
@@ -305,6 +312,42 @@ export class Fedora {
         const turtle = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid;
         const patchResponse = await this.patchRdf(targetPath, turtle);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
+    /**
+     * This method removes an isMemberOf relationship from a pid/parent pid pair.
+     *
+     * @param pid       PID to update
+     * @param parentPid Parent PID to update
+     */
+    async deleteParentRelationship(pid: string, parentPid: string): Promise<void> {
+        const predicate = "info:fedora/fedora-system:def/relations-external#isMemberOf";
+        const targetPath = "/" + pid;
+        const insertClause = "";
+        const deleteClause = `<> <${predicate}> <info:fedora/${parentPid}> .`;
+        const whereClause = "";
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
+    /**
+     * This method removes a sequence relationship from a pid/parent pid pair.
+     *
+     * @param pid       PID to update
+     * @param parentPid Parent PID to update
+     */
+    async deleteSequenceRelationship(pid: string, parentPid: string): Promise<void> {
+        const predicate = "http://vudl.org/relationships#sequence";
+        const targetPath = "/" + pid;
+        const insertClause = "";
+        const deleteClause = `<> <${predicate}> ?pos .`;
+        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#"))`;
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
         if (patchResponse.statusCode !== 204) {
             throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
         }

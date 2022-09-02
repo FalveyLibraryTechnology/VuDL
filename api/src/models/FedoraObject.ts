@@ -107,7 +107,7 @@ export class FedoraObject {
             logMessage: "Initial Ingest addDatastream - MASTER-MD",
         };
         const fitsXml = this.fitsMasterMetadata(filename);
-        await this.addDatastream("MASTER-MD", params, fitsXml, [201]);
+        await this.addDatastream("MASTER-MD", params, fitsXml, [201, 204]);
     }
 
     async addRelationship(subject: string, predicate: string, obj: string, isLiteral = false): Promise<void> {
@@ -120,6 +120,14 @@ export class FedoraObject {
             "info:fedora/" + this.pid,
             "info:fedora/fedora-system:def/model#hasModel",
             "info:fedora/vudl-system:" + model
+        );
+    }
+
+    async addParentRelationship(parentPid: string): Promise<void> {
+        return this.addRelationship(
+            "info:fedora/" + this.pid,
+            "info:fedora/fedora-system:def/relations-external#isMemberOf",
+            "info:fedora/" + parentPid
         );
     }
 
@@ -202,11 +210,7 @@ export class FedoraObject {
         }
         // Attach parent if present:
         if (this.parentPid !== null) {
-            await this.addRelationship(
-                "info:fedora/" + this.pid,
-                "info:fedora/fedora-system:def/relations-external#isMemberOf",
-                "info:fedora/" + this.parentPid
-            );
+            await this.addParentRelationship(this.parentPid);
         }
     }
 

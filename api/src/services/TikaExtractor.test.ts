@@ -23,14 +23,17 @@ describe("TikaExtractor", () => {
         const fd = "fake.fd";
         jest.spyOn(tmp, "fileSync").mockReturnValue({ name: filename, fd });
         const writeSpy = jest.spyOn(fs, "writeSync").mockImplementation(jest.fn());
+        const truncateSpy = jest.spyOn(fs, "truncateSync").mockImplementation(jest.fn());
         const deleteSpy = jest.spyOn(fs, "rmSync").mockImplementation(jest.fn());
         const buffer = Buffer.from("fake");
         expect(extractor.extractText(buffer)).toEqual("bar");
         expect(writeSpy).toHaveBeenCalledTimes(1);
         expect(writeSpy).toHaveBeenCalledWith(fd, buffer);
+        expect(truncateSpy).toHaveBeenCalledTimes(1);
+        expect(truncateSpy).toHaveBeenCalledWith(filename, 0);
         expect(deleteSpy).toHaveBeenCalledTimes(1);
         expect(deleteSpy).toHaveBeenCalledWith(filename);
         expect(execSync).toHaveBeenCalledTimes(1);
-        expect(execSync).toHaveBeenCalledWith("java -jar /tika.jar --text -eUTF8 foo");
+        expect(execSync).toHaveBeenCalledWith("java -jar /tika.jar --text -eUTF8 foo", { maxBuffer: Infinity });
     });
 });

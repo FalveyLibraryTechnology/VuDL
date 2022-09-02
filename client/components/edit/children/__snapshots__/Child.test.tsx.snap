@@ -41,6 +41,9 @@ exports[`Child can be expanded to show children 1`] = `
                   <Unknown
                     pid="foo:123"
                   />
+                  <EditParentsButton
+                    pid="foo:123"
+                  />
                   <ObjectLoader
                     pid="foo:123"
                   />
@@ -1138,6 +1141,9 @@ exports[`Child can be expanded to show children 1`] = `
                       <Unknown
                         pid="foo:123"
                       />,
+                      <EditParentsButton
+                        pid="foo:123"
+                      />,
                       <ObjectLoader
                         pid="foo:123"
                       />,
@@ -1492,6 +1498,15 @@ exports[`Child can be expanded to show children 1`] = `
                   >
                     ObjectStatus
                   </Component>
+                  <EditParentsButton
+                    pid="foo:123"
+                  >
+                    <button
+                      onClick={[Function]}
+                    >
+                      Edit Parents
+                    </button>
+                  </EditParentsButton>
                   <ObjectLoader
                     pid="foo:123"
                   />
@@ -1937,6 +1952,9 @@ exports[`Child handles empty titles appropriately 1`] = `
                   xs={4}
                 >
                   <Unknown
+                    pid="foo:123"
+                  />
+                  <EditParentsButton
                     pid="foo:123"
                   />
                   <ObjectLoader
@@ -3036,6 +3054,9 @@ exports[`Child handles empty titles appropriately 1`] = `
                       <Unknown
                         pid="foo:123"
                       />,
+                      <EditParentsButton
+                        pid="foo:123"
+                      />,
                       <ObjectLoader
                         pid="foo:123"
                       />,
@@ -3390,6 +3411,15 @@ exports[`Child handles empty titles appropriately 1`] = `
                   >
                     ObjectStatus
                   </Component>
+                  <EditParentsButton
+                    pid="foo:123"
+                  >
+                    <button
+                      onClick={[Function]}
+                    >
+                      Edit Parents
+                    </button>
+                  </EditParentsButton>
                   <ObjectLoader
                     pid="foo:123"
                   />
@@ -3829,6 +3859,9 @@ exports[`Child renders using ajax-loaded data 1`] = `
                   xs={4}
                 >
                   <Unknown
+                    pid="foo:123"
+                  />
+                  <EditParentsButton
                     pid="foo:123"
                   />
                   <ObjectLoader
@@ -4928,6 +4961,9 @@ exports[`Child renders using ajax-loaded data 1`] = `
                       <Unknown
                         pid="foo:123"
                       />,
+                      <EditParentsButton
+                        pid="foo:123"
+                      />,
                       <ObjectLoader
                         pid="foo:123"
                       />,
@@ -5282,6 +5318,15 @@ exports[`Child renders using ajax-loaded data 1`] = `
                   >
                     ObjectStatus
                   </Component>
+                  <EditParentsButton
+                    pid="foo:123"
+                  >
+                    <button
+                      onClick={[Function]}
+                    >
+                      Edit Parents
+                    </button>
+                  </EditParentsButton>
                   <ObjectLoader
                     pid="foo:123"
                   />

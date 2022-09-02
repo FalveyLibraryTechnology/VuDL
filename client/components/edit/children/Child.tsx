@@ -8,6 +8,7 @@ import AddBox from "@mui/icons-material/AddBox";
 import Refresh from "@mui/icons-material/Refresh";
 import IndeterminateCheckBox from "@mui/icons-material/IndeterminateCheckBox";
 import { extractFirstMetadataValue } from "../../../util/metadata";
+import EditParentsButton from "../EditParentsButton";
 import ObjectLoader from "../ObjectLoader";
 import ObjectStatus from "../ObjectStatus";
 
@@ -46,6 +47,7 @@ export const Child = ({ pid, parentPid = "", initialTitle }: ChildProps): React.
                 </Grid>
                 <Grid item xs={4}>
                     {loaded ? <ObjectStatus pid={pid} /> : ""}
+                    {loaded ? <EditParentsButton pid={pid} /> : ""}
                     <ObjectLoader pid={pid} />
                     <button onClick={refresh}><Refresh style={ { height: "14px" } } titleAccess="Refresh children" /></button>
                 </Grid>
