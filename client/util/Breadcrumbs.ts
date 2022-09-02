@@ -57,8 +57,8 @@ export function generateBreadcrumbTrails(treeData: TreeData, pid: string) {
     });
     const result: Array<Array<TreeNode>> = [];
     while (queue.length > 0) {
-        const current = queue.shift();
-        const record = treeData.records[current.pid] ?? {};
+        const current = queue.shift() as BreadcrumbTrail;
+        const record = treeData.records[current.pid] ?? { parents: [], pid: current.pid, title: "-" };
         const path = current.path;
         path.push(record);
         (treeData.childLookups[current.pid] ?? []).forEach((childPid: string) => {
