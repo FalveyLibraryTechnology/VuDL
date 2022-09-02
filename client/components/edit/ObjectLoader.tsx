@@ -4,9 +4,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 export interface ObjectLoaderProps {
     pid: string;
+    errorCallback?: ((pid: string) => void) | null;
 }
 
-export const ObjectLoader = ({ pid }: ObjectLoaderProps): React.ReactElement => {
+export const ObjectLoader = ({ pid, errorCallback = null }: ObjectLoaderProps): React.ReactElement | null => {
     const {
         state: { objectDetailsStorage },
         action: { loadObjectDetailsIntoStorage },
@@ -15,7 +16,7 @@ export const ObjectLoader = ({ pid }: ObjectLoaderProps): React.ReactElement => 
 
     useEffect(() => {
         if (!loaded) {
-            loadObjectDetailsIntoStorage(pid);
+            loadObjectDetailsIntoStorage(pid, errorCallback);
         }
     }, [loaded]);
     return !loaded ? (

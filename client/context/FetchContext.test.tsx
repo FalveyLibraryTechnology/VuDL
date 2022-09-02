@@ -117,11 +117,12 @@ describe("useFetchContext", () => {
         it("throws an error when response is not okay", async () => {
             response.ok = false;
             response.statusText = "not okay";
+            response.text.mockResolvedValue("kaboom");
             global.fetch.mockResolvedValueOnce(response);
             const { result } = await renderHook(() => useFetchContext(), { wrapper: FetchContextProvider });
 
             await act(async () => {
-                await expect(() => result.current.action.fetchText(url)).rejects.toThrow("not okay");
+                await expect(() => result.current.action.fetchText(url)).rejects.toThrow("not okay: kaboom");
             });
 
             expect(global.fetch).toHaveBeenCalledWith(
@@ -130,7 +131,7 @@ describe("useFetchContext", () => {
                     method: "GET",
                 })
             );
-            expect(response.text).not.toHaveBeenCalled();
+            expect(response.text).toHaveBeenCalled();
         });
     });
 

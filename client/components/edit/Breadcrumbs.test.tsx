@@ -4,6 +4,7 @@ import { waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import Breadcrumbs from "./Breadcrumbs";
+import { EditorContextProvider } from "../../context/EditorContext";
 import { FetchContextProvider } from "../../context/FetchContext";
 
 describe("Breadcrumb", () => {
@@ -28,7 +29,9 @@ describe("Breadcrumb", () => {
     async function runStandardSnapshotTest() {
         const wrapper = mount(
             <FetchContextProvider>
-                <Breadcrumbs {...props} />
+                <EditorContextProvider>
+                    <Breadcrumbs {...props} />
+                </EditorContextProvider>
             </FetchContextProvider>
         );
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));

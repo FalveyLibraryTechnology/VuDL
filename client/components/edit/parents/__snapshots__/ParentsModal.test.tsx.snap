@@ -1,0 +1,128 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ParentsModal renders correctly for a loaded PID 1`] = `
+<ForwardRef(Dialog)
+  className="parentsModal"
+  fullWidth={true}
+  onClose={[MockFunction]}
+  open={true}
+>
+  <ForwardRef(DialogTitle)>
+    <ForwardRef(Grid)
+      container={true}
+    >
+      <ForwardRef(Grid)
+        item={true}
+        xs={11}
+      >
+        Parents Editor (
+        foo:123
+        )
+      </ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        item={true}
+        xs={1}
+      >
+        <ForwardRef(IconButton)
+          className="closeButton"
+          onClick={[MockFunction]}
+        >
+          <Memo(ForwardRef(CloseIcon)) />
+        </ForwardRef(IconButton)>
+      </ForwardRef(Grid)>
+    </ForwardRef(Grid)>
+  </ForwardRef(DialogTitle)>
+  <ForwardRef(DialogContent)>
+    <Component
+      pid="foo:123"
+    />
+    <h3>
+      Add New Parent:
+    </h3>
+    <Component
+      pid="foo:123"
+    />
+    <h3>
+      Parents
+    </h3>
+    <Component
+      pid="foo:123"
+    />
+  </ForwardRef(DialogContent)>
+</ForwardRef(Dialog)>
+`;
+
+exports[`ParentsModal renders correctly for a non-loaded PID 1`] = `
+<ForwardRef(Dialog)
+  className="parentsModal"
+  fullWidth={true}
+  onClose={[MockFunction]}
+  open={true}
+>
+  <ForwardRef(DialogTitle)>
+    <ForwardRef(Grid)
+      container={true}
+    >
+      <ForwardRef(Grid)
+        item={true}
+        xs={11}
+      >
+        Parents Editor (
+        foo:123
+        )
+      </ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        item={true}
+        xs={1}
+      >
+        <ForwardRef(IconButton)
+          className="closeButton"
+          onClick={[MockFunction]}
+        >
+          <Memo(ForwardRef(CloseIcon)) />
+        </ForwardRef(IconButton)>
+      </ForwardRef(Grid)>
+    </ForwardRef(Grid)>
+  </ForwardRef(DialogTitle)>
+  <ForwardRef(DialogContent)>
+    <Component
+      pid="foo:123"
+    />
+  </ForwardRef(DialogContent)>
+</ForwardRef(Dialog)>
+`;
+
+exports[`ParentsModal renders correctly when PID is unset 1`] = `
+<ForwardRef(Dialog)
+  className="parentsModal"
+  fullWidth={true}
+  onClose={[MockFunction]}
+  open={true}
+>
+  <ForwardRef(DialogTitle)>
+    <ForwardRef(Grid)
+      container={true}
+    >
+      <ForwardRef(Grid)
+        item={true}
+        xs={11}
+      >
+        Parents Editor (
+        )
+      </ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        item={true}
+        xs={1}
+      >
+        <ForwardRef(IconButton)
+          className="closeButton"
+          onClick={[MockFunction]}
+        >
+          <Memo(ForwardRef(CloseIcon)) />
+        </ForwardRef(IconButton)>
+      </ForwardRef(Grid)>
+    </ForwardRef(Grid)>
+  </ForwardRef(DialogTitle)>
+  <ForwardRef(DialogContent) />
+</ForwardRef(Dialog)>
+`;

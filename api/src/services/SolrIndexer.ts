@@ -194,7 +194,6 @@ class SolrIndexer {
             author2: "dc.contributor_txt_mv",
             dc_collection_str_mv: "dc.collection_txt_mv", // possibly unused
             dc_source_str_mv: "dc.source_txt_mv",
-            description: "dc.description_txt_mv",
             format: "dc.format_txt_mv",
             publisher: "dc.publisher_txt_mv",
             publisher_str_mv: "dc.publisher_txt_mv",
@@ -216,6 +215,7 @@ class SolrIndexer {
             dc_date_str: "dc.date_txt_mv",
             dc_relation_str: "dc.relation_txt_mv",
             dc_title_str: "dc.title_txt_mv",
+            description: "dc.description_txt_mv",
             title: "dc.title_txt_mv",
             title_full: "dc.title_txt_mv",
             title_short: "dc.title_txt_mv",

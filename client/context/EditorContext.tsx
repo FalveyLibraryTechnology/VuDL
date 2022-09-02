@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { editObjectCatalogUrl, getObjectChildrenUrl, getObjectDetailsUrl } from "../util/routes";
+import { editObjectCatalogUrl, getObjectChildrenUrl, getObjectDetailsUrl, getObjectParentsUrl } from "../util/routes";
 import { useFetchContext } from "./FetchContext";
 import { extractFirstMetadataValue as utilExtractFirstMetadataValue } from "../util/metadata";
+import { TreeNode } from "../util/Breadcrumbs";
 
 export interface ObjectDetails {
     fedoraDatastreams: Array<string>;
@@ -44,15 +45,19 @@ interface EditorState {
     modelsCatalog: Record<string, FedoraModel>;
     licensesCatalog: Record<string, License>;
     agentsCatalog: Record<string, Object>;
+    favoritePidsCatalog: Record<string, string>;
     currentAgents: Array<Object>;
     currentPid: string | null;
     activeDatastream: string | null;
     isDatastreamModalOpen: boolean;
+    isParentsModalOpen: boolean;
     isStateModalOpen: boolean;
     datastreamModalState: string | null;
+    parentsModalActivePid: string | null;
     stateModalActivePid: string | null;
     snackbarState: SnackbarState;
     objectDetailsStorage: Record<string, ObjectDetails>;
+    parentDetailsStorage: Record<string, TreeNode>;
     childListStorage: Record<string, ChildrenResultPage>;
 }
 
@@ -64,12 +69,15 @@ const editorContextParams: EditorState = {
     modelsCatalog: {},
     licensesCatalog: {},
     agentsCatalog: {},
+    favoritePidsCatalog: {},
     currentAgents: [],
     currentPid: null,
     activeDatastream: null,
     isDatastreamModalOpen: false,
+    isParentsModalOpen: false,
     isStateModalOpen: false,
     datastreamModalState: null,
+    parentsModalActivePid: null,
     stateModalActivePid: null,
     snackbarState: {
         open: false,
@@ -77,6 +85,7 @@ const editorContextParams: EditorState = {
         severity: "info"
     },
     objectDetailsStorage: {},
+    parentDetailsStorage: {},
     childListStorage: {},
 };
 
@@ -93,14 +102,17 @@ const EditorContext = createContext({});
 
 const reducerMapping: Record<string, string> = {
     SET_AGENTS_CATALOG: "agentsCatalog",
+    SET_FAVORITE_PIDS_CATALOG: "favoritePidsCatalog",
     SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_AGENTS: "currentAgents",
     SET_CURRENT_PID: "currentPid",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
+    SET_IS_PARENTS_MODAL_OPEN: "isParentsModalOpen",
     SET_IS_STATE_MODAL_OPEN: "isStateModalOpen",
     SET_DATASTREAM_MODAL_STATE: "datastreamModalState",
+    SET_PARENTS_MODAL_ACTIVE_PID: "parentsModalActivePid",
     SET_STATE_MODAL_ACTIVE_PID: "stateModalActivePid",
     SET_SNACKBAR_STATE: "snackbarState",
 };
@@ -128,6 +140,26 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
         return {
             ...state,
             objectDetailsStorage
+        };
+    } else if (type === "ADD_TO_PARENT_DETAILS_STORAGE") {
+        const { key, details } = payload as { key: string; details: TreeNode };
+        const parentDetailsStorage = {
+            ...state.parentDetailsStorage,
+        };
+        parentDetailsStorage[key] = details;
+        return {
+            ...state,
+            parentDetailsStorage
+        };
+    } else if (type === "REMOVE_FROM_PARENT_DETAILS_STORAGE") {
+        const { key } = payload as { key: string };
+        const parentDetailsStorage = {
+            ...state.parentDetailsStorage,
+        };
+        delete parentDetailsStorage[key];
+        return {
+            ...state,
+            parentDetailsStorage
         };
     } else if (type === "ADD_TO_CHILD_LIST_STORAGE") {
         const { key, children } = payload as { key: string; children: ChildrenResultPage };
@@ -180,14 +212,18 @@ export const useEditorContext = () => {
             currentPid,
             activeDatastream,
             isDatastreamModalOpen,
+            isParentsModalOpen,
             isStateModalOpen,
             datastreamModalState,
+            parentsModalActivePid,
             stateModalActivePid,
             agentsCatalog,
+            favoritePidsCatalog,
             licensesCatalog,
             modelsCatalog,
             snackbarState,
             objectDetailsStorage,
+            parentDetailsStorage,
             childListStorage,
         },
         dispatch,
@@ -222,6 +258,20 @@ export const useEditorContext = () => {
         });
     };
 
+    const addToParentDetailsStorage = (key: string, details: TreeNode) => {
+        dispatch({
+            type: "ADD_TO_PARENT_DETAILS_STORAGE",
+            payload: { key, details },
+        });
+    };
+
+    const removeFromParentDetailsStorage = (key: string) => {
+        dispatch({
+            type: "REMOVE_FROM_PARENT_DETAILS_STORAGE",
+            payload: { key },
+        });
+    };
+
     const setCurrentAgents = (currentAgents) => {
         dispatch({
             type: "SET_CURRENT_AGENTS",
@@ -247,7 +297,7 @@ export const useEditorContext = () => {
         return `${pid}_${page}_${pageSize}`;
     };
 
-    const loadObjectDetailsIntoStorage = async (pid: string) => {
+    const loadObjectDetailsIntoStorage = async (pid: string, errorCallback: ((pid: string) => void) | null = null) => {
         // Ignore null values:
         if (pid === null) {
             return;
@@ -256,7 +306,26 @@ export const useEditorContext = () => {
         try {
             addToObjectDetailsStorage(pid, await fetchJSON(url));
         } catch (e) {
+            if (errorCallback) {
+                errorCallback(pid);
+            }
             console.error("Problem fetching details from " + url);
+        }
+    };
+
+    const loadParentDetailsIntoStorage = async (pid: string, errorCallback: ((pid: string) => void) | null = null) => {
+        // Ignore null values:
+        if (pid === null) {
+            return;
+        }
+        const url = getObjectParentsUrl(pid);
+        try {
+            addToParentDetailsStorage(pid, await fetchJSON(url));
+        } catch (e) {
+            if (errorCallback) {
+                errorCallback(pid);
+            }
+            console.error("Problem fetching parent details from " + url);
         }
     };
 
@@ -276,6 +345,13 @@ export const useEditorContext = () => {
             console.error("Problem fetching tree data from " + url);
         }
     };
+
+    const setFavoritePidsCatalog = (favoritePidsCatalog: Record<string, string>) => {
+        dispatch({
+            type: "SET_FAVORITE_PIDS_CATALOG",
+            payload: favoritePidsCatalog
+        });
+    }
 
     const setModelsCatalog = (modelsCatalog: Record<string, FedoraModel>) => {
         dispatch({
@@ -305,6 +381,13 @@ export const useEditorContext = () => {
         });
     };
 
+    const toggleParentsModal = () => {
+        dispatch({
+            type: "SET_IS_PARENTS_MODAL_OPEN",
+            payload: !isParentsModalOpen
+        });
+    };
+
     const toggleStateModal = () => {
         dispatch({
             type: "SET_IS_STATE_MODAL_OPEN",
@@ -316,6 +399,13 @@ export const useEditorContext = () => {
         dispatch({
             type: "SET_DATASTREAM_MODAL_STATE",
             payload: datastreamModalState
+        });
+    };
+
+    const setParentsModalActivePid = (pid: string) => {
+        dispatch({
+            type: "SET_PARENTS_MODAL_ACTIVE_PID",
+            payload: pid
         });
     };
 
@@ -352,14 +442,15 @@ export const useEditorContext = () => {
             const response = await fetchJSON(editObjectCatalogUrl);
             setModelsCatalog(response.models || {});
             setLicensesCatalog(response.licenses || {});
+            setFavoritePidsCatalog(response.favoritePids || {});
             setAgentsCatalog(response.agents || {});
         } catch(err) {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
         }
     };
 
-    const loadCurrentObjectDetails = async () => {
-        return await loadObjectDetailsIntoStorage(currentPid);
+    const loadCurrentObjectDetails = async (errorCallback: ((pid: string) => void) | null = null) => {
+        return await loadObjectDetailsIntoStorage(currentPid, errorCallback);
     };
 
     const extractFirstMetadataValue = function (field: string, defaultValue: string): string {
@@ -374,16 +465,20 @@ export const useEditorContext = () => {
             currentDatastreams,
             activeDatastream,
             isDatastreamModalOpen,
+            isParentsModalOpen,
             isStateModalOpen,
             datastreamModalState,
+            parentsModalActivePid,
             stateModalActivePid,
             datastreamsCatalog,
             modelsDatastreams,
             agentsCatalog,
+            favoritePidsCatalog,
             modelsCatalog,
             licensesCatalog,
             snackbarState,
             objectDetailsStorage,
+            parentDetailsStorage,
             childListStorage,
         },
         action: {
@@ -393,15 +488,19 @@ export const useEditorContext = () => {
             loadCurrentObjectDetails,
             setActiveDatastream,
             setDatastreamModalState,
+            setParentsModalActivePid,
             setStateModalActivePid,
             toggleDatastreamModal,
+            toggleParentsModal,
             toggleStateModal,
             setSnackbarState,
             extractFirstMetadataValue,
             getChildListStorageKey,
             loadObjectDetailsIntoStorage,
+            loadParentDetailsIntoStorage,
             loadChildrenIntoStorage,
             removeFromObjectDetailsStorage,
+            removeFromParentDetailsStorage,
             clearPidFromChildListStorage,
         },
     };

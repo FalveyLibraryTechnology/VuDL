@@ -29,6 +29,22 @@ describe("FedoraObject", () => {
         jest.clearAllMocks();
     });
 
+    describe("addMasterMetadataDatastream", () => {
+        it("calls FITS and saves the results to a datastream", async () => {
+            const fakeFilename = "/tmp/foo";
+            const fakeXml = "<foo />";
+            const fitsSpy = jest.spyOn(fedoraObject, "fitsMasterMetadata").mockReturnValue(fakeXml);
+            const saveSpy = jest.spyOn(fedoraObject, "addDatastream").mockResolvedValue();
+            await fedoraObject.addMasterMetadataDatastream(fakeFilename);
+            expect(fitsSpy).toHaveBeenCalledWith(fakeFilename);
+            const expectedParams = {
+                mimeType: "text/xml",
+                logMessage: "Initial Ingest addDatastream - MASTER-MD",
+            };
+            expect(saveSpy).toHaveBeenCalledWith("MASTER-MD", expectedParams, fakeXml, [201, 204]);
+        });
+    });
+
     describe("modifyLicense", () => {
         it("adds a datastream for a license", async () => {
             const config = new Config({
@@ -101,6 +117,23 @@ describe("FedoraObject", () => {
             fedoraObject.addRelationship("subject", "predicate", "object", true);
             expect(spy).toHaveBeenCalledTimes(1);
             expect(spy).toHaveBeenCalledWith(pid, "subject", "predicate", "object", true);
+        });
+    });
+
+    describe("addParentRelationship", () => {
+        it("proxies a call to the fedora service", () => {
+            const fedora = Fedora.getInstance();
+            const spy = jest.spyOn(fedora, "addRelationship").mockImplementation(jest.fn());
+            fedoraObject = FedoraObject.build(pid);
+            fedoraObject.addParentRelationship("foo:999");
+            expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy).toHaveBeenCalledWith(
+                pid,
+                "info:fedora/" + pid,
+                "info:fedora/fedora-system:def/relations-external#isMemberOf",
+                "info:fedora/foo:999",
+                false
+            );
         });
     });
 

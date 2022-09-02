@@ -46,6 +46,7 @@ exports[`ObjectEditor renders 1`] = `
   </ForwardRef(Grid)>
   <Component />
   <Component />
+  <Component />
   <h2>
     Contents
   </h2>

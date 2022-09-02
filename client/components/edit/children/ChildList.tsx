@@ -2,15 +2,17 @@ import styles from "./ChildList.module.css";
 import React, { useEffect, useState } from "react";
 import { useEditorContext } from "../../../context/EditorContext";
 import Child from "./Child";
+import SelectableChild from "./SelectableChild";
 import CircularProgress from "@mui/material/CircularProgress";
 import Pagination from "@mui/material/Pagination";
 
 export interface ChildListProps {
     pid?: string;
+    selectCallback?: boolean | ((pid: string) => void);
     pageSize?: number;
 }
 
-export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.ReactElement => {
+export const ChildList = ({ pid = "", selectCallback = false, pageSize = 10 }: ChildListProps): React.ReactElement => {
     const {
         state: { childListStorage },
         action: { getChildListStorageKey, loadChildrenIntoStorage },
@@ -37,7 +39,15 @@ export const ChildList = ({ pid = "", pageSize = 10 }: ChildListProps): React.Re
             childDocs.map((child: Record<string, string>) => {
                 return (
                     <li key={`${pid}_child_${child.id}`}>
-                        <Child pid={child.id} parentPid={pid} initialTitle={child.title ?? "-"} />
+                        {selectCallback === false ? (
+                            <Child pid={child.id} parentPid={pid} initialTitle={child.title ?? "-"} />
+                        ) : (
+                            <SelectableChild
+                                pid={child.id}
+                                selectCallback={selectCallback}
+                                initialTitle={child.title ?? "-"}
+                            />
+                        )}
                     </li>
                 );
             })

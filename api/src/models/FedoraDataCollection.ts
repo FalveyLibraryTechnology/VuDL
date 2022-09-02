@@ -1,3 +1,4 @@
+import Config from "./Config";
 import Fedora from "../services/Fedora";
 import FedoraDatastreamDetails from "./FedoraDatastreamDetails";
 import MetadataExtractor from "../services/MetadataExtractor";
@@ -16,6 +17,7 @@ class FedoraDataCollection {
     public fedoraDatastreams: Array<string>;
     public parents: Array<FedoraDataCollection> = [];
     public datastreamDetails: FedoraDatastreamDetails;
+    protected config: Config;
 
     constructor(
         pid: string,
@@ -24,13 +26,15 @@ class FedoraDataCollection {
         fedoraDatastreams: Array<string>,
         fedora: Fedora,
         extractor: MetadataExtractor,
-        tika: TikaExtractor
+        tika: TikaExtractor,
+        config: Config
     ) {
         this.pid = pid;
         this.metadata = metadata;
         this.fedoraDetails = fedoraDetails;
         this.fedoraDatastreams = fedoraDatastreams;
         this.datastreamDetails = new FedoraDatastreamDetails(this, fedora, extractor, tika);
+        this.config = config;
     }
 
     public static build(
@@ -40,7 +44,8 @@ class FedoraDataCollection {
         fedoraDatastreams: Array<string> = [],
         fedora: Fedora = null,
         extractor: MetadataExtractor = null,
-        tika: TikaExtractor = null
+        tika: TikaExtractor = null,
+        config: Config = null
     ): FedoraDataCollection {
         return new FedoraDataCollection(
             pid,
@@ -49,7 +54,8 @@ class FedoraDataCollection {
             fedoraDatastreams,
             fedora ?? Fedora.getInstance(),
             extractor ?? MetadataExtractor.getInstance(),
-            tika ?? TikaExtractor.getInstance()
+            tika ?? TikaExtractor.getInstance(),
+            config ?? Config.getInstance()
         );
     }
 
@@ -61,6 +67,12 @@ class FedoraDataCollection {
         // If we have no parents, we ARE the top:
         if (this.parents.length === 0) {
             return [this];
+        }
+        // If one of our parents is the root, we ARE the top:
+        for (let i = 0; i < this.parents.length; i++) {
+            if (this.config.topLevelPids.includes(this.parents[i].pid)) {
+                return [this];
+            }
         }
 
         // Otherwise, let's collect data from our parents:

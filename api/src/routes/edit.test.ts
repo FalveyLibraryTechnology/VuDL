@@ -5,6 +5,8 @@ import edit from "./edit";
 import Config from "../models/Config";
 import DatastreamManager from "../services/DatastreamManager";
 import Fedora from "../services/Fedora";
+import FedoraCatalog from "../services/FedoraCatalog";
+import { CompleteCatalog } from "../services/FedoraCatalog";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import FedoraDataCollector from "../services/FedoraDataCollector";
 import Database from "../services/Database";
@@ -28,6 +30,106 @@ describe("edit", () => {
         Config.setInstance(new Config(config));
         pid = "foo:123";
         datastream = "test1";
+    });
+
+    describe("get /catalog", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the complete catalog", async () => {
+            const fakeCatalog: CompleteCatalog = {
+                agents: { defaults: {}, roles: [], types: [] },
+                licenses: {},
+                models: {},
+                favoritePids: {},
+            };
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getCompleteCatalog").mockResolvedValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("get /catalog/models", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the catalog of models", async () => {
+            const fakeCatalog = ["foo", "bar"];
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getModelCatalog").mockReturnValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog/models")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("get /catalog/datastreams", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the catalog of datastreams", async () => {
+            const fakeCatalog = ["foo", "bar"];
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getDatastreamCatalog").mockReturnValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog/datastreams")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("get /catalog/datastreammimetypes", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the catalog of datastream MIME types", async () => {
+            const fakeCatalog = { foo: {} };
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getDatastreamMimetypes").mockReturnValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog/datastreammimetypes")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("get /catalog/favoritePids", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the catalog of favorite PIDs", async () => {
+            const fakeCatalog = { foo: "bar" };
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getFavoritePids").mockResolvedValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog/favoritePids")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe("post /object/new", () => {
@@ -418,6 +520,29 @@ describe("edit", () => {
         });
     });
 
+    describe("get /object/:pid/lastChildPosition", () => {
+        let querySpy;
+        beforeEach(() => {
+            const solrResponse = { statusCode: 200, body: { response: { docs: [{ sequence_foo_123_str: "100" }] } } };
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue(solrResponse as NeedleResponse);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will run an appropriate Solr query and parse the response", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/lastChildPosition`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
+                fl: "sequence_foo_123_str",
+                rows: "1",
+                sort: "sequence_foo_123_str DESC",
+            });
+            expect(response.text).toEqual("100");
+        });
+    });
+
     describe("get /object/:pid/recursiveChildPids", () => {
         let querySpy;
         beforeEach(() => {
@@ -479,6 +604,162 @@ describe("edit", () => {
                 .expect(StatusCodes.OK);
 
             expect(stateSpy).toHaveBeenCalledWith(pid, "Active");
+        });
+    });
+
+    describe("put /object/:pid/parent/:parentPid", () => {
+        let parentPid: string;
+        let mockData: FedoraDataCollection;
+        let mockObject;
+        let buildSpy;
+        beforeEach(() => {
+            parentPid = "foo:100";
+            mockData = FedoraDataCollection.build(parentPid);
+            const collector = FedoraDataCollector.getInstance();
+            jest.spyOn(collector, "getHierarchy").mockResolvedValue(mockData);
+            mockObject = {
+                addParentRelationship: jest.fn(),
+                addSequenceRelationship: jest.fn(),
+            };
+            buildSpy = jest.spyOn(FedoraObject, "build").mockReturnValue(mockObject);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will not make an object its own parent", async () => {
+            const response = await request(app)
+                .put(`/edit/object/${pid}/parent/${pid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("Object cannot be its own parent.");
+            expect(buildSpy).not.toHaveBeenCalled();
+        });
+
+        it("will not make an object its own grandparent", async () => {
+            mockData.addParent(FedoraDataCollection.build(pid));
+            const response = await request(app)
+                .put(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("Object cannot be its own grandparent.");
+            expect(buildSpy).not.toHaveBeenCalled();
+        });
+
+        it("will not add a child to a non-collection object", async () => {
+            const response = await request(app)
+                .put(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("Illegal parent foo:100; not a collection!");
+            expect(buildSpy).not.toHaveBeenCalled();
+        });
+
+        it("adds parent when appropriate preconditions are met", async () => {
+            jest.spyOn(mockData, "models", "get").mockReturnValue(["vudl-system:CollectionModel"]);
+            await request(app)
+                .put(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.OK);
+            expect(buildSpy).toHaveBeenCalled();
+            expect(mockObject.addParentRelationship).toHaveBeenCalledWith(parentPid);
+            // no sequence because no custom sort
+            expect(mockObject.addSequenceRelationship).not.toHaveBeenCalled();
+        });
+
+        it("adds parent and sequence when appropriate preconditions are met", async () => {
+            jest.spyOn(mockData, "models", "get").mockReturnValue(["vudl-system:CollectionModel"]);
+            jest.spyOn(mockData, "sortOn", "get").mockReturnValue("custom");
+            await request(app)
+                .put(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.OK);
+            expect(buildSpy).toHaveBeenCalled();
+            expect(mockObject.addParentRelationship).toHaveBeenCalledWith(parentPid);
+            expect(mockObject.addSequenceRelationship).toHaveBeenCalledWith(parentPid, 2);
+        });
+
+        it("handles exceptions gracefully", async () => {
+            const exception = new Error("kaboom");
+            jest.spyOn(mockData, "models", "get").mockImplementation(() => {
+                throw exception;
+            });
+            const errorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
+            const response = await request(app)
+                .put(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+            expect(errorSpy).toHaveBeenCalledWith(exception);
+            expect(response.error.text).toEqual("kaboom");
+        });
+    });
+
+    describe("delete /object/:pid/parent/:parentPid", () => {
+        let parentPid: string;
+        let mockData: FedoraDataCollection;
+        let deleteParentSpy;
+        let deleteSequenceSpy;
+        beforeEach(() => {
+            parentPid = "foo:100";
+            mockData = FedoraDataCollection.build(pid);
+            const collector = FedoraDataCollector.getInstance();
+            jest.spyOn(collector, "getHierarchy").mockResolvedValue(mockData);
+            const fedora = Fedora.getInstance();
+            deleteParentSpy = jest.spyOn(fedora, "deleteParentRelationship").mockImplementation(jest.fn());
+            deleteSequenceSpy = jest.spyOn(fedora, "deleteSequenceRelationship").mockImplementation(jest.fn());
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will reject an illegal parent/child pair", async () => {
+            const response = await request(app)
+                .delete(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("foo:100 is not an immediate parent of foo:123.");
+            expect(deleteParentSpy).not.toHaveBeenCalled();
+            expect(deleteSequenceSpy).not.toHaveBeenCalled();
+        });
+
+        it("deletes parent only when appropriate preconditions are met", async () => {
+            const parent = FedoraDataCollection.build(parentPid);
+            mockData.addParent(parent);
+            await request(app)
+                .delete(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.OK);
+            expect(deleteParentSpy).toHaveBeenCalledWith(pid, parentPid);
+            // No custom sort = no sequence to delete
+            expect(deleteSequenceSpy).not.toHaveBeenCalled();
+        });
+
+        it("deletes parent and sequence when appropriate preconditions are met", async () => {
+            const parent = FedoraDataCollection.build(parentPid);
+            parent.fedoraDetails.sortOn = ["custom"];
+            mockData.addParent(parent);
+            await request(app)
+                .delete(`/edit/object/${pid}/parent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("2")
+                .expect(StatusCodes.OK);
+            expect(deleteParentSpy).toHaveBeenCalledWith(pid, parentPid);
+            expect(deleteSequenceSpy).toHaveBeenCalledWith(pid, parentPid);
         });
     });
 
