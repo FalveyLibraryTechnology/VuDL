@@ -5,12 +5,10 @@ import ChildPosition from "./ChildPosition";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import AddBox from "@mui/icons-material/AddBox";
-import Refresh from "@mui/icons-material/Refresh";
 import IndeterminateCheckBox from "@mui/icons-material/IndeterminateCheckBox";
 import { extractFirstMetadataValue } from "../../../util/metadata";
-import EditParentsButton from "../EditParentsButton";
 import ObjectLoader from "../ObjectLoader";
-import ObjectStatus from "../ObjectStatus";
+import ObjectButtonBar from "../ObjectButtonBar";
 
 export interface ChildProps {
     pid: string;
@@ -21,7 +19,6 @@ export interface ChildProps {
 export const Child = ({ pid, parentPid = "", initialTitle }: ChildProps): React.ReactElement => {
     const {
         state: { objectDetailsStorage },
-        action: { clearPidFromChildListStorage },
     } = useEditorContext();
     const [expanded, setExpanded] = useState<boolean>(false);
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, pid);
@@ -34,9 +31,6 @@ export const Child = ({ pid, parentPid = "", initialTitle }: ChildProps): React.
         </span>
     );
     const childList = expanded ? <ChildList pid={pid} pageSize={10} /> : "";
-    const refresh = () => {
-        clearPidFromChildListStorage(pid);
-    };
     return (
         <>
             <Grid container>
@@ -46,10 +40,8 @@ export const Child = ({ pid, parentPid = "", initialTitle }: ChildProps): React.
                     <Link href={"/edit/object/" + pid}>{(title.length > 0 ? title : "-") + " [" + pid + "]"}</Link>
                 </Grid>
                 <Grid item xs={4}>
-                    {loaded ? <ObjectStatus pid={pid} /> : ""}
-                    {loaded ? <EditParentsButton pid={pid} /> : ""}
+                    {loaded ? <ObjectButtonBar pid={pid} /> : ""}
                     <ObjectLoader pid={pid} />
-                    <button onClick={refresh}><Refresh style={ { height: "14px" } } titleAccess="Refresh children" /></button>
                 </Grid>
             </Grid>
             {childList}

@@ -4,12 +4,11 @@ import { waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import { ChildProps, Child } from "./Child";
-import * as EditorContextModule from "../../../context/EditorContext";
 import { EditorContextProvider, ObjectDetails } from "../../../context/EditorContext";
 import { FetchContextProvider } from "../../../context/FetchContext";
 
 jest.mock("./ChildList", () => () => "ChildList");
-jest.mock("../ObjectStatus", () => () => "ObjectStatus");
+jest.mock("../ObjectButtonBar", () => () => "ObjectButtonBar");
 
 function getMountedChildComponent(props: ChildProps) {
     return mount(
@@ -79,23 +78,5 @@ describe("Child", () => {
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
-    });
-
-    it("can refresh its list of children", async () => {
-        const mockContext = {
-            state: { objectDetailsStorage: {} },
-            action: {
-                clearPidFromChildListStorage: jest.fn(),
-                loadObjectDetailsIntoStorage: jest.fn(),
-            },
-        };
-        jest.spyOn(EditorContextModule, "useEditorContext").mockReturnValue(mockContext);
-        const wrapper = getMountedChildComponent(props);
-        await waitFor(() => expect(mockContext.action.loadObjectDetailsIntoStorage).toHaveBeenCalledTimes(1));
-        const refreshIcon = wrapper.find("button").at(0);
-        expect(refreshIcon.text()).toEqual("Refresh children");
-        refreshIcon.simulate("click");
-        await waitFor(() => expect(mockContext.action.clearPidFromChildListStorage).toHaveBeenCalledTimes(1));
-        expect(mockContext.action.clearPidFromChildListStorage).toHaveBeenCalledWith(pid);
     });
 });
