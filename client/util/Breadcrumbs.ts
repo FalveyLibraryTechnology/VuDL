@@ -27,9 +27,6 @@ export function processBreadcrumbData(data: TreeNode): TreeData {
     const records: Record<string, TreeNode> = {};
     while (queue.length > 0) {
         const current = queue.shift();
-        if (!current) {
-            break;
-        }
         if (current.parents.length === 0) {
             topNodes.add(current.pid);
         }
@@ -61,9 +58,6 @@ export function generateBreadcrumbTrails(treeData: TreeData, pid: string) {
     const result: Array<Array<TreeNode>> = [];
     while (queue.length > 0) {
         const current = queue.shift();
-        if (!current) {
-            break;
-        }
         const record = treeData.records[current.pid] ?? {};
         const path = current.path;
         path.push(record);

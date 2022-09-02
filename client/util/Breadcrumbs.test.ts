@@ -1,6 +1,10 @@
 import { generateBreadcrumbTrails, processBreadcrumbData } from "./Breadcrumbs";
 
 describe("generateBreadcrumbTrails", () => {
+    it("handles empty data gracefully", () => {
+        expect(generateBreadcrumbTrails({}, "foo")).toEqual([[]]);
+    });
+
     it("can handle a child with multiple parents and a shared root", () => {
         const treeData = {
             topNodes: [ 'root' ],
