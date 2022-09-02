@@ -1,5 +1,6 @@
 import QueueManager from "./QueueManager";
 import { Queue } from "bullmq";
+import Config from "../models/Config";
 
 let workerArgs;
 function workerConstructor(...args) {
@@ -19,6 +20,7 @@ describe("QueueManager", () => {
     let queueManager;
     beforeEach(() => {
         queueManager = QueueManager.getInstance();
+        Config.setInstance(new Config({}));
     });
     afterEach(() => {
         jest.clearAllMocks();
