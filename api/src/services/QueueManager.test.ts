@@ -19,8 +19,8 @@ Queue.prototype.getJobs = jest.fn();
 describe("QueueManager", () => {
     let queueManager;
     beforeEach(() => {
-        queueManager = QueueManager.getInstance();
         Config.setInstance(new Config({}));
+        queueManager = QueueManager.getInstance();
     });
     afterEach(() => {
         jest.clearAllMocks();
@@ -69,7 +69,7 @@ describe("QueueManager", () => {
             expect(workerArgs[0]).toEqual("vudl");
             expect(workerArgs[1]).toEqual(callback);
             expect(workerArgs[2]).toEqual({
-                connection: { host: "localhost", port: "6379" },
+                connection: Config.getInstance().redisConnectionSettings,
                 lockDuration: 30000,
             });
         });
