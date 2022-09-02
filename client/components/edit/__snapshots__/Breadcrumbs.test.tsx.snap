@@ -2,970 +2,980 @@
 
 exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`] = `
 <FetchContextProvider>
-  <Breadcrumbs
-    pid="foo:1234"
-  >
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_0"
+  <EditorContextProvider>
+    <Breadcrumbs
+      pid="foo:1234"
     >
-      <li
-        key="breadcrumb_home_0"
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_0"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_0"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:0_0"
-      >
-        <Link
-          href="/edit/object/foo:0"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:0_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:0"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 0
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:1_0"
-      >
-        <Link
-          href="/edit/object/foo:1"
+            <a
+              href="/edit/object/foo:0"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 0
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:1_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:1"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 1
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:2_0"
-      >
-        <Link
-          href="/edit/object/foo:2"
+            <a
+              href="/edit/object/foo:1"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 1
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:2_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:2"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 2
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:3_0"
-      >
-        <Link
-          href="/edit/object/foo:3"
+            <a
+              href="/edit/object/foo:2"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 2
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:3_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:3"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 3
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:4_0"
-      >
-        <Link
-          href="/edit/object/foo:4"
+            <a
+              href="/edit/object/foo:3"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 3
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:4_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:4"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 4
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:5_0"
-      >
-        <Link
-          href="/edit/object/foo:5"
+            <a
+              href="/edit/object/foo:4"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 4
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:5_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:5"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 5
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:6_0"
-      >
-        <Link
-          href="/edit/object/foo:6"
+            <a
+              href="/edit/object/foo:5"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 5
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:6_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:6"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 6
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:7_0"
-      >
-        <Link
-          href="/edit/object/foo:7"
+            <a
+              href="/edit/object/foo:6"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 6
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:7_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:7"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 7
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:8_0"
-      >
-        <Link
-          href="/edit/object/foo:8"
+            <a
+              href="/edit/object/foo:7"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 7
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:8_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:8"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 8
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:9_0"
-      >
-        <Link
-          href="/edit/object/foo:9"
+            <a
+              href="/edit/object/foo:8"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 8
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:9_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:9"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 9
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:10_0"
-      >
-        <Link
-          href="/edit/object/foo:10"
+            <a
+              href="/edit/object/foo:9"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 9
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:10_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:10"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 10
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:11_0"
-      >
-        <Link
-          href="/edit/object/foo:11"
+            <a
+              href="/edit/object/foo:10"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 10
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:11_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:11"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 11
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:12_0"
-      >
-        <Link
-          href="/edit/object/foo:12"
+            <a
+              href="/edit/object/foo:11"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 11
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:12_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:12"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 12
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:13_0"
-      >
-        <Link
-          href="/edit/object/foo:13"
+            <a
+              href="/edit/object/foo:12"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 12
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:13_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:13"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 13
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:14_0"
-      >
-        <Link
-          href="/edit/object/foo:14"
+            <a
+              href="/edit/object/foo:13"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 13
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:14_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:14"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 14
-          </a>
-        </Link>
-      </li>
-    </ul>
-  </Breadcrumbs>
+            <a
+              href="/edit/object/foo:14"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 14
+            </a>
+          </Link>
+        </li>
+      </ul>
+    </Breadcrumbs>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;
 
 exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
 <FetchContextProvider>
-  <Breadcrumbs
-    pid="foo:1234"
-  >
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_0"
+  <EditorContextProvider>
+    <Breadcrumbs
+      pid="foo:1234"
     >
-      <li
-        key="breadcrumb_home_0"
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_0"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_0"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:0_0"
-      >
-        <Link
-          href="/edit/object/foo:0"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:0_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:0"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 0
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_1"
-    >
-      <li
-        key="breadcrumb_home_1"
+            <a
+              href="/edit/object/foo:0"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 0
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_1"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_1"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:1_1"
-      >
-        <Link
-          href="/edit/object/foo:1"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:1_1"
         >
-          <a
+          <Link
             href="/edit/object/foo:1"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 1
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_2"
-    >
-      <li
-        key="breadcrumb_home_2"
+            <a
+              href="/edit/object/foo:1"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 1
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_2"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_2"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:2_2"
-      >
-        <Link
-          href="/edit/object/foo:2"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:2_2"
         >
-          <a
+          <Link
             href="/edit/object/foo:2"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 2
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_3"
-    >
-      <li
-        key="breadcrumb_home_3"
+            <a
+              href="/edit/object/foo:2"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 2
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_3"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_3"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:3_3"
-      >
-        <Link
-          href="/edit/object/foo:3"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:3_3"
         >
-          <a
+          <Link
             href="/edit/object/foo:3"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 3
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_4"
-    >
-      <li
-        key="breadcrumb_home_4"
+            <a
+              href="/edit/object/foo:3"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 3
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_4"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_4"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:4_4"
-      >
-        <Link
-          href="/edit/object/foo:4"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:4_4"
         >
-          <a
+          <Link
             href="/edit/object/foo:4"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 4
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_5"
-    >
-      <li
-        key="breadcrumb_home_5"
+            <a
+              href="/edit/object/foo:4"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 4
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_5"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_5"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:5_5"
-      >
-        <Link
-          href="/edit/object/foo:5"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:5_5"
         >
-          <a
+          <Link
             href="/edit/object/foo:5"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 5
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_6"
-    >
-      <li
-        key="breadcrumb_home_6"
+            <a
+              href="/edit/object/foo:5"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 5
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_6"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_6"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:6_6"
-      >
-        <Link
-          href="/edit/object/foo:6"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:6_6"
         >
-          <a
+          <Link
             href="/edit/object/foo:6"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 6
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_7"
-    >
-      <li
-        key="breadcrumb_home_7"
+            <a
+              href="/edit/object/foo:6"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 6
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_7"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_7"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:7_7"
-      >
-        <Link
-          href="/edit/object/foo:7"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:7_7"
         >
-          <a
+          <Link
             href="/edit/object/foo:7"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 7
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_8"
-    >
-      <li
-        key="breadcrumb_home_8"
+            <a
+              href="/edit/object/foo:7"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 7
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_8"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_8"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:8_8"
-      >
-        <Link
-          href="/edit/object/foo:8"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:8_8"
         >
-          <a
+          <Link
             href="/edit/object/foo:8"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 8
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_9"
-    >
-      <li
-        key="breadcrumb_home_9"
+            <a
+              href="/edit/object/foo:8"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 8
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_9"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_9"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:9_9"
-      >
-        <Link
-          href="/edit/object/foo:9"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:9_9"
         >
-          <a
+          <Link
             href="/edit/object/foo:9"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 9
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_10"
-    >
-      <li
-        key="breadcrumb_home_10"
+            <a
+              href="/edit/object/foo:9"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 9
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_10"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_10"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:10_10"
-      >
-        <Link
-          href="/edit/object/foo:10"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:10_10"
         >
-          <a
+          <Link
             href="/edit/object/foo:10"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 10
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_11"
-    >
-      <li
-        key="breadcrumb_home_11"
+            <a
+              href="/edit/object/foo:10"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 10
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_11"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_11"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:11_11"
-      >
-        <Link
-          href="/edit/object/foo:11"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:11_11"
         >
-          <a
+          <Link
             href="/edit/object/foo:11"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 11
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_12"
-    >
-      <li
-        key="breadcrumb_home_12"
+            <a
+              href="/edit/object/foo:11"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 11
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_12"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_12"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:12_12"
-      >
-        <Link
-          href="/edit/object/foo:12"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:12_12"
         >
-          <a
+          <Link
             href="/edit/object/foo:12"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 12
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_13"
-    >
-      <li
-        key="breadcrumb_home_13"
+            <a
+              href="/edit/object/foo:12"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 12
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_13"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_13"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:13_13"
-      >
-        <Link
-          href="/edit/object/foo:13"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:13_13"
         >
-          <a
+          <Link
             href="/edit/object/foo:13"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 13
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_14"
-    >
-      <li
-        key="breadcrumb_home_14"
+            <a
+              href="/edit/object/foo:13"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 13
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_14"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_14"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:14_14"
-      >
-        <Link
-          href="/edit/object/foo:14"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:14_14"
         >
-          <a
+          <Link
             href="/edit/object/foo:14"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 14
-          </a>
-        </Link>
-      </li>
-    </ul>
-  </Breadcrumbs>
+            <a
+              href="/edit/object/foo:14"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 14
+            </a>
+          </Link>
+        </li>
+      </ul>
+    </Breadcrumbs>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;
 
 exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with common grandparent) 1`] = `
 <FetchContextProvider>
-  <Breadcrumbs
-    pid="foo:1234"
-  >
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_0"
+  <EditorContextProvider>
+    <Breadcrumbs
+      pid="foo:1234"
     >
-      <li
-        key="breadcrumb_home_0"
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_0"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_0"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:1232_0"
-      >
-        <Link
-          href="/edit/object/foo:1232"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:1232_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:1232"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Grandparent
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:1233_0"
-      >
-        <Link
-          href="/edit/object/foo:1233"
+            <a
+              href="/edit/object/foo:1232"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Grandparent
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:1233_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:1233"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 1
-          </a>
-        </Link>
-      </li>
-    </ul>
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_1"
-    >
-      <li
-        key="breadcrumb_home_1"
+            <a
+              href="/edit/object/foo:1233"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 1
+            </a>
+          </Link>
+        </li>
+      </ul>
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_1"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_1"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:1232_1"
-      >
-        <Link
-          href="/edit/object/foo:1232"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:1232_1"
         >
-          <a
+          <Link
             href="/edit/object/foo:1232"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Grandparent
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:1231_1"
-      >
-        <Link
-          href="/edit/object/foo:1231"
+            <a
+              href="/edit/object/foo:1232"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Grandparent
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:1231_1"
         >
-          <a
+          <Link
             href="/edit/object/foo:1231"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent 2
-          </a>
-        </Link>
-      </li>
-    </ul>
-  </Breadcrumbs>
+            <a
+              href="/edit/object/foo:1231"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent 2
+            </a>
+          </Link>
+        </li>
+      </ul>
+    </Breadcrumbs>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;
 
 exports[`Breadcrumb renders using ajax-loaded object data (no parents) 1`] = `
 <FetchContextProvider>
-  <Breadcrumbs
-    pid="foo:1234"
-  >
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_0"
+  <EditorContextProvider>
+    <Breadcrumbs
+      pid="foo:1234"
     >
-      <li
-        key="breadcrumb_home_0"
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_0"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_0"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-    </ul>
-  </Breadcrumbs>
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+      </ul>
+    </Breadcrumbs>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;
 
 exports[`Breadcrumb renders using ajax-loaded object data (simple case) 1`] = `
 <FetchContextProvider>
-  <Breadcrumbs
-    pid="foo:1234"
-  >
-    <ul
-      className="breadcrumb"
-      key="breadcrumbs_0"
+  <EditorContextProvider>
+    <Breadcrumbs
+      pid="foo:1234"
     >
-      <li
-        key="breadcrumb_home_0"
+      <ul
+        className="breadcrumb"
+        key="breadcrumbs_0"
       >
-        <Link
-          href="/edit"
+        <li
+          key="breadcrumb_home_0"
         >
-          <a
+          <Link
             href="/edit"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Edit Home
-          </a>
-        </Link>
-      </li>
-      <li
-        key="breadcrumb_foo:1233_0"
-      >
-        <Link
-          href="/edit/object/foo:1233"
+            <a
+              href="/edit"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Edit Home
+            </a>
+          </Link>
+        </li>
+        <li
+          key="breadcrumb_foo:1233_0"
         >
-          <a
+          <Link
             href="/edit/object/foo:1233"
-            onClick={[Function]}
-            onMouseEnter={[Function]}
           >
-            Fake Parent
-          </a>
-        </Link>
-      </li>
-    </ul>
-  </Breadcrumbs>
+            <a
+              href="/edit/object/foo:1233"
+              onClick={[Function]}
+              onMouseEnter={[Function]}
+            >
+              Fake Parent
+            </a>
+          </Link>
+        </li>
+      </ul>
+    </Breadcrumbs>
+  </EditorContextProvider>
 </FetchContextProvider>
 `;

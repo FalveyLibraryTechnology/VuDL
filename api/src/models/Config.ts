@@ -157,6 +157,10 @@ class Config {
         return this.ini["articles_to_strip"] ?? [];
     }
 
+    get favoritePids(): Array<string> {
+        return this.ini["favorite_pids"] ?? [];
+    }
+
     get languageMap(): Record<string, string> {
         return this.ini["LanguageMap"] ?? {};
     }
@@ -226,15 +230,15 @@ class Config {
     }
 
     get agentDefaults(): Record<string, string> {
-        return this.ini["agent"]["defaults"] ?? {};
+        return this.ini?.["agent"]?.["defaults"] ?? {};
     }
 
     get agentRoles(): Array<string> {
-        return this.ini["agent"]["roles"] ?? [];
+        return this.ini?.["agent"]?.["roles"] ?? [];
     }
 
     get agentTypes(): Array<string> {
-        return this.ini["agent"]["types"] ?? [];
+        return this.ini?.["agent"]?.["types"] ?? [];
     }
 }
 

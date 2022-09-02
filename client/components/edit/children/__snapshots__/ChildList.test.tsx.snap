@@ -133,6 +133,34 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
 </FetchContextProvider>
 `;
 
+exports[`ChildList renders using SelectableChild when a callback is provided 1`] = `
+<FetchContextProvider>
+  <EditorContextProvider>
+    <ChildList
+      pageSize={10}
+      pid=""
+      selectCallback={[MockFunction]}
+    >
+      <ul
+        className="childlist"
+      >
+        <li
+          key="_child_foo:124"
+        >
+          <Component
+            initialTitle="hello"
+            pid="foo:124"
+            selectCallback={[MockFunction]}
+          >
+            SelectableChild
+          </Component>
+        </li>
+      </ul>
+    </ChildList>
+  </EditorContextProvider>
+</FetchContextProvider>
+`;
+
 exports[`ChildList renders using ajax-loaded object data 1`] = `
 <FetchContextProvider>
   <EditorContextProvider>

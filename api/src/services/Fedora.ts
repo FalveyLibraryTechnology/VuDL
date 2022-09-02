@@ -318,6 +318,42 @@ export class Fedora {
     }
 
     /**
+     * This method removes an isMemberOf relationship from a pid/parent pid pair.
+     *
+     * @param pid       PID to update
+     * @param parentPid Parent PID to update
+     */
+    async deleteParentRelationship(pid: string, parentPid: string): Promise<void> {
+        const predicate = "info:fedora/fedora-system:def/relations-external#isMemberOf";
+        const targetPath = "/" + pid;
+        const insertClause = "";
+        const deleteClause = `<> <${predicate}> <info:fedora/${parentPid}> .`;
+        const whereClause = "";
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
+    /**
+     * This method removes a sequence relationship from a pid/parent pid pair.
+     *
+     * @param pid       PID to update
+     * @param parentPid Parent PID to update
+     */
+    async deleteSequenceRelationship(pid: string, parentPid: string): Promise<void> {
+        const predicate = "http://vudl.org/relationships#sequence";
+        const targetPath = "/" + pid;
+        const insertClause = "";
+        const deleteClause = `<> <${predicate}> ?pos .`;
+        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#"))`;
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
+    /**
      * This method changes the sequential position of a pid within a specified parent pid.
      * It is the responsibility of the caller to ensure that parentPid is a legal parent of pid.
      * This will NOT insert a new position; it only updates existing values.
