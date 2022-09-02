@@ -7,7 +7,7 @@ export interface TreeNode {
 export interface TreeData {
     topNodes: Array<string>;
     records: Record<string, TreeNode>;
-    childLookups: Record<string, Array<string>>;
+    childLookups: Record<string, Set<string>>;
 }
 
 interface BreadcrumbTrail {
@@ -23,7 +23,7 @@ interface BreadcrumbTrail {
 export function processBreadcrumbData(data: TreeNode): TreeData {
     const queue: Array<TreeNode> = [data];
     const topNodes: Set<string> = new Set(); // use set to avoid duplicates
-    const childLookups: Record<string, Array<string>> = {};
+    const childLookups: Record<string, Set<string>> = {};
     const records: Record<string, TreeNode> = {};
     while (queue.length > 0) {
         const current = queue.shift();
@@ -37,9 +37,9 @@ export function processBreadcrumbData(data: TreeNode): TreeData {
         current.parents.forEach((parent) => {
             queue.push(parent);
             if (typeof childLookups[parent.pid] === "undefined") {
-                childLookups[parent.pid] = [current.pid];
+                childLookups[parent.pid] = new Set([current.pid]);
             } else {
-                childLookups[parent.pid].push(current.pid);
+                childLookups[parent.pid].add(current.pid);
             }
         });
     }
