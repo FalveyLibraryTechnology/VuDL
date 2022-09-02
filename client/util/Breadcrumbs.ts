@@ -8,10 +8,11 @@ export interface TreeData {
     topNodes: Array<string>;
     records: Record<string, TreeNode>;
     childLookups: Record<string, Set<string>>;
+    paths: Array<Array<TreeNode>>;
 }
 
-interface BreadcrumbTrail {
-    pid: string;
+interface QueueTreeNode {
+    current: TreeNode;
     path: Array<TreeNode>;
 }
 
@@ -21,18 +22,20 @@ interface BreadcrumbTrail {
  * render breadcrumbs from left to right and to find all relevant trails.
  */
 export function processBreadcrumbData(data: TreeNode): TreeData {
-    const queue: Array<TreeNode> = [data];
+    const queue: Array<QueueTreeNode> = [{ current: data, path: [] }];
     const topNodes: Set<string> = new Set(); // use set to avoid duplicates
     const childLookups: Record<string, Set<string>> = {};
     const records: Record<string, TreeNode> = {};
+    const paths: Array<Array<TreeNode>> = [];
     while (queue.length > 0) {
-        const current = queue.shift();
+        const { current, path } = queue.shift() as QueueTreeNode;
         if (current.parents.length === 0) {
+            paths.push(path);
             topNodes.add(current.pid);
         }
         records[current.pid] = { pid: current.pid, title: current.title, parents: [] };
         current.parents.forEach((parent) => {
-            queue.push(parent);
+            queue.push({ current: parent, path: [parent, ...path] });
             if (typeof childLookups[parent.pid] === "undefined") {
                 childLookups[parent.pid] = new Set([current.pid]);
             } else {
@@ -44,38 +47,6 @@ export function processBreadcrumbData(data: TreeNode): TreeData {
         topNodes: Array.from(topNodes),
         records,
         childLookups,
+        paths,
     };
 }
-
-export function generateBreadcrumbTrails(treeData: TreeData, pid: string) {
-    // BFS from top (root id) to target pid
-    const queue: Array<BreadcrumbTrail> = (treeData.topNodes ?? []).map((rootId) => {
-        return {
-            pid: rootId,
-            path: [],
-        };
-    });
-    const result: Array<Array<TreeNode>> = [];
-    while (queue.length > 0) {
-        const current = queue.shift() as BreadcrumbTrail;
-        const record = treeData.records[current.pid] ?? { parents: [], pid: current.pid, title: "-" };
-        const path = current.path;
-        path.push(record);
-        (treeData.childLookups[current.pid] ?? []).forEach((childPid: string) => {
-            // At target
-            if (childPid === pid) {
-                result.push(path);
-            } else {
-                // Add to queue for more
-                queue.push({
-                    pid: childPid,
-                    path: [...path], // clone array to avoid multiple references to the same array
-                });
-            }
-        });
-    }
-    // Even if no trails were found, at least return a single empty array so that we can
-    // display the "Edit Home" link when we process the data.
-    return result.length == 0 ? [[]] : result;
-}
-
