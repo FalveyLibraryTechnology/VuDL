@@ -84,6 +84,11 @@ articles_to_strip[] = "a "
 articles_to_strip[] = "an "
 articles_to_strip[] = "the "
 
+# "Favorite PIDs" that should be displayed in the "edit parents" dialog box.
+# Useful for "trash can" and "in progress" holding area.
+#favorite_pids[] = "vudl:1234"
+#favorite_pids[] = "vudl:1235"
+
 # Authentication settings
 [Authentication]
 # Type of authentication to use (local = local database; saml = SAML)

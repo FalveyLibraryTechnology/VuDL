@@ -1,0 +1,123 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PidPicker renders correctly with a selected PID 1`] = `
+<Fragment>
+  Selected pid: 
+  selected:123
+  . 
+  <button
+    onClick={[Function]}
+  >
+    Clear
+  </button>
+</Fragment>
+`;
+
+exports[`PidPicker renders correctly with favorite PIDs 1`] = `
+<Fragment>
+  <ForwardRef(Accordion)>
+    <ForwardRef(AccordionSummary)
+      expandIcon={<Memo />}
+    >
+      Enter PID manually
+    </ForwardRef(AccordionSummary)>
+    <ForwardRef(AccordionDetails)>
+      <label>
+        Enter PID:
+         
+        <input
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+      </label>
+      <button
+        onClick={[Function]}
+      >
+        Set
+      </button>
+    </ForwardRef(AccordionDetails)>
+  </ForwardRef(Accordion)>
+  <ForwardRef(Accordion)>
+    <ForwardRef(AccordionSummary)
+      expandIcon={<Memo />}
+    >
+      Choose PID from Tree
+    </ForwardRef(AccordionSummary)>
+    <ForwardRef(AccordionDetails)>
+      <Component
+        selectCallback={[MockFunction]}
+      />
+    </ForwardRef(AccordionDetails)>
+  </ForwardRef(Accordion)>
+  <ForwardRef(Accordion)>
+    <ForwardRef(AccordionSummary)
+      expandIcon={<Memo />}
+    >
+      Choose PID from Favorites
+    </ForwardRef(AccordionSummary)>
+    <ForwardRef(AccordionDetails)>
+      <ul>
+        <li
+          key="favorite_foo:123"
+        >
+          <button
+            onClick={[Function]}
+          >
+            first test
+          </button>
+        </li>
+        <li
+          key="favorite_foo:124"
+        >
+          <button
+            onClick={[Function]}
+          >
+            second test
+          </button>
+        </li>
+      </ul>
+    </ForwardRef(AccordionDetails)>
+  </ForwardRef(Accordion)>
+</Fragment>
+`;
+
+exports[`PidPicker renders correctly without favorite PIDs 1`] = `
+<Fragment>
+  <ForwardRef(Accordion)>
+    <ForwardRef(AccordionSummary)
+      expandIcon={<Memo />}
+    >
+      Enter PID manually
+    </ForwardRef(AccordionSummary)>
+    <ForwardRef(AccordionDetails)>
+      <label>
+        Enter PID:
+         
+        <input
+          onChange={[Function]}
+          type="text"
+          value=""
+        />
+      </label>
+      <button
+        onClick={[Function]}
+      >
+        Set
+      </button>
+    </ForwardRef(AccordionDetails)>
+  </ForwardRef(Accordion)>
+  <ForwardRef(Accordion)>
+    <ForwardRef(AccordionSummary)
+      expandIcon={<Memo />}
+    >
+      Choose PID from Tree
+    </ForwardRef(AccordionSummary)>
+    <ForwardRef(AccordionDetails)>
+      <Component
+        selectCallback={[MockFunction]}
+      />
+    </ForwardRef(AccordionDetails)>
+  </ForwardRef(Accordion)>
+</Fragment>
+`;

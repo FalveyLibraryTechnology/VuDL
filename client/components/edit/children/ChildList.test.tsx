@@ -9,6 +9,7 @@ import { FetchContextProvider } from "../../../context/FetchContext";
 
 jest.mock("@mui/material/Pagination", () => () => "Pagination");
 jest.mock("./Child", () => () => "Child");
+jest.mock("./SelectableChild", () => () => "SelectableChild");
 
 function getMountedChildListComponent(props: ChildListProps) {
     return mount(
@@ -41,6 +42,15 @@ describe("ChildList", () => {
     });
 
     it("renders using ajax-loaded root data", async () => {
+        const wrapper = getMountedChildListComponent(props);
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
+        wrapper.update();
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders using SelectableChild when a callback is provided", async () => {
+        props.selectCallback = jest.fn();
         const wrapper = getMountedChildListComponent(props);
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");

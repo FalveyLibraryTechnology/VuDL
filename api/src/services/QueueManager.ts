@@ -50,15 +50,15 @@ class QueueManager {
         return await this.addToQueue("ingest", { dir });
     }
 
-    public async performIndexOperation(pid: string, action: string): Promise<void> {
+    public async performIndexOperation(pid: string, action: string, force = false): Promise<void> {
         // Fedora often fires many change events about the same object in rapid succession;
         // we don't want to index more times than we have to, so let's not re-queue anything
         // that is already awaiting indexing.
         const q = this.getQueue();
         const jobs = await q.getJobs("wait");
         const queueJob = { pid, action };
-        if (this.isAlreadyAwaitingAction(jobs, "index", queueJob)) {
-            console.log("Skipping queue; " + pid + " is already awaiting " + action + ".");
+        if (!force && this.isAlreadyAwaitingAction(jobs, "index", queueJob)) {
+            console.log(`Skipping queue; ${pid} is already awaiting ${action}.`);
         } else {
             await q.add("index", { pid, action });
         }
@@ -72,12 +72,12 @@ class QueueManager {
         return matchingJob ? matchingJob?.data?.action === action : false;
     }
 
-    public async queueMetadataOperation(pid: string, action: string): Promise<void> {
+    public async queueMetadataOperation(pid: string, action: string, force = false): Promise<void> {
         const q = this.getQueue();
         const jobs = await q.getJobs("wait");
         const queueJob = { pid, action };
-        if (this.isAlreadyAwaitingAction(jobs, "metadata", queueJob)) {
-            console.log("Skipping queue; " + pid + " is already awaiting " + action + ".");
+        if (!force && this.isAlreadyAwaitingAction(jobs, "metadata", queueJob)) {
+            console.log(`Skipping queue; ${pid} is already awaiting ${action}.`);
         } else {
             await q.add("metadata", queueJob);
         }
