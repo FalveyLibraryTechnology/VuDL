@@ -10,7 +10,7 @@ jest.mock("../../context/EditorContext", () => ({
         return mockUseEditorContext();
     },
 }));
-jest.mock("./ObjectStatus", () => () => "ObjectStatus");
+jest.mock("./ObjectButtonBar", () => () => "ObjectButtonBar");
 
 describe("ObjectSummary", () => {
     let editorValues;

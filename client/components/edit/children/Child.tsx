@@ -7,9 +7,8 @@ import Link from "next/link";
 import AddBox from "@mui/icons-material/AddBox";
 import IndeterminateCheckBox from "@mui/icons-material/IndeterminateCheckBox";
 import { extractFirstMetadataValue } from "../../../util/metadata";
-import EditParentsButton from "../EditParentsButton";
 import ObjectLoader from "../ObjectLoader";
-import ObjectStatus from "../ObjectStatus";
+import ObjectButtonBar from "../ObjectButtonBar";
 
 export interface ChildProps {
     pid: string;
@@ -41,8 +40,7 @@ export const Child = ({ pid, parentPid = "", initialTitle }: ChildProps): React.
                     <Link href={"/edit/object/" + pid}>{(title.length > 0 ? title : "-") + " [" + pid + "]"}</Link>
                 </Grid>
                 <Grid item xs={4}>
-                    {loaded ? <ObjectStatus pid={pid} /> : ""}
-                    {loaded ? <EditParentsButton pid={pid} /> : ""}
+                    {loaded ? <ObjectButtonBar pid={pid} /> : ""}
                     <ObjectLoader pid={pid} />
                 </Grid>
             </Grid>

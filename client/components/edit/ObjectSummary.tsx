@@ -2,7 +2,7 @@ import styles from "./ObjectSummary.module.css";
 import React, { useEffect } from "react";
 import HtmlReactParser from "html-react-parser";
 import { useEditorContext } from "../../context/EditorContext";
-import ObjectStatus from "./ObjectStatus";
+import ObjectButtonBar from "./ObjectButtonBar";
 
 const ObjectSummary = (): React.ReactElement => {
     const {
@@ -24,7 +24,7 @@ const ObjectSummary = (): React.ReactElement => {
         <div className={styles.infobox}>
             <h2>{title}</h2>
             <div>{HtmlReactParser(description)}</div>
-            {loaded ? <ObjectStatus pid={currentPid} /> : ""}
+            {loaded ? <ObjectButtonBar pid={currentPid} /> : ""}
         </div>
     );
 };

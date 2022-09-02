@@ -8,7 +8,7 @@ import { EditorContextProvider, ObjectDetails } from "../../../context/EditorCon
 import { FetchContextProvider } from "../../../context/FetchContext";
 
 jest.mock("./ChildList", () => () => "ChildList");
-jest.mock("../ObjectStatus", () => () => "ObjectStatus");
+jest.mock("../ObjectButtonBar", () => () => "ObjectButtonBar");
 
 function getMountedChildComponent(props: ChildProps) {
     return mount(
@@ -21,19 +21,21 @@ function getMountedChildComponent(props: ChildProps) {
 }
 
 describe("Child", () => {
+    let pid: string;
     let props: ChildProps;
     let lastRequestUrl: string;
     let response: ObjectDetails;
 
     beforeEach(() => {
-        props = { pid: "foo:123", initialTitle: "initial title" };
+        pid = "foo:123";
+        props = { pid, initialTitle: "initial title" };
         response = {
             fedoraDatastreams: [],
             metadata: {
                 "dc:title": ["ajax-loaded title"],
             },
             models: [],
-            pid: "foo:123",
+            pid,
             sortOn: "title",
         };
         global.fetch = jest.fn((url) => {
@@ -69,7 +71,7 @@ describe("Child", () => {
     it("can be expanded to show children", async () => {
         const wrapper = getMountedChildComponent(props);
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        const expandIcon = wrapper.find("svg title");
+        const expandIcon = wrapper.find("svg title").at(0);
         expect(expandIcon.text()).toEqual("Expand Tree");
         expandIcon.simulate("click");
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
