@@ -16,6 +16,10 @@ class QueueManager {
         return QueueManager.instance;
     }
 
+    public static setInstance(manager: QueueManager): void {
+        QueueManager.instance = manager;
+    }
+
     protected get queueBaseOptions(): Record<string, Record<string, string>> {
         return {
             connection: this.config.redisConnectionSettings,
