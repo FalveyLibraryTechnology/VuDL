@@ -1,15 +1,20 @@
 import Arena = require("bull-arena");
 import { Queue, FlowProducer } from "bullmq";
+import Config from "../models/Config";
+
+const config = Config.getInstance();
+const connection = config.redisConnectionSettings;
 
 const queue = Arena({
     BullMQ: Queue,
     FlowBullMQ: FlowProducer,
     queues: [
         {
-            // TODO: make this configurable through vudl.ini
             type: "bullmq",
-            name: "vudl",
-            hostId: "localhost",
+            name: config.redisDefaultQueueName,
+            hostId: connection.host ?? "localhost",
+            port: connection.port ?? 6379,
+            password: connection.password ?? null,
         },
     ],
 });

@@ -1,9 +1,15 @@
 import QueueManager from "./QueueManager";
 import { Queue } from "bullmq";
+import Config from "../models/Config";
 
+let workerArgs;
+function workerConstructor(...args) {
+    workerArgs = args;
+}
 jest.mock("bullmq", () => {
     return {
         Queue: jest.fn(),
+        Worker: jest.fn().mockImplementation(workerConstructor),
     };
 });
 Queue.prototype.add = jest.fn();
@@ -13,6 +19,7 @@ Queue.prototype.getJobs = jest.fn();
 describe("QueueManager", () => {
     let queueManager;
     beforeEach(() => {
+        Config.setInstance(new Config({}));
         queueManager = QueueManager.getInstance();
     });
     afterEach(() => {
@@ -52,6 +59,19 @@ describe("QueueManager", () => {
         it("queues a job appropriately", async () => {
             await queueManager.generatePdf("foo");
             expect(addSpy).toHaveBeenCalledWith("generatepdf", { pid: "foo" });
+        });
+    });
+
+    describe("getWorker", () => {
+        it("will return a correctly configured worker", () => {
+            const callback = jest.fn();
+            queueManager.getWorker(callback);
+            expect(workerArgs[0]).toEqual("vudl");
+            expect(workerArgs[1]).toEqual(callback);
+            expect(workerArgs[2]).toEqual({
+                connection: Config.getInstance().redisConnectionSettings,
+                lockDuration: 30000,
+            });
         });
     });
 

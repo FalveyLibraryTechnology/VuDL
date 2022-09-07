@@ -15,7 +15,8 @@ describe("Job", () => {
     let job: Job;
 
     beforeEach(() => {
-        job = new Job("test1", new Config({}), new QueueManager());
+        const config = new Config({});
+        job = new Job("test1", config, new QueueManager(config));
     });
 
     it("should return the name", () => {

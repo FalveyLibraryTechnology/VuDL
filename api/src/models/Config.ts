@@ -240,6 +240,18 @@ class Config {
     get agentTypes(): Array<string> {
         return this.ini?.["agent"]?.["types"] ?? [];
     }
+
+    get redisConnectionSettings(): Record<string, string> {
+        return this.ini?.["queue"]?.["connection"] ?? {};
+    }
+
+    get redisDefaultQueueName(): string {
+        return this.ini?.["queue"]?.["defaultQueueName"] ?? "vudl";
+    }
+
+    get redisLockDuration(): number {
+        return parseInt(this.ini?.["queue"]?.["lockDuration"] ?? "30000");
+    }
 }
 
 export default Config;
