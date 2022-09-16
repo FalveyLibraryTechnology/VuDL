@@ -83,6 +83,26 @@ const useDatastreamOperation = () => {
         }
     };
 
+    const uploadDublinCore = async (metadata) => {
+        try {
+            throw new Error("TODO: not implemented yet!");
+            /*
+            setSnackbarState({
+                open: true,
+                message: text,
+                severity: "success",
+            });
+            */
+        } catch (err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
+        }
+        toggleDatastreamModal();
+    };
+
     const uploadLicense = async (licenseKey) => {
         try {
             const text = await fetchText(objectDatastreamLicenseUrl(currentPid, activeDatastream), {
@@ -236,6 +256,7 @@ const useDatastreamOperation = () => {
     };
     return {
         uploadAgents,
+        uploadDublinCore,
         uploadFile,
         uploadLicense,
         deleteDatastream,
