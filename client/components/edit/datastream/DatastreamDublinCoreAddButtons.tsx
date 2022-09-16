@@ -16,11 +16,9 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
     const buttons = [];
     for (const key in dublinCoreFieldCatalog) {
         const current = dublinCoreFieldCatalog[key];
-        buttons.push(
-            <button onClick={() => addField(key)}>{current.label}</button>
-        )
+        buttons.push(<button onClick={() => addField(key)}>{current.label}</button>);
     }
     return <>{buttons}</>;
-}
+};
 
 export default DatastreamDublinCoreAddButtons;

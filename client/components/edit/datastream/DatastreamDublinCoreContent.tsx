@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -10,7 +10,7 @@ import DatastreamDublinCoreAddButtons from "./DatastreamDublinCoreAddButtons";
 
 const DatastreamDublinCoreContent = (): React.ReactElement => {
     const {
-        state: { currentPid, objectDetailsStorage },
+        state: { currentDublinCore, currentPid, objectDetailsStorage },
         action: { setCurrentDublinCore, toggleDatastreamModal },
     } = useEditorContext();
     const { uploadDublinCore } = useDatastreamOperation();
@@ -25,8 +25,12 @@ const DatastreamDublinCoreContent = (): React.ReactElement => {
         <>
             <DialogContent>
                 <Grid container spacing={1}>
-                    <Grid item xs={8}><DatastreamDublinCoreValues /></Grid>
-                    <Grid item xs={4}><DatastreamDublinCoreAddButtons /></Grid>
+                    <Grid item xs={8}>
+                        <DatastreamDublinCoreValues />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <DatastreamDublinCoreAddButtons />
+                    </Grid>
                 </Grid>
             </DialogContent>
 
@@ -34,7 +38,7 @@ const DatastreamDublinCoreContent = (): React.ReactElement => {
                 <Button
                     className="uploadDublinCoreButton"
                     onClick={async () => {
-                        await uploadDublinCore(metadata);
+                        await uploadDublinCore(currentDublinCore);
                     }}
                 >
                     Save

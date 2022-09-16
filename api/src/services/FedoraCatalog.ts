@@ -81,21 +81,21 @@ class FedoraCatalog {
     getDublinCoreFields(): Record<string, Record<string, string>> {
         // TODO: make configurable
         return {
-            "dc:title": { "label": "Title", "type": "text" },
-            "dc:creator": { "label": "Creator", "type": "text" },
-            "dc:subject": { "label": "Subject", "type": "text" },
-            "dc:description": { "label": "Description", "type": "html" },
-            "dc:publisher": { "label": "Publisher", "type": "text" },
-            "dc:contributor": { "label": "Contributor", "type": "text" },
-            "dc:date": { "label": "Date", "type": "text" },
-            "dc:type": { "label": "Type", "type": "text" },
-            "dc:format": { "label": "Format", "type": "dropdown" },
-            "dc:identifier": { "label": "Identifier", "type": "locked" },
-            "dc:source": { "label": "Source", "type": "text" },
-            "dc:language": { "label": "Language", "type": "dropdown" },
-            "dc:relation": { "label": "Relation", "type": "text" },
-            "dc:coverage": { "label": "Coverage", "type": "text" },
-            "dc:rights": { "label": "Rights", "type": "text" },
+            "dc:title": { label: "Title", type: "text" },
+            "dc:creator": { label: "Creator", type: "text" },
+            "dc:subject": { label: "Subject", type: "text" },
+            "dc:description": { label: "Description", type: "html" },
+            "dc:publisher": { label: "Publisher", type: "text" },
+            "dc:contributor": { label: "Contributor", type: "text" },
+            "dc:date": { label: "Date", type: "text" },
+            "dc:type": { label: "Type", type: "text" },
+            "dc:format": { label: "Format", type: "dropdown" },
+            "dc:identifier": { label: "Identifier", type: "locked" },
+            "dc:source": { label: "Source", type: "text" },
+            "dc:language": { label: "Language", type: "dropdown" },
+            "dc:relation": { label: "Relation", type: "text" },
+            "dc:coverage": { label: "Coverage", type: "text" },
+            "dc:rights": { label: "Rights", type: "text" },
         };
     }
 
