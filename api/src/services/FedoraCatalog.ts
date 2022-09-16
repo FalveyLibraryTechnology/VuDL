@@ -23,6 +23,7 @@ export interface License {
 }
 export interface CompleteCatalog {
     agents: Agents;
+    dublinCoreFields: Record<string, Record<string, string>>;
     licenses: Record<string, License>;
     models: Record<string, FedoraModel>;
     favoritePids: Record<string, string>;
@@ -54,6 +55,7 @@ class FedoraCatalog {
                 roles: agentRoles,
                 types: agentTypes,
             },
+            dublinCoreFields: this.getDublinCoreFields(),
             favoritePids: await this.getFavoritePids(),
             models,
             licenses,
@@ -74,6 +76,27 @@ class FedoraCatalog {
         return Object.values(this.config.models).reduce((acc: Record<string, FedoraDatastream>, model: FedoraModel) => {
             return { ...acc, ...model.datastreams };
         }, {});
+    }
+
+    getDublinCoreFields(): Record<string, Record<string, string>> {
+        // TODO: make configurable
+        return {
+            "dc:title": { "label": "Title", "type": "text" },
+            "dc:creator": { "label": "Creator", "type": "text" },
+            "dc:subject": { "label": "Subject", "type": "text" },
+            "dc:description": { "label": "Description", "type": "html" },
+            "dc:publisher": { "label": "Publisher", "type": "text" },
+            "dc:contributor": { "label": "Contributor", "type": "text" },
+            "dc:date": { "label": "Date", "type": "text" },
+            "dc:type": { "label": "Type", "type": "text" },
+            "dc:format": { "label": "Format", "type": "dropdown" },
+            "dc:identifier": { "label": "Identifier", "type": "locked" },
+            "dc:source": { "label": "Source", "type": "text" },
+            "dc:language": { "label": "Language", "type": "dropdown" },
+            "dc:relation": { "label": "Relation", "type": "text" },
+            "dc:coverage": { "label": "Coverage", "type": "text" },
+            "dc:rights": { "label": "Rights", "type": "text" },
+        };
     }
 
     async getFavoritePids(): Promise<Record<string, string>> {

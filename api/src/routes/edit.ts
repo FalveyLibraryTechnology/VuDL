@@ -35,6 +35,10 @@ edit.get("/catalog/datastreammimetypes", requireToken, function (req, res) {
     res.json(FedoraCatalog.getInstance().getDatastreamMimetypes());
 });
 
+edit.get("/catalog/dublinCoreFields", requireToken, function (req, res) {
+    res.json(FedoraCatalog.getInstance().getDublinCoreFields());
+});
+
 edit.get("/catalog/favoritePids", requireToken, async function (req, res) {
     res.json(await FedoraCatalog.getInstance().getFavoritePids());
 });
