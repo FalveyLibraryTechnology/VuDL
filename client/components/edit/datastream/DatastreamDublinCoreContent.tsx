@@ -17,7 +17,8 @@ const DatastreamDublinCoreContent = (): React.ReactElement => {
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, currentPid);
     useEffect(() => {
         if (loaded) {
-            setCurrentDublinCore(objectDetailsStorage[currentPid].metadata ?? {});
+            // Make a deep clone of the metadata; we don't want to modify anything by reference!
+            setCurrentDublinCore(JSON.parse(JSON.stringify(objectDetailsStorage[currentPid].metadata ?? {})));
         }
     }, [loaded]);
 
