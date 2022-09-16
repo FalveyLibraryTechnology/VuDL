@@ -32,6 +32,24 @@ describe("edit", () => {
         datastream = "test1";
     });
 
+    const expectedDcFieldsCatalog = {
+        "dc:title": { label: "Title", type: "text" },
+        "dc:creator": { label: "Creator", type: "text" },
+        "dc:subject": { label: "Subject", type: "text" },
+        "dc:description": { label: "Description", type: "html" },
+        "dc:publisher": { label: "Publisher", type: "text" },
+        "dc:contributor": { label: "Contributor", type: "text" },
+        "dc:date": { label: "Date", type: "text" },
+        "dc:type": { label: "Type", type: "text" },
+        "dc:format": { label: "Format", type: "dropdown" },
+        "dc:identifier": { label: "Identifier", type: "locked" },
+        "dc:source": { label: "Source", type: "text" },
+        "dc:language": { label: "Language", type: "dropdown" },
+        "dc:relation": { label: "Relation", type: "text" },
+        "dc:coverage": { label: "Coverage", type: "text" },
+        "dc:rights": { label: "Rights", type: "text" },
+    };
+
     describe("get /catalog", () => {
         beforeEach(() => {
             jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
@@ -42,6 +60,7 @@ describe("edit", () => {
         it("returns the complete catalog", async () => {
             const fakeCatalog: CompleteCatalog = {
                 agents: { defaults: {}, roles: [], types: [] },
+                dublinCoreFields: expectedDcFieldsCatalog,
                 licenses: {},
                 models: {},
                 favoritePids: {},

@@ -4,12 +4,30 @@ import FedoraCatalog from "./FedoraCatalog";
 
 describe("FedoraCatalog", () => {
     describe("getCompleteCatalog", () => {
+        const expectedDcFieldsCatalog = {
+            "dc:title": { label: "Title", type: "text" },
+            "dc:creator": { label: "Creator", type: "text" },
+            "dc:subject": { label: "Subject", type: "text" },
+            "dc:description": { label: "Description", type: "html" },
+            "dc:publisher": { label: "Publisher", type: "text" },
+            "dc:contributor": { label: "Contributor", type: "text" },
+            "dc:date": { label: "Date", type: "text" },
+            "dc:type": { label: "Type", type: "text" },
+            "dc:format": { label: "Format", type: "dropdown" },
+            "dc:identifier": { label: "Identifier", type: "locked" },
+            "dc:source": { label: "Source", type: "text" },
+            "dc:language": { label: "Language", type: "dropdown" },
+            "dc:relation": { label: "Relation", type: "text" },
+            "dc:coverage": { label: "Coverage", type: "text" },
+            "dc:rights": { label: "Rights", type: "text" },
+        };
         let config;
         let solr;
         let solrResponse;
         let core;
         let query;
         let solrParams;
+
         beforeEach(() => {
             config = new Config({ favorite_pids: ["foo:123", "foo:124"] });
             solr = {
@@ -40,6 +58,7 @@ describe("FedoraCatalog", () => {
                     roles: ["A", "B"],
                     types: ["C", "D"],
                 },
+                dublinCoreFields: expectedDcFieldsCatalog,
                 favoritePids: {},
                 licenses: {},
                 models: {},
@@ -54,6 +73,7 @@ describe("FedoraCatalog", () => {
                     roles: [],
                     types: [],
                 },
+                dublinCoreFields: expectedDcFieldsCatalog,
                 favoritePids: {
                     "foo:123": "foo:123",
                     "foo:124": "foo:124",
@@ -75,6 +95,7 @@ describe("FedoraCatalog", () => {
                     roles: [],
                     types: [],
                 },
+                dublinCoreFields: expectedDcFieldsCatalog,
                 favoritePids: {
                     "foo:123": "- [foo:123]", // test missing title in Solr response
                     "foo:124": "second title [foo:124]",
