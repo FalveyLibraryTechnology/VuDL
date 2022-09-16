@@ -16,13 +16,23 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
     const buttons = [];
     for (const key in dublinCoreFieldCatalog) {
         const current = dublinCoreFieldCatalog[key];
-        buttons.push(
-            <button key={"dcadd_" + key.replace(":", "_")} onClick={() => addField(key)}>
-                {current.label}
-            </button>
-        );
+        // Don't add fields we're not allowed to edit:
+        if (current.type !== "locked") {
+            buttons.push(
+                <button key={"dcadd_" + key.replace(":", "_")} onClick={() => addField(key)}>
+                    {current.label}
+                </button>
+            );
+        }
     }
-    return <>{buttons}</>;
+    return (
+        <>
+            <h3>Add Field:</h3>
+            {buttons}
+            <h3>Other Tools:</h3>
+            <button onClick={() => alert("TODO")}>Clone Metadata</button>
+        </>
+    );
 };
 
 export default DatastreamDublinCoreAddButtons;

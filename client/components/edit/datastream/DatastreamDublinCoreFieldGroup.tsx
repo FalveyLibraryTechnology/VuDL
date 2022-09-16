@@ -16,6 +16,12 @@ const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.Rea
             setCurrentDublinCore(currentDublinCore);
         };
         switch (catalogData.type) {
+            case "locked":
+                return (
+                    <FormControl fullWidth={true} key={key}>
+                        <TextField type="text" value={value} disabled={true} />
+                    </FormControl>
+                );
             case "text":
                 return (
                     <FormControl fullWidth={true} key={key}>
