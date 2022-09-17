@@ -85,7 +85,7 @@ const useDatastreamOperation = () => {
 
     const uploadDublinCore = async (metadata) => {
         try {
-            throw new Error("TODO: not implemented yet!");
+            throw new Error("TODO: not implemented yet! " + JSON.stringify(metadata));
             /*
             setSnackbarState({
                 open: true,
