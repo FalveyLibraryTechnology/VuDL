@@ -1,6 +1,7 @@
 import React from "react";
 import { useEditorContext } from "../../../context/EditorContext";
 import FormControl from "@mui/material/FormControl";
+import BlurSavingTextField from "../../shared/BlurSavingTextField";
 import TextField from "@mui/material/TextField";
 
 const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.ReactElement => {
@@ -11,8 +12,8 @@ const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.Rea
     const catalogData = dublinCoreFieldCatalog[field];
     const values = currentDublinCore[field].map((value: string, i: number) => {
         const key = `${field}_value_${i}`;
-        const handleChangeEvent = (event: React.ChangeEvent) => {
-            currentDublinCore[field][i] = event.target.value;
+        const saveChanges = (value: string) => {
+            currentDublinCore[field][i] = value;
             setCurrentDublinCore(currentDublinCore);
         };
         switch (catalogData.type) {
@@ -25,7 +26,7 @@ const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.Rea
             case "text":
                 return (
                     <FormControl fullWidth={true} key={key}>
-                        <TextField type="text" value={value} onChange={handleChangeEvent} />
+                        <BlurSavingTextField value={value} setValue={saveChanges} />
                     </FormControl>
                 );
             default:
