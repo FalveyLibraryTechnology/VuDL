@@ -189,6 +189,10 @@ label input[type="radio"] {
     text-align: center;
 }
 
+.preview img {
+  border: 1px solid black;
+}
+
 .MuiTreeItem-root.Mui-selected,
 .MuiTreeItem-root.Mui-selected:hover {
     color: #fff;
