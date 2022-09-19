@@ -1,8 +1,6 @@
 import React from "react";
 import { useEditorContext } from "../../../context/EditorContext";
-import FormControl from "@mui/material/FormControl";
-import BlurSavingTextField from "../../shared/BlurSavingTextField";
-import TextField from "@mui/material/TextField";
+import DatastreamDublinCoreEditField from "./DatastreamDublinCoreEditField";
 
 const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.ReactElement => {
     const {
@@ -16,22 +14,11 @@ const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.Rea
             currentDublinCore[field][i] = value;
             setCurrentDublinCore(currentDublinCore);
         };
-        switch (catalogData.type) {
-            case "locked":
-                return (
-                    <FormControl fullWidth={true} key={key}>
-                        <TextField type="text" value={value} disabled={true} />
-                    </FormControl>
-                );
-            case "text":
-                return (
-                    <FormControl fullWidth={true} key={key}>
-                        <BlurSavingTextField value={value} setValue={saveChanges} />
-                    </FormControl>
-                );
-            default:
-                return <p key={key}>{`Unsupported type (${catalogData.type}): ${value}`}</p>;
-        }
+        return (
+            <div key={key}>
+                <DatastreamDublinCoreEditField value={value} setValue={saveChanges} fieldType={catalogData.type} />
+            </div>
+        );
     });
 
     return (
