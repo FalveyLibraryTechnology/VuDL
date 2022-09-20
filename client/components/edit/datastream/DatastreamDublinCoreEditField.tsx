@@ -15,6 +15,11 @@ const DatastreamDublinCoreEditField = ({
     fieldType,
 }: DatastreamDublinCoreEditFieldProps): React.ReactElement => {
     switch (fieldType) {
+        case "html":
+            const textareaCallback = (e) => {
+                setValue(e.target.value);
+            };
+            return <textarea style={{ width: "100%" }} onBlur={textareaCallback}>{value}</textarea>;
         case "locked":
             return (
                 <FormControl fullWidth={true}>
