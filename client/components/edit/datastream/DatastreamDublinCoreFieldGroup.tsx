@@ -46,7 +46,12 @@ const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.Rea
         return (
             <Grid container spacing={1} key={key}>
                 <Grid item xs={10}>
-                    <DatastreamDublinCoreEditField value={value} setValue={saveChanges} fieldType={catalogData.type} />
+                    <DatastreamDublinCoreEditField
+                        value={value}
+                        setValue={saveChanges}
+                        fieldType={catalogData.type}
+                        legalValues={catalogData.values ?? []}
+                    />
                 </Grid>
                 <Grid item xs={2}>
                     {buttons}
