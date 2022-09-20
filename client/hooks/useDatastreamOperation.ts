@@ -8,7 +8,8 @@ import {
     postObjectDatastreamUrl,
     viewObjectDatastreamUrl,
     getObjectDatastreamMetadataUrl,
-    objectDatastreamAgentsUrl
+    objectDatastreamAgentsUrl,
+    objectDatastreamDublinCoreUrl
  } from "../util/routes";
 
 const useDatastreamOperation = () => {
@@ -85,14 +86,18 @@ const useDatastreamOperation = () => {
 
     const uploadDublinCore = async (metadata) => {
         try {
-            throw new Error("TODO: not implemented yet! " + JSON.stringify(metadata));
-            /*
+            const text = await fetchText(objectDatastreamDublinCoreUrl(currentPid, activeDatastream), {
+                method: "POST",
+                body: JSON.stringify({
+                    metadata
+                })
+            }, { "Content-Type": "application/json" });
+            await loadCurrentObjectDetails();
             setSnackbarState({
                 open: true,
                 message: text,
                 severity: "success",
             });
-            */
         } catch (err) {
             setSnackbarState({
                 open: true,

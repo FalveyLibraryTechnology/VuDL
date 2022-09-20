@@ -182,6 +182,24 @@ edit.post(
     }
 );
 
+edit.post(
+    "/object/:pid/datastream/:stream/dublinCore",
+    requireToken,
+    bodyParser.json(),
+    datastreamSanitizer,
+    async (req, res) => {
+        try {
+            const { pid, stream } = req.params;
+            const { metadata } = req.body;
+            const datastream = DatastreamManager.getInstance();
+            await datastream.uploadDublinCoreMetadata(pid, stream, metadata);
+            res.status(200).send("Upload metadata success");
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
+);
+
 edit.get("/object/:pid/datastream/:stream/agents", requireToken, datastreamSanitizer, async (req, res) => {
     try {
         const { pid, stream } = req.params;
