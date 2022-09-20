@@ -241,7 +241,7 @@ class Config {
         return this.ini?.["agent"]?.["types"] ?? [];
     }
 
-    get dublinCoreFields(): Record<string, Record<string, string|Array<string>>> {
+    get dublinCoreFields(): Record<string, Record<string, string | Array<string>>> {
         return this.ini?.["dublin_core"] ?? {};
     }
 

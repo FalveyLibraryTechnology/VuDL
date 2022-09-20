@@ -23,7 +23,7 @@ export interface License {
 }
 export interface CompleteCatalog {
     agents: Agents;
-    dublinCoreFields: Record<string, Record<string, string|Array<string>>>;
+    dublinCoreFields: Record<string, Record<string, string | Array<string>>>;
     licenses: Record<string, License>;
     models: Record<string, FedoraModel>;
     favoritePids: Record<string, string>;
@@ -78,7 +78,7 @@ class FedoraCatalog {
         }, {});
     }
 
-    getDublinCoreFields(): Record<string, Record<string, string|Array<string>>> {
+    getDublinCoreFields(): Record<string, Record<string, string | Array<string>>> {
         return this.config.dublinCoreFields;
     }
 
