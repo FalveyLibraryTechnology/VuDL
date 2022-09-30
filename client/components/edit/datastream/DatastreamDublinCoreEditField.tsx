@@ -58,7 +58,7 @@ const DatastreamDublinCoreEditField = ({
                     init={{ plugins: "code" }}
                     tinymceScriptSrc="/tinymce/tinymce.min.js"
                     onBlur={saveHtmlFromTinyMCE}
-                    initialValue={value}
+                    initialValue={value.length > 0 ? value : "<div></div>"}
                 />
             );
         case "locked":
