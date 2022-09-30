@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FormControl from "@mui/material/FormControl";
 import BlurSavingTextField from "../../shared/BlurSavingTextField";
 import NativeSelect from "@mui/material/NativeSelect";
@@ -18,8 +18,21 @@ const DatastreamDublinCoreEditField = ({
     fieldType,
     legalValues = [],
 }: DatastreamDublinCoreEditFieldProps): React.ReactElement => {
+    // We need this effect to make TinyMCE pop-up dialogs (e.g. view source) work:
+    useEffect(() => {
+        const handler = (e) => {
+            if (e.target.closest(".tox-tinymce-aux, .moxman-window, .tam-assetmanager-root") !== null) {
+                e.stopImmediatePropagation();
+            }
+        };
+        document.addEventListener("focusin", handler);
+        return () => document.removeEventListener("focusin", handler);
+    }, []);
     const eventHelperCallback = (e) => {
         setValue(e.target.value);
+    };
+    const saveHtmlFromTinyMCE = (event, editor) => {
+        setValue(editor.getContent());
     };
     switch (fieldType) {
         case "dropdown":
@@ -40,10 +53,14 @@ const DatastreamDublinCoreEditField = ({
                 </FormControl>
             );
         case "html":
-            const saveHtml = (event, editor) => {
-                setValue(editor.getContent());
-            };
-            return <Editor tinymceScriptSrc="/tinymce/tinymce.min.js" onBlur={saveHtml} initialValue={value} />;
+            return (
+                <Editor
+                    init={{ plugins: "code" }}
+                    tinymceScriptSrc="/tinymce/tinymce.min.js"
+                    onBlur={saveHtmlFromTinyMCE}
+                    initialValue={value}
+                />
+            );
         case "locked":
             return (
                 <FormControl fullWidth={true}>
