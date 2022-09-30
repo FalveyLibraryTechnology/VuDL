@@ -55,7 +55,7 @@ const DatastreamDublinCoreEditField = ({
         case "html":
             return (
                 <Editor
-                    init={{ plugins: "code" }}
+                    init={{ plugins: "code link" }}
                     tinymceScriptSrc="/tinymce/tinymce.min.js"
                     onBlur={saveHtmlFromTinyMCE}
                     initialValue={value.length > 0 ? value : "<div></div>"}
