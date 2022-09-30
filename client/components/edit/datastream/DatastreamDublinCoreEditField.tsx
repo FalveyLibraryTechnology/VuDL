@@ -39,11 +39,7 @@ const DatastreamDublinCoreEditField = ({
                 </FormControl>
             );
         case "html":
-            return (
-                <textarea style={{ width: "100%" }} onBlur={eventHelperCallback}>
-                    {value}
-                </textarea>
-            );
+            return <textarea style={{ width: "100%" }} onBlur={eventHelperCallback} defaultValue={value} />;
         case "locked":
             return (
                 <FormControl fullWidth={true}>
