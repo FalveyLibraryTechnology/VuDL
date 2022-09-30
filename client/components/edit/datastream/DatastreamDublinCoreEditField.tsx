@@ -3,6 +3,7 @@ import FormControl from "@mui/material/FormControl";
 import BlurSavingTextField from "../../shared/BlurSavingTextField";
 import NativeSelect from "@mui/material/NativeSelect";
 import TextField from "@mui/material/TextField";
+import { Editor } from "@tinymce/tinymce-react";
 
 interface DatastreamDublinCoreEditFieldProps {
     value: string;
@@ -39,7 +40,10 @@ const DatastreamDublinCoreEditField = ({
                 </FormControl>
             );
         case "html":
-            return <textarea style={{ width: "100%" }} onBlur={eventHelperCallback} defaultValue={value} />;
+            const saveHtml = (event, editor) => {
+                setValue(editor.getContent());
+            };
+            return <Editor tinymceScriptSrc="/tinymce/tinymce.min.js" onBlur={saveHtml} initialValue={value} />;
         case "locked":
             return (
                 <FormControl fullWidth={true}>
