@@ -170,6 +170,61 @@ describe("useDatastreamOperation", () => {
         });
     });
 
+    describe("uploadDublinCore", () => {
+        let metadata;
+        beforeEach(() => {
+            metadata = {
+                "dc:title": ["foo"],
+            };
+            editorValues.state.activeDatastream = "DC";
+        });
+
+        it("uploads DC with success", async () => {
+            fetchValues.action.fetchText.mockResolvedValue("upload DC works");
+
+            const { uploadDublinCore } = useDatastreamOperation();
+            await uploadDublinCore(metadata);
+
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/DC/dublinCore",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({ metadata }),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+                open: true,
+                message: "upload DC works",
+                severity: "success",
+            });
+        });
+
+        it("fails to upload the DC", async () => {
+            fetchValues.action.fetchText.mockRejectedValue(new Error("Upload failure!"));
+
+            const { uploadDublinCore } = useDatastreamOperation();
+            await uploadDublinCore(metadata);
+
+            expect(editorValues.action.loadCurrentObjectDetails).not.toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/vudl%3A123/datastream/DC/dublinCore",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({ metadata }),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    open: true,
+                    message: "Upload failure!",
+                    severity: "error"
+                })
+            );
+        });
+    });
+
     describe("uploadLicense", () => {
         beforeEach(() => {
             editorValues.state.activeDatastream = "LICENSE";
