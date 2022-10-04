@@ -7,7 +7,9 @@ import Config from "../models/Config";
 describe("DatastreamManager", () => {
     let config;
     let fedoraObjectBuildSpy;
+    let modifyDatastreamSpy;
     let modifyLicenseSpy;
+    let modifyObjectLabelSpy;
     let modifyAgentsSpy;
     let getDatastreamSpy;
     let updateDatastreamFromFileSpy;
@@ -24,11 +26,15 @@ describe("DatastreamManager", () => {
         };
         jest.spyOn(Config, "getInstance").mockReturnValue(config);
         fedoraObjectBuildSpy = jest.spyOn(FedoraObject, "build");
-        getDatastreamSpy = jest.spyOn(FedoraObject.prototype, "getDatastream");
-        modifyLicenseSpy = jest.spyOn(FedoraObject.prototype, "modifyLicense");
-        modifyAgentsSpy = jest.spyOn(FedoraObject.prototype, "modifyAgents");
-        updateDatastreamFromFileSpy = jest.spyOn(FedoraObject.prototype, "updateDatastreamFromFile");
-        datastreamsSpy = jest.spyOn(FedoraCatalog.prototype, "getDatastreamMimetypes");
+        getDatastreamSpy = jest.spyOn(FedoraObject.prototype, "getDatastream").mockImplementation(jest.fn());
+        modifyAgentsSpy = jest.spyOn(FedoraObject.prototype, "modifyAgents").mockImplementation(jest.fn());
+        modifyDatastreamSpy = jest.spyOn(FedoraObject.prototype, "modifyDatastream").mockImplementation(jest.fn());
+        modifyLicenseSpy = jest.spyOn(FedoraObject.prototype, "modifyLicense").mockImplementation(jest.fn());
+        modifyObjectLabelSpy = jest.spyOn(FedoraObject.prototype, "modifyObjectLabel").mockImplementation(jest.fn());
+        updateDatastreamFromFileSpy = jest
+            .spyOn(FedoraObject.prototype, "updateDatastreamFromFile")
+            .mockImplementation(jest.fn());
+        datastreamsSpy = jest.spyOn(FedoraCatalog.prototype, "getDatastreamMimetypes").mockImplementation(jest.fn());
         datastreamManager = DatastreamManager.getInstance();
     });
 
@@ -200,6 +206,53 @@ describe("DatastreamManager", () => {
             expect(datastreamManager.uploadFile(pid, stream, filepath, mimeType)).rejects.toThrowError(
                 "Invalid mime type: " + mimeType
             );
+        });
+    });
+
+    describe("uploadDublinCoreMetadata", () => {
+        let pid;
+        let stream;
+        let metadata;
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            metadata = { "dc:title": ['the "best" title'], "dc:subject": ["one", "two"] };
+        });
+
+        it("performs appropriate updates (when there is no ID in data)", async () => {
+            modifyDatastreamSpy.mockResolvedValue("");
+            modifyObjectLabelSpy.mockResolvedValue("");
+
+            await datastreamManager.uploadDublinCoreMetadata(pid, stream, metadata);
+
+            expect(modifyObjectLabelSpy).toHaveBeenCalledWith('the "best" title');
+            const expectedXml =
+                '<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">\n' +
+                "  <dc:title>the &quot;best&quot; title</dc:title>\n" +
+                "  <dc:subject>one</dc:subject>\n" +
+                "  <dc:subject>two</dc:subject>\n" +
+                "  <dc:identifier>test1</dc:identifier>\n" +
+                "</oai_dc:dc>\n";
+            expect(modifyDatastreamSpy).toHaveBeenCalledWith(stream, { mimeType: "text/xml" }, expectedXml);
+        });
+
+        it("performs appropriate updates (when there is a mismatched ID in data)", async () => {
+            modifyDatastreamSpy.mockResolvedValue("");
+            modifyObjectLabelSpy.mockResolvedValue("");
+            metadata["dc:identifier"] = ["nope"];
+
+            await datastreamManager.uploadDublinCoreMetadata(pid, stream, metadata);
+
+            expect(modifyObjectLabelSpy).toHaveBeenCalledWith('the "best" title');
+            const expectedXml =
+                '<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">\n' +
+                "  <dc:title>the &quot;best&quot; title</dc:title>\n" +
+                "  <dc:subject>one</dc:subject>\n" +
+                "  <dc:subject>two</dc:subject>\n" +
+                "  <dc:identifier>nope</dc:identifier>\n" +
+                "  <dc:identifier>test1</dc:identifier>\n" +
+                "</oai_dc:dc>\n";
+            expect(modifyDatastreamSpy).toHaveBeenCalledWith(stream, { mimeType: "text/xml" }, expectedXml);
         });
     });
 
