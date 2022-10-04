@@ -14,7 +14,7 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
             setClonePid("");
             return;
         }
-        if (!clonePidLoaded) {
+        if (!Object.prototype.hasOwnProperty.call(objectDetailsStorage, newClonePid)) {
             let error = false;
             const errorCallback = () => {
                 error = true;
@@ -24,8 +24,8 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
                 alert(`Cannot load PID: ${newClonePid}`);
                 return;
             }
-            setClonePid(newClonePid);
         }
+        setClonePid(newClonePid);
     };
     const addField = (field: string) => {
         if (!Object.prototype.hasOwnProperty.call(currentDublinCore, field)) {
