@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 
-interface BlurSavingTextFieldProps {
+export interface BlurSavingTextFieldProps {
     value: string;
     setValue: (value: string) => void;
 }
