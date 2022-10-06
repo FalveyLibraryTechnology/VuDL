@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamDublinCoreFieldGroup renders locked fields 1`] = `
+<Fragment>
+  <h3 />
+  <ForwardRef(Grid)
+    container={true}
+    key="dc:identifier_0_0"
+    spacing={1}
+  >
+    <ForwardRef(Grid)
+      item={true}
+      xs={10}
+    >
+      <DatastreamDublinCoreEditField
+        fieldType="locked"
+        legalValues={Array []}
+        setValue={[Function]}
+        value="foo"
+      />
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
+      item={true}
+      xs={2}
+    />
+  </ForwardRef(Grid)>
+</Fragment>
+`;
+
+exports[`DatastreamDublinCoreFieldGroup renders unlocked fields 1`] = `
+<Fragment>
+  <h3 />
+  <ForwardRef(Grid)
+    container={true}
+    key="dc:title_0_0"
+    spacing={1}
+  >
+    <ForwardRef(Grid)
+      item={true}
+      xs={10}
+    >
+      <DatastreamDublinCoreEditField
+        fieldType="text"
+        legalValues={Array []}
+        setValue={[Function]}
+        value="bar"
+      />
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
+      item={true}
+      xs={2}
+    >
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+      >
+        <Memo(ForwardRef(AddCircleIcon))
+          titleAccess="Add Above"
+        />
+      </ForwardRef(IconButton)>
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+      >
+        <Memo(ForwardRef(DeleteIcon))
+          titleAccess="Delete Row"
+        />
+      </ForwardRef(IconButton)>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
+  <ForwardRef(Grid)
+    container={true}
+    key="dc:title_1_0"
+    spacing={1}
+  >
+    <ForwardRef(Grid)
+      item={true}
+      xs={10}
+    >
+      <DatastreamDublinCoreEditField
+        fieldType="text"
+        legalValues={Array []}
+        setValue={[Function]}
+        value="baz"
+      />
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
+      item={true}
+      xs={2}
+    >
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+      >
+        <Memo(ForwardRef(AddCircleIcon))
+          titleAccess="Add Above"
+        />
+      </ForwardRef(IconButton)>
+      <ForwardRef(IconButton)
+        onClick={[Function]}
+      >
+        <Memo(ForwardRef(DeleteIcon))
+          titleAccess="Delete Row"
+        />
+      </ForwardRef(IconButton)>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
+</Fragment>
+`;
