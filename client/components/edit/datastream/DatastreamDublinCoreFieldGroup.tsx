@@ -1,6 +1,9 @@
 import React from "react";
 import { useEditorContext } from "../../../context/EditorContext";
 import DatastreamDublinCoreEditField from "./DatastreamDublinCoreEditField";
+import Delete from "@mui/icons-material/Delete";
+import AddCircle from "@mui/icons-material/AddCircle";
+import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 
 // We need to be careful about how we set keys for elements in our control group; if we reuse
@@ -39,8 +42,12 @@ const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.Rea
         const locked = catalogData.type === "locked";
         const buttons = locked ? null : (
             <>
-                <button onClick={addAbove}>Add Above</button>
-                <button onClick={deleteRow}>Delete</button>
+                <IconButton onClick={addAbove}>
+                    <AddCircle titleAccess="Add Above" />
+                </IconButton>
+                <IconButton onClick={deleteRow}>
+                    <Delete titleAccess="Delete Row" />
+                </IconButton>
             </>
         );
         return (
