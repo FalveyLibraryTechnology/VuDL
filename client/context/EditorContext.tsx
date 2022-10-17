@@ -45,8 +45,10 @@ interface EditorState {
     modelsCatalog: Record<string, FedoraModel>;
     licensesCatalog: Record<string, License>;
     agentsCatalog: Record<string, Object>;
+    dublinCoreFieldCatalog: Record<string, Record<string, string>>;
     favoritePidsCatalog: Record<string, string>;
     currentAgents: Array<Object>;
+    currentDublinCore: Record<string, Array<string>>;
     currentPid: string | null;
     activeDatastream: string | null;
     isDatastreamModalOpen: boolean;
@@ -69,8 +71,10 @@ const editorContextParams: EditorState = {
     modelsCatalog: {},
     licensesCatalog: {},
     agentsCatalog: {},
+    dublinCoreFieldCatalog: {},
     favoritePidsCatalog: {},
     currentAgents: [],
+    currentDublinCore: {},
     currentPid: null,
     activeDatastream: null,
     isDatastreamModalOpen: false,
@@ -102,10 +106,12 @@ const EditorContext = createContext({});
 
 const reducerMapping: Record<string, string> = {
     SET_AGENTS_CATALOG: "agentsCatalog",
+    SET_DUBLIN_CORE_FIELD_CATALOG: "dublinCoreFieldCatalog",
     SET_FAVORITE_PIDS_CATALOG: "favoritePidsCatalog",
     SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_AGENTS: "currentAgents",
+    SET_CURRENT_DUBLIN_CORE: "currentDublinCore",
     SET_CURRENT_PID: "currentPid",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
@@ -209,6 +215,7 @@ export const useEditorContext = () => {
     const {
         state: {
             currentAgents,
+            currentDublinCore,
             currentPid,
             activeDatastream,
             isDatastreamModalOpen,
@@ -218,6 +225,7 @@ export const useEditorContext = () => {
             parentsModalActivePid,
             stateModalActivePid,
             agentsCatalog,
+            dublinCoreFieldCatalog,
             favoritePidsCatalog,
             licensesCatalog,
             modelsCatalog,
@@ -279,10 +287,24 @@ export const useEditorContext = () => {
         });
     };
 
+    const setCurrentDublinCore = (dc: Record<string, Array<string>>) => {
+        dispatch({
+            type: "SET_CURRENT_DUBLIN_CORE",
+            payload: dc
+        });
+    };
+
     const setAgentsCatalog = (agentsCatalog) => {
         dispatch({
             type: "SET_AGENTS_CATALOG",
             payload: agentsCatalog
+        });
+    };
+
+    const setDublinCoreFieldCatalog = (dcCatalog: Record<string, Record<string, string>>) => {
+        dispatch({
+            type: "SET_DUBLIN_CORE_FIELD_CATALOG",
+            payload: dcCatalog
         });
     };
 
@@ -444,6 +466,7 @@ export const useEditorContext = () => {
             setLicensesCatalog(response.licenses || {});
             setFavoritePidsCatalog(response.favoritePids || {});
             setAgentsCatalog(response.agents || {});
+            setDublinCoreFieldCatalog(response.dublinCoreFields || {});
         } catch(err) {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
         }
@@ -461,6 +484,7 @@ export const useEditorContext = () => {
     return {
         state: {
             currentAgents,
+            currentDublinCore,
             currentPid,
             currentDatastreams,
             activeDatastream,
@@ -473,6 +497,7 @@ export const useEditorContext = () => {
             datastreamsCatalog,
             modelsDatastreams,
             agentsCatalog,
+            dublinCoreFieldCatalog,
             favoritePidsCatalog,
             modelsCatalog,
             licensesCatalog,
@@ -484,6 +509,7 @@ export const useEditorContext = () => {
         action: {
             initializeCatalog,
             setCurrentAgents,
+            setCurrentDublinCore,
             setCurrentPid,
             loadCurrentObjectDetails,
             setActiveDatastream,

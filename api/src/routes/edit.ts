@@ -35,6 +35,10 @@ edit.get("/catalog/datastreammimetypes", requireToken, function (req, res) {
     res.json(FedoraCatalog.getInstance().getDatastreamMimetypes());
 });
 
+edit.get("/catalog/dublinCoreFields", requireToken, function (req, res) {
+    res.json(FedoraCatalog.getInstance().getDublinCoreFields());
+});
+
 edit.get("/catalog/favoritePids", requireToken, async function (req, res) {
     res.json(await FedoraCatalog.getInstance().getFavoritePids());
 });
@@ -172,6 +176,24 @@ edit.post(
             const datastream = DatastreamManager.getInstance();
             await datastream.uploadAgents(pid, stream, agents);
             res.status(200).send("Upload agents success");
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
+);
+
+edit.post(
+    "/object/:pid/datastream/:stream/dublinCore",
+    requireToken,
+    bodyParser.json(),
+    datastreamSanitizer,
+    async (req, res) => {
+        try {
+            const { pid, stream } = req.params;
+            const { metadata } = req.body;
+            const datastream = DatastreamManager.getInstance();
+            await datastream.uploadDublinCoreMetadata(pid, stream, metadata);
+            res.status(200).send("Upload metadata success");
         } catch (error) {
             res.status(500).send(error.message);
         }

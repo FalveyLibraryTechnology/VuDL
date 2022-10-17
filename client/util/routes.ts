@@ -104,6 +104,10 @@ const objectDatastreamAgentsUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "agents")
 };
 
+const objectDatastreamDublinCoreUrl = (pid: string, datastream: string) => {
+    return getDatastreamActionUrl(pid, datastream, "dublinCore")
+};
+
 export {
     baseUrl,
     apiUrl,
@@ -134,5 +138,6 @@ export {
     getObjectDatastreamMimetypeUrl,
     getObjectDatastreamMetadataUrl,
     objectDatastreamLicenseUrl,
-    objectDatastreamAgentsUrl
+    objectDatastreamAgentsUrl,
+    objectDatastreamDublinCoreUrl,
 };

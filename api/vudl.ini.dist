@@ -359,6 +359,71 @@ name = "My Library, My University"
 role = "DISSEMINATOR"
 type = "ORGANIZATION"
 
+# Dublin Core Fields/Values Supported By Editor
+[dublin_core.dc:title]
+label = "Title"
+type = "text"
+
+[dublin_core.dc:creator]
+label = "Creator"
+type = "text"
+
+[dublin_core.dc:subject]
+label = "Subject"
+type = "text"
+
+[dublin_core.dc:description]
+label = "Description"
+type = "html"
+
+[dublin_core.dc:publisher]
+label = "Publisher"
+type = "text"
+
+[dublin_core.dc:contributor]
+label = "Contributor"
+type = "text"
+
+[dublin_core.dc:date]
+label = "Date"
+type = "text"
+
+[dublin_core.dc:type]
+label = "Type"
+type = "text"
+
+[dublin_core.dc:format]
+label = "Format"
+type = "dropdown"
+values[] = "Book"
+values[] = "Journal"
+
+[dublin_core.dc:identifier]
+label = "Identifier"
+type = "locked"
+
+[dublin_core.dc:source]
+label = "Source"
+type = "text"
+
+[dublin_core.dc:language]
+label = "Language"
+type = "dropdown"
+values[] = "English"
+values[] = "Latin"
+
+[dublin_core.dc:relation]
+label = "Relation"
+type = "text"
+
+[dublin_core.dc:coverage]
+label = "Coverage"
+type = "text"
+
+[dublin_core.dc:rights]
+label = "Rights"
+type = "text"
+
 [queue]
 # This is the queue name that will be used for messages in Redis:
 defaultQueueName = "vudl"

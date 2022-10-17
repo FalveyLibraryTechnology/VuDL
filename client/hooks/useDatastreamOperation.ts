@@ -8,7 +8,8 @@ import {
     postObjectDatastreamUrl,
     viewObjectDatastreamUrl,
     getObjectDatastreamMetadataUrl,
-    objectDatastreamAgentsUrl
+    objectDatastreamAgentsUrl,
+    objectDatastreamDublinCoreUrl
  } from "../util/routes";
 
 const useDatastreamOperation = () => {
@@ -81,6 +82,30 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
+    };
+
+    const uploadDublinCore = async (metadata) => {
+        try {
+            const text = await fetchText(objectDatastreamDublinCoreUrl(currentPid, activeDatastream), {
+                method: "POST",
+                body: JSON.stringify({
+                    metadata
+                })
+            }, { "Content-Type": "application/json" });
+            await loadCurrentObjectDetails();
+            setSnackbarState({
+                open: true,
+                message: text,
+                severity: "success",
+            });
+        } catch (err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
+        }
+        toggleDatastreamModal();
     };
 
     const uploadLicense = async (licenseKey) => {
@@ -236,6 +261,7 @@ const useDatastreamOperation = () => {
     };
     return {
         uploadAgents,
+        uploadDublinCore,
         uploadFile,
         uploadLicense,
         deleteDatastream,

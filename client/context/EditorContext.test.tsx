@@ -39,6 +39,20 @@ describe("useEditorContext", () => {
             expect(result.current.state.currentAgents).toEqual(agents);
         });
     });
+    describe("setCurrentDublinCore", () => {
+        it("sets the current Dublin Core", async () => {
+            const dc = { "dc:title": ["foo"] };
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+
+            expect(result.current.state.currentDublinCore).toEqual({});
+
+            await act(async () => {
+                await result.current.action.setCurrentDublinCore(dc);
+            });
+
+            expect(result.current.state.currentDublinCore).toEqual(dc);
+        });
+    });
     describe("setCurrentPid", () => {
         it("sets the current pid", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
@@ -124,13 +138,14 @@ describe("useEditorContext", () => {
     });
 
     describe("initializeCatalog", () => {
-        it("initializes the models catalog", async () => {
-            fetchValues.action.fetchJSON.mockResolvedValue({
-                models: {
-                    CoreModel: "test1"
-                },
-
-            });
+        it("initializes the catalog with data", async () => {
+            // Note: this data is not realistic!
+            const models = { CoreModel: "test1" };
+            const licenses = { license: "data" };
+            const favoritePids = { pid: "foo" };
+            const agents = { agent: "bar" };
+            const dublinCoreFields = { field: "xyzzy" };
+            fetchValues.action.fetchJSON.mockResolvedValue({ models, licenses, favoritePids, agents, dublinCoreFields });
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
             await act(async () => {
@@ -138,6 +153,27 @@ describe("useEditorContext", () => {
             });
 
             expect(fetchValues.action.fetchJSON).toHaveBeenCalled();
+            expect(result.current.state.modelsCatalog).toEqual(models);
+            expect(result.current.state.licensesCatalog).toEqual(licenses);
+            expect(result.current.state.favoritePidsCatalog).toEqual(favoritePids);
+            expect(result.current.state.agentsCatalog).toEqual(agents);
+            expect(result.current.state.dublinCoreFieldCatalog).toEqual(dublinCoreFields);
+        });
+
+        it("initializes the catalog with defaults", async () => {
+            fetchValues.action.fetchJSON.mockResolvedValue({});
+            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
+
+            await act(async () => {
+                await result.current.action.initializeCatalog();
+            });
+
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalled();
+            expect(result.current.state.modelsCatalog).toEqual({});
+            expect(result.current.state.licensesCatalog).toEqual({});
+            expect(result.current.state.favoritePidsCatalog).toEqual({});
+            expect(result.current.state.agentsCatalog).toEqual({});
+            expect(result.current.state.dublinCoreFieldCatalog).toEqual({});
         });
 
         it("throws an error", async () => {

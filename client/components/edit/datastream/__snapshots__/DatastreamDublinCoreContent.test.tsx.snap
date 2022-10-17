@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamDublinCoreContent  renders 1`] = `
+<Fragment>
+  <ForwardRef(DialogContent)>
+    <ForwardRef(Grid)
+      container={true}
+      spacing={1}
+    >
+      <ForwardRef(Grid)
+        item={true}
+        xs={8}
+      >
+        <Component />
+      </ForwardRef(Grid)>
+      <ForwardRef(Grid)
+        item={true}
+        xs={4}
+      >
+        <Component />
+      </ForwardRef(Grid)>
+    </ForwardRef(Grid)>
+  </ForwardRef(DialogContent)>
+  <ForwardRef(DialogActions)>
+    <ForwardRef(Button)
+      className="uploadDublinCoreButton"
+      onClick={[Function]}
+    >
+      Save
+    </ForwardRef(Button)>
+    <ForwardRef(Button)>
+      Cancel
+    </ForwardRef(Button)>
+  </ForwardRef(DialogActions)>
+</Fragment>
+`;

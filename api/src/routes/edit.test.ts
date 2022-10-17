@@ -42,6 +42,7 @@ describe("edit", () => {
         it("returns the complete catalog", async () => {
             const fakeCatalog: CompleteCatalog = {
                 agents: { defaults: {}, roles: [], types: [] },
+                dublinCoreFields: {},
                 licenses: {},
                 models: {},
                 favoritePids: {},
@@ -106,6 +107,25 @@ describe("edit", () => {
             const spy = jest.spyOn(FedoraCatalog.getInstance(), "getDatastreamMimetypes").mockReturnValue(fakeCatalog);
             const response = await request(app)
                 .get("/edit/catalog/datastreammimetypes")
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.text).toEqual(JSON.stringify(fakeCatalog));
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("get /catalog/dublinCoreFields", () => {
+        beforeEach(() => {
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("returns the Dublin Core fields", async () => {
+            const fakeCatalog = { foo: { baz: "bar" } };
+            const spy = jest.spyOn(FedoraCatalog.getInstance(), "getDublinCoreFields").mockReturnValue(fakeCatalog);
+            const response = await request(app)
+                .get("/edit/catalog/dublinCoreFields")
                 .set("Authorization", "Bearer test")
                 .expect(StatusCodes.OK);
             expect(response.text).toEqual(JSON.stringify(fakeCatalog));
@@ -199,6 +219,47 @@ describe("edit", () => {
             expect(dataSpy).toHaveBeenCalledWith("pid:123");
             expect(factorySpy).toHaveBeenCalledTimes(1);
             expect(factorySpy).toHaveBeenCalledWith("foo", "bar", "Active", "pid:123");
+        });
+    });
+
+    describe("post /object/:pid/datastream/:stream/dublinCore", () => {
+        let datastreamManager;
+        let metadata;
+        beforeEach(() => {
+            datastreamManager = {
+                uploadDublinCoreMetadata: jest.fn(),
+            };
+            metadata = "<dc />";
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+            jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+
+        it("uploads Dublin Core", async () => {
+            datastreamManager.uploadDublinCoreMetadata.mockResolvedValue({});
+
+            await request(app)
+                .post(`/edit/object/${pid}/datastream/${datastream}/dublinCore`)
+                .set("Authorization", "Bearer test")
+                .send({ metadata })
+                .set("Accept", "application/json")
+                .expect(StatusCodes.OK);
+
+            expect(datastreamManager.uploadDublinCoreMetadata).toHaveBeenCalledWith(pid, datastream, metadata);
+        });
+
+        it("handles exceptions", async () => {
+            datastreamManager.uploadDublinCoreMetadata.mockImplementation(() => {
+                throw new Error("kaboom");
+            });
+
+            const response = await request(app)
+                .post(`/edit/object/${pid}/datastream/${datastream}/dublinCore`)
+                .set("Authorization", "Bearer test")
+                .send({ metadata })
+                .set("Accept", "application/json")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+
+            expect(response.error.text).toEqual("kaboom");
         });
     });
 

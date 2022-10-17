@@ -23,6 +23,7 @@ export interface License {
 }
 export interface CompleteCatalog {
     agents: Agents;
+    dublinCoreFields: Record<string, Record<string, string | Array<string>>>;
     licenses: Record<string, License>;
     models: Record<string, FedoraModel>;
     favoritePids: Record<string, string>;
@@ -54,6 +55,7 @@ class FedoraCatalog {
                 roles: agentRoles,
                 types: agentTypes,
             },
+            dublinCoreFields: this.getDublinCoreFields(),
             favoritePids: await this.getFavoritePids(),
             models,
             licenses,
@@ -74,6 +76,10 @@ class FedoraCatalog {
         return Object.values(this.config.models).reduce((acc: Record<string, FedoraDatastream>, model: FedoraModel) => {
             return { ...acc, ...model.datastreams };
         }, {});
+    }
+
+    getDublinCoreFields(): Record<string, Record<string, string | Array<string>>> {
+        return this.config.dublinCoreFields;
     }
 
     async getFavoritePids(): Promise<Record<string, string>> {

@@ -3,6 +3,7 @@ import { FedoraObject } from "../models/FedoraObject";
 import FedoraCatalog from "./FedoraCatalog";
 import { Agent } from "./interfaces";
 import MetadataExtractor from "./MetadataExtractor";
+import xmlescape = require("xml-escape");
 
 class DatastreamManager {
     private static instance: DatastreamManager;
@@ -70,6 +71,38 @@ class DatastreamManager {
             ? metadataExtractor.extractAgentsAttributes(xml)
             : { createDate: "", modifiedDate: "", recordStatus: "" };
         await fedoraObject.modifyAgents(stream, agents, agentsAttributes);
+    }
+
+    async uploadDublinCoreMetadata(
+        pid: string,
+        stream: string,
+        metadata: Record<string, Array<string>>
+    ): Promise<void> {
+        const fedoraObject = FedoraObject.build(pid);
+        // The metadata must always include the current PID:
+        if (typeof metadata["dc:identifier"] === "undefined") {
+            metadata["dc:identifier"] = [pid];
+        } else if (!metadata["dc:identifier"].includes(pid)) {
+            metadata["dc:identifier"].push(pid);
+        }
+        let contents = "";
+        for (const field in metadata) {
+            const xmlize = (value: string): string => {
+                return `  <${field}>${xmlescape(value)}</${field}>\n`;
+            };
+            contents += metadata[field].map(xmlize).join("");
+        }
+        // Format an XML document and save it to the repository:
+        const xml =
+            '<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">' +
+            "\n" +
+            contents +
+            "</oai_dc:dc>\n";
+
+        await fedoraObject.modifyDatastream(stream, { mimeType: "text/xml" }, xml);
+        // Extract a title from the metadata and use it as the Fedora label:
+        const title = (metadata["dc:title"] ?? [""])[0] ?? "";
+        await fedoraObject.modifyObjectLabel(title);
     }
 
     async getLicenseKey(pid: string, stream: string): Promise<string> {

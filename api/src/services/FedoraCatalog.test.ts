@@ -10,6 +10,7 @@ describe("FedoraCatalog", () => {
         let core;
         let query;
         let solrParams;
+
         beforeEach(() => {
             config = new Config({ favorite_pids: ["foo:123", "foo:124"] });
             solr = {
@@ -40,6 +41,7 @@ describe("FedoraCatalog", () => {
                     roles: ["A", "B"],
                     types: ["C", "D"],
                 },
+                dublinCoreFields: {},
                 favoritePids: {},
                 licenses: {},
                 models: {},
@@ -54,6 +56,7 @@ describe("FedoraCatalog", () => {
                     roles: [],
                     types: [],
                 },
+                dublinCoreFields: {},
                 favoritePids: {
                     "foo:123": "foo:123",
                     "foo:124": "foo:124",
@@ -75,6 +78,7 @@ describe("FedoraCatalog", () => {
                     roles: [],
                     types: [],
                 },
+                dublinCoreFields: {},
                 favoritePids: {
                     "foo:123": "- [foo:123]", // test missing title in Solr response
                     "foo:124": "second title [foo:124]",
