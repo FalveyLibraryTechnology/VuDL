@@ -5,10 +5,22 @@ exports[`ObjectSummary displays loading message when appropriate 1`] = `
   <div
     className="infobox"
   >
+    <Component
+      pid="foo:123"
+    >
+      ObjectThumbnail
+    </Component>
     <h2>
       Loading...
     </h2>
     <div />
+    <br
+      style={
+        Object {
+          "clear": "both",
+        }
+      }
+    />
   </div>
 </ObjectSummary>
 `;
@@ -18,6 +30,11 @@ exports[`ObjectSummary renders information from metadata when available 1`] = `
   <div
     className="infobox"
   >
+    <Component
+      pid="foo:123"
+    >
+      ObjectThumbnail
+    </Component>
     <h2>
       My title
     </h2>
@@ -37,6 +54,13 @@ exports[`ObjectSummary renders information from metadata when available 1`] = `
     >
       ObjectButtonBar
     </Component>
+    <br
+      style={
+        Object {
+          "clear": "both",
+        }
+      }
+    />
   </div>
 </ObjectSummary>
 `;
