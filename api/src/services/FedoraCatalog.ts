@@ -27,6 +27,7 @@ export interface CompleteCatalog {
     licenses: Record<string, License>;
     models: Record<string, FedoraModel>;
     favoritePids: Record<string, string>;
+    vufindUrl: string;
 }
 
 class FedoraCatalog {
@@ -48,7 +49,7 @@ class FedoraCatalog {
     }
 
     async getCompleteCatalog(): Promise<CompleteCatalog> {
-        const { models, licenses, agentDefaults, agentRoles, agentTypes } = this.config;
+        const { models, licenses, agentDefaults, agentRoles, agentTypes, vufindUrl } = this.config;
         return {
             agents: {
                 defaults: agentDefaults,
@@ -59,6 +60,7 @@ class FedoraCatalog {
             favoritePids: await this.getFavoritePids(),
             models,
             licenses,
+            vufindUrl,
         };
     }
 

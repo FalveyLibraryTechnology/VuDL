@@ -47,6 +47,7 @@ interface EditorState {
     agentsCatalog: Record<string, Object>;
     dublinCoreFieldCatalog: Record<string, Record<string, string>>;
     favoritePidsCatalog: Record<string, string>;
+    vufindUrl: string;
     currentAgents: Array<Object>;
     currentDublinCore: Record<string, Array<string>>;
     currentPid: string | null;
@@ -73,6 +74,7 @@ const editorContextParams: EditorState = {
     agentsCatalog: {},
     dublinCoreFieldCatalog: {},
     favoritePidsCatalog: {},
+    vufindUrl: "",
     currentAgents: [],
     currentDublinCore: {},
     currentPid: null,
@@ -108,6 +110,7 @@ const reducerMapping: Record<string, string> = {
     SET_AGENTS_CATALOG: "agentsCatalog",
     SET_DUBLIN_CORE_FIELD_CATALOG: "dublinCoreFieldCatalog",
     SET_FAVORITE_PIDS_CATALOG: "favoritePidsCatalog",
+    SET_VUFIND_URL: "vufindUrl",
     SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_AGENTS: "currentAgents",
@@ -227,6 +230,7 @@ export const useEditorContext = () => {
             agentsCatalog,
             dublinCoreFieldCatalog,
             favoritePidsCatalog,
+            vufindUrl,
             licensesCatalog,
             modelsCatalog,
             snackbarState,
@@ -375,6 +379,13 @@ export const useEditorContext = () => {
         });
     }
 
+    const setVuFindUrl = (url: string) => {
+        dispatch({
+            type: "SET_VUFIND_URL",
+            payload: url
+        });
+    };
+
     const setModelsCatalog = (modelsCatalog: Record<string, FedoraModel>) => {
         dispatch({
             type: "SET_MODELS_CATALOG",
@@ -467,6 +478,7 @@ export const useEditorContext = () => {
             setFavoritePidsCatalog(response.favoritePids || {});
             setAgentsCatalog(response.agents || {});
             setDublinCoreFieldCatalog(response.dublinCoreFields || {});
+            setVuFindUrl(response.vufindUrl ?? "");
         } catch(err) {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
         }
@@ -499,6 +511,7 @@ export const useEditorContext = () => {
             agentsCatalog,
             dublinCoreFieldCatalog,
             favoritePidsCatalog,
+            vufindUrl,
             modelsCatalog,
             licensesCatalog,
             snackbarState,
