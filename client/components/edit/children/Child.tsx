@@ -9,14 +9,16 @@ import IndeterminateCheckBox from "@mui/icons-material/IndeterminateCheckBox";
 import { extractFirstMetadataValue } from "../../../util/metadata";
 import ObjectLoader from "../ObjectLoader";
 import ObjectButtonBar from "../ObjectButtonBar";
+import ObjectThumbnail from "../ObjectThumbnail";
 
 export interface ChildProps {
     pid: string;
-    parentPid: string;
+    parentPid?: string;
     initialTitle: string;
+    thumbnail?: boolean;
 }
 
-export const Child = ({ pid, parentPid = "", initialTitle }: ChildProps): React.ReactElement => {
+export const Child = ({ pid, parentPid = "", initialTitle, thumbnail = false }: ChildProps): React.ReactElement => {
     const {
         state: { objectDetailsStorage },
     } = useEditorContext();
@@ -30,11 +32,16 @@ export const Child = ({ pid, parentPid = "", initialTitle }: ChildProps): React.
             {expanded ? <IndeterminateCheckBox titleAccess="Collapse Tree" /> : <AddBox titleAccess="Expand Tree" />}
         </span>
     );
-    const childList = expanded ? <ChildList pid={pid} pageSize={10} /> : "";
+    const childList = expanded ? <ChildList pid={pid} pageSize={10} forceThumbs={thumbnail} /> : "";
+    const thumbnailDisplay = thumbnail ? (
+        <Grid item xs={1}>
+            <ObjectThumbnail pid={pid} />
+        </Grid>
+    ) : null;
     return (
         <>
             <Grid container>
-                <Grid item xs={8}>
+                <Grid item xs={thumbnail ? 7 : 8}>
                     {expandControl}
                     {loaded && parentPid ? <ChildPosition pid={pid} parentPid={parentPid} /> : ""}
                     <Link href={"/edit/object/" + pid}>{(title.length > 0 ? title : "-") + " [" + pid + "]"}</Link>
@@ -43,6 +50,7 @@ export const Child = ({ pid, parentPid = "", initialTitle }: ChildProps): React.
                     {loaded ? <ObjectButtonBar pid={pid} /> : ""}
                     <ObjectLoader pid={pid} />
                 </Grid>
+                {thumbnailDisplay}
             </Grid>
             {childList}
         </>

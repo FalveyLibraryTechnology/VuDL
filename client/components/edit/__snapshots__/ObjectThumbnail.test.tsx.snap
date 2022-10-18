@@ -4,13 +4,7 @@ exports[`ObjectThumbnail displays unavailable message when appropriate 1`] = `
 <ObjectThumbnail
   pid="foo"
 >
-  <span
-    style={
-      Object {
-        "float": "right",
-      }
-    }
-  >
+  <span>
     No Thumbnail
   </span>
 </ObjectThumbnail>
@@ -26,7 +20,6 @@ exports[`ObjectThumbnail renders thumbnail when available 1`] = `
     style={
       Object {
         "border": "1px solid black",
-        "float": "right",
       }
     }
   />

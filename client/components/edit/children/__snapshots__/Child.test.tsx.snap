@@ -45,6 +45,7 @@ exports[`Child can be expanded to show children 1`] = `
                     pid="foo:123"
                   />
                 </ForwardRef(Grid)>,
+                null,
               ],
               "columnSpacing": 0,
               "columns": 12,
@@ -1478,6 +1479,7 @@ exports[`Child can be expanded to show children 1`] = `
         </MuiGridRoot>
       </ForwardRef(Grid)>
       <Component
+        forceThumbs={false}
         pageSize={10}
         pid="foo:123"
       >
@@ -1533,6 +1535,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                     pid="foo:123"
                   />
                 </ForwardRef(Grid)>,
+                null,
               ],
               "columnSpacing": 0,
               "columns": 12,
@@ -3015,6 +3018,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                     pid="foo:123"
                   />
                 </ForwardRef(Grid)>,
+                null,
               ],
               "columnSpacing": 0,
               "columns": 12,

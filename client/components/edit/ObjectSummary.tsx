@@ -23,7 +23,9 @@ const ObjectSummary = (): React.ReactElement => {
     const description = extractFirstMetadataValue("dc:description", "");
     return (
         <div className={styles.infobox}>
-            <ObjectThumbnail pid={currentPid} />
+            <div style={{ float: "right" }}>
+                <ObjectThumbnail pid={currentPid} />
+            </div>
             <h2>{title}</h2>
             <div>{HtmlReactParser(description)}</div>
             {loaded ? <ObjectButtonBar pid={currentPid} /> : ""}

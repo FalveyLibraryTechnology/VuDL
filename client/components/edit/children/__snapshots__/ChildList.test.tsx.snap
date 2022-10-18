@@ -7,6 +7,11 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
       pageSize={10}
       pid=""
     >
+      <button
+        onClick={[Function]}
+      >
+        Show Thumbnails
+      </button>
       <Component
         count={1000}
         onChange={[Function]}
@@ -24,6 +29,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
             initialTitle="hello1"
             parentPid=""
             pid="foo:124"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -35,6 +41,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
             initialTitle="hello2"
             parentPid=""
             pid="foo:125"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -46,6 +53,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
             initialTitle="hello3"
             parentPid=""
             pid="foo:126"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -57,6 +65,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
             initialTitle="hello4"
             parentPid=""
             pid="foo:127"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -68,6 +77,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
             initialTitle="hello5"
             parentPid=""
             pid="foo:128"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -79,6 +89,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
             initialTitle="hello6"
             parentPid=""
             pid="foo:129"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -90,6 +101,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
             initialTitle="hello7"
             parentPid=""
             pid="foo:130"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -101,6 +113,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
             initialTitle="hello8"
             parentPid=""
             pid="foo:131"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -112,6 +125,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
             initialTitle="hello9"
             parentPid=""
             pid="foo:132"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -123,6 +137,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
             initialTitle="hello10"
             parentPid=""
             pid="foo:133"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -141,6 +156,11 @@ exports[`ChildList renders using SelectableChild when a callback is provided 1`]
       pid=""
       selectCallback={[MockFunction]}
     >
+      <button
+        onClick={[Function]}
+      >
+        Show Thumbnails
+      </button>
       <ul
         className="childlist"
       >
@@ -151,6 +171,7 @@ exports[`ChildList renders using SelectableChild when a callback is provided 1`]
             initialTitle="hello"
             pid="foo:124"
             selectCallback={[MockFunction]}
+            thumbnail={false}
           >
             SelectableChild
           </Component>
@@ -168,6 +189,11 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
       pageSize={10}
       pid="foo:123"
     >
+      <button
+        onClick={[Function]}
+      >
+        Show Thumbnails
+      </button>
       <ul
         className="childlist"
       >
@@ -178,6 +204,7 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
             initialTitle="hello"
             parentPid="foo:123"
             pid="foo:124"
+            thumbnail={false}
           >
             Child
           </Component>
@@ -195,6 +222,11 @@ exports[`ChildList renders using ajax-loaded root data 1`] = `
       pageSize={10}
       pid=""
     >
+      <button
+        onClick={[Function]}
+      >
+        Show Thumbnails
+      </button>
       <ul
         className="childlist"
       >
@@ -205,6 +237,7 @@ exports[`ChildList renders using ajax-loaded root data 1`] = `
             initialTitle="hello"
             parentPid=""
             pid="foo:124"
+            thumbnail={false}
           >
             Child
           </Component>

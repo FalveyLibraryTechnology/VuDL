@@ -115,6 +115,7 @@ exports[`SelectableChild can be expanded to show children 1`] = `
     initial title [foo:123]
   </button>
   <Component
+    forceThumbs={false}
     pageSize={10}
     pid="foo:123"
     selectCallback={[MockFunction]}
