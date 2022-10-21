@@ -9,6 +9,7 @@ import { FetchContextProvider } from "../../../context/FetchContext";
 
 jest.mock("./ChildList", () => () => "ChildList");
 jest.mock("../ObjectButtonBar", () => () => "ObjectButtonBar");
+jest.mock("../ObjectThumbnail", () => () => "ObjectThumbnail");
 
 function getMountedChildComponent(props: ChildProps) {
     return mount(
@@ -51,6 +52,15 @@ describe("Child", () => {
     });
 
     it("renders using ajax-loaded data", async () => {
+        const wrapper = getMountedChildComponent(props);
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
+        wrapper.update();
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders a thumbnail", async () => {
+        props.thumbnail = true;
         const wrapper = getMountedChildComponent(props);
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
