@@ -49,6 +49,16 @@ describe("ChildList", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
+    it("allows thumbnails to be toggled on", async () => {
+        const wrapper = getMountedChildListComponent(props);
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
+        wrapper.update();
+        wrapper.find("button").simulate("click");
+        wrapper.update();
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
     it("renders using SelectableChild when a callback is provided", async () => {
         props.selectCallback = jest.fn();
         const wrapper = getMountedChildListComponent(props);

@@ -1,5 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ChildList allows thumbnails to be toggled on 1`] = `
+<FetchContextProvider>
+  <EditorContextProvider>
+    <ChildList
+      pageSize={10}
+      pid=""
+    >
+      <button
+        onClick={[Function]}
+      >
+        Hide Thumbnails
+      </button>
+      <ul
+        className="childlist"
+      >
+        <li
+          key="_child_foo:124"
+        >
+          <Component
+            initialTitle="hello"
+            parentPid=""
+            pid="foo:124"
+            thumbnail={true}
+          >
+            Child
+          </Component>
+        </li>
+      </ul>
+    </ChildList>
+  </EditorContextProvider>
+</FetchContextProvider>
+`;
+
 exports[`ChildList displays a paginator when appropriate 1`] = `
 <FetchContextProvider>
   <EditorContextProvider>
