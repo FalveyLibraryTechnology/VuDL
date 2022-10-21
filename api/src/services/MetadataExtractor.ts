@@ -241,8 +241,28 @@ class MetadataExtractor {
      * @returns   Process details
      */
      public getProcessMetadata(xml: string): object {
-        // TODO
-        return {};
+        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml");
+        const namespaces = {
+            PMD: "http://www.loc.gov/PMD",
+        };
+        const rdfXPath = xpath.useNamespaces(namespaces);
+        // TODO: extract task sequence
+        const nodeMap = {
+            process_creator: "processCreator",
+            process_datetime: "processDateTime",
+            process_label: "processLabel",
+            process_organization: "processOrganization",
+        };
+        return rdfXPath("//PMD:process_creator|//PMD:process_datetime|//PMD:process_label|//PMD:process_organization", parsedXml).reduce(
+            (acc, relation: Element) => {
+                const target = nodeMap[relation.localName] ?? "";
+                if (target.length > 0) {
+                    acc[target] = relation.textContent;
+                }
+                return acc;
+            },
+            { processCreator: "", processDateTime: "", processLabel: "", processOrganization: "" }
+        );
     }
 
     /**
