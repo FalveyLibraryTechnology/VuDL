@@ -22,7 +22,7 @@ describe("ObjectButtonBar", () => {
     beforeEach(() => {
         pid = "foo:123";
         mockContext = {
-            state: { objectDetailsStorage: {} },
+            state: { objectDetailsStorage: {}, vufindUrl: "" },
             action: {
                 clearPidFromChildListStorage: jest.fn(),
             },
@@ -30,9 +30,25 @@ describe("ObjectButtonBar", () => {
         jest.spyOn(EditorContextModule, "useEditorContext").mockReturnValue(mockContext);
     });
 
-    it("renders correctly", async () => {
+    it("renders correctly without VuFind URL", async () => {
         const wrapper = mount(<ObjectButtonBar pid={pid} />);
         expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders correctly with VuFind URL", async () => {
+        mockContext.state.vufindUrl = "http://localhost";
+        const wrapper = mount(<ObjectButtonBar pid={pid} />);
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("can open a VuFind preview URL", async () => {
+        mockContext.state.vufindUrl = "http://localhost";
+        const wrapper = mount(<ObjectButtonBar pid={pid} />);
+        const previewButton = wrapper.find("button").at(1);
+        expect(previewButton.text()).toEqual("Preview");
+        const openSpy = jest.spyOn(window, "open").mockImplementation(jest.fn());
+        previewButton.simulate("click");
+        expect(openSpy).toHaveBeenCalledWith("http://localhost/Item/" + pid);
     });
 
     it("can refresh a list of children", async () => {

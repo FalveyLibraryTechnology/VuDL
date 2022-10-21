@@ -46,6 +46,7 @@ describe("edit", () => {
                 licenses: {},
                 models: {},
                 favoritePids: {},
+                vufindUrl: "",
             };
             const spy = jest.spyOn(FedoraCatalog.getInstance(), "getCompleteCatalog").mockResolvedValue(fakeCatalog);
             const response = await request(app)

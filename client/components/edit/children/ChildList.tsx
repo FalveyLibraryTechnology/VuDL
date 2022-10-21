@@ -10,14 +10,21 @@ export interface ChildListProps {
     pid?: string;
     selectCallback?: boolean | ((pid: string) => void);
     pageSize?: number;
+    forceThumbs?: boolean | null;
 }
 
-export const ChildList = ({ pid = "", selectCallback = false, pageSize = 10 }: ChildListProps): React.ReactElement => {
+export const ChildList = ({
+    pid = "",
+    selectCallback = false,
+    pageSize = 10,
+    forceThumbs = null,
+}: ChildListProps): React.ReactElement => {
     const {
         state: { childListStorage },
         action: { getChildListStorageKey, loadChildrenIntoStorage },
     } = useEditorContext();
     const [page, setPage] = useState<number>(1);
+    const [showThumbs, setShowThumbs] = useState<boolean>(false);
     const key = getChildListStorageKey(pid, page, pageSize);
     const loaded = Object.prototype.hasOwnProperty.call(childListStorage, key);
     useEffect(() => {
@@ -34,18 +41,34 @@ export const ChildList = ({ pid = "", selectCallback = false, pageSize = 10 }: C
     }
     const children = childListStorage[key];
     const childDocs = children.docs;
+    const thumbsButton =
+        forceThumbs === null ? (
+            <button
+                onClick={() => {
+                    setShowThumbs(!showThumbs);
+                }}
+            >
+                {showThumbs ? "Hide Thumbnails" : "Show Thumbnails"}
+            </button>
+        ) : null;
     const contents =
         childDocs.length > 0 ? (
             childDocs.map((child: Record<string, string>) => {
                 return (
                     <li key={`${pid}_child_${child.id}`}>
                         {selectCallback === false ? (
-                            <Child pid={child.id} parentPid={pid} initialTitle={child.title ?? "-"} />
+                            <Child
+                                pid={child.id}
+                                parentPid={pid}
+                                initialTitle={child.title ?? "-"}
+                                thumbnail={forceThumbs ?? showThumbs}
+                            />
                         ) : (
                             <SelectableChild
                                 pid={child.id}
                                 selectCallback={selectCallback}
                                 initialTitle={child.title ?? "-"}
+                                thumbnail={forceThumbs ?? showThumbs}
                             />
                         )}
                     </li>
@@ -69,6 +92,7 @@ export const ChildList = ({ pid = "", selectCallback = false, pageSize = 10 }: C
         );
     return (
         <>
+            {thumbsButton}
             {paginator}
             <ul className={styles.childlist}>{contents}</ul>
         </>

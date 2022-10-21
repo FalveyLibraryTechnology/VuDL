@@ -115,6 +115,7 @@ exports[`SelectableChild can be expanded to show children 1`] = `
     initial title [foo:123]
   </button>
   <Component
+    forceThumbs={false}
     pageSize={10}
     pid="foo:123"
     selectCallback={[MockFunction]}
@@ -154,6 +155,27 @@ exports[`SelectableChild handles missing object details storage title metadata c
     onClick={[Function]}
   >
     - [foo:123]
+  </button>
+</Fragment>
+`;
+
+exports[`SelectableChild renders thumbnails 1`] = `
+<Fragment>
+  <span
+    onClick={[Function]}
+  >
+    <Memo(ForwardRef(AddBoxIcon))
+      titleAccess="Expand Tree"
+    />
+  </span>
+  <button
+    onClick={[Function]}
+  >
+    initial title [foo:123]
+    <br />
+    <Component
+      pid="foo:123"
+    />
   </button>
 </Fragment>
 `;
