@@ -132,6 +132,10 @@ const useDatastreamOperation = () => {
         toggleDatastreamModal();
     };
 
+    const uploadProcessMetadata = async (metadata) => {
+        // TODO
+    };
+
     const deleteDatastream = async () => {
         try {
             const text = await fetchText(deleteObjectDatastreamUrl(currentPid, activeDatastream), {
@@ -245,6 +249,10 @@ const useDatastreamOperation = () => {
         }
         return  "";
     };
+    const getProcessMetadata = async (): Promise<Array<object>> => {
+        // TODO
+        return  [];
+    };
     const getAgents = async (): Promise<Array<object>> => {
         if(currentDatastreams.includes(activeDatastream)) {
             try {
@@ -264,12 +272,14 @@ const useDatastreamOperation = () => {
         uploadDublinCore,
         uploadFile,
         uploadLicense,
+        uploadProcessMetadata,
         deleteDatastream,
         downloadDatastream,
         viewDatastream,
         viewMetadata,
         getDatastreamMimetype,
         getLicenseKey,
+        getProcessMetadata,
         getAgents
     };
 };
