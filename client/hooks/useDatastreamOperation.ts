@@ -9,7 +9,8 @@ import {
     viewObjectDatastreamUrl,
     getObjectDatastreamMetadataUrl,
     objectDatastreamAgentsUrl,
-    objectDatastreamDublinCoreUrl
+    objectDatastreamDublinCoreUrl,
+    objectDatastreamProcessMetadataUrl
  } from "../util/routes";
 
 const useDatastreamOperation = () => {
@@ -249,9 +250,19 @@ const useDatastreamOperation = () => {
         }
         return  "";
     };
-    const getProcessMetadata = async (): Promise<Array<object>> => {
-        // TODO
-        return  [];
+    const getProcessMetadata = async (): Promise<object> => {
+        if(currentDatastreams.includes(activeDatastream)) {
+            try {
+                return await fetchJSON(objectDatastreamProcessMetadataUrl(currentPid, activeDatastream));
+            } catch(err) {
+                setSnackbarState({
+                    open: true,
+                    message: err.message,
+                    severity: "error",
+                });
+            }
+        }
+        return {};
     };
     const getAgents = async (): Promise<Array<object>> => {
         if(currentDatastreams.includes(activeDatastream)) {

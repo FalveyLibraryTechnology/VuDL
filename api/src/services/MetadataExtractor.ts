@@ -235,6 +235,17 @@ class MetadataExtractor {
     }
 
     /**
+     * Extract process metadata details from the PROCESS-MD datastream.
+     *
+     * @param xml PROCESS-MD datastream XML
+     * @returns   Process details
+     */
+     public getProcessMetadata(xml: string): object {
+        // TODO
+        return {};
+    }
+
+    /**
      * Extract useful details from FITS technical metadata.
      *
      * @param xml FITS technical metadata

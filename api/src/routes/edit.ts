@@ -222,6 +222,17 @@ edit.get("/object/:pid/datastream/:stream/metadata", requireToken, datastreamSan
     }
 });
 
+edit.get("/object/:pid/datastream/:stream/processMetadata", requireToken, datastreamSanitizer, async (req, res) => {
+    try {
+        const { pid, stream } = req.params;
+        const datastream = DatastreamManager.getInstance();
+        const metadata = await datastream.getProcessMetadata(pid, stream);
+        res.status(200).send(metadata);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 edit.get("/topLevelObjects", requireToken, getChildren);
 edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
 edit.get("/object/:pid/lastChildPosition", requireToken, pidSanitizer, async (req, res) => {

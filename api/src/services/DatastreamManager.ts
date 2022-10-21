@@ -123,6 +123,13 @@ class DatastreamManager {
         return metadataExtractor.getAgents(xml);
     }
 
+    async getProcessMetadata(pid: string, stream: string): Promise<object> {
+        const fedoraObject = FedoraObject.build(pid);
+        const xml = await fedoraObject.getDatastreamMetadata(stream);
+        const metadataExtractor = MetadataExtractor.getInstance();
+        return metadataExtractor.getProcessMetadata(xml);
+    }
+
     async deleteDatastream(pid: string, stream: string): Promise<void> {
         const fedoraObject = FedoraObject.build(pid);
         await fedoraObject.deleteDatastream(stream);
