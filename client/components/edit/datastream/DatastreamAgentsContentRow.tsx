@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
-import TextField from "@mui/material/TextField";
 import { useEditorContext } from "../../../context/EditorContext";
 
 import ExpandCircleDown from "@mui/icons-material/ExpandCircleDown";
@@ -111,11 +110,7 @@ const DatastreamAgentsContentRow = ({
             </Grid>
             <Grid container item xs={5}>
                 <FormControl fullWidth={true}>
-                    <BlurSavingTextField
-                        options={nameFieldOptions}
-                        value={name}
-                        setValue={setName}
-                    />
+                    <BlurSavingTextField options={nameFieldOptions} value={name} setValue={setName} />
                 </FormControl>
             </Grid>
             <Grid container item xs={1}>
