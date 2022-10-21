@@ -11,6 +11,8 @@ import DatastreamAgentsContentNotes from "./DatastreamAgentsContentNotes";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Paper from "@mui/material/Paper";
 
+import BlurSavingTextField from "../../shared/BlurSavingTextField";
+
 interface DatastreamAgentsContentRowProps {
     agent: {
         role: string;
@@ -42,6 +44,21 @@ const DatastreamAgentsContentRow = ({
     const { types, roles, defaults } = agentsCatalog;
     const { role, type, name, notes } = agent;
     const [expanded, setExpanded] = useState(initialExpand);
+    const nameFieldOptions = {
+        className: "agentNameTextField",
+        error: name === "",
+        label: namesHelperText,
+    };
+    const setName = (name) => {
+        const { role, type } = defaults;
+        if (agent.name === "" && agent.role === "") {
+            onRoleChange(role);
+        }
+        if (agent.name === "" && agent.type === "") {
+            onTypeChange(type);
+        }
+        onNameChange(name);
+    };
     return (
         <>
             <Grid container item xs={3}>
@@ -94,21 +111,10 @@ const DatastreamAgentsContentRow = ({
             </Grid>
             <Grid container item xs={5}>
                 <FormControl fullWidth={true}>
-                    <TextField
-                        className="agentNameTextField"
-                        error={name === ""}
+                    <BlurSavingTextField
+                        options={nameFieldOptions}
                         value={name}
-                        label={namesHelperText}
-                        onChange={(event) => {
-                            const { role, type } = defaults;
-                            if (agent.name === "" && agent.role === "") {
-                                onRoleChange(role);
-                            }
-                            if (agent.name === "" && agent.type === "") {
-                                onTypeChange(type);
-                            }
-                            onNameChange(event.target.value);
-                        }}
+                        setValue={setName}
                     />
                 </FormControl>
             </Grid>

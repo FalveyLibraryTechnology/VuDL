@@ -86,7 +86,7 @@ describe("DatastreamAgentsContentRow", () => {
     it("changes a name", () => {
         const wrapper = mount(<DatastreamAgentsContentRow {...props} />);
         act(() => {
-            wrapper.find(".agentNameTextField input").simulate("change", { target: { value: "test" } });
+            wrapper.find(".agentNameTextField input").simulate("blur", { target: { value: "test" } });
             wrapper.update();
         });
 
