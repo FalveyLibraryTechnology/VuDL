@@ -86,11 +86,15 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
     <ForwardRef(FormControl)
       fullWidth={true}
     >
-      <ForwardRef(TextField)
-        className="agentNameTextField"
-        error={false}
-        label=""
-        onChange={[Function]}
+      <BlurSavingTextField
+        options={
+          Object {
+            "className": "agentNameTextField",
+            "error": false,
+            "label": "",
+          }
+        }
+        setValue={[Function]}
         value="test3"
       />
     </ForwardRef(FormControl)>
