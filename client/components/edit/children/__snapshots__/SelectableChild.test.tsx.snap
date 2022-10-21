@@ -159,6 +159,27 @@ exports[`SelectableChild handles missing object details storage title metadata c
 </Fragment>
 `;
 
+exports[`SelectableChild renders thumbnails 1`] = `
+<Fragment>
+  <span
+    onClick={[Function]}
+  >
+    <Memo(ForwardRef(AddBoxIcon))
+      titleAccess="Expand Tree"
+    />
+  </span>
+  <button
+    onClick={[Function]}
+  >
+    initial title [foo:123]
+    <br />
+    <Component
+      pid="foo:123"
+    />
+  </button>
+</Fragment>
+`;
+
 exports[`SelectableChild renders using object details storage data 1`] = `
 <Fragment>
   <span

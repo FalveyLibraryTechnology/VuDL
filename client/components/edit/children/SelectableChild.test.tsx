@@ -5,6 +5,7 @@ import toJson from "enzyme-to-json";
 import { SelectableChildProps, SelectableChild } from "./SelectableChild";
 
 jest.mock("./ChildList", () => () => "ChildList");
+jest.mock("../ObjectThumbnail", () => () => "ObjectThumbnail");
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
     useEditorContext: () => {
@@ -25,6 +26,12 @@ describe("SelectableChild", () => {
     });
 
     it("renders using provided default data", async () => {
+        const wrapper = shallow(<SelectableChild {...props} />);
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders thumbnails", async () => {
+        props.thumbnail = true;
         const wrapper = shallow(<SelectableChild {...props} />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
