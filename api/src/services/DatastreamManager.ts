@@ -123,7 +123,7 @@ class DatastreamManager {
         return metadataExtractor.getAgents(xml);
     }
 
-    async getProcessMetadata(pid: string, stream: string): Promise<object> {
+    async getProcessMetadata(pid: string, stream: string): Promise<Record<string, unknown>> {
         const fedoraObject = FedoraObject.build(pid);
         const xml = await fedoraObject.getDatastream(stream);
         const metadataExtractor = MetadataExtractor.getInstance();

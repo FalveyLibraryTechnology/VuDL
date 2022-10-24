@@ -240,28 +240,54 @@ class MetadataExtractor {
      * @param xml PROCESS-MD datastream XML
      * @returns   Process details
      */
-     public getProcessMetadata(xml: string): object {
-        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml");
-        const namespaces = {
-            PMD: "http://www.loc.gov/PMD",
+    public getProcessMetadata(xml: string): Record<string, unknown> {
+        const taskNodeMap = {
+            task_label: "label",
+            task_description: "description",
+            task_sequence: "sequence",
+            task_individual: "individual",
+            tool_label: "toolLabel",
+            tool_description: "toolDescription",
+            tool_make: "toolMake",
+            tool_version: "toolVersion",
+            tool_serial_number: "toolSerialNumber",
         };
-        const rdfXPath = xpath.useNamespaces(namespaces);
-        // TODO: extract task sequence
-        const nodeMap = {
+        const topNodeMap = {
             process_creator: "processCreator",
             process_datetime: "processDateTime",
             process_label: "processLabel",
             process_organization: "processOrganization",
         };
-        return rdfXPath("//PMD:process_creator|//PMD:process_datetime|//PMD:process_label|//PMD:process_organization", parsedXml).reduce(
-            (acc, relation: Element) => {
-                const target = nodeMap[relation.localName] ?? "";
+        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml");
+        const namespaces = {
+            PMD: "http://www.loc.gov/PMD",
+        };
+        const xpathProcessor = xpath.useNamespaces(namespaces);
+        // TODO: extract task sequence
+        const tasks = xpathProcessor("//PMD:task", parsedXml).map((task: Element) => {
+            const parsedTask = xpathProcessor("*|PMD:tool/*", task).reduce((acc, current: Element) => {
+                const target = taskNodeMap[current.localName] ?? "";
                 if (target.length > 0) {
-                    acc[target] = relation.textContent;
+                    acc[target] = current.textContent;
+                }
+                return acc;
+            }, {});
+            Object.values(task.attributes).forEach((attr) => {
+                if (attr.nodeName == "ID") {
+                    parsedTask["id"] = attr.nodeValue;
+                }
+            });
+            return parsedTask;
+        });
+        return xpathProcessor("//PMD:DIGIPROVMD/*", parsedXml).reduce(
+            (acc, current: Element) => {
+                const target = topNodeMap[current.localName] ?? "";
+                if (target.length > 0) {
+                    acc[target] = current.textContent;
                 }
                 return acc;
             },
-            { processCreator: "", processDateTime: "", processLabel: "", processOrganization: "" }
+            { tasks, processCreator: "", processDateTime: "", processLabel: "", processOrganization: "" }
         );
     }
 
