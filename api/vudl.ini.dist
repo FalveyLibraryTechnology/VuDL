@@ -4,6 +4,9 @@ client_url = "http://localhost:3000"
 # Base URL of the backend code:
 backend_url = "http://localhost:9000"
 
+# Secret phrase to use for session encryption:
+session_key = "vanilla hot cocoa"
+
 # Credentials for connecting to a Fedora backend:
 fedora_username = "fedoraAdmin"
 fedora_password = "fedoraAdmin"
