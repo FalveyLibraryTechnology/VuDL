@@ -263,7 +263,6 @@ class MetadataExtractor {
             PMD: "http://www.loc.gov/PMD",
         };
         const xpathProcessor = xpath.useNamespaces(namespaces);
-        // TODO: extract task sequence
         const tasks = xpathProcessor("//PMD:task", parsedXml).map((task: Element) => {
             const parsedTask = xpathProcessor("*|PMD:tool/*", task).reduce((acc, current: Element) => {
                 const target = taskNodeMap[current.localName] ?? "";
