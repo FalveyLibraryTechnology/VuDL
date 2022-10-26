@@ -15,10 +15,10 @@ import queueRouter from "./routes/queue";
 import indexRouter from "./routes/index";
 import { requireLogin, getAuthRouter } from "./routes/auth";
 import Authentication from "./services/Authentication";
+import Config from "./models/Config";
 
-// TODO: Config?
 const sess = {
-    secret: "vanilla hot cocoa",
+    secret: Config.getInstance().sessionKey,
     saveUninitialized: true,
     resave: true,
 };
