@@ -12,6 +12,8 @@ const loginPath = "/api/auth/login";
 export function authenticate(req: Request, res: Response, next?: NextFunction): void {
     const authMethod = passport.authenticate(Config.getInstance().authenticationStrategy, {
         failureRedirect: loginPath + "?fail=true",
+        // We need to remember the referer when we regenerate the session so that post-login redirect works:
+        keepSessionInfo: true,
     });
     authMethod(req, res, next);
 }
@@ -92,9 +94,10 @@ export function getAuthRouter(): Router {
     // which, in this example, will redirect the user to the referring URL.
     authRouter.post("/login", authenticate, postLoginRedirect);
 
-    authRouter.get("/logout", function (req, res) {
-        req.logout();
-        res.redirect(Config.getInstance().clientUrl);
+    authRouter.get("/logout", passport.initialize(), async function (req, res) {
+        await req.logout(() => {
+            res.redirect(Config.getInstance().clientUrl);
+        });
     });
 
     authRouter.get("/token/confirm/:token", async function (req: Request, res: Response) {
