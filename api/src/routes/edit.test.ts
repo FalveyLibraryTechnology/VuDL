@@ -368,10 +368,83 @@ describe("edit", () => {
         });
 
         it("sends an error status code", async () => {
-            datastreamManager.getAgents.mockRejectedValue("get license key fails");
+            datastreamManager.getAgents.mockRejectedValue("get agents fails");
 
             await request(app)
-                .get(`/edit/object/${pid}/datastream/${datastream}/license`)
+                .get(`/edit/object/${pid}/datastream/${datastream}/agents`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+    });
+
+    describe("post /object/:pid/datastream/:stream/processMetadata", () => {
+        let datastreamManager;
+        let processMetadata;
+        beforeEach(() => {
+            datastreamManager = {
+                uploadProcessMetadata: jest.fn(),
+            };
+            processMetadata = { foo: "bar" };
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+            jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+
+        it("uploads metadata", async () => {
+            datastreamManager.uploadProcessMetadata.mockResolvedValue({});
+
+            await request(app)
+                .post(`/edit/object/${pid}/datastream/${datastream}/processMetadata`)
+                .set("Authorization", "Bearer test")
+                .send({ processMetadata })
+                .set("Accept", "application/json")
+                .expect(StatusCodes.OK);
+
+            expect(datastreamManager.uploadProcessMetadata).toHaveBeenCalledWith(pid, datastream, processMetadata);
+        });
+
+        it("sends an error status code", async () => {
+            datastreamManager.uploadProcessMetadata.mockRejectedValue("upload processMetadata failed");
+
+            await request(app)
+                .post(`/edit/object/${pid}/datastream/${datastream}/processMetadata`)
+                .set("Authorization", "Bearer test")
+                .send({ processMetadata })
+                .set("Accept", "application/json")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+    });
+
+    describe("get /object/:pid/datastream/:stream/processMetadata", () => {
+        let datastreamManager;
+        let processMetadata;
+        beforeEach(() => {
+            datastreamManager = {
+                getProcessMetadata: jest.fn(),
+            };
+            processMetadata = { foo: "bar" };
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+            jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("gets the metadata", async () => {
+            datastreamManager.getProcessMetadata.mockResolvedValue(processMetadata);
+
+            const response = await request(app)
+                .get(`/edit/object/${pid}/datastream/${datastream}/processMetadata`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(response.body).toEqual(processMetadata);
+            expect(datastreamManager.getProcessMetadata).toHaveBeenCalledWith(pid, datastream);
+        });
+
+        it("sends an error status code", async () => {
+            datastreamManager.getProcessMetadata.mockRejectedValue("get processMetadata fails");
+
+            await request(app)
+                .get(`/edit/object/${pid}/datastream/${datastream}/processMetadata`)
                 .set("Authorization", "Bearer test")
                 .expect(StatusCodes.INTERNAL_SERVER_ERROR);
         });
