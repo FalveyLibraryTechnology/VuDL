@@ -304,9 +304,9 @@ describe("DatastreamManager", () => {
 
             await datastreamManager.uploadProcessMetadata(pid, stream, metadata);
 
-            const expectedXml = `<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<DIGIPROVMD:DIGIPROVMD xmlns:DIGIPROVMD=\"http://www.loc.gov/PMD\">
-    <DIGIPROVMD:task ID=\"1\">
+            const expectedXml = `<?xml version="1.0" encoding="UTF-8"?>
+<DIGIPROVMD:DIGIPROVMD xmlns:DIGIPROVMD="http://www.loc.gov/PMD">
+    <DIGIPROVMD:task ID="1">
         <DIGIPROVMD:task_label>task label 1</DIGIPROVMD:task_label>
         <DIGIPROVMD:task_description>task desc 1</DIGIPROVMD:task_description>
         <DIGIPROVMD:task_sequence>1</DIGIPROVMD:task_sequence>
@@ -319,7 +319,7 @@ describe("DatastreamManager", () => {
         <DIGIPROVMD:tool_serial_number>sn1</DIGIPROVMD:tool_serial_number>
         </DIGIPROVMD:tool>
     </DIGIPROVMD:task>
-    <DIGIPROVMD:task ID=\"2\">
+    <DIGIPROVMD:task ID="2">
         <DIGIPROVMD:task_label>task label 2</DIGIPROVMD:task_label>
         <DIGIPROVMD:task_description>task desc 2</DIGIPROVMD:task_description>
         <DIGIPROVMD:task_sequence>1</DIGIPROVMD:task_sequence>
