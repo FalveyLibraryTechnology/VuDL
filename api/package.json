@@ -39,7 +39,7 @@
     "nanoid": "^3.1.23",
     "needle": "^2.6.0",
     "node-tesseract-ocr": "^2.0.0",
-    "passport": "^0.4.1",
+    "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "passport-saml": "^3.2.1",
     "pdfkit": "^0.12.1",

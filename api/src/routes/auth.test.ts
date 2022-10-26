@@ -1,4 +1,5 @@
 import * as request from "supertest";
+import * as session from "express-session";
 import { StatusCodes } from "http-status-codes";
 import app from "../app";
 import { getAuthRouter } from "./auth";
@@ -7,6 +8,7 @@ import Config from "../models/Config";
 describe("index", () => {
     beforeAll(() => {
         Config.setInstance(new Config({}));
+        app.use(session({ secret: "testing", resave: true, saveUninitialized: true }));
         app.use("/auth", getAuthRouter());
     });
     beforeEach(() => {
