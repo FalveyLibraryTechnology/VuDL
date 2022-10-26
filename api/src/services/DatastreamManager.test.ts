@@ -38,6 +38,10 @@ describe("DatastreamManager", () => {
         datastreamManager = DatastreamManager.getInstance();
     });
 
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     describe("hasValidMimeType", () => {
         beforeEach(() => {
             datastreamsSpy.mockReturnValue({
@@ -147,7 +151,6 @@ describe("DatastreamManager", () => {
 
             expect(await datastreamManager.getMimeType(pid, stream)).toEqual(mimeType);
 
-            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
             expect(getMetadataSpy).toHaveBeenCalledWith(pid, stream);
             expect(extractEbuNodeSpy).toHaveBeenCalledWith(xml, "//ebucore:hasMimeType");
         });
@@ -218,7 +221,6 @@ describe("DatastreamManager", () => {
             stream = "test2";
             metadata = { "dc:title": ['the "best" title'], "dc:subject": ["one", "two"] };
         });
-
         it("performs appropriate updates (when there is no ID in data)", async () => {
             modifyDatastreamSpy.mockResolvedValue("");
             modifyObjectLabelSpy.mockResolvedValue("");
@@ -252,6 +254,89 @@ describe("DatastreamManager", () => {
                 "  <dc:identifier>nope</dc:identifier>\n" +
                 "  <dc:identifier>test1</dc:identifier>\n" +
                 "</oai_dc:dc>\n";
+            expect(modifyDatastreamSpy).toHaveBeenCalledWith(stream, { mimeType: "text/xml" }, expectedXml);
+        });
+    });
+
+    describe("uploadProcessMetadata", () => {
+        let pid;
+        let stream;
+        let metadata;
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            metadata = {
+                processCreator: "first",
+                processDateTime: "2022-10-05T07:00:00",
+                processLabel: "Digitize Original Item",
+                processOrganization: "Falvey Memorial Library, Villanova University",
+                tasks: [
+                    {
+                        description: "task desc 1",
+                        id: "1",
+                        individual: "task indiv 1",
+                        label: "task label 1",
+                        sequence: "1",
+                        toolDescription: "desc 1",
+                        toolLabel: "Photoshop",
+                        toolMake: "Adobe",
+                        toolSerialNumber: "sn1",
+                        toolVersion: "CS2",
+                    },
+                    {
+                        description: "task desc 2",
+                        id: "2",
+                        individual: "task indiv 2",
+                        label: "task label 2",
+                        sequence: "1",
+                        toolDescription: "desc 2",
+                        toolLabel: "Indus 5005 MAX LARGE FORMAT BOOK SCANNER",
+                        toolMake: "ImageWare",
+                        toolSerialNumber: "LF-00207",
+                        toolVersion: "LF-00207",
+                    },
+                ],
+            };
+        });
+
+        it("performs appropriate updates", async () => {
+            modifyDatastreamSpy.mockResolvedValue("");
+
+            await datastreamManager.uploadProcessMetadata(pid, stream, metadata);
+
+            const expectedXml = `<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<DIGIPROVMD:DIGIPROVMD xmlns:DIGIPROVMD=\"http://www.loc.gov/PMD\">
+    <DIGIPROVMD:task ID=\"1\">
+        <DIGIPROVMD:task_label>task label 1</DIGIPROVMD:task_label>
+        <DIGIPROVMD:task_description>task desc 1</DIGIPROVMD:task_description>
+        <DIGIPROVMD:task_sequence>1</DIGIPROVMD:task_sequence>
+        <DIGIPROVMD:task_individual>task indiv 1</DIGIPROVMD:task_individual>
+        <DIGIPROVMD:tool>
+        <DIGIPROVMD:tool_label>Photoshop</DIGIPROVMD:tool_label>
+        <DIGIPROVMD:tool_description>desc 1</DIGIPROVMD:tool_description>
+        <DIGIPROVMD:tool_make>Adobe</DIGIPROVMD:tool_make>
+        <DIGIPROVMD:tool_version>CS2</DIGIPROVMD:tool_version>
+        <DIGIPROVMD:tool_serial_number>sn1</DIGIPROVMD:tool_serial_number>
+        </DIGIPROVMD:tool>
+    </DIGIPROVMD:task>
+    <DIGIPROVMD:task ID=\"2\">
+        <DIGIPROVMD:task_label>task label 2</DIGIPROVMD:task_label>
+        <DIGIPROVMD:task_description>task desc 2</DIGIPROVMD:task_description>
+        <DIGIPROVMD:task_sequence>1</DIGIPROVMD:task_sequence>
+        <DIGIPROVMD:task_individual>task indiv 2</DIGIPROVMD:task_individual>
+        <DIGIPROVMD:tool>
+        <DIGIPROVMD:tool_label>Indus 5005 MAX LARGE FORMAT BOOK SCANNER</DIGIPROVMD:tool_label>
+        <DIGIPROVMD:tool_description>desc 2</DIGIPROVMD:tool_description>
+        <DIGIPROVMD:tool_make>ImageWare</DIGIPROVMD:tool_make>
+        <DIGIPROVMD:tool_version>LF-00207</DIGIPROVMD:tool_version>
+        <DIGIPROVMD:tool_serial_number>LF-00207</DIGIPROVMD:tool_serial_number>
+        </DIGIPROVMD:tool>
+    </DIGIPROVMD:task>
+    <DIGIPROVMD:process_creator>first</DIGIPROVMD:process_creator>
+    <DIGIPROVMD:process_datetime>2022-10-05T07:00:00</DIGIPROVMD:process_datetime>
+    <DIGIPROVMD:process_label>Digitize Original Item</DIGIPROVMD:process_label>
+    <DIGIPROVMD:process_organization>Falvey Memorial Library, Villanova University</DIGIPROVMD:process_organization>
+</DIGIPROVMD:DIGIPROVMD>`;
             expect(modifyDatastreamSpy).toHaveBeenCalledWith(stream, { mimeType: "text/xml" }, expectedXml);
         });
     });

@@ -183,6 +183,24 @@ edit.post(
 );
 
 edit.post(
+    "/object/:pid/datastream/:stream/processMetadata",
+    requireToken,
+    bodyParser.json(),
+    datastreamSanitizer,
+    async (req, res) => {
+        try {
+            const { pid, stream } = req.params;
+            const { processMetadata } = req.body;
+            const datastream = DatastreamManager.getInstance();
+            await datastream.uploadProcessMetadata(pid, stream, processMetadata);
+            res.status(200).send("Upload process metadata success");
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
+);
+
+edit.post(
     "/object/:pid/datastream/:stream/dublinCore",
     requireToken,
     bodyParser.json(),
