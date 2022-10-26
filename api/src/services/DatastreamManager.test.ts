@@ -433,7 +433,7 @@ describe("DatastreamManager", () => {
             getAgentsSpy = jest.spyOn(MetadataExtractor.prototype, "getAgents");
         });
 
-        it("returns a licenseKey", async () => {
+        it("returns agents", async () => {
             const agents = [
                 {
                     role: "test3",
@@ -451,6 +451,30 @@ describe("DatastreamManager", () => {
             expect(getDatastreamSpy).toHaveBeenCalledWith(stream);
             expect(getAgentsSpy).toHaveBeenCalledWith("testXml");
             expect(response).toEqual(agents);
+        });
+    });
+
+    describe("getProcessMetadata", () => {
+        let pid;
+        let stream;
+        let getProcessMetadataSpy;
+        beforeEach(() => {
+            pid = "test1";
+            stream = "test2";
+            getProcessMetadataSpy = jest.spyOn(MetadataExtractor.prototype, "getProcessMetadata");
+        });
+
+        it("returns process metadata", async () => {
+            const metadata = { foo: "bar" };
+            getDatastreamSpy.mockReturnValue("testXml");
+            getProcessMetadataSpy.mockReturnValue(metadata);
+
+            const response = await datastreamManager.getProcessMetadata(pid, stream);
+
+            expect(fedoraObjectBuildSpy).toHaveBeenCalledWith(pid);
+            expect(getDatastreamSpy).toHaveBeenCalledWith(stream);
+            expect(getProcessMetadataSpy).toHaveBeenCalledWith("testXml");
+            expect(response).toEqual(metadata);
         });
     });
 
