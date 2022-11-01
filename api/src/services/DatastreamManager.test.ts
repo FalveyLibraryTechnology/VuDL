@@ -29,7 +29,9 @@ describe("DatastreamManager", () => {
         fedoraObjectBuildSpy = jest.spyOn(FedoraObject, "build");
         getDatastreamSpy = jest.spyOn(FedoraObject.prototype, "getDatastream").mockImplementation(jest.fn());
         modifyAgentsSpy = jest.spyOn(FedoraObject.prototype, "modifyAgents").mockImplementation(jest.fn());
-        createOrModifyDatastreamSpy = jest.spyOn(FedoraObject.prototype, "createOrModifyDatastream").mockImplementation(jest.fn());
+        createOrModifyDatastreamSpy = jest
+            .spyOn(FedoraObject.prototype, "createOrModifyDatastream")
+            .mockImplementation(jest.fn());
         modifyDatastreamSpy = jest.spyOn(FedoraObject.prototype, "modifyDatastream").mockImplementation(jest.fn());
         modifyLicenseSpy = jest.spyOn(FedoraObject.prototype, "modifyLicense").mockImplementation(jest.fn());
         modifyObjectLabelSpy = jest.spyOn(FedoraObject.prototype, "modifyObjectLabel").mockImplementation(jest.fn());
