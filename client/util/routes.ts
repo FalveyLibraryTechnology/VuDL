@@ -108,7 +108,7 @@ const objectDatastreamDublinCoreUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "dublinCore")
 };
 
-const objectDatastreamProcessMetadataUrl = (pid: string, datastream: string) => {
+const objectDatastreamProcessMetadataUrl = (pid: string, datastream: string): string => {
     return getDatastreamActionUrl(pid, datastream, "processMetadata")
 };
 
