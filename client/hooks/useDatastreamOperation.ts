@@ -133,8 +133,28 @@ const useDatastreamOperation = () => {
         toggleDatastreamModal();
     };
 
-    const uploadProcessMetadata = async (metadata) => {
-        // TODO
+    const uploadProcessMetadata = async (processMetadata) => {
+        try {
+            const text = await fetchText(objectDatastreamProcessMetadataUrl(currentPid, activeDatastream), {
+                method: "POST",
+                body: JSON.stringify({
+                    processMetadata
+                })
+            }, { "Content-Type": "application/json" });
+            await loadCurrentObjectDetails();
+            setSnackbarState({
+                open: true,
+                message: text,
+                severity: "success",
+            });
+        } catch (err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
+        }
+        toggleDatastreamModal();
     };
 
     const deleteDatastream = async () => {

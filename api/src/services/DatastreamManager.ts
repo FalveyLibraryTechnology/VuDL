@@ -147,7 +147,7 @@ class DatastreamManager {
             )}</DIGIPROVMD:process_organization>\n` +
             "</DIGIPROVMD:DIGIPROVMD>";
 
-        await fedoraObject.modifyDatastream(stream, { mimeType: "text/xml" }, xml);
+        await fedoraObject.createOrModifyDatastream(stream, { mimeType: "text/xml" }, xml);
     }
 
     async getLicenseKey(pid: string, stream: string): Promise<string> {

@@ -7,6 +7,7 @@ import Config from "../models/Config";
 describe("DatastreamManager", () => {
     let config;
     let fedoraObjectBuildSpy;
+    let createOrModifyDatastreamSpy;
     let modifyDatastreamSpy;
     let modifyLicenseSpy;
     let modifyObjectLabelSpy;
@@ -28,6 +29,7 @@ describe("DatastreamManager", () => {
         fedoraObjectBuildSpy = jest.spyOn(FedoraObject, "build");
         getDatastreamSpy = jest.spyOn(FedoraObject.prototype, "getDatastream").mockImplementation(jest.fn());
         modifyAgentsSpy = jest.spyOn(FedoraObject.prototype, "modifyAgents").mockImplementation(jest.fn());
+        createOrModifyDatastreamSpy = jest.spyOn(FedoraObject.prototype, "createOrModifyDatastream").mockImplementation(jest.fn());
         modifyDatastreamSpy = jest.spyOn(FedoraObject.prototype, "modifyDatastream").mockImplementation(jest.fn());
         modifyLicenseSpy = jest.spyOn(FedoraObject.prototype, "modifyLicense").mockImplementation(jest.fn());
         modifyObjectLabelSpy = jest.spyOn(FedoraObject.prototype, "modifyObjectLabel").mockImplementation(jest.fn());
@@ -300,7 +302,7 @@ describe("DatastreamManager", () => {
         });
 
         it("performs appropriate updates", async () => {
-            modifyDatastreamSpy.mockResolvedValue("");
+            createOrModifyDatastreamSpy.mockResolvedValue("");
 
             await datastreamManager.uploadProcessMetadata(pid, stream, metadata);
 
@@ -337,7 +339,7 @@ describe("DatastreamManager", () => {
     <DIGIPROVMD:process_label>Digitize Original Item</DIGIPROVMD:process_label>
     <DIGIPROVMD:process_organization>Falvey Memorial Library, Villanova University</DIGIPROVMD:process_organization>
 </DIGIPROVMD:DIGIPROVMD>`;
-            expect(modifyDatastreamSpy).toHaveBeenCalledWith(stream, { mimeType: "text/xml" }, expectedXml);
+            expect(createOrModifyDatastreamSpy).toHaveBeenCalledWith(stream, { mimeType: "text/xml" }, expectedXml);
         });
     });
 
