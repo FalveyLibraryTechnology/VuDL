@@ -38,7 +38,11 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
     const { uploadProcessMetadata, getProcessMetadata } = useDatastreamOperation();
     useEffect(() => {
         const loadProcessMetadata = async () => {
-            setMetadata(await getProcessMetadata());
+            const metadata = await getProcessMetadata();
+            setMetadata(metadata);
+            if ((metadata.tasks ?? []).length == 0) {
+                addTask(0);
+            }
             setLoading(false);
         };
         loadProcessMetadata();
