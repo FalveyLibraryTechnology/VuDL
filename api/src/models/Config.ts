@@ -64,6 +64,10 @@ class Config {
         return this.ini["fits_command"];
     }
 
+    get sessionKey(): string {
+        return this.ini["session_key"] ?? "vanilla hot cocoa";
+    }
+
     get tesseractPath(): string {
         return this.ini["tesseract_path"];
     }

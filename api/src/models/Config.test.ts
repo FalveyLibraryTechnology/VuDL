@@ -5,6 +5,12 @@ describe("Config", () => {
         const config = new Config({});
         expect(config.favoritePids).toEqual([]);
         expect(config.dublinCoreFields).toEqual({});
+        expect(config.sessionKey).toEqual("vanilla hot cocoa");
+    });
+
+    it("allows session key configuration", () => {
+        const config = new Config({ session_key: "foo" });
+        expect(config.sessionKey).toEqual("foo");
     });
 
     it("should return Dublin Core settings from configuration", () => {
