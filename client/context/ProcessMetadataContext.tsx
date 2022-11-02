@@ -43,6 +43,21 @@ const resynchronizeTaskIds = (tasks: Array<ProcessMetadataTask>): Array<ProcessM
 const processMetadataReducer = (state: ProcessMetadata, { type, payload }: { type: string, payload: unknown }) => {
     if (type === "UPDATE_METADATA") {
         return payload;
+    } else if (type === "UPDATE_TASK_ATTRIBUTE") {
+        const { index, attribute, value } = payload as { index: number, attribute: string, value: string};
+        const tasks = (state.tasks ?? []).map((task, i) => {
+            if (i === index) {
+                return {
+                    ...task,
+                    [attribute]: value
+                };
+            }
+            return task;
+        });
+        return {
+            ...state,
+            tasks
+        };
     } else if (type === "ADD_TASK") {
         const index = payload as number;
         const newTask = {
@@ -105,6 +120,13 @@ export const useProcessMetadataContext = () => {
         });
     }
 
+    const updateTaskAttribute = (index: number, attribute: string, value: string): void => {
+        dispatch({
+            type: "UPDATE_TASK_ATTRIBUTE",
+            payload: { index, attribute, value }
+        });
+    }
+
     const setMetadata = (metadata: ProcessMetadata): void => {
         dispatch({
             type: "UPDATE_METADATA",
@@ -145,6 +167,7 @@ export const useProcessMetadataContext = () => {
         action: {
             addTask,
             deleteTask,
+            updateTaskAttribute,
             setMetadata,
             setProcessCreator,
             setProcessDateTime,

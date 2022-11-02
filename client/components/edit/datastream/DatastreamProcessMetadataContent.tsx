@@ -27,6 +27,7 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
             setProcessDateTime,
             setProcessLabel,
             setProcessOrganization,
+            updateTaskAttribute,
         },
     } = useProcessMetadataContext();
     const [loading, setLoading] = useState<boolean>(true);
@@ -41,8 +42,8 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
     }, []);
     const tasks = (processMetadata.tasks ?? []).map((task, i) => {
         keyCounter++;
-        const callback = (attribute, value) => {
-            alert(`Set ${attribute} to ${value} at index ${i}`);
+        const callback = (attribute: string, value: string) => {
+            updateTaskAttribute(i, attribute, value);
         };
         return (
             <DatastreamProcessMetadataTask
