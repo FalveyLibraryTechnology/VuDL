@@ -33,9 +33,42 @@ const reducerMapping: Record<string, string> = {
     UPDATE_PROCESS_LABEL: "processLabel",
     UPDATE_PROCESS_ORGANIZATION: "processOrganization",
 };
-const processMetadataReducer = (state, { type, payload }) => {
+const resynchronizeTaskIds = (tasks: Array<ProcessMetadataTask>): Array<ProcessMetadataTask> => {
+    return tasks.map((task: ProcessMetadataTask, i: string) => {
+        task.id = "" + (parseInt(i) + 1);
+        return task;
+    });
+}
+
+const processMetadataReducer = (state: ProcessMetadata, { type, payload }: { type: string, payload: unknown }) => {
     if (type === "UPDATE_METADATA") {
         return payload;
+    } else if (type === "ADD_TASK") {
+        const index = payload as number;
+        const newTask = {
+            description: "",
+            id: "",
+            individual: "",
+            label: "",
+            sequence: "" + (index + 1),
+            toolDescription: "",
+            toolLabel: "",
+            toolMake: "",
+            toolSerialNumber: "",
+            toolVersion: "",
+        };
+        const tasks = [...(state.tasks ?? [])];
+        tasks.splice(index, 0, newTask);
+        return {
+            ...state,
+            tasks: resynchronizeTaskIds(tasks),
+        };
+    } else if (type === "DELETE_TASK") {
+        const index = payload as number;
+        return {
+            ...state,
+            tasks: resynchronizeTaskIds((state.tasks ?? []).filter((task, i) => i !== index)),
+        };
     } else if(Object.keys(reducerMapping).includes(type)) {
         return {
             ...state,
@@ -57,6 +90,20 @@ export const useProcessMetadataContext = () => {
         state,
         dispatch,
     } = useContext(ProcessMetadataContext) as { state: ProcessMetadata, dispatch: (params: unknown) => void };
+
+    const addTask = (index: number): void => {
+        dispatch({
+            type: "ADD_TASK",
+            payload: index
+        });
+    }
+
+    const deleteTask = (index: number): void => {
+        dispatch({
+            type: "DELETE_TASK",
+            payload: index
+        });
+    }
 
     const setMetadata = (metadata: ProcessMetadata): void => {
         dispatch({
@@ -96,6 +143,8 @@ export const useProcessMetadataContext = () => {
     return {
         state,
         action: {
+            addTask,
+            deleteTask,
             setMetadata,
             setProcessCreator,
             setProcessDateTime,

@@ -19,7 +19,15 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
     } = useEditorContext();
     const {
         state: processMetadata,
-        action: { setMetadata, setProcessCreator, setProcessDateTime, setProcessLabel, setProcessOrganization },
+        action: {
+            addTask,
+            deleteTask,
+            setMetadata,
+            setProcessCreator,
+            setProcessDateTime,
+            setProcessLabel,
+            setProcessOrganization,
+        },
     } = useProcessMetadataContext();
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -36,7 +44,15 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
         const callback = (attribute, value) => {
             alert(`Set ${attribute} to ${value} at index ${i}`);
         };
-        return <DatastreamProcessMetadataTask key={`process_task_${keyCounter}`} setAttribute={callback} task={task} />;
+        return (
+            <DatastreamProcessMetadataTask
+                key={`process_task_${keyCounter}`}
+                addBelow={() => addTask(i + 1)}
+                deleteTask={() => deleteTask(i)}
+                setAttribute={callback}
+                task={task}
+            />
+        );
     });
     return loading ? (
         <DialogContent>Loading...</DialogContent>
@@ -46,7 +62,7 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
                 <FormControl style={{ "margin-bottom": "10px" }}>
                     <FormLabel>Digital Provenance</FormLabel>
                 </FormControl>
-                <Grid container spacing={1} style={{ "margin-bottom": "10px" }}>
+                <Grid container spacing={1} style={{ marginBottom: "10px" }}>
                     <Grid item xs={3}>
                         <FormControl fullWidth={true}>
                             <BlurSavingTextField
@@ -84,7 +100,7 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
                         </FormControl>
                     </Grid>
                 </Grid>
-                {tasks}
+                {tasks.length > 0 ? tasks : <button onClick={() => addTask(0)}>Add Task</button>}
             </DialogContent>
 
             <DialogActions>
