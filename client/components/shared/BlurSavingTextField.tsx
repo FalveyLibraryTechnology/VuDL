@@ -10,7 +10,9 @@ export interface BlurSavingTextFieldProps {
 const BlurSavingTextField = ({ value, setValue, options = {} }: BlurSavingTextFieldProps): React.ReactElement => {
     const [temporaryValue, setTemporaryValue] = useState(value);
     const handleBlurEvent = (event: React.ChangeEvent) => {
-        setValue(event.target.value);
+        if (event.target.value !== value) {
+            setValue(event.target.value);
+        }
     };
     const handleChangeEvent = (event: React.ChangeEvent) => {
         setTemporaryValue(event.target.value);
