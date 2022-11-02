@@ -9,6 +9,9 @@ import { useEditorContext } from "../../../context/EditorContext";
 import { useProcessMetadataContext } from "../../../context/ProcessMetadataContext";
 import BlurSavingTextField from "../../shared/BlurSavingTextField";
 import Grid from "@mui/material/Grid";
+import DatastreamProcessMetadataTask from "./DatastreamProcessMetadataTask";
+
+let keyCounter = 0;
 
 const DatastreamProcessMetadataContent = (): React.ReactElement => {
     const {
@@ -28,17 +31,22 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
         };
         loadProcessMetadata();
     }, []);
+    const tasks = (processMetadata.tasks ?? []).map((task, i) => {
+        keyCounter++;
+        const callback = (attribute, value) => {
+            alert(`Set ${attribute} to ${value} at index ${i}`);
+        };
+        return <DatastreamProcessMetadataTask key={`process_task_${keyCounter}`} setAttribute={callback} task={task} />;
+    });
     return loading ? (
         <DialogContent>Loading...</DialogContent>
     ) : (
         <>
             <DialogContent>
-                <FormControl>
+                <FormControl style={{ "margin-bottom": "10px" }}>
                     <FormLabel>Digital Provenance</FormLabel>
                 </FormControl>
-                <br />
-                <br />
-                <Grid container spacing={1}>
+                <Grid container spacing={1} style={{ "margin-bottom": "10px" }}>
                     <Grid item xs={3}>
                         <FormControl fullWidth={true}>
                             <BlurSavingTextField
@@ -76,6 +84,7 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
                         </FormControl>
                     </Grid>
                 </Grid>
+                {tasks}
             </DialogContent>
 
             <DialogActions>
