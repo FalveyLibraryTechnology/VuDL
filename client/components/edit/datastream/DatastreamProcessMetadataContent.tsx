@@ -11,7 +11,10 @@ import BlurSavingTextField from "../../shared/BlurSavingTextField";
 import Grid from "@mui/material/Grid";
 import DatastreamProcessMetadataTask from "./DatastreamProcessMetadataTask";
 
-let keyCounter = 0;
+// Whenever a task is added or removed, we need to revise the keys on the task
+// components so that React renders correctly. This counter is incremented on each
+// task add/remove, and used as part of the keys on related components.
+let taskKeyGeneration = 0;
 
 const DatastreamProcessMetadataContent = (): React.ReactElement => {
     const {
@@ -41,15 +44,14 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
         loadProcessMetadata();
     }, []);
     const tasks = (processMetadata.tasks ?? []).map((task, i) => {
-        keyCounter++;
         const callback = (attribute: string, value: string) => {
             updateTaskAttribute(i, attribute, value);
         };
         return (
             <DatastreamProcessMetadataTask
-                key={`process_task_${keyCounter}`}
-                addBelow={() => addTask(i + 1)}
-                deleteTask={() => deleteTask(i)}
+                key={`process_task_${taskKeyGeneration}_${i}`}
+                addBelow={() => { taskKeyGeneration++ ; addTask(i + 1) }}
+                deleteTask={() => { taskKeyGeneration++; deleteTask(i) }}
                 setAttribute={callback}
                 task={task}
             />
