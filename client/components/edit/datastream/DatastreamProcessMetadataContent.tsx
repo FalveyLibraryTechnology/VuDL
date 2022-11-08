@@ -34,7 +34,7 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
             setProcessDateTime,
             setProcessLabel,
             setProcessOrganization,
-            updateTaskAttribute,
+            updateTaskAttributes,
         },
     } = useProcessMetadataContext();
     const [loading, setLoading] = useState<boolean>(true);
@@ -52,8 +52,12 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
         loadProcessMetadata();
     }, []);
     const tasks = (processMetadata.tasks ?? []).map((task, i) => {
-        const callback = (attribute: string, value: string) => {
-            updateTaskAttribute(i, attribute, value);
+        const callback = (attributes: Record<string, string>, forceNewGeneration = false) => {
+            updateTaskAttributes(i, attributes);
+            // TODO: figure out why this is necessary!
+            if (forceNewGeneration) {
+                taskKeyGeneration++;
+            }
         };
         return (
             <DatastreamProcessMetadataTask
@@ -66,7 +70,7 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
                     taskKeyGeneration++;
                     deleteTask(i);
                 }}
-                setAttribute={callback}
+                setAttributes={callback}
                 task={task}
             />
         );
