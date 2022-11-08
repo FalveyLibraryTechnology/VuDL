@@ -427,6 +427,11 @@ type = "text"
 label = "Rights"
 type = "text"
 
+# You can set default values for top-level process metadata
+[process_metadata_defaults]
+processLabel = "Digitize Original Item"
+processOrganization = "My Library, My University"
+
 # You can set up tools as presets in the Process Metadata screen; just number each
 # uniquely in the section header (e.g. [tool_presets.0], [tool_presets.1], etc.)
 [tool_presets.0]

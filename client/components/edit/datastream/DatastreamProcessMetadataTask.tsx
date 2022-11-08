@@ -32,13 +32,16 @@ const DatastreamProcessMetadataTask = ({
         // the "key generation" -- this is the purpose of the second parameter (true) below.
         // This enables a compromise between redraws-when-needed and fast performance when
         // users update the form via keyboard.
-        setAttributes({
-            toolLabel: tool.label ?? "",
-            toolSerialNumber: tool.serialNumber ?? "",
-            toolDescription: tool.description ?? "",
-            toolMake: tool.make ?? "",
-            toolVersion: tool.version ?? "",
-        }, true);
+        setAttributes(
+            {
+                toolLabel: tool.label ?? "",
+                toolSerialNumber: tool.serialNumber ?? "",
+                toolDescription: tool.description ?? "",
+                toolMake: tool.make ?? "",
+                toolVersion: tool.version ?? "",
+            },
+            true
+        );
     };
     return (
         <>

@@ -47,6 +47,7 @@ interface EditorState {
     agentsCatalog: Record<string, Object>;
     dublinCoreFieldCatalog: Record<string, Record<string, string>>;
     favoritePidsCatalog: Record<string, string>;
+    processMetadataDefaults: Record<string, string>;
     toolPresets: Array<Record<string, string>>;
     vufindUrl: string;
     currentAgents: Array<Object>;
@@ -75,6 +76,7 @@ const editorContextParams: EditorState = {
     agentsCatalog: {},
     dublinCoreFieldCatalog: {},
     favoritePidsCatalog: {},
+    processMetadataDefaults: {},
     toolPresets: [],
     vufindUrl: "",
     currentAgents: [],
@@ -112,6 +114,7 @@ const reducerMapping: Record<string, string> = {
     SET_AGENTS_CATALOG: "agentsCatalog",
     SET_DUBLIN_CORE_FIELD_CATALOG: "dublinCoreFieldCatalog",
     SET_FAVORITE_PIDS_CATALOG: "favoritePidsCatalog",
+    SET_PROCESS_METADATA_DEFAULTS: "processMetadataDefaults",
     SET_TOOL_PRESETS: "toolPresets",
     SET_VUFIND_URL: "vufindUrl",
     SET_LICENSES_CATALOG: "licensesCatalog",
@@ -233,6 +236,7 @@ export const useEditorContext = () => {
             agentsCatalog,
             dublinCoreFieldCatalog,
             favoritePidsCatalog,
+            processMetadataDefaults,
             toolPresets,
             vufindUrl,
             licensesCatalog,
@@ -383,6 +387,13 @@ export const useEditorContext = () => {
         });
     }
 
+    const setProcessMetadataDefaults = (defaults: Record<string, string>) => {
+        dispatch({
+            type: "SET_PROCESS_METADATA_DEFAULTS",
+            payload: defaults
+        });
+    }
+
     const setToolPresets = (toolPresets: Array<Record<string, string>>) => {
         dispatch({
             type: "SET_TOOL_PRESETS",
@@ -488,6 +499,7 @@ export const useEditorContext = () => {
             setLicensesCatalog(response.licenses || {});
             setFavoritePidsCatalog(response.favoritePids || {});
             setToolPresets(response.toolPresets || []);
+            setProcessMetadataDefaults(response.processMetadataDefaults || {});
             setAgentsCatalog(response.agents || {});
             setDublinCoreFieldCatalog(response.dublinCoreFields || {});
             setVuFindUrl(response.vufindUrl ?? "");
@@ -523,6 +535,7 @@ export const useEditorContext = () => {
             agentsCatalog,
             dublinCoreFieldCatalog,
             favoritePidsCatalog,
+            processMetadataDefaults,
             toolPresets,
             vufindUrl,
             modelsCatalog,

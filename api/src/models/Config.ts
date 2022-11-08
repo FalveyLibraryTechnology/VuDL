@@ -261,6 +261,10 @@ class Config {
         return parseInt(this.ini?.["queue"]?.["lockDuration"] ?? "30000");
     }
 
+    get processMetadataDefaults(): Record<string, string> {
+        return this.ini?.["process_metadata_defaults"] ?? {};
+    }
+
     get toolPresets(): Array<Record<string, string>> {
         return this.ini?.["tool_presets"] ?? [];
     }

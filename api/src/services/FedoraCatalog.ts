@@ -27,6 +27,7 @@ export interface CompleteCatalog {
     licenses: Record<string, License>;
     models: Record<string, FedoraModel>;
     favoritePids: Record<string, string>;
+    processMetadataDefaults: Record<string, string>;
     toolPresets: Array<Record<string, string>>;
     vufindUrl: string;
 }
@@ -50,7 +51,16 @@ class FedoraCatalog {
     }
 
     async getCompleteCatalog(): Promise<CompleteCatalog> {
-        const { models, licenses, agentDefaults, agentRoles, agentTypes, toolPresets, vufindUrl } = this.config;
+        const {
+            models,
+            licenses,
+            agentDefaults,
+            agentRoles,
+            agentTypes,
+            processMetadataDefaults,
+            toolPresets,
+            vufindUrl,
+        } = this.config;
         return {
             agents: {
                 defaults: agentDefaults,
@@ -62,6 +72,7 @@ class FedoraCatalog {
             models,
             licenses,
             toolPresets,
+            processMetadataDefaults,
             vufindUrl,
         };
     }

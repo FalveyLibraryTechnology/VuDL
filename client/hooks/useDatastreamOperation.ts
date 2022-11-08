@@ -18,7 +18,7 @@ const useDatastreamOperation = () => {
         action: { fetchBlob, fetchJSON, fetchText },
     } = useFetchContext();
     const {
-        state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams },
+        state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams, processMetadataDefaults },
         action: { setSnackbarState, toggleDatastreamModal, loadCurrentObjectDetails },
     } = useEditorContext();
 
@@ -282,7 +282,7 @@ const useDatastreamOperation = () => {
                 });
             }
         }
-        return {};
+        return processMetadataDefaults;
     };
     const getAgents = async (): Promise<Array<object>> => {
         if(currentDatastreams.includes(activeDatastream)) {

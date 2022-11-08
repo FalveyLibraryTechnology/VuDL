@@ -45,6 +45,7 @@ describe("FedoraCatalog", () => {
                 favoritePids: {},
                 licenses: {},
                 models: {},
+                processMetadataDefaults: {},
                 toolPresets: [],
                 vufindUrl: "",
             };
@@ -65,6 +66,7 @@ describe("FedoraCatalog", () => {
                 },
                 licenses: {},
                 models: {},
+                processMetadataDefaults: {},
                 toolPresets: [],
                 vufindUrl: "",
             };
@@ -89,6 +91,7 @@ describe("FedoraCatalog", () => {
                 },
                 licenses: {},
                 models: {},
+                processMetadataDefaults: {},
                 toolPresets: [],
                 vufindUrl: "",
             };
