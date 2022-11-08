@@ -54,7 +54,6 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
     const tasks = (processMetadata.tasks ?? []).map((task, i) => {
         const callback = (attributes: Record<string, string>, forceNewGeneration = false) => {
             updateTaskAttributes(i, attributes);
-            // TODO: figure out why this is necessary!
             if (forceNewGeneration) {
                 taskKeyGeneration++;
             }

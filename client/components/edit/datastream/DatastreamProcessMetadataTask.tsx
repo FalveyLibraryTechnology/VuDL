@@ -28,7 +28,10 @@ const DatastreamProcessMetadataTask = ({
     const [selectedTool, setSelectedTool] = useState(Object.keys(toolPresets)[0] ?? "");
     const applyToolPreset = () => {
         const tool = toolPresets[selectedTool] ?? {};
-        // TODO: figure out why the second parameter (true) is necessary to trigger redraws
+        // When we apply tool presets, we need to force a redraw of the form by incrementing
+        // the "key generation" -- this is the purpose of the second parameter (true) below.
+        // This enables a compromise between redraws-when-needed and fast performance when
+        // users update the form via keyboard.
         setAttributes({
             toolLabel: tool.label ?? "",
             toolSerialNumber: tool.serialNumber ?? "",
