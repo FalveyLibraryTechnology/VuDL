@@ -45,6 +45,7 @@ describe("FedoraCatalog", () => {
                 favoritePids: {},
                 licenses: {},
                 models: {},
+                toolPresets: [],
                 vufindUrl: "",
             };
             expect(await FedoraCatalog.getInstance().getCompleteCatalog()).toEqual(expectedCatalog);
@@ -64,6 +65,7 @@ describe("FedoraCatalog", () => {
                 },
                 licenses: {},
                 models: {},
+                toolPresets: [],
                 vufindUrl: "",
             };
             const catalog = new FedoraCatalog(config, solr);
@@ -87,6 +89,7 @@ describe("FedoraCatalog", () => {
                 },
                 licenses: {},
                 models: {},
+                toolPresets: [],
                 vufindUrl: "",
             };
             const catalog = new FedoraCatalog(config, solr);

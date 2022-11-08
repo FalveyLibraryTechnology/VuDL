@@ -45,6 +45,7 @@ describe("edit", () => {
                 dublinCoreFields: {},
                 licenses: {},
                 models: {},
+                toolPresets: [],
                 favoritePids: {},
                 vufindUrl: "",
             };

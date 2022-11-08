@@ -260,6 +260,10 @@ class Config {
     get redisLockDuration(): number {
         return parseInt(this.ini?.["queue"]?.["lockDuration"] ?? "30000");
     }
+
+    get toolPresets(): Array<Record<string, string>> {
+        return this.ini?.["tool_presets"] ?? [];
+    }
 }
 
 export default Config;
