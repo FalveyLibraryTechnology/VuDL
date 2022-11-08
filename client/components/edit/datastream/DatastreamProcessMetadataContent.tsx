@@ -15,6 +15,11 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
 
+// Whenever a task is added or removed, we need to revise the keys on the task
+// components so that React renders correctly. This counter is incremented on each
+// task add/remove, and used as part of the keys on related components.
+let taskKeyGeneration = 0;
+
 const DatastreamProcessMetadataContent = (): React.ReactElement => {
     const {
         action: { toggleDatastreamModal },
@@ -47,16 +52,22 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
         loadProcessMetadata();
     }, []);
     const tasks = (processMetadata.tasks ?? []).map((task, i) => {
-        const callback = (attributes: Record<string, string>) => {
+        const callback = (attributes: Record<string, string>, forceNewGeneration = false) => {
             updateTaskAttributes(i, attributes);
+            // TODO: figure out why this is necessary!
+            if (forceNewGeneration) {
+                taskKeyGeneration++;
+            }
         };
         return (
             <DatastreamProcessMetadataTask
-                key={JSON.stringify(task)}
+                key={`process_task_${taskKeyGeneration}_${i}`}
                 addBelow={() => {
+                    taskKeyGeneration++;
                     addTask(i + 1);
                 }}
                 deleteTask={() => {
+                    taskKeyGeneration++;
                     deleteTask(i);
                 }}
                 setAttributes={callback}
