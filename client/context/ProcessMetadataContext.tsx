@@ -141,10 +141,10 @@ export const useProcessMetadataContext = () => {
         });
     };
 
-    const setProcessDateTime = (value: string): void => {
+    const setProcessDateTime = (value: string | null): void => {
         dispatch({
             type: "UPDATE_PROCESS_DATE_TIME",
-            payload: value
+            payload: value ?? ""
         });
     };
 

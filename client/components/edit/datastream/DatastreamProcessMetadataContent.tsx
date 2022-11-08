@@ -4,12 +4,16 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import TextField from "@mui/material/TextField";
 import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 import { useEditorContext } from "../../../context/EditorContext";
 import { useProcessMetadataContext } from "../../../context/ProcessMetadataContext";
 import BlurSavingTextField from "../../shared/BlurSavingTextField";
 import Grid from "@mui/material/Grid";
 import DatastreamProcessMetadataTask from "./DatastreamProcessMetadataTask";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import type {} from "@mui/x-date-pickers/themeAugmentation";
 
 // Whenever a task is added or removed, we need to revise the keys on the task
 // components so that React renders correctly. This counter is incremented on each
@@ -54,8 +58,14 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
         return (
             <DatastreamProcessMetadataTask
                 key={`process_task_${taskKeyGeneration}_${i}`}
-                addBelow={() => { taskKeyGeneration++ ; addTask(i + 1) }}
-                deleteTask={() => { taskKeyGeneration++; deleteTask(i) }}
+                addBelow={() => {
+                    taskKeyGeneration++;
+                    addTask(i + 1);
+                }}
+                deleteTask={() => {
+                    taskKeyGeneration++;
+                    deleteTask(i);
+                }}
                 setAttribute={callback}
                 task={task}
             />
@@ -66,7 +76,7 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
     ) : (
         <>
             <DialogContent>
-                <FormControl style={{ "margin-bottom": "10px" }}>
+                <FormControl style={{ marginBottom: "10px" }}>
                     <FormLabel>Digital Provenance</FormLabel>
                 </FormControl>
                 <Grid container spacing={1} style={{ marginBottom: "10px" }}>
@@ -89,13 +99,14 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
                         </FormControl>
                     </Grid>
                     <Grid item xs={3}>
-                        <FormControl fullWidth={true}>
-                            <BlurSavingTextField
-                                options={{ label: "Process Date/Time" }}
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateTimePicker
+                                renderInput={(props) => <TextField {...props} />}
+                                label="Process Date/Time"
                                 value={processMetadata.processDateTime ?? ""}
-                                setValue={setProcessDateTime}
+                                onChange={setProcessDateTime}
                             />
-                        </FormControl>
+                        </LocalizationProvider>
                     </Grid>
                     <Grid item xs={3}>
                         <FormControl fullWidth={true}>
