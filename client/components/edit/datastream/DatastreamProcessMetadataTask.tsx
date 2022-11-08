@@ -13,7 +13,7 @@ interface DatastreamProcessMetadataTaskProps {
     task: ProcessMetadataTask;
     deleteTask: () => void;
     addBelow: () => void;
-    setAttributes: (attributes: Record<string, string>, forceNewGeneration?: boolean) => void;
+    setAttributes: (attributes: Record<string, string>) => void;
 }
 
 const DatastreamProcessMetadataTask = ({
@@ -28,14 +28,13 @@ const DatastreamProcessMetadataTask = ({
     const [selectedTool, setSelectedTool] = useState(Object.keys(toolPresets)[0] ?? "");
     const applyToolPreset = () => {
         const tool = toolPresets[selectedTool] ?? {};
-        // TODO: figure out why the second parameter (true) is necessary to trigger redraws
         setAttributes({
             toolLabel: tool.label ?? "",
             toolSerialNumber: tool.serialNumber ?? "",
             toolDescription: tool.description ?? "",
             toolMake: tool.make ?? "",
             toolVersion: tool.version ?? "",
-        }, true);
+        });
     };
     return (
         <>
