@@ -245,9 +245,9 @@ export class FedoraObject {
         expectedStatus: Array<number>
     ): Promise<void> {
         if (typeof params.dsLabel !== "undefined" || typeof params.dsState !== "undefined") {
-            throw new Error("Unsupported parameter(s) passed to modifyDatastream()");
+            throw new Error("Unsupported parameter(s) passed to putDatastream()");
         }
-        this.log(params.logMessage);
+        this.log(params.logMessage ?? "");
         await this.fedora.putDatastream(this.pid, id, params.mimeType, expectedStatus, data);
     }
 
@@ -264,7 +264,7 @@ export class FedoraObject {
     }
 
     log(message: string): void {
-        if (this.logger) {
+        if (this.logger && message.length > 0) {
             this.logger.info(message);
         }
     }

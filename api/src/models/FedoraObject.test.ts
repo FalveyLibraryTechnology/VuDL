@@ -210,4 +210,49 @@ describe("FedoraObject", () => {
             expect(deleteDatastreamTombstoneSpy).toHaveBeenCalledWith(pid, stream);
         });
     });
+
+    describe("putDatastream", () => {
+        let putDatastreamSpy;
+        beforeEach(() => {
+            putDatastreamSpy = jest.spyOn(Fedora.getInstance(), "putDatastream").mockImplementation(jest.fn());
+        });
+
+        it("proxies the Fedora service", async () => {
+            const params = { mimeType: "foo/bar" };
+            const expectedStatus = [204];
+            await fedoraObject.putDatastream("foo", params, "data", expectedStatus);
+            expect(putDatastreamSpy).toHaveBeenCalledWith(pid, "foo", "foo/bar", expectedStatus, "data");
+        });
+
+        it("logs messages", async () => {
+            const logSpy = jest.spyOn(fedoraObject, "log").mockImplementation(jest.fn());
+            const params = { mimeType: "foo/bar", logMessage: "log" };
+            const expectedStatus = [204];
+            await fedoraObject.putDatastream("foo", params, "data", expectedStatus);
+            expect(logSpy).toHaveBeenCalledWith("log");
+        });
+
+        it("does not support dsLabel or dsState parameters", async () => {
+            const params = { dsLabel: "foo", dsState: "bar" };
+            await expect(async () => {
+                await fedoraObject.putDatastream("foo", params, "bar", [200]);
+            }).rejects.toThrow("Unsupported parameter(s) passed to putDatastream()");
+        });
+    });
+
+    describe("createOrModifyDatastream", () => {
+        it("proxies putDatastream with appropriate status expectations", async () => {
+            const putSpy = jest.spyOn(fedoraObject, "putDatastream").mockImplementation(jest.fn());
+            await fedoraObject.createOrModifyDatastream("foo", { mimeType: "bar" }, "baz");
+            expect(putSpy).toHaveBeenCalledWith("foo", { mimeType: "bar" }, "baz", [201, 204]);
+        });
+    });
+
+    describe("modifyDatastream", () => {
+        it("proxies putDatastream with appropriate status expectations", async () => {
+            const putSpy = jest.spyOn(fedoraObject, "putDatastream").mockImplementation(jest.fn());
+            await fedoraObject.modifyDatastream("foo", { mimeType: "bar" }, "baz");
+            expect(putSpy).toHaveBeenCalledWith("foo", { mimeType: "bar" }, "baz", [204]);
+        });
+    });
 });
