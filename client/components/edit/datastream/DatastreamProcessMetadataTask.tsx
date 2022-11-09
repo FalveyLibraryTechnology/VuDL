@@ -43,6 +43,35 @@ const DatastreamProcessMetadataTask = ({
             true
         );
     };
+    const toolPresetKeys = Object.keys(toolPresets);
+    const presetControl =
+        toolPresetKeys.length > 0 ? (
+            <>
+                <Grid item xs={7}>
+                    <FormControl fullWidth={true}>
+                        <label>
+                            Select a preset tool:
+                            <NativeSelect
+                                value={selectedTool}
+                                onChange={(event) => setSelectedTool(event.target.value)}
+                            >
+                                {toolPresetKeys.map((index: string) => {
+                                    const tool = toolPresets[index];
+                                    return (
+                                        <option key={`tool_preset_${index}`} value={index}>
+                                            {tool.label ?? ""}
+                                        </option>
+                                    );
+                                })}
+                            </NativeSelect>
+                        </label>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={5}>
+                    <button onClick={applyToolPreset}>Apply Preset</button>
+                </Grid>
+            </>
+        ) : null;
     return (
         <>
             <hr style={{ marginBottom: "20px" }} />
@@ -85,29 +114,7 @@ const DatastreamProcessMetadataTask = ({
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={7}>
-                            <FormControl fullWidth={true}>
-                                <label>
-                                    Select a preset tool:
-                                    <NativeSelect
-                                        value={selectedTool}
-                                        onChange={(event) => setSelectedTool(event.target.value)}
-                                    >
-                                        {Object.keys(toolPresets).map((index: number) => {
-                                            const tool = toolPresets[index];
-                                            return (
-                                                <option key={`tool_preset_${index}`} value={index}>
-                                                    {tool.label ?? ""}
-                                                </option>
-                                            );
-                                        })}
-                                    </NativeSelect>
-                                </label>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={5}>
-                            <button onClick={applyToolPreset}>Apply Preset</button>
-                        </Grid>
+                        {presetControl}
                         <Grid item xs={3}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
