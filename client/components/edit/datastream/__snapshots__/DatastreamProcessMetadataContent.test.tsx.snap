@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamProcessMetadataContent renders a loading message if content is unavailable 1`] = `
+<ForwardRef(DialogContent)>
+  Loading...
+</ForwardRef(DialogContent)>
+`;
