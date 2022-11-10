@@ -25,7 +25,10 @@ jest.mock("../../../hooks/useDatastreamOperation", () => () => {
     return mockUseDatastreamOperation();
 });
 
-jest.mock("./DatastreamProcessMetadataTask", () => () => "DatastreamProcessMetadataTask");
+const DatastreamProcessMetadataTask = function DatastreamProcessMetadataTask() {
+    return "";
+};
+jest.mock("./DatastreamProcessMetadataTask", () => DatastreamProcessMetadataTask);
 
 describe("DatastreamProcessMetadataContent", () => {
     let datastreamOperationValues;
@@ -101,5 +104,24 @@ describe("DatastreamProcessMetadataContent", () => {
         const wrapper = await getMountedComponent();
         await wrapper.find(".uploadProcessMetadataButton").find(Button).props().onClick();
         expect(datastreamOperationValues.uploadProcessMetadata).toHaveBeenCalledWith(processMetadataValues.state);
+    });
+
+    it("supports task updates", async () => {
+        const wrapper = await getMountedComponent({ tasks: [{ id: 1 }] });
+        const attr = { foo: "bar" };
+        wrapper.find(DatastreamProcessMetadataTask).props().setAttributes(attr, true);
+        expect(processMetadataValues.action.updateTaskAttributes).toHaveBeenCalledWith(0, attr);
+    });
+
+    it("supports adding tasks", async () => {
+        const wrapper = await getMountedComponent({ tasks: [{ id: 1 }] });
+        wrapper.find(DatastreamProcessMetadataTask).props().addBelow();
+        expect(processMetadataValues.action.addTask).toHaveBeenCalledWith(1);
+    });
+
+    it("supports deleting tasks", async () => {
+        const wrapper = await getMountedComponent({ tasks: [{ id: 1 }] });
+        wrapper.find(DatastreamProcessMetadataTask).props().deleteTask();
+        expect(processMetadataValues.action.deleteTask).toHaveBeenCalledWith(0);
     });
 });
