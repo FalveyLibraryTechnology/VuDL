@@ -1,8 +1,9 @@
 import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
 import toJson from "enzyme-to-json";
 import DatastreamProcessMetadataContent from "./DatastreamProcessMetadataContent";
+import { waitFor } from "@testing-library/react";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
@@ -63,6 +64,20 @@ describe("DatastreamProcessMetadataContent", () => {
     it("renders a loading message if content is unavailable", () => {
         const wrapper = shallow(<DatastreamProcessMetadataContent />);
 
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders a form when data is loaded", async () => {
+        const fakeData = { foo: "bar" };
+        datastreamOperationValues.getProcessMetadata.mockResolvedValue(fakeData);
+
+        const wrapper = mount(<DatastreamProcessMetadataContent />);
+
+        await waitFor(() => expect(processMetadataValues.action.setMetadata).toHaveBeenCalledWith(fakeData));
+
+        expect(processMetadataValues.action.addTask).toHaveBeenCalledWith(0);
+
+        wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 });
