@@ -4,6 +4,7 @@ import { mount, shallow } from "enzyme";
 import toJson from "enzyme-to-json";
 import DatastreamProcessMetadataContent from "./DatastreamProcessMetadataContent";
 import { waitFor } from "@testing-library/react";
+import Button from "@mui/material/Button";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
@@ -31,6 +32,19 @@ describe("DatastreamProcessMetadataContent", () => {
     let editorValues;
     let processMetadataValues;
 
+    const getMountedComponent = async (fakeData = {}) => {
+        datastreamOperationValues.getProcessMetadata.mockResolvedValue(fakeData);
+        processMetadataValues.state = fakeData;
+
+        const wrapper = mount(<DatastreamProcessMetadataContent />);
+
+        await waitFor(() => expect(processMetadataValues.action.setMetadata).toHaveBeenCalledWith(fakeData));
+
+        wrapper.update();
+
+        return wrapper;
+    };
+
     beforeEach(() => {
         datastreamOperationValues = {
             uploadProcessMetadata: jest.fn(),
@@ -40,9 +54,7 @@ describe("DatastreamProcessMetadataContent", () => {
         editorValues = { action: { toggleDatastreamModal: jest.fn() } };
         mockUseEditorContext.mockReturnValue(editorValues);
         processMetadataValues = {
-            state: {
-                processMetadata: {},
-            },
+            state: {},
             action: {
                 addTask: jest.fn(),
                 deleteTask: jest.fn(),
@@ -67,17 +79,27 @@ describe("DatastreamProcessMetadataContent", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("renders a form when data is loaded", async () => {
-        const fakeData = { foo: "bar" };
-        datastreamOperationValues.getProcessMetadata.mockResolvedValue(fakeData);
-
-        const wrapper = mount(<DatastreamProcessMetadataContent />);
-
-        await waitFor(() => expect(processMetadataValues.action.setMetadata).toHaveBeenCalledWith(fakeData));
-
+    it("renders a form when empty data is loaded", async () => {
+        const wrapper = await getMountedComponent();
         expect(processMetadataValues.action.addTask).toHaveBeenCalledWith(0);
-
-        wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders a form when non-empty data is loaded", async () => {
+        const wrapper = await getMountedComponent({
+            processLabel: "label",
+            processCreator: "creator",
+            processDateTime: "datetime",
+            processOrganization: "organization",
+            tasks: [{ id: 1 }, { id: 2 }],
+        });
+        expect(processMetadataValues.action.addTask).not.toHaveBeenCalled();
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("has a working save button", async () => {
+        const wrapper = await getMountedComponent();
+        await wrapper.find(".uploadProcessMetadataButton").find(Button).props().onClick();
+        expect(datastreamOperationValues.uploadProcessMetadata).toHaveBeenCalledWith(processMetadataValues.state);
     });
 });
