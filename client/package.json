@@ -10,8 +10,8 @@
     "prod": "next start",
     "snapshots": "jest --updateSnapshot",
     "start": "next dev",
-    "test": "jest --coverage",
-    "testWatch": "jest --watch --coverage"
+    "test": "TZ='America/New_York' jest --coverage",
+    "testWatch": "TZ='America/New_York' jest --watch --coverage"
   },
   "dependencies": {
     "@date-io/dayjs": "^2.16.0",
