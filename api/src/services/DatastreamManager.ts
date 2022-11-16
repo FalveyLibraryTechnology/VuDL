@@ -109,25 +109,19 @@ class DatastreamManager {
         const fedoraObject = FedoraObject.build(pid);
         const tasks = ((metadata.tasks ?? []) as Array<Record<string, string>>)
             .map((task) => {
-                return (
-                    `    <DIGIPROVMD:task ID="${task.id ?? 1}">\n` +
-                    `        <DIGIPROVMD:task_label>${task.label ?? ""}</DIGIPROVMD:task_label>\n` +
-                    `        <DIGIPROVMD:task_description>${task.description ?? ""}</DIGIPROVMD:task_description>\n` +
-                    `        <DIGIPROVMD:task_sequence>${task.sequence ?? 1}</DIGIPROVMD:task_sequence>\n` +
-                    `        <DIGIPROVMD:task_individual>${task.individual ?? ""}</DIGIPROVMD:task_individual>\n` +
-                    "        <DIGIPROVMD:tool>\n" +
-                    `        <DIGIPROVMD:tool_label>${task.toolLabel ?? ""}</DIGIPROVMD:tool_label>\n` +
-                    `        <DIGIPROVMD:tool_description>${
-                        task.toolDescription ?? ""
-                    }</DIGIPROVMD:tool_description>\n` +
-                    `        <DIGIPROVMD:tool_make>${task.toolMake ?? ""}</DIGIPROVMD:tool_make>\n` +
-                    `        <DIGIPROVMD:tool_version>${task.toolVersion ?? ""}</DIGIPROVMD:tool_version>\n` +
-                    `        <DIGIPROVMD:tool_serial_number>${
-                        task.toolSerialNumber ?? ""
-                    }</DIGIPROVMD:tool_serial_number>\n` +
-                    "        </DIGIPROVMD:tool>\n" +
-                    "    </DIGIPROVMD:task>\n"
-                );
+                return `    <DIGIPROVMD:task ID="${task.id ?? 1}">
+        <DIGIPROVMD:task_label>${task.label ?? ""}</DIGIPROVMD:task_label>
+        <DIGIPROVMD:task_description>${task.description ?? ""}</DIGIPROVMD:task_description>
+        <DIGIPROVMD:task_sequence>${task.sequence ?? 1}</DIGIPROVMD:task_sequence>
+        <DIGIPROVMD:task_individual>${task.individual ?? ""}</DIGIPROVMD:task_individual>
+        <DIGIPROVMD:tool>
+        <DIGIPROVMD:tool_label>${task.toolLabel ?? ""}</DIGIPROVMD:tool_label>
+        <DIGIPROVMD:tool_description>${task.toolDescription ?? ""}</DIGIPROVMD:tool_description>
+        <DIGIPROVMD:tool_make>${task.toolMake ?? ""}</DIGIPROVMD:tool_make>
+        <DIGIPROVMD:tool_version>${task.toolVersion ?? ""}</DIGIPROVMD:tool_version>
+        <DIGIPROVMD:tool_serial_number>${task.toolSerialNumber ?? ""}</DIGIPROVMD:tool_serial_number>
+        </DIGIPROVMD:tool>
+    </DIGIPROVMD:task>\n`;
             })
             .join("");
         // Format an XML document and save it to the repository:
