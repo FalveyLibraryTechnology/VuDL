@@ -30,6 +30,11 @@ const DatastreamProcessMetadataTask = function DatastreamProcessMetadataTask() {
 };
 jest.mock("./DatastreamProcessMetadataTask", () => DatastreamProcessMetadataTask);
 
+jest.mock("@mui/x-date-pickers", () => ({
+    DateTimePicker: () => "DateTimePicker",
+    LocalizationProvider: () => "LocalizationProvider",
+}));
+
 describe("DatastreamProcessMetadataContent", () => {
     let datastreamOperationValues;
     let editorValues;
