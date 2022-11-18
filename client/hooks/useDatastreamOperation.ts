@@ -9,7 +9,8 @@ import {
     viewObjectDatastreamUrl,
     getObjectDatastreamMetadataUrl,
     objectDatastreamAgentsUrl,
-    objectDatastreamDublinCoreUrl
+    objectDatastreamDublinCoreUrl,
+    objectDatastreamProcessMetadataUrl
  } from "../util/routes";
 
 const useDatastreamOperation = () => {
@@ -17,7 +18,7 @@ const useDatastreamOperation = () => {
         action: { fetchBlob, fetchJSON, fetchText },
     } = useFetchContext();
     const {
-        state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams },
+        state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams, processMetadataDefaults },
         action: { setSnackbarState, toggleDatastreamModal, loadCurrentObjectDetails },
     } = useEditorContext();
 
@@ -114,6 +115,30 @@ const useDatastreamOperation = () => {
                 method: "POST",
                 body: JSON.stringify({
                     licenseKey
+                })
+            }, { "Content-Type": "application/json" });
+            await loadCurrentObjectDetails();
+            setSnackbarState({
+                open: true,
+                message: text,
+                severity: "success",
+            });
+        } catch (err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
+        }
+        toggleDatastreamModal();
+    };
+
+    const uploadProcessMetadata = async (processMetadata) => {
+        try {
+            const text = await fetchText(objectDatastreamProcessMetadataUrl(currentPid, activeDatastream), {
+                method: "POST",
+                body: JSON.stringify({
+                    processMetadata
                 })
             }, { "Content-Type": "application/json" });
             await loadCurrentObjectDetails();
@@ -245,6 +270,20 @@ const useDatastreamOperation = () => {
         }
         return  "";
     };
+    const getProcessMetadata = async (): Promise<object> => {
+        if(currentDatastreams.includes(activeDatastream)) {
+            try {
+                return await fetchJSON(objectDatastreamProcessMetadataUrl(currentPid, activeDatastream));
+            } catch(err) {
+                setSnackbarState({
+                    open: true,
+                    message: err.message,
+                    severity: "error",
+                });
+            }
+        }
+        return processMetadataDefaults;
+    };
     const getAgents = async (): Promise<Array<object>> => {
         if(currentDatastreams.includes(activeDatastream)) {
             try {
@@ -264,12 +303,14 @@ const useDatastreamOperation = () => {
         uploadDublinCore,
         uploadFile,
         uploadLicense,
+        uploadProcessMetadata,
         deleteDatastream,
         downloadDatastream,
         viewDatastream,
         viewMetadata,
         getDatastreamMimetype,
         getLicenseKey,
+        getProcessMetadata,
         getAgents
     };
 };

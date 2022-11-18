@@ -276,6 +276,59 @@ describe("useDatastreamOperation", () => {
         });
     });
 
+    describe("uploadProcessMetadata ", () => {
+        beforeEach(() => {
+            editorValues.state.activeDatastream = "PROCESS-MD";
+        });
+
+        it("uploads process metadata with success", async () => {
+            fetchValues.action.fetchText.mockResolvedValue("upload works");
+
+            const { uploadProcessMetadata  } = useDatastreamOperation();
+            const input = { foo: "bar" };
+            await uploadProcessMetadata(input);
+
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/PROCESS-MD/processMetadata",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({processMetadata: input}),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+                open: true,
+                message: "upload works",
+                severity: "success",
+            });
+        });
+
+        it("fails to upload the process metadata", async () => {
+            fetchValues.action.fetchText.mockRejectedValue(new Error("Upload failure!"));
+
+            const { uploadProcessMetadata } = useDatastreamOperation();
+            const input = { foo: "bar" };
+            await uploadProcessMetadata(input);
+
+            expect(editorValues.action.loadCurrentObjectDetails).not.toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/vudl%3A123/datastream/PROCESS-MD/processMetadata",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({processMetadata: input}),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    open: true,
+                    message: "Upload failure!",
+                    severity: "error"
+                })
+            );
+        });
+    });
+
     describe("deleteDatastream", () => {
         it("deletes with success", async () => {
             fetchValues.action.fetchText.mockResolvedValue("Delete success!");
@@ -564,7 +617,7 @@ describe("useDatastreamOperation", () => {
         });
 
 
-        it("fails to fetch the license key", async () => {
+        it("fails to fetch the agents", async () => {
             fetchValues.action.fetchJSON.mockRejectedValue(new Error("fetch agents failed"));
 
             const { getAgents } = useDatastreamOperation();
@@ -576,6 +629,44 @@ describe("useDatastreamOperation", () => {
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "fetch agents failed",
+                severity: "error"
+            });
+        });
+    });
+
+    describe("getProcessMetadata", () => {
+        let expectedMetadata: Record<string, string>;
+        beforeEach(() => {
+            expectedMetadata = { foo: "bar" };
+            editorValues.state.activeDatastream = "PROCESS-MD";
+            editorValues.state.currentDatastreams = ["PROCESS-MD"];
+        });
+
+        it("returns process metadata for the active datastream", async () => {
+            fetchValues.action.fetchJSON.mockResolvedValue(expectedMetadata);
+
+            const { getProcessMetadata } = useDatastreamOperation();
+            const agents = await getProcessMetadata();
+
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/PROCESS-MD/processMetadata"
+            );
+            expect(agents).toEqual(expectedMetadata);
+        });
+
+
+        it("fails to fetch the process metadata", async () => {
+            fetchValues.action.fetchJSON.mockRejectedValue(new Error("fetch process metadata failed"));
+
+            const { getProcessMetadata } = useDatastreamOperation();
+            await getProcessMetadata();
+
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/PROCESS-MD/processMetadata"
+            );
+            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+                open: true,
+                message: "fetch process metadata failed",
                 severity: "error"
             });
         });

@@ -105,6 +105,45 @@ class DatastreamManager {
         await fedoraObject.modifyObjectLabel(title);
     }
 
+    async uploadProcessMetadata(pid: string, stream: string, metadata: Record<string, unknown>): Promise<void> {
+        const fedoraObject = FedoraObject.build(pid);
+        const tasks = ((metadata.tasks ?? []) as Array<Record<string, string>>)
+            .map((task) => {
+                return `    <DIGIPROVMD:task ID="${task.id ?? 1}">
+        <DIGIPROVMD:task_label>${task.label ?? ""}</DIGIPROVMD:task_label>
+        <DIGIPROVMD:task_description>${task.description ?? ""}</DIGIPROVMD:task_description>
+        <DIGIPROVMD:task_sequence>${task.sequence ?? 1}</DIGIPROVMD:task_sequence>
+        <DIGIPROVMD:task_individual>${task.individual ?? ""}</DIGIPROVMD:task_individual>
+        <DIGIPROVMD:tool>
+        <DIGIPROVMD:tool_label>${task.toolLabel ?? ""}</DIGIPROVMD:tool_label>
+        <DIGIPROVMD:tool_description>${task.toolDescription ?? ""}</DIGIPROVMD:tool_description>
+        <DIGIPROVMD:tool_make>${task.toolMake ?? ""}</DIGIPROVMD:tool_make>
+        <DIGIPROVMD:tool_version>${task.toolVersion ?? ""}</DIGIPROVMD:tool_version>
+        <DIGIPROVMD:tool_serial_number>${task.toolSerialNumber ?? ""}</DIGIPROVMD:tool_serial_number>
+        </DIGIPROVMD:tool>
+    </DIGIPROVMD:task>\n`;
+            })
+            .join("");
+        // Format an XML document and save it to the repository:
+        const xml =
+            '<?xml version="1.0" encoding="UTF-8"?>\n' +
+            '<DIGIPROVMD:DIGIPROVMD xmlns:DIGIPROVMD="http://www.loc.gov/PMD">\n' +
+            tasks +
+            `    <DIGIPROVMD:process_creator>${xmlescape(
+                metadata.processCreator ?? ""
+            )}</DIGIPROVMD:process_creator>\n` +
+            `    <DIGIPROVMD:process_datetime>${xmlescape(
+                metadata.processDateTime ?? ""
+            )}</DIGIPROVMD:process_datetime>\n` +
+            `    <DIGIPROVMD:process_label>${xmlescape(metadata.processLabel ?? "")}</DIGIPROVMD:process_label>\n` +
+            `    <DIGIPROVMD:process_organization>${xmlescape(
+                metadata.processOrganization ?? ""
+            )}</DIGIPROVMD:process_organization>\n` +
+            "</DIGIPROVMD:DIGIPROVMD>";
+
+        await fedoraObject.createOrModifyDatastream(stream, { mimeType: "text/xml" }, xml);
+    }
+
     async getLicenseKey(pid: string, stream: string): Promise<string> {
         const fedoraObject = FedoraObject.build(pid);
         const xml = await fedoraObject.getDatastream(stream);
@@ -121,6 +160,13 @@ class DatastreamManager {
         const xml = await fedoraObject.getDatastream(stream);
         const metadataExtractor = MetadataExtractor.getInstance();
         return metadataExtractor.getAgents(xml);
+    }
+
+    async getProcessMetadata(pid: string, stream: string): Promise<Record<string, unknown>> {
+        const fedoraObject = FedoraObject.build(pid);
+        const xml = await fedoraObject.getDatastream(stream);
+        const metadataExtractor = MetadataExtractor.getInstance();
+        return metadataExtractor.getProcessMetadata(xml);
     }
 
     async deleteDatastream(pid: string, stream: string): Promise<void> {

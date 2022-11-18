@@ -238,12 +238,25 @@ export class FedoraObject {
         return fs.readFileSync(targetXml).toString();
     }
 
-    async modifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
+    async putDatastream(
+        id: string,
+        params: DatastreamParameters,
+        data: string,
+        expectedStatus: Array<number>
+    ): Promise<void> {
         if (typeof params.dsLabel !== "undefined" || typeof params.dsState !== "undefined") {
-            throw new Error("Unsupported parameter(s) passed to modifyDatastream()");
+            throw new Error("Unsupported parameter(s) passed to putDatastream()");
         }
-        this.log(params.logMessage);
-        await this.fedora.putDatastream(this.pid, id, params.mimeType, [204], data);
+        this.log(params.logMessage ?? "");
+        await this.fedora.putDatastream(this.pid, id, params.mimeType, expectedStatus, data);
+    }
+
+    async createOrModifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
+        await this.putDatastream(id, params, data, [201, 204]);
+    }
+
+    async modifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
+        await this.putDatastream(id, params, data, [204]);
     }
 
     async modifyObjectLabel(title: string): Promise<void> {
@@ -251,7 +264,7 @@ export class FedoraObject {
     }
 
     log(message: string): void {
-        if (this.logger) {
+        if (this.logger && message.length > 0) {
             this.logger.info(message);
         }
     }
