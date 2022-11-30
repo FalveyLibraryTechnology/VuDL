@@ -6,6 +6,7 @@ import SolrIndexer from "./SolrIndexer";
 
 jest.mock("./SinglePidIndexer", () => () => "SinglePidIndexer");
 jest.mock("./PidRangeIndexer", () => () => "PidRangeIndexer");
+jest.mock("../shared/BasicBreadcrumbs", () => () => "BasicBreadcrumbs");
 
 const mockUseFetchContext = jest.fn();
 jest.mock("../../context/FetchContext", () => ({

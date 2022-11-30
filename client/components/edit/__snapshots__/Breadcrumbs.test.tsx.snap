@@ -1284,23 +1284,25 @@ exports[`Breadcrumb renders without a pid 1`] = `
 <FetchContextProvider>
   <EditorContextProvider>
     <Breadcrumbs>
-      <ul
-        className="breadcrumb"
-      >
-        <li>
-          <Link
-            href="/"
-          >
-            <a
+      <BasicBreadcrumbs>
+        <ul
+          className="breadcrumb"
+        >
+          <li>
+            <Link
               href="/"
-              onClick={[Function]}
-              onMouseEnter={[Function]}
             >
-              Main Menu
-            </a>
-          </Link>
-        </li>
-      </ul>
+              <a
+                href="/"
+                onClick={[Function]}
+                onMouseEnter={[Function]}
+              >
+                Main Menu
+              </a>
+            </Link>
+          </li>
+        </ul>
+      </BasicBreadcrumbs>
     </Breadcrumbs>
   </EditorContextProvider>
 </FetchContextProvider>

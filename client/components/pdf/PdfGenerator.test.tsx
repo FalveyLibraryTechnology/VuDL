@@ -11,6 +11,7 @@ jest.mock("../../context/FetchContext", () => ({
         return mockUseFetchContext();
     },
 }));
+jest.mock("../shared/BasicBreadcrumbs", () => () => "BasicBreadcrumbs");
 
 describe("PdfGenerator", () => {
     let fetchContextValues;

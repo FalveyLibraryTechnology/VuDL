@@ -5,12 +5,14 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import BasicBreadcrumbs from "../shared/BasicBreadcrumbs";
 
 const SolrIndexer = (): React.ReactElement => {
     const [results, setResults] = useState("");
 
     return (
         <div>
+            <BasicBreadcrumbs />
             <h1>Solr Index Tool</h1>
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>Index Single PID:</AccordionSummary>

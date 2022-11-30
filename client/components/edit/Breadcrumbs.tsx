@@ -1,5 +1,6 @@
-import styles from "./Breadcrumbs.module.css";
+import styles from "../shared/Breadcrumbs.module.css";
 import React, { useEffect } from "react";
+import BasicBreadcrumbs from "../shared/BasicBreadcrumbs";
 import { TreeNode, processBreadcrumbData } from "../../util/Breadcrumbs";
 import { useEditorContext } from "../../context/EditorContext";
 import Link from "next/link";
@@ -23,13 +24,7 @@ const Breadcrumbs = ({ pid = null }: BreadcrumbsProps): React.ReactElement => {
 
     // Special case: no PID, we're at the top level:
     if (pid === null) {
-        return (
-            <ul className={styles.breadcrumb}>
-                <li>
-                    <Link href="/">Main Menu</Link>
-                </li>
-            </ul>
-        );
+        return <BasicBreadcrumbs />;
     }
 
     const treeData: Array<Array<TreeNode>> =
