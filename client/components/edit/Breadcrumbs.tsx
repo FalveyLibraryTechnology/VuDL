@@ -5,10 +5,10 @@ import { useEditorContext } from "../../context/EditorContext";
 import Link from "next/link";
 
 interface BreadcrumbsProps {
-    pid: string;
+    pid?: string | null;
 }
 
-const Breadcrumbs = ({ pid }: BreadcrumbsProps): React.ReactElement => {
+const Breadcrumbs = ({ pid = null }: BreadcrumbsProps): React.ReactElement => {
     const {
         state: { parentDetailsStorage },
         action: { loadParentDetailsIntoStorage },
@@ -16,12 +16,23 @@ const Breadcrumbs = ({ pid }: BreadcrumbsProps): React.ReactElement => {
     const loaded = Object.prototype.hasOwnProperty.call(parentDetailsStorage, pid);
 
     useEffect(() => {
-        if (!loaded) {
+        if (!loaded && pid !== null) {
             loadParentDetailsIntoStorage(pid);
         }
     }, [loaded]);
 
-    const treeData: Array<Array<TreeNode>> = loaded ? processBreadcrumbData(parentDetailsStorage[pid]).paths : [];
+    // Special case: no PID, we're at the top level:
+    if (pid === null) {
+        return (
+            <ul className={styles.breadcrumb}>
+                <li>
+                    <Link href="/">Main Menu</Link>
+                </li>
+            </ul>
+        );
+    }
+
+    const treeData: Array<Array<TreeNode>> = loaded && pid ? processBreadcrumbData(parentDetailsStorage[pid]).paths : [];
 
     const contents = treeData.map((trail, trailIndex: number) => {
         const breadcrumbs = trail.map((breadcrumb) => {
@@ -36,8 +47,13 @@ const Breadcrumbs = ({ pid }: BreadcrumbsProps): React.ReactElement => {
                 <Link href="/edit">Edit Home</Link>
             </li>
         );
+        breadcrumbs.unshift(
+            <li key={"breadcrumb_mainmenu_" + trailIndex}>
+                <Link href="/">Main Menu</Link>
+            </li>
+        );
         return (
-            <ul className={styles.breadcrumb} key={"breadcrumbs" + "_" + trailIndex}>
+            <ul className={styles.breadcrumb} key={"breadcrumbs_" + trailIndex}>
                 {breadcrumbs}
             </ul>
         );
