@@ -32,7 +32,8 @@ const Breadcrumbs = ({ pid = null }: BreadcrumbsProps): React.ReactElement => {
         );
     }
 
-    const treeData: Array<Array<TreeNode>> = loaded && pid ? processBreadcrumbData(parentDetailsStorage[pid]).paths : [];
+    const treeData: Array<Array<TreeNode>> =
+        loaded && pid ? processBreadcrumbData(parentDetailsStorage[pid]).paths : [];
 
     const contents = treeData.map((trail, trailIndex: number) => {
         const breadcrumbs = trail.map((breadcrumb) => {
