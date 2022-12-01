@@ -2,6 +2,7 @@
 
 exports[`PdfGenerator renders 1`] = `
 <div>
+  BasicBreadcrumbs
   <h1>
     PDF Generator Tool
   </h1>

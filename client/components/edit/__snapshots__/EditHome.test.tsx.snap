@@ -3,6 +3,9 @@
 exports[`EditHome renders 1`] = `
 <EditHome>
   <div>
+    <Component>
+      Breadcrumbs
+    </Component>
     <h1>
       Editor
     </h1>

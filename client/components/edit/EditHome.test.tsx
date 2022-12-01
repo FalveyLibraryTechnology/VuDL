@@ -15,6 +15,7 @@ jest.mock("./children/ChildList", () => () => "ChildList");
 jest.mock("./EditorSnackbar", () => () => "EditorSnackbar");
 jest.mock("./parents/ParentsModal", () => () => "ParentsModal");
 jest.mock("./StateModal", () => () => "StateModal");
+jest.mock("./Breadcrumbs", () => () => "Breadcrumbs");
 
 describe("EditHome", () => {
     let editorValues;

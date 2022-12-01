@@ -14,6 +14,7 @@ jest.mock(
             return <mock-Category />;
         }
 );
+jest.mock("../shared/BasicBreadcrumbs", () => () => "BasicBreadcrumbs");
 
 describe("JobSelector", () => {
     let data;

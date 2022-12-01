@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { baseUrl } from "../../util/routes";
 import { useFetchContext } from "../../context/FetchContext";
+import BasicBreadcrumbs from "../shared/BasicBreadcrumbs";
 
 const PdfGenerator = (): React.ReactElement => {
     const [pid, setPid] = useState("");
@@ -19,6 +20,7 @@ const PdfGenerator = (): React.ReactElement => {
 
     return (
         <div>
+            <BasicBreadcrumbs />
             <h1>PDF Generator Tool</h1>
             <label>
                 PID: <input type="text" id="pdfGeneratePid" value={pid} onChange={(e) => setPid(e.target.value)} />

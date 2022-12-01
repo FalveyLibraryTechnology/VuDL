@@ -44,6 +44,18 @@ describe("Breadcrumb", () => {
         return { pid, title, parents };
     }
 
+    it("renders without a pid", () => {
+        props = {};
+        const wrapper = mount(
+            <FetchContextProvider>
+                <EditorContextProvider>
+                    <Breadcrumbs />
+                </EditorContextProvider>
+            </FetchContextProvider>
+        );
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
     it("renders using ajax-loaded object data (no parents)", async () => {
         breadcrumbResponse = getObject("foo:1234", "Fake Title");
         await runStandardSnapshotTest();

@@ -1,7 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`JobSelector renders 1`] = `
-<div
-  id="jobSelector"
-/>
+Array [
+  "BasicBreadcrumbs",
+  <div
+    id="jobSelector"
+  />,
+  ";",
+]
 `;

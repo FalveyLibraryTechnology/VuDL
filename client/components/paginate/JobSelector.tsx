@@ -4,6 +4,7 @@ import Category from "./Category";
 import { ingestApiUrl } from "../../util/routes";
 
 import { useFetchContext } from "../../context/FetchContext";
+import BasicBreadcrumbs from "../shared/BasicBreadcrumbs";
 
 const JobSelector = (): React.ReactElement => {
     const {
@@ -33,7 +34,12 @@ const JobSelector = (): React.ReactElement => {
         injestApi();
     }, []);
 
-    return <div id="jobSelector">{[...categoryComponents[0], ...categoryComponents[1]]}</div>;
+    return (
+        <>
+            <BasicBreadcrumbs />
+            <div id="jobSelector">{[...categoryComponents[0], ...categoryComponents[1]]}</div>;
+        </>
+    );
 };
 
 export default JobSelector;

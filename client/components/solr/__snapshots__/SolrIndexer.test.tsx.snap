@@ -3,6 +3,9 @@
 exports[`SolrIndexer renders 1`] = `
 <SolrIndexer>
   <div>
+    <Component>
+      BasicBreadcrumbs
+    </Component>
     <h1>
       Solr Index Tool
     </h1>

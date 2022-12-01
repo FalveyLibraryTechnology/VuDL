@@ -3,6 +3,7 @@ import JobPaginatorZoomToggle from "./JobPaginatorZoomToggle";
 import PaginatorControls from "./PaginatorControls";
 import PaginatorList from "./PaginatorList";
 import { usePaginatorContext } from "../../context/PaginatorContext";
+import Link from "next/link";
 
 interface JobPaginatorProps {
     initialCategory: string;
@@ -27,7 +28,8 @@ const JobPaginator = ({ initialCategory, initialJob }: JobPaginatorProps): React
                 </div>
                 <div className="six col">
                     <p>
-                        {category} &gt; {job}
+                        <Link href="/">Main Menu</Link> &gt; <Link href="/paginate">Paginator</Link> &gt; {category}{" "}
+                        &gt; {job}
                     </p>
                     <PaginatorControls />
                     <PaginatorList />
