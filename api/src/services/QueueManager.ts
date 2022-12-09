@@ -36,8 +36,12 @@ class QueueManager {
         return new Worker(queueName ?? this.config.redisDefaultQueueName, callback, options);
     }
 
-    protected async addToQueue(jobName: string, data: Record<string, string>, queueName: string = null): Promise<void> {
-        const q = this.getQueue(queueName);
+    protected getQueueNameForJob(jobName: string): string {
+        return this.config.redisQueueJobMap[jobName] ?? this.config.redisDefaultQueueName;
+    }
+
+    protected async addToQueue(jobName: string, data: Record<string, string>): Promise<void> {
+        const q = this.getQueue(this.getQueueNameForJob(jobName));
         await q.add(jobName, data);
         q.close();
     }
@@ -58,7 +62,7 @@ class QueueManager {
         // Fedora often fires many change events about the same object in rapid succession;
         // we don't want to index more times than we have to, so let's not re-queue anything
         // that is already awaiting indexing.
-        const q = this.getQueue();
+        const q = this.getQueue(this.getQueueNameForJob("index"));
         const jobs = await q.getJobs("wait");
         const queueJob = { pid, action };
         if (!force && this.isAlreadyAwaitingAction(jobs, "index", queueJob)) {
@@ -77,7 +81,7 @@ class QueueManager {
     }
 
     public async queueMetadataOperation(pid: string, action: string, force = false): Promise<void> {
-        const q = this.getQueue();
+        const q = this.getQueue(this.getQueueNameForJob("metadata"));
         const jobs = await q.getJobs("wait");
         const queueJob = { pid, action };
         if (!force && this.isAlreadyAwaitingAction(jobs, "metadata", queueJob)) {

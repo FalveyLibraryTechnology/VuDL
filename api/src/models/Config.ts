@@ -257,6 +257,10 @@ class Config {
         return this.ini?.["queue"]?.["defaultQueueName"] ?? "vudl";
     }
 
+    get redisQueueJobMap(): Record<string, string> {
+        return this.ini?.["queue"]?.["jobMap"] ?? {};
+    }
+
     get redisLockDuration(): number {
         return parseInt(this.ini?.["queue"]?.["lockDuration"] ?? "30000");
     }

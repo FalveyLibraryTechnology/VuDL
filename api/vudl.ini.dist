@@ -449,6 +449,17 @@ defaultQueueName = "vudl"
 # if you are seeing "Missing lock for job" errors in your queue.
 lockDuration = 30000
 
+# This section can be used to map specific job types to different queue names. this
+# is useful if you want to run multiple queue workers and triage work. The example
+# below shows light/medium/heavy queues to sort work by CPU intensity, so that
+# lighter work could potentially be processed by multiple parallel workers.
+[queue.jobMap]
+#derivatives = "vudl-medium"
+#generatepdf = "vudl-heavy"
+#index = "vudl-light"
+#ingest = "vudl-heavy"
+#metadata = "vudl-medium"
+
 # This section controls how BullMQ connects to Redis.
 # See the ioredis documentation (https://ioredis.readthedocs.io/en/latest/API/) for available options.
 [queue.connection]
