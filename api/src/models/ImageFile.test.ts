@@ -18,6 +18,8 @@ describe("Image", () => {
     });
 
     it("generates appropriate derivative paths", () => {
+        const existsSpy = jest.spyOn(image, "makePathIfMissing").mockImplementation(jest.fn());
         expect(image.derivativePath("HUGE", "gif")).toEqual("/foo/test1/HUGE/test1.gif");
+        expect(existsSpy).toHaveBeenCalledWith("/foo/test1/HUGE");
     });
 });

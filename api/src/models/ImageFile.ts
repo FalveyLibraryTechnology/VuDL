@@ -63,14 +63,18 @@ class ImageFile {
         return deriv;
     }
 
+    makePathIfMissing(basePath: string): void {
+        if (!fs.existsSync(basePath)) {
+            fs.mkdirSync(basePath, { recursive: true });
+        }
+    }
+
     derivativePath(size: string, extension = "jpg"): string {
         const dir = path.dirname(this.filename);
         const ext = this.filename.substring(this.filename.lastIndexOf("."));
         const filename = path.basename(this.filename, ext);
         const basePath = dir + "/" + filename + "/" + size;
-        if (!fs.existsSync(basePath)) {
-            fs.mkdirSync(basePath, { recursive: true });
-        }
+        this.makePathIfMissing(basePath);
         return basePath + "/" + filename + "." + extension.toLowerCase();
     }
 
