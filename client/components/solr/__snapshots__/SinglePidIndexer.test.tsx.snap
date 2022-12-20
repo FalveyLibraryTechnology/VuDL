@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SinglePidIndexer renders 1`] = `
+<SinglePidIndexer
+  setResults={[MockFunction]}
+>
+  <label>
+    PID: 
+    <input
+      id="solrIndexPid"
+      onChange={[Function]}
+      type="text"
+      value=""
+    />
+  </label>
+  <button
+    id="solrIndexPreviewButton"
+    onClick={[Function]}
+  >
+    Preview
+  </button>
+  <button
+    id="solrIndexIndexButton"
+    onClick={[Function]}
+  >
+    Index
+  </button>
+</SinglePidIndexer>
+`;

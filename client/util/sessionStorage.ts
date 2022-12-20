@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
-const getSessionStorage = (storageKey, initialStorageValue) => {
+const getSessionStorage = (storageKey: string, initialStorageValue: JSON) => {
     if (typeof window.sessionStorage === "undefined" || !window.sessionStorage.getItem(storageKey)) {
         return initialStorageValue;
     }
     return JSON.parse(window.sessionStorage.getItem(storageKey));
 };
 
-const useSessionStorage = (storageKey, initialStorageValue) => {
+const useSessionStorage = (storageKey: string, initialStorageValue: JSON) => {
     const [storageValue, setStorageValue] = useState(getSessionStorage(storageKey, initialStorageValue));
 
     useEffect(() => {

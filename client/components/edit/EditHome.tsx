@@ -1,10 +1,23 @@
-import React from "react";
-import ChildList from "./ChildList";
+import Breadcrumbs from "./Breadcrumbs";
+import React, { useEffect } from "react";
+import ChildList from "./children/ChildList";
+import ParentsModal from "./parents/ParentsModal";
+import StateModal from "./StateModal";
+import EditorSnackbar from "./EditorSnackbar";
 import Link from "next/link";
+import { useEditorContext } from "../../context/EditorContext";
 
-const EditHome = () => {
+const EditHome = (): React.ReactElement => {
+    const {
+        action: { initializeCatalog },
+    } = useEditorContext();
+
+    useEffect(() => {
+        initializeCatalog();
+    }, []);
     return (
         <div>
+            <Breadcrumbs />
             <h1>Editor</h1>
             <h2>Tools</h2>
             <ul>
@@ -13,7 +26,10 @@ const EditHome = () => {
                 </li>
             </ul>
             <h2>Contents</h2>
-            <ChildList />
+            <ParentsModal />
+            <StateModal />
+            <ChildList pid="" />
+            <EditorSnackbar />
         </div>
     );
 };

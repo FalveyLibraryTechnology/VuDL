@@ -16,7 +16,18 @@ exports[`JobPaginator renders 1`] = `
       class="six col"
     >
       <p>
-        testCategory &gt; testJob
+        <a
+          href="/"
+        >
+          Main Menu
+        </a>
+         &gt; 
+        <a
+          href="/paginate"
+        >
+          Paginator
+        </a>
+         &gt; testCategory &gt; testJob
       </p>
       PaginatorControlsPaginatorList
     </div>

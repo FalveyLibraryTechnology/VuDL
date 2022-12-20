@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import PropTypes from "prop-types";
 
 import Zoomy from "../../util/Zoomy";
 
-const PaginatorZoomy = ({ img }) => {
+interface PaginatorZoomyProps {
+    img: string;
+}
+
+const PaginatorZoomy = ({ img }: PaginatorZoomyProps): React.ReactElement => {
     const status = useRef();
     const initializeZoomy = () => {
         Zoomy.init(document.getElementById("zoomy"));
@@ -32,10 +35,6 @@ const PaginatorZoomy = ({ img }) => {
             <canvas id="zoomy"></canvas>
         </div>
     );
-};
-
-PaginatorZoomy.propTypes = {
-    img: PropTypes.string,
 };
 
 export default PaginatorZoomy;

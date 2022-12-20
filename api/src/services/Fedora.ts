@@ -6,8 +6,7 @@ const { DataFactory } = N3;
 const { namedNode, literal } = DataFactory;
 import { NeedleResponse } from "./interfaces";
 import xmlescape = require("xml-escape");
-import xmldom = require("@xmldom/xmldom");
-const { DOMParser, XMLSerializer } = xmldom;
+import { HttpError } from "../models/HttpError";
 
 export interface DatastreamParameters {
     dsLabel?: string;
@@ -31,7 +30,6 @@ export interface DC {
 export class Fedora {
     private static instance: Fedora;
     config: Config;
-    cache: Record<string, Record<string, string>> = {};
 
     constructor(config: Config) {
         this.config = config;
@@ -75,56 +73,20 @@ export class Fedora {
      *
      * @param pid PID to look up
      */
-    async getRdf(pid: string, allowCaching = true): Promise<string> {
-        const cacheKey = "RDF";
-        let data = allowCaching ? this.getCache(pid, cacheKey) : null;
-        if (!data) {
-            const options = {
-                parse_response: false,
-                headers: { Accept: "application/rdf+xml" },
-            };
-            const result = await this._request("get", pid, null, options);
-            data = result.body.toString();
-            if (allowCaching) {
-                this.setCache(pid, cacheKey, data);
-            }
+    async getRdf(pid: string): Promise<string> {
+        const options = {
+            parse_response: false,
+            headers: { Accept: "application/rdf+xml" },
+        };
+        const result = await this._request("get", pid, null, options);
+        if (result.statusCode !== 200) {
+            throw new Error("Unexpected status code: " + result.statusCode);
         }
-        return data;
+        return result.body.toString();
     }
 
-    public clearCache(pid: string): void {
-        this.cache[pid] = {};
-    }
-
-    protected getCache(pid: string, key: string): string {
-        if (typeof this.cache[pid] === "undefined" || typeof this.cache[pid][key] === "undefined") {
-            return null;
-        }
-        return this.cache[pid][key];
-    }
-
-    protected setCache(pid: string, key: string, data: string): void {
-        if (typeof this.cache[pid] === "undefined") {
-            this.cache[pid] = {};
-        }
-        this.cache[pid][key] = data;
-    }
-
-    async getDatastreamAsString(
-        pid: string,
-        datastream: string,
-        allowCaching = true,
-        treatMissingAsEmpty = false
-    ): Promise<string> {
-        const cacheKey = "stream_" + datastream;
-        let data = allowCaching ? this.getCache(pid, cacheKey) : null;
-        if (!data) {
-            data = (await this.getDatastreamAsBuffer(pid, datastream, treatMissingAsEmpty)).toString();
-            if (allowCaching) {
-                this.setCache(pid, cacheKey, data);
-            }
-        }
-        return data;
+    async getDatastreamAsString(pid: string, datastream: string, treatMissingAsEmpty = false): Promise<string> {
+        return (await this.getDatastreamAsBuffer(pid, datastream, treatMissingAsEmpty)).toString();
     }
 
     async getDatastreamAsBuffer(pid: string, datastream: string, treatMissingAsEmpty = false): Promise<Buffer> {
@@ -138,6 +100,46 @@ export class Fedora {
         } else {
             throw new Error("Unexpected response for " + pid + "/" + datastream + ": " + response.statusCode);
         }
+    }
+
+    /**
+     * Delete datastream from Fedora
+     *
+     * @param pid Record id
+     * @param datastream Which stream to request
+     * @param parse Parse JSON (true) or return raw (false, default)
+     */
+    async deleteDatastream(
+        pid: string,
+        datastream: string,
+        requestOptions = { parse_response: false }
+    ): Promise<NeedleResponse> {
+        return await this._request(
+            "delete",
+            `${pid}/${datastream}`,
+            null, // Data
+            requestOptions
+        );
+    }
+
+    /**
+     *
+     * @param pid Record id
+     * @param datastream Which stream to request
+     * @param requestOptions Parse JSON (true) or return raw (false, default)
+     * @returns
+     */
+    async deleteDatastreamTombstone(
+        pid: string,
+        datastream: string,
+        requestOptions = { parse_response: false }
+    ): Promise<NeedleResponse> {
+        return await this._request(
+            "delete",
+            `${pid}/${datastream}/fcr:tombstone`,
+            null, // Data
+            requestOptions
+        );
     }
 
     /**
@@ -167,20 +169,13 @@ export class Fedora {
      *
      * @param pid Record id
      */
-    async getDC(pid: string, allowCaching = true): Promise<DC> {
-        const cacheKey = "DC";
-        const data = allowCaching ? this.getCache(pid, cacheKey) : null;
-        if (data) {
-            // If we found data in the cache, we need to decode it:
-            return JSON.parse(data);
-        }
+    async getDublinCore(pid: string): Promise<DC> {
         const requestOptions = { parse_response: true };
-        const dublinCore = <DC>(await this.getDatastream(pid, "DC", requestOptions)).body;
-        if (allowCaching) {
-            // The cache stores strings, so we need to encode our DC data to JSON:
-            this.setCache(pid, cacheKey, JSON.stringify(dublinCore));
+        const response = await this.getDatastream(pid, "DC", requestOptions);
+        if (response.statusCode !== 200) {
+            throw new Error("Unexpected status code: " + response.statusCode);
         }
-        return dublinCore;
+        return <DC>response.body;
     }
 
     /**
@@ -196,7 +191,7 @@ export class Fedora {
         pid: string,
         stream: string,
         mimeType: string,
-        expectedStatus: number,
+        expectedStatus = [201],
         data: string | Buffer,
         linkHeader = ""
     ): Promise<void> {
@@ -213,8 +208,11 @@ export class Fedora {
         }
         const targetPath = "/" + pid + "/" + stream;
         const response = await this._request("put", targetPath, data, options);
-        if (response.statusCode !== expectedStatus) {
-            throw new Error("Expected " + expectedStatus + " Created response, received: " + response.statusCode);
+        if (!expectedStatus.includes(response.statusCode)) {
+            throw new HttpError(
+                response,
+                `Expected ${expectedStatus} Created response, received: ${response.statusCode}`
+            );
         }
     }
 
@@ -230,10 +228,11 @@ export class Fedora {
         pid: string,
         stream: string,
         params: DatastreamParameters,
-        data: string | Buffer
+        data: string | Buffer,
+        expectedStatus = [201]
     ): Promise<void> {
         // First create the stream:
-        await this.putDatastream(pid, stream, params.mimeType, 201, data, params.linkHeader ?? "");
+        await this.putDatastream(pid, stream, params.mimeType, expectedStatus, data, params.linkHeader ?? "");
 
         // Now set appropriate metadata:
         const writer = new N3.Writer({ format: "text/turtle" });
@@ -275,7 +274,25 @@ export class Fedora {
     }
 
     /**
-     * Add a triple to the RELS-EXT datastream.
+     * Change the state of an object
+     *
+     * @param pid   PID of object to modify
+     * @param state New state to set
+     */
+    async modifyObjectState(pid: string, state: string): Promise<void> {
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#state"), literal(state));
+        const insertClause = this.getOutputFromWriter(writer);
+        const deleteClause = "<> <info:fedora/fedora-system:def/model#state> ?any .";
+        const whereClause = "?id <info:fedora/fedora-system:def/model#state> ?any";
+        const response = await this.patchRdf("/" + pid, insertClause, deleteClause, whereClause);
+        if (response.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + response.statusCode);
+        }
+    }
+
+    /**
+     * Add a triple to the Fedora object.
      *
      * @param pid        PID to update
      * @param subject    RDF subject
@@ -283,52 +300,80 @@ export class Fedora {
      * @param obj        RDF object
      * @param isLiteral  Is object a literal (true) or a URI (false)?
      */
-    async addRelsExtRelationship(
+    async addRelationship(
         pid: string,
         subject: string,
         predicate: string,
         obj: string,
         isLiteral = false
     ): Promise<void> {
-        // Try to fetch the RELS-EXT; if it's empty, we need to create it for the first time!
-        let relsExt = await this.getDatastreamAsString(pid, "RELS-EXT", false, true);
-        const rdfNs = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-        const relsExtAlreadyExists = relsExt.length > 0;
-        if (!relsExtAlreadyExists) {
-            relsExt =
-                '<rdf:RDF xmlns:rdf="' +
-                rdfNs +
-                '">' +
-                '<rdf:Description rdf:about="' +
-                subject +
-                '">' +
-                "</rdf:Description></rdf:RDF>";
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(subject), namedNode(predicate), isLiteral ? literal(obj) : namedNode(obj));
+        const turtle = this.getOutputFromWriter(writer);
+        const targetPath = "/" + pid;
+        const patchResponse = await this.patchRdf(targetPath, turtle);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
         }
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(relsExt, "text/xml");
-        const description = xmlDoc.getElementsByTagNameNS(rdfNs, "Description");
-        const parts = predicate.split("#");
-        const tagName = parts[1];
-        const nameSpace = parts[0] + "#";
-        const newElement = xmlDoc.createElementNS(nameSpace, tagName);
-        if (isLiteral) {
-            const newText = xmlDoc.createTextNode(obj);
-            newElement.appendChild(newText);
-        } else {
-            newElement.setAttribute("rdf:resource", obj);
+    }
+
+    /**
+     * This method removes an isMemberOf relationship from a pid/parent pid pair.
+     *
+     * @param pid       PID to update
+     * @param parentPid Parent PID to update
+     */
+    async deleteParentRelationship(pid: string, parentPid: string): Promise<void> {
+        const predicate = "info:fedora/fedora-system:def/relations-external#isMemberOf";
+        const targetPath = "/" + pid;
+        const insertClause = "";
+        const deleteClause = `<> <${predicate}> <info:fedora/${parentPid}> .`;
+        const whereClause = "";
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
         }
-        description[0].appendChild(newElement);
-        const updatedXml = new XMLSerializer().serializeToString(xmlDoc);
-        const mimeType = "application/rdf+xml";
-        if (!relsExtAlreadyExists) {
-            const dsParams: DatastreamParameters = {
-                dsLabel: "Relationships",
-                mimeType: mimeType,
-                linkHeader: '<http://www.w3.org/ns/ldp#NonRDFSource>; rel="type"',
-            };
-            await this.addDatastream(pid, "RELS-EXT", dsParams, updatedXml);
-        } else {
-            await this.putDatastream(pid, "RELS-EXT", mimeType, 204, updatedXml);
+    }
+
+    /**
+     * This method removes a sequence relationship from a pid/parent pid pair.
+     *
+     * @param pid       PID to update
+     * @param parentPid Parent PID to update
+     */
+    async deleteSequenceRelationship(pid: string, parentPid: string): Promise<void> {
+        const predicate = "http://vudl.org/relationships#sequence";
+        const targetPath = "/" + pid;
+        const insertClause = "";
+        const deleteClause = `<> <${predicate}> ?pos .`;
+        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#"))`;
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
+    /**
+     * This method changes the sequential position of a pid within a specified parent pid.
+     * It is the responsibility of the caller to ensure that parentPid is a legal parent of pid.
+     * This will NOT insert a new position; it only updates existing values.
+     *
+     * @param pid         PID to update
+     * @param parentPid   Parent PID to update
+     * @param newPosition New position to set
+     */
+    async updateSequenceRelationship(pid: string, parentPid: string, newPosition: number): Promise<void> {
+        const subject = "info:fedora/" + pid;
+        const predicate = "http://vudl.org/relationships#sequence";
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(subject), namedNode(predicate), literal(`${parentPid}#${newPosition}`));
+        const insertClause = this.getOutputFromWriter(writer);
+        const targetPath = "/" + pid;
+        const deleteClause = `<> <${predicate}> ?pos .`;
+        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#"))`;
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
         }
     }
 
@@ -416,6 +461,9 @@ export class Fedora {
         const xml =
             '<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">' +
             "\n" +
+            "  <dc:identifier>" +
+            xmlescape(pid) +
+            "</dc:identifier>\n" +
             "  <dc:title>" +
             xmlescape(label) +
             "</dc:title>\n" +
@@ -424,7 +472,7 @@ export class Fedora {
             mimeType: "text/xml",
             logMessage: "Create initial Dublin Core record",
         };
-        await this.addDatastream(pid, "DC", params, xml);
+        await this.addDatastream(pid, "DC", params, xml, [201]);
     }
 }
 

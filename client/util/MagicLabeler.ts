@@ -1,11 +1,18 @@
 import RomanNumerals from "roman-numerals";
 
+interface PageLabel {
+    prefix: string;
+    label: string;
+    suffix: string;
+    brackets: boolean;
+}
+
 var MagicLabeler = {
     prefixes: ["Front ", "Inside front ", "Rear ", "Inside rear "],
     labels: ["Blank", "cover", "fly leaf", "pastedown", "Frontispiece", "Plate"],
     suffixes: [", recto", ", verso", ", front", ", back"],
 
-    adjustNumericLabel: function (prior, delta) {
+    adjustNumericLabel: function (prior: string, delta: number) {
         // If it's an integer, this is simple:
         if (parseInt(prior) > 0) {
             return parseInt(prior) + delta;
@@ -27,7 +34,7 @@ var MagicLabeler = {
         return false;
     },
 
-    getLabelFromPrevPage: function (p, getLabelCallback) {
+    getLabelFromPrevPage: function (p: number, getLabelCallback: (i: number) => string): string {
         var bracketStatus = null;
         var skipSuffixCheck = false;
         while (p > 0) {
@@ -67,22 +74,22 @@ var MagicLabeler = {
             p--;
             skipSuffixCheck = true;
         }
-        return 1;
+        return "1";
     },
 
-    getLabel: function (p, getLabelCallback) {
+    getLabel: function (p: number, getLabelCallback: (i: number) => string) {
         // Did some experimentation with getLabelFromNextPage to
         // complement getLabelFromPrevPage, but it winded up having
         // too much recursion and making things too slow.
         return this.getLabelFromPrevPage(p, getLabelCallback);
     },
 
-    assemblePageLabel: function (label) {
+    assemblePageLabel: function (label: PageLabel): string {
         var text = label["prefix"] + label["label"] + label["suffix"];
         return label["brackets"] ? "[" + text + "]" : text;
     },
 
-    parsePageLabel: function (text) {
+    parsePageLabel: function (text: string): PageLabel {
         var brackets = false;
         text = String(text);
         if (text.substring(0, 1) === "[" && text.substring(text.length - 1, text.length) === "]") {
@@ -116,26 +123,23 @@ var MagicLabeler = {
         };
     },
 
-    replaceLabelPart: function (label, part, replacement, allowToggle) {
-        if (typeof allowToggle === "undefined") {
-            allowToggle = false;
-        }
+    replaceLabelPart: function (label: string, part: string, replacement: string, allowToggle: boolean = false) {
         var parts = this.parsePageLabel(label);
         parts[part] = parts[part] === replacement && allowToggle ? "" : replacement;
         return this.assemblePageLabel(parts);
     },
 
-    toggleBrackets: function (text) {
+    toggleBrackets: function (text: string) {
         var label = this.parsePageLabel(text);
         label["brackets"] = !label["brackets"];
         return this.assemblePageLabel(label);
     },
 
-    toggleCase: function (label) {
+    toggleCase: function (label: string): string {
         return label === label.toLowerCase() ? label.toUpperCase() : label.toLowerCase();
     },
 
-    toggleRoman: function (text) {
+    toggleRoman: function (text: string): string | false {
         var label = this.parsePageLabel(text);
         if (parseInt(label["label"]) > 0) {
             label["label"] = RomanNumerals.toRoman(label["label"]);

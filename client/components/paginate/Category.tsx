@@ -1,12 +1,18 @@
 import React from "react";
 import { useSessionStorage } from "../../util/sessionStorage";
-import PropTypes from "prop-types";
 import JobList from "./JobList";
 
-const Category = ({ data }) => {
+interface CategoryProps {
+    data: {
+        category: string;
+        jobs: Array<string>;
+    };
+}
+
+const Category = ({ data }: CategoryProps): React.ReactElement => {
     const { jobs, category } = data;
     const [open, setOpen] = useSessionStorage("open-" + category, false);
-    const toggle = (e) => {
+    const toggle = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         setOpen(!open);
@@ -26,13 +32,6 @@ const Category = ({ data }) => {
             {open && <JobList category={category} data={jobs} />}
         </div>
     );
-};
-
-Category.propTypes = {
-    data: PropTypes.exact({
-        category: PropTypes.string,
-        jobs: PropTypes.arrayOf(PropTypes.string),
-    }),
 };
 
 export default Category;

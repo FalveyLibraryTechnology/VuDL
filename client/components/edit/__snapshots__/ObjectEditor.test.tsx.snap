@@ -2,30 +2,57 @@
 
 exports[`ObjectEditor renders 1`] = `
 <div>
+  <Component
+    pid="foo:123"
+  />
   <h1>
     Editor: Object 
     foo:123
   </h1>
-  <ObjectSummary
-    pid="foo:123"
-  />
-  <h2>
-    Tools
-  </h2>
-  <ul>
-    <li>
-      <Link
-        href="/edit/object/foo:123/newChild"
-      >
-        Create New Child Object
-      </Link>
-    </li>
-  </ul>
+  <Component />
+  <ForwardRef(Grid)
+    container={true}
+  >
+    <ForwardRef(Grid)
+      item={true}
+      xs={4}
+    >
+      <ForwardRef(Box)>
+        <h3>
+          Object Tools
+        </h3>
+        <ul>
+          <li>
+            <Link
+              href="/edit/object/foo:123/newChild"
+            >
+              Create New Child Object
+            </Link>
+          </li>
+        </ul>
+      </ForwardRef(Box)>
+    </ForwardRef(Grid)>
+    <ForwardRef(Grid)
+      item={true}
+      xs={4}
+    >
+      <ForwardRef(Box)>
+        <h3>
+          Datastreams
+        </h3>
+        <Component />
+      </ForwardRef(Box)>
+    </ForwardRef(Grid)>
+  </ForwardRef(Grid)>
+  <Component />
+  <Component />
+  <Component />
   <h2>
     Contents
   </h2>
-  <ChildList
+  <Component
     pid="foo:123"
   />
+  <Component />
 </div>
 `;

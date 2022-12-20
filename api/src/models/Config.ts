@@ -1,22 +1,43 @@
 import fs = require("fs");
 import ini = require("ini");
+import { FedoraModel, License } from "../services/FedoraCatalog";
+
+type ConfigValue = string | string[] | ConfigRecord;
+interface ConfigRecord {
+    [key: string]: ConfigValue;
+}
 
 class Config {
     private static instance: Config;
 
     protected ini;
 
-    constructor(ini: Record<string, string>) {
+    constructor(ini: ConfigRecord) {
         this.ini = ini;
     }
 
     public static getInstance(): Config {
         if (!Config.instance) {
-            const config = ini.parse(fs.readFileSync(__dirname.replace(/\\/g, "/") + "/../../vudl.ini", "utf-8"));
+            const filename = __dirname.replace(/\\/g, "/") + "/../../vudl.ini";
+            let config;
+            try {
+                config = ini.parse(fs.readFileSync(filename, "utf-8"));
+            } catch (e) {
+                console.warn(`Could not load ${filename}; defaulting to empty configuration.`);
+                config = {};
+            }
             // ini returns any, but we can cast it to what we need:
-            Config.instance = new Config(config as Record<string, string>);
+            Config.setInstance(new Config(config as Record<string, string>));
         }
         return Config.instance;
+    }
+
+    public static setInstance(config: Config): void {
+        Config.instance = config;
+    }
+
+    get backendUrl(): string {
+        return this.ini["backend_url"] ?? "http://localhost:9000";
     }
 
     get clientUrl(): string {
@@ -43,6 +64,10 @@ class Config {
         return this.ini["fits_command"];
     }
 
+    get sessionKey(): string {
+        return this.ini["session_key"] ?? "vanilla hot cocoa";
+    }
+
     get tesseractPath(): string {
         return this.ini["tesseract_path"];
     }
@@ -52,7 +77,7 @@ class Config {
     }
 
     get vufindUrl(): string {
-        return this.ini["vufind_url"];
+        return this.ini["vufind_url"] ?? "";
     }
 
     get pdfDirectory(): string {
@@ -101,7 +126,7 @@ class Config {
     }
 
     get allowedOrigins(): string[] {
-        return this.ini["allowed_origins"];
+        return this.ini["allowed_origins"] ?? [];
     }
 
     get pidNamespace(): string {
@@ -136,12 +161,112 @@ class Config {
         return this.ini["articles_to_strip"] ?? [];
     }
 
+    get favoritePids(): Array<string> {
+        return this.ini["favorite_pids"] ?? [];
+    }
+
     get languageMap(): Record<string, string> {
         return this.ini["LanguageMap"] ?? {};
     }
 
     get minimumValidYear(): number {
         return parseInt(this.ini["minimum_valid_year"] ?? 1000);
+    }
+
+    get models(): Record<string, FedoraModel> {
+        return this.ini["models"] || {};
+    }
+
+    get databaseSettings(): ConfigRecord {
+        return this.ini["Database"] ?? {};
+    }
+
+    get databaseClient(): string {
+        return (this.databaseSettings["client"] as string) ?? "sqlite3";
+    }
+
+    get databaseConnectionSettings(): ConfigRecord {
+        return (this.databaseSettings["connection"] as ConfigRecord) ?? { filename: "./data/auth.sqlite3" };
+    }
+
+    get authenticationSettings(): ConfigRecord {
+        return this.ini["Authentication"] ?? [];
+    }
+
+    get authenticationStrategy(): string {
+        return (this.authenticationSettings["strategy"] as string) ?? "local";
+    }
+
+    get authenticationHashAlgorithm(): string {
+        return (this.authenticationSettings["hash_algorithm"] as string) ?? "sha1";
+    }
+
+    get authenticationLegalUsernames(): Array<string> {
+        return (this.authenticationSettings["legal_usernames"] as Array<string>) ?? [];
+    }
+
+    get authenticationRequirePasswords(): boolean {
+        if (typeof this.authenticationSettings["require_passwords"] === "boolean") {
+            return this.authenticationSettings["require_passwords"];
+        }
+        const stringValue = (this.authenticationSettings["require_passwords"] as string) ?? "true";
+        return stringValue.trim().toLowerCase() !== "false";
+    }
+
+    get authenticationSalt(): string {
+        return (this.authenticationSettings["salt"] as string) ?? "VuDLSaltValue";
+    }
+
+    get databaseInitialUsers(): Record<string, string> {
+        return (this.authenticationSettings["initial_users"] ?? []) as Record<string, string>;
+    }
+
+    get samlCertificate(): string {
+        return (this.authenticationSettings["saml_certificate"] as string) ?? "";
+    }
+
+    get samlEntryPoint(): string {
+        return (this.authenticationSettings["saml_entry_point"] as string) ?? "";
+    }
+
+    get licenses(): Record<string, License> {
+        return this.ini["licenses"] ?? {};
+    }
+
+    get agentDefaults(): Record<string, string> {
+        return this.ini?.["agent"]?.["defaults"] ?? {};
+    }
+
+    get agentRoles(): Array<string> {
+        return this.ini?.["agent"]?.["roles"] ?? [];
+    }
+
+    get agentTypes(): Array<string> {
+        return this.ini?.["agent"]?.["types"] ?? [];
+    }
+
+    get dublinCoreFields(): Record<string, Record<string, string | Array<string>>> {
+        return this.ini?.["dublin_core"] ?? {};
+    }
+
+    get redisConnectionSettings(): Record<string, string> {
+        return this.ini?.["queue"]?.["connection"] ?? {};
+    }
+
+    get redisDefaultQueueName(): string {
+        return this.ini?.["queue"]?.["defaultQueueName"] ?? "vudl";
+    }
+
+    get redisLockDuration(): number {
+        return parseInt(this.ini?.["queue"]?.["lockDuration"] ?? "30000");
+    }
+
+    get processMetadataDefaults(): Record<string, string> {
+        return this.ini?.["process_metadata_defaults"] ?? {};
+    }
+
+    get toolPresets(): Array<Record<string, string>> {
+        return this.ini?.["tool_presets"] ?? [];
     }
 }
 

@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamDeleteModalContent renders 1`] = `
+<Fragment>
+  <ForwardRef(DialogContent)>
+    <ForwardRef(DialogContentText)>
+      Are you sure you want to delete the datastream?
+    </ForwardRef(DialogContentText)>
+  </ForwardRef(DialogContent)>
+  <ForwardRef(DialogActions)>
+    <ForwardRef(Button)
+      className="noButton"
+      onClick={[MockFunction]}
+    >
+      No
+    </ForwardRef(Button)>
+    <ForwardRef(Button)
+      className="yesButton"
+      onClick={[MockFunction]}
+    >
+      Yes
+    </ForwardRef(Button)>
+  </ForwardRef(DialogActions)>
+</Fragment>
+`;

@@ -2,7 +2,7 @@ import React from "react";
 import { baseUrl } from "../../util/routes";
 import Link from "next/link";
 
-const MainMenu = () => {
+const MainMenu = (): React.ReactElement => {
     return (
         <div className="main-menu">
             <h1 className="main-menu-heading">VuDL Admin</h1>

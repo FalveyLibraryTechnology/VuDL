@@ -1,6 +1,12 @@
 # URL of React client:
 client_url = "http://localhost:3000"
 
+# Base URL of the backend code:
+backend_url = "http://localhost:9000"
+
+# Secret phrase to use for session encryption:
+session_key = "vanilla hot cocoa"
+
 # Credentials for connecting to a Fedora backend:
 fedora_username = "fedoraAdmin"
 fedora_password = "fedoraAdmin"
@@ -28,9 +34,11 @@ tesseract_path = "/usr/local/bin/tesseract"
 #tesseract_allowed_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!'\"()&$%-+=[]?<>“”‘’—"
 
 # Settings for ocrmypdf (omit setting to skip this step if you aren't using it)
-#ocrmypdf_path = /usr/local/bin/ocrmypdf 
+#ocrmypdf_path = /usr/local/bin/ocrmypdf
 
-# VuFind Base URL
+# VuFind Base URL. Required for indexing first/last change dates into Solr and
+# for generating PDFs for existing items in the collection. You can omit the
+# setting if you do not use VuFind and do not need these features.
 vufind_url = "https://myserver"
 
 # Base URL and core name for Solr instance containing index
@@ -78,6 +86,53 @@ minimum_valid_year = 1000
 articles_to_strip[] = "a "
 articles_to_strip[] = "an "
 articles_to_strip[] = "the "
+
+# "Favorite PIDs" that should be displayed in the "edit parents" dialog box.
+# Useful for "trash can" and "in progress" holding area.
+#favorite_pids[] = "vudl:1234"
+#favorite_pids[] = "vudl:1235"
+
+# Authentication settings
+[Authentication]
+# Type of authentication to use (local = local database; saml = SAML)
+strategy = local
+# Algorithm to use for hashing passwords (when strategy = local)
+hash_algorithm = sha1
+# Salt value for hashing passwords (when strategy = local)
+salt = "AnyMadeUpValueYouLike"
+# Set to false to disable passwords (and allow username-only logins) when strategy = local; recommended for testing only.
+require_passwords = true
+# SAML Entry point URL (required when strategy = saml)
+#saml_entry_point = "https://my-idp"
+# Certificate for use in SAML transactions (required when strategy = saml; must be single line)
+#saml_certificate = "MIICizCCAfQCCQCY8tKaMc0BMjANBgkqh ... W=="
+# Uncomment this list to restrict the usernames allowed to access the system; if the setting is omitted, all valid users will be accepted.
+#legal_usernames[] = "allowedUsername1"
+#legal_usernames[] = "allowedUsername2"
+
+# Defines user account(s) to be created in the database when the database is initialized:
+[Authentication.initial_users]
+admin_user = admin_password
+
+# Database settings
+[Database]
+# Supported values: mysql, sqlite3
+client = sqlite3
+
+# Database connection settings (required values vary based on client setting above)
+[Database.connection]
+# Required when client = sqlite3; filename of database, relative to api directory
+filename = "./data/auth.sqlite3"
+# Required when client = mysql
+# To set up a MySQL/MariaDB database, run these commands in the database client:
+#    create database vudl;
+#    create user 'your_database_user'@'localhost' identified by 'your_database_password';
+#    grant all on vudl.* to 'vudl'@'localhost';
+#host = 127.0.0.1
+#port = 3306
+#user = your_database_user
+#password = your_database_password
+#database = vudl
 
 # Mapping of language codes to display names; used for indexing
 [LanguageMap]
@@ -194,3 +249,209 @@ DOC = "vudl-system:DOCData"
 Audio = "vudl-system:AudioData"
 XLS = "vudl-system:XLSData"
 Text = "vudl-system:TextData"
+
+# AudioData
+[models.AudioData.datastreams.WAV.mimetype]
+allowedType = "audio"
+allowedSubtypes = "wav,x-wav"
+[models.AudioData.datastreams.MP3.mimetype]
+allowedType = "audio"
+allowedSubtypes = "mpeg3,x-mpeg-3,mpeg"
+models.AudioData.datastreams.OGG.mimetype]
+allowedType = "audio"
+allowedSubtypes = "ogg"
+
+# CollectionModel
+[models.CollectionModel.datastreams]
+
+# CoreModel
+[models.CoreModel.datastreams.THUMBNAIL.mimetype]
+allowedType = "image"
+allowedSubtypes = "jpeg,gif,png"
+[models.CoreModel.datastreams.LICENSE.mimetype]
+allowedType = "text"
+allowedSubtypes = "xml"
+[models.CoreModel.datastreams.DC.mimetype]
+allowedType = "text"
+allowedSubtypes = "xml"
+
+# DOCData
+[models.DOCData.datastreams]
+
+# DataModel
+[models.DataModel.datastreams.MASTER.mimetype]
+allowedType = "*"
+allowedSubtypes = "*"
+[models.DataModel.datastreams.MASTER-MD.mimetype]
+allowedType = "text"
+allowedSubtypes = "xml"
+
+# FolderCollection
+[models.FolderCollection.datastreams]
+
+# ImageData
+[models.ImageData.datastreams.LARGE.mimetype]
+allowedType = "image"
+allowedSubtypes = "*"
+[models.ImageData.datastreams.MEDIUM.mimetype]
+allowedType = "image"
+allowedSubtypes = "*"
+[models.ImageData.datastreams.OCR-DIRTY.mimetype]
+allowedType = "text"
+allowedSubtypes = "plain"
+[models.ImageData.datastreams.OCR-EDITED.mimetype]
+allowedType = "text"
+allowedSubtypes = "plain"
+
+# ListCollection
+[models.ListCollection.datastreams]
+
+# PDFData
+[models.PDFData.datastreams]
+
+# ResourceCollection
+[models.ResourceCollection.datastreams.AGENTS.mimetype]
+allowedType = "text"
+allowedSubtypes = "xml"
+[models.ResourceCollection.datastreams.PROCESS-MD.mimetype]
+allowedType = "text"
+allowedSubtypes = "xml"
+
+# XLSData
+[models.XLSData.datastreams]
+
+# Licenses
+[licenses.ATTRIBUTION]
+name = "Attribution"
+uri = "http://creativecommons.org/licenses/by/4.0/"
+[licenses.ATTRIBUTION_SHARE_ALIKE]
+name = "Attribution-ShareAlike"
+uri = "http://creativecommons.org/licenses/by-sa/4.0/"
+[licenses.ATTRIBUTION_NO_DERIVS]
+name = "Attribution-NoDerivs"
+uri = "http://creativecommons.org/licenses/by-nd/4.0/"
+[licenses.ATTRIBUTION_NON_COMMERCIAL]
+name = "Attribution-NonCommercial"
+uri = "http://creativecommons.org/licenses/by-nc/4.0/"
+[licenses.ATTRIBUTION_NON_COMMERCIAL_SHARE_ALIKE]
+name = "Attribution-NonCommercial-ShareAlike"
+uri = "http://creativecommons.org/licenses/by-nc-sa/4.0/"
+[licenses.ATTRIBUTION_NON_COMMERCIAL_NO_DERIVS]
+name = "Attribution-NonCommercial-NoDerivs"
+uri = "http://creativecommons.org/licenses/by-nc-nd/4.0/"
+[licenses.PUBLIC_DOMAIN]
+name = "CC0 1.0 Universal (Public Domain)"
+uri = "https://creativecommons.org/publicdomain/zero/1.0/"
+
+# Agent
+[agent]
+
+roles[] = "EDITOR"
+roles[] = "ARCHIVIST"
+roles[] = "PRESERVATION"
+roles[] = "DISSEMINATOR"
+roles[] = "CUSTODIAN"
+roles[] = "IPOWNER"
+roles[] = "CREATOR"
+
+types[] = "ORGANIZATION"
+types[] = "INDIVIDUAL"
+
+[agent.defaults]
+name = "My Library, My University"
+role = "DISSEMINATOR"
+type = "ORGANIZATION"
+
+# Dublin Core Fields/Values Supported By Editor
+[dublin_core.dc:title]
+label = "Title"
+type = "text"
+
+[dublin_core.dc:creator]
+label = "Creator"
+type = "text"
+
+[dublin_core.dc:subject]
+label = "Subject"
+type = "text"
+
+[dublin_core.dc:description]
+label = "Description"
+type = "html"
+
+[dublin_core.dc:publisher]
+label = "Publisher"
+type = "text"
+
+[dublin_core.dc:contributor]
+label = "Contributor"
+type = "text"
+
+[dublin_core.dc:date]
+label = "Date"
+type = "text"
+
+[dublin_core.dc:type]
+label = "Type"
+type = "text"
+
+[dublin_core.dc:format]
+label = "Format"
+type = "dropdown"
+values[] = "Book"
+values[] = "Journal"
+
+[dublin_core.dc:identifier]
+label = "Identifier"
+type = "locked"
+
+[dublin_core.dc:source]
+label = "Source"
+type = "text"
+
+[dublin_core.dc:language]
+label = "Language"
+type = "dropdown"
+values[] = "English"
+values[] = "Latin"
+
+[dublin_core.dc:relation]
+label = "Relation"
+type = "text"
+
+[dublin_core.dc:coverage]
+label = "Coverage"
+type = "text"
+
+[dublin_core.dc:rights]
+label = "Rights"
+type = "text"
+
+# You can set default values for top-level process metadata
+[process_metadata_defaults]
+processLabel = "Digitize Original Item"
+processOrganization = "My Library, My University"
+
+# You can set up tools as presets in the Process Metadata screen; just number each
+# uniquely in the section header (e.g. [tool_presets.0], [tool_presets.1], etc.)
+[tool_presets.0]
+label = "Example tool"
+serialNumber = "12345"
+description = "Just an example"
+make = "Example"
+version = "1"
+
+[queue]
+# This is the queue name that will be used for messages in Redis:
+defaultQueueName = "vudl"
+
+# This is the length of time (in ms) that workers should lock jobs; set it higher
+# if you are seeing "Missing lock for job" errors in your queue.
+lockDuration = 30000
+
+# This section controls how BullMQ connects to Redis.
+# See the ioredis documentation (https://ioredis.readthedocs.io/en/latest/API/) for available options.
+[queue.connection]
+host = "localhost"
+port = 6379
+#password = "mypass"

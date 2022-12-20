@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChildPosition renders correctly when a sequence exists and parent is custom sorted 1`] = `
+<ForwardRef(TextField)
+  aria-label="Position in foo:122"
+  defaultValue={73}
+  onBlur={[Function]}
+  size="small"
+  sx={
+    Object {
+      "marginRight": 1,
+      "width": "5em",
+    }
+  }
+/>
+`;
+
+exports[`ChildPosition renders correctly when a sequence exists and parent is not custom sorted 1`] = `<Fragment />`;
+
+exports[`ChildPosition renders correctly when no sort or sequence exists 1`] = `<Fragment />`;

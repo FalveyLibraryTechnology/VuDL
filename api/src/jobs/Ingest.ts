@@ -15,19 +15,23 @@ import QueueJobInterface from "./QueueJobInterface";
 import winston = require("winston");
 import xmlescape = require("xml-escape");
 
-class IngestProcessor {
+export class IngestProcessor {
     protected job: Job;
     protected category: Category;
     protected logger: winston.Logger;
     protected config: Config;
     protected objectFactory: FedoraObjectFactory;
 
-    constructor(dir: string, config: Config, objectFactory: FedoraObjectFactory) {
+    constructor(dir: string, config: Config, objectFactory: FedoraObjectFactory, logger: winston.Logger) {
         this.config = config;
         this.objectFactory = objectFactory;
         this.job = Job.build(dir);
         this.category = new Category(path.dirname(dir));
-        this.logger = winston.createLogger({
+        this.logger = logger;
+    }
+
+    public static build(dir: string): IngestProcessor {
+        const logger = winston.createLogger({
             level: "info",
             format: winston.format.combine(
                 winston.format.timestamp(),
@@ -38,10 +42,7 @@ class IngestProcessor {
                 new winston.transports.Console(),
             ],
         });
-    }
-
-    public static build(dir: string): IngestProcessor {
-        return new IngestProcessor(dir, Config.getInstance(), FedoraObjectFactory.getInstance());
+        return new IngestProcessor(dir, Config.getInstance(), FedoraObjectFactory.getInstance(), logger);
     }
 
     async addDatastreamsToPage(page: Page, imageData: FedoraObject): Promise<void> {
@@ -170,7 +171,7 @@ class IngestProcessor {
     }
 
     async finalizeTitle(resource: FedoraObject): Promise<void> {
-        const title = this.job.dir.substr(1).split("/").reverse().join("_");
+        const title = this.job.dir.substring(1).split("/").reverse().join("_");
         this.logger.info("Updating title to " + title);
         await resource.modifyObjectLabel(title);
 
@@ -194,7 +195,7 @@ class IngestProcessor {
     moveDirectory(): void {
         const basePath = this.config.processedAreaPath;
         const currentTime = new Date();
-        const now = currentTime.toISOString().substr(0, 10);
+        const now = currentTime.toISOString().substring(0, 10);
         let target = basePath + "/" + now + "/" + this.category.name + "/" + this.job.name;
         if (fs.existsSync(target)) {
             let i = 2;
@@ -217,7 +218,7 @@ class IngestProcessor {
         this.logger.info("Beginning ingest.");
         this.logger.info("Target collection ID: " + this.category.targetCollectionId);
         const holdingArea = FedoraObject.build(this.category.targetCollectionId, this.logger);
-        if ((await holdingArea.getSort()) == "custom") {
+        if ((await holdingArea.getSortOn()) == "custom") {
             // This was already a TODO in the Ruby code; low priority:
             throw new Error("TODO: implement custom sort support.");
         }
@@ -240,8 +241,8 @@ class IngestProcessor {
         }
 
         await this.finalizeTitle(resource);
-        if (this.job.metadata.dc.length > 0) {
-            this.replaceDCMetadata(resource, this.job.metadata.dc, "Loading DC XML");
+        if (this.job.metadata.dublinCore.length > 0) {
+            this.replaceDCMetadata(resource, this.job.metadata.dublinCore, "Loading DC XML");
         }
 
         this.moveDirectory();

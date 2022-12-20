@@ -1,47 +1,37 @@
 import styles from "./ObjectSummary.module.css";
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
 import HtmlReactParser from "html-react-parser";
-import { useFetchContext } from "../../context/FetchContext";
-import { apiUrl } from "../../util/routes";
+import { useEditorContext } from "../../context/EditorContext";
+import ObjectButtonBar from "./ObjectButtonBar";
+import ObjectThumbnail from "./ObjectThumbnail";
 
-const ObjectSummary = ({ pid = null }) => {
+const ObjectSummary = (): React.ReactElement => {
     const {
-        action: { fetchJSON },
-    } = useFetchContext();
-    const [details, setDetails] = useState([]);
+        state: { currentPid, objectDetailsStorage },
+        action: { extractFirstMetadataValue, loadCurrentObjectDetails },
+    } = useEditorContext();
 
-    function extractMetadata(metadata, field, defaultValue) {
-        const values = typeof metadata[field] === "undefined" ? [] : metadata[field];
-        return values.length > 0 ? values[0] : defaultValue;
-    }
+    const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, currentPid);
 
     useEffect(() => {
-        async function loadData() {
-            let data = [];
-            const url = apiUrl + "/edit/object/details/" + encodeURIComponent(pid);
-            try {
-                data = await fetchJSON(url);
-            } catch (e) {
-                console.error("Problem fetching object details from " + url);
-            }
-            setDetails(data);
+        if (!loaded) {
+            loadCurrentObjectDetails();
         }
-        loadData();
-    }, []);
-    const metadata = details?.metadata ?? [];
-    const title = extractMetadata(metadata, "dc:title", "Title not available");
-    const description = extractMetadata(metadata, "dc:description", "");
+    }, [currentPid, loaded]);
+
+    const title = !loaded ? "Loading..." : extractFirstMetadataValue("dc:title", "Title not available");
+    const description = extractFirstMetadataValue("dc:description", "");
     return (
         <div className={styles.infobox}>
+            <div style={{ float: "right" }}>
+                <ObjectThumbnail pid={currentPid} />
+            </div>
             <h2>{title}</h2>
             <div>{HtmlReactParser(description)}</div>
+            {loaded ? <ObjectButtonBar pid={currentPid} /> : ""}
+            <br style={{ clear: "both" }} />
         </div>
     );
-};
-
-ObjectSummary.propTypes = {
-    pid: PropTypes.string,
 };
 
 export default ObjectSummary;

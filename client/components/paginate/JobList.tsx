@@ -1,9 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
-
 import Job from "./Job";
 
-const JobList = ({ category, data }) => {
+interface JobListProps {
+    category: string;
+    data: Array<string>;
+}
+
+const JobList = ({ category, data }: JobListProps): React.ReactElement => {
     return (
         <ul>
             {data.map((job) => (
@@ -13,11 +16,6 @@ const JobList = ({ category, data }) => {
             ))}
         </ul>
     );
-};
-
-JobList.propTypes = {
-    category: PropTypes.string,
-    data: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default JobList;

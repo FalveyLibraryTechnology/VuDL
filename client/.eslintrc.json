@@ -9,13 +9,32 @@
     "sourceType": "module"
   },
   "plugins": ["react"],
-  "extends": ["eslint:recommended", "plugin:prettier/recommended", "plugin:react/recommended"],
+  "extends": [
+    "next",
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "rules": {
+    "@next/next/no-img-element": "off",
     "prettier/prettier": [
       "error",
       {},
       {
         "usePrettierrc": true
+      }
+    ],
+    "react-hooks/exhaustive-deps": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          "@mui/icons-material",
+          "@mui/lab",
+          "@mui/material"
+        ]
       }
     ]
   },

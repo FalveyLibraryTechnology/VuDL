@@ -1,4 +1,4 @@
-const getAgeString = (minutes) => {
+const getAgeString = (minutes: number) => {
     const ageObject = {
         value: minutes,
         timeKey: `minute${minutes > 1 ? "s" : ""}`,

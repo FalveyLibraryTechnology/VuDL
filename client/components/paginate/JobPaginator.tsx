@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import JobPaginatorZoomToggle from "./JobPaginatorZoomToggle";
 import PaginatorControls from "./PaginatorControls";
 import PaginatorList from "./PaginatorList";
 import { usePaginatorContext } from "../../context/PaginatorContext";
+import Link from "next/link";
 
-const JobPaginator = ({ initialCategory, initialJob }) => {
+interface JobPaginatorProps {
+    initialCategory: string;
+    initialJob: string;
+}
+
+const JobPaginator = ({ initialCategory, initialJob }: JobPaginatorProps): React.ReactElement => {
     const {
         state: { category, job },
         action: { loadJob },
@@ -23,7 +28,8 @@ const JobPaginator = ({ initialCategory, initialJob }) => {
                 </div>
                 <div className="six col">
                     <p>
-                        {category} &gt; {job}
+                        <Link href="/">Main Menu</Link> &gt; <Link href="/paginate">Paginator</Link> &gt; {category}{" "}
+                        &gt; {job}
                     </p>
                     <PaginatorControls />
                     <PaginatorList />
@@ -31,11 +37,6 @@ const JobPaginator = ({ initialCategory, initialJob }) => {
             </div>
         </div>
     );
-};
-
-JobPaginator.propTypes = {
-    initialCategory: PropTypes.string,
-    initialJob: PropTypes.string,
 };
 
 export default JobPaginator;

@@ -38,8 +38,11 @@ export default class DateSanitizer {
         }
 
         // If we've gotten this far, we at least know that we have a valid year.
-        const yearValue = "0000" + parseInt(date.substr(0, 4));
-        const year = yearValue.substr(yearValue.length - 4, 4);
+        const padNumber = function (val: string | number, targetLength: number): string {
+            const paddedVal = "0".repeat(targetLength) + val;
+            return paddedVal.substring(paddedVal.length - targetLength);
+        };
+        const year = padNumber(parseInt(date.substring(0, 4)), 4);
 
         // Let's get rid of punctuation and normalize separators:
         date = date.replace(/[. ?]/g, "").replace(/\/|--|0-/g, "-");
@@ -57,7 +60,7 @@ export default class DateSanitizer {
                 day = "01";
                 const matches = date.match(/^[0-9]{4}-([0-9]{1,2})/);
                 if (matches && typeof matches[1] !== "undefined") {
-                    month = ("0" + matches[1]).substr(-2);
+                    month = padNumber(matches[1], 2);
                 } else {
                     month = "01";
                 }
@@ -65,8 +68,8 @@ export default class DateSanitizer {
                 // If we have year + month + day, parse that out:
                 const matches = date.match(/^[0-9]{4}-([0-9]{1,2})-([0-9]{1,2})/);
                 if (matches && typeof matches[2] !== "undefined") {
-                    month = ("0" + matches[1]).substr(-2);
-                    day = ("0" + matches[2]).substr(-2);
+                    month = padNumber(matches[1], 2);
+                    day = padNumber(matches[2], 2);
                 } else {
                     month = day = "01";
                 }

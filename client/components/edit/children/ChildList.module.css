@@ -1,0 +1,7 @@
+.childlist {
+    list-style-type: none;
+}
+
+.childlist li {
+    border-top: 1px solid gray;
+}

@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamDublinCoreEditField renders a dropdown field 1`] = `
+<ForwardRef(FormControl)
+  fullWidth={true}
+>
+  <ForwardRef(NativeSelect)
+    onChange={[Function]}
+    value="foo"
+  >
+    <option
+      key="foo_0"
+      value="foo"
+    >
+      foo
+    </option>
+    <option
+      key="bar_1"
+      value="bar"
+    >
+      bar
+    </option>
+    <option
+      key="baz_2"
+      value="baz"
+    >
+      baz
+    </option>
+  </ForwardRef(NativeSelect)>
+</ForwardRef(FormControl)>
+`;
+
+exports[`DatastreamDublinCoreEditField renders a dropdown field with an unexpected value 1`] = `
+<ForwardRef(FormControl)
+  fullWidth={true}
+>
+  <ForwardRef(NativeSelect)
+    onChange={[Function]}
+    value="foo"
+  >
+    <option
+      key="foo_0"
+      value="foo"
+    >
+      foo
+    </option>
+  </ForwardRef(NativeSelect)>
+</ForwardRef(FormControl)>
+`;
+
+exports[`DatastreamDublinCoreEditField renders a locked field 1`] = `
+<ForwardRef(FormControl)
+  fullWidth={true}
+>
+  <ForwardRef(TextField)
+    disabled={true}
+    type="text"
+    value="foo"
+  />
+</ForwardRef(FormControl)>
+`;
+
+exports[`DatastreamDublinCoreEditField renders a text field 1`] = `
+<ForwardRef(FormControl)
+  fullWidth={true}
+>
+  <BlurSavingTextField
+    setValue={[MockFunction]}
+    value="foo"
+  />
+</ForwardRef(FormControl)>
+`;
+
+exports[`DatastreamDublinCoreEditField renders an html field 1`] = `
+<Editor
+  cloudChannel="6"
+  init={
+    Object {
+      "plugins": "code link",
+    }
+  }
+  initialValue="foo"
+  onBlur={[Function]}
+  tinymceScriptSrc="/tinymce/tinymce.min.js"
+/>
+`;
+
+exports[`DatastreamDublinCoreEditField renders an unknown field 1`] = `
+<p>
+  Unsupported type (unknown): foo
+</p>
+`;

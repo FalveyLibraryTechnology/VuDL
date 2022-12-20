@@ -1,33 +1,31 @@
 import React, { useState } from "react";
-import { baseUrl } from "../../util/routes";
-import { useFetchContext } from "../../context/FetchContext";
-const SolrIndexer = () => {
-    const [pid, setPid] = useState("");
-    const [results, setResults] = useState("");
-    const {
-        action: { fetchText },
-    } = useFetchContext();
+import SinglePidIndexer from "./SinglePidIndexer";
+import PidRangeIndexer from "./PidRangeIndexer";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import BasicBreadcrumbs from "../shared/BasicBreadcrumbs";
 
-    const doApiCall = async (method) => {
-        try {
-            setResults(await fetchText(`${baseUrl}/messenger/solrindex/${encodeURIComponent(pid)}`, { method }));
-        } catch (error) {
-            setResults(error.message);
-        }
-    };
+const SolrIndexer = (): React.ReactElement => {
+    const [results, setResults] = useState("");
 
     return (
         <div>
+            <BasicBreadcrumbs />
             <h1>Solr Index Tool</h1>
-            <label>
-                PID: <input type="text" id="solrIndexPid" value={pid} onChange={(e) => setPid(e.target.value)} />
-            </label>
-            <button id="solrIndexPreviewButton" onClick={() => doApiCall("GET")}>
-                Preview
-            </button>
-            <button id="solrIndexIndexButton" onClick={() => doApiCall("POST")}>
-                Index
-            </button>
+            <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>Index Single PID:</AccordionSummary>
+                <AccordionDetails>
+                    <SinglePidIndexer setResults={setResults} />
+                </AccordionDetails>
+            </Accordion>
+            <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>Index Range of PIDs:</AccordionSummary>
+                <AccordionDetails>
+                    <PidRangeIndexer setResults={setResults} />
+                </AccordionDetails>
+            </Accordion>
             <h2>Results:</h2>
             <pre id="solrIndexResults">{results}</pre>
         </div>

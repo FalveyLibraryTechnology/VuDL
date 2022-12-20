@@ -31,7 +31,7 @@ class JobMetadata {
         }
     }
 
-    get dc(): string {
+    get dublinCore(): string {
         const filename = this.job.dir + "/dc.xml";
         return fs.existsSync(filename) ? fs.readFileSync(filename).toString() : "";
     }

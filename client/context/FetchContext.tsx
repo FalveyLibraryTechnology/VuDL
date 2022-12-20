@@ -126,8 +126,27 @@ export const useFetchContext = () => {
      */
     const fetchText = async (url = ingestApiUrl, params = {}, headers = {}) => {
         const response = await makeRequest(url, params, headers);
+        const body = response ? await response.text() : "";
+        if (response?.ok) {
+            return body;
+        }
+        throw new Error(response.statusText + ((body ?? "").length > 0 ? ": " + body : ""));
+    };
+
+    /**
+     * Return a blob response when making a request
+     * @param {string} url - The http url of the request
+     * @param {Object} params - The request parameters
+     * @param {Object} headers - The request parameter headers
+     */
+    const fetchBlob = async (url, params = {}, headers = {}) => {
+        const response = await makeRequest(url, params, headers);
         if (response.ok) {
-            return await response.text();
+            const blob = await response.blob();
+            return {
+                headers: response.headers,
+                blob
+            };
         }
         throw new Error(response.statusText);
     };
@@ -137,6 +156,7 @@ export const useFetchContext = () => {
             token,
         },
         action: {
+            fetchBlob,
             fetchJSON,
             fetchText,
             makeRequest,

@@ -2,7 +2,7 @@ import React from "react";
 
 import { logoutUrl } from "../util/routes";
 
-const LogoutButton = () => {
+const LogoutButton = (): React.ReactElement => {
     const clearToken = () => {
         sessionStorage.removeItem("token");
     };

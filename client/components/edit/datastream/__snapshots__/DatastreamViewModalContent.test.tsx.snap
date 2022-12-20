@@ -1,0 +1,963 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamViewModalContent renders 1`] = `
+<DatastreamViewModalContent>
+  <ForwardRef(DialogContent)
+    sx={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "justifyContent": "center",
+        "minHeight": "50vh",
+      }
+    }
+  >
+    <MuiDialogContentRoot
+      className="MuiDialogContent-root"
+      ownerState={
+        Object {
+          "children": Array [
+            <ForwardRef(CircularProgress)
+              size="60px"
+            />,
+            ";",
+          ],
+          "dividers": false,
+          "sx": Object {
+            "alignItems": "center",
+            "display": "flex",
+            "justifyContent": "center",
+            "minHeight": "50vh",
+          },
+        }
+      }
+      sx={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "justifyContent": "center",
+          "minHeight": "50vh",
+        }
+      }
+    >
+      <Insertion
+        cache={
+          Object {
+            "insert": [Function],
+            "inserted": Object {
+              "176wh8e-MuiCircularProgress-circle": true,
+              "18lrjg1-MuiCircularProgress-root": true,
+              "1idz92c-MuiCircularProgress-svg": true,
+              "animation-1p2h4ri": true,
+              "animation-61bdi0": true,
+              "lebnmz-MuiDialogContent-root": true,
+              "mx6d60-MuiDialogContent-root": true,
+            },
+            "key": "css",
+            "nonce": undefined,
+            "registered": Object {},
+            "sheet": StyleSheet {
+              "_alreadyInsertedOrderInsensitiveRule": true,
+              "_insertTag": [Function],
+              "before": null,
+              "container": <head>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-mx6d60-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+                </style>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .MuiDialogTitle-root+.css-mx6d60-MuiDialogContent-root{padding-top:0;}
+                </style>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-18lrjg1-MuiCircularProgress-root{display:inline-block;color:#1976d2;-webkit-animation:animation-61bdi0 1.4s linear infinite;animation:animation-61bdi0 1.4s linear infinite;}
+                </style>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  @-webkit-keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                </style>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  @keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                </style>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-1idz92c-MuiCircularProgress-svg{display:block;}
+                </style>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-176wh8e-MuiCircularProgress-circle{stroke:currentColor;stroke-dasharray:80px,200px;stroke-dashoffset:0;-webkit-animation:animation-1p2h4ri 1.4s ease-in-out infinite;animation:animation-1p2h4ri 1.4s ease-in-out infinite;}
+                </style>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  @-webkit-keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                </style>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  @keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                </style>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-lebnmz-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;}
+                </style>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .MuiDialogTitle-root+.css-lebnmz-MuiDialogContent-root{padding-top:0;}
+                </style>
+              </head>,
+              "ctr": 11,
+              "insertionPoint": undefined,
+              "isSpeedy": false,
+              "key": "css",
+              "nonce": undefined,
+              "prepend": undefined,
+              "tags": Array [
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-mx6d60-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+                </style>,
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .MuiDialogTitle-root+.css-mx6d60-MuiDialogContent-root{padding-top:0;}
+                </style>,
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-18lrjg1-MuiCircularProgress-root{display:inline-block;color:#1976d2;-webkit-animation:animation-61bdi0 1.4s linear infinite;animation:animation-61bdi0 1.4s linear infinite;}
+                </style>,
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  @-webkit-keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                </style>,
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  @keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                </style>,
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-1idz92c-MuiCircularProgress-svg{display:block;}
+                </style>,
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-176wh8e-MuiCircularProgress-circle{stroke:currentColor;stroke-dasharray:80px,200px;stroke-dashoffset:0;-webkit-animation:animation-1p2h4ri 1.4s ease-in-out infinite;animation:animation-1p2h4ri 1.4s ease-in-out infinite;}
+                </style>,
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  @-webkit-keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                </style>,
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  @keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                </style>,
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-lebnmz-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;}
+                </style>,
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .MuiDialogTitle-root+.css-lebnmz-MuiDialogContent-root{padding-top:0;}
+                </style>,
+              ],
+            },
+          }
+        }
+        isStringTag={true}
+        serialized={
+          Object {
+            "map": undefined,
+            "name": "mx6d60-MuiDialogContent-root",
+            "next": undefined,
+            "styles": "label:MuiDialogContent-root;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;.MuiDialogTitle-root + &{padding-top:0;}min-height:50vh;display:flex;justify-content:center;align-items:center;",
+            "toString": [Function],
+          }
+        }
+      />
+      <div
+        className="MuiDialogContent-root css-mx6d60-MuiDialogContent-root"
+      >
+        <ForwardRef(CircularProgress)
+          size="60px"
+        >
+          <MuiCircularProgressRoot
+            className="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary"
+            ownerState={
+              Object {
+                "color": "primary",
+                "disableShrink": false,
+                "size": "60px",
+                "thickness": 3.6,
+                "value": 0,
+                "variant": "indeterminate",
+              }
+            }
+            role="progressbar"
+            style={
+              Object {
+                "height": "60px",
+                "width": "60px",
+              }
+            }
+          >
+            <Insertion
+              cache={
+                Object {
+                  "insert": [Function],
+                  "inserted": Object {
+                    "176wh8e-MuiCircularProgress-circle": true,
+                    "18lrjg1-MuiCircularProgress-root": true,
+                    "1idz92c-MuiCircularProgress-svg": true,
+                    "animation-1p2h4ri": true,
+                    "animation-61bdi0": true,
+                    "lebnmz-MuiDialogContent-root": true,
+                    "mx6d60-MuiDialogContent-root": true,
+                  },
+                  "key": "css",
+                  "nonce": undefined,
+                  "registered": Object {},
+                  "sheet": StyleSheet {
+                    "_alreadyInsertedOrderInsensitiveRule": true,
+                    "_insertTag": [Function],
+                    "before": null,
+                    "container": <head>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .css-mx6d60-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+                      </style>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .MuiDialogTitle-root+.css-mx6d60-MuiDialogContent-root{padding-top:0;}
+                      </style>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .css-18lrjg1-MuiCircularProgress-root{display:inline-block;color:#1976d2;-webkit-animation:animation-61bdi0 1.4s linear infinite;animation:animation-61bdi0 1.4s linear infinite;}
+                      </style>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        @-webkit-keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                      </style>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        @keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                      </style>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .css-1idz92c-MuiCircularProgress-svg{display:block;}
+                      </style>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .css-176wh8e-MuiCircularProgress-circle{stroke:currentColor;stroke-dasharray:80px,200px;stroke-dashoffset:0;-webkit-animation:animation-1p2h4ri 1.4s ease-in-out infinite;animation:animation-1p2h4ri 1.4s ease-in-out infinite;}
+                      </style>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        @-webkit-keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                      </style>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        @keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                      </style>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .css-lebnmz-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;}
+                      </style>
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .MuiDialogTitle-root+.css-lebnmz-MuiDialogContent-root{padding-top:0;}
+                      </style>
+                    </head>,
+                    "ctr": 11,
+                    "insertionPoint": undefined,
+                    "isSpeedy": false,
+                    "key": "css",
+                    "nonce": undefined,
+                    "prepend": undefined,
+                    "tags": Array [
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .css-mx6d60-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+                      </style>,
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .MuiDialogTitle-root+.css-mx6d60-MuiDialogContent-root{padding-top:0;}
+                      </style>,
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .css-18lrjg1-MuiCircularProgress-root{display:inline-block;color:#1976d2;-webkit-animation:animation-61bdi0 1.4s linear infinite;animation:animation-61bdi0 1.4s linear infinite;}
+                      </style>,
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        @-webkit-keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                      </style>,
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        @keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                      </style>,
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .css-1idz92c-MuiCircularProgress-svg{display:block;}
+                      </style>,
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .css-176wh8e-MuiCircularProgress-circle{stroke:currentColor;stroke-dasharray:80px,200px;stroke-dashoffset:0;-webkit-animation:animation-1p2h4ri 1.4s ease-in-out infinite;animation:animation-1p2h4ri 1.4s ease-in-out infinite;}
+                      </style>,
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        @-webkit-keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                      </style>,
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        @keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                      </style>,
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .css-lebnmz-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;}
+                      </style>,
+                      <style
+                        data-emotion="css"
+                        data-s=""
+                      >
+                        
+                        .MuiDialogTitle-root+.css-lebnmz-MuiDialogContent-root{padding-top:0;}
+                      </style>,
+                    ],
+                  },
+                }
+              }
+              isStringTag={true}
+              serialized={
+                Object {
+                  "map": undefined,
+                  "name": "18lrjg1-MuiCircularProgress-root",
+                  "next": Object {
+                    "name": "animation-61bdi0",
+                    "next": undefined,
+                    "styles": "@keyframes animation-61bdi0{
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}",
+                  },
+                  "styles": "label:MuiCircularProgress-root;display:inline-block;color:#1976d2;
+      animation: animation-61bdi0 1.4s linear infinite;
+    ;",
+                  "toString": [Function],
+                }
+              }
+            />
+            <span
+              className="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-18lrjg1-MuiCircularProgress-root"
+              role="progressbar"
+              style={
+                Object {
+                  "height": "60px",
+                  "width": "60px",
+                }
+              }
+            >
+              <MuiCircularProgressSvg
+                className="MuiCircularProgress-svg"
+                ownerState={
+                  Object {
+                    "color": "primary",
+                    "disableShrink": false,
+                    "size": "60px",
+                    "thickness": 3.6,
+                    "value": 0,
+                    "variant": "indeterminate",
+                  }
+                }
+                viewBox="22 22 44 44"
+              >
+                <Insertion
+                  cache={
+                    Object {
+                      "insert": [Function],
+                      "inserted": Object {
+                        "176wh8e-MuiCircularProgress-circle": true,
+                        "18lrjg1-MuiCircularProgress-root": true,
+                        "1idz92c-MuiCircularProgress-svg": true,
+                        "animation-1p2h4ri": true,
+                        "animation-61bdi0": true,
+                        "lebnmz-MuiDialogContent-root": true,
+                        "mx6d60-MuiDialogContent-root": true,
+                      },
+                      "key": "css",
+                      "nonce": undefined,
+                      "registered": Object {},
+                      "sheet": StyleSheet {
+                        "_alreadyInsertedOrderInsensitiveRule": true,
+                        "_insertTag": [Function],
+                        "before": null,
+                        "container": <head>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .css-mx6d60-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+                          </style>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .MuiDialogTitle-root+.css-mx6d60-MuiDialogContent-root{padding-top:0;}
+                          </style>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .css-18lrjg1-MuiCircularProgress-root{display:inline-block;color:#1976d2;-webkit-animation:animation-61bdi0 1.4s linear infinite;animation:animation-61bdi0 1.4s linear infinite;}
+                          </style>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            @-webkit-keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                          </style>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            @keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                          </style>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .css-1idz92c-MuiCircularProgress-svg{display:block;}
+                          </style>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .css-176wh8e-MuiCircularProgress-circle{stroke:currentColor;stroke-dasharray:80px,200px;stroke-dashoffset:0;-webkit-animation:animation-1p2h4ri 1.4s ease-in-out infinite;animation:animation-1p2h4ri 1.4s ease-in-out infinite;}
+                          </style>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            @-webkit-keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                          </style>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            @keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                          </style>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .css-lebnmz-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;}
+                          </style>
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .MuiDialogTitle-root+.css-lebnmz-MuiDialogContent-root{padding-top:0;}
+                          </style>
+                        </head>,
+                        "ctr": 11,
+                        "insertionPoint": undefined,
+                        "isSpeedy": false,
+                        "key": "css",
+                        "nonce": undefined,
+                        "prepend": undefined,
+                        "tags": Array [
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .css-mx6d60-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+                          </style>,
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .MuiDialogTitle-root+.css-mx6d60-MuiDialogContent-root{padding-top:0;}
+                          </style>,
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .css-18lrjg1-MuiCircularProgress-root{display:inline-block;color:#1976d2;-webkit-animation:animation-61bdi0 1.4s linear infinite;animation:animation-61bdi0 1.4s linear infinite;}
+                          </style>,
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            @-webkit-keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                          </style>,
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            @keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                          </style>,
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .css-1idz92c-MuiCircularProgress-svg{display:block;}
+                          </style>,
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .css-176wh8e-MuiCircularProgress-circle{stroke:currentColor;stroke-dasharray:80px,200px;stroke-dashoffset:0;-webkit-animation:animation-1p2h4ri 1.4s ease-in-out infinite;animation:animation-1p2h4ri 1.4s ease-in-out infinite;}
+                          </style>,
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            @-webkit-keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                          </style>,
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            @keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                          </style>,
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .css-lebnmz-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;}
+                          </style>,
+                          <style
+                            data-emotion="css"
+                            data-s=""
+                          >
+                            
+                            .MuiDialogTitle-root+.css-lebnmz-MuiDialogContent-root{padding-top:0;}
+                          </style>,
+                        ],
+                      },
+                    }
+                  }
+                  isStringTag={true}
+                  serialized={
+                    Object {
+                      "map": undefined,
+                      "name": "1idz92c-MuiCircularProgress-svg",
+                      "next": undefined,
+                      "styles": "label:MuiCircularProgress-svg;display:block;",
+                      "toString": [Function],
+                    }
+                  }
+                />
+                <svg
+                  className="MuiCircularProgress-svg css-1idz92c-MuiCircularProgress-svg"
+                  viewBox="22 22 44 44"
+                >
+                  <MuiCircularProgressCircle
+                    className="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+                    cx={44}
+                    cy={44}
+                    fill="none"
+                    ownerState={
+                      Object {
+                        "color": "primary",
+                        "disableShrink": false,
+                        "size": "60px",
+                        "thickness": 3.6,
+                        "value": 0,
+                        "variant": "indeterminate",
+                      }
+                    }
+                    r={20.2}
+                    strokeWidth={3.6}
+                    style={Object {}}
+                  >
+                    <Insertion
+                      cache={
+                        Object {
+                          "insert": [Function],
+                          "inserted": Object {
+                            "176wh8e-MuiCircularProgress-circle": true,
+                            "18lrjg1-MuiCircularProgress-root": true,
+                            "1idz92c-MuiCircularProgress-svg": true,
+                            "animation-1p2h4ri": true,
+                            "animation-61bdi0": true,
+                            "lebnmz-MuiDialogContent-root": true,
+                            "mx6d60-MuiDialogContent-root": true,
+                          },
+                          "key": "css",
+                          "nonce": undefined,
+                          "registered": Object {},
+                          "sheet": StyleSheet {
+                            "_alreadyInsertedOrderInsensitiveRule": true,
+                            "_insertTag": [Function],
+                            "before": null,
+                            "container": <head>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .css-mx6d60-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+                              </style>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .MuiDialogTitle-root+.css-mx6d60-MuiDialogContent-root{padding-top:0;}
+                              </style>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .css-18lrjg1-MuiCircularProgress-root{display:inline-block;color:#1976d2;-webkit-animation:animation-61bdi0 1.4s linear infinite;animation:animation-61bdi0 1.4s linear infinite;}
+                              </style>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                @-webkit-keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                              </style>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                @keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                              </style>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .css-1idz92c-MuiCircularProgress-svg{display:block;}
+                              </style>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .css-176wh8e-MuiCircularProgress-circle{stroke:currentColor;stroke-dasharray:80px,200px;stroke-dashoffset:0;-webkit-animation:animation-1p2h4ri 1.4s ease-in-out infinite;animation:animation-1p2h4ri 1.4s ease-in-out infinite;}
+                              </style>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                @-webkit-keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                              </style>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                @keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                              </style>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .css-lebnmz-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;}
+                              </style>
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .MuiDialogTitle-root+.css-lebnmz-MuiDialogContent-root{padding-top:0;}
+                              </style>
+                            </head>,
+                            "ctr": 11,
+                            "insertionPoint": undefined,
+                            "isSpeedy": false,
+                            "key": "css",
+                            "nonce": undefined,
+                            "prepend": undefined,
+                            "tags": Array [
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .css-mx6d60-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;}
+                              </style>,
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .MuiDialogTitle-root+.css-mx6d60-MuiDialogContent-root{padding-top:0;}
+                              </style>,
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .css-18lrjg1-MuiCircularProgress-root{display:inline-block;color:#1976d2;-webkit-animation:animation-61bdi0 1.4s linear infinite;animation:animation-61bdi0 1.4s linear infinite;}
+                              </style>,
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                @-webkit-keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                              </style>,
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                @keyframes animation-61bdi0{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);transform:rotate(360deg);}}
+                              </style>,
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .css-1idz92c-MuiCircularProgress-svg{display:block;}
+                              </style>,
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .css-176wh8e-MuiCircularProgress-circle{stroke:currentColor;stroke-dasharray:80px,200px;stroke-dashoffset:0;-webkit-animation:animation-1p2h4ri 1.4s ease-in-out infinite;animation:animation-1p2h4ri 1.4s ease-in-out infinite;}
+                              </style>,
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                @-webkit-keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                              </style>,
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                @keyframes animation-1p2h4ri{0%{stroke-dasharray:1px,200px;stroke-dashoffset:0;}50%{stroke-dasharray:100px,200px;stroke-dashoffset:-15px;}100%{stroke-dasharray:100px,200px;stroke-dashoffset:-125px;}}
+                              </style>,
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .css-lebnmz-MuiDialogContent-root{-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overflow-y:auto;padding:20px 24px;min-height:50vh;}
+                              </style>,
+                              <style
+                                data-emotion="css"
+                                data-s=""
+                              >
+                                
+                                .MuiDialogTitle-root+.css-lebnmz-MuiDialogContent-root{padding-top:0;}
+                              </style>,
+                            ],
+                          },
+                        }
+                      }
+                      isStringTag={true}
+                      serialized={
+                        Object {
+                          "map": undefined,
+                          "name": "176wh8e-MuiCircularProgress-circle",
+                          "next": Object {
+                            "name": "animation-1p2h4ri",
+                            "next": undefined,
+                            "styles": "@keyframes animation-1p2h4ri{
+  0% {
+    stroke-dasharray: 1px, 200px;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 100px, 200px;
+    stroke-dashoffset: -15px;
+  }
+
+  100% {
+    stroke-dasharray: 100px, 200px;
+    stroke-dashoffset: -125px;
+  }
+}",
+                          },
+                          "styles": "label:MuiCircularProgress-circle;stroke:currentColor;stroke-dasharray:80px, 200px;stroke-dashoffset:0;
+      animation: animation-1p2h4ri 1.4s ease-in-out infinite;
+    ;",
+                          "toString": [Function],
+                        }
+                      }
+                    />
+                    <circle
+                      className="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-176wh8e-MuiCircularProgress-circle"
+                      cx={44}
+                      cy={44}
+                      fill="none"
+                      r={20.2}
+                      strokeWidth={3.6}
+                      style={Object {}}
+                    />
+                  </MuiCircularProgressCircle>
+                </svg>
+              </MuiCircularProgressSvg>
+            </span>
+          </MuiCircularProgressRoot>
+        </ForwardRef(CircularProgress)>
+        ;
+      </div>
+    </MuiDialogContentRoot>
+  </ForwardRef(DialogContent)>
+</DatastreamViewModalContent>
+`;

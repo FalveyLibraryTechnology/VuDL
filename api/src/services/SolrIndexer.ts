@@ -1,7 +1,7 @@
 import Config from "../models/Config";
 import DateSanitizer from "./DateSanitizer";
-import FedoraData from "../models/FedoraData";
-import HierarchyCollector from "./HierarchyCollector";
+import FedoraDataCollection from "../models/FedoraDataCollection";
+import FedoraDataCollector from "./FedoraDataCollector";
 import http = require("needle");
 import { NeedleResponse } from "./interfaces";
 import Solr from "./Solr";
@@ -13,11 +13,11 @@ interface SolrFields {
 class SolrIndexer {
     private static instance: SolrIndexer;
     config: Config;
-    hierarchyCollector: HierarchyCollector;
+    fedoraDataCollector: FedoraDataCollector;
     solr: Solr;
 
-    constructor(hierarchyCollector: HierarchyCollector, solr: Solr, config: Config) {
-        this.hierarchyCollector = hierarchyCollector;
+    constructor(fedoraDataCollector: FedoraDataCollector, solr: Solr, config: Config) {
+        this.fedoraDataCollector = fedoraDataCollector;
         this.config = config;
         this.solr = solr;
     }
@@ -25,7 +25,7 @@ class SolrIndexer {
     public static getInstance(): SolrIndexer {
         if (!SolrIndexer.instance) {
             SolrIndexer.instance = new SolrIndexer(
-                HierarchyCollector.getInstance(),
+                FedoraDataCollector.getInstance(),
                 Solr.getInstance(),
                 Config.getInstance()
             );
@@ -36,11 +36,15 @@ class SolrIndexer {
     protected padNumber(num: string): string {
         // Yes, I wrote a left_pad function.
         const paddedNumber = "0000000000" + num;
-        return paddedNumber.substr(paddedNumber.length - 10);
+        return paddedNumber.substring(paddedNumber.length - 10);
     }
 
     protected async getChangeTrackerDetails(pid: string, modificationDate: string): Promise<Record<string, string>> {
         const core = this.config.solrCore;
+        if (!this.config.vufindUrl) {
+            console.warn("No VuFind URL configured; skipping change tracking indexing.");
+            return {};
+        }
         const url = this.config.vufindUrl + "/XSLT/Home?";
         const query =
             "method[]=getLastIndexed&method[]=getFirstIndexed&id=" +
@@ -64,17 +68,13 @@ class SolrIndexer {
     }
 
     async indexPid(pid: string): Promise<NeedleResponse> {
-        // Empty out Fedora cache data to be sure we get the latest
-        // information while indexing.
-        // TODO: review datastream caching logic; do we need it? Is there a better way?
-        this.hierarchyCollector.fedora.clearCache(pid);
         const fedoraFields = await this.getFields(pid);
         return await this.solr.indexRecord(this.config.solrCore, fedoraFields);
     }
 
     async getFields(pid: string): Promise<SolrFields> {
         // Collect hierarchy data
-        const fedoraData = await this.hierarchyCollector.getHierarchy(pid);
+        const fedoraData = await this.fedoraDataCollector.getHierarchy(pid);
 
         // Start with basic data:
         const fields: SolrFields = {
@@ -87,12 +87,6 @@ class SolrIndexer {
             hierarchytype: "",
             hierarchy_all_parents_str_mv: fedoraData.getAllParents(),
         };
-
-        // Load RELS-EXT data (some of this is used below):
-        for (const field in fedoraData.relations) {
-            const fieldName = "relsext." + field + "_txt_mv";
-            fields[fieldName] = fedoraData.relations[field];
-        }
 
         // Is this a hierarchy?
         if (fedoraData.models.includes("vudl-system:FolderCollection")) {
@@ -110,10 +104,10 @@ class SolrIndexer {
             fields[dynamic_sequence_field_name] = this.padNumber(seqNum);
         }
 
-        // Process parent data (note that hierarchyParents makes some special exceptions for VuFind;
+        // Process parent data (note that vufindParents makes some special exceptions for VuFind;
         // fedoraParents exactly maintains the hierarchy as represented in Fedora):
-        const hierarchyParents: Array<FedoraData> = [];
-        const fedoraParents: Array<FedoraData> = [];
+        const vufindParents: Array<FedoraDataCollection> = [];
+        const fedoraParents: Array<FedoraDataCollection> = [];
         const hierarchySequences: Array<string> = [];
         for (const parent of fedoraData.parents) {
             // Fedora parents should directly reflect the repository without any
@@ -124,17 +118,17 @@ class SolrIndexer {
             // to (skip the List object):
             if (fedoraData.models.includes("vudl-system:DataModel")) {
                 for (const grandParent of parent.parents) {
-                    hierarchyParents.push(grandParent);
+                    vufindParents.push(grandParent);
                     hierarchySequences.push(this.padNumber(sequenceIndex[grandParent.pid] ?? 0));
                 }
             } else if (!this.config.topLevelPids.includes(pid)) {
                 // ...for non-Data objects, store the immediate parent (Folder most likely)
                 // as long as the current pid is not marked as a top-level one:
-                hierarchyParents.push(parent);
+                vufindParents.push(parent);
                 hierarchySequences.push(this.padNumber(sequenceIndex[parent.pid] ?? 0));
             }
         }
-        const hierarchyTops: Array<FedoraData> = fedoraData.getAllHierarchyTops();
+        const hierarchyTops: Array<FedoraDataCollection> = fedoraData.getAllHierarchyTops();
         if (hierarchyTops.length > 0) {
             fields.hierarchy_top_id = [];
             fields.hierarchy_top_title = [];
@@ -146,15 +140,15 @@ class SolrIndexer {
             }
         }
         fields.fedora_parent_id_str_mv = fedoraParents.map((parent) => parent.pid);
-        if (hierarchyParents.length > 0) {
+        if (vufindParents.length > 0) {
             // This is what we are collapsing on:
             fields.hierarchy_first_parent_id_str = fedoraData.models.includes("vudl-system:DataModel")
-                ? hierarchyParents[0].pid
+                ? vufindParents[0].pid
                 : pid;
             fields.hierarchy_browse = [];
             fields.hierarchy_parent_id = [];
             fields.hierarchy_parent_title = [];
-            for (const parent of hierarchyParents) {
+            for (const parent of vufindParents) {
                 if (!fields.hierarchy_parent_id.includes(parent.pid)) {
                     fields.hierarchy_browse.push(parent.title + "{{{_ID_}}}" + parent.pid);
                     fields.hierarchy_parent_id.push(parent.pid);
@@ -176,7 +170,7 @@ class SolrIndexer {
             // to look them up manually in Fedora. Perhaps this can be optimized or
             // simplified somehow...
             const titlePromises = ((fields.hierarchy_parent_id ?? []) as Array<string>).map(async (id) => {
-                const currentObject = await this.hierarchyCollector.getFedoraData(id, false);
+                const currentObject = await this.fedoraDataCollector.getObjectData(id);
                 return currentObject.title;
             });
             fields.hierarchy_parent_title = await Promise.all(titlePromises);
@@ -200,7 +194,6 @@ class SolrIndexer {
             author2: "dc.contributor_txt_mv",
             dc_collection_str_mv: "dc.collection_txt_mv", // possibly unused
             dc_source_str_mv: "dc.source_txt_mv",
-            description: "dc.description_txt_mv",
             format: "dc.format_txt_mv",
             publisher: "dc.publisher_txt_mv",
             publisher_str_mv: "dc.publisher_txt_mv",
@@ -222,6 +215,7 @@ class SolrIndexer {
             dc_date_str: "dc.date_txt_mv",
             dc_relation_str: "dc.relation_txt_mv",
             dc_title_str: "dc.title_txt_mv",
+            description: "dc.description_txt_mv",
             title: "dc.title_txt_mv",
             title_full: "dc.title_txt_mv",
             title_short: "dc.title_txt_mv",
@@ -248,9 +242,9 @@ class SolrIndexer {
 
         // If this is a data model, we want to pull the date from its parent.
         const dateString = fedoraData.models.includes("vudl-system:DataModel")
-            ? (hierarchyParents[0]?.metadata["dc:date"] ?? [])[0] ?? ""
+            ? (vufindParents[0]?.metadata["dc:date"] ?? [])[0] ?? ""
             : (fields["dc.date_txt_mv"] ?? [])[0] ?? "";
-        const strippedDate = parseInt(dateString.substr(0, 4));
+        const strippedDate = parseInt(dateString.substring(0, 4));
         if (strippedDate > this.config.minimumValidYear) {
             fields.publishDate = String(strippedDate);
             fields.publishDateSort = String(strippedDate);
@@ -267,8 +261,8 @@ class SolrIndexer {
             // If we have a title, generate a sort-friendly version:
             let sortTitle = (fields["title"] as string).toLowerCase();
             for (const article of this.config.articlesToStrip) {
-                if (sortTitle.substr(0, article.length) === article) {
-                    sortTitle = sortTitle.substr(article.length);
+                if (sortTitle.substring(0, article.length) === article) {
+                    sortTitle = sortTitle.substring(article.length);
                     break;
                 }
             }
@@ -277,57 +271,81 @@ class SolrIndexer {
                 fields.collection_title_sort_str = fields.title_sort;
             }
         }
-
-        fields.has_order_str = ((fields["relsext.sortOn_txt_mv"] ?? [])[0] ?? "title") === "custom" ? "yes" : "no";
-
+        // Fedora 3 stored some data in Fedora object XML and some in separate RELS-EXT datastreams.
+        // Legacy VuDL indexed these two data sources using different prefixes. For stability of legacy
+        // queries, we retain this prefix separation, using the table below to identify the former
+        // RELS-EXT fields and defaulting to the "fgs." prefix for everything else.
+        const prefixes = {
+            hasLegacyURL: "relsext",
+            hasModel: "relsext",
+            itemID: "relsext",
+            isMemberOf: "relsext",
+            sequence: "relsext",
+            sortOn: "relsext",
+        };
         for (const field in fedoraData.fedoraDetails) {
-            const fieldName = "fgs." + field + "_txt_mv";
+            const prefix = prefixes[field] ?? "fgs";
+            const fieldName = prefix + "." + field + "_txt_mv";
             fields[fieldName] = fedoraData.fedoraDetails[field];
         }
 
-        for (const field in fedoraData.agents) {
+        fields.has_order_str = ((fields["relsext.sortOn_txt_mv"] ?? [])[0] ?? "title") === "custom" ? "yes" : "no";
+
+        const agents = await fedoraData.datastreamDetails.getAgents();
+        for (const field in agents) {
             const fieldName = "agent." + field + "_txt_mv";
-            fields[fieldName] = fedoraData.agents[field];
+            fields[fieldName] = agents[field];
         }
 
-        if (fedoraData.license !== null) {
-            fields["license.mdRef_str"] = fedoraData.license;
+        const license = await fedoraData.getLicense();
+        if (license !== null) {
+            fields["license.mdRef_str"] = license;
         }
         if ((fields["license.mdRef_str"] ?? null) === "http://digital.library.villanova.edu/copyright.html") {
             fields.license_str = "protected";
         }
         fields.has_thumbnail_str = fedoraData.fedoraDatastreams.includes("THUMBNAIL") ? "true" : "false";
         if (fields.has_thumbnail_str === "true") {
-            fields.THUMBNAIL_contentDigest_digest_str = fedoraData.getThumbnailHash("md5");
+            fields.THUMBNAIL_contentDigest_digest_str = await fedoraData.getThumbnailHash("md5");
         }
 
         // FITS details:
-        if (fedoraData.fileSize !== null) {
-            fields.sizebytes_str = fedoraData.fileSize;
+        const fileSize = await fedoraData.getFileSize();
+        if (fileSize !== null) {
+            fields.sizebytes_str = fileSize;
         }
-        if (fedoraData.imageHeight !== null) {
-            fields.height_str = fedoraData.imageHeight;
+        const imageHeight = await fedoraData.getImageHeight();
+        if (imageHeight !== null) {
+            fields.height_str = imageHeight;
         }
-        if (fedoraData.imageWidth !== null) {
-            fields.width_str = fedoraData.imageWidth;
+        const imageWidth = await fedoraData.getImageWidth();
+        if (imageWidth !== null) {
+            fields.width_str = imageWidth;
         }
-        if (fedoraData.mimetype.length > 0) {
-            fields.mime_str_mv = fedoraData.mimetype;
+        const mimetype = await fedoraData.getMimeType();
+        if (mimetype.length > 0) {
+            fields.mime_str_mv = mimetype;
         }
 
         // Full text:
-        const fullText = fedoraData.fullText;
+        const fullText = await fedoraData.getFullText();
         if (fullText.length > 0) {
             fields.fulltext = fullText;
         }
 
         // Change tracker details:
-        const change = await this.getChangeTrackerDetails(
-            pid,
-            fields["fgs.lastModifiedDate_txt_mv"][0] ?? "1900-01-01T00:00:00Z"
-        );
-        fields.first_indexed = change.getFirstIndexed;
-        fields.last_indexed = change.getLastIndexed;
+        const lastModified =
+            typeof fields["fgs.lastModifiedDate_txt_mv"] !== "undefined" &&
+            fields["fgs.lastModifiedDate_txt_mv"].length > 0
+                ? fields["fgs.lastModifiedDate_txt_mv"][0]
+                : "1900-01-01T00:00:00Z";
+        const change = await this.getChangeTrackerDetails(pid, lastModified);
+        if (change.getFirstIndexed ?? "") {
+            fields.first_indexed = change.getFirstIndexed;
+        }
+        if (change.getLastIndexed ?? "") {
+            fields.last_indexed = change.getLastIndexed;
+        }
 
         return fields;
     }

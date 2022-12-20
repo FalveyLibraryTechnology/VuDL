@@ -1,15 +1,7 @@
-/**
- * TODO: Multiple levels of permission
- * - Mint keys at user level or below
- * - Allow different levels in one easy function
- * - Three easy payments of $19.95
- */
 import { Request, Response, Router } from "express"; // Types
 import passport = require("passport");
-import hash = require("passport-hash");
-
 import Config from "../models/Config";
-import { getUserBy, confirmToken, makeToken } from "../services/Database";
+import Database from "../services/Database";
 
 interface NextFunction {
     (err?: Error): void;
@@ -17,36 +9,17 @@ interface NextFunction {
 
 const loginPath = "/api/auth/login";
 
-passport.serializeUser(function (user, done) {
-    done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-    getUserBy("id", id).then((user) => {
-        done(null, user);
-    });
-});
-
-passport.use(
-    new hash.Strategy(function (hash, done) {
-        getUserBy("hash", hash).then((user) => {
-            done(null, user);
-        });
-    })
-);
-
 export function authenticate(req: Request, res: Response, next?: NextFunction): void {
-    const authMethod = passport.authenticate("hash", { failureRedirect: loginPath });
-    // we can switch tactics here
-    if (req.header("Authorization")) {
-        console.log("Authorization", req.header("Authorization"));
-    }
+    const authMethod = passport.authenticate(Config.getInstance().authenticationStrategy, {
+        failureRedirect: loginPath + "?fail=true",
+        // We need to remember the referer when we regenerate the session so that post-login redirect works:
+        keepSessionInfo: true,
+    });
     authMethod(req, res, next);
 }
 
 function saveSessionReferer(req: Request) {
     req.session.referer = req.originalUrl;
-    console.log("< save login referral: " + req.session.referer);
 }
 
 export function requireLogin(req: Request, res: Response, next?: NextFunction): void {
@@ -61,7 +34,7 @@ export async function requireToken(req: Request, res: Response, next?: NextFunct
     // Check for API key in header or session
     const userToken = req.header("Authorization") ? req.header("Authorization").slice(6) : req.session.token ?? null;
 
-    if (await confirmToken(userToken)) {
+    if (await Database.getInstance().confirmToken(userToken)) {
         return next();
     }
 
@@ -71,58 +44,74 @@ export async function requireToken(req: Request, res: Response, next?: NextFunct
 }
 
 // Express session settings
-export const router = Router();
-router.use(passport.initialize());
-router.use(passport.session());
+export function getAuthRouter(): Router {
+    const authRouter = Router();
+    authRouter.use(passport.initialize());
+    authRouter.use(passport.session());
 
-// Debug sessions
-router.use(function (req, res, next) {
-    if (req.method === "OPTIONS") {
-        return next();
-    }
-    console.log(`${req.originalUrl} (Session: ${req.sessionID})`);
-    for (const key in req.session) {
-        if (key == "cookie") {
-            continue;
+    // Debug sessions
+    authRouter.use(function (req, res, next) {
+        if (req.method === "OPTIONS") {
+            return next();
         }
+        for (const key in req.session) {
+            if (key == "cookie") {
+                continue;
+            }
+        }
+        next();
+    });
+
+    function saveReferer(req, res, next) {
+        if (req.query.referer ?? false) {
+            req.session.referer = req.query.referer;
+        }
+        next();
     }
-    next();
-});
 
-router.get("/login", async function (req, res) {
-    if (req.query.referer ?? false) {
-        req.session.referer = req.query.referer;
+    function showLoginForm(req, res) {
+        const requirePasswords = Config.getInstance().authenticationRequirePasswords;
+        const failed = (req.query.fail ?? "").length > 0;
+        res.render("../../views/login", { requirePasswords, failed });
     }
-    const user = await getUserBy("username", "chris");
-    res.render("../../views/login-test", { user });
-});
 
-router.get("/logout", function (req, res) {
-    req.logout();
-    res.redirect(Config.getInstance().clientUrl);
-});
-
-// Use passport.authenticate() as route middleware to authenticate the
-// request.  If authentication fails, the user will be redirected back to the
-// login page.  Otherwise, the primary route function function will be called,
-// which, in this example, will redirect the user to the home page.
-router.get("/user/confirm/:hash", authenticate, function (req: Request, res: Response) {
-    const referral = req.query.referer ?? req.session.referer;
-    console.log("> goto login referral: " + referral);
-    res.redirect(referral ?? Config.getInstance().clientUrl);
-    req.session.referer = null;
-});
-
-router.get("/token/confirm/:token", async function (req: Request, res: Response) {
-    const isGood = await confirmToken(req.params.token);
-    res.sendStatus(isGood ? 200 : 401);
-});
-
-router.get("/token/mint", async function (req: Request, res: Response) {
-    if (!req.user) {
-        return res.sendStatus(401);
+    function postLoginRedirect(req, res) {
+        const referral = req.query.referer ?? req.session.referer;
+        res.redirect(referral ?? Config.getInstance().clientUrl);
+        req.session.referer = null;
     }
-    const token = await makeToken(req.user);
-    req.session.token = token;
-    res.json(token);
-});
+
+    // We have a different login flow depending on whether or not there's a login screen...
+    const loginFlow =
+        Config.getInstance().authenticationStrategy === "saml"
+            ? [saveReferer, authenticate, postLoginRedirect]
+            : [saveReferer, showLoginForm];
+    authRouter.get("/login", ...loginFlow);
+
+    // Use passport.authenticate() as route middleware to authenticate the
+    // request.  If authentication fails, the user will be redirected back to the
+    // login page.  Otherwise, the primary route function will be called,
+    // which, in this example, will redirect the user to the referring URL.
+    authRouter.post("/login", authenticate, postLoginRedirect);
+
+    authRouter.get("/logout", passport.initialize(), async function (req, res) {
+        await req.logout(() => {
+            res.redirect(Config.getInstance().clientUrl);
+        });
+    });
+
+    authRouter.get("/token/confirm/:token", async function (req: Request, res: Response) {
+        const isGood = await Database.getInstance().confirmToken(req.params.token);
+        res.sendStatus(isGood ? 200 : 401);
+    });
+
+    authRouter.get("/token/mint", async function (req: Request, res: Response) {
+        if (!req.user) {
+            return res.sendStatus(401);
+        }
+        const token = await Database.getInstance().makeToken(req.user);
+        req.session.token = token;
+        res.json(token);
+    });
+    return authRouter;
+}

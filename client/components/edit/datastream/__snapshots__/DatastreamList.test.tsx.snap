@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamList renders 1`] = `
+<DatastreamList>
+  <ForwardRef(List)>
+    <MuiListRoot
+      as="ul"
+      className="MuiList-root MuiList-padding"
+      ownerState={
+        Object {
+          "children": Array [
+            <Unknown
+              datastream="test1"
+            />,
+          ],
+          "component": "ul",
+          "dense": false,
+          "disablePadding": false,
+        }
+      }
+    >
+      <Insertion
+        cache={
+          Object {
+            "insert": [Function],
+            "inserted": Object {
+              "h4y409-MuiList-root": true,
+            },
+            "key": "css",
+            "nonce": undefined,
+            "registered": Object {},
+            "sheet": StyleSheet {
+              "_alreadyInsertedOrderInsensitiveRule": true,
+              "_insertTag": [Function],
+              "before": null,
+              "container": <head>
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-h4y409-MuiList-root{list-style:none;margin:0;padding:0;position:relative;padding-top:8px;padding-bottom:8px;}
+                </style>
+              </head>,
+              "ctr": 1,
+              "insertionPoint": undefined,
+              "isSpeedy": false,
+              "key": "css",
+              "nonce": undefined,
+              "prepend": undefined,
+              "tags": Array [
+                <style
+                  data-emotion="css"
+                  data-s=""
+                >
+                  
+                  .css-h4y409-MuiList-root{list-style:none;margin:0;padding:0;position:relative;padding-top:8px;padding-bottom:8px;}
+                </style>,
+              ],
+            },
+          }
+        }
+        isStringTag={true}
+        serialized={
+          Object {
+            "map": undefined,
+            "name": "h4y409-MuiList-root",
+            "next": undefined,
+            "styles": "label:MuiList-root;list-style:none;margin:0;padding:0;position:relative;padding-top:8px;padding-bottom:8px;",
+            "toString": [Function],
+          }
+        }
+      />
+      <ul
+        className="MuiList-root MuiList-padding css-h4y409-MuiList-root"
+      >
+        <Component
+          datastream="test1"
+          key="0"
+        >
+          Datastream
+        </Component>
+      </ul>
+    </MuiListRoot>
+  </ForwardRef(List)>
+</DatastreamList>
+`;

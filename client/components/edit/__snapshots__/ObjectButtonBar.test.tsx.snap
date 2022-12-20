@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ObjectButtonBar renders correctly with VuFind URL 1`] = `
+<ObjectButtonBar
+  pid="foo:123"
+>
+  <Component
+    pid="foo:123"
+  >
+    ObjectStatus
+  </Component>
+  <Component
+    pid="foo:123"
+  >
+    EditParentsButton
+  </Component>
+  <button
+    onClick={[Function]}
+  >
+    <Component
+      style={
+        Object {
+          "height": "14px",
+        }
+      }
+      titleAccess="Refresh children"
+    >
+      Refresh children
+    </Component>
+  </button>
+  <button
+    onClick={[Function]}
+  >
+    Preview
+  </button>
+</ObjectButtonBar>
+`;
+
+exports[`ObjectButtonBar renders correctly without VuFind URL 1`] = `
+<ObjectButtonBar
+  pid="foo:123"
+>
+  <Component
+    pid="foo:123"
+  >
+    ObjectStatus
+  </Component>
+  <Component
+    pid="foo:123"
+  >
+    EditParentsButton
+  </Component>
+  <button
+    onClick={[Function]}
+  >
+    <Component
+      style={
+        Object {
+          "height": "14px",
+        }
+      }
+      titleAccess="Refresh children"
+    >
+      Refresh children
+    </Component>
+  </button>
+</ObjectButtonBar>
+`;

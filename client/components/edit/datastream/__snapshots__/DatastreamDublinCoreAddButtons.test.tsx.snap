@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamDublinCoreAddButtons renders with selected clone pid 1`] = `
+<Fragment>
+  <h3>
+    Add Blank Field:
+  </h3>
+  <button
+    key="dcadd_dc_title"
+    onClick={[Function]}
+  />
+  <button
+    key="dcadd_dc_description"
+    onClick={[Function]}
+  />
+  <h3>
+    Clone Metadata:
+  </h3>
+  <Component
+    selected="foo"
+    setSelected={[Function]}
+  />
+  <button
+    onClick={[Function]}
+  >
+    Clone
+  </button>
+</Fragment>
+`;
+
+exports[`DatastreamDublinCoreAddButtons renders without selected clone pid 1`] = `
+<Fragment>
+  <h3>
+    Add Blank Field:
+  </h3>
+  <button
+    key="dcadd_dc_title"
+    onClick={[Function]}
+  />
+  <button
+    key="dcadd_dc_description"
+    onClick={[Function]}
+  />
+  <h3>
+    Clone Metadata:
+  </h3>
+  <Component
+    selected=""
+    setSelected={[Function]}
+  />
+</Fragment>
+`;

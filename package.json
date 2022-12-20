@@ -11,6 +11,7 @@
     "api:build": "cd api && tsc",
     "api:dev": "cd api && npm run start:serverWatch",
     "api:lint": "eslint api/*.js api/src/ --ext .ts,.js,.jsx",
+    "api:saml:metadata": "cd api && npm run saml:metadata",
     "api:setup": "cd api && npm ci",
     "api:test": "cd api && npm test",
     "api:testWatch": "cd api && npm run testWatch",
@@ -38,7 +39,7 @@
     "format": "concurrently npm:client:format npm:backend:format",
     "lint": "concurrently npm:client:lint npm:backend:lint",
     "setup": "concurrently npm:api:setup npm:client:setup",
-    "start": "concurrently -c 'cyan,green,gray' npm:client:dev npm:api npm:queue",
+    "start": "concurrently -c 'cyan,green,gray' npm:client npm:api npm:queue",
     "test": "concurrently npm:client:test npm:api:test",
     "watch": "cd api && tsc --watch"
   },

@@ -54,7 +54,7 @@ This software is designed to run on multiple operating systems; however, Ubuntu 
 - [ImageMagick](https://imagemagick.org) - required by textcleaner (see below)
 - [OCRmyPDF](https://ocrmypdf.readthedocs.io) - required for OCR enhancement of PDFs
 - [Redis](https://redis.io/) - required to support queue features
-- Relational Database ([SQLite](https://www.sqlite.org) by default) - required for user session persistence and PID generation
+- Relational Database ([SQLite](https://www.sqlite.org) by default, or MySQL/MariaDB by configuration) - required for user session persistence and PID generation
 - [Solr](https://solr.apache.org/) - required for searching/indexing content; it is recommended that you use the instance bundled with VuFind (see below)
 - [tesseract-ocr](https://github.com/tesseract-ocr/) - required for OCR of image files
 - [textcleaner](http://www.fmwconcepts.com/imagemagick/textcleaner/index.php) - required for cleanup of image files prior to OCR
@@ -95,6 +95,7 @@ After a few moments, a new tab should automatically open in your browser pointin
 | api:build | Build api Typescript |
 | api:dev | run api server, restart server on changes |
 | api:lint | lint only the api code |
+| api:saml:metadata | output SAML SP metadata to share with an IdP |
 | api:setup | install npm dependencies in api/ |
 | api:wsl | run api server, restart on changes (use if on WSL or `api:dev` isn't working) |
 | | |

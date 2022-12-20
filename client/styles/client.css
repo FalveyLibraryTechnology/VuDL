@@ -50,7 +50,6 @@ form {
 }
 label {
     display: block;
-    margin: 1rem 0;
     padding: 1px 4px;
     cursor: pointer;
 }
@@ -188,6 +187,10 @@ label input[type="radio"] {
 }
 #zoomyStatus {
     text-align: center;
+}
+
+.preview img {
+  border: 1px solid black;
 }
 
 .MuiTreeItem-root.Mui-selected,

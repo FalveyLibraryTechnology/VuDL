@@ -1,10 +1,11 @@
 import fs = require("fs");
 import winston = require("winston");
+import xmlescape = require("xml-escape");
 import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
-import { DOMParser } from "@xmldom/xmldom";
+import FedoraDataCollector from "../services/FedoraDataCollector";
 import { execSync } from "child_process";
-import xpath = require("xpath");
+import { Agent } from "../services/interfaces";
 
 export interface ObjectParameters {
     label?: string;
@@ -25,34 +26,71 @@ export class FedoraObject {
     protected config: Config;
     protected fedora: Fedora;
     protected logger: winston.Logger;
+    protected fedoraDataCollector: FedoraDataCollector;
 
-    constructor(pid: string, config: Config, fedora: Fedora, logger: winston.Logger = null) {
+    constructor(
+        pid: string,
+        config: Config,
+        fedora: Fedora,
+        fedoraDataCollector: FedoraDataCollector,
+        logger: winston.Logger = null
+    ) {
         this.pid = pid;
         this.config = config;
         this.fedora = fedora;
         this.logger = logger;
+        this.fedoraDataCollector = fedoraDataCollector;
     }
 
     public static build(pid: string, logger: winston.Logger = null, config: Config = null): FedoraObject {
-        return new FedoraObject(pid, config ?? Config.getInstance(), Fedora.getInstance(), logger);
+        return new FedoraObject(
+            pid,
+            config ?? Config.getInstance(),
+            Fedora.getInstance(),
+            FedoraDataCollector.getInstance(),
+            logger
+        );
     }
 
     get namespace(): string {
         return this.config.pidNamespace;
     }
 
-    async addDatastream(id: string, params: DatastreamParameters, data: string | Buffer): Promise<void> {
+    async addDatastream(
+        id: string,
+        params: DatastreamParameters,
+        data: string | Buffer,
+        expectedStatus = [201]
+    ): Promise<void> {
         this.log(
             params.logMessage ?? "Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes"
         );
-        await this.fedora.addDatastream(this.pid, id, params, data);
+        await this.fedora.addDatastream(this.pid, id, params, data, expectedStatus);
+    }
+
+    async deleteDatastream(stream: string): Promise<void> {
+        await this.fedora.deleteDatastream(this.pid, stream);
+        await this.deleteDatastreamTombstone(stream);
+    }
+
+    async deleteDatastreamTombstone(stream: string): Promise<void> {
+        await this.fedora.deleteDatastreamTombstone(this.pid, stream);
     }
 
     async addDatastreamFromFile(filename: string, stream: string, mimeType: string): Promise<void> {
-        await this.addDatastreamFromStringOrBuffer(fs.readFileSync(filename), stream, mimeType);
+        await this.addDatastreamFromStringOrBuffer(fs.readFileSync(filename), stream, mimeType, [201]);
     }
 
-    async addDatastreamFromStringOrBuffer(contents: string | Buffer, stream: string, mimeType: string): Promise<void> {
+    async updateDatastreamFromFile(filename: string, stream: string, mimeType: string): Promise<void> {
+        await this.addDatastreamFromStringOrBuffer(fs.readFileSync(filename), stream, mimeType, [201, 204]);
+    }
+
+    async addDatastreamFromStringOrBuffer(
+        contents: string | Buffer,
+        stream: string,
+        mimeType: string,
+        expectedStatus = [201]
+    ): Promise<void> {
         if (mimeType === "text/plain" && contents.length === 0) {
             contents = "\n"; // workaround for 500 error on empty OCR
         }
@@ -60,7 +98,7 @@ export class FedoraObject {
             mimeType: mimeType,
             logMessage: "Initial Ingest addDatastream - " + stream,
         };
-        await this.addDatastream(stream, params, contents);
+        await this.addDatastream(stream, params, contents, expectedStatus);
     }
 
     async addMasterMetadataDatastream(filename: string): Promise<void> {
@@ -69,12 +107,12 @@ export class FedoraObject {
             logMessage: "Initial Ingest addDatastream - MASTER-MD",
         };
         const fitsXml = this.fitsMasterMetadata(filename);
-        await this.addDatastream("MASTER-MD", params, fitsXml);
+        await this.addDatastream("MASTER-MD", params, fitsXml, [201, 204]);
     }
 
     async addRelationship(subject: string, predicate: string, obj: string, isLiteral = false): Promise<void> {
         this.log("Adding relationship " + [subject, predicate, obj].join(" ") + " to " + this.pid);
-        return this.fedora.addRelsExtRelationship(this.pid, subject, predicate, obj, isLiteral);
+        return this.fedora.addRelationship(this.pid, subject, predicate, obj, isLiteral);
     }
 
     async addModelRelationship(model: string): Promise<void> {
@@ -85,6 +123,14 @@ export class FedoraObject {
         );
     }
 
+    async addParentRelationship(parentPid: string): Promise<void> {
+        return this.addRelationship(
+            "info:fedora/" + this.pid,
+            "info:fedora/fedora-system:def/relations-external#isMemberOf",
+            "info:fedora/" + parentPid
+        );
+    }
+
     async addSequenceRelationship(parentPid: string, position: number): Promise<void> {
         return this.addRelationship(
             "info:fedora/" + this.pid,
@@ -92,6 +138,43 @@ export class FedoraObject {
             parentPid + "#" + position,
             true
         );
+    }
+
+    async modifyLicense(stream: string, licenseKey: string): Promise<void> {
+        const licenses = this.config.licenses;
+        const url = licenses[licenseKey]?.uri;
+        const licenseXml = `
+            <METS:rightsMD xmlns:METS="http://www.loc.gov/METS/" ID="0">
+                <METS:mdRef xmlns:xlink="http://www.w3.org/1999/xlink" LOCTYPE="URL" MDTYPE="OTHER" MIMETYPE="text/html" OTHERMDTYPE="HTML" xlink:href="${xmlescape(
+                    url
+                )}">
+                </METS:mdRef>
+            </METS:rightsMD>
+        `;
+        await this.addDatastreamFromStringOrBuffer(licenseXml, stream, "text/xml", [201, 204]);
+    }
+
+    async modifyAgents(stream: string, agents: Array<Agent>, agentsAttributes: Record<string, string>): Promise<void> {
+        const { createDate, recordStatus } = agentsAttributes;
+        const agentsXml = agents.reduce((acc, agent) => {
+            const { role, type, name, notes } = agent;
+            const notesXml = notes.reduce((acc, note) => {
+                return acc + `<METS:note>${xmlescape(note)}</METS:note>`;
+            }, "");
+            const agentXml = `<METS:agent ROLE="${xmlescape(role)}" TYPE="${xmlescape(type)}"><METS:name>${xmlescape(
+                name
+            )}</METS:name>${notesXml.trim()}</METS:agent>`.trim();
+            return acc + agentXml;
+        }, "");
+        const documentXml = `
+            <?xml version="1.0" encoding="UTF-8"?>
+            <METS:metsHdr xmlns:METS="http://www.loc.gov/METS/" CREATEDATE="${xmlescape(
+                createDate || new Date().toISOString()
+            )}"${createDate ? ` LASTMODDATE="${xmlescape(new Date().toISOString())}"` : ""}${
+            recordStatus ? ` RECORDSTATUS="${xmlescape(recordStatus)}"` : ""
+        }>${agentsXml}</METS:metsHdr>
+        `.trim();
+        await this.addDatastreamFromStringOrBuffer(documentXml, stream, "text/xml", [201, 204]);
     }
 
     async addSortRelationship(sort: string): Promise<void> {
@@ -127,20 +210,20 @@ export class FedoraObject {
         }
         // Attach parent if present:
         if (this.parentPid !== null) {
-            await this.addRelationship(
-                "info:fedora/" + this.pid,
-                "info:fedora/fedora-system:def/relations-external#isMemberOf",
-                "info:fedora/" + this.parentPid
-            );
+            await this.addParentRelationship(this.parentPid);
         }
     }
 
-    async getDatastream(datastream: string): Promise<string> {
-        return this.fedora.getDatastreamAsString(this.pid, datastream);
+    async getDatastream(datastream: string, treatMissingAsEmpty = false): Promise<string> {
+        return this.fedora.getDatastreamAsString(this.pid, datastream, treatMissingAsEmpty);
     }
 
     async getDatastreamAsBuffer(datastream: string): Promise<Buffer> {
         return this.fedora.getDatastreamAsBuffer(this.pid, datastream);
+    }
+
+    async getDatastreamMetadata(datastream: string): Promise<string> {
+        return await this.fedora.getRdf(`${this.pid}/${datastream}/fcr:metadata`);
     }
 
     fitsMasterMetadata(filename: string): string {
@@ -155,12 +238,25 @@ export class FedoraObject {
         return fs.readFileSync(targetXml).toString();
     }
 
-    async modifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
+    async putDatastream(
+        id: string,
+        params: DatastreamParameters,
+        data: string,
+        expectedStatus: Array<number>
+    ): Promise<void> {
         if (typeof params.dsLabel !== "undefined" || typeof params.dsState !== "undefined") {
-            throw new Error("Unsupported parameter(s) passed to modifyDatastream()");
+            throw new Error("Unsupported parameter(s) passed to putDatastream()");
         }
-        this.log(params.logMessage);
-        await this.fedora.putDatastream(this.pid, id, params.mimeType, 204, data);
+        this.log(params.logMessage ?? "");
+        await this.fedora.putDatastream(this.pid, id, params.mimeType, expectedStatus, data);
+    }
+
+    async createOrModifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
+        await this.putDatastream(id, params, data, [201, 204]);
+    }
+
+    async modifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
+        await this.putDatastream(id, params, data, [204]);
     }
 
     async modifyObjectLabel(title: string): Promise<void> {
@@ -168,23 +264,12 @@ export class FedoraObject {
     }
 
     log(message: string): void {
-        if (this.logger) {
+        if (this.logger && message.length > 0) {
             this.logger.info(message);
         }
     }
 
-    async getSort(): Promise<string> {
-        let sort = "title"; // default
-        // If we can find a RELS-EXT, let's check for non-default values:
-        const rels = await this.fedora.getDatastreamAsString(this.pid, "RELS-EXT", false, true);
-        if (rels.length > 0) {
-            const xmlParser = new DOMParser();
-            const xml = xmlParser.parseFromString(rels, "text/xml");
-            const rdfXPath = xpath.useNamespaces({ "vudl-rel": "http://vudl.org/relationships#" });
-            rdfXPath("//vudl-rel:sortOn/text()", xml).forEach((node: Node) => {
-                sort = node.nodeValue;
-            });
-        }
-        return sort;
+    async getSortOn(): Promise<string> {
+        return (await this.fedoraDataCollector.getObjectData(this.pid)).sortOn;
     }
 }

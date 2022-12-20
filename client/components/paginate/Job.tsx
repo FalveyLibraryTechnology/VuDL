@@ -1,10 +1,15 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+
 import JobClickable from "./JobClickable";
 
 import useJob from "../../hooks/useJob";
 
-const Job = ({ category, children }) => {
+interface JobProps {
+    category: string;
+    children: string;
+}
+
+const Job = ({ category, children }: JobProps): React.ReactElement => {
     const {
         state: { statusText, clickWarning, action, ingestInfo, clickable, timeoutRef },
         action: { updateStatus },
@@ -30,11 +35,6 @@ const Job = ({ category, children }) => {
             {ingestInfo}
         </li>
     );
-};
-
-Job.propTypes = {
-    category: PropTypes.string,
-    children: PropTypes.string,
 };
 
 export default Job;

@@ -25,16 +25,16 @@ class Derivative implements QueueJob {
         });
 
         // Wait for all image generation
-        Promise.all(generatingPromises).then(() => {
-            // Delete lock file
-            try {
-                console.log(": build derivatives done");
-                const metadata = new JobMetadata(job.data);
-                fs.unlinkSync(metadata.derivativeLockfile);
-            } catch (e) {
-                console.error("lock file not deleted: " + job.data.dir);
-            }
-        });
+        await Promise.all(generatingPromises);
+
+        // Delete lock file
+        try {
+            console.log(": build derivatives done");
+            const metadata = new JobMetadata(job.data);
+            fs.unlinkSync(metadata.derivativeLockfile);
+        } catch (e) {
+            console.error("lock file not deleted: " + job.data.dir);
+        }
     }
 }
 

@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatastreamAgentsContentRow renders 1`] = `
+<Fragment>
+  <ForwardRef(Grid)
+    container={true}
+    item={true}
+    xs={3}
+  >
+    <ForwardRef(Paper)
+      sx={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "padding": "0 14px",
+          "width": "100%",
+        }
+      }
+      variant="outlined"
+    >
+      <ForwardRef(FormControl)
+        fullWidth={true}
+      >
+        <ForwardRef(NativeSelect)
+          className="agentRoleSelect"
+          error={false}
+          onChange={[Function]}
+          value="test1"
+        >
+          <option
+            value=""
+          />
+          <option
+            key="0"
+            value="role1"
+          >
+            role1
+          </option>
+        </ForwardRef(NativeSelect)>
+      </ForwardRef(FormControl)>
+    </ForwardRef(Paper)>
+  </ForwardRef(Grid)>
+  <ForwardRef(Grid)
+    container={true}
+    item={true}
+    xs={3}
+  >
+    <ForwardRef(Paper)
+      sx={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "padding": "0 14px",
+          "width": "100%",
+        }
+      }
+      variant="outlined"
+    >
+      <ForwardRef(FormControl)
+        fullWidth={true}
+      >
+        <ForwardRef(NativeSelect)
+          className="agentTypeSelect"
+          error={false}
+          onChange={[Function]}
+          value="test2"
+        >
+          <option
+            value=""
+          />
+          <option
+            key="0"
+            value="type1"
+          >
+            type1
+          </option>
+        </ForwardRef(NativeSelect)>
+      </ForwardRef(FormControl)>
+    </ForwardRef(Paper)>
+  </ForwardRef(Grid)>
+  <ForwardRef(Grid)
+    container={true}
+    item={true}
+    xs={5}
+  >
+    <ForwardRef(FormControl)
+      fullWidth={true}
+    >
+      <BlurSavingTextField
+        options={
+          Object {
+            "className": "agentNameTextField",
+            "error": false,
+            "label": "",
+          }
+        }
+        setValue={[Function]}
+        value="test3"
+      />
+    </ForwardRef(FormControl)>
+  </ForwardRef(Grid)>
+  <ForwardRef(Grid)
+    container={true}
+    item={true}
+    xs={1}
+  >
+    <ForwardRef(Paper)
+      sx={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "width": "100%",
+        }
+      }
+      variant="outlined"
+    >
+      <ForwardRef(FormControl)
+        fullWidth={true}
+      >
+        <ForwardRef(ButtonGroup)
+          sx={
+            Object {
+              "display": "flex",
+              "justifyContent": "center",
+            }
+          }
+        >
+          <ForwardRef(IconButton)
+            onClick={[Function]}
+          >
+            <Memo(ForwardRef(ExpandCircleDownIcon)) />
+          </ForwardRef(IconButton)>
+        </ForwardRef(ButtonGroup)>
+      </ForwardRef(FormControl)>
+    </ForwardRef(Paper)>
+  </ForwardRef(Grid)>
+  <Component
+    expanded={false}
+    notes={
+      Array [
+        "test4",
+      ]
+    }
+    setNotes={[Function]}
+  />
+</Fragment>
+`;
