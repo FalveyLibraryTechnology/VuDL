@@ -49,7 +49,8 @@ class ImageFile {
         if (metadata.width > constraint || metadata.height > constraint) {
             try {
                 console.log("make derivative", constraint, deriv);
-                await image.resize(constraint, constraint, { fit: "inside" })
+                await image
+                    .resize(constraint, constraint, { fit: "inside" })
                     .jpeg({ quality: 90 }) // set JPEG quality
                     .toFile(deriv);
             } catch (error) {
