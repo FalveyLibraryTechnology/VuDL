@@ -1,9 +1,9 @@
 import Config from "./Config";
 import ImageFile from "./ImageFile";
 
-// We don't want JIMP loading to interfere with the test suite (and we
+// We don't want Sharp loading to interfere with the test suite (and we
 // don't really want to do any image manipulation during testing).
-jest.mock("jimp", () => {
+jest.mock("sharp", () => {
     return {};
 });
 

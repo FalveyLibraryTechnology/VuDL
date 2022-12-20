@@ -1,4 +1,3 @@
-import Jimp = require("jimp");
 import Sharp = require("sharp");
 import path = require("path");
 
@@ -46,19 +45,19 @@ class ImageFile {
         const image = Sharp(this.filename);
         const constraint = this.constraintForSize(size);
 
-        if (image.width > constraint || image.height > constraint) {
+        const metadata = await image.metadata();
+        if (metadata.width > constraint || metadata.height > constraint) {
             try {
-                image.resize(constraint, constraint);
-                image.quality(90); // set JPEG quality
-                image.toFile(deriv, (err, info) => {});
-
-                console.log("image written");
+                console.log("make derivative", constraint, deriv);
+                await image.resize(constraint, constraint, { fit: "inside" })
+                    .jpeg({ quality: 90 }) // set JPEG quality
+                    .toFile(deriv);
             } catch (error) {
                 console.error("resize error: " + error);
             }
         } else {
             // Image source smaller than derivative size
-            image.toFile(deriv, (err, info) => {});
+            await image.toFile(deriv);
         }
         return deriv;
     }
@@ -67,7 +66,11 @@ class ImageFile {
         const dir = path.dirname(this.filename);
         const ext = this.filename.substring(this.filename.lastIndexOf("."));
         const filename = path.basename(this.filename, ext);
-        return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
+        const basePath = dir + "/" + filename + "/" + size;
+        if (!fs.existsSync(basePath)) {
+            fs.mkdirSync(basePath, { recursive: true });
+        }
+        return basePath + "/" + filename + "." + extension.toLowerCase();
     }
 
     protected filterIllegalCharacters(txt: string): void {
