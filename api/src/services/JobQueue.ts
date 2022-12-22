@@ -24,7 +24,7 @@ class JobQueue {
         return JobQueue.instance;
     }
 
-    start(): void {
+    start(queueName: string = null): void {
         this.workers.derivatives = new Derivative();
         this.workers.generatepdf = new GeneratePdf();
         this.workers.index = new Index();
@@ -38,7 +38,7 @@ class JobQueue {
             }
 
             return await this.workers[job.name].run(job);
-        });
+        }, queueName);
         this.manager.on("failed", (job: Job, failedReason: string) => {
             console.error("Job failed; reason: " + failedReason);
         });
