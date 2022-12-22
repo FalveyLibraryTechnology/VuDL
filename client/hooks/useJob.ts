@@ -34,7 +34,7 @@ const useJob = ({ category, children }: JobProps) => {
     const [action, setAction] = useState<ActionInterface|null>(null);
     const [ingestInfo, setIngestInfo] = useState("");
     const [clickable, setClickable] = useState(false);
-    const timeoutRef = useRef();
+    const timeoutRef = useRef<NodeJS.Timeout|null>(null);
     const derivativeTypeCount = 3;
 
     const getPublishedStatusText = ({ derivatives, ingesting, published }) => {
@@ -113,7 +113,9 @@ const useJob = ({ category, children }: JobProps) => {
         setClickable(false);
         setClickWarning("");
         setAction(null);
-        await updateStatus();
+        if (!timeoutRef.current) {
+            await updateStatus(e);
+        }
     };
 
     const ingest = async (e) => {
@@ -134,7 +136,9 @@ const useJob = ({ category, children }: JobProps) => {
         setClickable(false);
         setClickWarning("");
         setAction(null);
-        await updateStatus(e);
+        if (!timeoutRef.current) {
+            await updateStatus(e);
+        }
     };
 
     const updateStatus = async (e = null) => {
@@ -151,11 +155,14 @@ const useJob = ({ category, children }: JobProps) => {
                 (typeof response.ingest_info !== "undefined" && response?.ingest_info.length > 0)
             ) {
                 timeoutRef.current = setTimeout(updateStatus, 1000);
+            } else {
+                timeoutRef.current = null;
             }
         } catch (error) {
             setIngestInfo("");
             setPublished(false);
             console.error(error);
+            timeoutRef.current = null;
         }
     };
 

@@ -11,7 +11,9 @@ const Job = ({ category, children }: JobProps): React.ReactElement => {
     } = useJob({ category, children });
 
     useEffect(() => {
-        updateStatus();
+        if (!timeoutRef.current) {
+            updateStatus();
+        }
         return () => {
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current);
