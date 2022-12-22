@@ -1,5 +1,6 @@
 import QueueManager from "./QueueManager";
 import { Queue } from "bullmq";
+import * as BullMQ from "bullmq";
 import Config from "../models/Config";
 
 let workerArgs;
@@ -40,13 +41,25 @@ describe("QueueManager", () => {
 
     describe("ingestJob", () => {
         let addSpy;
+        let constructorSpy;
         beforeEach(() => {
             addSpy = jest.spyOn(Queue.prototype, "add").mockImplementation(jest.fn());
+            constructorSpy = jest.spyOn(BullMQ, "Queue");
         });
 
-        it("queues a job appropriately", async () => {
+        it("queues a job appropriately with default configuration", async () => {
             await queueManager.ingestJob("foo");
             expect(addSpy).toHaveBeenCalledWith("ingest", { dir: "foo" });
+            expect(constructorSpy).toHaveBeenCalledWith("vudl", { connection: {} });
+        });
+
+        it("supports non-default queue/connection configuration", async () => {
+            const customQueueManager = new QueueManager(
+                new Config({ queue: { connection: { foo: "bar" }, jobMap: { ingest: "vudl-foo" } } })
+            );
+            await customQueueManager.ingestJob("foo");
+            expect(addSpy).toHaveBeenCalledWith("ingest", { dir: "foo" });
+            expect(constructorSpy).toHaveBeenCalledWith("vudl-foo", { connection: { foo: "bar" } });
         });
     });
 

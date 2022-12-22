@@ -107,9 +107,9 @@ After a few moments, a new tab should automatically open in your browser pointin
 | client:test | run client unit tests with test coverage |
 | client:testWatch | run client unit tests while watching source folders |
 | | |
-| queue | start api worker queue server |
-| queue:dev | start api worker listener, restart on changes |
-| queue:wsl | start api worker listener, restart on changes (use if on WSL or `api:dev` isn't working) |
+| queue | start job queue worker (call with `-- [queuename]` to specify a non-default queue to monitor)|
+| queue:dev | start job queue worker, restart on changes |
+| queue:wsl | start job queue worker, restart on changes (use if on WSL or `api:dev` isn't working) |
 | | |
 | ingest | add all published jobs to the ingest queue |
 | | |
