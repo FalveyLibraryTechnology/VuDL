@@ -14,14 +14,24 @@ interface JobStatus {
     ingest_info: string;
 }
 
-const useJob = ({ category, children }) => {
+export interface JobProps {
+    category: string;
+    children: string;
+}
+
+export interface ActionInterface {
+    onClick: (e: any) => void;
+    text: string;
+}
+
+const useJob = ({ category, children }: JobProps) => {
     const {
         action: { makeRequest, fetchJSON },
     } = useFetchContext();
-    const [statusText, setStatusText] = useState([]);
-    const [published, setPublished] = useState();
+    const [statusText, setStatusText] = useState<Array<string>>([]);
+    const [published, setPublished] = useState<boolean>(false);
     const [clickWarning, setClickWarning] = useState("");
-    const [action, setAction] = useState(null);
+    const [action, setAction] = useState<ActionInterface|null>(null);
     const [ingestInfo, setIngestInfo] = useState("");
     const [clickable, setClickable] = useState(false);
     const timeoutRef = useRef();
@@ -127,8 +137,8 @@ const useJob = ({ category, children }) => {
         await updateStatus(e);
     };
 
-    const updateStatus = async (e) => {
-        if (typeof e !== "undefined") {
+    const updateStatus = async (e = null) => {
+        if (typeof e !== "undefined" && e) {
             e.stopPropagation();
         }
         try {
@@ -143,7 +153,7 @@ const useJob = ({ category, children }) => {
                 timeoutRef.current = setTimeout(updateStatus, 1000);
             }
         } catch (error) {
-            setIngestInfo([]);
+            setIngestInfo("");
             setPublished(false);
             console.error(error);
         }

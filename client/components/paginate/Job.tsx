@@ -2,12 +2,7 @@ import React, { useEffect } from "react";
 
 import JobClickable from "./JobClickable";
 
-import useJob from "../../hooks/useJob";
-
-interface JobProps {
-    category: string;
-    children: string;
-}
+import useJob, { JobProps } from "../../hooks/useJob";
 
 const Job = ({ category, children }: JobProps): React.ReactElement => {
     const {
