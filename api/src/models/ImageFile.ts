@@ -1,4 +1,4 @@
-import Jimp = require("jimp");
+import Sharp = require("sharp");
 import path = require("path");
 
 import { execSync } from "child_process";
@@ -42,31 +42,40 @@ class ImageFile {
             return deriv;
         }
 
-        // Create derivative
-        const image = await Jimp.read(this.filename);
+        const image = Sharp(this.filename);
         const constraint = this.constraintForSize(size);
 
-        if (image.bitmap.width > constraint || image.bitmap.height > constraint) {
+        const metadata = await image.metadata();
+        if (metadata.width > constraint || metadata.height > constraint) {
             try {
-                console.log("make derivative", constraint, deriv);
-                image.scaleToFit(constraint, constraint); // resize to pixel sizes?
-                image.quality(90); // set JPEG quality
-                await image.writeAsync(deriv); // save
+                await image
+                    .resize(constraint, constraint, { fit: "inside" })
+                    .jpeg({ quality: 90 }) // set JPEG quality
+                    .toFile(deriv);
+                console.log("generated derivative", constraint, deriv);
             } catch (error) {
                 console.error("resize error: " + error);
             }
         } else {
             // Image source smaller than derivative size
-            await image.writeAsync(deriv); // save
+            await image.toFile(deriv);
         }
         return deriv;
+    }
+
+    makePathIfMissing(basePath: string): void {
+        if (!fs.existsSync(basePath)) {
+            fs.mkdirSync(basePath, { recursive: true });
+        }
     }
 
     derivativePath(size: string, extension = "jpg"): string {
         const dir = path.dirname(this.filename);
         const ext = this.filename.substring(this.filename.lastIndexOf("."));
         const filename = path.basename(this.filename, ext);
-        return dir + "/" + filename + "/" + size + "/" + filename + "." + extension.toLowerCase();
+        const basePath = dir + "/" + filename + "/" + size;
+        this.makePathIfMissing(basePath);
+        return basePath + "/" + filename + "." + extension.toLowerCase();
     }
 
     protected filterIllegalCharacters(txt: string): void {
