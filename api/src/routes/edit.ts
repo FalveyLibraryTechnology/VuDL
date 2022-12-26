@@ -94,9 +94,9 @@ async function getChildren(req, res) {
     let query;
     let sort;
     if ((req.params.pid ?? "").length > 0) {
-        const cleanPid = req.params.pid.replace('"', "");
+        const cleanPid = req.params.pid.replace(/["]/g, "");
         query = `fedora_parent_id_str_mv:"${cleanPid}"`;
-        sort = `sequence_${cleanPid.replace(":", "_")}_str ASC,title ASC`;
+        sort = `sequence_${cleanPid.replace(/:/g, "_")}_str ASC,title ASC`;
     } else {
         query = "-fedora_parent_id_str_mv:*";
         sort = "title ASC";
@@ -254,9 +254,9 @@ edit.get("/object/:pid/datastream/:stream/processMetadata", requireToken, datast
 edit.get("/topLevelObjects", requireToken, getChildren);
 edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
 edit.get("/object/:pid/lastChildPosition", requireToken, pidSanitizer, async (req, res) => {
-    const cleanPid = req.params.pid.replace('"', "");
+    const cleanPid = req.params.pid.replace(/["]/g, "");
     const query = `fedora_parent_id_str_mv:"${cleanPid}"`;
-    const sequenceField = `sequence_${cleanPid.replace(":", "_")}_str`;
+    const sequenceField = `sequence_${cleanPid.replace(/:/g, "_")}_str`;
     const sort = `${sequenceField} DESC`;
     const config = Config.getInstance();
     const solr = Solr.getInstance();
@@ -270,7 +270,7 @@ edit.get("/object/:pid/lastChildPosition", requireToken, pidSanitizer, async (re
     res.status(200).send(docs?.[0]?.[sequenceField] ?? "0");
 });
 async function getRecursiveChildPids(req, res) {
-    const cleanPid = req.params.pid.replace('"', "");
+    const cleanPid = req.params.pid.replace(/["]/g, "");
     const query = `hierarchy_all_parents_str_mv:"${cleanPid}"`;
     const sort = `id ASC`;
     const config = Config.getInstance();

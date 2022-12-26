@@ -103,7 +103,7 @@ class FedoraCatalog {
         if (pids.length > 0) {
             const query = pids
                 .map((pid) => {
-                    return `id:"${pid.replace('"', "")}"`;
+                    return `id:"${pid.replace(/["]/g, "")}"`;
                 })
                 .join(" OR ");
             const solrResponse = await this.solr.query(this.config.solrCore, query, {

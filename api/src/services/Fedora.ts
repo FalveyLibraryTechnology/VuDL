@@ -244,7 +244,7 @@ export class Fedora {
         writer.addQuad(
             namedNode(""),
             namedNode("http://purl.org/dc/terms/title"),
-            literal(params.dsLabel ?? pid.replace(":", "_") + "_" + stream)
+            literal(params.dsLabel ?? pid.replace(/:/g, "_") + "_" + stream)
         );
         const turtle = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid + "/" + stream + "/fcr:metadata";

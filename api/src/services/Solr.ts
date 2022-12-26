@@ -47,7 +47,7 @@ class Solr {
     public async deleteRecord(core: string, pid: string): Promise<NeedleResponse> {
         // Strip double quotes from PID -- they should never be present, and it protects
         // against malicious query manipulation.
-        const data = JSON.stringify({ delete: { query: 'id:"' + pid.replace('"', "") + '"' } });
+        const data = JSON.stringify({ delete: { query: 'id:"' + pid.replace(/["]/g, "") + '"' } });
         return this.updateSolr(core, data);
     }
 
