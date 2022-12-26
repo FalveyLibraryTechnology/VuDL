@@ -96,10 +96,10 @@ async function getChildren(req, res) {
     if ((req.params.pid ?? "").length > 0) {
         const cleanPid = req.params.pid.replace(/["]/g, "");
         query = `fedora_parent_id_str_mv:"${cleanPid}"`;
-        sort = `sequence_${cleanPid.replace(/:/g, "_")}_str ASC,title ASC`;
+        sort = `sequence_${cleanPid.replace(/:/g, "_")}_str ASC,title_sort ASC`;
     } else {
         query = "-fedora_parent_id_str_mv:*";
-        sort = "title ASC";
+        sort = "title_sort ASC";
     }
     const config = Config.getInstance();
     const solr = Solr.getInstance();
