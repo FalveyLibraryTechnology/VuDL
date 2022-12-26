@@ -598,7 +598,7 @@ describe("edit", () => {
             expect(querySpy).toHaveBeenCalledWith("biblio", "-fedora_parent_id_str_mv:*", {
                 fl: "id,title",
                 rows: "100000",
-                sort: "title ASC",
+                sort: "title_sort ASC",
                 start: "0",
             });
             expect(response.text).toEqual('{"foo":"bar"}');
@@ -612,7 +612,7 @@ describe("edit", () => {
             expect(querySpy).toHaveBeenCalledWith("biblio", "-fedora_parent_id_str_mv:*", {
                 fl: "id,title",
                 rows: "100",
-                sort: "title ASC",
+                sort: "title_sort ASC",
                 start: "200",
             });
             expect(response.text).toEqual('{"foo":"bar"}');
@@ -636,7 +636,7 @@ describe("edit", () => {
             expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
                 fl: "id,title",
                 rows: "100000",
-                sort: "sequence_foo_123_str ASC,title ASC",
+                sort: "sequence_foo_123_str ASC,title_sort ASC",
                 start: "0",
             });
             expect(response.text).toEqual('{"foo":"bar"}');
@@ -650,7 +650,7 @@ describe("edit", () => {
             expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
                 fl: "id,title",
                 rows: "100",
-                sort: "sequence_foo_123_str ASC,title ASC",
+                sort: "sequence_foo_123_str ASC,title_sort ASC",
                 start: "200",
             });
             expect(response.text).toEqual('{"foo":"bar"}');
