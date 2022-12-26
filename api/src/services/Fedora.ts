@@ -354,6 +354,30 @@ export class Fedora {
     }
 
     /**
+     * This method changes the "sort on" property of a collection.
+     *
+     * @param pid    PID to update
+     * @param sortOn New sort value
+     */
+    async updateSortOnRelationship(pid: string, sortOn: string): Promise<void> {
+        if (sortOn !== "title" && sortOn !== "custom") {
+            throw new Error("Unexpected sortOn value: " + sortOn);
+        }
+        const subject = "info:fedora/" + pid;
+        const predicate = "http://vudl.org/relationships#sortOn";
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(subject), namedNode(predicate), literal(sortOn));
+        const insertClause = this.getOutputFromWriter(writer);
+        const targetPath = "/" + pid;
+        const deleteClause = `<> <${predicate}> ?any .`;
+        const whereClause = `?id <${predicate}> ?any`;
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
+    /**
      * This method changes the sequential position of a pid within a specified parent pid.
      * It is the responsibility of the caller to ensure that parentPid is a legal parent of pid.
      * This will NOT insert a new position; it only updates existing values.

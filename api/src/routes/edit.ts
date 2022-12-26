@@ -455,6 +455,27 @@ edit.delete("/object/:pid/parent/:parentPid", requireToken, pidAndParentPidSanit
         res.status(500).send(error.message);
     }
 });
+edit.put("/object/:pid/sortOn", requireToken, pidSanitizer, bodyParser.text(), async function (req, res) {
+    try {
+        const pid = req.params.pid;
+        const fedora = Fedora.getInstance();
+        const sortOn = req.body;
+
+        // Validate the input
+        const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
+        if (sortOn !== "title" && sortOn !== "custom") {
+            res.status(400).send(`Unrecognized sortOn value: ${sortOn}. Legal values: custom, title`);
+            return;
+        }
+
+        // If we got this far, we can safely update things
+        await fedora.updateSortOnRelationship(pid, sortOn);
+        res.status(200).send("ok");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
 edit.put(
     "/object/:pid/positionInParent/:parentPid",
     requireToken,
