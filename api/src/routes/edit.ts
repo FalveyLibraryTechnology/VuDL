@@ -269,23 +269,26 @@ edit.get("/object/:pid/lastChildPosition", requireToken, pidSanitizer, async (re
     const docs = result?.body?.response?.docs ?? [];
     res.status(200).send(docs?.[0]?.[sequenceField] ?? "0");
 });
-async function getRecursiveChildPids(req, res) {
-    const cleanPid = req.params.pid.replace(/["]/g, "");
-    const query = `hierarchy_all_parents_str_mv:"${cleanPid}"`;
-    const sort = `id ASC`;
-    const config = Config.getInstance();
-    const solr = Solr.getInstance();
-    const rows = parseInt(req.query.rows ?? "100000").toString();
-    const start = parseInt(req.query.start ?? "0").toString();
-    const result = await solr.query(config.solrCore, query, { sort, fl: "id", rows, start });
-    if (result.statusCode !== 200) {
-        res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
-        return;
-    }
-    const response = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
-    res.json(response);
+function getChildPidHandlerForField(field) {
+    return async function (req, res) {
+        const cleanPid = req.params.pid.replace(/["]/g, "");
+        const query = `${field}:"${cleanPid}"`;
+        const sort = req.query.sort ?? "id ASC";
+        const config = Config.getInstance();
+        const solr = Solr.getInstance();
+        const rows = parseInt(req.query.rows ?? "100000").toString();
+        const start = parseInt(req.query.start ?? "0").toString();
+        const result = await solr.query(config.solrCore, query, { sort, fl: "id", rows, start });
+        if (result.statusCode !== 200) {
+            res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
+            return;
+        }
+        const response = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
+        res.json(response);
+    };
 }
-edit.get("/object/:pid/recursiveChildPids", requireToken, pidSanitizer, getRecursiveChildPids);
+edit.get("/object/:pid/recursiveChildPids", requireToken, pidSanitizer, getChildPidHandlerForField("hierarchy_all_parents_str_mv"));
+edit.get("/object/:pid/directChildPids", requireToken, pidSanitizer, getChildPidHandlerForField("fedora_parent_id_str_mv"));
 edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
     try {
         const { fedoraDatastreams, metadata, models, pid, sortOn, sequences, state } =

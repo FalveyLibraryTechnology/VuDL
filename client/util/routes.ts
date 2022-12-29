@@ -39,9 +39,14 @@ const getObjectChildrenUrl = (pid: string, start = 0, rows = 10): string => {
     return `${base}?start=${start}&rows=${rows}`;
 }
 
-const getObjectRecursiveChildPidsUrl = (pid: string, start = 0, rows = 10): string => {
+const getObjectDirectChildPidsUrl = (pid: string, start = 0, rows = 10, sort: string|null = null): string => {
+    const base = getPidActionUrl(pid, "directChildPids");
+    return `${base}?start=${start}&rows=${rows}` + (sort ? `&sort=${encodeURIComponent(sort)}` : "");
+}
+
+const getObjectRecursiveChildPidsUrl = (pid: string, start = 0, rows = 10, sort: string|null = null): string => {
     const base = getPidActionUrl(pid, "recursiveChildPids");
-    return `${base}?start=${start}&rows=${rows}`;
+    return `${base}?start=${start}&rows=${rows}` + (sort ? `&sort=${encodeURIComponent(sort)}` : "");
 }
 
 const getObjectDetailsUrl = (pid: string): string => {
@@ -131,6 +136,7 @@ export {
     getObjectDetailsUrl,
     getObjectLastChildPositionUrl,
     getObjectParentsUrl,
+    getObjectDirectChildPidsUrl,
     getObjectRecursiveChildPidsUrl,
     getObjectStateUrl,
     getParentUrl,
