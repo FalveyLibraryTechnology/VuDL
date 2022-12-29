@@ -58,12 +58,13 @@ const ObjectOrder = ({ pid }: ObjectOrderProps): React.ReactElement => {
                     setStatusMessage(`${currentStatus} -- unexpected error`);
                     break;
                 }
+                removeFromObjectDetailsStorage(targetPid);
             }
             offset += childPageSize;
         } while (offset < response.numFound ?? 0);
         setStatusMessage("");
-        clearPidFromChildListStorage(pid);
         removeFromObjectDetailsStorage(pid);
+        clearPidFromChildListStorage(pid);
     }
     const otherSort = currentSort === "title" ? "custom" : "title";
     return statusMessage.length > 0 ? (
