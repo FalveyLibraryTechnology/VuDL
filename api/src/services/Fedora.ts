@@ -380,7 +380,6 @@ export class Fedora {
     /**
      * This method changes the sequential position of a pid within a specified parent pid.
      * It is the responsibility of the caller to ensure that parentPid is a legal parent of pid.
-     * This will NOT insert a new position; it only updates existing values.
      *
      * @param pid         PID to update
      * @param parentPid   Parent PID to update
@@ -394,7 +393,7 @@ export class Fedora {
         const insertClause = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid;
         const deleteClause = `<> <${predicate}> ?pos .`;
-        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#"))`;
+        const whereClause = `OPTIONAL { ?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#")) }`;
         const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
         if (patchResponse.statusCode !== 204) {
             throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
