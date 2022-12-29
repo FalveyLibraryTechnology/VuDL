@@ -489,6 +489,35 @@ edit.put("/object/:pid/sortOn", requireToken, pidSanitizer, bodyParser.text(), a
         res.status(500).send(error.message);
     }
 });
+edit.delete(
+    "/object/:pid/positionInParent/:parentPid",
+    requireToken,
+    pidAndParentPidSanitizer,
+    async function (req, res) {
+        try {
+            const pid = req.params.pid;
+            const parent = req.params.parentPid;
+            const fedora = Fedora.getInstance();
+
+            // Validate the input
+            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
+            const legalParent = fedoraData.parents.reduce((previous, current) => {
+                return previous || (current.pid === parent ? current : false);
+            }, false);
+            if (!legalParent) {
+                res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
+                return;
+            }
+
+            // If we got this far, we can safely update things
+            await fedora.deleteSequenceRelationship(pid, parent);
+            res.status(200).send("ok");
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
+    }
+);
 edit.put(
     "/object/:pid/positionInParent/:parentPid",
     requireToken,

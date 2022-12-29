@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEditorContext } from "../../context/EditorContext";
-import { getObjectDirectChildPidsUrl } from "../../util/routes";
+import { getObjectDirectChildPidsUrl, getObjectSortOnUrl, getPositionInParentUrl } from "../../util/routes";
 import { useFetchContext } from "../../context/FetchContext";
 import ObjectStatus from "./ObjectStatus";
 import Refresh from "@mui/icons-material/Refresh";
@@ -13,7 +13,7 @@ export interface ObjectOrderProps {
 const ObjectOrder = ({ pid }: ObjectOrderProps): React.ReactElement => {
     const {
         state: { objectDetailsStorage },
-        action: { clearPidFromChildListStorage },
+        action: { clearPidFromChildListStorage, removeFromObjectDetailsStorage },
     } = useEditorContext();
     const {
         action: { fetchJSON, fetchText },
@@ -29,23 +29,41 @@ const ObjectOrder = ({ pid }: ObjectOrderProps): React.ReactElement => {
         setStatusMessage("Saving...");
         let offset = 0;
         let response = null;
+        let result = "";
+        let currentStatus = "";
+        currentStatus = `Changing ${pid} sort to ${sort}`;
+        setStatusMessage(currentStatus);
+        const sortResult = await fetchText(getObjectSortOnUrl(pid), { method: "PUT", body: sort });
+        if (sortResult != "ok") {
+            setStatusMessage(`${currentStatus} -- unexpected error`);
+            return;
+        }
         do {
             const url = getObjectDirectChildPidsUrl(pid, offset, childPageSize, solrSort);
             response = await fetchJSON(url);
             for (var x in response.docs ?? []) {
                 const targetPid = response.docs[x].id;
+                const positionUrl = getPositionInParentUrl(targetPid, pid);
                 if (sort === "custom") {
                     const newPosition = (offset + parseInt(x) + 1)
-                    setStatusMessage(`Setting ${targetPid} to position ${newPosition}`);
-                    // TODO
+                    currentStatus = `Setting ${targetPid} to position ${newPosition}`;
+                    setStatusMessage(currentStatus);
+                    result = await fetchText(positionUrl, { method: "PUT", body: newPosition });
                 } else {
-                    setStatusMessage(`Clearing order for ${pid}`);
-                    // TODO
+                    currentStatus = `Clearing order for ${targetPid}`;
+                    setStatusMessage(currentStatus);
+                    result = await fetchText(positionUrl, { method: "DELETE" });
+                }
+                if (result != "ok") {
+                    setStatusMessage(`${currentStatus} -- unexpected error`);
+                    break;
                 }
             }
             offset += childPageSize;
         } while (offset < response.numFound ?? 0);
         setStatusMessage("");
+        clearPidFromChildListStorage(pid);
+        removeFromObjectDetailsStorage(pid);
     }
     const otherSort = currentSort === "title" ? "custom" : "title";
     return statusMessage.length > 0 ? (

@@ -61,6 +61,10 @@ const getObjectParentsUrl = (pid: string): string => {
     return getPidActionUrl(pid, "parents");
 }
 
+const getObjectSortOnUrl = (pid: string): string => {
+    return getPidActionUrl(pid, "sortOn");
+}
+
 const getObjectStateUrl = (pid: string): string => {
     return getPidActionUrl(pid, "state");
 }
@@ -138,6 +142,7 @@ export {
     getObjectParentsUrl,
     getObjectDirectChildPidsUrl,
     getObjectRecursiveChildPidsUrl,
+    getObjectSortOnUrl,
     getObjectStateUrl,
     getParentUrl,
     getPositionInParentUrl,
