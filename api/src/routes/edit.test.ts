@@ -954,6 +954,61 @@ describe("edit", () => {
         });
     });
 
+    describe("delete /object/:pid/positionInParent/:parentPid", () => {
+        let parentPid: string;
+        let mockData: FedoraDataCollection;
+        let sequenceSpy;
+        beforeEach(() => {
+            parentPid = "foo:100";
+            mockData = FedoraDataCollection.build(pid);
+            const collector = FedoraDataCollector.getInstance();
+            jest.spyOn(collector, "getHierarchy").mockResolvedValue(mockData);
+            const fedora = Fedora.getInstance();
+            sequenceSpy = jest.spyOn(fedora, "deleteSequenceRelationship").mockImplementation(jest.fn());
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will reject an illegal parent/child pair", async () => {
+            const response = await request(app)
+                .delete(`/edit/object/${pid}/positionInParent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send()
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("foo:100 is not an immediate parent of foo:123.");
+        });
+
+        it("deletes sequence when appropriate preconditions are met", async () => {
+            const parent = FedoraDataCollection.build(parentPid);
+            parent.fedoraDetails.sortOn = ["custom"];
+            mockData.addParent(parent);
+            await request(app)
+                .delete(`/edit/object/${pid}/positionInParent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send()
+                .expect(StatusCodes.OK);
+            expect(sequenceSpy).toHaveBeenCalledWith(pid, parentPid);
+        });
+
+        it("handles Fedora exceptions", async () => {
+            const parent = FedoraDataCollection.build(parentPid);
+            sequenceSpy.mockImplementation(() => {
+                throw new Error("Kaboom");
+            });
+            parent.fedoraDetails.sortOn = ["custom"];
+            mockData.addParent(parent);
+            await request(app)
+                .delete(`/edit/object/${pid}/positionInParent/${parentPid}`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send()
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+            expect(sequenceSpy).toHaveBeenCalledWith(pid, parentPid);
+        });
+    });
+
     describe("put /object/:pid/positionInParent/:parentPid", () => {
         let parentPid: string;
         let mockData: FedoraDataCollection;
