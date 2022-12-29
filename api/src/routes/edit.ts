@@ -269,23 +269,36 @@ edit.get("/object/:pid/lastChildPosition", requireToken, pidSanitizer, async (re
     const docs = result?.body?.response?.docs ?? [];
     res.status(200).send(docs?.[0]?.[sequenceField] ?? "0");
 });
-async function getRecursiveChildPids(req, res) {
-    const cleanPid = req.params.pid.replace(/["]/g, "");
-    const query = `hierarchy_all_parents_str_mv:"${cleanPid}"`;
-    const sort = `id ASC`;
-    const config = Config.getInstance();
-    const solr = Solr.getInstance();
-    const rows = parseInt(req.query.rows ?? "100000").toString();
-    const start = parseInt(req.query.start ?? "0").toString();
-    const result = await solr.query(config.solrCore, query, { sort, fl: "id", rows, start });
-    if (result.statusCode !== 200) {
-        res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
-        return;
-    }
-    const response = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
-    res.json(response);
+function getChildPidHandlerForField(field) {
+    return async function (req, res) {
+        const cleanPid = req.params.pid.replace(/["]/g, "");
+        const query = `${field}:"${cleanPid}"`;
+        const sort = req.query.sort ?? "id ASC";
+        const config = Config.getInstance();
+        const solr = Solr.getInstance();
+        const rows = parseInt(req.query.rows ?? "100000").toString();
+        const start = parseInt(req.query.start ?? "0").toString();
+        const result = await solr.query(config.solrCore, query, { sort, fl: "id", rows, start });
+        if (result.statusCode !== 200) {
+            res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
+            return;
+        }
+        const response = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
+        res.json(response);
+    };
 }
-edit.get("/object/:pid/recursiveChildPids", requireToken, pidSanitizer, getRecursiveChildPids);
+edit.get(
+    "/object/:pid/recursiveChildPids",
+    requireToken,
+    pidSanitizer,
+    getChildPidHandlerForField("hierarchy_all_parents_str_mv")
+);
+edit.get(
+    "/object/:pid/directChildPids",
+    requireToken,
+    pidSanitizer,
+    getChildPidHandlerForField("fedora_parent_id_str_mv")
+);
 edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
     try {
         const { fedoraDatastreams, metadata, models, pid, sortOn, sequences, state } =
@@ -455,6 +468,55 @@ edit.delete("/object/:pid/parent/:parentPid", requireToken, pidAndParentPidSanit
         res.status(500).send(error.message);
     }
 });
+edit.put("/object/:pid/sortOn", requireToken, pidSanitizer, bodyParser.text(), async function (req, res) {
+    try {
+        const pid = req.params.pid;
+        const fedora = Fedora.getInstance();
+        const sortOn = req.body;
+
+        // Validate the input
+        if (sortOn !== "title" && sortOn !== "custom") {
+            res.status(400).send(`Unrecognized sortOn value: ${sortOn}. Legal values: custom, title`);
+            return;
+        }
+
+        // If we got this far, we can safely update things
+        await fedora.updateSortOnRelationship(pid, sortOn);
+        res.status(200).send("ok");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
+edit.delete(
+    "/object/:pid/positionInParent/:parentPid",
+    requireToken,
+    pidAndParentPidSanitizer,
+    async function (req, res) {
+        try {
+            const pid = req.params.pid;
+            const parent = req.params.parentPid;
+            const fedora = Fedora.getInstance();
+
+            // Validate the input
+            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
+            const legalParent = fedoraData.parents.reduce((previous, current) => {
+                return previous || (current.pid === parent ? current : false);
+            }, false);
+            if (!legalParent) {
+                res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
+                return;
+            }
+
+            // If we got this far, we can safely update things
+            await fedora.deleteSequenceRelationship(pid, parent);
+            res.status(200).send("ok");
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
+    }
+);
 edit.put(
     "/object/:pid/positionInParent/:parentPid",
     requireToken,

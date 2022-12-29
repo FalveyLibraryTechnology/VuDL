@@ -36,6 +36,9 @@ export const ChildPosition = ({ pid, parentPid }: ChildPositionProps): React.Rea
                     return parseInt(parts[1]);
                 }
             }
+            // If we couldn't find a sequence, let's return 0 as a fallback; this allows the
+            // position to be edited even if sequence data is somehow missing from Fedora.
+            return 0;
         }
         return false;
     }

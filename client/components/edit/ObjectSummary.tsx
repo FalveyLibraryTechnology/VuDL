@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import HtmlReactParser from "html-react-parser";
 import { useEditorContext } from "../../context/EditorContext";
 import ObjectButtonBar from "./ObjectButtonBar";
+import ObjectOrder from "./ObjectOrder";
 import ObjectThumbnail from "./ObjectThumbnail";
 
 const ObjectSummary = (): React.ReactElement => {
@@ -29,6 +30,7 @@ const ObjectSummary = (): React.ReactElement => {
             <h2>{title}</h2>
             <div>{HtmlReactParser(description)}</div>
             {loaded ? <ObjectButtonBar pid={currentPid} /> : ""}
+            {loaded ? <ObjectOrder pid={currentPid} /> : ""}
             <br style={{ clear: "both" }} />
         </div>
     );

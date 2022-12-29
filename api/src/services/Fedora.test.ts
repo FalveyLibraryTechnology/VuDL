@@ -191,14 +191,52 @@ describe("Fedora", () => {
         });
 
         it("will modify sequence relationship", async () => {
-            fedora.updateSequenceRelationship(pid, "foo:100", 2);
+            await fedora.updateSequenceRelationship(pid, "foo:100", 2);
             expect(requestSpy).toHaveBeenCalledWith(
                 "patch",
                 "/" + pid,
                 'DELETE { <> <http://vudl.org/relationships#sequence> ?pos . } INSERT { <info:fedora/test4> <http://vudl.org/relationships#sequence> "foo:100#2".\n' +
-                    ' } WHERE { ?id <http://vudl.org/relationships#sequence> ?pos . FILTER(REGEX(?pos, "foo:100#")) }',
+                    ' } WHERE { OPTIONAL { ?id <http://vudl.org/relationships#sequence> ?pos . FILTER(REGEX(?pos, "foo:100#")) } }',
                 { headers: { "Content-Type": "application/sparql-update" } }
             );
+        });
+    });
+
+    describe("updateSortOnRelationship", () => {
+        beforeEach(() => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
+        });
+
+        it("prevents invalid input", async () => {
+            let message = "";
+            try {
+                await fedora.updateSortOnRelationship(pid, "invalid");
+            } catch (e) {
+                message = e.message;
+            }
+            expect(message).toEqual("Unexpected sortOn value: invalid");
+        });
+
+        it("will modify sortOn relationship", async () => {
+            await fedora.updateSortOnRelationship(pid, "custom");
+            expect(requestSpy).toHaveBeenCalledWith(
+                "patch",
+                "/" + pid,
+                'DELETE { <> <http://vudl.org/relationships#sortOn> ?any . } INSERT { <info:fedora/test4> <http://vudl.org/relationships#sortOn> "custom".\n' +
+                    " } WHERE { ?id <http://vudl.org/relationships#sortOn> ?any }",
+                { headers: { "Content-Type": "application/sparql-update" } }
+            );
+        });
+
+        it("handles unexpected codes", async () => {
+            requestSpy.mockResolvedValue({ statusCode: 500 });
+            let message = "";
+            try {
+                await fedora.updateSortOnRelationship(pid, "custom");
+            } catch (e) {
+                message = e.message;
+            }
+            expect(message).toEqual("Expected 204 No Content response, received: 500");
         });
     });
 });
