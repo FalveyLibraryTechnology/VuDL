@@ -475,7 +475,6 @@ edit.put("/object/:pid/sortOn", requireToken, pidSanitizer, bodyParser.text(), a
         const sortOn = req.body;
 
         // Validate the input
-        const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
         if (sortOn !== "title" && sortOn !== "custom") {
             res.status(400).send(`Unrecognized sortOn value: ${sortOn}. Legal values: custom, title`);
             return;
