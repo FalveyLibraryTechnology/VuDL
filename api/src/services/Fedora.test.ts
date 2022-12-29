@@ -223,13 +223,13 @@ describe("Fedora", () => {
                 "patch",
                 "/" + pid,
                 'DELETE { <> <http://vudl.org/relationships#sortOn> ?any . } INSERT { <info:fedora/test4> <http://vudl.org/relationships#sortOn> "custom".\n' +
-                    ' } WHERE { ?id <http://vudl.org/relationships#sortOn> ?any }',
+                    " } WHERE { ?id <http://vudl.org/relationships#sortOn> ?any }",
                 { headers: { "Content-Type": "application/sparql-update" } }
             );
         });
 
         it("handles unexpected codes", async () => {
-            requestSpy.mockResolvedValue({ statusCode: 500 })
+            requestSpy.mockResolvedValue({ statusCode: 500 });
             let message = "";
             try {
                 await fedora.updateSortOnRelationship(pid, "custom");
