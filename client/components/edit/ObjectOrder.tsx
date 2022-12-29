@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { useEditorContext } from "../../context/EditorContext";
 import { getObjectDirectChildPidsUrl, getObjectSortOnUrl, getPositionInParentUrl } from "../../util/routes";
 import { useFetchContext } from "../../context/FetchContext";
-import ObjectStatus from "./ObjectStatus";
-import Refresh from "@mui/icons-material/Refresh";
-import EditParentsButton from "./EditParentsButton";
 
 export interface ObjectOrderProps {
     pid: string;
@@ -41,11 +38,11 @@ const ObjectOrder = ({ pid }: ObjectOrderProps): React.ReactElement => {
         do {
             const url = getObjectDirectChildPidsUrl(pid, offset, childPageSize, solrSort);
             response = await fetchJSON(url);
-            for (var x in response.docs ?? []) {
+            for (const x in response.docs ?? []) {
                 const targetPid = response.docs[x].id;
                 const positionUrl = getPositionInParentUrl(targetPid, pid);
                 if (sort === "custom") {
-                    const newPosition = (offset + parseInt(x) + 1)
+                    const newPosition = offset + parseInt(x) + 1;
                     currentStatus = `Setting ${targetPid} to position ${newPosition}`;
                     setStatusMessage(currentStatus);
                     result = await fetchText(positionUrl, { method: "PUT", body: newPosition });
@@ -65,14 +62,20 @@ const ObjectOrder = ({ pid }: ObjectOrderProps): React.ReactElement => {
         setStatusMessage("");
         removeFromObjectDetailsStorage(pid);
         clearPidFromChildListStorage(pid);
-    }
+    };
     const otherSort = currentSort === "title" ? "custom" : "title";
     return statusMessage.length > 0 ? (
         <div>{statusMessage}</div>
     ) : (
         <div>
             Current sort: {currentSort}
-            <button onClick={() => { changeSort(otherSort)}}>Change to {otherSort}</button>
+            <button
+                onClick={() => {
+                    changeSort(otherSort);
+                }}
+            >
+                Change to {otherSort}
+            </button>
         </div>
     );
 };
