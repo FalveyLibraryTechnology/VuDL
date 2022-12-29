@@ -718,6 +718,60 @@ describe("edit", () => {
         });
     });
 
+    describe("get /object/:pid/directChildPids", () => {
+        let querySpy;
+        let solrResponse = {};
+        beforeEach(() => {
+            solrResponse = { statusCode: 200, body: { response: { foo: "bar" } } };
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue(solrResponse as NeedleResponse);
+        });
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+        it("will run an appropriate Solr query with default params", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/directChildPids`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
+                fl: "id",
+                rows: "100000",
+                sort: "id ASC",
+                start: "0",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+        it("allows sort, start and rows to be overridden", async () => {
+            const response = await request(app)
+                .get(`/edit/object/${pid}/directChildPids`)
+                .query({ rows: "100", start: "200", sort: "title_sort ASC,id ASC" })
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
+                fl: "id",
+                rows: "100",
+                sort: "title_sort ASC,id ASC",
+                start: "200",
+            });
+            expect(response.text).toEqual('{"foo":"bar"}');
+        });
+        it("handles Solr errors", async () => {
+            (solrResponse as Record<string, unknown>).statusCode = 500;
+            const response = await request(app)
+                .get(`/edit/object/${pid}/directChildPids`)
+                .query({ rows: "100", start: "200", sort: "title_sort ASC,id ASC" })
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"foo:123"', {
+                fl: "id",
+                rows: "100",
+                sort: "title_sort ASC,id ASC",
+                start: "200",
+            });
+            expect(response.text).toEqual("Unexpected Solr response code.");
+        });
+    });
+
     describe("put /object/:pid/state", () => {
         it("will reject invalid states", async () => {
             const response = await request(app)
