@@ -16,7 +16,7 @@ const ObjectOrder = ({ pid }: ObjectOrderProps): React.ReactElement => {
         action: { fetchJSON, fetchText },
     } = useFetchContext();
     const [statusMessage, setStatusMessage] = useState<string>("");
-    const currentSort = objectDetailsStorage[pid].sortOn ?? "title";
+    const currentSort = objectDetailsStorage?.[pid]?.sortOn ?? "title";
     const childPageSize = 1000;
     const solrSort = "title_sort ASC,id ASC";
     const changeSort = async (sort: string) => {
@@ -35,6 +35,7 @@ const ObjectOrder = ({ pid }: ObjectOrderProps): React.ReactElement => {
             setStatusMessage(`${currentStatus} -- unexpected error`);
             return;
         }
+        let errorOccurred = false;
         do {
             const url = getObjectDirectChildPidsUrl(pid, offset, childPageSize, solrSort);
             response = await fetchJSON(url);
@@ -53,13 +54,16 @@ const ObjectOrder = ({ pid }: ObjectOrderProps): React.ReactElement => {
                 }
                 if (result != "ok") {
                     setStatusMessage(`${currentStatus} -- unexpected error`);
+                    errorOccurred = true;
                     break;
                 }
                 removeFromObjectDetailsStorage(targetPid);
             }
             offset += childPageSize;
-        } while (offset < response.numFound ?? 0);
-        setStatusMessage("");
+        } while (!errorOccurred && offset < (response.numFound ?? 0));
+        if (!errorOccurred) {
+            setStatusMessage("");
+        }
         removeFromObjectDetailsStorage(pid);
         clearPidFromChildListStorage(pid);
     };
