@@ -287,8 +287,18 @@ function getChildPidHandlerForField(field) {
         res.json(response);
     };
 }
-edit.get("/object/:pid/recursiveChildPids", requireToken, pidSanitizer, getChildPidHandlerForField("hierarchy_all_parents_str_mv"));
-edit.get("/object/:pid/directChildPids", requireToken, pidSanitizer, getChildPidHandlerForField("fedora_parent_id_str_mv"));
+edit.get(
+    "/object/:pid/recursiveChildPids",
+    requireToken,
+    pidSanitizer,
+    getChildPidHandlerForField("hierarchy_all_parents_str_mv")
+);
+edit.get(
+    "/object/:pid/directChildPids",
+    requireToken,
+    pidSanitizer,
+    getChildPidHandlerForField("fedora_parent_id_str_mv")
+);
 edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
     try {
         const { fedoraDatastreams, metadata, models, pid, sortOn, sequences, state } =
