@@ -196,7 +196,7 @@ describe("Fedora", () => {
                 "patch",
                 "/" + pid,
                 'DELETE { <> <http://vudl.org/relationships#sequence> ?pos . } INSERT { <info:fedora/test4> <http://vudl.org/relationships#sequence> "foo:100#2".\n' +
-                    ' } WHERE { ?id <http://vudl.org/relationships#sequence> ?pos . FILTER(REGEX(?pos, "foo:100#")) }',
+                    ' } WHERE { OPTIONAL { ?id <http://vudl.org/relationships#sequence> ?pos . FILTER(REGEX(?pos, "foo:100#")) } }',
                 { headers: { "Content-Type": "application/sparql-update" } }
             );
         });
