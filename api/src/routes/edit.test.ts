@@ -798,6 +798,48 @@ describe("edit", () => {
         });
     });
 
+    describe("put /object/:pid/sortOn", () => {
+        it("will reject invalid sort values", async () => {
+            const response = await request(app)
+                .put(`/edit/object/${pid}/sortOn`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("Illegal")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.error.text).toEqual("Unrecognized sortOn value: Illegal. Legal values: custom, title");
+        });
+
+        it("will accept a valid sort value", async () => {
+            const fedora = Fedora.getInstance();
+            const updateSpy = jest.spyOn(fedora, "updateSortOnRelationship").mockImplementation(jest.fn());
+
+            await request(app)
+                .put(`/edit/object/${pid}/sortOn`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("custom")
+                .expect(StatusCodes.OK);
+
+            expect(updateSpy).toHaveBeenCalledWith(pid, "custom");
+        });
+
+        it("handles Fedora exceptions appropriately", async () => {
+            const fedora = Fedora.getInstance();
+            const updateSpy = jest.spyOn(fedora, "updateSortOnRelationship").mockImplementation(() => {
+                throw new Error("kaboom");
+            });
+
+            await request(app)
+                .put(`/edit/object/${pid}/sortOn`)
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "text/plain")
+                .send("custom")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+
+            expect(updateSpy).toHaveBeenCalledWith(pid, "custom");
+        });
+    });
+
     describe("put /object/:pid/parent/:parentPid", () => {
         let parentPid: string;
         let mockData: FedoraDataCollection;
