@@ -12,15 +12,22 @@ jest.mock("../../../context/EditorContext", () => ({
     },
 }));
 
+const mockUseDublinCoreMetadataContext = jest.fn();
+jest.mock("../../../context/DublinCoreMetadataContext", () => ({
+    useDublinCoreMetadataContext: () => {
+        return mockUseDublinCoreMetadataContext();
+    },
+}));
+
 jest.mock("../PidPicker", () => () => "PidPicker");
 
 describe("DatastreamDublinCoreAddButtons", () => {
+    let dcValues;
     let editorValues;
 
     beforeEach(() => {
         editorValues = {
             state: {
-                currentDublinCore: {},
                 dublinCoreFieldCatalog: {
                     "dc:identifier": { type: "locked" },
                     "dc:title": { type: "text" },
@@ -30,10 +37,18 @@ describe("DatastreamDublinCoreAddButtons", () => {
             },
             action: {
                 loadObjectDetailsIntoStorage: jest.fn(),
-                setCurrentDublinCore: jest.fn(),
             },
         };
         mockUseEditorContext.mockReturnValue(editorValues);
+        dcValues = {
+            state: {
+                currentDublinCore: {},
+            },
+            action: {
+                addValueAbove: jest.fn(),
+            },
+        };
+        mockUseDublinCoreMetadataContext.mockReturnValue(dcValues);
     });
 
     afterEach(() => {
@@ -57,28 +72,21 @@ describe("DatastreamDublinCoreAddButtons", () => {
     });
 
     it("adds to existing fields on click", () => {
-        editorValues.state.currentDublinCore = { "dc:identifier": ["baz"], "dc:title": ["original"] };
+        dcValues.state.currentDublinCore = { "dc:identifier": ["baz"], "dc:title": ["original"] };
         const wrapper = mount(<DatastreamDublinCoreAddButtons />);
         act(() => {
             wrapper.find("button").at(0).props().onClick();
         });
-        expect(editorValues.action.setCurrentDublinCore).toHaveBeenCalledWith({
-            "dc:identifier": ["baz"],
-            "dc:title": ["original", ""],
-        });
+        expect(dcValues.action.addValueAbove).toHaveBeenCalledWith("dc:title", 0, "");
     });
 
     it("adds new fields on click", () => {
-        editorValues.state.currentDublinCore = { "dc:identifier": ["baz"], "dc:title": ["original"] };
+        dcValues.state.currentDublinCore = { "dc:identifier": ["baz"], "dc:title": ["original"] };
         const wrapper = mount(<DatastreamDublinCoreAddButtons />);
         act(() => {
             wrapper.find("button").at(1).props().onClick();
         });
-        expect(editorValues.action.setCurrentDublinCore).toHaveBeenCalledWith({
-            "dc:identifier": ["baz"],
-            "dc:title": ["original"],
-            "dc:description": [""],
-        });
+        expect(dcValues.action.addValueAbove).toHaveBeenCalledWith("dc:description", 0, "");
     });
 
     it("loads details for cloned pids", async () => {
@@ -90,7 +98,7 @@ describe("DatastreamDublinCoreAddButtons", () => {
     });
 
     it("clones metadata", () => {
-        editorValues.state.currentDublinCore = { "dc:identifier": ["baz"], "dc:title": ["original"] };
+        dcValues.state.currentDublinCore = { "dc:identifier": ["baz"], "dc:title": ["original"] };
         editorValues.state.objectDetailsStorage["foo"] = {
             metadata: { "dc:identifier": ["foo"], "dc:title": ["added"], "dc:description": ["bar"] },
         };
@@ -102,7 +110,7 @@ describe("DatastreamDublinCoreAddButtons", () => {
         act(() => {
             wrapper.find("button").at(2).props().onClick();
         });
-        expect(editorValues.action.setCurrentDublinCore).toHaveBeenCalledWith({
+        expect(dcValues.action.setCurrentDublinCore).toHaveBeenCalledWith({
             "dc:identifier": ["baz"],
             "dc:title": ["original", "added"],
             "dc:description": ["bar"],
