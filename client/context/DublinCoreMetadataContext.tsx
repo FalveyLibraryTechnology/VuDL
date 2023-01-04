@@ -92,7 +92,8 @@ const dublinCoreMetadataReducer = (state: DublinCoreMetadata, { type, payload }:
         const { field, index, value } = payload as { field: string, index: number, value: string };
         return {
             ...state,
-            keyCounter: incrementKeyCounter(state.keyCounter, field),
+            // We don't need to refresh the key counter in this scenario, because the number of
+            // fields is not changing.
             currentDublinCore: replaceValue(state.currentDublinCore, field, index, value),
         }
     } else if(Object.keys(reducerMapping).includes(type)) {

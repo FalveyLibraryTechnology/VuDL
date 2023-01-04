@@ -21,22 +21,13 @@ const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.Rea
             keyCounter[field] = 0;
         }
         const key = `${field}_${i}_${keyCounter[field] ?? 0}`;
-        const saveChanges = (value: string) => {
-            replaceValue(field, i, value);
-        };
-        const addBelow = () => {
-            addValueBelow(field, i, "");
-        };
-        const deleteRow = () => {
-            deleteValue(field, i);
-        };
         const locked = catalogData.type === "locked";
         const buttons = locked ? null : (
             <>
-                <IconButton onClick={addBelow}>
+                <IconButton onClick={() => addValueBelow(field, i, "")}>
                     <AddCircle titleAccess="Add Below" />
                 </IconButton>
-                <IconButton onClick={deleteRow}>
+                <IconButton onClick={() => deleteValue(field, i)}>
                     <Delete titleAccess="Delete Row" />
                 </IconButton>
             </>
@@ -46,7 +37,7 @@ const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.Rea
                 <Grid item xs={10}>
                     <DatastreamDublinCoreEditField
                         value={value}
-                        setValue={saveChanges}
+                        setValue={(value) => replaceValue(field, i, value)}
                         fieldType={catalogData.type}
                         legalValues={catalogData.values ?? []}
                     />
