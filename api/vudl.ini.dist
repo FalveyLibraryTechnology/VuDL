@@ -257,7 +257,7 @@ allowedSubtypes = "wav,x-wav"
 [models.AudioData.datastreams.MP3.mimetype]
 allowedType = "audio"
 allowedSubtypes = "mpeg3,x-mpeg-3,mpeg"
-models.AudioData.datastreams.OGG.mimetype]
+[models.AudioData.datastreams.OGG.mimetype]
 allowedType = "audio"
 allowedSubtypes = "ogg"
 
