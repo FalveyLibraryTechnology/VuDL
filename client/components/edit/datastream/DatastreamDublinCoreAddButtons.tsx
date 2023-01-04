@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { useEditorContext } from "../../../context/EditorContext";
+import { useDublinCoreMetadataContext } from "../../../context/DublinCoreMetadataContext";
 import PidPicker from "../PidPicker";
 
 const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
     const {
-        state: { currentDublinCore, dublinCoreFieldCatalog, objectDetailsStorage },
-        action: { loadObjectDetailsIntoStorage, setCurrentDublinCore },
+        state: { dublinCoreFieldCatalog, objectDetailsStorage },
+        action: { loadObjectDetailsIntoStorage },
     } = useEditorContext();
+    const {
+        state: { currentDublinCore },
+        action: { addValueAbove },
+    } = useDublinCoreMetadataContext();
     const [clonePid, setClonePid] = useState("");
     const clonePidLoaded = clonePid.length > 0 && Object.prototype.hasOwnProperty.call(objectDetailsStorage, clonePid);
     const loadClonePid = async (newClonePid: string) => {
@@ -27,20 +32,13 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
         }
         setClonePid(newClonePid);
     };
-    const addField = (field: string) => {
-        if (!Object.prototype.hasOwnProperty.call(currentDublinCore, field)) {
-            currentDublinCore[field] = [];
-        }
-        currentDublinCore[field].push("");
-        setCurrentDublinCore(currentDublinCore);
-    };
     const buttons = [];
     for (const key in dublinCoreFieldCatalog) {
         const current = dublinCoreFieldCatalog[key];
         // Don't add fields we're not allowed to edit:
         if (current.type !== "locked") {
             buttons.push(
-                <button key={"dcadd_" + key.replace(":", "_")} onClick={() => addField(key)}>
+                <button key={"dcadd_" + key.replace(":", "_")} onClick={() => addValueAbove(key, 0, "")}>
                     {current.label}
                 </button>
             );

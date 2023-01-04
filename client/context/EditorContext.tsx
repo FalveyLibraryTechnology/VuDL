@@ -51,7 +51,6 @@ interface EditorState {
     toolPresets: Array<Record<string, string>>;
     vufindUrl: string;
     currentAgents: Array<Object>;
-    currentDublinCore: Record<string, Array<string>>;
     currentPid: string | null;
     activeDatastream: string | null;
     isDatastreamModalOpen: boolean;
@@ -80,7 +79,6 @@ const editorContextParams: EditorState = {
     toolPresets: [],
     vufindUrl: "",
     currentAgents: [],
-    currentDublinCore: {},
     currentPid: null,
     activeDatastream: null,
     isDatastreamModalOpen: false,
@@ -120,7 +118,6 @@ const reducerMapping: Record<string, string> = {
     SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_AGENTS: "currentAgents",
-    SET_CURRENT_DUBLIN_CORE: "currentDublinCore",
     SET_CURRENT_PID: "currentPid",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
@@ -224,7 +221,6 @@ export const useEditorContext = () => {
     const {
         state: {
             currentAgents,
-            currentDublinCore,
             currentPid,
             activeDatastream,
             isDatastreamModalOpen,
@@ -296,13 +292,6 @@ export const useEditorContext = () => {
         dispatch({
             type: "SET_CURRENT_AGENTS",
             payload: currentAgents
-        });
-    };
-
-    const setCurrentDublinCore = (dc: Record<string, Array<string>>) => {
-        dispatch({
-            type: "SET_CURRENT_DUBLIN_CORE",
-            payload: dc
         });
     };
 
@@ -520,7 +509,6 @@ export const useEditorContext = () => {
     return {
         state: {
             currentAgents,
-            currentDublinCore,
             currentPid,
             currentDatastreams,
             activeDatastream,
@@ -548,7 +536,6 @@ export const useEditorContext = () => {
         action: {
             initializeCatalog,
             setCurrentAgents,
-            setCurrentDublinCore,
             setCurrentPid,
             loadCurrentObjectDetails,
             setActiveDatastream,
