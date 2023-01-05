@@ -1,11 +1,15 @@
 import React from "react";
 import { useEditorContext } from "../../../context/EditorContext";
+import { useDublinCoreMetadataContext } from "../../../context/DublinCoreMetadataContext";
 import DatastreamDublinCoreFieldGroup from "./DatastreamDublinCoreFieldGroup";
 
 const DatastreamDublinCoreValues = (): React.ReactElement => {
     const {
-        state: { currentDublinCore, dublinCoreFieldCatalog },
+        state: { dublinCoreFieldCatalog },
     } = useEditorContext();
+    const {
+        state: { currentDublinCore },
+    } = useDublinCoreMetadataContext();
     // Display fields in the order defined by the catalog:
     const sections = [];
     for (const field in dublinCoreFieldCatalog) {

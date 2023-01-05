@@ -11,16 +11,20 @@ jest.mock("../../../context/EditorContext", () => ({
     },
 }));
 
+const mockUseDublinCoreMetadataContext = jest.fn();
+jest.mock("../../../context/DublinCoreMetadataContext", () => ({
+    useDublinCoreMetadataContext: () => {
+        return mockUseDublinCoreMetadataContext();
+    },
+}));
+
 describe("DatastreamDublinCoreValues", () => {
+    let dcValues;
     let editorValues;
 
     beforeEach(() => {
         editorValues = {
             state: {
-                currentDublinCore: {
-                    "dc:identifier": ["foo"],
-                    "dc:title": ["bar", "baz"],
-                },
                 dublinCoreFieldCatalog: {
                     "dc:identifier": { type: "locked" },
                     "dc:title": { type: "text" },
@@ -29,6 +33,15 @@ describe("DatastreamDublinCoreValues", () => {
             },
         };
         mockUseEditorContext.mockReturnValue(editorValues);
+        dcValues = {
+            state: {
+                currentDublinCore: {
+                    "dc:identifier": ["foo"],
+                    "dc:title": ["bar", "baz"],
+                },
+            },
+        };
+        mockUseDublinCoreMetadataContext.mockReturnValue(dcValues);
     });
 
     afterEach(() => {

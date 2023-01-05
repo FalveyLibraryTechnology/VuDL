@@ -4,15 +4,20 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import Grid from "@mui/material/Grid";
 import { useEditorContext } from "../../../context/EditorContext";
+import { useDublinCoreMetadataContext } from "../../../context/DublinCoreMetadataContext";
 import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 import DatastreamDublinCoreValues from "./DatastreamDublinCoreValues";
 import DatastreamDublinCoreAddButtons from "./DatastreamDublinCoreAddButtons";
 
 const DatastreamDublinCoreContent = (): React.ReactElement => {
     const {
-        state: { currentDublinCore, currentPid, objectDetailsStorage },
-        action: { setCurrentDublinCore, toggleDatastreamModal },
+        state: { currentPid, objectDetailsStorage },
+        action: { toggleDatastreamModal },
     } = useEditorContext();
+    const {
+        state: { currentDublinCore },
+        action: { setCurrentDublinCore },
+    } = useDublinCoreMetadataContext();
     const { uploadDublinCore } = useDatastreamOperation();
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, currentPid);
     useEffect(() => {
