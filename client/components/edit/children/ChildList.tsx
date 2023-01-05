@@ -44,6 +44,7 @@ export const ChildList = ({
     const thumbsButton =
         forceThumbs === null ? (
             <button
+                style={{ float: "right", marginTop: "-2em" }}
                 onClick={() => {
                     setShowThumbs(!showThumbs);
                 }}
