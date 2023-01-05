@@ -41,11 +41,9 @@ describe("DatastreamDublinCoreAddButtons", () => {
         };
         mockUseEditorContext.mockReturnValue(editorValues);
         dcValues = {
-            state: {
-                currentDublinCore: {},
-            },
             action: {
                 addValueAbove: jest.fn(),
+                mergeValues: jest.fn(),
             },
         };
         mockUseDublinCoreMetadataContext.mockReturnValue(dcValues);
@@ -71,17 +69,7 @@ describe("DatastreamDublinCoreAddButtons", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("adds to existing fields on click", () => {
-        dcValues.state.currentDublinCore = { "dc:identifier": ["baz"], "dc:title": ["original"] };
-        const wrapper = mount(<DatastreamDublinCoreAddButtons />);
-        act(() => {
-            wrapper.find("button").at(0).props().onClick();
-        });
-        expect(dcValues.action.addValueAbove).toHaveBeenCalledWith("dc:title", 0, "");
-    });
-
     it("adds new fields on click", () => {
-        dcValues.state.currentDublinCore = { "dc:identifier": ["baz"], "dc:title": ["original"] };
         const wrapper = mount(<DatastreamDublinCoreAddButtons />);
         act(() => {
             wrapper.find("button").at(1).props().onClick();
@@ -98,7 +86,6 @@ describe("DatastreamDublinCoreAddButtons", () => {
     });
 
     it("clones metadata", () => {
-        dcValues.state.currentDublinCore = { "dc:identifier": ["baz"], "dc:title": ["original"] };
         editorValues.state.objectDetailsStorage["foo"] = {
             metadata: { "dc:identifier": ["foo"], "dc:title": ["added"], "dc:description": ["bar"] },
         };
@@ -110,9 +97,8 @@ describe("DatastreamDublinCoreAddButtons", () => {
         act(() => {
             wrapper.find("button").at(2).props().onClick();
         });
-        expect(dcValues.action.setCurrentDublinCore).toHaveBeenCalledWith({
-            "dc:identifier": ["baz"],
-            "dc:title": ["original", "added"],
+        expect(dcValues.action.mergeValues).toHaveBeenCalledWith({
+            "dc:title": ["added"],
             "dc:description": ["bar"],
         });
     });
