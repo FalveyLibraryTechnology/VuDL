@@ -15,26 +15,42 @@ jest.mock("../../../context/EditorContext", () => ({
     },
 }));
 
+const mockUseDublinCoreMetadataContext = jest.fn();
+jest.mock("../../../context/DublinCoreMetadataContext", () => ({
+    useDublinCoreMetadataContext: () => {
+        return mockUseDublinCoreMetadataContext();
+    },
+}));
+
 describe("DatastreamDublinCoreFieldGroup", () => {
+    let dcValues;
     let editorValues;
 
     beforeEach(() => {
         editorValues = {
             state: {
-                currentDublinCore: {
-                    "dc:identifier": ["foo"],
-                    "dc:title": ["bar", "baz"],
-                },
                 dublinCoreFieldCatalog: {
                     "dc:identifier": { type: "locked" },
                     "dc:title": { type: "text" },
                 },
             },
-            action: {
-                setCurrentDublinCore: jest.fn(),
-            },
         };
         mockUseEditorContext.mockReturnValue(editorValues);
+        dcValues = {
+            state: {
+                currentDublinCore: {
+                    "dc:identifier": ["foo"],
+                    "dc:title": ["bar", "baz"],
+                },
+                keyCounter: {},
+            },
+            action: {
+                addValueBelow: jest.fn(),
+                deleteValue: jest.fn(),
+                replaceValue: jest.fn(),
+            },
+        };
+        mockUseDublinCoreMetadataContext.mockReturnValue(dcValues);
     });
 
     afterEach(() => {
@@ -59,10 +75,7 @@ describe("DatastreamDublinCoreFieldGroup", () => {
         act(() => {
             wrapper.find(AddCircle).at(1).parent().props().onClick();
         });
-        expect(editorValues.action.setCurrentDublinCore).toHaveBeenCalledWith({
-            "dc:identifier": ["foo"],
-            "dc:title": ["bar", "", "baz"],
-        });
+        expect(dcValues.action.addValueBelow).toHaveBeenCalledWith("dc:title", 1, "");
     });
 
     it("deletes rows", () => {
@@ -71,18 +84,12 @@ describe("DatastreamDublinCoreFieldGroup", () => {
         act(() => {
             wrapper.find(Delete).at(0).parent().props().onClick();
         });
-        expect(editorValues.action.setCurrentDublinCore).toHaveBeenCalledWith({
-            "dc:identifier": ["foo"],
-            "dc:title": ["baz"],
-        });
+        expect(dcValues.action.deleteValue).toHaveBeenCalledWith("dc:title", 0);
     });
 
     it("saves values appropriately", () => {
         const wrapper = mount(<DatastreamDublinCoreFieldGroup field="dc:title" />);
         wrapper.find(DatastreamDublinCoreEditField).at(1).props().setValue("xyzzy");
-        expect(editorValues.action.setCurrentDublinCore).toHaveBeenCalledWith({
-            "dc:identifier": ["foo"],
-            "dc:title": ["bar", "xyzzy"],
-        });
+        expect(dcValues.action.replaceValue).toHaveBeenCalledWith("dc:title", 1, "xyzzy");
     });
 });

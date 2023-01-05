@@ -39,20 +39,6 @@ describe("useEditorContext", () => {
             expect(result.current.state.currentAgents).toEqual(agents);
         });
     });
-    describe("setCurrentDublinCore", () => {
-        it("sets the current Dublin Core", async () => {
-            const dc = { "dc:title": ["foo"] };
-            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
-
-            expect(result.current.state.currentDublinCore).toEqual({});
-
-            await act(async () => {
-                await result.current.action.setCurrentDublinCore(dc);
-            });
-
-            expect(result.current.state.currentDublinCore).toEqual(dc);
-        });
-    });
     describe("setCurrentPid", () => {
         it("sets the current pid", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
