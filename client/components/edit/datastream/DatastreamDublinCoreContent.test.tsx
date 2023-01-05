@@ -25,6 +25,7 @@ jest.mock("../../../hooks/useDatastreamOperation", () => () => mockUseDatastream
 
 jest.mock("./DatastreamDublinCoreValues", () => () => "DatastreamDublinCoreValues");
 jest.mock("./DatastreamDublinCoreAddButtons", () => () => "DatastreamDublinCoreAddButtons");
+jest.mock("../ObjectPreviewButton", () => () => "ObjectPreviewButton");
 
 describe("DatastreamDublinCoreContent ", () => {
     let dcValues;
