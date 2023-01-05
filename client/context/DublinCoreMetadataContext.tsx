@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer } from "react";
 import PropTypes from "prop-types";
+import { constants } from "buffer";
 
 export interface DublinCoreMetadata {
     currentDublinCore: Record<string, Array<string>>;
@@ -30,6 +31,17 @@ const incrementKeyCounter = (keyCounter: Record<string, number>, field: string):
     };
 };
 
+const incrementKeyCounters = (keyCounter: Record<string, number>, fields: Array<string>): Record<string, number> => {
+    const newValues: Record<string, number> = {};
+    fields.forEach((field) => {
+        newValues[field] = (keyCounter[field] ?? 0) + 1;
+    });
+    return {
+        ...keyCounter,
+        ...newValues,
+    };
+};
+
 const addAbove = (dublinCore: Record<string, Array<string>>, field: string, index: number, value: string): Record<string, Array<string>> => {
     const current = (dublinCore[field] ?? []).slice(0);
     current.splice(index, 0, value);
@@ -55,6 +67,15 @@ const deleteValue = (dublinCore: Record<string, Array<string>>, field: string, i
         ...dublinCore,
         [field]: current,
     }
+};
+
+const mergeValues = (existing: Record<string, Array<string>>, newValues: Record<string, Array<string>>): Record<string, Array<string>> => {
+    const allFields = new Set([...Object.keys(existing), ...Object.keys(newValues)]);
+    const merged: Record<string, Array<string>> = {};
+    allFields.forEach((field) => {
+        merged[field] = (existing[field] ?? []).concat(newValues[field] ?? []);
+    });
+    return merged;
 };
 
 const replaceValue = (dublinCore: Record<string, Array<string>>, field: string, index: number, value: string): Record<string, Array<string>> => {
@@ -87,6 +108,13 @@ const dublinCoreMetadataReducer = (state: DublinCoreMetadata, { type, payload }:
             ...state,
             keyCounter: incrementKeyCounter(state.keyCounter, field),
             currentDublinCore: deleteValue(state.currentDublinCore, field, index),
+        }
+    } else if (type === "MERGE_VALUES") {
+        const { field, index } = payload as { field: string, index: number };
+        return {
+            ...state,
+            keyCounter: incrementKeyCounters(state.keyCounter, Object.keys(payload)),
+            currentDublinCore: mergeValues(state.currentDublinCore, payload),
         }
     } else if (type === "REPLACE_VALUE") {
         const { field, index, value } = payload as { field: string, index: number, value: string };
@@ -146,6 +174,13 @@ export const useDublinCoreMetadataContext = () => {
         });
     }
 
+    const mergeValues = (dc: Record<string, Array<string>>) => {
+        dispatch({
+            type: "MERGE_VALUES",
+            payload: dc
+        });
+    };
+
     const replaceValue = (field: string, index: number, value: string): void => {
         dispatch({
             type: "REPLACE_VALUE",
@@ -159,6 +194,7 @@ export const useDublinCoreMetadataContext = () => {
             addValueAbove,
             addValueBelow,
             deleteValue,
+            mergeValues,
             replaceValue,
             setCurrentDublinCore,
         },

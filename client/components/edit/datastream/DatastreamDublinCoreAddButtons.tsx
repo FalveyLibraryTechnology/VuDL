@@ -10,7 +10,7 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
     } = useEditorContext();
     const {
         state: { currentDublinCore },
-        action: { addValueAbove },
+        action: { addValueAbove, mergeValues },
     } = useDublinCoreMetadataContext();
     const [clonePid, setClonePid] = useState("");
     const clonePidLoaded = clonePid.length > 0 && Object.prototype.hasOwnProperty.call(objectDetailsStorage, clonePid);
@@ -48,12 +48,12 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
         const details = objectDetailsStorage[clonePid] ?? {};
         const metadata = details.metadata ?? {};
         for (const field in metadata) {
-            // Don't clone locked fields!
-            if (dublinCoreFieldCatalog[field].type !== "locked") {
-                currentDublinCore[field] = (currentDublinCore[field] ?? []).concat(metadata[field]);
+            // Filter out locked fields.
+            if (dublinCoreFieldCatalog[field].type === "locked") {
+                metadata[field] = [];
             }
         }
-        setCurrentDublinCore(currentDublinCore);
+        mergeValues(metadata);
         setClonePid("");
     };
     return (
