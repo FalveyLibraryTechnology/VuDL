@@ -18,7 +18,9 @@ const ObjectPreviewButton = ({ pid }: ObjectPreviewButtonProps): React.ReactElem
         >
             Preview
         </button>
-    ) : <></>;
+    ) : (
+        <></>
+    );
 };
 
 export default ObjectPreviewButton;
