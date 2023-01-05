@@ -8,6 +8,7 @@ import { useDublinCoreMetadataContext } from "../../../context/DublinCoreMetadat
 import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 import DatastreamDublinCoreValues from "./DatastreamDublinCoreValues";
 import DatastreamDublinCoreAddButtons from "./DatastreamDublinCoreAddButtons";
+import ObjectPreviewButton from "../ObjectPreviewButton";
 
 const DatastreamDublinCoreContent = (): React.ReactElement => {
     const {
@@ -36,6 +37,8 @@ const DatastreamDublinCoreContent = (): React.ReactElement => {
                     </Grid>
                     <Grid item xs={4}>
                         <DatastreamDublinCoreAddButtons />
+                        <h3>Other Tools</h3>
+                        <ObjectPreviewButton pid={currentPid} />
                     </Grid>
                 </Grid>
             </DialogContent>
