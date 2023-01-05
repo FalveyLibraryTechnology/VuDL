@@ -9,7 +9,6 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
         action: { loadObjectDetailsIntoStorage },
     } = useEditorContext();
     const {
-        state: { currentDublinCore },
         action: { addValueAbove, mergeValues },
     } = useDublinCoreMetadataContext();
     const [clonePid, setClonePid] = useState("");
@@ -50,7 +49,7 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
         for (const field in metadata) {
             // Filter out locked fields.
             if (dublinCoreFieldCatalog[field].type === "locked") {
-                metadata[field] = [];
+                delete metadata[field];
             }
         }
         mergeValues(metadata);
