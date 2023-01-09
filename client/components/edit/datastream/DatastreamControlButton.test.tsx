@@ -44,4 +44,15 @@ describe("DatastreamControlButton", () => {
         });
         expect(datastreamOperationValues.downloadDatastream).toHaveBeenCalledWith("THUMBNAIL");
     });
+
+    it("activates the modal", async () => {
+        const wrapper = mount(<DatastreamControlButton modalState="View" datastream="THUMBNAIL" />);
+        await act(async () => {
+            wrapper.find("button.datastreamControlButton").simulate("click");
+            wrapper.update();
+        });
+        expect(editorValues.action.setActiveDatastream).toHaveBeenCalledWith("THUMBNAIL");
+        expect(editorValues.action.setDatastreamModalState).toHaveBeenCalledWith("View");
+        expect(editorValues.action.toggleDatastreamModal).toHaveBeenCalled();
+    });
 });
