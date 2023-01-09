@@ -5,6 +5,13 @@ import { act } from "react-dom/test-utils";
 import toJson from "enzyme-to-json";
 import DatastreamViewModalContent from "./DatastreamViewModalContent";
 
+const mockUseEditorContext = jest.fn();
+jest.mock("../../../context/EditorContext", () => ({
+    useEditorContext: () => {
+        return mockUseEditorContext();
+    },
+}));
+
 const mockUseDatastreamOperation = jest.fn();
 jest.mock("../../../hooks/useDatastreamOperation", () => () => mockUseDatastreamOperation());
 const mockDatatypeContent = jest.fn();
@@ -14,6 +21,7 @@ jest.mock("../../shared/DatatypeContent", () => (props) => {
 });
 describe("DatastreamViewModalContent", () => {
     let datastreamOperationValues;
+    let editorValues;
     let response;
     let data;
     let createObjectURL;
@@ -30,6 +38,12 @@ describe("DatastreamViewModalContent", () => {
             },
             writable: true,
         });
+        editorValues = {
+            state: {
+                activeDatastream: "foo",
+            },
+        };
+        mockUseEditorContext.mockReturnValue(editorValues);
     });
 
     it("renders", async () => {
