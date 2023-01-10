@@ -825,9 +825,11 @@ describe("edit", () => {
 
         it("handles Fedora exceptions appropriately", async () => {
             const fedora = Fedora.getInstance();
+            const ex = new Error("kaboom");
             const updateSpy = jest.spyOn(fedora, "updateSortOnRelationship").mockImplementation(() => {
-                throw new Error("kaboom");
+                throw ex;
             });
+            const errorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
 
             await request(app)
                 .put(`/edit/object/${pid}/sortOn`)
@@ -837,6 +839,7 @@ describe("edit", () => {
                 .expect(StatusCodes.INTERNAL_SERVER_ERROR);
 
             expect(updateSpy).toHaveBeenCalledWith(pid, "custom");
+            expect(errorSpy).toHaveBeenCalledWith(ex);
         });
     });
 
