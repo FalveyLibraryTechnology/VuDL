@@ -66,7 +66,9 @@ export class FedoraObject {
         this.log(
             params.logMessage ?? "Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes"
         );
-        await this.callWith409Retry(async () => await this.fedora.addDatastream(this.pid, id, params, data, expectedStatus));
+        await this.callWith409Retry(
+            async () => await this.fedora.addDatastream(this.pid, id, params, data, expectedStatus)
+        );
     }
 
     async deleteDatastream(stream: string): Promise<void> {
@@ -270,7 +272,9 @@ export class FedoraObject {
             throw new Error("Unsupported parameter(s) passed to putDatastream()");
         }
         this.log(params.logMessage ?? "");
-        await this.callWith409Retry(async () => await this.fedora.putDatastream(this.pid, id, params.mimeType, expectedStatus, data));
+        await this.callWith409Retry(
+            async () => await this.fedora.putDatastream(this.pid, id, params.mimeType, expectedStatus, data)
+        );
     }
 
     async createOrModifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
