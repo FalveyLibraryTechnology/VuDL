@@ -223,10 +223,11 @@ export class Fedora {
     /**
      * Add a datastream to Fedora.
      *
-     * @param pid    Object containing datastream
-     * @param stream Name of stream
-     * @param params Additional parameters
-     * @param data   Content to write to stream
+     * @param pid            Object containing datastream
+     * @param stream         Name of stream
+     * @param params         Additional parameters
+     * @param data           Content to write to stream
+     * @param expectedStatus Array of expected legal HTTP response codes
      */
     async addDatastream(
         pid: string,
