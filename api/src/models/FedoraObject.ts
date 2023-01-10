@@ -5,6 +5,7 @@ import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
 import FedoraDataCollector from "../services/FedoraDataCollector";
 import { execSync } from "child_process";
+
 import { Agent } from "../services/interfaces";
 
 export interface ObjectParameters {
@@ -65,7 +66,7 @@ export class FedoraObject {
         this.log(
             params.logMessage ?? "Adding datastream " + id + " to " + this.pid + " with " + data.length + " bytes"
         );
-        await this.fedora.addDatastream(this.pid, id, params, data, expectedStatus);
+        await this.callWith409Retry(async () => await this.fedora.addDatastream(this.pid, id, params, data, expectedStatus));
     }
 
     async deleteDatastream(stream: string): Promise<void> {
@@ -193,7 +194,7 @@ export class FedoraObject {
         }
         this.log("Creating object " + this.pid + " with models CoreModel, " + modelType + ", " + model);
         // Create the object in Fedora:
-        await this.fedora.createContainer(this.pid, this.title, objectState, owner);
+        await this.callWith409Retry(async () => this.fedora.createContainer(this.pid, this.title, objectState, owner));
         // Add the three layers of models -- core (always), the type (data/collection), and the specific model
         await this.addModelRelationship("CoreModel");
         await this.addModelRelationship(modelType);
@@ -238,6 +239,27 @@ export class FedoraObject {
         return fs.readFileSync(targetXml).toString();
     }
 
+    async callWith409Retry(callback: () => Promise<void>, maxRetries = 3): Promise<void> {
+        let retries = 0;
+        while (true) {
+            try {
+                await callback();
+                return;
+            } catch (e) {
+                if (e.statusCode ?? null === 409) {
+                    retries++;
+                    if (retries <= maxRetries) {
+                        this.log(`Encountered 409 error; retry #${retries}...`);
+                    } else {
+                        throw e;
+                    }
+                } else {
+                    throw e;
+                }
+            }
+        }
+    }
+
     async putDatastream(
         id: string,
         params: DatastreamParameters,
@@ -248,7 +270,7 @@ export class FedoraObject {
             throw new Error("Unsupported parameter(s) passed to putDatastream()");
         }
         this.log(params.logMessage ?? "");
-        await this.fedora.putDatastream(this.pid, id, params.mimeType, expectedStatus, data);
+        await this.callWith409Retry(async () => await this.fedora.putDatastream(this.pid, id, params.mimeType, expectedStatus, data));
     }
 
     async createOrModifyDatastream(id: string, params: DatastreamParameters, data: string): Promise<void> {
