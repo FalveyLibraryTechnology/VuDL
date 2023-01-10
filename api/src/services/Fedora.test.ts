@@ -27,10 +27,15 @@ describe("Fedora", () => {
 
     describe("getDublinCore", () => {
         it("will fail if an unexpected status code is received", async () => {
-            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 404, body: "not found" });
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 500, body: "internal server error" });
             expect(async () => await fedora.getDublinCore("foo:123")).rejects.toThrowError(
-                "Unexpected status code: 404"
+                "Unexpected status code: 500"
             );
+        });
+
+        it("will return empty data if datastream does not exist", async () => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 404, body: "not found" });
+            expect(await fedora.getDublinCore("foo:123")).toEqual({});
         });
 
         it("will return an appropriate response body when data exists", async () => {
