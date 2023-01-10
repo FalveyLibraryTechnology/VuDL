@@ -172,6 +172,10 @@ export class Fedora {
     async getDublinCore(pid: string): Promise<DC> {
         const requestOptions = { parse_response: true };
         const response = await this.getDatastream(pid, "DC", requestOptions);
+        // If the DC doesn't exist yet, return an empty object.
+        if (response.statusCode === 404) {
+            return <DC>{};
+        }
         if (response.statusCode !== 200) {
             throw new Error("Unexpected status code: " + response.statusCode);
         }
