@@ -27,7 +27,9 @@ describe("Fedora", () => {
 
     describe("getDublinCore", () => {
         it("will fail if an unexpected status code is received", async () => {
-            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 500, body: "internal server error" });
+            requestSpy = jest
+                .spyOn(fedora, "_request")
+                .mockResolvedValue({ statusCode: 500, body: "internal server error" });
             expect(async () => await fedora.getDublinCore("foo:123")).rejects.toThrowError(
                 "Unexpected status code: 500"
             );
