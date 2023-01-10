@@ -48,7 +48,7 @@ describe("DatastreamViewModalContent", () => {
 
     afterEach(() => {
         jest.resetAllMocks();
-    })
+    });
 
     it("renders for viewable content", async () => {
         const response = {
