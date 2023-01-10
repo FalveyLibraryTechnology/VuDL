@@ -257,6 +257,8 @@ export class IngestProcessor {
         } catch (e) {
             console.trace(e.message);
             this.logger.error("Unexpected problem: " + e.message);
+            this.logger.close(); // Release file handle on log.
+            throw e; // Rethrow error to fail job.
         }
         this.logger.close(); // Release file handle on log.
     }
