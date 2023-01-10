@@ -172,6 +172,10 @@ export class Fedora {
     async getDublinCore(pid: string): Promise<DC> {
         const requestOptions = { parse_response: true };
         const response = await this.getDatastream(pid, "DC", requestOptions);
+        // If the DC doesn't exist yet, return an empty object.
+        if (response.statusCode === 404) {
+            return <DC>{};
+        }
         if (response.statusCode !== 200) {
             throw new Error("Unexpected status code: " + response.statusCode);
         }
@@ -219,10 +223,11 @@ export class Fedora {
     /**
      * Add a datastream to Fedora.
      *
-     * @param pid    Object containing datastream
-     * @param stream Name of stream
-     * @param params Additional parameters
-     * @param data   Content to write to stream
+     * @param pid            Object containing datastream
+     * @param stream         Name of stream
+     * @param params         Additional parameters
+     * @param data           Content to write to stream
+     * @param expectedStatus Array of expected legal HTTP response codes
      */
     async addDatastream(
         pid: string,

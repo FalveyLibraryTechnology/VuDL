@@ -257,6 +257,9 @@ export class IngestProcessor {
         } catch (e) {
             console.trace(e.message);
             this.logger.error("Unexpected problem: " + e.message);
+            this.logger.close(); // Release file handle on log.
+            // Rethrow error to fail job and display helpful details.
+            throw new Error(`Exception during ingest -- ${e.stack}`);
         }
         this.logger.close(); // Release file handle on log.
     }
