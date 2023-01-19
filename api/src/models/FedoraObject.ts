@@ -196,7 +196,9 @@ export class FedoraObject {
         }
         this.log("Creating object " + this.pid + " with models CoreModel, " + modelType + ", " + model);
         // Create the object in Fedora:
-        await this.callWith409Retry(async () => await this.fedora.createContainer(this.pid, this.title, objectState, owner));
+        await this.callWith409Retry(
+            async () => await this.fedora.createContainer(this.pid, this.title, objectState, owner)
+        );
         // Add the three layers of models -- core (always), the type (data/collection), and the specific model
         await this.addModelRelationship("CoreModel");
         await this.addModelRelationship(modelType);
