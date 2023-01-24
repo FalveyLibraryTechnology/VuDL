@@ -57,10 +57,21 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
       >
         Show Thumbnails
       </button>
+      <p>
+        Showing 
+        1
+         - 
+        10
+         of
+         
+        10000
+      </p>
       <Component
+        boundaryCount={2}
         count={1000}
         onChange={[Function]}
         page={1}
+        siblingCount={2}
       >
         Pagination
       </Component>
