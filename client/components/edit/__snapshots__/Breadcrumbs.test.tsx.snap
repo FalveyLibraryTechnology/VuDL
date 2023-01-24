@@ -8,10 +8,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
     >
       <ul
         className="breadcrumb"
-        key="breadcrumbs_0"
+        key="breadcrumbs_0_s"
       >
         <li
-          key="breadcrumb_mainmenu_0"
+          key="breadcrumb_mainmenu_0_s"
         >
           <Link
             href="/"
@@ -26,7 +26,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_home_0"
+          key="breadcrumb_home_0_s"
         >
           <Link
             href="/edit"
@@ -41,7 +41,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:0_0"
+          key="breadcrumb_expand_0_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:0_0_s"
         >
           <Link
             href="/edit/object/foo:0"
@@ -56,7 +65,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:1_0"
+          key="breadcrumb_foo:1_0_s"
         >
           <Link
             href="/edit/object/foo:1"
@@ -71,7 +80,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:2_0"
+          key="breadcrumb_foo:2_0_s"
         >
           <Link
             href="/edit/object/foo:2"
@@ -86,7 +95,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:3_0"
+          key="breadcrumb_foo:3_0_s"
         >
           <Link
             href="/edit/object/foo:3"
@@ -101,7 +110,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:4_0"
+          key="breadcrumb_foo:4_0_s"
         >
           <Link
             href="/edit/object/foo:4"
@@ -116,7 +125,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:5_0"
+          key="breadcrumb_foo:5_0_s"
         >
           <Link
             href="/edit/object/foo:5"
@@ -131,7 +140,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:6_0"
+          key="breadcrumb_foo:6_0_s"
         >
           <Link
             href="/edit/object/foo:6"
@@ -146,7 +155,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:7_0"
+          key="breadcrumb_foo:7_0_s"
         >
           <Link
             href="/edit/object/foo:7"
@@ -161,7 +170,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:8_0"
+          key="breadcrumb_foo:8_0_s"
         >
           <Link
             href="/edit/object/foo:8"
@@ -176,7 +185,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:9_0"
+          key="breadcrumb_foo:9_0_s"
         >
           <Link
             href="/edit/object/foo:9"
@@ -191,7 +200,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:10_0"
+          key="breadcrumb_foo:10_0_s"
         >
           <Link
             href="/edit/object/foo:10"
@@ -206,7 +215,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:11_0"
+          key="breadcrumb_foo:11_0_s"
         >
           <Link
             href="/edit/object/foo:11"
@@ -221,7 +230,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:12_0"
+          key="breadcrumb_foo:12_0_s"
         >
           <Link
             href="/edit/object/foo:12"
@@ -236,7 +245,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:13_0"
+          key="breadcrumb_foo:13_0_s"
         >
           <Link
             href="/edit/object/foo:13"
@@ -251,7 +260,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (deep parent chain) 1`
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:14_0"
+          key="breadcrumb_foo:14_0_s"
         >
           <Link
             href="/edit/object/foo:14"
@@ -279,10 +288,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
     >
       <ul
         className="breadcrumb"
-        key="breadcrumbs_0"
+        key="breadcrumbs_0_s"
       >
         <li
-          key="breadcrumb_mainmenu_0"
+          key="breadcrumb_mainmenu_0_s"
         >
           <Link
             href="/"
@@ -297,7 +306,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_0"
+          key="breadcrumb_home_0_s"
         >
           <Link
             href="/edit"
@@ -312,7 +321,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:0_0"
+          key="breadcrumb_expand_0_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:0_0_s"
         >
           <Link
             href="/edit/object/foo:0"
@@ -329,10 +347,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_1"
+        key="breadcrumbs_1_s"
       >
         <li
-          key="breadcrumb_mainmenu_1"
+          key="breadcrumb_mainmenu_1_s"
         >
           <Link
             href="/"
@@ -347,7 +365,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_1"
+          key="breadcrumb_home_1_s"
         >
           <Link
             href="/edit"
@@ -362,7 +380,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:1_1"
+          key="breadcrumb_expand_1_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:1_1_s"
         >
           <Link
             href="/edit/object/foo:1"
@@ -379,10 +406,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_2"
+        key="breadcrumbs_2_s"
       >
         <li
-          key="breadcrumb_mainmenu_2"
+          key="breadcrumb_mainmenu_2_s"
         >
           <Link
             href="/"
@@ -397,7 +424,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_2"
+          key="breadcrumb_home_2_s"
         >
           <Link
             href="/edit"
@@ -412,7 +439,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:2_2"
+          key="breadcrumb_expand_2_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:2_2_s"
         >
           <Link
             href="/edit/object/foo:2"
@@ -429,10 +465,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_3"
+        key="breadcrumbs_3_s"
       >
         <li
-          key="breadcrumb_mainmenu_3"
+          key="breadcrumb_mainmenu_3_s"
         >
           <Link
             href="/"
@@ -447,7 +483,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_3"
+          key="breadcrumb_home_3_s"
         >
           <Link
             href="/edit"
@@ -462,7 +498,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:3_3"
+          key="breadcrumb_expand_3_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:3_3_s"
         >
           <Link
             href="/edit/object/foo:3"
@@ -479,10 +524,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_4"
+        key="breadcrumbs_4_s"
       >
         <li
-          key="breadcrumb_mainmenu_4"
+          key="breadcrumb_mainmenu_4_s"
         >
           <Link
             href="/"
@@ -497,7 +542,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_4"
+          key="breadcrumb_home_4_s"
         >
           <Link
             href="/edit"
@@ -512,7 +557,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:4_4"
+          key="breadcrumb_expand_4_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:4_4_s"
         >
           <Link
             href="/edit/object/foo:4"
@@ -529,10 +583,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_5"
+        key="breadcrumbs_5_s"
       >
         <li
-          key="breadcrumb_mainmenu_5"
+          key="breadcrumb_mainmenu_5_s"
         >
           <Link
             href="/"
@@ -547,7 +601,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_5"
+          key="breadcrumb_home_5_s"
         >
           <Link
             href="/edit"
@@ -562,7 +616,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:5_5"
+          key="breadcrumb_expand_5_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:5_5_s"
         >
           <Link
             href="/edit/object/foo:5"
@@ -579,10 +642,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_6"
+        key="breadcrumbs_6_s"
       >
         <li
-          key="breadcrumb_mainmenu_6"
+          key="breadcrumb_mainmenu_6_s"
         >
           <Link
             href="/"
@@ -597,7 +660,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_6"
+          key="breadcrumb_home_6_s"
         >
           <Link
             href="/edit"
@@ -612,7 +675,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:6_6"
+          key="breadcrumb_expand_6_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:6_6_s"
         >
           <Link
             href="/edit/object/foo:6"
@@ -629,10 +701,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_7"
+        key="breadcrumbs_7_s"
       >
         <li
-          key="breadcrumb_mainmenu_7"
+          key="breadcrumb_mainmenu_7_s"
         >
           <Link
             href="/"
@@ -647,7 +719,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_7"
+          key="breadcrumb_home_7_s"
         >
           <Link
             href="/edit"
@@ -662,7 +734,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:7_7"
+          key="breadcrumb_expand_7_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:7_7_s"
         >
           <Link
             href="/edit/object/foo:7"
@@ -679,10 +760,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_8"
+        key="breadcrumbs_8_s"
       >
         <li
-          key="breadcrumb_mainmenu_8"
+          key="breadcrumb_mainmenu_8_s"
         >
           <Link
             href="/"
@@ -697,7 +778,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_8"
+          key="breadcrumb_home_8_s"
         >
           <Link
             href="/edit"
@@ -712,7 +793,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:8_8"
+          key="breadcrumb_expand_8_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:8_8_s"
         >
           <Link
             href="/edit/object/foo:8"
@@ -729,10 +819,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_9"
+        key="breadcrumbs_9_s"
       >
         <li
-          key="breadcrumb_mainmenu_9"
+          key="breadcrumb_mainmenu_9_s"
         >
           <Link
             href="/"
@@ -747,7 +837,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_9"
+          key="breadcrumb_home_9_s"
         >
           <Link
             href="/edit"
@@ -762,7 +852,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:9_9"
+          key="breadcrumb_expand_9_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:9_9_s"
         >
           <Link
             href="/edit/object/foo:9"
@@ -779,10 +878,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_10"
+        key="breadcrumbs_10_s"
       >
         <li
-          key="breadcrumb_mainmenu_10"
+          key="breadcrumb_mainmenu_10_s"
         >
           <Link
             href="/"
@@ -797,7 +896,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_10"
+          key="breadcrumb_home_10_s"
         >
           <Link
             href="/edit"
@@ -812,7 +911,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:10_10"
+          key="breadcrumb_expand_10_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:10_10_s"
         >
           <Link
             href="/edit/object/foo:10"
@@ -829,10 +937,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_11"
+        key="breadcrumbs_11_s"
       >
         <li
-          key="breadcrumb_mainmenu_11"
+          key="breadcrumb_mainmenu_11_s"
         >
           <Link
             href="/"
@@ -847,7 +955,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_11"
+          key="breadcrumb_home_11_s"
         >
           <Link
             href="/edit"
@@ -862,7 +970,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:11_11"
+          key="breadcrumb_expand_11_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:11_11_s"
         >
           <Link
             href="/edit/object/foo:11"
@@ -879,10 +996,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_12"
+        key="breadcrumbs_12_s"
       >
         <li
-          key="breadcrumb_mainmenu_12"
+          key="breadcrumb_mainmenu_12_s"
         >
           <Link
             href="/"
@@ -897,7 +1014,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_12"
+          key="breadcrumb_home_12_s"
         >
           <Link
             href="/edit"
@@ -912,7 +1029,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:12_12"
+          key="breadcrumb_expand_12_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:12_12_s"
         >
           <Link
             href="/edit/object/foo:12"
@@ -929,10 +1055,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_13"
+        key="breadcrumbs_13_s"
       >
         <li
-          key="breadcrumb_mainmenu_13"
+          key="breadcrumb_mainmenu_13_s"
         >
           <Link
             href="/"
@@ -947,7 +1073,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_13"
+          key="breadcrumb_home_13_s"
         >
           <Link
             href="/edit"
@@ -962,7 +1088,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:13_13"
+          key="breadcrumb_expand_13_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:13_13_s"
         >
           <Link
             href="/edit/object/foo:13"
@@ -979,10 +1114,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_14"
+        key="breadcrumbs_14_s"
       >
         <li
-          key="breadcrumb_mainmenu_14"
+          key="breadcrumb_mainmenu_14_s"
         >
           <Link
             href="/"
@@ -997,7 +1132,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_14"
+          key="breadcrumb_home_14_s"
         >
           <Link
             href="/edit"
@@ -1012,7 +1147,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (many parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:14_14"
+          key="breadcrumb_expand_14_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:14_14_s"
         >
           <Link
             href="/edit/object/foo:14"
@@ -1040,10 +1184,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
     >
       <ul
         className="breadcrumb"
-        key="breadcrumbs_0"
+        key="breadcrumbs_0_s"
       >
         <li
-          key="breadcrumb_mainmenu_0"
+          key="breadcrumb_mainmenu_0_s"
         >
           <Link
             href="/"
@@ -1058,7 +1202,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
           </Link>
         </li>
         <li
-          key="breadcrumb_home_0"
+          key="breadcrumb_home_0_s"
         >
           <Link
             href="/edit"
@@ -1073,7 +1217,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:1232_0"
+          key="breadcrumb_expand_0_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:1232_0_s"
         >
           <Link
             href="/edit/object/foo:1232"
@@ -1088,7 +1241,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:1233_0"
+          key="breadcrumb_foo:1233_0_s"
         >
           <Link
             href="/edit/object/foo:1233"
@@ -1105,10 +1258,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
       </ul>
       <ul
         className="breadcrumb"
-        key="breadcrumbs_1"
+        key="breadcrumbs_1_s"
       >
         <li
-          key="breadcrumb_mainmenu_1"
+          key="breadcrumb_mainmenu_1_s"
         >
           <Link
             href="/"
@@ -1123,7 +1276,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
           </Link>
         </li>
         <li
-          key="breadcrumb_home_1"
+          key="breadcrumb_home_1_s"
         >
           <Link
             href="/edit"
@@ -1138,7 +1291,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:1232_1"
+          key="breadcrumb_expand_1_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:1232_1_s"
         >
           <Link
             href="/edit/object/foo:1232"
@@ -1153,7 +1315,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (multiple parents with
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:1231_1"
+          key="breadcrumb_foo:1231_1_s"
         >
           <Link
             href="/edit/object/foo:1231"
@@ -1181,10 +1343,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (no parents) 1`] = `
     >
       <ul
         className="breadcrumb"
-        key="breadcrumbs_0"
+        key="breadcrumbs_0_s"
       >
         <li
-          key="breadcrumb_mainmenu_0"
+          key="breadcrumb_mainmenu_0_s"
         >
           <Link
             href="/"
@@ -1199,7 +1361,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (no parents) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_0"
+          key="breadcrumb_home_0_s"
         >
           <Link
             href="/edit"
@@ -1212,6 +1374,15 @@ exports[`Breadcrumb renders using ajax-loaded object data (no parents) 1`] = `
               Edit Home
             </a>
           </Link>
+        </li>
+        <li
+          key="breadcrumb_expand_0_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
         </li>
       </ul>
     </Breadcrumbs>
@@ -1227,10 +1398,10 @@ exports[`Breadcrumb renders using ajax-loaded object data (simple case) 1`] = `
     >
       <ul
         className="breadcrumb"
-        key="breadcrumbs_0"
+        key="breadcrumbs_0_s"
       >
         <li
-          key="breadcrumb_mainmenu_0"
+          key="breadcrumb_mainmenu_0_s"
         >
           <Link
             href="/"
@@ -1245,7 +1416,7 @@ exports[`Breadcrumb renders using ajax-loaded object data (simple case) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_home_0"
+          key="breadcrumb_home_0_s"
         >
           <Link
             href="/edit"
@@ -1260,7 +1431,16 @@ exports[`Breadcrumb renders using ajax-loaded object data (simple case) 1`] = `
           </Link>
         </li>
         <li
-          key="breadcrumb_foo:1233_0"
+          key="breadcrumb_expand_0_s"
+        >
+          <button
+            onClick={[Function]}
+          >
+            ...
+          </button>
+        </li>
+        <li
+          key="breadcrumb_foo:1233_0_s"
         >
           <Link
             href="/edit/object/foo:1233"

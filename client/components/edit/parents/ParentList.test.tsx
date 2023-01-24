@@ -28,25 +28,36 @@ describe("ParentList", () => {
             state: {
                 parentDetailsStorage: {
                     "foo:123": {
-                        parents: [
-                            {
-                                pid: "foo:122",
-                                title: "Parent",
-                                parents: [
-                                    {
-                                        pid: "foo:121",
-                                        title: "Grandparent",
-                                        parents: [
-                                            {
-                                                pid: "foo:120",
-                                                title: "Great-grandparent",
-                                                parents: [],
-                                            },
-                                        ],
-                                    },
-                                ],
-                            },
-                        ],
+                        shallow: {
+                            parents: [
+                                {
+                                    pid: "foo:122",
+                                    title: "Parent",
+                                    parents: [],
+                                },
+                            ],
+                        },
+                        full: {
+                            parents: [
+                                {
+                                    pid: "foo:122",
+                                    title: "Parent",
+                                    parents: [
+                                        {
+                                            pid: "foo:121",
+                                            title: "Grandparent",
+                                            parents: [
+                                                {
+                                                    pid: "foo:120",
+                                                    title: "Great-grandparent",
+                                                    parents: [],
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
                     },
                 },
             },
@@ -74,21 +85,28 @@ describe("ParentList", () => {
     it("triggers a data load if necessary", () => {
         editorValues.state.parentDetailsStorage = {};
         mount(<ParentList pid={pid} />);
-        expect(editorValues.action.loadParentDetailsIntoStorage).toHaveBeenCalledWith(pid);
+        expect(editorValues.action.loadParentDetailsIntoStorage).toHaveBeenCalledWith(pid, true);
     });
 
     it("renders an empty list correctly", () => {
         editorValues.state.parentDetailsStorage = {
             "foo:123": {
-                parents: [],
+                shallow: {
+                    parents: [],
+                },
             },
         };
         const wrapper = shallow(<ParentList pid={pid} />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("renders a populated parent list correctly", () => {
+    it("renders a populated parent list correctly (shallow mode)", () => {
         const wrapper = shallow(<ParentList pid={pid} />);
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders a populated parent list correctly (full mode)", () => {
+        const wrapper = shallow(<ParentList pid={pid} initiallyShallow={false} />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
@@ -96,7 +114,7 @@ describe("ParentList", () => {
         const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(true);
         fetchValues.action.fetchText.mockResolvedValue("ok");
         const wrapper = mount(<ParentList pid={pid} />);
-        wrapper.find("button").simulate("click");
+        wrapper.find("button").at(0).simulate("click");
         expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
@@ -116,7 +134,7 @@ describe("ParentList", () => {
     it("does not delete parents if confirmation is canceled", () => {
         const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(false);
         const wrapper = mount(<ParentList pid={pid} />);
-        wrapper.find("button").simulate("click");
+        wrapper.find("button").at(0).simulate("click");
         expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
         expect(fetchValues.action.fetchText).not.toHaveBeenCalled();
     });
@@ -125,7 +143,7 @@ describe("ParentList", () => {
         const confirmSpy = jest.spyOn(window, "confirm").mockReturnValue(true);
         fetchValues.action.fetchText.mockResolvedValue("not ok");
         const wrapper = mount(<ParentList pid={pid} />);
-        wrapper.find("button").simulate("click");
+        wrapper.find("button").at(0).simulate("click");
         expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
@@ -148,7 +166,7 @@ describe("ParentList", () => {
             throw new Error("boom");
         });
         const wrapper = mount(<ParentList pid={pid} />);
-        wrapper.find("button").simulate("click");
+        wrapper.find("button").at(0).simulate("click");
         expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",

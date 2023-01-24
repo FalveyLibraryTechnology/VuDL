@@ -35,7 +35,7 @@ describe("Breadcrumb", () => {
             </FetchContextProvider>
         );
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A1234/parents");
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A1234/parents?shallow=1");
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     }

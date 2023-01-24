@@ -49,12 +49,19 @@ class FedoraDataCollector {
         );
     }
 
-    async getHierarchy(pid: string): Promise<FedoraDataCollection> {
+    /**
+     * Retrieve an object including parent data
+     *
+     * @param pid Object ID to retrieve
+     * @param shallow True to load immediate parents only; false to load entire hierarchy
+     * @returns Object data including requested parents
+     */
+    async getHierarchy(pid: string, shallow = false): Promise<FedoraDataCollection> {
         const result = await this.getObjectData(pid);
         // Create promises to retrieve parents asynchronously...
         const promises = (result.fedoraDetails.isMemberOf ?? []).map(async (resource) => {
             const parentPid = resource.split("/").pop();
-            const parent = await this.getHierarchy(parentPid);
+            const parent = shallow ? await this.getObjectData(parentPid) : await this.getHierarchy(parentPid);
             result.addParent(parent);
         });
         // Now wait for the promises to complete before we return results, so

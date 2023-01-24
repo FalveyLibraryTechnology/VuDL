@@ -57,8 +57,8 @@ const getObjectLastChildPositionUrl = (pid: string): string => {
     return getPidActionUrl(pid, "lastChildPosition");
 }
 
-const getObjectParentsUrl = (pid: string): string => {
-    return getPidActionUrl(pid, "parents");
+const getObjectParentsUrl = (pid: string, shallow = false): string => {
+    return getPidActionUrl(pid, "parents") + (shallow ? "?shallow=1" : "");
 }
 
 const getObjectSortOnUrl = (pid: string): string => {
