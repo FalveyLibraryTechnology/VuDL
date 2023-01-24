@@ -48,6 +48,7 @@ describe("edit", () => {
                 processMetadataDefaults: {},
                 toolPresets: [],
                 favoritePids: {},
+                topLevelPids: [],
                 vufindUrl: "",
             };
             const spy = jest.spyOn(FedoraCatalog.getInstance(), "getCompleteCatalog").mockResolvedValue(fakeCatalog);
