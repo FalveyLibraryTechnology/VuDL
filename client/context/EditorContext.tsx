@@ -63,6 +63,7 @@ interface EditorState {
     objectDetailsStorage: Record<string, ObjectDetails>;
     parentDetailsStorage: Record<string, Record<string, TreeNode>>;
     childListStorage: Record<string, ChildrenResultPage>;
+    topLevelPids: Array<string>;
 }
 
 /**
@@ -95,6 +96,7 @@ const editorContextParams: EditorState = {
     objectDetailsStorage: {},
     parentDetailsStorage: {},
     childListStorage: {},
+    topLevelPids: [],
 };
 
 export const DatastreamModalStates = {
@@ -127,6 +129,7 @@ const reducerMapping: Record<string, string> = {
     SET_PARENTS_MODAL_ACTIVE_PID: "parentsModalActivePid",
     SET_STATE_MODAL_ACTIVE_PID: "stateModalActivePid",
     SET_SNACKBAR_STATE: "snackbarState",
+    SET_TOP_LEVEL_PIDS: "topLevelPids",
 };
 
 /**
@@ -244,6 +247,7 @@ export const useEditorContext = () => {
             objectDetailsStorage,
             parentDetailsStorage,
             childListStorage,
+            topLevelPids,
         },
         dispatch,
     } = useContext(EditorContext);
@@ -309,6 +313,13 @@ export const useEditorContext = () => {
         dispatch({
             type: "SET_DUBLIN_CORE_FIELD_CATALOG",
             payload: dcCatalog
+        });
+    };
+
+    const setTopLevelPids = (pids: Array<string>) => {
+        dispatch({
+            type: "SET_TOP_LEVEL_PIDS",
+            payload: pids
         });
     };
 
@@ -494,6 +505,7 @@ export const useEditorContext = () => {
             setProcessMetadataDefaults(response.processMetadataDefaults || {});
             setAgentsCatalog(response.agents || {});
             setDublinCoreFieldCatalog(response.dublinCoreFields || {});
+            setTopLevelPids(response.topLevelPids || []);
             setVuFindUrl(response.vufindUrl ?? "");
         } catch(err) {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
@@ -535,6 +547,7 @@ export const useEditorContext = () => {
             objectDetailsStorage,
             parentDetailsStorage,
             childListStorage,
+            topLevelPids,
         },
         action: {
             initializeCatalog,

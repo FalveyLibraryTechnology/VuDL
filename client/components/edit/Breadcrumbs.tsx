@@ -11,7 +11,7 @@ interface BreadcrumbsProps {
 
 const Breadcrumbs = ({ pid = null }: BreadcrumbsProps): React.ReactElement => {
     const {
-        state: { parentDetailsStorage },
+        state: { parentDetailsStorage, topLevelPids },
         action: { loadParentDetailsIntoStorage },
     } = useEditorContext();
     const [shallow, setShallow] = useState<boolean>(true);
@@ -41,14 +41,18 @@ const Breadcrumbs = ({ pid = null }: BreadcrumbsProps): React.ReactElement => {
 
     const contents = treeData.map((trail, trailIndex: number) => {
         const keySuffix = trailIndex + "_" + (shallow ? "s" : "f");
+        const trailPids: Array<string> = [];
         const breadcrumbs = trail.map((breadcrumb) => {
+            trailPids.push(breadcrumb.pid);
             return (
                 <li key={"breadcrumb_" + breadcrumb.pid + "_" + keySuffix}>
                     <Link href={"/edit/object/" + breadcrumb.pid}>{breadcrumb.title}</Link>
                 </li>
             );
         });
-        if (shallow) {
+        // If we're in shallow mode, and our trail is non-empty and does not include the uppermost
+        // top-level PID, we should show an expand control.
+        if (shallow && trailPids.length > 0 && !trailPids.includes(topLevelPids[0] ?? "")) {
             breadcrumbs.unshift(
                 <li key={"breadcrumb_expand_" + keySuffix}>
                     <button onClick={() => setShallow(false)}>...</button>

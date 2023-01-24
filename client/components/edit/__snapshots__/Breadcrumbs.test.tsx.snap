@@ -1375,15 +1375,6 @@ exports[`Breadcrumb renders using ajax-loaded object data (no parents) 1`] = `
             </a>
           </Link>
         </li>
-        <li
-          key="breadcrumb_expand_0_s"
-        >
-          <button
-            onClick={[Function]}
-          >
-            ...
-          </button>
-        </li>
       </ul>
     </Breadcrumbs>
   </EditorContextProvider>
