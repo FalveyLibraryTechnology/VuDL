@@ -7,14 +7,15 @@ import Link from "next/link";
 
 interface BreadcrumbsProps {
     pid?: string | null;
+    initiallyShallow?: boolean;
 }
 
-const Breadcrumbs = ({ pid = null }: BreadcrumbsProps): React.ReactElement => {
+const Breadcrumbs = ({ pid = null, initiallyShallow = true }: BreadcrumbsProps): React.ReactElement => {
     const {
         state: { parentDetailsStorage, topLevelPids },
         action: { loadParentDetailsIntoStorage },
     } = useEditorContext();
-    const [shallow, setShallow] = useState<boolean>(true);
+    const [shallow, setShallow] = useState<boolean>(initiallyShallow);
 
     const dataForPid =
         pid !== null && Object.prototype.hasOwnProperty.call(parentDetailsStorage, pid as string)
