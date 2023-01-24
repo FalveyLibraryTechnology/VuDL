@@ -1054,6 +1054,51 @@ describe("edit", () => {
         });
     });
 
+    describe("get /object/:pid/parents", () => {
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        it("will return deep hierarchy data by default", async () => {
+            const data = FedoraDataCollection.build(pid);
+            const hierarchySpy = jest.spyOn(FedoraDataCollector.getInstance(), "getHierarchy").mockResolvedValue(data);
+            const response = await request(app)
+                .get(`/edit/object/${pid}/parents`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(hierarchySpy).toHaveBeenCalledWith(pid, false);
+            expect(response.body).toEqual({ parents: [], pid, title: "" });
+        });
+
+        it("will return shallow hierarchy data by request", async () => {
+            const data = FedoraDataCollection.build(pid);
+            const hierarchySpy = jest.spyOn(FedoraDataCollector.getInstance(), "getHierarchy").mockResolvedValue(data);
+            const response = await request(app)
+                .get(`/edit/object/${pid}/parents?shallow=1`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.OK);
+            expect(hierarchySpy).toHaveBeenCalledWith(pid, true);
+            expect(response.body).toEqual({ parents: [], pid, title: "" });
+        });
+
+        it("handles exceptions appropriately", async () => {
+            const ex = new Error("kaboom");
+            const hierarchySpy = jest
+                .spyOn(FedoraDataCollector.getInstance(), "getHierarchy")
+                .mockImplementation(() => {
+                    throw ex;
+                });
+            const errorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
+
+            await request(app)
+                .get(`/edit/object/${pid}/parents`)
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+            expect(hierarchySpy).toHaveBeenCalledWith(pid, false);
+            expect(errorSpy).toHaveBeenCalledWith("Error retrieving breadcrumbs: " + ex);
+        });
+    });
+
     describe("put /object/:pid/positionInParent/:parentPid", () => {
         let parentPid: string;
         let mockData: FedoraDataCollection;
