@@ -428,7 +428,7 @@ describe("useEditorContext", () => {
             const errorSpy = jest.spyOn(global.console, "error").mockImplementation(jest.fn());
             fetchValues.action.fetchJSON.mockRejectedValue("test1");
             await act(async () => {
-                await result.current.action.loadParentDetailsIntoStorage("test:123", callback);
+                await result.current.action.loadParentDetailsIntoStorage("test:123", false, callback);
             });
             expect(callback).toHaveBeenCalledWith("test:123");
             expect(errorSpy).toHaveBeenCalledWith("Problem fetching parent details from http://localhost:9000/api/edit/object/test%3A123/parents");

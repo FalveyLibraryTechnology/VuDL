@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useEditorContext } from "../../../context/EditorContext";
 import { useFetchContext } from "../../../context/FetchContext";
 import { getParentUrl } from "../../../util/routes";
@@ -6,9 +6,10 @@ import Delete from "@mui/icons-material/Delete";
 
 export interface ParentListProps {
     pid: string;
+    initiallyShallow?: boolean;
 }
 
-const ParentList = ({ pid }: ParentListProps): React.ReactElement => {
+const ParentList = ({ pid, initiallyShallow = true }: ParentListProps): React.ReactElement => {
     const {
         state: { parentDetailsStorage },
         action: {
@@ -22,13 +23,18 @@ const ParentList = ({ pid }: ParentListProps): React.ReactElement => {
     const {
         action: { fetchText },
     } = useFetchContext();
-    const loaded = Object.prototype.hasOwnProperty.call(parentDetailsStorage, pid);
+    const [shallow, setShallow] = useState<boolean>(initiallyShallow);
+    const dataForPid = Object.prototype.hasOwnProperty.call(parentDetailsStorage, pid as string)
+        ? parentDetailsStorage[pid]
+        : {};
+    const key = shallow ? "shallow" : "full";
+    const loaded = Object.prototype.hasOwnProperty.call(dataForPid, key);
 
     useEffect(() => {
         if (!loaded) {
-            loadParentDetailsIntoStorage(pid);
+            loadParentDetailsIntoStorage(pid, shallow);
         }
-    }, [loaded]);
+    }, [loaded, shallow]);
 
     const showSnackbarMessage = (message: string, severity: string) => {
         setSnackbarState({
@@ -62,7 +68,7 @@ const ParentList = ({ pid }: ParentListProps): React.ReactElement => {
         }
     };
 
-    const parents = (loaded ? parentDetailsStorage[pid].parents ?? [] : []).map((parent) => {
+    const parents = (loaded ? parentDetailsStorage[pid][key].parents ?? [] : []).map((parent) => {
         let parentChain = "";
         let nextNode = (parent.parents ?? [])[0] ?? null;
         while (nextNode) {
@@ -78,7 +84,7 @@ const ParentList = ({ pid }: ParentListProps): React.ReactElement => {
                 </td>
                 <td>{parent.pid ?? ""}</td>
                 <td>{parent.title ?? "Unknown title"}</td>
-                <td>{parentChain}</td>
+                <td>{shallow ? <button onClick={() => setShallow(false)}>Show More</button> : parentChain}</td>
             </tr>
         );
     });

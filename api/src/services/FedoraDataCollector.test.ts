@@ -5,18 +5,23 @@ import MetadataExtractor from "./MetadataExtractor";
 
 describe("FedoraDataCollector", () => {
     let collector;
+    let getHierarchySpy;
+    let getObjectDataSpy;
+    const pid = "test:123";
+    const parentPid = "test:124";
+
     beforeEach(() => {
         Config.setInstance(new Config({}));
         collector = FedoraDataCollector.getInstance();
+        getHierarchySpy = jest.spyOn(collector, "getHierarchy");
+        getObjectDataSpy = jest.spyOn(collector, "getObjectData");
     });
 
     afterEach(() => {
         jest.restoreAllMocks();
     });
 
-    it("retrieves an appropriate hierarchy", async () => {
-        const pid = "test:123";
-        const parentPid = "test:124";
+    const runStandardTest = async (shallow: boolean) => {
         const fedora = Fedora.getInstance();
         const extractor = MetadataExtractor.getInstance();
         const dcGenerator = function (name) {
@@ -45,7 +50,7 @@ describe("FedoraDataCollector", () => {
             .spyOn(extractor, "extractFedoraDatastreams")
             .mockReturnValueOnce(["stream1"])
             .mockReturnValueOnce(["stream2"]);
-        const result = await collector.getHierarchy(pid);
+        const result = await collector.getHierarchy(pid, shallow);
         expect(dublinCoreSpy).toHaveBeenCalledTimes(2);
         expect(dublinCoreSpy).toHaveBeenNthCalledWith(1, pid);
         expect(dublinCoreSpy).toHaveBeenNthCalledWith(2, parentPid);
@@ -72,5 +77,16 @@ describe("FedoraDataCollector", () => {
         expect(parent.fedoraDetails).toEqual(details2);
         expect(parent.fedoraDatastreams).toEqual(["stream2"]);
         expect(parent.parents.length).toEqual(0);
+    };
+
+    it("retrieves an appropriate full hierarchy", async () => {
+        await runStandardTest(false);
+        expect(getHierarchySpy).toHaveBeenCalledWith(parentPid);
+    });
+
+    it("retrieves an appropriate shallow hierarchy", async () => {
+        await runStandardTest(true);
+        expect(getHierarchySpy).not.toHaveBeenCalledWith(parentPid);
+        expect(getObjectDataSpy).toHaveBeenCalledWith(parentPid);
     });
 });
