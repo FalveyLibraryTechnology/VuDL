@@ -312,7 +312,10 @@ edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req
 
 edit.get("/object/:pid/parents", pidSanitizer, requireToken, async function (req, res) {
     try {
-        const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(req.params.pid);
+        const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(
+            req.params.pid,
+            (req.query.shallow ?? "") == "1"
+        );
         res.json(fedoraData.getParentTree());
     } catch (e) {
         console.error("Error retrieving breadcrumbs: " + e);
@@ -450,7 +453,7 @@ edit.delete("/object/:pid/parent/:parentPid", requireToken, pidAndParentPidSanit
         const fedora = Fedora.getInstance();
 
         // Validate the input
-        const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
+        const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid, true);
         const legalParent = fedoraData.parents.find((current) => current.pid === parent);
         if (!legalParent) {
             res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
@@ -499,10 +502,8 @@ edit.delete(
             const fedora = Fedora.getInstance();
 
             // Validate the input
-            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
-            const legalParent = fedoraData.parents.reduce((previous, current) => {
-                return previous || (current.pid === parent ? current : false);
-            }, false);
+            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid, true);
+            const legalParent = fedoraData.parents.find((current) => current.pid === parent);
             if (!legalParent) {
                 res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
                 return;
@@ -530,10 +531,8 @@ edit.put(
             const pos = parseInt(req.body);
 
             // Validate the input
-            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid);
-            const legalParent = fedoraData.parents.reduce((previous, current) => {
-                return previous || (current.pid === parent ? current : false);
-            }, false);
+            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid, true);
+            const legalParent = fedoraData.parents.find((current) => current.pid === parent);
             if (!legalParent) {
                 res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
                 return;

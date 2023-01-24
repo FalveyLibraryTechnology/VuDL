@@ -29,6 +29,7 @@ export interface CompleteCatalog {
     favoritePids: Record<string, string>;
     processMetadataDefaults: Record<string, string>;
     toolPresets: Array<Record<string, string>>;
+    topLevelPids: Array<string>;
     vufindUrl: string;
 }
 
@@ -59,6 +60,7 @@ class FedoraCatalog {
             agentTypes,
             processMetadataDefaults,
             toolPresets,
+            topLevelPids,
             vufindUrl,
         } = this.config;
         return {
@@ -72,6 +74,7 @@ class FedoraCatalog {
             models,
             licenses,
             toolPresets,
+            topLevelPids,
             processMetadataDefaults,
             vufindUrl,
         };

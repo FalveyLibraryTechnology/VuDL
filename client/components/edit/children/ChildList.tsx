@@ -84,6 +84,8 @@ export const ChildList = ({
             <Pagination
                 count={pageCount}
                 page={page}
+                siblingCount={2}
+                boundaryCount={2}
                 onChange={(e, page) => {
                     setPage(page);
                 }}
@@ -91,9 +93,19 @@ export const ChildList = ({
         ) : (
             ""
         );
+    const startNumber = (page - 1) * pageSize + 1;
+    const endNumber = startNumber + pageSize - 1;
+    const paginatorLabel =
+        children.numFound > 1 ? (
+            <p>
+                Showing {startNumber} - {children.numFound < endNumber ? children.numFound : endNumber} of{" "}
+                {children.numFound}
+            </p>
+        ) : null;
     return (
         <>
             {thumbsButton}
+            {paginatorLabel}
             {paginator}
             <ul className={styles.childlist}>{contents}</ul>
         </>

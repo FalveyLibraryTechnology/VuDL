@@ -8,8 +8,8 @@ import { EditorContextProvider } from "../../context/EditorContext";
 import { FetchContextProvider } from "../../context/FetchContext";
 
 describe("Breadcrumb", () => {
-    let props;
-    let lastRequestUrl;
+    let props: Record<string, string>;
+    let lastRequestUrl: string;
     let breadcrumbResponse = {};
 
     beforeEach(() => {
@@ -26,16 +26,16 @@ describe("Breadcrumb", () => {
         });
     });
 
-    async function runStandardSnapshotTest() {
+    async function runStandardSnapshotTest(initiallyShallow: boolean) {
         const wrapper = mount(
             <FetchContextProvider>
                 <EditorContextProvider>
-                    <Breadcrumbs {...props} />
+                    <Breadcrumbs {...{...props, initiallyShallow}} />
                 </EditorContextProvider>
             </FetchContextProvider>
         );
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A1234/parents");
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A1234/parents" + (initiallyShallow ? "?shallow=1" : ""));
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
     }
@@ -56,24 +56,44 @@ describe("Breadcrumb", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("renders using ajax-loaded object data (no parents)", async () => {
+    it("renders using ajax-loaded object data (no parents, shallow mode)", async () => {
         breadcrumbResponse = getObject("foo:1234", "Fake Title");
-        await runStandardSnapshotTest();
+        await runStandardSnapshotTest(true);
     });
 
-    it("renders using ajax-loaded object data (simple case)", async () => {
+    it("renders using ajax-loaded object data (no parents, deep mode)", async () => {
+        breadcrumbResponse = getObject("foo:1234", "Fake Title");
+        await runStandardSnapshotTest(false);
+    });
+
+    it("renders using ajax-loaded object data (simple case, shallow mode)", async () => {
         const parent = getObject("foo:1233", "Fake Parent");
         breadcrumbResponse = getObject("foo:1234", "Fake Title", [parent]);
-        await runStandardSnapshotTest();
+        await runStandardSnapshotTest(true);
     });
 
-    it("renders using ajax-loaded object data (many parents)", async () => {
+    it("renders using ajax-loaded object data (simple case, deep mode)", async () => {
+        const parent = getObject("foo:1233", "Fake Parent");
+        breadcrumbResponse = getObject("foo:1234", "Fake Title", [parent]);
+        await runStandardSnapshotTest(false);
+    });
+
+    it("renders using ajax-loaded object data (many parents, shallow mode)", async () => {
         const parents = [];
         for (let $x = 0; $x < 15; $x++) {
             parents.push(getObject("foo:" + $x, "Fake Parent " + $x));
         }
         breadcrumbResponse = getObject("foo:1234", "Fake Title", parents);
-        await runStandardSnapshotTest();
+        await runStandardSnapshotTest(true);
+    });
+
+    it("renders using ajax-loaded object data (many parents, deep mode)", async () => {
+        const parents = [];
+        for (let $x = 0; $x < 15; $x++) {
+            parents.push(getObject("foo:" + $x, "Fake Parent " + $x));
+        }
+        breadcrumbResponse = getObject("foo:1234", "Fake Title", parents);
+        await runStandardSnapshotTest(false);
     });
 
     it("renders using ajax-loaded object data (deep parent chain)", async () => {
@@ -82,7 +102,7 @@ describe("Breadcrumb", () => {
             parents = [getObject("foo:" + $x, "Fake Parent " + $x, parents)];
         }
         breadcrumbResponse = getObject("foo:1234", "Fake Title", parents);
-        await runStandardSnapshotTest();
+        await runStandardSnapshotTest(false);
     });
 
     it("renders using ajax-loaded object data (multiple parents with common grandparent)", async () => {
@@ -90,6 +110,6 @@ describe("Breadcrumb", () => {
         const parent1 = getObject("foo:1233", "Fake Parent 1", [grandparent]);
         const parent2 = getObject("foo:1231", "Fake Parent 2", [grandparent]);
         breadcrumbResponse = getObject("foo:1234", "Fake Title", [parent1, parent2]);
-        await runStandardSnapshotTest();
+        await runStandardSnapshotTest(false);
     });
 });
