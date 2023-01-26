@@ -10,7 +10,20 @@ exports[`DatastreamList renders 1`] = `
         Object {
           "children": Array [
             <Unknown
-              datastream="test1"
+              datastream={
+                Object {
+                  "disabled": false,
+                  "stream": "test0",
+                }
+              }
+            />,
+            <Unknown
+              datastream={
+                Object {
+                  "disabled": true,
+                  "stream": "test1",
+                }
+              }
             />,
           ],
           "component": "ul",
@@ -75,8 +88,24 @@ exports[`DatastreamList renders 1`] = `
         className="MuiList-root MuiList-padding css-h4y409-MuiList-root"
       >
         <Component
-          datastream="test1"
+          datastream={
+            Object {
+              "disabled": false,
+              "stream": "test0",
+            }
+          }
           key="0"
+        >
+          Datastream
+        </Component>
+        <Component
+          datastream={
+            Object {
+              "disabled": true,
+              "stream": "test1",
+            }
+          }
+          key="1"
         >
           Datastream
         </Component>
