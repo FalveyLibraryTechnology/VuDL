@@ -245,7 +245,7 @@ export class FedoraObject {
 
     async callWith409Retry(callback: () => Promise<void>, maxRetries = 3): Promise<void> {
         let retries = 0;
-        while (true) {
+        while (retries <= maxRetries) {
             try {
                 await callback();
                 return;
