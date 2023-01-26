@@ -58,7 +58,7 @@ class SolrIndexer {
             typeof response.results.getFirstIndexed !== "string" ||
             typeof response.results.getLastIndexed !== "string"
         ) {
-            throw new Error("Unexpected change tracker response.");
+            throw new Error(`Unexpected change tracker response: ${JSON.stringify(response)}.`);
         }
         return response.results;
     }
