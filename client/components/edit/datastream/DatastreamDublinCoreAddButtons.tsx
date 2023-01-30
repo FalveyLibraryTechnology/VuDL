@@ -5,7 +5,7 @@ import PidPicker from "../PidPicker";
 
 const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
     const {
-        state: { dublinCoreFieldCatalog, objectDetailsStorage },
+        state: { currentPid, dublinCoreFieldCatalog, objectDetailsStorage, parentDetailsStorage },
         action: { loadObjectDetailsIntoStorage },
     } = useEditorContext();
     const {
@@ -55,12 +55,17 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
         mergeValues(metadata);
         setClonePid("");
     };
+    const getImmediateParents = () => {
+        const dataForPid = parentDetailsStorage?.[currentPid] ?? {};
+        return dataForPid?.shallow?.parents ?? dataForPid?.full?.parents ?? [];
+    };
+    getImmediateParents();
     return (
         <>
             <h3>Add Blank Field:</h3>
             {buttons}
             <h3>Clone Metadata:</h3>
-            <PidPicker selected={clonePid} setSelected={loadClonePid} />
+            <PidPicker selected={clonePid} setSelected={loadClonePid} parents={getImmediateParents()} />
             {clonePidLoaded ? <button onClick={doClone}>Clone</button> : null}
         </>
     );

@@ -3,6 +3,7 @@ import { describe, beforeEach, expect, it, jest } from "@jest/globals";
 import { shallow, mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import PidPicker from "./PidPicker";
+import { Parent } from "./PidPicker";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../context/EditorContext", () => ({
@@ -17,8 +18,8 @@ describe("PidPicker", () => {
     let editorValues;
     let favoritePidsCatalog: Record<string, string>;
 
-    const getPicker = (selected = "") => {
-        return <PidPicker selected={selected} setSelected={callback} />;
+    const getPicker = (selected = "", parents: Array<Parent> = []) => {
+        return <PidPicker selected={selected} parents={parents} setSelected={callback} />;
     };
 
     beforeEach(() => {
@@ -54,6 +55,12 @@ describe("PidPicker", () => {
 
     it("renders correctly with a selected PID", () => {
         const wrapper = shallow(getPicker("selected:123"));
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders correctly with parents", () => {
+        const parents = [{ pid: "foo", title: "Foo" }, { pid: "bar", title: "Bar" }];
+        const wrapper = shallow(getPicker("", parents));
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
