@@ -6,12 +6,18 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEditorContext } from "../../context/EditorContext";
 
+export interface Parent {
+    pid: string;
+    title: string;
+}
+
 interface PidPickerProps {
     selected: string;
     setSelected: (pid: string) => void;
+    parents?: Array<Parent>;
 }
 
-const PidPicker = ({ selected, setSelected }: PidPickerProps): React.ReactElement => {
+const PidPicker = ({ selected, setSelected, parents = [] }: PidPickerProps): React.ReactElement => {
     const {
         state: { favoritePidsCatalog },
     } = useEditorContext();
@@ -33,6 +39,19 @@ const PidPicker = ({ selected, setSelected }: PidPickerProps): React.ReactElemen
                 </AccordionDetails>
             </Accordion>
         ) : null;
+
+    const parentAccordions = parents.map((parent: Parent) => {
+        return (
+            <Accordion key={`clone_parent_${parent.pid}`}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    Choose PID from Parent ({parent.title})
+                </AccordionSummary>
+                <AccordionDetails>
+                    <ChildList pid={parent.pid} selectCallback={setSelected} />
+                </AccordionDetails>
+            </Accordion>
+        );
+    });
 
     return selected.length > 0 ? (
         <>
@@ -56,6 +75,7 @@ const PidPicker = ({ selected, setSelected }: PidPickerProps): React.ReactElemen
                     <ChildList selectCallback={setSelected} />
                 </AccordionDetails>
             </Accordion>
+            {parentAccordions}
             {favoritesAccordion}
         </>
     );

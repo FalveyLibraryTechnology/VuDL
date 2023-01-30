@@ -24,16 +24,19 @@ jest.mock("../PidPicker", () => () => "PidPicker");
 describe("DatastreamDublinCoreAddButtons", () => {
     let dcValues;
     let editorValues;
+    const pid = "foo:123";
 
     beforeEach(() => {
         editorValues = {
             state: {
+                currentPid: pid,
                 dublinCoreFieldCatalog: {
                     "dc:identifier": { type: "locked" },
                     "dc:title": { type: "text" },
                     "dc:description": { type: "html" },
                 },
                 objectDetailsStorage: {},
+                parentDetailsStorage: {},
             },
             action: {
                 loadObjectDetailsIntoStorage: jest.fn(),
@@ -66,6 +69,28 @@ describe("DatastreamDublinCoreAddButtons", () => {
             wrapper.children().at(4).props().setSelected("foo");
         });
         wrapper.update();
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders with appropriate parent details (using shallow storage)", () => {
+        editorValues.state.parentDetailsStorage[pid] = {
+            shallow: {
+                parents: [{ pid: "parent:123", title: "Parent" }],
+            },
+        };
+        const wrapper = shallow(<DatastreamDublinCoreAddButtons />);
+
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it("renders with appropriate parent details (using full storage)", () => {
+        editorValues.state.parentDetailsStorage[pid] = {
+            full: {
+                parents: [{ pid: "parent:123", title: "Parent" }],
+            },
+        };
+        const wrapper = shallow(<DatastreamDublinCoreAddButtons />);
+
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
