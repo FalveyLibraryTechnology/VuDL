@@ -59,7 +59,10 @@ describe("PidPicker", () => {
     });
 
     it("renders correctly with parents", () => {
-        const parents = [{ pid: "foo", title: "Foo" }, { pid: "bar", title: "Bar" }];
+        const parents = [
+            { pid: "foo", title: "Foo" },
+            { pid: "bar", title: "Bar" },
+        ];
         const wrapper = shallow(getPicker("", parents));
         expect(toJson(wrapper)).toMatchSnapshot();
     });

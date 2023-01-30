@@ -75,8 +75,8 @@ describe("DatastreamDublinCoreAddButtons", () => {
     it("renders with appropriate parent details (using shallow storage)", () => {
         editorValues.state.parentDetailsStorage[pid] = {
             shallow: {
-                parents: [{pid: "parent:123", title: "Parent"}]
-            }
+                parents: [{ pid: "parent:123", title: "Parent" }],
+            },
         };
         const wrapper = shallow(<DatastreamDublinCoreAddButtons />);
 
@@ -86,8 +86,8 @@ describe("DatastreamDublinCoreAddButtons", () => {
     it("renders with appropriate parent details (using full storage)", () => {
         editorValues.state.parentDetailsStorage[pid] = {
             full: {
-                parents: [{pid: "parent:123", title: "Parent"}]
-            }
+                parents: [{ pid: "parent:123", title: "Parent" }],
+            },
         };
         const wrapper = shallow(<DatastreamDublinCoreAddButtons />);
 
