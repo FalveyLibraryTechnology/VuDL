@@ -1,5 +1,67 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`DatastreamDublinCoreAddButtons renders with appropriate parent details (using full storage) 1`] = `
+<Fragment>
+  <h3>
+    Add Blank Field:
+  </h3>
+  <button
+    key="dcadd_dc_title"
+    onClick={[Function]}
+  />
+  <button
+    key="dcadd_dc_description"
+    onClick={[Function]}
+  />
+  <h3>
+    Clone Metadata:
+  </h3>
+  <Component
+    parents={
+      Array [
+        Object {
+          "pid": "parent:123",
+          "title": "Parent",
+        },
+      ]
+    }
+    selected=""
+    setSelected={[Function]}
+  />
+</Fragment>
+`;
+
+exports[`DatastreamDublinCoreAddButtons renders with appropriate parent details (using shallow storage) 1`] = `
+<Fragment>
+  <h3>
+    Add Blank Field:
+  </h3>
+  <button
+    key="dcadd_dc_title"
+    onClick={[Function]}
+  />
+  <button
+    key="dcadd_dc_description"
+    onClick={[Function]}
+  />
+  <h3>
+    Clone Metadata:
+  </h3>
+  <Component
+    parents={
+      Array [
+        Object {
+          "pid": "parent:123",
+          "title": "Parent",
+        },
+      ]
+    }
+    selected=""
+    setSelected={[Function]}
+  />
+</Fragment>
+`;
+
 exports[`DatastreamDublinCoreAddButtons renders with selected clone pid 1`] = `
 <Fragment>
   <h3>
@@ -17,6 +79,7 @@ exports[`DatastreamDublinCoreAddButtons renders with selected clone pid 1`] = `
     Clone Metadata:
   </h3>
   <Component
+    parents={Array []}
     selected="foo"
     setSelected={[Function]}
   />
@@ -45,6 +108,7 @@ exports[`DatastreamDublinCoreAddButtons renders without selected clone pid 1`] =
     Clone Metadata:
   </h3>
   <Component
+    parents={Array []}
     selected=""
     setSelected={[Function]}
   />
