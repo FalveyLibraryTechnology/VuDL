@@ -150,7 +150,7 @@ export const usePaginatorContext = () => {
         }
 
         if (message.length) {
-            alert(message.join());
+            alert(message.join(""));
         }
     };
 
