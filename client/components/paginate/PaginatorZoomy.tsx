@@ -25,7 +25,7 @@ const PaginatorZoomy = ({ img }: PaginatorZoomyProps): React.ReactElement => {
     useEffect(() => {
         initializeZoomy();
         loadZoomy();
-    }, []);
+    }, [img]);
 
     return (
         <div>
