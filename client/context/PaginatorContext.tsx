@@ -178,6 +178,7 @@ export const usePaginatorContext = () => {
         // order in the previously-loaded job. To avoid this, we should always clear out the
         // whole order before loading new data.
         setOrder([]);
+        setMagicLabelCache([]); // clear label cache whenever there is a change
         const { order } = await fetchJSON(getJobUrl(initialCategory, initialJob));
         setOrder(order);
         setCurrentPage(0);
