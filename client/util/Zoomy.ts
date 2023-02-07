@@ -310,8 +310,14 @@ var Zoomy = {
         } else {
             this.image.zoom = zoom;
         }
+     
         if (this.image.zoom < this.image.minZoom) {
             this.image.zoom = this.image.minZoom;
+        }
+
+	// prevent infinite zoom
+        if (this.image.zoom > 10) {
+            this.image.zoom = 10;
         }
 
         var mousex = this.width / 2;
