@@ -10,12 +10,6 @@ jest.mock("../../context/GlobalContext", () => ({
         return mockUseGlobalContext();
     },
 }));
-const mockUseEditorContext = jest.fn();
-jest.mock("../../context/EditorContext", () => ({
-    useEditorContext: () => {
-        return mockUseEditorContext();
-    },
-}));
 jest.mock("./children/ChildList", () => () => "ChildList");
 
 describe("EditorSnackbar", () => {
