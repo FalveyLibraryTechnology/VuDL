@@ -8,6 +8,13 @@ import StateModal from "./StateModal";
 import Checkbox from "@mui/material/Checkbox";
 import RadioGroup from "@mui/material/RadioGroup";
 
+const mockUseGlobalContext = jest.fn();
+jest.mock("../../context/GlobalContext", () => ({
+    useGlobalContext: () => {
+        return mockUseGlobalContext();
+    },
+}));
+
 const mockUseEditorContext = jest.fn();
 jest.mock("../../context/EditorContext", () => ({
     useEditorContext: () => {
@@ -23,10 +30,16 @@ jest.mock("../../context/FetchContext", () => ({
 }));
 
 describe("StateModal", () => {
+    let globalValues;
     let editorValues;
     let fetchContextValues;
     const pid = "foo:123";
     beforeEach(() => {
+        globalValues = {
+            action: {
+                setSnackbarState: jest.fn(),
+            },
+        };
         editorValues = {
             state: {
                 stateModalActivePid: pid,
@@ -35,17 +48,17 @@ describe("StateModal", () => {
             },
             action: {
                 removeFromObjectDetailsStorage: jest.fn(),
-                setSnackbarState: jest.fn(),
                 toggleStateModal: jest.fn(),
             },
         };
-        mockUseEditorContext.mockReturnValue(editorValues);
         fetchContextValues = {
             action: {
                 fetchJSON: jest.fn(),
                 fetchText: jest.fn(),
             },
         };
+        mockUseGlobalContext.mockReturnValue(globalValues);
+        mockUseEditorContext.mockReturnValue(editorValues);
         mockUseFetchContext.mockReturnValue(fetchContextValues);
     });
 
@@ -109,7 +122,7 @@ describe("StateModal", () => {
                 { body: "Active", method: "PUT" }
             )
         );
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Status saved successfully.",
             open: true,
             severity: "success",
@@ -132,7 +145,7 @@ describe("StateModal", () => {
             wrapper.find("button").at(1).simulate("click");
         });
         await waitFor(() =>
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 message: "No changes were made.",
                 open: true,
                 severity: "info",
@@ -168,7 +181,7 @@ describe("StateModal", () => {
                 { body: "Active", method: "PUT" }
             )
         );
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: 'Status failed to save; "not ok"',
             open: true,
             severity: "error",
@@ -208,7 +221,7 @@ describe("StateModal", () => {
                 { body: "Active", method: "PUT" }
             )
         );
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: 'Status failed to save; "not ok"',
             open: true,
             severity: "error",
@@ -248,7 +261,7 @@ describe("StateModal", () => {
                 { body: "Active", method: "PUT" }
             )
         );
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Status saved successfully.",
             open: true,
             severity: "success",

@@ -1,5 +1,6 @@
 import { useFetchContext } from "../context/FetchContext";
 import { useEditorContext } from "../context/EditorContext";
+import { useGlobalContext } from "../context/GlobalContext";
 import {
     deleteObjectDatastreamUrl,
     downloadObjectDatastreamUrl,
@@ -19,8 +20,11 @@ const useDatastreamOperation = () => {
     } = useFetchContext();
     const {
         state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams, processMetadataDefaults },
-        action: { setSnackbarState, toggleDatastreamModal, loadCurrentObjectDetails },
+        action: { toggleDatastreamModal, loadCurrentObjectDetails },
     } = useEditorContext();
+    const {
+        action: { setSnackbarState },
+    } = useGlobalContext();
 
     const isAllowedMimeType = (mimeType) => {
         if (!datastreamsCatalog[activeDatastream]) {

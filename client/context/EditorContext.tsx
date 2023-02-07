@@ -19,12 +19,6 @@ interface ChildrenResultPage {
     docs?: Record<string, string|string[]>[];
 }
 
-interface SnackbarState {
-    open: boolean,
-    message: string,
-    severity: string
-}
-
 export interface FedoraDatastream {
     mimetype?: {
         allowedType: string;
@@ -59,7 +53,6 @@ interface EditorState {
     datastreamModalState: string | null;
     parentsModalActivePid: string | null;
     stateModalActivePid: string | null;
-    snackbarState: SnackbarState;
     objectDetailsStorage: Record<string, ObjectDetails>;
     parentDetailsStorage: Record<string, Record<string, TreeNode>>;
     childListStorage: Record<string, ChildrenResultPage>;
@@ -88,11 +81,6 @@ const editorContextParams: EditorState = {
     datastreamModalState: null,
     parentsModalActivePid: null,
     stateModalActivePid: null,
-    snackbarState: {
-        open: false,
-        message: "",
-        severity: "info"
-    },
     objectDetailsStorage: {},
     parentDetailsStorage: {},
     childListStorage: {},
@@ -128,14 +116,13 @@ const reducerMapping: Record<string, string> = {
     SET_DATASTREAM_MODAL_STATE: "datastreamModalState",
     SET_PARENTS_MODAL_ACTIVE_PID: "parentsModalActivePid",
     SET_STATE_MODAL_ACTIVE_PID: "stateModalActivePid",
-    SET_SNACKBAR_STATE: "snackbarState",
     SET_TOP_LEVEL_PIDS: "topLevelPids",
 };
 
 /**
  * Update the shared states of react components.
  */
-const editorReducer = (state: EditorState, { type, payload }: { type: string, payload: SnackbarState | unknown}) => {
+const editorReducer = (state: EditorState, { type, payload }: { type: string, payload: unknown}) => {
     if (type === "ADD_TO_OBJECT_DETAILS_STORAGE") {
         const { key, details } = payload as { key: string; details: ObjectDetails };
         const objectDetailsStorage = {
@@ -243,7 +230,6 @@ export const useEditorContext = () => {
             vufindUrl,
             licensesCatalog,
             modelsCatalog,
-            snackbarState,
             objectDetailsStorage,
             parentDetailsStorage,
             childListStorage,
@@ -481,13 +467,6 @@ export const useEditorContext = () => {
         })
     };
 
-    const setSnackbarState = (snackbarState: SnackbarState) => {
-        dispatch({
-            type: "SET_SNACKBAR_STATE",
-            payload: snackbarState
-        });
-    };
-
     const datastreamsCatalog = Object.values(modelsCatalog).reduce((acc: Record<string, FedoraDatastream>, model) => {
         return {
             ...acc,
@@ -543,7 +522,6 @@ export const useEditorContext = () => {
             vufindUrl,
             modelsCatalog,
             licensesCatalog,
-            snackbarState,
             objectDetailsStorage,
             parentDetailsStorage,
             childListStorage,
@@ -561,7 +539,6 @@ export const useEditorContext = () => {
             toggleDatastreamModal,
             toggleParentsModal,
             toggleStateModal,
-            setSnackbarState,
             extractFirstMetadataValue,
             getChildListStorageKey,
             loadObjectDetailsIntoStorage,

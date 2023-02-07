@@ -1,6 +1,12 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import useDatastreamOperation from "./useDatastreamOperation";
 
+const mockUseGlobalwContext = jest.fn();
+jest.mock("../context/GlobalwContext", () => ({
+    useGlobalwContext: () => {
+        return mockUseGlobalwContext();
+    },
+}));
 const mockUseFetchContext = jest.fn();
 jest.mock("../context/FetchContext", () => ({
     useFetchContext: () => {
@@ -15,6 +21,7 @@ jest.mock("../context/EditorContext", () => ({
 }));
 
 describe("useDatastreamOperation", () => {
+    let globalValues;
     let fetchValues;
     let editorValues;
     let currentPid;
@@ -31,6 +38,11 @@ describe("useDatastreamOperation", () => {
                     allowedType: "image",
                     allowedSubtypes: "png",
                 },
+            },
+        };
+        globalValues = {
+            action: {
+                setSnackbarState: jest.fn(),
             },
         };
         fetchValues = {
@@ -53,6 +65,7 @@ describe("useDatastreamOperation", () => {
                 loadCurrentObjectDetails: jest.fn()
             },
         };
+        mockUseGlobalContext.mockReturnValue(globalValues);
         mockUseFetchContext.mockReturnValue(fetchValues);
         mockUseEditorContext.mockReturnValue(editorValues);
     });
@@ -75,7 +88,7 @@ describe("useDatastreamOperation", () => {
                 })
             );
             expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload worked",
                 severity: "success",
@@ -87,7 +100,7 @@ describe("useDatastreamOperation", () => {
             await uploadFile({
                 type: "image/illegaltype",
             });
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: expect.stringContaining("Illegal mime type"),
                 severity: "error",
@@ -103,7 +116,7 @@ describe("useDatastreamOperation", () => {
                 type: "image/png",
             });
 
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: expect.stringContaining("Illegal mime type"),
                 severity: "error",
@@ -139,7 +152,7 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload agents worked",
                 severity: "success",
@@ -160,7 +173,7 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Upload failure!",
@@ -194,7 +207,7 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload DC works",
                 severity: "success",
@@ -215,7 +228,7 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Upload failure!",
@@ -245,7 +258,7 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload license works",
                 severity: "success",
@@ -266,7 +279,7 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Upload failure!",
@@ -297,7 +310,7 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload works",
                 severity: "success",
@@ -319,7 +332,7 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Upload failure!",
@@ -343,7 +356,7 @@ describe("useDatastreamOperation", () => {
                 })
             );
             expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Delete success!",
@@ -365,7 +378,7 @@ describe("useDatastreamOperation", () => {
                 })
             );
 
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Delete failure!",
@@ -442,7 +455,7 @@ describe("useDatastreamOperation", () => {
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/test1/download"
             );
 
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Incorrect file format",
@@ -463,7 +476,7 @@ describe("useDatastreamOperation", () => {
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/test1/download"
             );
 
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Incorrect file format",
@@ -482,7 +495,7 @@ describe("useDatastreamOperation", () => {
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/test1/download"
             );
 
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Download failure!",
@@ -545,7 +558,7 @@ describe("useDatastreamOperation", () => {
             await viewDatastream();
 
             expect(fetchValues.action.fetchBlob).toHaveBeenCalled();
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     severity: "error",
@@ -583,7 +596,7 @@ describe("useDatastreamOperation", () => {
             expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/LICENSE/license"
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "fetch license failed",
                 severity: "error"
@@ -626,7 +639,7 @@ describe("useDatastreamOperation", () => {
             expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/AGENTS/agents"
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "fetch agents failed",
                 severity: "error"
@@ -664,7 +677,7 @@ describe("useDatastreamOperation", () => {
             expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/PROCESS-MD/processMetadata"
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "fetch process metadata failed",
                 severity: "error"

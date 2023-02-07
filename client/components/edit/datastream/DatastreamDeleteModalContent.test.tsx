@@ -5,6 +5,12 @@ import { act } from "react-dom/test-utils";
 import toJson from "enzyme-to-json";
 import DatastreamDeleteModalContent from "./DatastreamDeleteModalContent";
 
+const mockUseGlobalContext = jest.fn();
+jest.mock("../../../context/GlobalContext", () => ({
+    useGlobalContext: () => {
+        return mockUseGlobalContext();
+    },
+}));
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
     useEditorContext: () => {
@@ -14,9 +20,15 @@ jest.mock("../../../context/EditorContext", () => ({
 const mockUseDatastreamOperation = jest.fn();
 jest.mock("../../../hooks/useDatastreamOperation", () => () => mockUseDatastreamOperation());
 describe("DatastreamDeleteModalContent", () => {
+    let globalValues;
     let editorValues;
     let datastreamOperationValues;
     beforeEach(() => {
+        globalValues = {
+            action: {
+                setSnackbarState: jest.fn(),
+            },
+        };
         editorValues = {
             state: {
                 currentPid: "vudl:123",
@@ -24,13 +36,13 @@ describe("DatastreamDeleteModalContent", () => {
             },
             action: {
                 loadCurrentObjectDetails: jest.fn().mockResolvedValue({}),
-                setSnackbarState: jest.fn(),
                 toggleDatastreamModal: jest.fn(),
             },
         };
         datastreamOperationValues = {
             deleteDatastream: jest.fn(),
         };
+        mockUseGlobalContext.mockReturnValue(globalValues);
         mockUseEditorContext.mockReturnValue(editorValues);
         mockUseDatastreamOperation.mockReturnValue(datastreamOperationValues);
     });

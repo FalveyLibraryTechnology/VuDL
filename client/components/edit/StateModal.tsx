@@ -11,6 +11,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { useEditorContext } from "../../context/EditorContext";
 import { getObjectRecursiveChildPidsUrl, getObjectStateUrl } from "../../util/routes";
 import { useFetchContext } from "../../context/FetchContext";
@@ -18,8 +19,11 @@ import ObjectLoader from "./ObjectLoader";
 
 const StateModal = (): React.ReactElement => {
     const {
+        action: { setSnackbarState },
+    } = useGlobalContext();
+    const {
         state: { isStateModalOpen, objectDetailsStorage, stateModalActivePid },
-        action: { removeFromObjectDetailsStorage, setSnackbarState, toggleStateModal },
+        action: { removeFromObjectDetailsStorage, toggleStateModal },
     } = useEditorContext();
     const {
         action: { fetchJSON, fetchText },

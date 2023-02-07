@@ -4,6 +4,12 @@ import { shallow, mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import EditorSnackbar from "./EditorSnackbar";
 
+const mockUseGlobalContext = jest.fn();
+jest.mock("../../context/GlobalContext", () => ({
+    useGlobalContext: () => {
+        return mockUseGlobalContext();
+    },
+}));
 const mockUseEditorContext = jest.fn();
 jest.mock("../../context/EditorContext", () => ({
     useEditorContext: () => {
@@ -13,9 +19,9 @@ jest.mock("../../context/EditorContext", () => ({
 jest.mock("./children/ChildList", () => () => "ChildList");
 
 describe("EditorSnackbar", () => {
-    let editorValues;
+    let globalValues;
     beforeEach(() => {
-        editorValues = {
+        globalValues = {
             state: {
                 snackbarState: {
                     message: "test1",
@@ -27,7 +33,7 @@ describe("EditorSnackbar", () => {
                 setSnackbarState: jest.fn(),
             },
         };
-        mockUseEditorContext.mockReturnValue(editorValues);
+        mockUseGlobalContext.mockReturnValue(globalValues);
     });
 
     it("renders", () => {
@@ -40,7 +46,7 @@ describe("EditorSnackbar", () => {
 
         component.find("button.editorSnackBarAlertCloseButton").simulate("click");
 
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             open: false,
             message: "",
             severity: "info",
