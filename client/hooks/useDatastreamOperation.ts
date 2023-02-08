@@ -20,10 +20,10 @@ const useDatastreamOperation = () => {
     } = useFetchContext();
     const {
         state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams, processMetadataDefaults },
-        action: { toggleDatastreamModal, loadCurrentObjectDetails },
+        action: { loadCurrentObjectDetails },
     } = useEditorContext();
     const {
-        action: { setSnackbarState },
+        action: { setSnackbarState, toggleModal },
     } = useGlobalContext();
 
     const isAllowedMimeType = (mimeType) => {
@@ -55,14 +55,14 @@ const useDatastreamOperation = () => {
                 message: text,
                 severity: "success",
             });
-            toggleDatastreamModal();
+            toggleModal();
         } catch (err) {
             setSnackbarState({
                 open: true,
                 message: err.message,
                 severity: "error",
             });
-            toggleDatastreamModal();
+            toggleModal();
         }
     };
 
@@ -110,7 +110,7 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
-        toggleDatastreamModal();
+        toggleModal();
     };
 
     const uploadLicense = async (licenseKey) => {
@@ -134,7 +134,7 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
-        toggleDatastreamModal();
+        toggleModal();
     };
 
     const uploadProcessMetadata = async (processMetadata) => {
@@ -158,7 +158,7 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
-        toggleDatastreamModal();
+        toggleModal();
     };
 
     const deleteDatastream = async () => {
@@ -179,7 +179,7 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
-        toggleDatastreamModal();
+        toggleModal();
     };
 
     const downloadDatastream = async (datastream) => {
