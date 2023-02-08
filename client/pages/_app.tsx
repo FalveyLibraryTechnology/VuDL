@@ -9,15 +9,21 @@ import "../styles/application.css";
 import "../styles/client.css";
 import "../styles/justgrid.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+
 import LogoutButton from "../components/LogoutButton";
+import ThemeMenu from "../components/ThemeMenu";
 
 function MyApp({ Component, pageProps }: { Component: React.ReactNode }): React.ReactElement {
     return (
         <GlobalContextProvider>
-            <PaginatorContextProvider>
+            <div className="nav--right">
+                <ThemeMenu />
                 <div className="logout">
                     <LogoutButton />
                 </div>
+            </div>
+
+            <PaginatorContextProvider>
                 <FetchContextProvider>
                     <Component {...pageProps} />
                 </FetchContextProvider>

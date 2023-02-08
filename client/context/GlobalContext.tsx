@@ -12,6 +12,12 @@ interface SnackbarState {
     severity: string
 }
 
+export enum ThemeOption {
+    system = "system",
+    light = "light",
+    dark = "dark",
+};
+
 interface GlobalState {
     snackbarState: SnackbarState;
 }
@@ -29,11 +35,15 @@ const globalContextParams: GlobalState = {
         message: "",
         severity: "info",
     },
+    // User theme
+    userTheme: localLoadUserTheme(),
 };
 
 const reducerMapping: Record<string, string> = {
     // Snackbar
     SET_SNACKBAR_STATE: "snackbarState",
+    // User theme
+    SET_USER_THEME: "userTheme",
 };
 
 /**
@@ -75,6 +85,8 @@ export const useGlobalContext = () => {
             openModalState,
             // Snackbar
             snackbarState,
+            // User theme
+            userTheme,
         },
         dispatch,
     } = useContext(GlobalContext);
@@ -113,10 +125,23 @@ export const useGlobalContext = () => {
         });
     };
 
+    // User theme
+
+    const setUserTheme = (userTheme: ThemeOption) => {
+        localSaveUserTheme(userTheme);
+        applyUserThemeToBody(userTheme);
+        dispatch({
+            type: "SET_USER_THEME",
+            payload: userTheme,
+        });
+    };
+
     return {
         state: {
             // Snackbar
             snackbarState,
+            // User theme
+            userTheme,
         },
         action: {
             // Modal control
@@ -126,6 +151,8 @@ export const useGlobalContext = () => {
             toggleModal,
             // Snackbar
             setSnackbarState,
+            // User theme
+            setUserTheme,
         },
     };
 }
@@ -133,4 +160,47 @@ export const useGlobalContext = () => {
 export default {
     GlobalContextProvider,
     useGlobalContext
+}
+
+/* User Theme */
+
+// Get system theme from CSS media queries
+function systemTheme() {
+    if (typeof window != "undefined") {
+        if (window.matchMedia("(prefers-color-scheme)").mediaTheme == "not all") {
+            return "light"
+        }
+
+        const isDark = !window.matchMedia("(prefers-color-scheme: light)").matches;
+        return isDark ? "dark" : "light";
+    }
+
+    return "light";
+}
+
+function applyUserThemeToBody(userTheme) {
+    if (typeof window != "undefined") {
+        document.body.setAttribute(
+            "color-scheme",
+            userTheme == "system" ? systemTheme() : userTheme
+        );
+    }
+}
+
+// Get page theme from localStorage
+function localSaveUserTheme(mediaTheme) {
+    if (typeof window != "undefined") {
+        localStorage.setItem("vudl-theme", mediaTheme);
+    }
+}
+
+// Save page theme from localStorage
+function localLoadUserTheme() {
+    if (typeof window != "undefined") {
+        let mediaTheme = localStorage.getItem("vudl-theme") ?? "system";
+
+        applyUserThemeToBody(mediaTheme);
+
+        return mediaTheme;
+    }
 }
