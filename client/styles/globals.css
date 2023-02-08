@@ -1,16 +1,55 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+:root,
+[color-scheme="light"] {
+    --body-bg: #fafbfc;
+    --heading-color: #4d4d4d;
+    --link-color: #008aed;
+
+    --btn-bg: #485a6c;
+    --btn-text: #ffffff;
+    --btn-border: #275575;
+    --btn-focus-bg: #3498db;
+
+    --btn-primary-bg: #27ae60;
+    --btn-primary-text: #ffffff;
+    --btn-primary-border: #275575;
+    --btn-primary-focus-bg: #155724;
+
+    --btn-danger-bg: red;
+    --btn-danger-text: #ffffff;
+    --btn-danger-border: #a10705;
+    --btn-danger-focus-bg: #a10705;
+
+    --btn-logout-bg: #1abc9c;
+    --btn-logout-text: #ffffff;
+    --btn-logout-border: #16a085;
+    --btn-logout-focus-bg: #1abc9c;
+
+    --btn-toggle-bg: #7f8c8d;
+    --btn-toggle-text: #ffffff;
+    --btn-toggle-border: #34495e;
+    --btn-toggle-focus-bg: #53626f;
+
+    --group-border: #53626f;
+
+    --input-border: #6a737d;
+    --input-focus-border: #2188ff;
+
+    --label-hover: #c8e1ff;
+
+    --page-list-bg: #ffffff;
+    --page-list-border: #c1c1c1;
+
+    --thumbnail-bg: #e1e1e1;
+    --thumbnail-focus-bg: #51aded;
+    --thumbnail-number-bg: #ffffff;
+    --thumbnail-number-text: #000000;
+    --thumbnail-preview-border: #000000;
+
+    --tree-item-focus-bg: #000000;
+    --tree-item-focus-text: #ffffff;
+
+    --shadow-gray: #c8e1ff;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
+[color-scheme="dark"] {
 }

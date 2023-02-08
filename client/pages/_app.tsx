@@ -5,6 +5,7 @@ import { PaginatorContextProvider } from "../context/PaginatorContext";
 import { FetchContextProvider } from "../context/FetchContext";
 
 import "../styles/normalize.css";
+import "../styles/globals.css";
 import "../styles/application.css";
 import "../styles/client.css";
 import "../styles/justgrid.css";

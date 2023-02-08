@@ -1,5 +1,5 @@
 body {
-    background: #fafbfc;
+    background: var(--body-bg);
     font-size: 14px;
     font-family: "Roboto", Arial;
     font-weight: 500;
@@ -18,7 +18,7 @@ h2 {
     margin-top: 2rem;
     margin-bottom: 0;
     font-size: 1.6rem;
-    color: #4d4d4d;
+    color: var(--heading-color);
 }
 
 ul {
@@ -36,10 +36,10 @@ button,
     margin: 0 2px;
     padding: 4px 10px;
     border: 0;
-    color: #fff;
+    color: var(--btn-text);
     line-height: 1.5;
     text-decoration: none;
-    background-color: #485a6c;
+    background-color: var(--btn-bg);
     cursor: pointer;
     border-radius: 5px;
 }
@@ -50,33 +50,33 @@ button.active,
 .button:hover,
 .button:focus,
 .button.active {
-    background-color: #3498db;
-    border-color: #275575;
+    background-color: var(--btn-focus-bg);
+    border-color: var(--btn-border);
 }
 
 button.primary,
 .button.primary {
-    background-color: #27ae60;
-    border-color: #13562f;
-    color: #fff;
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-border);
+    color: var(--btn-primary-text);
 }
 button.primary:hover,
 .button.primary:hover,
 button.primary:focus,
 .button.primary:focus {
-    background-color: #155724;
+    background-color: var(--btn-primary-focus-bg);
 }
 
 button.danger,
 .button.danger {
-    background-color: red;
+    background-color: var(--btn-danger-bg);
     margin-left: 20px;
 }
 button.danger:hover,
 .button.danger:hover,
 button.danger:focus,
 .button.danger:focus {
-    background-color: #a10705;
+    background-color: var(--btn-danger-focus-bg);
 }
 
 button.btn-link {
@@ -84,18 +84,48 @@ button.btn-link {
     padding: 0 0.25rem;
     border-color: transparent;
     font-weight: bold;
-    color: #008aed;
+    color: var(--link-color);
     text-decoration: underline;
     background-color: transparent;
     box-shadow: none;
 }
 
-.logout {
+.nav--right {
     position: absolute;
     top: 12px;
     right: 8px;
+    display: flex;
+    gap: 0.25rem;
 }
+
+.user-theme__menu {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+}
+#user-theme {
+    min-height: auto;
+    padding-block: 5px;
+    border-width: 2px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+#user-theme__label {
+    position: relative;
+    width: fit-content;
+    font-size: 0.875rem;
+    transform: none;
+    transition: none;
+}
+
 .logout .button {
-    background: #1abc9c;
-    border-color: #16a085;
+    background-color: var(--btn-logout-bg);
+    border-color: var(--btn-logout-border);
+}
+.logout .button:hover,
+.logout .button:focus {
+    background-color: var(--btn-logout-focus-bg);
 }
