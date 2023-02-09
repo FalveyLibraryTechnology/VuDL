@@ -1,5 +1,6 @@
 import styles from "./ObjectStatus.module.css";
 import React from "react";
+import { useGlobalContext } from "../../context/GlobalContext";
 import { useEditorContext } from "../../context/EditorContext";
 import ObjectLoader from "./ObjectLoader";
 
@@ -8,6 +9,9 @@ export interface ObjectStatusProps {
 }
 
 export const ObjectStatus = ({ pid }: ObjectStatusProps): React.ReactElement => {
+    const {
+        action: { toggleModal },
+    } = useGlobalContext();
     const {
         state: { objectDetailsStorage },
         action: { setStateModalActivePid, toggleStateModal },
@@ -18,7 +22,7 @@ export const ObjectStatus = ({ pid }: ObjectStatusProps): React.ReactElement => 
     const stateTxt = details.state ?? "Unknown";
     const clickAction = () => {
         setStateModalActivePid(pid);
-        toggleStateModal();
+        toggleModal("state");
     };
     const stateMsg = loaded ? (
         <button onClick={clickAction} className={styles[stateTxt.toLowerCase()]}>

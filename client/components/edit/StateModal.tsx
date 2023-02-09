@@ -19,15 +19,21 @@ import ObjectLoader from "./ObjectLoader";
 
 const StateModal = (): React.ReactElement => {
     const {
-        action: { setSnackbarState },
+        state: { isModalOpen },
+        action: { closeModal, setSnackbarState },
     } = useGlobalContext();
     const {
-        state: { isStateModalOpen, objectDetailsStorage, stateModalActivePid },
-        action: { removeFromObjectDetailsStorage, toggleStateModal },
+        state: { objectDetailsStorage, stateModalActivePid },
+        action: { removeFromObjectDetailsStorage },
     } = useEditorContext();
     const {
         action: { fetchJSON, fetchText },
     } = useFetchContext();
+
+    function closeStateModal() {
+        closeModal("state");
+    }
+
     const [statusMessage, setStatusMessage] = useState<string>("");
     const [includeChildren, setIncludeChildren] = useState<boolean>(false);
     const [selectedValue, setSelectedValue] = useState<string>("Inactive");
@@ -81,7 +87,7 @@ const StateModal = (): React.ReactElement => {
             const result = await updateStatus(response.docs[i].id);
             if (result !== "ok") {
                 showSnackbarMessage(`Status failed to save; "${result}"`, "error");
-                toggleStateModal();
+                closeStateModal();
                 setStatusMessage("");
                 return false;
             }
@@ -119,7 +125,7 @@ const StateModal = (): React.ReactElement => {
             } else {
                 showSnackbarMessage(`Status failed to save; "${result}"`, "error");
             }
-            toggleStateModal();
+            closeStateModal();
             setStatusMessage("");
         } else {
             showSnackbarMessage("No changes were made.", "info");
@@ -168,14 +174,14 @@ const StateModal = (): React.ReactElement => {
             </Grid>
         );
     return (
-        <Dialog className="stateModal" open={isStateModalOpen} onClose={toggleStateModal} fullWidth={true}>
+        <Dialog className="stateModal" open={isModalOpen["state"]} onClose={closeStateModal} fullWidth={true}>
             <DialogTitle>
                 <Grid container>
                     <Grid item xs={11}>
                         State Editor ({stateModalActivePid})
                     </Grid>
                     <Grid item xs={1}>
-                        <IconButton className="closeButton" onClick={toggleStateModal}>
+                        <IconButton className="closeButton" onClick={closeStateModal}>
                             <CloseIcon />
                         </IconButton>
                     </Grid>
