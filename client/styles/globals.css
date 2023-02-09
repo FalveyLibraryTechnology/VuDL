@@ -1,49 +1,64 @@
+:root {
+  --family-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --family-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, var(--family-emoji);
+}
 :root,
 [color-scheme="light"] {
-    --body-bg: #fafbfc;
-    --heading-color: #4d4d4d;
-    --link-color: #008aed;
+    --body-bg: #f2f4f8;
+    --body-color: #343a3f;
+    --heading-color: #121619;
+    --link-color: #0043ce;
 
-    --btn-bg: #485a6c;
+    --btn-bg: #4d5358;
     --btn-text: #ffffff;
-    --btn-border: #275575;
-    --btn-focus-bg: #3498db;
+    --btn-border: #343a3f;
+    --btn-focus-bg: #21272a;
 
-    --btn-primary-bg: #27ae60;
+    --btn-primary-bg: #198038;
     --btn-primary-text: #ffffff;
-    --btn-primary-border: #275575;
-    --btn-primary-focus-bg: #155724;
+    --btn-primary-border: #044317;
+    --btn-primary-focus-bg: #022d0d;
 
-    --btn-danger-bg: red;
+    --btn-danger-bg: #da1e28;
     --btn-danger-text: #ffffff;
-    --btn-danger-border: #a10705;
-    --btn-danger-focus-bg: #a10705;
+    --btn-danger-border: #750e13;
+    --btn-danger-focus-bg: #520408;
 
-    --btn-logout-bg: #1abc9c;
+    --btn-logout-bg: #007d79;
     --btn-logout-text: #ffffff;
-    --btn-logout-border: #16a085;
-    --btn-logout-focus-bg: #1abc9c;
+    --btn-logout-border: #004144;
+    --btn-logout-focus-bg: #022b30;
 
     --btn-toggle-bg: #7f8c8d;
     --btn-toggle-text: #ffffff;
     --btn-toggle-border: #34495e;
     --btn-toggle-focus-bg: #53626f;
 
-    --group-border: #53626f;
+    --group-border: #121619;
 
+    --input-bg: #ffffff;
     --input-border: #6a737d;
     --input-focus-border: #2188ff;
 
     --label-hover: #c8e1ff;
 
+    /* Paginator */
+
     --page-list-bg: #ffffff;
     --page-list-border: #c1c1c1;
 
-    --thumbnail-bg: #e1e1e1;
-    --thumbnail-focus-bg: #51aded;
+    --thumbnail-bg: #dde1e6;
+    --thumbnail-focus-bg: #82cfff;
     --thumbnail-number-bg: #ffffff;
-    --thumbnail-number-text: #000000;
+    --thumbnail-number-text: #4d5358;
     --thumbnail-preview-border: #000000;
+
+    /* Editor */
+
+    --object-status-active: #bef264;
+    --object-status-inactive: #fde047;
+    --object-status-deleted: #fca5a5;
+    --object-status-unknown: #c1c7cd;
 
     --tree-item-focus-bg: #000000;
     --tree-item-focus-text: #ffffff;

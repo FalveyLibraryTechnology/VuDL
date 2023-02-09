@@ -82,6 +82,7 @@ export const ChildList = ({
     const paginator =
         pageCount > 1 ? (
             <Pagination
+                sx={{ ml: 3 }}
                 count={pageCount}
                 page={page}
                 siblingCount={2}

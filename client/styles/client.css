@@ -1,16 +1,15 @@
 p {
-    padding: 0 12px;
+    padding: 0 1rem;
     width: 100%;
-    margin-bottom: 9px;
+    margin-block: 1rem;
 }
 .controls {
     margin-top: 0px;
-    padding: 0 8px;
 }
 .top {
     position: absolute;
-    top: 41px;
-    right: 8px;
+    top: 3.5rem;
+    right: 1rem;
 }
 .top button {
     margin: 0 2px;
@@ -23,6 +22,7 @@ p {
 }
 input {
     padding: 2px;
+    background-color: var(--input-bg) !important;
     border: 1px solid var(--input-border);
     border-radius: 4px;
 }
@@ -33,7 +33,7 @@ input:focus {
 }
 .status {
     padding: 0;
-    padding-top: 5px;
+/*    padding-top: 5px;*/
 }
 .group input[type="text"] {
     height: auto;
@@ -140,10 +140,11 @@ label input[type="radio"] {
     height: 202px;
     margin: 2px;
     padding: 4px;
-    background-color: var(--thumbnail-bg);
     font-weight: 400;
     text-align: center;
+    background-color: var(--thumbnail-bg);
     text-shadow: 0 1px 0 #fff;
+    border-radius: 0.25rem;
     cursor: pointer;
     word-break: break-all;
 }
@@ -172,10 +173,11 @@ label input[type="radio"] {
     display: table;
     top: 0;
     left: 0;
-    padding: 2px;
+    padding-inline: 4px;
     font-size: 10px;
-    background-color: var(--thumbail-number-bg);
-    color: var(--thumbail-number-text);
+    font-weight: 700;
+    background-color: var(--thumbnail-number-bg);
+    color: var(--thumbnail-number-text);
 }
 .preview,
 #zoomy {
@@ -197,4 +199,15 @@ label input[type="radio"] {
 .MuiTreeItem-root.Mui-selected:hover {
     color: var(--tree-item-focus-text);
     background-color: var(--tree-item-focus-bg);
+}
+
+.child__container {
+    align-items: center;
+}
+.child__label {
+    display: flex;
+    align-items: center;
+}
+.child__expand-icon {
+    vertical-align: bottom;
 }

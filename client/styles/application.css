@@ -1,9 +1,21 @@
+html {
+    font-size: 16px;
+}
+
 body {
-    background: var(--body-bg);
-    font-size: 14px;
-    font-family: "Roboto", Arial;
+    padding-inline: 1rem;
+    font-size: 1rem;
+    font-family: var(--family-sans);
     font-weight: 500;
+    line-height: 1.5;
+    color: var(--body-color);
+    background-color: var(--body-bg);
     overflow-x: hidden;
+}
+
+a,
+button {
+    font-weight: 500;
 }
 
 .hidden {
@@ -22,7 +34,7 @@ h2 {
 }
 
 ul {
-    margin-top: 0.25rem;
+    margin-block: 1rem;
     padding-left: 1rem;
     list-style-position: inside;
 }
@@ -104,19 +116,16 @@ button.btn-link {
     flex-direction: row;
     align-items: center;
     gap: 0.25rem;
-    font-size: 0.75rem;
 }
 #user-theme {
     min-height: auto;
-    padding-block: 5px;
-    border-width: 2px;
-    font-size: 0.875rem;
+    padding-block: 6px;
     line-height: 1.25rem;
+    background-color: var(--input-bg);
 }
 #user-theme__label {
     position: relative;
     width: fit-content;
-    font-size: 0.875rem;
     transform: none;
     transition: none;
 }
