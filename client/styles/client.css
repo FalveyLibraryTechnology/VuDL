@@ -141,12 +141,15 @@ label input[type="radio"] {
     margin: 2px;
     padding: 4px;
     font-weight: 400;
+    color: var(--thumbnail-label);
     text-align: center;
     background-color: var(--thumbnail-bg);
-    text-shadow: 0 1px 0 #fff;
     border-radius: 0.25rem;
     cursor: pointer;
     word-break: break-all;
+}
+[color-scheme="light"] .thumbnail {
+    text-shadow: 0 1px 0 #fff;
 }
 .thumbnail.selected {
     background-color: var(--thumbnail-focus-bg);

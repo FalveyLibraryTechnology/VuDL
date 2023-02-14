@@ -13,6 +13,17 @@ body {
     overflow-x: hidden;
 }
 
+a {
+    color: var(--link-color);
+}
+a:hover,
+a:focus {
+    color: var(--heading-color);
+}
+a:visited {
+    color: var(--link-visited);
+}
+
 a,
 button {
     font-weight: 500;
@@ -136,6 +147,7 @@ button.btn-link {
 }
 
 .logout .button {
+    color: var(--btn-text);
     background-color: var(--btn-logout-bg);
     border-color: var(--btn-logout-border);
 }
