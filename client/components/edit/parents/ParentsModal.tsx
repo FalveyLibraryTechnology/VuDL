@@ -13,12 +13,16 @@ import ParentPicker from "./ParentPicker";
 
 const ParentsModal = (): React.ReactElement => {
     const {
-        state: { parentsModalActivePid },
-        action: { isModalOpen, openModal, closeModal },
+        state: { isModalOpen },
+        action: { openModal, closeModal },
     } = useGlobalContext();
     const {
-        state: { objectDetailsStorage },
+        state: { parentsModalActivePid, objectDetailsStorage },
     } = useEditorContext();
+
+    function closeParentModal() {
+        closeModal("parent");
+    }
 
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, parentsModalActivePid);
 
@@ -31,14 +35,14 @@ const ParentsModal = (): React.ReactElement => {
         </>
     );
     return (
-        <Dialog className="parentsModal" open={isModalOpen("parents")} onClose={closeModal} fullWidth={true}>
+        <Dialog className="parentsModal" open={isModalOpen["parents"]} onClose={closeParentModal} fullWidth={true}>
             <DialogTitle>
                 <Grid container>
                     <Grid item xs={11}>
                         Parents Editor ({parentsModalActivePid})
                     </Grid>
                     <Grid item xs={1}>
-                        <IconButton className="closeButton" onClick={closeModal}>
+                        <IconButton className="closeButton" onClick={closeParentModal}>
                             <CloseIcon />
                         </IconButton>
                     </Grid>

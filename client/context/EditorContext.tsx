@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { editObjectCatalogUrl, getObjectChildrenUrl, getObjectDetailsUrl, getObjectParentsUrl } from "../util/routes";
+import { useGlobalContext } from "./GlobalContext";
 import { useFetchContext } from "./FetchContext";
 import { extractFirstMetadataValue as utilExtractFirstMetadataValue } from "../util/metadata";
 import { TreeNode } from "../util/Breadcrumbs";
@@ -206,6 +207,11 @@ export const EditorContextProvider = ({ children }) => {
 };
 
 export const useEditorContext = () => {
+    const {
+        action: {
+            toggleModal
+        }
+    } = useGlobalContext();
     const {
         action: {
             fetchJSON
@@ -415,27 +421,6 @@ export const useEditorContext = () => {
         });
     };
 
-    const toggleDatastreamModal = () => {
-        dispatch({
-            type: "SET_IS_DATASTREAM_MODAL_OPEN",
-            payload: !isDatastreamModalOpen
-        });
-    };
-
-    const toggleParentsModal = () => {
-        dispatch({
-            type: "SET_IS_PARENTS_MODAL_OPEN",
-            payload: !isParentsModalOpen
-        });
-    };
-
-    const toggleStateModal = () => {
-        dispatch({
-            type: "SET_IS_STATE_MODAL_OPEN",
-            payload: !isStateModalOpen
-        });
-    };
-
     const setDatastreamModalState = (datastreamModalState: boolean) => {
         dispatch({
             type: "SET_DATASTREAM_MODAL_STATE",
@@ -530,9 +515,6 @@ export const useEditorContext = () => {
             setDatastreamModalState,
             setParentsModalActivePid,
             setStateModalActivePid,
-            toggleDatastreamModal,
-            toggleParentsModal,
-            toggleStateModal,
             extractFirstMetadataValue,
             getChildListStorageKey,
             loadObjectDetailsIntoStorage,
