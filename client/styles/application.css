@@ -56,10 +56,10 @@ button,
 .button {
     display: inline-block;
     margin: 0 2px;
-    padding: 4px 10px;
+    padding: 6px 10px;
     border: 0;
     color: var(--btn-text);
-    line-height: 1.5;
+    line-height: 1.15;
     text-decoration: none;
     background-color: var(--btn-bg);
     cursor: pointer;
