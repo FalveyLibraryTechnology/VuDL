@@ -5,10 +5,12 @@ import { PaginatorContextProvider } from "../context/PaginatorContext";
 import { FetchContextProvider } from "../context/FetchContext";
 
 import "../styles/normalize.css";
+import "../styles/justgrid.css";
+import "../styles/globals.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
 import "../styles/application.css";
 import "../styles/client.css";
-import "../styles/justgrid.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import LogoutButton from "../components/LogoutButton";
 import ThemeMenu from "../components/ThemeMenu";

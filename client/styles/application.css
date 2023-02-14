@@ -22,15 +22,14 @@ button {
     display: none;
 }
 
-#jobSelector {
-    margin-left: 1rem;
+h1, h2, h3, h4 {
+    color: var(--heading-color);
 }
 
 h2 {
     margin-top: 2rem;
     margin-bottom: 0;
     font-size: 1.6rem;
-    color: var(--heading-color);
 }
 
 ul {
@@ -100,6 +99,12 @@ button.btn-link {
     text-decoration: underline;
     background-color: transparent;
     box-shadow: none;
+}
+
+/* Layout */
+
+#jobSelector {
+    margin-left: 1rem;
 }
 
 .nav--right {
