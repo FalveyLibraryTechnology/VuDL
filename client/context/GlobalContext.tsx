@@ -7,6 +7,7 @@ interface SnackbarState {
 }
 
 interface GlobalState {
+    isModalOpen: Record<string, boolean>;
     snackbarState: SnackbarState;
 }
 
