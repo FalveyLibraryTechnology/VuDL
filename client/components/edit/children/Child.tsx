@@ -29,7 +29,11 @@ export const Child = ({ pid, parentPid = "", initialTitle, thumbnail = false }: 
     const title = !loaded ? initialTitle : extractFirstMetadataValue(details?.metadata ?? {}, "dc:title", "-");
     const expandControl = (
         <span onClick={() => setExpanded(!expanded)}>
-            {expanded ? <IndeterminateCheckBox titleAccess="Collapse Tree" /> : <AddBox titleAccess="Expand Tree" />}
+            {
+                expanded
+                    ? <IndeterminateCheckBox titleAccess="Collapse Tree" className="child__expand-icon" />
+                    : <AddBox titleAccess="Expand Tree" className="child__expand-icon" />
+            }
         </span>
     );
     const childList = expanded ? <ChildList pid={pid} pageSize={10} forceThumbs={thumbnail} /> : "";
@@ -40,8 +44,8 @@ export const Child = ({ pid, parentPid = "", initialTitle, thumbnail = false }: 
     ) : null;
     return (
         <>
-            <Grid container>
-                <Grid item xs={thumbnail ? 7 : 8}>
+            <Grid container className="child__container">
+                <Grid item xs={thumbnail ? 7 : 8} className="child__label">
                     {expandControl}
                     {loaded && parentPid ? <ChildPosition pid={pid} parentPid={parentPid} /> : ""}
                     <Link href={"/edit/object/" + pid}>{(title.length > 0 ? title : "-") + " [" + pid + "]"}</Link>
