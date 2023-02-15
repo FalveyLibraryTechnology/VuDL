@@ -42,7 +42,7 @@ class ImageFile {
             return deriv;
         }
 
-        const image = Sharp(this.filename);
+        const image = Sharp(this.filename, this.config.sharpOptions);
         const constraint = this.constraintForSize(size);
 
         const metadata = await image.metadata();
