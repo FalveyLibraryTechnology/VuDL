@@ -24,8 +24,8 @@ const DatastreamModalContent = ({ datastreamModalState }: { datastreamModalState
 
 const DatastreamModal = (): React.ReactElement => {
     const {
-        state: { isModalOpen, datastreamModalState },
-        action: { closeModal },
+        state: { datastreamModalState },
+        action: { isModalOpen, openModal, closeModal },
     } = useGlobalContext();
 
     return (

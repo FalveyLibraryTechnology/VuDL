@@ -16,15 +16,15 @@ import {
 
 const useDatastreamOperation = () => {
     const {
-        action: { setSnackbarState, toggleModal },
-    } = useGlobalContext();
-    const {
         action: { fetchBlob, fetchJSON, fetchText },
     } = useFetchContext();
     const {
         state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams, processMetadataDefaults },
         action: { loadCurrentObjectDetails },
     } = useEditorContext();
+    const {
+        action: { setSnackbarState, toggleModal },
+    } = useGlobalContext();
 
     const isAllowedMimeType = (mimeType) => {
         if (!datastreamsCatalog[activeDatastream]) {
@@ -55,14 +55,14 @@ const useDatastreamOperation = () => {
                 message: text,
                 severity: "success",
             });
-            toggleModal("datastream");
+            toggleModal();
         } catch (err) {
             setSnackbarState({
                 open: true,
                 message: err.message,
                 severity: "error",
             });
-            toggleModal("datastream");
+            toggleModal();
         }
     };
 
@@ -110,7 +110,7 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
-        toggleModal("datastream");
+        toggleModal();
     };
 
     const uploadLicense = async (licenseKey) => {
@@ -134,7 +134,7 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
-        toggleModal("datastream");
+        toggleModal();
     };
 
     const uploadProcessMetadata = async (processMetadata) => {
@@ -158,7 +158,7 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
-        toggleModal("datastream");
+        toggleModal();
     };
 
     const deleteDatastream = async () => {
@@ -179,7 +179,7 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
-        toggleModal("datastream");
+        toggleModal();
     };
 
     const downloadDatastream = async (datastream) => {
