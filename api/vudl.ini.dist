@@ -466,3 +466,7 @@ lockDuration = 30000
 host = "localhost"
 port = 6379
 #password = "mypass"
+
+# These settings control the Sharp image processing library
+[sharp]
+limitInputPixels = 268402689
