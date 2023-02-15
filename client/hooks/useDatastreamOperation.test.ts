@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import useDatastreamOperation from "./useDatastreamOperation";
 
-const mockUseGlobalwContext = jest.fn();
-jest.mock("../context/GlobalwContext", () => ({
-    useGlobalwContext: () => {
-        return mockUseGlobalwContext();
+const mockUseGlobalContext = jest.fn();
+jest.mock("../context/GlobalContext", () => ({
+    useGlobalContext: () => {
+        return mockUseGlobalContext();
     },
 }));
 const mockUseFetchContext = jest.fn();
@@ -43,6 +43,7 @@ describe("useDatastreamOperation", () => {
         globalValues = {
             action: {
                 setSnackbarState: jest.fn(),
+                toggleModal: jest.fn()
             },
         };
         fetchValues = {
@@ -60,8 +61,6 @@ describe("useDatastreamOperation", () => {
                 datastreamsCatalog
             },
             action: {
-                setSnackbarState: jest.fn(),
-                toggleDatastreamModal: jest.fn(),
                 loadCurrentObjectDetails: jest.fn()
             },
         };
@@ -105,7 +104,7 @@ describe("useDatastreamOperation", () => {
                 message: expect.stringContaining("Illegal mime type"),
                 severity: "error",
             });
-            expect(editorValues.action.toggleDatastreamModal).toHaveBeenCalled();
+            expect(globalValues.action.toggleModal).toHaveBeenCalled();
         });
 
         it("returns illegal mime type when catalog cannot find datastream", async () => {
@@ -121,7 +120,7 @@ describe("useDatastreamOperation", () => {
                 message: expect.stringContaining("Illegal mime type"),
                 severity: "error",
             });
-            expect(editorValues.action.toggleDatastreamModal).toHaveBeenCalled();
+            expect(globalValues.action.toggleModal).toHaveBeenCalled();
         });
     });
 

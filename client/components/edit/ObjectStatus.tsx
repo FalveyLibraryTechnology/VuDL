@@ -14,7 +14,7 @@ export const ObjectStatus = ({ pid }: ObjectStatusProps): React.ReactElement => 
     } = useGlobalContext();
     const {
         state: { objectDetailsStorage },
-        action: { setStateModalActivePid, toggleStateModal },
+        action: { setStateModalActivePid },
     } = useEditorContext();
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, pid);
     const details = loaded ? objectDetailsStorage[pid] : {};

@@ -14,7 +14,7 @@ import ParentPicker from "./ParentPicker";
 const ParentsModal = (): React.ReactElement => {
     const {
         state: { isModalOpen },
-        action: { openModal, closeModal },
+        action: { closeModal },
     } = useGlobalContext();
     const {
         state: { parentsModalActivePid, objectDetailsStorage },
