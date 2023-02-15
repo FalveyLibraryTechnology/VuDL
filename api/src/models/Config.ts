@@ -272,6 +272,13 @@ class Config {
     get toolPresets(): Array<Record<string, string>> {
         return this.ini?.["tool_presets"] ?? [];
     }
+
+    get sharpOptions(): Record<string, unknown> {
+        const pixelLimit = this.ini?.["sharp"]?.["limitInputPixels"] ?? "268402689";
+        return {
+            limitInputPixels: parseInt(pixelLimit),
+        };
+    }
 }
 
 export default Config;
