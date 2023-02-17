@@ -13,8 +13,7 @@ import ParentPicker from "./ParentPicker";
 
 const ParentsModal = (): React.ReactElement => {
     const {
-        state: { isModalOpen },
-        action: { closeModal },
+        action: { isModalOpen, openModal, closeModal },
     } = useGlobalContext();
     const {
         state: { parentsModalActivePid, objectDetailsStorage },
@@ -35,7 +34,7 @@ const ParentsModal = (): React.ReactElement => {
         </>
     );
     return (
-        <Dialog className="parentsModal" open={isModalOpen["parents"]} onClose={closeParentModal} fullWidth={true}>
+        <Dialog className="parentsModal" open={isModalOpen("parents")} onClose={closeParentModal} fullWidth={true}>
             <DialogTitle>
                 <Grid container>
                     <Grid item xs={11}>

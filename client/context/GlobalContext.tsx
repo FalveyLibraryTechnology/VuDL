@@ -7,7 +7,9 @@ interface SnackbarState {
 }
 
 interface GlobalState {
-    isModalOpen: Record<string, boolean>;
+    // Modal control
+    modalOpenStates: Record<string, boolean>;
+    // Snackbar
     snackbarState: SnackbarState;
 }
 
@@ -17,7 +19,7 @@ interface GlobalState {
  */
 const globalContextParams: GlobalState = {
     // Modal control
-    isModalOpen: {},
+    modalOpenStates: {},
     // Snackbar
     snackbarState: {
         open: false,
@@ -35,17 +37,21 @@ const reducerMapping: Record<string, string> = {
  * Update the shared states of react components.
  */
 const globalReducer = (state: GlobalState, { type, payload }: { type: string, payload: unknown}) => {
-    if (type == "OPEN_MODAL") {
+    function updateModalInState(payload, isOpen) {
+        const modalOpenStates = {
+            ...state.modalOpenStates,
+            [payload]: isOpen,
+        };
         return {
             ...state,
-            isModalOpen: { [payload]: true }
+            modalOpenStates,
         };
     }
+    if (type == "OPEN_MODAL") {
+        return updateModalInState(payload, true);
+    }
     if (type == "CLOSE_MODAL") {
-        return {
-            ...state,
-            isModalOpen: { [payload]: false }
-        };
+        return updateModalInState(payload, false);
     }
 
     if (Object.keys(reducerMapping).includes(type)){
@@ -71,7 +77,7 @@ export const useGlobalContext = () => {
     const {
         state: {
             // Modal control
-            isModalOpen,
+            modalOpenStates,
             // Snackbar
             snackbarState,
         },
@@ -80,6 +86,7 @@ export const useGlobalContext = () => {
 
     // Modal control
 
+    const isModalOpen = (modal: string) => modalOpenStates[modal] ?? false;
     const openModal = (modal: string) => {
         dispatch({
             type: "OPEN_MODAL",
@@ -93,7 +100,7 @@ export const useGlobalContext = () => {
         });
     };
     const toggleModal = (modal: string) => {
-        if (isModalOpen[modal]) {
+        if (modalOpenStates[modal]) {
             closeModal(modal);
         } else {
             openModal(modal);
@@ -111,13 +118,12 @@ export const useGlobalContext = () => {
 
     return {
         state: {
-            // Modal control
-            isModalOpen,
             // Snackbar
             snackbarState,
         },
         action: {
             // Modal control
+            isModalOpen,
             openModal,
             closeModal,
             toggleModal,
