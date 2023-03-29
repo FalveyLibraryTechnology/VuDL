@@ -279,6 +279,10 @@ class Config {
             limitInputPixels: parseInt(pixelLimit),
         };
     }
+
+    get maxUploadSize(): number {
+        return this.ini?.["upload"]?.["sizeLimit"] ?? 200 * 1024 * 1024;
+    }
 }
 
 export default Config;
