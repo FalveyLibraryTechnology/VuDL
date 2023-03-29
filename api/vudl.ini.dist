@@ -470,3 +470,8 @@ port = 6379
 # These settings control the Sharp image processing library
 [sharp]
 limitInputPixels = 268402689
+
+# These settings control file uploads
+[upload]
+# Upload limit in bytes (default = 200MB)
+sizeLimit = 209715200
