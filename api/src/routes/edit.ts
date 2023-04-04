@@ -8,7 +8,7 @@ import FedoraObjectFactory from "../services/FedoraObjectFactory";
 import FedoraDataCollector from "../services/FedoraDataCollector";
 import { requireToken } from "./auth";
 import { datastreamSanitizer, pidSanitizer, pidSanitizeRegEx, sanitizeParameters } from "./sanitize";
-import * as formidable from "formidable";
+import { IncomingForm } from "formidable";
 import Solr from "../services/Solr";
 import FedoraDataCollection from "../models/FedoraDataCollection";
 import { FedoraObject } from "../models/FedoraObject";
@@ -116,7 +116,7 @@ async function getChildren(req, res) {
 
 function uploadFile(req, res, next) {
     const { pid, stream } = req.params;
-    const form = formidable({ multiples: true });
+    const form = new IncomingForm({ multiples: true, maxFileSize: Config.getInstance().maxUploadSize });
 
     form.parse(req, async (err, fields, files) => {
         if (err) {
@@ -129,6 +129,7 @@ function uploadFile(req, res, next) {
             await datastream.uploadFile(pid, stream, filepath, mimetype);
             res.status(200).send("Upload success");
         } catch (error) {
+            console.error(error);
             res.status(500).send(error.message);
         }
     });
