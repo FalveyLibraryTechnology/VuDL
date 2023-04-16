@@ -67,15 +67,15 @@ describe("IngestProcessor", () => {
             const expectedLockRegEx = new RegExp(expectedTarget + "/ingest.lock");
             const existsSpy = jest.spyOn(fs, "existsSync").mockReturnValueOnce(false).mockReturnValueOnce(true);
             const renameSpy = jest.spyOn(fs, "renameSync").mockImplementation(jest.fn());
-            const unlinkSpy = jest.spyOn(fs, "unlinkSync").mockImplementation(jest.fn());
+            const rmSpy = jest.spyOn(fs, "rmSync").mockImplementation(jest.fn());
             ingest.moveDirectory();
             expect(existsSpy).toHaveBeenCalledTimes(2);
             expect(existsSpy).toHaveBeenNthCalledWith(1, expect.stringMatching(expectedTargetRegEx));
             expect(existsSpy).toHaveBeenNthCalledWith(2, expect.stringMatching(expectedTargetParentRegEx));
             expect(renameSpy).toHaveBeenCalledTimes(1);
             expect(renameSpy).toHaveBeenCalledWith(job.dir, expect.stringMatching(expectedTargetRegEx));
-            expect(unlinkSpy).toHaveBeenCalledTimes(1);
-            expect(unlinkSpy).toHaveBeenCalledWith(expect.stringMatching(expectedLockRegEx));
+            expect(rmSpy).toHaveBeenCalledTimes(1);
+            expect(rmSpy).toHaveBeenCalledWith(expect.stringMatching(expectedLockRegEx));
         });
     });
 });

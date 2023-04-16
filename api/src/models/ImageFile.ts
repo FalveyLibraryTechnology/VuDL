@@ -146,15 +146,16 @@ class ImageFile {
 
     public delete(): void {
         const files: Array<string> = [this.filename];
-        for (const size in Object.keys(this.sizes)) {
+        for (const size of Object.keys(this.sizes)) {
             files.push(this.derivativePath(size, "jpg"));
-            files.push(this.derivativePath("ocr/pngs", "png"));
-            files.push(this.derivativePath("OCR-DIRTY", "txt"));
         }
+        files.push(this.derivativePath("ocr/pngs", "png"));
+        files.push(this.derivativePath("OCR-DIRTY", "txt"));
         for (const file of files) {
             if (fs.existsSync(file)) {
                 try {
-                    fs.unlinkSync(file);
+                    fs.truncateSync(file, 0);
+                    fs.rmSync(file);
                 } catch (err) {
                     console.error(err);
                 }
