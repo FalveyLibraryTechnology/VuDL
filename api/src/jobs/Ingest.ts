@@ -210,7 +210,7 @@ export class IngestProcessor {
             fs.mkdirSync(targetParent, { recursive: true });
         }
         fs.renameSync(this.job.dir, target);
-        fs.unlinkSync(target + "/ingest.lock");
+        fs.rmSync(target + "/ingest.lock");
     }
 
     async doIngest(): Promise<void> {

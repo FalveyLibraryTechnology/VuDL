@@ -154,7 +154,8 @@ class ImageFile {
         for (const file of files) {
             if (fs.existsSync(file)) {
                 try {
-                    fs.unlinkSync(file);
+                    fs.truncateSync(file, 0);
+                    fs.rmSync(file);
                 } catch (err) {
                     console.error(err);
                 }
