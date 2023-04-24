@@ -48,13 +48,7 @@ export class FedoraObject {
         if (logger) {
             fedora.setLogger(logger);
         }
-        return new FedoraObject(
-            pid,
-            config ?? Config.getInstance(),
-            fedora,
-            FedoraDataCollector.getInstance(),
-            logger
-        );
+        return new FedoraObject(pid, config ?? Config.getInstance(), fedora, FedoraDataCollector.getInstance(), logger);
     }
 
     get namespace(): string {
