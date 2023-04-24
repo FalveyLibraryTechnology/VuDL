@@ -258,5 +258,45 @@ describe("Fedora", () => {
                 },
             });
         });
+        it("can succeed after retrying 409 status", async () => {
+            requestSpy = jest
+                .spyOn(fedora, "_request")
+                .mockResolvedValueOnce({ statusCode: 409 })
+                .mockResolvedValueOnce({ statusCode: 201 });
+            const logSpy = jest.spyOn(fedora, "log");
+            await fedora.putDatastream("pid:123", "MYSTREAM", "text/plain", [201], "my data is here", "my link header");
+            expect(requestSpy).toHaveBeenCalledWith("put", "/pid:123/MYSTREAM", "my data is here", {
+                headers: {
+                    "Content-Disposition": 'attachment; filename="MYSTREAM"',
+                    "Content-Type": "text/plain",
+                    Digest: "md5=ce851d9cd2bee2c2eeceaea99e62145d, sha-512=a4daa746ea902fe69c45dbce6ded92306206b75928e3df01b395ee896f08e5209a92493bc3f951ada968f1dc264552d9a92747adfbab1892bb6ebc1ac757d307",
+                    Link: "my link header",
+                },
+            });
+            expect(logSpy).toHaveBeenCalledWith("Encountered 409 error; retry #1...");
+            expect(logSpy).toHaveBeenCalledTimes(1);
+        });
+        it("can run out of 409 retries", async () => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 409 });
+            const logSpy = jest.spyOn(fedora, "log");
+            let message = "";
+            try {
+                await fedora.putDatastream(
+                    "pid:123",
+                    "MYSTREAM",
+                    "text/plain",
+                    [201],
+                    "my data is here",
+                    "my link header"
+                );
+            } catch (e) {
+                message = e.message;
+            }
+            expect(logSpy).toHaveBeenCalledWith("Encountered 409 error; retry #1...");
+            expect(logSpy).toHaveBeenCalledWith("Encountered 409 error; retry #2...");
+            expect(logSpy).toHaveBeenCalledWith("Encountered 409 error; retry #3...");
+            expect(logSpy).toHaveBeenCalledTimes(3);
+            expect(message).toEqual("Expected 201 Created response, received: 409");
+        });
     });
 });
