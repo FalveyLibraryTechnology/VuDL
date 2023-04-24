@@ -280,6 +280,10 @@ class Config {
         };
     }
 
+    get max409Retries(): number {
+        return this.ini["max_409_retries"] ?? 3;
+    }
+
     get maxUploadSize(): number {
         return this.ini?.["upload"]?.["sizeLimit"] ?? 200 * 1024 * 1024;
     }
