@@ -16,6 +16,9 @@ base_url = "http://localhost:8080/rest"
 # The first number for the PID generator to use:
 fedora_initial_pid = "1"
 
+# The maximum number of times to retry a PUT to Fedora after receiving a 409 error
+max_409_retries = 3
+
 # Values to be indexed into commonly-used Solr facet fields:
 institution = "My University"
 collection = "Digital Library"

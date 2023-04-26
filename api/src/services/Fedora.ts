@@ -7,6 +7,7 @@ const { namedNode, literal } = DataFactory;
 import { NeedleResponse } from "./interfaces";
 import xmlescape = require("xml-escape");
 import { HttpError } from "../models/HttpError";
+import winston = require("winston");
 
 export interface DatastreamParameters {
     dsLabel?: string;
@@ -29,6 +30,7 @@ export interface DC {
 
 export class Fedora {
     private static instance: Fedora;
+    protected logger: winston.Logger = null;
     config: Config;
 
     constructor(config: Config) {
@@ -183,6 +185,35 @@ export class Fedora {
     }
 
     /**
+     * Call the callback, and retry if it yields a 409 response. Number of retries
+     * is based on configuration in vudl.ini (and retries can be disabled by setting
+     * retry count to 0).
+     *
+     * @param callback Callback to attempt
+     */
+    async callWith409Retry(callback: () => Promise<void>): Promise<void> {
+        const maxRetries = this.config.max409Retries;
+        let retries = 0;
+        while (retries <= maxRetries) {
+            try {
+                await callback();
+                return;
+            } catch (e) {
+                if (e.statusCode ?? null === 409) {
+                    retries++;
+                    if (retries <= maxRetries) {
+                        this.log(`Encountered 409 error; retry #${retries}...`);
+                    } else {
+                        throw e;
+                    }
+                } else {
+                    throw e;
+                }
+            }
+        }
+    }
+
+    /**
      * Write a datastream to Fedora.
      *
      * @param pid            Object containing datastream
@@ -211,13 +242,16 @@ export class Fedora {
             options.headers.Link = linkHeader;
         }
         const targetPath = "/" + pid + "/" + stream;
-        const response = await this._request("put", targetPath, data, options);
-        if (!expectedStatus.includes(response.statusCode)) {
-            throw new HttpError(
-                response,
-                `Expected ${expectedStatus} Created response, received: ${response.statusCode}`
-            );
-        }
+        const callback = async () => {
+            const response = await this._request("put", targetPath, data, options);
+            if (!expectedStatus.includes(response.statusCode)) {
+                throw new HttpError(
+                    response,
+                    `Expected ${expectedStatus} Created response, received: ${response.statusCode}`
+                );
+            }
+        };
+        await this.callWith409Retry(callback);
     }
 
     /**
@@ -501,6 +535,26 @@ export class Fedora {
             logMessage: "Create initial Dublin Core record",
         };
         await this.addDatastream(pid, "DC", params, xml, [201]);
+    }
+
+    /**
+     * Send a message to the active logger (if any).
+     *
+     * @param message Message to log
+     */
+    log(message: string): void {
+        if (this.logger && message.length > 0) {
+            this.logger.info(message);
+        }
+    }
+
+    /**
+     * Set the active logger
+     *
+     * @param logger Logger object to use (or null to disable logging)
+     */
+    setLogger(logger: winston.Logger | null): void {
+        this.logger = logger;
     }
 }
 
