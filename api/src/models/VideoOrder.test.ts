@@ -3,7 +3,7 @@ import Config from "./Config";
 import Job from "./Job";
 import VideoOrder from "./VideoOrder";
 
-jest.mock("../services/QueueManager")
+jest.mock("../services/QueueManager");
 
 describe("VideoOrder", () => {
     beforeEach(() => {
@@ -18,15 +18,15 @@ describe("VideoOrder", () => {
     });
 
     it("can reconstitute itself from raw data", () => {
-        const raw = [ { filename: "foo.avi" } ];
+        const raw = [{ filename: "foo.avi" }];
         const list = VideoOrder.fromRaw(raw);
         expect(list.raw()).toEqual(raw);
     });
 
     it("prioritizes file extensions appropriately", () => {
-        const globSpy = jest.spyOn(glob, "sync").mockReturnValue(
-            ["a.avi", "b.mp4", "c.avi", "c.mp4", "d.mp4", "d.avi", "e.mkv", "e.avi", "e.mp4"]
-        );
+        const globSpy = jest
+            .spyOn(glob, "sync")
+            .mockReturnValue(["a.avi", "b.mp4", "c.avi", "c.mp4", "d.mp4", "d.avi", "e.mkv", "e.avi", "e.mp4"]);
         const job = Job.build("/foo");
         const list = VideoOrder.fromJob(job);
         expect(globSpy).toHaveBeenCalledWith("/foo/*.{avi,mkv,mov,mp4}", { nocase: true });
@@ -37,5 +37,5 @@ describe("VideoOrder", () => {
             { filename: "d.avi" }, // best option (2nd in list)
             { filename: "e.mkv" }, // best option (out of three options)
         ]);
-    })
+    });
 });

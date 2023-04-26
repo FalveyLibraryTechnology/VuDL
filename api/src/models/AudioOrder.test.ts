@@ -3,7 +3,7 @@ import Config from "./Config";
 import Job from "./Job";
 import AudioOrder from "./AudioOrder";
 
-jest.mock("../services/QueueManager")
+jest.mock("../services/QueueManager");
 
 describe("AudioOrder", () => {
     beforeEach(() => {
@@ -18,21 +18,16 @@ describe("AudioOrder", () => {
     });
 
     it("can reconstitute itself from raw data", () => {
-        const raw = [ { filename: "foo.flac" } ];
+        const raw = [{ filename: "foo.flac" }];
         const list = AudioOrder.fromRaw(raw);
         expect(list.raw()).toEqual(raw);
     });
 
     it("can build a list from a directory listing", () => {
-        const globSpy = jest.spyOn(glob, "sync").mockReturnValue(
-            ["a.flac", "b.flac"]
-        );
+        const globSpy = jest.spyOn(glob, "sync").mockReturnValue(["a.flac", "b.flac"]);
         const job = Job.build("/foo");
         const list = AudioOrder.fromJob(job);
         expect(globSpy).toHaveBeenCalledWith("/foo/*.flac", { nocase: true });
-        expect(list.raw()).toEqual([
-            { filename: "a.flac" },
-            { filename: "b.flac" },
-        ]);
-    })
+        expect(list.raw()).toEqual([{ filename: "a.flac" }, { filename: "b.flac" }]);
+    });
 });
