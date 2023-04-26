@@ -42,7 +42,7 @@ class AbstractAVFile {
         return { filename: this.filename };
     }
 
-    derivativePath(extension): string {
+    derivativePath(extension: string): string {
         const ext = this.filename.substring(this.filename.lastIndexOf("."));
         const filename = path.basename(this.filename, ext);
         return this.dir + "/" + filename + "." + extension.toLowerCase();

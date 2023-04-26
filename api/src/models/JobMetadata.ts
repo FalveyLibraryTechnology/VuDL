@@ -7,6 +7,7 @@ import Job from "./Job";
 import ImageFile from "./ImageFile";
 import { PageRaw } from "./Page";
 import PageOrder from "./PageOrder";
+import VideoOrder from "./VideoOrder";
 
 interface JobMetadataRaw {
     order: Array<PageRaw>;
@@ -20,6 +21,7 @@ class JobMetadata {
     _order: PageOrder = null;
     _documents: DocumentOrder = null;
     _audio: AudioOrder = null;
+    _video: VideoOrder = null;
     published = false;
 
     constructor(job: Job) {
@@ -158,6 +160,21 @@ class JobMetadata {
 
     setAudioFromRaw(data: Array<Record<string, string>>): void {
         this._audio = AudioOrder.fromRaw(data);
+    }
+
+    get video(): VideoOrder {
+        if (this._video === null) {
+            this._video = VideoOrder.fromJob(this.job);
+        }
+        return this._video;
+    }
+
+    set video(order: VideoOrder) {
+        this._video = order;
+    }
+
+    setVideoFromRaw(data: Array<Record<string, string>>): void {
+        this._video = VideoOrder.fromRaw(data);
     }
 
     save(): void {

@@ -11,6 +11,16 @@ class VideoFile extends AbstractAVFile {
     static fromRaw(raw: Record<string, string>, config: Config = null): VideoFile {
         return new VideoFile(raw.filename, raw.label, config ?? Config.getInstance());
     }
+
+    get mimeType(): string {
+        const ext = this.filename.substring(this.filename.lastIndexOf(".") + 1).toLowerCase();
+        const extMap: Record<string, string> = {
+            avi: "video/x-msvideo",
+            mkv: "video/x-matroska",
+            mov: "video/quicktime",
+        };
+        return extMap[ext] ?? "video/" + ext;
+    }
 }
 
 export default VideoFile;
