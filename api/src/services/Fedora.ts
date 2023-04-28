@@ -125,11 +125,11 @@ export class Fedora {
     }
 
     /**
+     * Purge datastream from Fedora by removing its tombstone
      *
      * @param pid Record id
      * @param datastream Which stream to request
      * @param requestOptions Parse JSON (true) or return raw (false, default)
-     * @returns
      */
     async deleteDatastreamTombstone(
         pid: string,
@@ -139,6 +139,42 @@ export class Fedora {
         return await this._request(
             "delete",
             `${pid}/${datastream}/fcr:tombstone`,
+            null, // Data
+            requestOptions
+        );
+    }
+
+    /**
+     * Delete object from Fedora
+     *
+     * @param pid Record id
+     * @param parse Parse JSON (true) or return raw (false, default)
+     */
+    async deleteObject(
+        pid: string,
+        requestOptions = { parse_response: false }
+    ): Promise<NeedleResponse> {
+        return await this._request(
+            "delete",
+            `${pid}`,
+            null, // Data
+            requestOptions
+        );
+    }
+
+    /**
+     * Purge object from Fedora by removing its tombstone
+     *
+     * @param pid Record id
+     * @param requestOptions Parse JSON (true) or return raw (false, default)
+     */
+    async deleteObjectTombstone(
+        pid: string,
+        requestOptions = { parse_response: false }
+    ): Promise<NeedleResponse> {
+        return await this._request(
+            "delete",
+            `${pid}/fcr:tombstone`,
             null, // Data
             requestOptions
         );
