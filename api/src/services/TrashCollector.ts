@@ -1,19 +1,19 @@
-import Config from "../models/Config";
 import Fedora from "./Fedora";
+import FedoraDataCollector from "./FedoraDataCollector";
 
 class TrashCollector {
     private static instance: TrashCollector;
-    protected config: Config;
     protected fedora: Fedora;
+    protected collector: FedoraDataCollector;
 
-    constructor(config: Config, fedora: Fedora) {
-        this.config = config;
+    constructor(fedora: Fedora, collector: FedoraDataCollector) {
         this.fedora = fedora;
+        this.collector = collector;
     }
 
     public static getInstance(): TrashCollector {
         if (!TrashCollector.instance) {
-            TrashCollector.instance = new TrashCollector(Config.getInstance(), Fedora.getInstance());
+            TrashCollector.instance = new TrashCollector(Fedora.getInstance(), FedoraDataCollector.getInstance());
         }
         return TrashCollector.instance;
     }
@@ -28,8 +28,19 @@ class TrashCollector {
      * @param pid PID to check
      */
     public async pidIsSafeToPurge(pid: string): Promise<boolean> {
-        // TODO: check
-        return true;
+        let data = null;
+        try {
+            data = await this.collector.getObjectData(pid);
+        } catch (e) {
+            // Special case: if an object was partially deleted but its tombstone wasn't purged, it will return a 410.
+            // If this happens, we should go ahead and finish the job!
+            if (e.message === "Unexpected status code: 410") {
+                return true;
+            }
+            throw e;
+        }
+        // Only allow purging if the item is flagged as deleted in the system:
+        return data?.fedoraDetails?.state?.[0] === "Deleted";
     }
 
     /**
@@ -42,8 +53,8 @@ class TrashCollector {
             return false;
         }
         // We need to both mark the object as deleted AND delete its subsequent tombstone to fully reclaim space from Fedora:
-        this.fedora.deleteObject(pid);
-        this.fedora.deleteObjectTombstone(pid);
+        await this.fedora.deleteObject(pid);
+        await this.fedora.deleteObjectTombstone(pid);
         return true;
     }
 

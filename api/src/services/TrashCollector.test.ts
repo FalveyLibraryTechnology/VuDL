@@ -1,5 +1,6 @@
 import Config from "../models/Config";
 import Fedora from "./Fedora";
+import FedoraDataCollector from "./FedoraDataCollector";
 import TrashCollector from "./TrashCollector";
 
 describe("TrashCollector", () => {
@@ -11,6 +12,49 @@ describe("TrashCollector", () => {
 
     afterEach(() => {
         jest.restoreAllMocks();
+    });
+
+    describe("pidIsSafeToPurge", () => {
+        let getDataSpy;
+        beforeEach(() => {
+            getDataSpy = jest.spyOn(FedoraDataCollector.getInstance(), "getObjectData");
+        });
+        it("won't allow purging of active pids", async () => {
+            getDataSpy.mockResolvedValue({ fedoraDetails: { state: ["Active"] } });
+            expect(await collector.pidIsSafeToPurge("foo")).toEqual(false);
+            expect(getDataSpy).toHaveBeenCalledTimes(1);
+            expect(getDataSpy).toHaveBeenCalledWith("foo");
+        });
+
+        it("will allow purging of partially deleted pids", async () => {
+            getDataSpy.mockImplementation(() => {
+                throw new Error("Unexpected status code: 410");
+            });
+            expect(await collector.pidIsSafeToPurge("foo")).toEqual(true);
+            expect(getDataSpy).toHaveBeenCalledTimes(1);
+            expect(getDataSpy).toHaveBeenCalledWith("foo");
+        });
+
+        it("will rethrow unexpected exceptions", async () => {
+            const error = new Error("Kerboom");
+            getDataSpy.mockImplementation(() => {
+                throw error;
+            });
+            let thrownError = null;
+            try {
+                await collector.pidIsSafeToPurge("foo");
+            } catch (e) {
+                thrownError = e;
+            }
+            expect(thrownError).toEqual(error);
+        });
+
+        it("will allow purging of deleted pids", async () => {
+            getDataSpy.mockResolvedValue({ fedoraDetails: { state: ["Deleted"] } });
+            expect(await collector.pidIsSafeToPurge("foo")).toEqual(true);
+            expect(getDataSpy).toHaveBeenCalledTimes(1);
+            expect(getDataSpy).toHaveBeenCalledWith("foo");
+        });
     });
 
     describe("purgePid", () => {
