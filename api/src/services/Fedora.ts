@@ -153,7 +153,7 @@ export class Fedora {
     async deleteObject(pid: string, requestOptions = { parse_response: false }): Promise<NeedleResponse> {
         return await this._request(
             "delete",
-            `${pid}`,
+            pid,
             null, // Data
             requestOptions
         );
