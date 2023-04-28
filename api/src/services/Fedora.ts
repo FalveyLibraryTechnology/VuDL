@@ -150,10 +150,7 @@ export class Fedora {
      * @param pid Record id
      * @param parse Parse JSON (true) or return raw (false, default)
      */
-    async deleteObject(
-        pid: string,
-        requestOptions = { parse_response: false }
-    ): Promise<NeedleResponse> {
+    async deleteObject(pid: string, requestOptions = { parse_response: false }): Promise<NeedleResponse> {
         return await this._request(
             "delete",
             `${pid}`,
@@ -168,10 +165,7 @@ export class Fedora {
      * @param pid Record id
      * @param requestOptions Parse JSON (true) or return raw (false, default)
      */
-    async deleteObjectTombstone(
-        pid: string,
-        requestOptions = { parse_response: false }
-    ): Promise<NeedleResponse> {
+    async deleteObjectTombstone(pid: string, requestOptions = { parse_response: false }): Promise<NeedleResponse> {
         return await this._request(
             "delete",
             `${pid}/fcr:tombstone`,
