@@ -190,6 +190,7 @@ class JobMetadata {
             ingesting: fs.existsSync(this.ingestLockfile),
             documents: this.documents.list.length,
             audio: this.audio.list.length,
+            video: this.video.list.length,
             ingest_info: this.ingestInfo,
         };
     }
