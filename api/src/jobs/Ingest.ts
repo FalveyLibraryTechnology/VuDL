@@ -132,7 +132,7 @@ export class IngestProcessor {
             const number = parseInt(i) + 1;
             this.logger.info("Adding " + number + " of " + order.length + " - " + video.filename);
             const videoData = await this.buildVideo(videoList, video, number);
-            await this.addDatastreamsToAudio(video, videoData);
+            await this.addDatastreamsToVideo(video, videoData);
         }
     }
 
