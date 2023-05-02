@@ -111,6 +111,28 @@ describe("Fedora", () => {
         });
     });
 
+    describe("deleteObject", () => {
+        beforeEach(() => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({});
+        });
+
+        it("will delete an object", async () => {
+            fedora.deleteObject(pid, {});
+            expect(requestSpy).toHaveBeenCalledWith("delete", pid, null, {});
+        });
+    });
+
+    describe("deleteObjectTombstone", () => {
+        beforeEach(() => {
+            requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({});
+        });
+
+        it("will delete an object tombstone", async () => {
+            fedora.deleteObjectTombstone(pid, {});
+            expect(requestSpy).toHaveBeenCalledWith("delete", pid + "/fcr:tombstone", null, {});
+        });
+    });
+
     describe("createContainer", () => {
         beforeEach(() => {
             requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 201 });
