@@ -4,9 +4,7 @@ import Config from "../models/Config";
 import Notify from "./Notify";
 
 function mockRequests(notify, res = {}) {
-    return jest
-        .spyOn(notify, "_request")
-        .mockResolvedValue(Object.assign({ statusCode: 200, body: "n/a" }, res));
+    return jest.spyOn(notify, "_request").mockResolvedValue(Object.assign({ statusCode: 200, body: "n/a" }, res));
 }
 
 describe("Notify", () => {
@@ -28,14 +26,12 @@ describe("Notify", () => {
                 new Config({
                     notify: {
                         method: badMethod,
-                    }
+                    },
                 })
             );
 
             const job = { data: { body: "coo" } } as Job;
-            expect(async () => await notify.run(job)).rejects.toThrowError(
-                `Notify: invalid method '${badMethod}'`
-            );
+            expect(async () => await notify.run(job)).rejects.toThrowError(`Notify: invalid method '${badMethod}'`);
         });
     });
 
@@ -48,10 +44,9 @@ describe("Notify", () => {
                     notify: {
                         method: "ntfy",
                         ntfy_defaultChannel: testChannel,
-                    }
+                    },
                 })
             );
-
         });
 
         describe("run", () => {
@@ -73,9 +68,7 @@ describe("Notify", () => {
         describe("errors", () => {
             it("throws on no body", () => {
                 const job = { data: {} } as Job;
-                expect(async () => await notify.run(job)).rejects.toThrowError(
-                    "Notify: no body specified"
-                );
+                expect(async () => await notify.run(job)).rejects.toThrowError("Notify: no body specified");
             });
 
             it.skip("retries on error", async () => {
