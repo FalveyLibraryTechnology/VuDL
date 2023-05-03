@@ -8,7 +8,7 @@ import http = require("needle");
 
 class Notify implements QueueJob {
     protected _request(channel: string, body: string): Promise<NeedleResponse> {
-        console.log(`: ntfy (${channel}): ${job.data.body}`);
+        console.log(`: ntfy (${channel}): ${body}`);
 
         return http("POST", `https://ntfy.sh/${channel}`, body);
     }
