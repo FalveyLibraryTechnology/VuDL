@@ -70,12 +70,6 @@ describe("Notify", () => {
                 const job = { data: {} } as Job;
                 expect(async () => await notify.run(job)).rejects.toThrowError("Notify: no body specified");
             });
-
-            it.skip("retries on error", async () => {
-                const requestSpy = mockRequests(notify, { statusCode: 500, body: "bad" });
-
-                // #todo
-            });
         });
     });
 });
