@@ -282,9 +282,11 @@ describe("edit", () => {
                     },
                 };
             });
+            const kaboom = new Error("kaboom");
             datastreamManager.uploadFile.mockImplementation(() => {
-                throw new Error("kaboom");
+                throw kaboom;
             });
+            const consoleSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
             const response = await request(app)
                 .post(`/edit/object/${pid}/datastream/${datastream}`)
                 .set("Authorization", "Bearer test")
@@ -293,6 +295,7 @@ describe("edit", () => {
                 .expect(StatusCodes.INTERNAL_SERVER_ERROR);
 
             expect(response.error.text).toEqual("kaboom");
+            expect(consoleSpy).toHaveBeenCalledWith(kaboom);
         });
     });
 
