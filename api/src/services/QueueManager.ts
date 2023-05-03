@@ -58,8 +58,8 @@ class QueueManager {
         return await this.addToQueue("ingest", { dir });
     }
 
-    public async sendNotification(msg: string | null = null, channel: string | null = null): Promise<void> {
-        return await this.addToQueue("notify", { msg, channel });
+    public async sendNotification(body: string, channel: string | null = null): Promise<void> {
+        return await this.addToQueue("notify", { body, channel });
     }
 
     public async performIndexOperation(pid: string, action: string, force = false): Promise<void> {
