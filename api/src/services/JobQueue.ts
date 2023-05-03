@@ -4,6 +4,7 @@ import GeneratePdf from "../jobs/GeneratePdf";
 import Index from "../jobs/Index";
 import Ingest from "../jobs/Ingest";
 import Metadata from "../jobs/Metadata";
+import Notify from "../jobs/Notify";
 import QueueJob from "../jobs/QueueJobInterface";
 import QueueManager from "./QueueManager";
 
@@ -30,6 +31,7 @@ class JobQueue {
         this.workers.index = new Index();
         this.workers.ingest = new Ingest();
         this.workers.metadata = new Metadata();
+        this.workers.notify = new Notify();
         this.manager = this.queueManager.getWorker(async (job) => {
             console.log("JOB: " + job.name);
             if (typeof this.workers[job.name] === "undefined") {
