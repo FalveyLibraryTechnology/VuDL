@@ -287,6 +287,16 @@ class Config {
     get maxUploadSize(): number {
         return this.ini?.["upload"]?.["sizeLimit"] ?? 200 * 1024 * 1024;
     }
+
+    get notifyMethod(): string {
+        return this.ini?.["notify"]?.["method"] ?? "ntfy";
+    }
+
+    get ntfyConfig(): Record<string, string> {
+        return {
+            defaultChannel: this.ini?.["notify"]?.["ntfy_defaultChannel"] ?? "vudl-ntfy",
+        };
+    }
 }
 
 export default Config;

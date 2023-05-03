@@ -1,20 +1,30 @@
 import { Job } from "bullmq";
+import Config from "../models/Config";
 import QueueJob from "./QueueJobInterface";
 
 import http = require("needle");
 
 class Notify implements QueueJob {
-    // #todo: config
-    defaultChannel = "falvey-vudl-queue";
-    defaultBody = "VUDL queue is finished";
+    async _request(url, body) {
+        return http("POST", url, body);
+    }
 
     async run(job: Job): Promise<void> {
-        const channel = job.data.channel ?? this.defaultChannel;
-        const body = job.data.msg ?? this.defaultBody;
+        if (!(job.data.msg ?? false)) {
+            throw new Error("Notify: no body specified");
+        }
 
-        console.log(`: ntfy (${channel}): ${body}`);
+        const config = Config.getInstance();
 
-        await http("POST", `https://ntfy.sh/${channel}`, body);
+        if (config.notifyMethod !== "ntfy") {
+            throw new Error("Notify can only ntfy");
+        }
+
+        const channel = job.data.channel ?? config.ntfyConfig.defaultChannel;
+
+        console.log(`: ntfy (${channel}): ${job.data.msg}`);
+
+        await this._request(`https://ntfy.sh/${channel}`, job.data.msg);
     }
 }
 
