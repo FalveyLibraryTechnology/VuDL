@@ -325,6 +325,12 @@ allowedSubtypes = "xml"
 [models.VideoData.datastreams.MP4.mimetype]
 allowedType = "video"
 allowedSubtypes = "mp4"
+[models.VideoData.datastreams.TEXT-TRANSCRIPT.mimetype]
+allowedType = "text"
+allowedSubtypes = "plain"
+[models.VideoData.datastreams.VTT.mimetype]
+allowedType = "text"
+allowedSubtypes = "vtt"
 
 # XLSData
 [models.XLSData.datastreams]
