@@ -16,22 +16,22 @@ describe("VideoFile", () => {
         expect(video.derivativePath("mp4")).toEqual("/test2/test1.mp4");
     });
 
-    it ("returns a text transcript path when it exists", () => {
+    it("returns a text transcript path when it exists", () => {
         jest.spyOn(fs, "existsSync").mockReturnValue(true);
         expect(video.textTranscript).toEqual("/test2/test1.txt");
     });
 
-    it ("returns null when a text transcript does not exist", () => {
+    it("returns null when a text transcript does not exist", () => {
         jest.spyOn(fs, "existsSync").mockReturnValue(false);
         expect(video.textTranscript).toEqual(null);
     });
 
-    it ("returns a VTT transcript path when it exists", () => {
+    it("returns a VTT transcript path when it exists", () => {
         jest.spyOn(fs, "existsSync").mockReturnValue(true);
         expect(video.vtt).toEqual("/test2/test1.vtt");
     });
 
-    it ("returns null when a VTT transcript does not exist", () => {
+    it("returns null when a VTT transcript does not exist", () => {
         jest.spyOn(fs, "existsSync").mockReturnValue(false);
         expect(video.vtt).toEqual(null);
     });
