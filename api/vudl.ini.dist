@@ -484,3 +484,7 @@ limitInputPixels = 268402689
 [upload]
 # Upload limit in bytes (default = 200MB)
 sizeLimit = 209715200
+
+[notify]
+method = ntfy
+ntfy_defaultChannel = vudl-ntfy
