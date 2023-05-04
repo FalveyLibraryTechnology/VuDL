@@ -24,12 +24,12 @@ class VideoFile extends AbstractAVFile {
     }
 
     get textTranscript(): string | null {
-        const txtPath = this.derivativePath('txt');
+        const txtPath = this.derivativePath("txt");
         return fs.existsSync(txtPath) ? txtPath : null;
     }
 
     get vtt(): string | null {
-        const vttPath = this.derivativePath('vtt');
+        const vttPath = this.derivativePath("vtt");
         return fs.existsSync(vttPath) ? vttPath : null;
     }
 }
