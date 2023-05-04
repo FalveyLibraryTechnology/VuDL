@@ -250,6 +250,7 @@ Image = "vudl-system:ImageData"
 PDF = "vudl-system:PDFData"
 DOC = "vudl-system:DOCData"
 Audio = "vudl-system:AudioData"
+Video = "vudl-system:VideoData"
 XLS = "vudl-system:XLSData"
 Text = "vudl-system:TextData"
 
@@ -319,6 +320,17 @@ allowedSubtypes = "xml"
 [models.ResourceCollection.datastreams.PROCESS-MD.mimetype]
 allowedType = "text"
 allowedSubtypes = "xml"
+
+# VideoData
+[models.VideoData.datastreams.MP4.mimetype]
+allowedType = "video"
+allowedSubtypes = "mp4"
+[models.VideoData.datastreams.TEXT-TRANSCRIPT.mimetype]
+allowedType = "text"
+allowedSubtypes = "plain"
+[models.VideoData.datastreams.VTT.mimetype]
+allowedType = "text"
+allowedSubtypes = "vtt"
 
 # XLSData
 [models.XLSData.datastreams]
