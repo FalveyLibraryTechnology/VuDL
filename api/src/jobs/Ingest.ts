@@ -81,6 +81,17 @@ export class IngestProcessor {
             this.logger.info("Adding MP4");
             await videoData.addDatastreamFromFile(video.derivative("MP4"), "MP4", "video/mp4");
         }
+        // If we have VTT transcript and/or TXT transcript, add them.
+        const textTranscript = video.textTranscript;
+        if (textTranscript !== null) {
+            this.logger.info("Adding text transcript");
+            await videoData.addDatastreamFromFile(textTranscript, "TEXT-TRANSCRIPT", "text/plain");
+        }
+        const vtt = video.vtt;
+        if (vtt !== null) {
+            this.logger.info("Adding VTT transcript");
+            await videoData.addDatastreamFromFile(vtt, "VTT", "text/vtt");
+        }
     }
 
     async addPages(pageList: FedoraObject): Promise<void> {

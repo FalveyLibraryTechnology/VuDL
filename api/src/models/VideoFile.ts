@@ -1,3 +1,4 @@
+import fs = require("fs");
 import AbstractAVFile from "./AbstractAVFile";
 import Config from "./Config";
 
@@ -20,6 +21,16 @@ class VideoFile extends AbstractAVFile {
             mov: "video/quicktime",
         };
         return extMap[ext] ?? "video/" + ext;
+    }
+
+    get textTranscript(): string | null {
+        const txtPath = this.derivativePath('txt');
+        return fs.existsSync(txtPath) ? txtPath : null;
+    }
+
+    get vtt(): string | null {
+        const vttPath = this.derivativePath('vtt');
+        return fs.existsSync(vttPath) ? vttPath : null;
     }
 }
 
