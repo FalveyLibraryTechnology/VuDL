@@ -584,4 +584,78 @@ describe("SolrIndexer", () => {
         expect(changeSpy).toHaveBeenCalledTimes(1);
         expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
     });
+
+    it("prefers text transcript when both text and VTT are available", async () => {
+        const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
+        const pid = "test:123";
+        const collector = FedoraDataCollector.getInstance();
+        const record = FedoraDataCollection.build(pid, {}, {}, ["TEXT-TRANSCRIPT", "VTT"]);
+        const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
+        const fedora = Fedora.getInstance();
+        const getStreamSpy = jest.spyOn(fedora, "getDatastreamAsString").mockResolvedValue("text transcript");
+        const result = await indexer.getFields(pid);
+        expect(result).toEqual({
+            allfields: [],
+            collection: "Digital Library",
+            datastream_str_mv: ["TEXT-TRANSCRIPT", "VTT"],
+            fedora_parent_id_str_mv: [],
+            fulltext: ["text transcript"],
+            has_order_str: "no",
+            has_thumbnail_str: "false",
+            hierarchy_all_parents_str_mv: [],
+            hierarchy_first_parent_id_str: pid,
+            hierarchy_parent_title: [],
+            hierarchy_sequence: "0000000000",
+            hierarchy_top_id: [pid],
+            hierarchy_top_title: [""],
+            hierarchytype: "",
+            id: pid,
+            institution: "My University",
+            modeltype_str_mv: [],
+            record_format: "vudl",
+        });
+        expect(getStreamSpy).toHaveBeenCalledTimes(1);
+        expect(getStreamSpy).toHaveBeenCalledWith(pid, "TEXT-TRANSCRIPT");
+        expect(getHierarchySpy).toHaveBeenCalledTimes(1);
+        expect(getHierarchySpy).toHaveBeenCalledWith(pid);
+        expect(changeSpy).toHaveBeenCalledTimes(1);
+        expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
+    });
+
+    it("processes transcript data correctly when there is only a VTT", async () => {
+        const changeSpy = jest.spyOn(indexer, "getChangeTrackerDetails").mockResolvedValue({});
+        const pid = "test:123";
+        const collector = FedoraDataCollector.getInstance();
+        const record = FedoraDataCollection.build(pid, {}, {}, ["VTT"]);
+        const getHierarchySpy = jest.spyOn(collector, "getHierarchy").mockResolvedValue(record);
+        const fedora = Fedora.getInstance();
+        const getStreamSpy = jest.spyOn(fedora, "getDatastreamAsString").mockResolvedValue("VTT transcript");
+        const result = await indexer.getFields(pid);
+        expect(result).toEqual({
+            allfields: [],
+            collection: "Digital Library",
+            datastream_str_mv: ["VTT"],
+            fedora_parent_id_str_mv: [],
+            fulltext: ["VTT transcript"],
+            has_order_str: "no",
+            has_thumbnail_str: "false",
+            hierarchy_all_parents_str_mv: [],
+            hierarchy_first_parent_id_str: pid,
+            hierarchy_parent_title: [],
+            hierarchy_sequence: "0000000000",
+            hierarchy_top_id: [pid],
+            hierarchy_top_title: [""],
+            hierarchytype: "",
+            id: pid,
+            institution: "My University",
+            modeltype_str_mv: [],
+            record_format: "vudl",
+        });
+        expect(getStreamSpy).toHaveBeenCalledTimes(1);
+        expect(getStreamSpy).toHaveBeenCalledWith(pid, "VTT");
+        expect(getHierarchySpy).toHaveBeenCalledTimes(1);
+        expect(getHierarchySpy).toHaveBeenCalledWith(pid);
+        expect(changeSpy).toHaveBeenCalledTimes(1);
+        expect(changeSpy).toHaveBeenCalledWith(pid, "1900-01-01T00:00:00Z");
+    });
 });
