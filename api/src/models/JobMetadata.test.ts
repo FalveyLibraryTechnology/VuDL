@@ -3,6 +3,7 @@ import Config from "./Config";
 import Job from "./Job";
 import JobMetadata from "./JobMetadata";
 import QueueManager from "../services/QueueManager";
+import VideoOrder from "./VideoOrder";
 
 jest.mock("./Config");
 jest.mock("../services/QueueManager");
@@ -14,11 +15,12 @@ jest.mock("./ImageFile", () => {
 });
 
 describe("JobMetadata", () => {
+    let config: Config;
     let job: Job;
     let jobMetadata: JobMetadata;
 
     beforeEach(() => {
-        const config = new Config({});
+        config = new Config({});
         job = new Job("test1", config, new QueueManager(config));
         jobMetadata = new JobMetadata(job);
     });
@@ -34,5 +36,21 @@ describe("JobMetadata", () => {
         expect(jobMetadata.dublinCore).toEqual("foo");
         expect(existsSpy).toHaveBeenCalledWith(filename);
         expect(readSpy).toHaveBeenCalledWith(filename);
+    });
+
+    it("automaticaly creates a video order as needed", () => {
+        expect(jobMetadata.video.raw()).toEqual([]);
+    });
+
+    it("allows setting of a video list", () => {
+        const video = new VideoOrder([]);
+        jobMetadata.video = video;
+        expect(jobMetadata.video).toEqual(video);
+    });
+
+    it("allows setting of a video list from raw data", () => {
+        const video = [{ filename: "a.avi" }];
+        jobMetadata.setVideoFromRaw(video);
+        expect(jobMetadata.video.raw()).toEqual(video);
     });
 });
