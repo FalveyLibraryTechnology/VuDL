@@ -38,7 +38,7 @@ describe("JobMetadata", () => {
         expect(readSpy).toHaveBeenCalledWith(filename);
     });
 
-    it("automaticaly creates a video order as needed", () => {
+    it("automatically creates a video order as needed", () => {
         expect(jobMetadata.video.raw()).toEqual([]);
     });
 
