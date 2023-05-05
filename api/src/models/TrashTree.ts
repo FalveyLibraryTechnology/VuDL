@@ -3,6 +3,7 @@ import TrashTreeNode from "./TrashTreeNode";
 class TrashTree {
     protected _rootPid;
     protected _orphanedNodes: Array<TrashTreeNode> = [];
+    protected needsOrphanCheck = false;
     protected rootNodes: Array<TrashTreeNode> = [];
     protected nodeIndex: Record<string, TrashTreeNode> = {};
 
@@ -10,14 +11,20 @@ class TrashTree {
         this._rootPid = rootPid;
     }
 
-    addParentsToNode(node: TrashTreeNode, parentList: Array<string>): void {
+    linkParentsToNode(node: TrashTreeNode, parentList: Array<string>): void {
         for (const parentPid of parentList) {
             const parentNode = this.nodeIndex[parentPid] ?? null;
             if (parentNode !== null) {
-                node.addParentNode(parentNode);
-                parentNode.addChild(node);
+                node.linkParentNode(parentNode);
             }
         }
+    }
+
+    getMissingParentPidsForNode(node: TrashTreeNode): Array<string> {
+        // We need to account for not just parents within the tree, but also the root PID;
+        // the root does not exist within the PID, but not having a node object for it is not
+        // a problem.
+        return node.missingParentNodePids.filter((x) => x !== this._rootPid);
     }
 
     addNode(node: TrashTreeNode): void {
@@ -25,18 +32,22 @@ class TrashTree {
         if (node.parentPids.includes(this._rootPid)) {
             this.rootNodes.push(node);
         }
-        this.addParentsToNode(node, node.parentPids);
-        for (const parent in node.parentPids) {
-            if ((this.nodeIndex[parent] ?? null) !== null) {
-                this.nodeIndex[parent].addChild(node);
-            }
-        }
-        if (node.missingParentNodePids.filter((x) => x !== this._rootPid).length > 0) {
+        this.linkParentsToNode(node, node.parentPids);
+        if (this.getMissingParentPidsForNode(node).length > 0) {
             this._orphanedNodes.push(node);
+        }
+        this.needsOrphanCheck = this._orphanedNodes.length > 0;
+    }
+
+    addNodes(nodes: Array<TrashTreeNode>): void {
+        for (const node of nodes) {
+            this.addNode(node);
         }
     }
 
     removeLeafNode(node: TrashTreeNode): void {
+        // Make sure internal indexing is up to date first:
+        this.reuniteOrphans();
         const indexedNode = this.nodeIndex[node.pid] ?? null;
         if (indexedNode === null) {
             throw new Error("Unrecognized node provided.");
@@ -53,6 +64,8 @@ class TrashTree {
     }
 
     getNextLeaf(): TrashTreeNode | null {
+        // Make sure internal indexing is up to date first:
+        this.reuniteOrphans();
         for (const node of this.rootNodes) {
             return node.firstLeaf;
         }
@@ -60,14 +73,15 @@ class TrashTree {
     }
 
     reuniteOrphans(): void {
+        if (!this.needsOrphanCheck) {
+            return;
+        }
         this._orphanedNodes = this._orphanedNodes.filter((node) => {
-            const missingNodes = node.missingParentNodePids.filter((x) => x !== this._rootPid);
-            if (missingNodes.length > 0) {
-                this.addParentsToNode(node, missingNodes);
-                return node.missingParentNodePids.filter((x) => x !== this._rootPid).length > 0;
-            }
-            return false;
+            const missingNodes = this.getMissingParentPidsForNode(node);
+            this.linkParentsToNode(node, missingNodes);
+            return missingNodes.length === 0 ? false : this.getMissingParentPidsForNode(node).length > 0;
         });
+        this.needsOrphanCheck = false;
     }
 
     get orphanedNodes(): Array<TrashTreeNode> {

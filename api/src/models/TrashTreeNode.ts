@@ -38,9 +38,10 @@ class TrashTreeNode {
         return this;
     }
 
-    addParentNode(node: TrashTreeNode): void {
+    linkParentNode(node: TrashTreeNode): void {
         if (this.parentPids.includes(node.pid)) {
             this._parentNodes[node.pid] = node;
+            node.addChild(this);
         } else {
             throw new Error(`Unexpected parent PID: ${node.pid}`);
         }

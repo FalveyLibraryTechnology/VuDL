@@ -49,7 +49,7 @@ describe("TrashTreeNode", () => {
         const child = new TrashTreeNode("child", ["parent"]);
         parent.addChild(child);
         expect(child.missingParentNodePids).toEqual(["parent"]);
-        child.addParentNode(parent);
+        child.linkParentNode(parent);
         expect(child.missingParentNodePids).toEqual([]);
     });
 
@@ -58,7 +58,7 @@ describe("TrashTreeNode", () => {
         const boogeyman = new TrashTreeNode("boogeyman", []);
         let message = "";
         try {
-            child.addParentNode(boogeyman);
+            child.linkParentNode(boogeyman);
         } catch (e) {
             message = e.message;
         }
@@ -68,7 +68,7 @@ describe("TrashTreeNode", () => {
     it("allows access to parent nodes", () => {
         const parent = new TrashTreeNode("parent", []);
         const child = new TrashTreeNode("child", ["parent"]);
-        child.addParentNode(parent);
+        child.linkParentNode(parent);
         expect(child.parentNodes).toEqual([parent]);
     });
 });
