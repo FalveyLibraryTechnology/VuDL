@@ -1,19 +1,32 @@
+import Config from "../models/Config";
 import Fedora from "./Fedora";
 import FedoraDataCollector from "./FedoraDataCollector";
+import Solr from "./Solr";
+import TrashTree from "../models/TrashTree";
+import TrashTreeNode from "../models/TrashTreeNode";
 
 class TrashCollector {
     private static instance: TrashCollector;
     protected fedora: Fedora;
     protected collector: FedoraDataCollector;
+    protected solr: Solr;
+    protected config: Config;
 
-    constructor(fedora: Fedora, collector: FedoraDataCollector) {
+    constructor(fedora: Fedora, collector: FedoraDataCollector, solr: Solr, config: Config) {
         this.fedora = fedora;
         this.collector = collector;
+        this.solr = solr;
+        this.config = config;
     }
 
     public static getInstance(): TrashCollector {
         if (!TrashCollector.instance) {
-            TrashCollector.instance = new TrashCollector(Fedora.getInstance(), FedoraDataCollector.getInstance());
+            TrashCollector.instance = new TrashCollector(
+                Fedora.getInstance(),
+                FedoraDataCollector.getInstance(),
+                Solr.getInstance(),
+                Config.getInstance()
+            );
         }
         return TrashCollector.instance;
     }
@@ -77,6 +90,78 @@ class TrashCollector {
             }
         }
         return notDeleted;
+    }
+
+    /**
+     * Check if a PID has children.
+     *
+     * @param pid PID to check
+     * @param childrenToIgnore Child PIDs we don't care about (because they've been purged, but the index may not have caught up)
+     */
+    public async pidHasChildren(pid: string, childrenToIgnore: Array<string> = []): Promise<boolean> {
+        const result = await this.solr.query(this.config.solrCore, `hierarchy_all_parents_str_mv:"${pid}"`, {
+            fl: "id",
+            limit: "10000",
+        });
+        if (result.statusCode !== 200) {
+            throw new Error("Unexpected problem communicating with Solr.");
+        }
+        const docs = (result?.body?.response?.docs ?? []).filter((doc) => !childrenToIgnore.includes(doc.id));
+        return docs.length > 0;
+    }
+
+    /**
+     * Safely purge all deleted PIDs beneath a specified PID.
+     *
+     * @param pid PID containing deleted PIDs to purge
+     */
+    public async purgeDeletedPidsInContainer(pid: string): Promise<void> {
+        const tree = new TrashTree(pid);
+        const result = await this.solr.query(
+            this.config.solrCore,
+            `hierarchy_all_parents_str_mv:"${pid}" AND fgs.state_txt_mv:"Deleted"`,
+            { fl: "id,fedora_parent_id_str_mv", limit: "100000" }
+        );
+        if (result.statusCode !== 200) {
+            console.error("Unexpected problem communicating with Solr.");
+            return;
+        }
+        const deletedChildren = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
+        if ((deletedChildren.numFound ?? 0) === 0) {
+            console.log("Nothing found to delete.");
+            return;
+        }
+        for (const doc of deletedChildren.docs) {
+            const node = new TrashTreeNode(doc.id, doc.fedora_parent_id_str_mv);
+            tree.addNode(node);
+        }
+        if (tree.orphanedNodes.length > 0) {
+            console.error("Unexpected orphaned nodes found: " + tree.orphanedNodes.join(", "));
+            return;
+        }
+        let nextLeaf;
+        const purged = [];
+        while ((nextLeaf = tree.getNextLeaf())) {
+            try {
+                if (await this.pidIsSafeToPurge(nextLeaf.pid)) {
+                    // Double check the index to be absolutely sure the leaf is really a leaf.
+                    if (await this.pidHasChildren(nextLeaf.pid, purged)) {
+                        console.error(`${nextLeaf.pid} has unexpected children!`);
+                        return;
+                    }
+                    await this.purgePid(nextLeaf.pid);
+                    purged.push(nextLeaf.pid);
+                    tree.removeLeafNode(nextLeaf);
+                    console.log(`Purged ${nextLeaf.pid}`);
+                } else {
+                    console.error(`${nextLeaf.pid} is not safe to purge!`);
+                    return;
+                }
+            } catch (e) {
+                console.error(`Problem purging ${nextLeaf.pid} -- `, e);
+                return;
+            }
+        }
     }
 }
 
