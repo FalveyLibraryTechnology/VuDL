@@ -13,7 +13,13 @@ class TrashTreeNode {
         if (!node.parentPids.includes(this._pid)) {
             throw new Error("Cannot add child who does not recognize parent node");
         }
-        this._childNodes.push(node);
+        if (!this.hasChildPid(node.pid)) {
+            this._childNodes.push(node);
+        }
+    }
+
+    hasChildPid(pid: string): boolean {
+        return this._childNodes.filter((node) => node.pid === pid).length > 0;
     }
 
     removeChildByPid(pid: string): void {
