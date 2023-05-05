@@ -17,7 +17,7 @@ class TrashTreeNode {
     }
 
     removeChildByPid(pid: string): void {
-        this._childNodes = this._childNodes.filter(node => node.pid !== pid);
+        this._childNodes = this._childNodes.filter((node) => node.pid !== pid);
     }
 
     get childNodes(): Array<TrashTreeNode> {
@@ -54,7 +54,7 @@ class TrashTreeNode {
 
     get missingParentNodePids(): Array<string> {
         const existingNodes = Object.keys(this._parentNodes);
-        return this.parentPids.filter(x => !existingNodes.includes(x));
+        return this.parentPids.filter((x) => !existingNodes.includes(x));
     }
 }
 
