@@ -132,21 +132,16 @@ class TrashCollector {
                 { fl: "id,fedora_parent_id_str_mv", offset: offset.toString(), limit: pageSize.toString() }
             );
             if (result.statusCode !== 200) {
-                console.error("Unexpected problem communicating with Solr.");
-                return;
+                throw new Error("Unexpected problem communicating with Solr.");
             }
             const deletedChildren = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
             numFound = deletedChildren.numFound ?? 0;
-            if (numFound === 0) {
-                console.log("Nothing found to delete.");
-                return;
-            }
             for (const doc of deletedChildren.docs) {
                 const node = new TrashTreeNode(doc.id, doc.fedora_parent_id_str_mv);
                 tree.addNode(node);
             }
             offset += pageSize;
-        } while (numFound < offset);
+        } while (numFound > offset);
         return tree;
     }
 
@@ -156,7 +151,13 @@ class TrashCollector {
      * @param pid PID containing deleted PIDs to purge
      */
     public async purgeDeletedPidsInContainer(pid: string): Promise<void> {
-        const tree = await this.getTrashTreeForPid(pid);
+        let tree;
+        try {
+            tree = await this.getTrashTreeForPid(pid);
+        } catch (e) {
+            console.error(e);
+            return;
+        }
         if (tree.orphanedNodes.length > 0) {
             console.error("Unexpected orphaned nodes found: " + tree.orphanedNodes.join(", "));
             return;
@@ -183,6 +184,9 @@ class TrashCollector {
                 console.error(`Problem purging ${nextLeaf.pid} -- `, e);
                 return;
             }
+        }
+        if (purged.length === 0) {
+            console.log("Nothing found to delete.");
         }
     }
 }

@@ -203,4 +203,133 @@ describe("TrashCollector", () => {
             });
         });
     });
+
+    describe("getTrashTreeForPid", () => {
+        it("maps a Solr response into a trash tree", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 2,
+                        docs: [
+                            { id: "foo", fedora_parent_id_str_mv: ["root"] },
+                            { id: "bar", fedora_parent_id_str_mv: ["foo"] },
+                        ],
+                    },
+                },
+            } as NeedleResponse);
+            const tree = await collector.getTrashTreeForPid("root");
+            const firstLeaf = tree.getNextLeaf();
+            expect(firstLeaf.pid).toEqual("bar");
+            tree.removeLeafNode(firstLeaf);
+            const secondLeaf = tree.getNextLeaf();
+            expect(secondLeaf.pid).toEqual("foo");
+            tree.removeLeafNode(secondLeaf);
+            expect(tree.getNextLeaf()).toEqual(null);
+            expect(solrSpy).toHaveBeenCalledWith(
+                "test_core",
+                'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
+                {
+                    fl: "id,fedora_parent_id_str_mv",
+                    offset: "0",
+                    limit: "100000",
+                }
+            );
+        });
+
+        it("handles an empty Solr response correctly", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 0,
+                        docs: [],
+                    },
+                },
+            } as NeedleResponse);
+            const tree = await collector.getTrashTreeForPid("root");
+            expect(tree.getNextLeaf()).toEqual(null);
+            expect(solrSpy).toHaveBeenCalledWith(
+                "test_core",
+                'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
+                {
+                    fl: "id,fedora_parent_id_str_mv",
+                    offset: "0",
+                    limit: "100000",
+                }
+            );
+        });
+
+        it("paginates Solr results when necessary", async () => {
+            const solrSpy = jest
+                .spyOn(Solr.getInstance(), "query")
+                .mockResolvedValueOnce({
+                    statusCode: 200,
+                    body: {
+                        response: {
+                            numFound: 2,
+                            docs: [{ id: "bar", fedora_parent_id_str_mv: ["foo"] }],
+                        },
+                    },
+                } as NeedleResponse)
+                .mockResolvedValueOnce({
+                    statusCode: 200,
+                    body: {
+                        response: {
+                            numFound: 2,
+                            docs: [{ id: "foo", fedora_parent_id_str_mv: ["root"] }],
+                        },
+                    },
+                } as NeedleResponse);
+            const tree = await collector.getTrashTreeForPid("root", 1);
+            const firstLeaf = tree.getNextLeaf();
+            expect(firstLeaf.pid).toEqual("bar");
+            tree.removeLeafNode(firstLeaf);
+            const secondLeaf = tree.getNextLeaf();
+            expect(secondLeaf.pid).toEqual("foo");
+            tree.removeLeafNode(secondLeaf);
+            expect(tree.getNextLeaf()).toEqual(null);
+            expect(solrSpy).toHaveBeenCalledWith(
+                "test_core",
+                'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
+                {
+                    fl: "id,fedora_parent_id_str_mv",
+                    offset: "0",
+                    limit: "1",
+                }
+            );
+            expect(solrSpy).toHaveBeenCalledWith(
+                "test_core",
+                'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
+                {
+                    fl: "id,fedora_parent_id_str_mv",
+                    offset: "1",
+                    limit: "1",
+                }
+            );
+            expect(solrSpy).toHaveBeenCalledTimes(2);
+        });
+
+        it("responds to Solr errors appropriately", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 500,
+            } as NeedleResponse);
+            let message = "";
+            try {
+                await collector.getTrashTreeForPid("root");
+            } catch (e) {
+                message = e.message;
+            }
+            expect(message).toEqual("Unexpected problem communicating with Solr.");
+            expect(solrSpy).toHaveBeenCalledWith(
+                "test_core",
+                'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
+                {
+                    fl: "id,fedora_parent_id_str_mv",
+                    offset: "0",
+                    limit: "100000",
+                }
+            );
+        });
+    });
 });
