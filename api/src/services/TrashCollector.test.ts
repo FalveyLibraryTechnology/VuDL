@@ -1,12 +1,14 @@
 import Config from "../models/Config";
 import Fedora from "./Fedora";
 import FedoraDataCollector from "./FedoraDataCollector";
+import { NeedleResponse } from "./interfaces";
+import Solr from "./Solr";
 import TrashCollector from "./TrashCollector";
 
 describe("TrashCollector", () => {
     let collector;
     beforeEach(() => {
-        Config.setInstance(new Config({}));
+        Config.setInstance(new Config({ solr_core: "test_core" }));
         collector = TrashCollector.getInstance();
     });
 
@@ -106,6 +108,99 @@ describe("TrashCollector", () => {
             expect(purgeSpy).toHaveBeenCalledTimes(3);
             expect(errorSpy).toHaveBeenCalledTimes(1);
             expect(errorSpy).toHaveBeenCalledWith(fakeError);
+        });
+    });
+
+    describe("pidHasChildren", () => {
+        it("finds children when they exist", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 2,
+                        docs: [{ id: "foo" }, { id: "bar" }],
+                    },
+                },
+            } as NeedleResponse);
+            expect(await collector.pidHasChildren("root")).toEqual(true);
+            expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
+                fl: "id",
+                limit: "100000",
+            });
+        });
+
+        it("returns false when there are no children", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 0,
+                        docs: [],
+                    },
+                },
+            } as NeedleResponse);
+            expect(await collector.pidHasChildren("root")).toEqual(false);
+            expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
+                fl: "id",
+                limit: "100000",
+            });
+        });
+
+        it("reports a problem when there are too many children", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 1000000000,
+                        docs: [{ id: "foo" }, { id: "bar" }],
+                    },
+                },
+            } as NeedleResponse);
+            let message = "";
+            try {
+                await collector.pidHasChildren("root");
+            } catch (e) {
+                message = e.message;
+            }
+            expect(message).toEqual("root has too many children to analyze.");
+            expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
+                fl: "id",
+                limit: "100000",
+            });
+        });
+
+        it("responds to Solr errors appropriately", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 500,
+            } as NeedleResponse);
+            let message = "";
+            try {
+                await collector.pidHasChildren("root");
+            } catch (e) {
+                message = e.message;
+            }
+            expect(message).toEqual("Unexpected problem communicating with Solr.");
+            expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
+                fl: "id",
+                limit: "100000",
+            });
+        });
+
+        it("filters unwanted PIDs from the child list", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 2,
+                        docs: [{ id: "foo" }, { id: "bar" }],
+                    },
+                },
+            } as NeedleResponse);
+            expect(await collector.pidHasChildren("root", ["foo", "bar"])).toEqual(false);
+            expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
+                fl: "id",
+                limit: "100000",
+            });
         });
     });
 });

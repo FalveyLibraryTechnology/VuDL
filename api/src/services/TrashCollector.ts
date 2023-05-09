@@ -99,15 +99,55 @@ class TrashCollector {
      * @param childrenToIgnore Child PIDs we don't care about (because they've been purged, but the index may not have caught up)
      */
     public async pidHasChildren(pid: string, childrenToIgnore: Array<string> = []): Promise<boolean> {
+        const childLimit = 100000;
         const result = await this.solr.query(this.config.solrCore, `hierarchy_all_parents_str_mv:"${pid}"`, {
             fl: "id",
-            limit: "10000",
+            limit: childLimit.toString(),
         });
         if (result.statusCode !== 200) {
             throw new Error("Unexpected problem communicating with Solr.");
         }
-        const docs = (result?.body?.response?.docs ?? []).filter((doc) => !childrenToIgnore.includes(doc.id));
+        const response = result?.body?.response ?? {};
+        if ((response?.numFound ?? 0) > childLimit) {
+            throw new Error(`${pid} has too many children to analyze.`);
+        }
+        const docs = (response?.docs ?? []).filter((doc) => !childrenToIgnore.includes(doc.id));
         return docs.length > 0;
+    }
+
+    /**
+     * Assemble a trash tree using Solr lookups.
+     *
+     * @param pid PID representing root of trash tree
+     * @param pageSize Number of PIDs to retrieve from Solr at once
+     */
+    public async getTrashTreeForPid(pid: string, pageSize = 100000): Promise<TrashTree> {
+        const tree = new TrashTree(pid);
+        let offset = 0;
+        let numFound = 0;
+        do {
+            const result = await this.solr.query(
+                this.config.solrCore,
+                `hierarchy_all_parents_str_mv:"${pid}" AND fgs.state_txt_mv:"Deleted"`,
+                { fl: "id,fedora_parent_id_str_mv", offset: offset.toString(), limit: pageSize.toString() }
+            );
+            if (result.statusCode !== 200) {
+                console.error("Unexpected problem communicating with Solr.");
+                return;
+            }
+            const deletedChildren = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
+            numFound = deletedChildren.numFound ?? 0;
+            if (numFound === 0) {
+                console.log("Nothing found to delete.");
+                return;
+            }
+            for (const doc of deletedChildren.docs) {
+                const node = new TrashTreeNode(doc.id, doc.fedora_parent_id_str_mv);
+                tree.addNode(node);
+            }
+            offset += pageSize;
+        } while (numFound < offset);
+        return tree;
     }
 
     /**
@@ -116,25 +156,7 @@ class TrashCollector {
      * @param pid PID containing deleted PIDs to purge
      */
     public async purgeDeletedPidsInContainer(pid: string): Promise<void> {
-        const tree = new TrashTree(pid);
-        const result = await this.solr.query(
-            this.config.solrCore,
-            `hierarchy_all_parents_str_mv:"${pid}" AND fgs.state_txt_mv:"Deleted"`,
-            { fl: "id,fedora_parent_id_str_mv", limit: "100000" }
-        );
-        if (result.statusCode !== 200) {
-            console.error("Unexpected problem communicating with Solr.");
-            return;
-        }
-        const deletedChildren = result?.body?.response ?? { numFound: 0, start: 0, docs: [] };
-        if ((deletedChildren.numFound ?? 0) === 0) {
-            console.log("Nothing found to delete.");
-            return;
-        }
-        for (const doc of deletedChildren.docs) {
-            const node = new TrashTreeNode(doc.id, doc.fedora_parent_id_str_mv);
-            tree.addNode(node);
-        }
+        const tree = await this.getTrashTreeForPid(pid);
         if (tree.orphanedNodes.length > 0) {
             console.error("Unexpected orphaned nodes found: " + tree.orphanedNodes.join(", "));
             return;
