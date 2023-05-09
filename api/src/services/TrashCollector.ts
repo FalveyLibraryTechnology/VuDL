@@ -159,7 +159,7 @@ class TrashCollector {
             return;
         }
         if (tree.orphanedNodes.length > 0) {
-            console.error("Unexpected orphaned nodes found: " + tree.orphanedNodes.join(", "));
+            console.error("Unexpected orphaned nodes found: " + tree.orphanedNodes.map((node) => node.pid).join(", "));
             return;
         }
         let nextLeaf;

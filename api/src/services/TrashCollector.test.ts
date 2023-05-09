@@ -4,6 +4,8 @@ import FedoraDataCollector from "./FedoraDataCollector";
 import { NeedleResponse } from "./interfaces";
 import Solr from "./Solr";
 import TrashCollector from "./TrashCollector";
+import TrashTree from "../models/TrashTree";
+import TrashTreeNode from "../models/TrashTreeNode";
 
 describe("TrashCollector", () => {
     let collector;
@@ -330,6 +332,109 @@ describe("TrashCollector", () => {
                     limit: "100000",
                 }
             );
+        });
+    });
+
+    describe("purgeDeletedPidsInContainer", () => {
+        let errorSpy;
+        let logSpy;
+
+        beforeEach(() => {
+            errorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
+            logSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
+        });
+
+        it("purges nodes in the right order", async () => {
+            const tree = new TrashTree("root");
+            tree.addNode(new TrashTreeNode("foo", ["bar"]));
+            tree.addNode(new TrashTreeNode("bar", ["root"]));
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            const safeSpy = jest.spyOn(collector, "pidIsSafeToPurge").mockResolvedValue(true);
+            const childrenSpy = jest.spyOn(collector, "pidHasChildren").mockResolvedValue(false);
+            const purgeSpy = jest.spyOn(collector, "purgePid").mockImplementation(jest.fn());
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(errorSpy).not.toHaveBeenCalled();
+            expect(logSpy).toHaveBeenNthCalledWith(1, "Purged foo");
+            expect(logSpy).toHaveBeenNthCalledWith(2, "Purged bar");
+            expect(logSpy).toHaveBeenCalledTimes(2);
+            expect(safeSpy).toHaveBeenCalledTimes(2);
+            expect(childrenSpy).toHaveBeenCalledTimes(2);
+            expect(purgeSpy).toHaveBeenCalledTimes(2);
+        });
+
+        it("reports an empty tree", async () => {
+            const tree = new TrashTree("root");
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            jest.spyOn(collector, "pidIsSafeToPurge").mockResolvedValue(true);
+            jest.spyOn(collector, "pidHasChildren").mockResolvedValue(false);
+            const purgeSpy = jest.spyOn(collector, "purgePid").mockImplementation(jest.fn());
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(errorSpy).not.toHaveBeenCalled();
+            expect(purgeSpy).not.toHaveBeenCalled();
+            expect(logSpy).toHaveBeenNthCalledWith(1, "Nothing found to delete.");
+            expect(logSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it("reports purge exceptions", async () => {
+            const kaboom = new Error("kaboom!");
+            const tree = new TrashTree("root");
+            tree.addNode(new TrashTreeNode("bar", ["root"]));
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            jest.spyOn(collector, "pidIsSafeToPurge").mockResolvedValue(true);
+            jest.spyOn(collector, "pidHasChildren").mockResolvedValue(false);
+            const purgeSpy = jest.spyOn(collector, "purgePid").mockImplementation(() => {
+                throw kaboom;
+            });
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(logSpy).not.toHaveBeenCalled();
+            expect(purgeSpy).toHaveBeenCalledWith("bar");
+            expect(errorSpy).toHaveBeenNthCalledWith(1, "Problem purging bar -- ", kaboom);
+            expect(errorSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it("reports unsafe PIDs", async () => {
+            const tree = new TrashTree("root");
+            tree.addNode(new TrashTreeNode("bar", ["root"]));
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            jest.spyOn(collector, "pidIsSafeToPurge").mockResolvedValue(false);
+            jest.spyOn(collector, "pidHasChildren").mockResolvedValue(false);
+            const purgeSpy = jest.spyOn(collector, "purgePid").mockImplementation(jest.fn());
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(logSpy).not.toHaveBeenCalled();
+            expect(purgeSpy).not.toHaveBeenCalled();
+            expect(errorSpy).toHaveBeenNthCalledWith(1, "bar is not safe to purge!");
+            expect(errorSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it("reports unexpected children", async () => {
+            const tree = new TrashTree("root");
+            tree.addNode(new TrashTreeNode("bar", ["root"]));
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            jest.spyOn(collector, "pidIsSafeToPurge").mockResolvedValue(true);
+            jest.spyOn(collector, "pidHasChildren").mockResolvedValue(true);
+            const purgeSpy = jest.spyOn(collector, "purgePid").mockImplementation(jest.fn());
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(logSpy).not.toHaveBeenCalled();
+            expect(purgeSpy).not.toHaveBeenCalled();
+            expect(errorSpy).toHaveBeenNthCalledWith(1, "bar has unexpected children!");
+            expect(errorSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it("detects orphaned nodes", async () => {
+            const tree = new TrashTree("root");
+            tree.addNode(new TrashTreeNode("foo", ["bar"]));
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(errorSpy).toHaveBeenCalledWith("Unexpected orphaned nodes found: foo");
+        });
+
+        it("handles tree exceptions appropriately", async () => {
+            const kaboom = new Error("kaboom");
+            jest.spyOn(collector, "getTrashTreeForPid").mockImplementation(() => {
+                throw kaboom;
+            });
+            await collector.purgeDeletedPidsInContainer("foo");
+            expect(errorSpy).toHaveBeenCalledWith(kaboom);
         });
     });
 });
