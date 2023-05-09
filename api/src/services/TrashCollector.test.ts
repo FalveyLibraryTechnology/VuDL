@@ -1,12 +1,16 @@
 import Config from "../models/Config";
 import Fedora from "./Fedora";
 import FedoraDataCollector from "./FedoraDataCollector";
+import { NeedleResponse } from "./interfaces";
+import Solr from "./Solr";
 import TrashCollector from "./TrashCollector";
+import TrashTree from "../models/TrashTree";
+import TrashTreeNode from "../models/TrashTreeNode";
 
 describe("TrashCollector", () => {
     let collector;
     beforeEach(() => {
-        Config.setInstance(new Config({}));
+        Config.setInstance(new Config({ solr_core: "test_core" }));
         collector = TrashCollector.getInstance();
     });
 
@@ -106,6 +110,331 @@ describe("TrashCollector", () => {
             expect(purgeSpy).toHaveBeenCalledTimes(3);
             expect(errorSpy).toHaveBeenCalledTimes(1);
             expect(errorSpy).toHaveBeenCalledWith(fakeError);
+        });
+    });
+
+    describe("pidHasChildren", () => {
+        it("finds children when they exist", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 2,
+                        docs: [{ id: "foo" }, { id: "bar" }],
+                    },
+                },
+            } as NeedleResponse);
+            expect(await collector.pidHasChildren("root")).toEqual(true);
+            expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
+                fl: "id",
+                limit: "100000",
+            });
+        });
+
+        it("returns false when there are no children", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 0,
+                        docs: [],
+                    },
+                },
+            } as NeedleResponse);
+            expect(await collector.pidHasChildren("root")).toEqual(false);
+            expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
+                fl: "id",
+                limit: "100000",
+            });
+        });
+
+        it("reports a problem when there are too many children", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 1000000000,
+                        docs: [{ id: "foo" }, { id: "bar" }],
+                    },
+                },
+            } as NeedleResponse);
+            let message = "";
+            try {
+                await collector.pidHasChildren("root");
+            } catch (e) {
+                message = e.message;
+            }
+            expect(message).toEqual("root has too many children to analyze.");
+            expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
+                fl: "id",
+                limit: "100000",
+            });
+        });
+
+        it("responds to Solr errors appropriately", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 500,
+            } as NeedleResponse);
+            let message = "";
+            try {
+                await collector.pidHasChildren("root");
+            } catch (e) {
+                message = e.message;
+            }
+            expect(message).toEqual("Unexpected problem communicating with Solr.");
+            expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
+                fl: "id",
+                limit: "100000",
+            });
+        });
+
+        it("filters unwanted PIDs from the child list", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 2,
+                        docs: [{ id: "foo" }, { id: "bar" }],
+                    },
+                },
+            } as NeedleResponse);
+            expect(await collector.pidHasChildren("root", ["foo", "bar"])).toEqual(false);
+            expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
+                fl: "id",
+                limit: "100000",
+            });
+        });
+    });
+
+    describe("getTrashTreeForPid", () => {
+        it("maps a Solr response into a trash tree", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 2,
+                        docs: [
+                            { id: "foo", fedora_parent_id_str_mv: ["root"] },
+                            { id: "bar", fedora_parent_id_str_mv: ["foo"] },
+                        ],
+                    },
+                },
+            } as NeedleResponse);
+            const tree = await collector.getTrashTreeForPid("root");
+            const firstLeaf = tree.getNextLeaf();
+            expect(firstLeaf.pid).toEqual("bar");
+            tree.removeLeafNode(firstLeaf);
+            const secondLeaf = tree.getNextLeaf();
+            expect(secondLeaf.pid).toEqual("foo");
+            tree.removeLeafNode(secondLeaf);
+            expect(tree.getNextLeaf()).toEqual(null);
+            expect(solrSpy).toHaveBeenCalledWith(
+                "test_core",
+                'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
+                {
+                    fl: "id,fedora_parent_id_str_mv",
+                    offset: "0",
+                    limit: "100000",
+                }
+            );
+        });
+
+        it("handles an empty Solr response correctly", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 0,
+                        docs: [],
+                    },
+                },
+            } as NeedleResponse);
+            const tree = await collector.getTrashTreeForPid("root");
+            expect(tree.getNextLeaf()).toEqual(null);
+            expect(solrSpy).toHaveBeenCalledWith(
+                "test_core",
+                'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
+                {
+                    fl: "id,fedora_parent_id_str_mv",
+                    offset: "0",
+                    limit: "100000",
+                }
+            );
+        });
+
+        it("paginates Solr results when necessary", async () => {
+            const solrSpy = jest
+                .spyOn(Solr.getInstance(), "query")
+                .mockResolvedValueOnce({
+                    statusCode: 200,
+                    body: {
+                        response: {
+                            numFound: 2,
+                            docs: [{ id: "bar", fedora_parent_id_str_mv: ["foo"] }],
+                        },
+                    },
+                } as NeedleResponse)
+                .mockResolvedValueOnce({
+                    statusCode: 200,
+                    body: {
+                        response: {
+                            numFound: 2,
+                            docs: [{ id: "foo", fedora_parent_id_str_mv: ["root"] }],
+                        },
+                    },
+                } as NeedleResponse);
+            const tree = await collector.getTrashTreeForPid("root", 1);
+            const firstLeaf = tree.getNextLeaf();
+            expect(firstLeaf.pid).toEqual("bar");
+            tree.removeLeafNode(firstLeaf);
+            const secondLeaf = tree.getNextLeaf();
+            expect(secondLeaf.pid).toEqual("foo");
+            tree.removeLeafNode(secondLeaf);
+            expect(tree.getNextLeaf()).toEqual(null);
+            expect(solrSpy).toHaveBeenCalledWith(
+                "test_core",
+                'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
+                {
+                    fl: "id,fedora_parent_id_str_mv",
+                    offset: "0",
+                    limit: "1",
+                }
+            );
+            expect(solrSpy).toHaveBeenCalledWith(
+                "test_core",
+                'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
+                {
+                    fl: "id,fedora_parent_id_str_mv",
+                    offset: "1",
+                    limit: "1",
+                }
+            );
+            expect(solrSpy).toHaveBeenCalledTimes(2);
+        });
+
+        it("responds to Solr errors appropriately", async () => {
+            const solrSpy = jest.spyOn(Solr.getInstance(), "query").mockResolvedValue({
+                statusCode: 500,
+            } as NeedleResponse);
+            let message = "";
+            try {
+                await collector.getTrashTreeForPid("root");
+            } catch (e) {
+                message = e.message;
+            }
+            expect(message).toEqual("Unexpected problem communicating with Solr.");
+            expect(solrSpy).toHaveBeenCalledWith(
+                "test_core",
+                'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
+                {
+                    fl: "id,fedora_parent_id_str_mv",
+                    offset: "0",
+                    limit: "100000",
+                }
+            );
+        });
+    });
+
+    describe("purgeDeletedPidsInContainer", () => {
+        let errorSpy;
+        let logSpy;
+
+        beforeEach(() => {
+            errorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
+            logSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
+        });
+
+        it("purges nodes in the right order", async () => {
+            const tree = new TrashTree("root");
+            tree.addNode(new TrashTreeNode("foo", ["bar"]));
+            tree.addNode(new TrashTreeNode("bar", ["root"]));
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            const safeSpy = jest.spyOn(collector, "pidIsSafeToPurge").mockResolvedValue(true);
+            const childrenSpy = jest.spyOn(collector, "pidHasChildren").mockResolvedValue(false);
+            const purgeSpy = jest.spyOn(collector, "purgePid").mockImplementation(jest.fn());
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(errorSpy).not.toHaveBeenCalled();
+            expect(logSpy).toHaveBeenNthCalledWith(1, "Purged foo");
+            expect(logSpy).toHaveBeenNthCalledWith(2, "Purged bar");
+            expect(logSpy).toHaveBeenCalledTimes(2);
+            expect(safeSpy).toHaveBeenCalledTimes(2);
+            expect(childrenSpy).toHaveBeenCalledTimes(2);
+            expect(purgeSpy).toHaveBeenCalledTimes(2);
+        });
+
+        it("reports an empty tree", async () => {
+            const tree = new TrashTree("root");
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            jest.spyOn(collector, "pidIsSafeToPurge").mockResolvedValue(true);
+            jest.spyOn(collector, "pidHasChildren").mockResolvedValue(false);
+            const purgeSpy = jest.spyOn(collector, "purgePid").mockImplementation(jest.fn());
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(errorSpy).not.toHaveBeenCalled();
+            expect(purgeSpy).not.toHaveBeenCalled();
+            expect(logSpy).toHaveBeenNthCalledWith(1, "Nothing found to delete.");
+            expect(logSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it("reports purge exceptions", async () => {
+            const kaboom = new Error("kaboom!");
+            const tree = new TrashTree("root");
+            tree.addNode(new TrashTreeNode("bar", ["root"]));
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            jest.spyOn(collector, "pidIsSafeToPurge").mockResolvedValue(true);
+            jest.spyOn(collector, "pidHasChildren").mockResolvedValue(false);
+            const purgeSpy = jest.spyOn(collector, "purgePid").mockImplementation(() => {
+                throw kaboom;
+            });
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(logSpy).not.toHaveBeenCalled();
+            expect(purgeSpy).toHaveBeenCalledWith("bar");
+            expect(errorSpy).toHaveBeenNthCalledWith(1, "Problem purging bar -- ", kaboom);
+            expect(errorSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it("reports unsafe PIDs", async () => {
+            const tree = new TrashTree("root");
+            tree.addNode(new TrashTreeNode("bar", ["root"]));
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            jest.spyOn(collector, "pidIsSafeToPurge").mockResolvedValue(false);
+            jest.spyOn(collector, "pidHasChildren").mockResolvedValue(false);
+            const purgeSpy = jest.spyOn(collector, "purgePid").mockImplementation(jest.fn());
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(logSpy).not.toHaveBeenCalled();
+            expect(purgeSpy).not.toHaveBeenCalled();
+            expect(errorSpy).toHaveBeenNthCalledWith(1, "bar is not safe to purge!");
+            expect(errorSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it("reports unexpected children", async () => {
+            const tree = new TrashTree("root");
+            tree.addNode(new TrashTreeNode("bar", ["root"]));
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            jest.spyOn(collector, "pidIsSafeToPurge").mockResolvedValue(true);
+            jest.spyOn(collector, "pidHasChildren").mockResolvedValue(true);
+            const purgeSpy = jest.spyOn(collector, "purgePid").mockImplementation(jest.fn());
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(logSpy).not.toHaveBeenCalled();
+            expect(purgeSpy).not.toHaveBeenCalled();
+            expect(errorSpy).toHaveBeenNthCalledWith(1, "bar has unexpected children!");
+            expect(errorSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it("detects orphaned nodes", async () => {
+            const tree = new TrashTree("root");
+            tree.addNode(new TrashTreeNode("foo", ["bar"]));
+            jest.spyOn(collector, "getTrashTreeForPid").mockResolvedValue(tree);
+            await collector.purgeDeletedPidsInContainer("root");
+            expect(errorSpy).toHaveBeenCalledWith("Unexpected orphaned nodes found: foo");
+        });
+
+        it("handles tree exceptions appropriately", async () => {
+            const kaboom = new Error("kaboom");
+            jest.spyOn(collector, "getTrashTreeForPid").mockImplementation(() => {
+                throw kaboom;
+            });
+            await collector.purgeDeletedPidsInContainer("foo");
+            expect(errorSpy).toHaveBeenCalledWith(kaboom);
         });
     });
 });
