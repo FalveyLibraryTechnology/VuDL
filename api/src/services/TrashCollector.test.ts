@@ -127,7 +127,7 @@ describe("TrashCollector", () => {
             expect(await collector.pidHasChildren("root")).toEqual(true);
             expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
                 fl: "id",
-                limit: "100000",
+                rows: "100000",
             });
         });
 
@@ -144,7 +144,7 @@ describe("TrashCollector", () => {
             expect(await collector.pidHasChildren("root")).toEqual(false);
             expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
                 fl: "id",
-                limit: "100000",
+                rows: "100000",
             });
         });
 
@@ -167,7 +167,7 @@ describe("TrashCollector", () => {
             expect(message).toEqual("root has too many children to analyze.");
             expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
                 fl: "id",
-                limit: "100000",
+                rows: "100000",
             });
         });
 
@@ -184,7 +184,7 @@ describe("TrashCollector", () => {
             expect(message).toEqual("Unexpected problem communicating with Solr.");
             expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
                 fl: "id",
-                limit: "100000",
+                rows: "100000",
             });
         });
 
@@ -201,7 +201,7 @@ describe("TrashCollector", () => {
             expect(await collector.pidHasChildren("root", ["foo", "bar"])).toEqual(false);
             expect(solrSpy).toHaveBeenCalledWith("test_core", 'hierarchy_all_parents_str_mv:"root"', {
                 fl: "id",
-                limit: "100000",
+                rows: "100000",
             });
         });
     });
@@ -233,8 +233,8 @@ describe("TrashCollector", () => {
                 'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
                 {
                     fl: "id,fedora_parent_id_str_mv",
-                    offset: "0",
-                    limit: "100000",
+                    start: "0",
+                    rows: "100000",
                 }
             );
         });
@@ -256,8 +256,8 @@ describe("TrashCollector", () => {
                 'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
                 {
                     fl: "id,fedora_parent_id_str_mv",
-                    offset: "0",
-                    limit: "100000",
+                    start: "0",
+                    rows: "100000",
                 }
             );
         });
@@ -296,8 +296,8 @@ describe("TrashCollector", () => {
                 'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
                 {
                     fl: "id,fedora_parent_id_str_mv",
-                    offset: "0",
-                    limit: "1",
+                    start: "0",
+                    rows: "1",
                 }
             );
             expect(solrSpy).toHaveBeenCalledWith(
@@ -305,8 +305,8 @@ describe("TrashCollector", () => {
                 'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
                 {
                     fl: "id,fedora_parent_id_str_mv",
-                    offset: "1",
-                    limit: "1",
+                    start: "1",
+                    rows: "1",
                 }
             );
             expect(solrSpy).toHaveBeenCalledTimes(2);
@@ -328,8 +328,8 @@ describe("TrashCollector", () => {
                 'hierarchy_all_parents_str_mv:"root" AND fgs.state_txt_mv:"Deleted"',
                 {
                     fl: "id,fedora_parent_id_str_mv",
-                    offset: "0",
-                    limit: "100000",
+                    start: "0",
+                    rows: "100000",
                 }
             );
         });

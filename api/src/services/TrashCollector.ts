@@ -102,7 +102,7 @@ class TrashCollector {
         const childLimit = 100000;
         const result = await this.solr.query(this.config.solrCore, `hierarchy_all_parents_str_mv:"${pid}"`, {
             fl: "id",
-            limit: childLimit.toString(),
+            rows: childLimit.toString(),
         });
         if (result.statusCode !== 200) {
             throw new Error("Unexpected problem communicating with Solr.");
@@ -129,7 +129,7 @@ class TrashCollector {
             const result = await this.solr.query(
                 this.config.solrCore,
                 `hierarchy_all_parents_str_mv:"${pid}" AND fgs.state_txt_mv:"Deleted"`,
-                { fl: "id,fedora_parent_id_str_mv", offset: offset.toString(), limit: pageSize.toString() }
+                { fl: "id,fedora_parent_id_str_mv", start: offset.toString(), rows: pageSize.toString() }
             );
             if (result.statusCode !== 200) {
                 throw new Error("Unexpected problem communicating with Solr.");
