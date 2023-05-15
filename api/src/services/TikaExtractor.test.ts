@@ -10,7 +10,7 @@ jest.mock("child_process", () => {
 
 describe("TikaExtractor", () => {
     afterEach(() => {
-        jest.restoreAllMocks();
+        jest.clearAllMocks();
     });
 
     it("makes an appropriate CLI call without config XML", () => {
