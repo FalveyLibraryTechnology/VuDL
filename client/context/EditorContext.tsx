@@ -51,7 +51,6 @@ interface EditorState {
     toolPresets: Array<Record<string, string>>;
     vufindUrl: string;
     currentAgents: Array<Object>;
-    currentDublinCore: Record<string, Array<string>>;
     currentPid: string | null;
     activeDatastream: string | null;
     isDatastreamModalOpen: boolean;
@@ -62,8 +61,9 @@ interface EditorState {
     stateModalActivePid: string | null;
     snackbarState: SnackbarState;
     objectDetailsStorage: Record<string, ObjectDetails>;
-    parentDetailsStorage: Record<string, TreeNode>;
+    parentDetailsStorage: Record<string, Record<string, TreeNode>>;
     childListStorage: Record<string, ChildrenResultPage>;
+    topLevelPids: Array<string>;
 }
 
 /**
@@ -80,7 +80,6 @@ const editorContextParams: EditorState = {
     toolPresets: [],
     vufindUrl: "",
     currentAgents: [],
-    currentDublinCore: {},
     currentPid: null,
     activeDatastream: null,
     isDatastreamModalOpen: false,
@@ -97,6 +96,7 @@ const editorContextParams: EditorState = {
     objectDetailsStorage: {},
     parentDetailsStorage: {},
     childListStorage: {},
+    topLevelPids: [],
 };
 
 export const DatastreamModalStates = {
@@ -120,7 +120,6 @@ const reducerMapping: Record<string, string> = {
     SET_LICENSES_CATALOG: "licensesCatalog",
     SET_MODELS_CATALOG: "modelsCatalog",
     SET_CURRENT_AGENTS: "currentAgents",
-    SET_CURRENT_DUBLIN_CORE: "currentDublinCore",
     SET_CURRENT_PID: "currentPid",
     SET_ACTIVE_DATASTREAM: "activeDatastream",
     SET_IS_DATASTREAM_MODAL_OPEN: "isDatastreamModalOpen",
@@ -130,6 +129,7 @@ const reducerMapping: Record<string, string> = {
     SET_PARENTS_MODAL_ACTIVE_PID: "parentsModalActivePid",
     SET_STATE_MODAL_ACTIVE_PID: "stateModalActivePid",
     SET_SNACKBAR_STATE: "snackbarState",
+    SET_TOP_LEVEL_PIDS: "topLevelPids",
 };
 
 /**
@@ -157,11 +157,14 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
             objectDetailsStorage
         };
     } else if (type === "ADD_TO_PARENT_DETAILS_STORAGE") {
-        const { key, details } = payload as { key: string; details: TreeNode };
+        const { shallow, key, details } = payload as { shallow: boolean; key: string; details: TreeNode };
         const parentDetailsStorage = {
             ...state.parentDetailsStorage,
         };
-        parentDetailsStorage[key] = details;
+        parentDetailsStorage[key] = {
+            ...state.parentDetailsStorage[key],
+            [shallow ? "shallow" : "full"]: details,
+        };
         return {
             ...state,
             parentDetailsStorage
@@ -224,7 +227,6 @@ export const useEditorContext = () => {
     const {
         state: {
             currentAgents,
-            currentDublinCore,
             currentPid,
             activeDatastream,
             isDatastreamModalOpen,
@@ -245,6 +247,7 @@ export const useEditorContext = () => {
             objectDetailsStorage,
             parentDetailsStorage,
             childListStorage,
+            topLevelPids,
         },
         dispatch,
     } = useContext(EditorContext);
@@ -278,10 +281,10 @@ export const useEditorContext = () => {
         });
     };
 
-    const addToParentDetailsStorage = (key: string, details: TreeNode) => {
+    const addToParentDetailsStorage = (key: string, details: TreeNode, shallow = false) => {
         dispatch({
             type: "ADD_TO_PARENT_DETAILS_STORAGE",
-            payload: { key, details },
+            payload: { shallow, key, details },
         });
     };
 
@@ -299,13 +302,6 @@ export const useEditorContext = () => {
         });
     };
 
-    const setCurrentDublinCore = (dc: Record<string, Array<string>>) => {
-        dispatch({
-            type: "SET_CURRENT_DUBLIN_CORE",
-            payload: dc
-        });
-    };
-
     const setAgentsCatalog = (agentsCatalog) => {
         dispatch({
             type: "SET_AGENTS_CATALOG",
@@ -317,6 +313,13 @@ export const useEditorContext = () => {
         dispatch({
             type: "SET_DUBLIN_CORE_FIELD_CATALOG",
             payload: dcCatalog
+        });
+    };
+
+    const setTopLevelPids = (pids: Array<string>) => {
+        dispatch({
+            type: "SET_TOP_LEVEL_PIDS",
+            payload: pids
         });
     };
 
@@ -347,14 +350,14 @@ export const useEditorContext = () => {
         }
     };
 
-    const loadParentDetailsIntoStorage = async (pid: string, errorCallback: ((pid: string) => void) | null = null) => {
+    const loadParentDetailsIntoStorage = async (pid: string, shallow = false, errorCallback: ((pid: string) => void) | null = null) => {
         // Ignore null values:
         if (pid === null) {
             return;
         }
-        const url = getObjectParentsUrl(pid);
+        const url = getObjectParentsUrl(pid, shallow);
         try {
-            addToParentDetailsStorage(pid, await fetchJSON(url));
+            addToParentDetailsStorage(pid, await fetchJSON(url), shallow);
         } catch (e) {
             if (errorCallback) {
                 errorCallback(pid);
@@ -502,6 +505,7 @@ export const useEditorContext = () => {
             setProcessMetadataDefaults(response.processMetadataDefaults || {});
             setAgentsCatalog(response.agents || {});
             setDublinCoreFieldCatalog(response.dublinCoreFields || {});
+            setTopLevelPids(response.topLevelPids || []);
             setVuFindUrl(response.vufindUrl ?? "");
         } catch(err) {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
@@ -520,7 +524,6 @@ export const useEditorContext = () => {
     return {
         state: {
             currentAgents,
-            currentDublinCore,
             currentPid,
             currentDatastreams,
             activeDatastream,
@@ -544,11 +547,11 @@ export const useEditorContext = () => {
             objectDetailsStorage,
             parentDetailsStorage,
             childListStorage,
+            topLevelPids,
         },
         action: {
             initializeCatalog,
             setCurrentAgents,
-            setCurrentDublinCore,
             setCurrentPid,
             loadCurrentObjectDetails,
             setActiveDatastream,

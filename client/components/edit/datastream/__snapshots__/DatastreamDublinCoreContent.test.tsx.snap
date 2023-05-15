@@ -18,6 +18,12 @@ exports[`DatastreamDublinCoreContent  renders 1`] = `
         xs={4}
       >
         <Component />
+        <h3>
+          Other Tools
+        </h3>
+        <Component
+          pid="foo"
+        />
       </ForwardRef(Grid)>
     </ForwardRef(Grid)>
   </ForwardRef(DialogContent)>

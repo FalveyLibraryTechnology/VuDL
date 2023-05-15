@@ -39,20 +39,6 @@ describe("useEditorContext", () => {
             expect(result.current.state.currentAgents).toEqual(agents);
         });
     });
-    describe("setCurrentDublinCore", () => {
-        it("sets the current Dublin Core", async () => {
-            const dc = { "dc:title": ["foo"] };
-            const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
-
-            expect(result.current.state.currentDublinCore).toEqual({});
-
-            await act(async () => {
-                await result.current.action.setCurrentDublinCore(dc);
-            });
-
-            expect(result.current.state.currentDublinCore).toEqual(dc);
-        });
-    });
     describe("setCurrentPid", () => {
         it("sets the current pid", async () => {
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
@@ -442,7 +428,7 @@ describe("useEditorContext", () => {
             const errorSpy = jest.spyOn(global.console, "error").mockImplementation(jest.fn());
             fetchValues.action.fetchJSON.mockRejectedValue("test1");
             await act(async () => {
-                await result.current.action.loadParentDetailsIntoStorage("test:123", callback);
+                await result.current.action.loadParentDetailsIntoStorage("test:123", false, callback);
             });
             expect(callback).toHaveBeenCalledWith("test:123");
             expect(errorSpy).toHaveBeenCalledWith("Problem fetching parent details from http://localhost:9000/api/edit/object/test%3A123/parents");

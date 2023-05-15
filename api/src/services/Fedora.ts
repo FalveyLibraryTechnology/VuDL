@@ -7,6 +7,7 @@ const { namedNode, literal } = DataFactory;
 import { NeedleResponse } from "./interfaces";
 import xmlescape = require("xml-escape");
 import { HttpError } from "../models/HttpError";
+import winston = require("winston");
 
 export interface DatastreamParameters {
     dsLabel?: string;
@@ -29,6 +30,7 @@ export interface DC {
 
 export class Fedora {
     private static instance: Fedora;
+    protected logger: winston.Logger = null;
     config: Config;
 
     constructor(config: Config) {
@@ -123,11 +125,11 @@ export class Fedora {
     }
 
     /**
+     * Purge datastream from Fedora by removing its tombstone
      *
      * @param pid Record id
      * @param datastream Which stream to request
      * @param requestOptions Parse JSON (true) or return raw (false, default)
-     * @returns
      */
     async deleteDatastreamTombstone(
         pid: string,
@@ -137,6 +139,36 @@ export class Fedora {
         return await this._request(
             "delete",
             `${pid}/${datastream}/fcr:tombstone`,
+            null, // Data
+            requestOptions
+        );
+    }
+
+    /**
+     * Delete object from Fedora
+     *
+     * @param pid Record id
+     * @param parse Parse JSON (true) or return raw (false, default)
+     */
+    async deleteObject(pid: string, requestOptions = { parse_response: false }): Promise<NeedleResponse> {
+        return await this._request(
+            "delete",
+            pid,
+            null, // Data
+            requestOptions
+        );
+    }
+
+    /**
+     * Purge object from Fedora by removing its tombstone
+     *
+     * @param pid Record id
+     * @param requestOptions Parse JSON (true) or return raw (false, default)
+     */
+    async deleteObjectTombstone(pid: string, requestOptions = { parse_response: false }): Promise<NeedleResponse> {
+        return await this._request(
+            "delete",
+            `${pid}/fcr:tombstone`,
             null, // Data
             requestOptions
         );
@@ -172,10 +204,43 @@ export class Fedora {
     async getDublinCore(pid: string): Promise<DC> {
         const requestOptions = { parse_response: true };
         const response = await this.getDatastream(pid, "DC", requestOptions);
+        // If the DC doesn't exist yet, return an empty object.
+        if (response.statusCode === 404) {
+            return <DC>{};
+        }
         if (response.statusCode !== 200) {
             throw new Error("Unexpected status code: " + response.statusCode);
         }
         return <DC>response.body;
+    }
+
+    /**
+     * Call the callback, and retry if it yields a 409 response. Number of retries
+     * is based on configuration in vudl.ini (and retries can be disabled by setting
+     * retry count to 0).
+     *
+     * @param callback Callback to attempt
+     */
+    async callWith409Retry(callback: () => Promise<void>): Promise<void> {
+        const maxRetries = this.config.max409Retries;
+        let retries = 0;
+        while (retries <= maxRetries) {
+            try {
+                await callback();
+                return;
+            } catch (e) {
+                if (e.statusCode ?? null === 409) {
+                    retries++;
+                    if (retries <= maxRetries) {
+                        this.log(`Encountered 409 error; retry #${retries}...`);
+                    } else {
+                        throw e;
+                    }
+                } else {
+                    throw e;
+                }
+            }
+        }
     }
 
     /**
@@ -207,22 +272,26 @@ export class Fedora {
             options.headers.Link = linkHeader;
         }
         const targetPath = "/" + pid + "/" + stream;
-        const response = await this._request("put", targetPath, data, options);
-        if (!expectedStatus.includes(response.statusCode)) {
-            throw new HttpError(
-                response,
-                `Expected ${expectedStatus} Created response, received: ${response.statusCode}`
-            );
-        }
+        const callback = async () => {
+            const response = await this._request("put", targetPath, data, options);
+            if (!expectedStatus.includes(response.statusCode)) {
+                throw new HttpError(
+                    response,
+                    `Expected ${expectedStatus} Created response, received: ${response.statusCode}`
+                );
+            }
+        };
+        await this.callWith409Retry(callback);
     }
 
     /**
      * Add a datastream to Fedora.
      *
-     * @param pid    Object containing datastream
-     * @param stream Name of stream
-     * @param params Additional parameters
-     * @param data   Content to write to stream
+     * @param pid            Object containing datastream
+     * @param stream         Name of stream
+     * @param params         Additional parameters
+     * @param data           Content to write to stream
+     * @param expectedStatus Array of expected legal HTTP response codes
      */
     async addDatastream(
         pid: string,
@@ -244,7 +313,7 @@ export class Fedora {
         writer.addQuad(
             namedNode(""),
             namedNode("http://purl.org/dc/terms/title"),
-            literal(params.dsLabel ?? pid.replace(":", "_") + "_" + stream)
+            literal(params.dsLabel ?? pid.replace(/:/g, "_") + "_" + stream)
         );
         const turtle = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid + "/" + stream + "/fcr:metadata";
@@ -354,9 +423,32 @@ export class Fedora {
     }
 
     /**
+     * This method changes the "sort on" property of a collection.
+     *
+     * @param pid    PID to update
+     * @param sortOn New sort value
+     */
+    async updateSortOnRelationship(pid: string, sortOn: string): Promise<void> {
+        if (sortOn !== "title" && sortOn !== "custom") {
+            throw new Error("Unexpected sortOn value: " + sortOn);
+        }
+        const subject = "info:fedora/" + pid;
+        const predicate = "http://vudl.org/relationships#sortOn";
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(subject), namedNode(predicate), literal(sortOn));
+        const insertClause = this.getOutputFromWriter(writer);
+        const targetPath = "/" + pid;
+        const deleteClause = `<> <${predicate}> ?any .`;
+        const whereClause = `?id <${predicate}> ?any`;
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
+    /**
      * This method changes the sequential position of a pid within a specified parent pid.
      * It is the responsibility of the caller to ensure that parentPid is a legal parent of pid.
-     * This will NOT insert a new position; it only updates existing values.
      *
      * @param pid         PID to update
      * @param parentPid   Parent PID to update
@@ -370,7 +462,7 @@ export class Fedora {
         const insertClause = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid;
         const deleteClause = `<> <${predicate}> ?pos .`;
-        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#"))`;
+        const whereClause = `OPTIONAL { ?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#")) }`;
         const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
         if (patchResponse.statusCode !== 204) {
             throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
@@ -473,6 +565,26 @@ export class Fedora {
             logMessage: "Create initial Dublin Core record",
         };
         await this.addDatastream(pid, "DC", params, xml, [201]);
+    }
+
+    /**
+     * Send a message to the active logger (if any).
+     *
+     * @param message Message to log
+     */
+    log(message: string): void {
+        if (this.logger && message.length > 0) {
+            this.logger.info(message);
+        }
+    }
+
+    /**
+     * Set the active logger
+     *
+     * @param logger Logger object to use (or null to disable logging)
+     */
+    setLogger(logger: winston.Logger | null): void {
+        this.logger = logger;
     }
 }
 

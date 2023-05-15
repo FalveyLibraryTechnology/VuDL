@@ -13,13 +13,22 @@ jest.mock("../../../context/EditorContext", () => ({
     },
 }));
 
+const mockUseDublinCoreMetadataContext = jest.fn();
+jest.mock("../../../context/DublinCoreMetadataContext", () => ({
+    useDublinCoreMetadataContext: () => {
+        return mockUseDublinCoreMetadataContext();
+    },
+}));
+
 const mockUseDatastreamOperation = jest.fn();
 jest.mock("../../../hooks/useDatastreamOperation", () => () => mockUseDatastreamOperation());
 
 jest.mock("./DatastreamDublinCoreValues", () => () => "DatastreamDublinCoreValues");
 jest.mock("./DatastreamDublinCoreAddButtons", () => () => "DatastreamDublinCoreAddButtons");
+jest.mock("../ObjectPreviewButton", () => () => "ObjectPreviewButton");
 
 describe("DatastreamDublinCoreContent ", () => {
+    let dcValues;
     let editorValues;
     let pid;
     let uploadDublinCore;
@@ -28,18 +37,25 @@ describe("DatastreamDublinCoreContent ", () => {
         pid = "foo";
         editorValues = {
             state: {
-                currentDublinCore: {},
                 currentPid: pid,
                 objectDetailsStorage: {},
             },
             action: {
-                setCurrentDublinCore: jest.fn(),
                 toggleDatastreamsModel: jest.fn(),
             },
         };
         mockUseEditorContext.mockReturnValue(editorValues);
         uploadDublinCore = jest.fn();
         mockUseDatastreamOperation.mockReturnValue({ uploadDublinCore });
+        dcValues = {
+            state: {
+                currentDublinCore: {},
+            },
+            action: {
+                setCurrentDublinCore: jest.fn(),
+            },
+        };
+        mockUseDublinCoreMetadataContext.mockReturnValue(dcValues);
     });
 
     afterEach(() => {
@@ -52,25 +68,25 @@ describe("DatastreamDublinCoreContent ", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
         // Our default data has nothing loaded, and current DC shouldn't be set
         // until data loads.
-        expect(editorValues.action.setCurrentDublinCore).not.toHaveBeenCalled();
+        expect(dcValues.action.setCurrentDublinCore).not.toHaveBeenCalled();
     });
 
     it("correctly loads data", () => {
         const metadata = { "dc:title": ["foo"] };
         editorValues.state.objectDetailsStorage[pid] = { metadata };
         mount(<DatastreamDublinCoreContent />);
-        expect(editorValues.action.setCurrentDublinCore).toHaveBeenCalledWith(metadata);
+        expect(dcValues.action.setCurrentDublinCore).toHaveBeenCalledWith(metadata);
     });
 
     it("correctly defaults to empty data when none is provided", () => {
         editorValues.state.objectDetailsStorage[pid] = {};
         mount(<DatastreamDublinCoreContent />);
-        expect(editorValues.action.setCurrentDublinCore).toHaveBeenCalledWith({});
+        expect(dcValues.action.setCurrentDublinCore).toHaveBeenCalledWith({});
     });
 
     it("correctly uploads data", () => {
         const metadata = { "dc:title": ["foo"] };
-        editorValues.state.currentDublinCore = metadata;
+        dcValues.state.currentDublinCore = metadata;
         const wrapper = mount(<DatastreamDublinCoreContent />);
         act(() => {
             wrapper.find(Button).at(0).props().onClick();

@@ -173,11 +173,16 @@ export const usePaginatorContext = () => {
 
     const loadJob = async (initialCategory, initialJob) => {
         initialize(initialCategory, initialJob);
+        // There was a problem where switching jobs would sometimes fail to redraw the display,
+        // because the filenames in the order for the new job overlapped with filenames from the
+        // order in the previously-loaded job. To avoid this, we should always clear out the
+        // whole order before loading new data.
+        setOrder([]);
+        setMagicLabelCache([]); // clear label cache whenever there is a change
         const { order } = await fetchJSON(getJobUrl(initialCategory, initialJob));
         setOrder(order);
         setCurrentPage(0);
         updatePagesByStatus(await fetchJSON(getJobUrl(initialCategory, initialJob, "/status")));
-        dispatchEvent(new Event("Prep.loaded"));
     };
 
     const deletePage = async () => {

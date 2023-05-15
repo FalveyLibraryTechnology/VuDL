@@ -27,6 +27,11 @@ class MetadataProcessor {
         const contentFile = tmp.fileSync();
         fs.writeFileSync(contentFile.name, dataStream);
         await fedoraObject.addMasterMetadataDatastream(contentFile.name);
+        fs.truncateSync(contentFile.name, 0);
+        fs.rmSync(contentFile.name);
+        // FITS XML will have been generated in /tmp as a side-effect; clean it up:
+        fs.truncateSync(contentFile.name + ".fits.xml", 0);
+        fs.rmSync(contentFile.name + ".fits.xml");
     }
 
     async run(): Promise<void> {

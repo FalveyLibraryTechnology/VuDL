@@ -21,7 +21,10 @@ describe("DatastreamList", () => {
     beforeEach(() => {
         editorValues = {
             state: {
-                modelsDatastreams: ["test1"],
+                modelsDatastreams: [
+                    { stream: "test1", disabled: true },
+                    { stream: "test0", disabled: false },
+                ],
             },
         };
         mockUseEditorContext.mockReturnValue(editorValues);
@@ -31,7 +34,10 @@ describe("DatastreamList", () => {
         const wrapper = mount(<DatastreamList />);
         expect(toJson(wrapper)).toMatchSnapshot();
         expect(mockDatastream).toHaveBeenCalledWith({
-            datastream: "test1",
+            datastream: { stream: "test0", disabled: false },
+        });
+        expect(mockDatastream).toHaveBeenCalledWith({
+            datastream: { stream: "test1", disabled: true },
         });
     });
 });

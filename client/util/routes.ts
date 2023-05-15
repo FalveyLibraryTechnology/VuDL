@@ -39,9 +39,14 @@ const getObjectChildrenUrl = (pid: string, start = 0, rows = 10): string => {
     return `${base}?start=${start}&rows=${rows}`;
 }
 
-const getObjectRecursiveChildPidsUrl = (pid: string, start = 0, rows = 10): string => {
+const getObjectDirectChildPidsUrl = (pid: string, start = 0, rows = 10, sort: string|null = null): string => {
+    const base = getPidActionUrl(pid, "directChildPids");
+    return `${base}?start=${start}&rows=${rows}` + (sort ? `&sort=${encodeURIComponent(sort)}` : "");
+}
+
+const getObjectRecursiveChildPidsUrl = (pid: string, start = 0, rows = 10, sort: string|null = null): string => {
     const base = getPidActionUrl(pid, "recursiveChildPids");
-    return `${base}?start=${start}&rows=${rows}`;
+    return `${base}?start=${start}&rows=${rows}` + (sort ? `&sort=${encodeURIComponent(sort)}` : "");
 }
 
 const getObjectDetailsUrl = (pid: string): string => {
@@ -52,8 +57,12 @@ const getObjectLastChildPositionUrl = (pid: string): string => {
     return getPidActionUrl(pid, "lastChildPosition");
 }
 
-const getObjectParentsUrl = (pid: string): string => {
-    return getPidActionUrl(pid, "parents");
+const getObjectParentsUrl = (pid: string, shallow = false): string => {
+    return getPidActionUrl(pid, "parents") + (shallow ? "?shallow=1" : "");
+}
+
+const getObjectSortOnUrl = (pid: string): string => {
+    return getPidActionUrl(pid, "sortOn");
 }
 
 const getObjectStateUrl = (pid: string): string => {
@@ -131,7 +140,9 @@ export {
     getObjectDetailsUrl,
     getObjectLastChildPositionUrl,
     getObjectParentsUrl,
+    getObjectDirectChildPidsUrl,
     getObjectRecursiveChildPidsUrl,
+    getObjectSortOnUrl,
     getObjectStateUrl,
     getParentUrl,
     getPositionInParentUrl,

@@ -9,6 +9,12 @@ exports[`ChildList allows thumbnails to be toggled on 1`] = `
     >
       <button
         onClick={[Function]}
+        style={
+          Object {
+            "float": "right",
+            "marginTop": "-2em",
+          }
+        }
       >
         Hide Thumbnails
       </button>
@@ -42,13 +48,30 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
     >
       <button
         onClick={[Function]}
+        style={
+          Object {
+            "float": "right",
+            "marginTop": "-2em",
+          }
+        }
       >
         Show Thumbnails
       </button>
+      <p>
+        Showing 
+        1
+         - 
+        10
+         of
+         
+        10000
+      </p>
       <Component
+        boundaryCount={2}
         count={1000}
         onChange={[Function]}
         page={1}
+        siblingCount={2}
       >
         Pagination
       </Component>
@@ -191,6 +214,12 @@ exports[`ChildList renders using SelectableChild when a callback is provided 1`]
     >
       <button
         onClick={[Function]}
+        style={
+          Object {
+            "float": "right",
+            "marginTop": "-2em",
+          }
+        }
       >
         Show Thumbnails
       </button>
@@ -224,6 +253,12 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
     >
       <button
         onClick={[Function]}
+        style={
+          Object {
+            "float": "right",
+            "marginTop": "-2em",
+          }
+        }
       >
         Show Thumbnails
       </button>
@@ -257,6 +292,12 @@ exports[`ChildList renders using ajax-loaded root data 1`] = `
     >
       <button
         onClick={[Function]}
+        style={
+          Object {
+            "float": "right",
+            "marginTop": "-2em",
+          }
+        }
       >
         Show Thumbnails
       </button>

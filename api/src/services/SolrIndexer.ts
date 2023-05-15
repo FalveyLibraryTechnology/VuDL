@@ -58,7 +58,7 @@ class SolrIndexer {
             typeof response.results.getFirstIndexed !== "string" ||
             typeof response.results.getLastIndexed !== "string"
         ) {
-            throw new Error("Unexpected change tracker response.");
+            throw new Error(`Unexpected change tracker response: ${JSON.stringify(response)}.`);
         }
         return response.results;
     }
@@ -99,7 +99,7 @@ class SolrIndexer {
         for (const sequence of fedoraData.sequences) {
             const [seqPid, seqNum] = sequence.split("#", 2);
             sequenceIndex[seqPid] = seqNum;
-            const sequence_str = seqPid.replace(":", "_");
+            const sequence_str = seqPid.replace(/:/g, "_");
             const dynamic_sequence_field_name = "sequence_" + sequence_str + "_str";
             fields[dynamic_sequence_field_name] = this.padNumber(seqNum);
         }
@@ -183,7 +183,7 @@ class SolrIndexer {
         // Load all the Dublin Core data into dynamic fields AND allfields:
         fields.allfields = [];
         for (const field in fedoraData.metadata) {
-            const fieldName = field.replace(":", ".") + "_txt_mv";
+            const fieldName = field.replace(/:/g, ".") + "_txt_mv";
             fields[fieldName] = fedoraData.metadata[field];
             fields.allfields = fields.allfields.concat(fedoraData.metadata[field]);
         }

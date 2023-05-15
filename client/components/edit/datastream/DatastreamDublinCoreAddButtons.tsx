@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { useEditorContext } from "../../../context/EditorContext";
+import { useDublinCoreMetadataContext } from "../../../context/DublinCoreMetadataContext";
 import PidPicker from "../PidPicker";
 
 const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
     const {
-        state: { currentDublinCore, dublinCoreFieldCatalog, objectDetailsStorage },
-        action: { loadObjectDetailsIntoStorage, setCurrentDublinCore },
+        state: { currentPid, dublinCoreFieldCatalog, objectDetailsStorage, parentDetailsStorage },
+        action: { loadObjectDetailsIntoStorage },
     } = useEditorContext();
+    const {
+        action: { addValueAbove, mergeValues },
+    } = useDublinCoreMetadataContext();
     const [clonePid, setClonePid] = useState("");
     const clonePidLoaded = clonePid.length > 0 && Object.prototype.hasOwnProperty.call(objectDetailsStorage, clonePid);
     const loadClonePid = async (newClonePid: string) => {
@@ -27,20 +31,13 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
         }
         setClonePid(newClonePid);
     };
-    const addField = (field: string) => {
-        if (!Object.prototype.hasOwnProperty.call(currentDublinCore, field)) {
-            currentDublinCore[field] = [];
-        }
-        currentDublinCore[field].push("");
-        setCurrentDublinCore(currentDublinCore);
-    };
     const buttons = [];
     for (const key in dublinCoreFieldCatalog) {
         const current = dublinCoreFieldCatalog[key];
         // Don't add fields we're not allowed to edit:
         if (current.type !== "locked") {
             buttons.push(
-                <button key={"dcadd_" + key.replace(":", "_")} onClick={() => addField(key)}>
+                <button key={"dcadd_" + key.replace(":", "_")} onClick={() => addValueAbove(key, 0, "")}>
                     {current.label}
                 </button>
             );
@@ -50,20 +47,25 @@ const DatastreamDublinCoreAddButtons = (): React.ReactElement => {
         const details = objectDetailsStorage[clonePid] ?? {};
         const metadata = details.metadata ?? {};
         for (const field in metadata) {
-            // Don't clone locked fields!
-            if (dublinCoreFieldCatalog[field].type !== "locked") {
-                currentDublinCore[field] = (currentDublinCore[field] ?? []).concat(metadata[field]);
+            // Filter out locked fields.
+            if (dublinCoreFieldCatalog[field].type === "locked") {
+                delete metadata[field];
             }
         }
-        setCurrentDublinCore(currentDublinCore);
+        mergeValues(metadata);
         setClonePid("");
     };
+    const getImmediateParents = () => {
+        const dataForPid = parentDetailsStorage?.[currentPid] ?? {};
+        return dataForPid?.shallow?.parents ?? dataForPid?.full?.parents ?? [];
+    };
+    getImmediateParents();
     return (
         <>
             <h3>Add Blank Field:</h3>
             {buttons}
             <h3>Clone Metadata:</h3>
-            <PidPicker selected={clonePid} setSelected={loadClonePid} />
+            <PidPicker selected={clonePid} setSelected={loadClonePid} parents={getImmediateParents()} />
             {clonePidLoaded ? <button onClick={doClone}>Clone</button> : null}
         </>
     );

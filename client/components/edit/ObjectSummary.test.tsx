@@ -11,6 +11,7 @@ jest.mock("../../context/EditorContext", () => ({
     },
 }));
 jest.mock("./ObjectButtonBar", () => () => "ObjectButtonBar");
+jest.mock("./ObjectOrder", () => () => "ObjectOrder");
 jest.mock("./ObjectThumbnail", () => () => "ObjectThumbnail");
 
 describe("ObjectSummary", () => {
