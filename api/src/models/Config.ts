@@ -113,6 +113,10 @@ class Config {
         return this.ini["java_path"] ?? "java";
     }
 
+    get tikaConfigFile(): string {
+        return this.ini["tika_config_file"] ?? null;
+    }
+
     get tikaPath(): string {
         return this.ini["tika_path"];
     }

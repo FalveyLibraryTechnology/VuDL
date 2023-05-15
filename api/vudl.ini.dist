@@ -63,6 +63,9 @@ java_path = java
 # Settings for Tika (used for text extraction during Solr indexing)
 tika_path = /opt/tika/tika.jar
 
+# If you want to override defaults, you can specify a configuration file.
+#tika_config_file = /opt/tika/tika-config.xml
+
 # Settings for the textcleaner OCR preparation script. It can be downloaded
 # from http://www.fmwconcepts.com/imagemagick/textcleaner/index.php
 textcleaner_path = "/usr/local/bin/textcleaner"
