@@ -41,21 +41,19 @@ describe("JobMetadata", () => {
         });
     });
 
-    describe("video", () => {
-        it("automatically creates a video order as needed", () => {
-            expect(jobMetadata.video.raw()).toEqual([]);
-        });
-
-        it("allows setting of a video list", () => {
-            const video = new VideoOrder([]);
-            jobMetadata.video = video;
-            expect(jobMetadata.video).toEqual(video);
-        });
-
-        it("allows setting of a video list from raw data", () => {
-            const video = [{ filename: "a.avi" }];
-            jobMetadata.setVideoFromRaw(video);
-            expect(jobMetadata.video.raw()).toEqual(video);
+    describe("fileProblems", () => {
+        it("detects file problems correctly", () => {
+            jobMetadata.order = PageOrder.fromRaw([
+                { filename: "foo.jpg", label: "1" },
+                { filename: "bar.jpg", label: "2" },
+            ]);
+            const mockedFileOrder = PageOrder.fromRaw([
+                { filename: "baz.jpg", label: "3" },
+                { filename: "bar.jpg", label: "2" },
+            ]);
+            const fromJobSpy = jest.spyOn(PageOrder, "fromJob").mockReturnValue(mockedFileOrder);
+            expect(jobMetadata.fileProblems).toEqual({ deleted: ["foo.jpg"], added: ["baz.jpg"] });
+            expect(fromJobSpy).toHaveBeenCalledWith(jobMetadata.job);
         });
     });
 
@@ -105,6 +103,24 @@ describe("JobMetadata", () => {
             expect(jobMetadata.uploadTime).toEqual(newDate.getTime() / 1000);
             expect(statSpy).toHaveBeenCalledTimes(1);
             expect(statSpy).toHaveBeenCalledWith("test1");
+        });
+    });
+
+    describe("video", () => {
+        it("automatically creates a video order as needed", () => {
+            expect(jobMetadata.video.raw()).toEqual([]);
+        });
+
+        it("allows setting of a video list", () => {
+            const video = new VideoOrder([]);
+            jobMetadata.video = video;
+            expect(jobMetadata.video).toEqual(video);
+        });
+
+        it("allows setting of a video list from raw data", () => {
+            const video = [{ filename: "a.avi" }];
+            jobMetadata.setVideoFromRaw(video);
+            expect(jobMetadata.video.raw()).toEqual(video);
         });
     });
 });
