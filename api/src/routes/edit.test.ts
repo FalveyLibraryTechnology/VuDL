@@ -14,8 +14,10 @@ import FedoraDataCollection from "../models/FedoraDataCollection";
 import { FedoraObject } from "../models/FedoraObject";
 import Solr from "../services/Solr";
 import { NeedleResponse } from "../services/interfaces";
+import { IncomingForm } from "formidable";
 
 jest.mock("../services/DatastreamManager");
+jest.mock("formidable");
 
 describe("edit", () => {
     let config;
@@ -223,6 +225,77 @@ describe("edit", () => {
             expect(dataSpy).toHaveBeenCalledWith("pid:123");
             expect(factorySpy).toHaveBeenCalledTimes(1);
             expect(factorySpy).toHaveBeenCalledWith("foo", "bar", "Active", "pid:123");
+        });
+    });
+
+    describe("post /object/:pid/datastream/:stream", () => {
+        let datastreamManager;
+        const filepath = "/foo/bar";
+        const mimetype = "text/fake";
+        beforeEach(() => {
+            datastreamManager = {
+                uploadFile: jest.fn(),
+            };
+            datastream = "THUMBNAIL";
+            jest.spyOn(Database.getInstance(), "confirmToken").mockResolvedValue(true);
+            jest.spyOn(DatastreamManager, "getInstance").mockReturnValue(datastreamManager);
+        });
+
+        it("accepts an arbitrary upload", async () => {
+            let lastOptions = {};
+            IncomingForm.mockImplementation((options) => {
+                lastOptions = options;
+                return {
+                    parse: (req, callback) => {
+                        callback(
+                            false,
+                            {},
+                            {
+                                file: { filepath, mimetype },
+                            }
+                        );
+                    },
+                };
+            });
+            datastreamManager.uploadFile.mockResolvedValue({});
+            await request(app)
+                .post(`/edit/object/${pid}/datastream/${datastream}`)
+                .set("Authorization", "Bearer test")
+                .send()
+                .set("Accept", "application/json")
+                .expect(StatusCodes.OK);
+            expect(lastOptions).toEqual({ multiples: true, maxFileSize: 200 * 1024 * 1024 });
+            expect(datastreamManager.uploadFile).toHaveBeenCalledWith(pid, datastream, filepath, mimetype);
+        });
+
+        it("handles exceptions", async () => {
+            IncomingForm.mockImplementation(() => {
+                return {
+                    parse: (req, callback) => {
+                        callback(
+                            false,
+                            {},
+                            {
+                                file: { filepath, mimetype },
+                            }
+                        );
+                    },
+                };
+            });
+            const kaboom = new Error("kaboom");
+            datastreamManager.uploadFile.mockImplementation(() => {
+                throw kaboom;
+            });
+            const consoleSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
+            const response = await request(app)
+                .post(`/edit/object/${pid}/datastream/${datastream}`)
+                .set("Authorization", "Bearer test")
+                .send()
+                .set("Accept", "application/json")
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+
+            expect(response.error.text).toEqual("kaboom");
+            expect(consoleSpy).toHaveBeenCalledWith(kaboom);
         });
     });
 

@@ -24,24 +24,28 @@ class Solr {
         method = "get",
         _path = "/",
         data: string = null,
-        options: Record<string, unknown> = {}
+        options: Record<string, unknown> = {},
+        log = false
     ): Promise<NeedleResponse> {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
         const url = this.baseUrl + "/" + path;
-        console.log(method, url, data);
+        if (log) {
+            console.log(method, url, data);
+        }
         return http(method, url, data, options);
     }
 
     public async query(
         core: string,
         solrQuery: string,
-        queryParams: Record<string, string> = {}
+        queryParams: Record<string, string> = {},
+        log = false
     ): Promise<NeedleResponse> {
         const formatter = ([key, val]) => {
             return "&" + encodeURIComponent(key) + "=" + encodeURIComponent(val);
         };
         const extras = Object.entries(queryParams).map(formatter).join("");
-        return this._request("get", core + "/select?q=" + encodeURIComponent(solrQuery) + extras);
+        return this._request("get", core + "/select?q=" + encodeURIComponent(solrQuery) + extras, null, {}, log);
     }
 
     public async deleteRecord(core: string, pid: string): Promise<NeedleResponse> {

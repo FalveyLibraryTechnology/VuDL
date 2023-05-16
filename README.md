@@ -35,7 +35,8 @@ For image-based jobs, each job folder is expected to contain TIFF images of a mu
 
 The software provides functionality for automatically generating JPEG derivatives of these TIFFs as well as assigning labels to the pages within the jobs. When all of this work has been completed, the finished data can be published to a repository. (Currently, this is designed for a Fedora 6-based repository).
 
-Job folders can also include PDF files (for document-based jobs) or FLAC files (for audio-based jobs).
+Job folders can also include PDF files (for document-based jobs), FLAC files (for audio-based jobs) or AVI/MKV/MOV/MP4 files (for video-based jobs).
+Videos may optionally be accompanied by .txt or .vtt files containing transcripts -- the filenames just need to match (e.g. myVideo.vtt and myVideo.mp4).
 
 # Dependencies
 
