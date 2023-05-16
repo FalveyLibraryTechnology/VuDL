@@ -324,4 +324,41 @@ describe("usePaginatorContext", () => {
             expect(getImageUrlSpy).toHaveBeenCalledWith("testCategory", "testJob", "image.png", 2);
         });
     });
+
+    describe("updatePagesByStatus", () => {
+        it("reports anomalies", async () => {
+            const { result } = await renderHook(() => usePaginatorContext(), { wrapper });
+
+            json.mockResolvedValueOnce({
+                order: [
+                {
+                    filename: "test1",
+                    label: null,
+                },
+                {
+                    filename: "test2",
+                    label: null,
+                },
+            ]});
+            json.mockResolvedValueOnce({
+                file_problems: { deleted: ["test1"], added: ["test3"] }
+            });
+
+            await act(async () => {
+                await result.current.action.loadJob("foo", "bar");
+            });
+
+            expect(window.alert).toHaveBeenCalledWith("1 file(s) have been removed from the job since the last edit.\n1 file(s) have been added to the job since the last edit.\n");
+            expect(result.current.state.order).toEqual([
+                {
+                    filename: "test2",
+                    label: null,
+                },
+                {
+                    filename: "test3",
+                    label: null,
+                },
+            ]);
+        });
+    });
 });
