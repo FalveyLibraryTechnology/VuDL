@@ -38,6 +38,10 @@ describe("usePaginatorContext", () => {
         });
     });
 
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     it("increments and decrements the currentPage", async () => {
         const { result } = await renderHook(() => usePaginatorContext(), { wrapper });
 
@@ -162,6 +166,7 @@ describe("usePaginatorContext", () => {
 
     describe("save", () => {
         it("saves magic labels", () => {
+            const labelSpy = jest.spyOn(JobPaginatorState, "getLabel");
             const userMustReviewMoreLabelsMock = jest
                 .spyOn(JobPaginatorState, "userMustReviewMoreLabels")
                 .mockReturnValue(true);
@@ -189,8 +194,8 @@ describe("usePaginatorContext", () => {
             expect(result.current.state.order[1].label).toBeNull();
 
             userMustReviewMoreLabelsMock.mockReturnValue(false);
-            JobPaginatorState.getLabel.mockReturnValueOnce("1");
-            JobPaginatorState.getLabel.mockReturnValueOnce(null);
+            labelSpy.mockReturnValueOnce("1");
+            labelSpy.mockReturnValueOnce(null);
             act(() => {
                 result.current.action.save(false);
             });
