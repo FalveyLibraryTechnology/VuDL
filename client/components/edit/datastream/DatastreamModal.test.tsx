@@ -33,8 +33,8 @@ describe("DatastreamModal", () => {
             action: {
                 closeModal: jest.fn(),
                 isModalOpen: jest.fn(),
-            }
-        }
+            },
+        };
         mockUseGlobalContext.mockReturnValue(globalValues);
         globalValues.action.isModalOpen.mockReturnValue(true);
     });

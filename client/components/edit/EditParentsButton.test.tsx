@@ -33,8 +33,8 @@ describe("EditParentsButton", () => {
         globalValues = {
             action: {
                 openModal: jest.fn(),
-            }
-        }
+            },
+        };
         mockUseGlobalContext.mockReturnValue(globalValues);
     });
 
