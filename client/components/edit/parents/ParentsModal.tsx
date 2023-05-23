@@ -20,7 +20,7 @@ const ParentsModal = (): React.ReactElement => {
     } = useEditorContext();
 
     function closeParentModal() {
-        closeModal("parent");
+        closeModal("parents");
     }
 
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, parentsModalActivePid);
