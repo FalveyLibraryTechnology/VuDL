@@ -1,53 +1,57 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ObjectStatus defaults to unknown state 1`] = `
-<FetchContextProvider>
-  <EditorContextProvider>
-    <ObjectStatus
-      pid="foo:123"
-    >
-      <ObjectLoader
+<GlobalContextProvider>
+  <FetchContextProvider>
+    <EditorContextProvider>
+      <ObjectStatus
         pid="foo:123"
-      />
-      <button
-        className="unknown"
-        onClick={[Function]}
       >
-        <span
-          className="indicator"
+        <ObjectLoader
+          pid="foo:123"
+        />
+        <button
+          className="unknown"
+          onClick={[Function]}
         >
-          ◉
-        </span>
-         
-        Unknown
-      </button>
-    </ObjectStatus>
-  </EditorContextProvider>
-</FetchContextProvider>
+          <span
+            className="indicator"
+          >
+            ◉
+          </span>
+           
+          Unknown
+        </button>
+      </ObjectStatus>
+    </EditorContextProvider>
+  </FetchContextProvider>
+</GlobalContextProvider>
 `;
 
 exports[`ObjectStatus displays the state found in the response 1`] = `
-<FetchContextProvider>
-  <EditorContextProvider>
-    <ObjectStatus
-      pid="foo:123"
-    >
-      <ObjectLoader
+<GlobalContextProvider>
+  <FetchContextProvider>
+    <EditorContextProvider>
+      <ObjectStatus
         pid="foo:123"
-      />
-      <button
-        className="inactive"
-        onClick={[Function]}
       >
-        <span
-          className="indicator"
+        <ObjectLoader
+          pid="foo:123"
+        />
+        <button
+          className="inactive"
+          onClick={[Function]}
         >
-          ◉
-        </span>
-         
-        Inactive
-      </button>
-    </ObjectStatus>
-  </EditorContextProvider>
-</FetchContextProvider>
+          <span
+            className="indicator"
+          >
+            ◉
+          </span>
+           
+          Inactive
+        </button>
+      </ObjectStatus>
+    </EditorContextProvider>
+  </FetchContextProvider>
+</GlobalContextProvider>
 `;

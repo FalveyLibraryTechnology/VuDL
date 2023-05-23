@@ -6,14 +6,17 @@ import toJson from "enzyme-to-json";
 import { ObjectStatusProps, ObjectStatus } from "./ObjectStatus";
 import { EditorContextProvider, ObjectDetails } from "../../context/EditorContext";
 import { FetchContextProvider } from "../../context/FetchContext";
+import { GlobalContextProvider } from "../../context/GlobalContext";
 
 function getMountedObjectStatusComponent(props: ObjectStatusProps) {
     return mount(
-        <FetchContextProvider>
-            <EditorContextProvider>
-                <ObjectStatus {...props} />
-            </EditorContextProvider>
-        </FetchContextProvider>
+        <GlobalContextProvider>
+            <FetchContextProvider>
+                <EditorContextProvider>
+                    <ObjectStatus {...props} />
+                </EditorContextProvider>
+            </FetchContextProvider>
+        </GlobalContextProvider>
     );
 }
 

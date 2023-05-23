@@ -28,4 +28,30 @@ describe("useGlobalContext", () => {
             });
         });
     });
+
+    describe("toggleModal", () => {
+        it("toggles the modal", async () => {
+            const { result } = await renderHook(() => useGlobalContext(), { wrapper: GlobalContextProvider });
+
+            expect(result.current.action.isModalOpen("foo")).toEqual(false);
+
+            await act(async () => {
+                await result.current.action.toggleModal("foo");
+            });
+
+            expect(result.current.action.isModalOpen("foo")).toEqual(true);
+
+            await act(async () => {
+                await result.current.action.toggleModal("foo");
+            });
+
+            expect(result.current.action.isModalOpen("foo")).toEqual(false);
+
+            await act(async () => {
+                await result.current.action.toggleModal("foo");
+            });
+
+            expect(result.current.action.isModalOpen("foo")).toEqual(true);
+        });
+    });
 });

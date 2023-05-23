@@ -37,18 +37,19 @@ describe("StateModal", () => {
     beforeEach(() => {
         globalValues = {
             action: {
+                closeModal: jest.fn(),
+                isModalOpen: jest.fn(),
+                openModal: jest.fn(),
                 setSnackbarState: jest.fn(),
             },
         };
         editorValues = {
             state: {
                 stateModalActivePid: pid,
-                isStateModalOpen: true,
                 objectDetailsStorage: {},
             },
             action: {
                 removeFromObjectDetailsStorage: jest.fn(),
-                toggleStateModal: jest.fn(),
             },
         };
         fetchContextValues = {
@@ -60,10 +61,15 @@ describe("StateModal", () => {
         mockUseGlobalContext.mockReturnValue(globalValues);
         mockUseEditorContext.mockReturnValue(editorValues);
         mockUseFetchContext.mockReturnValue(fetchContextValues);
+        globalValues.action.isModalOpen.mockReturnValue(true);
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     it("renders correctly when closed", () => {
-        editorValues.state.isStateModalOpen = false;
+        globalValues.action.isModalOpen.mockReturnValue(false);
         const wrapper = shallow(<StateModal />);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
@@ -128,7 +134,7 @@ describe("StateModal", () => {
             severity: "success",
         });
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
-        expect(editorValues.action.toggleStateModal).toHaveBeenCalled();
+        expect(globalValues.action.closeModal).toHaveBeenCalledWith("state");
     });
 
     it("does not save when nothing changes", async () => {
@@ -153,7 +159,7 @@ describe("StateModal", () => {
         );
         expect(fetchContextValues.action.fetchText).not.toHaveBeenCalled();
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
-        expect(editorValues.action.toggleStateModal).not.toHaveBeenCalled();
+        expect(globalValues.action.openModal).not.toHaveBeenCalled();
     });
 
     it("handles save failure gracefully", async () => {
@@ -187,7 +193,7 @@ describe("StateModal", () => {
             severity: "error",
         });
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
-        expect(editorValues.action.toggleStateModal).toHaveBeenCalled();
+        expect(globalValues.action.closeModal).toHaveBeenCalledWith("state");
     });
 
     it("handles child save failure gracefully", async () => {
@@ -227,7 +233,7 @@ describe("StateModal", () => {
             severity: "error",
         });
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
-        expect(editorValues.action.toggleStateModal).toHaveBeenCalled();
+        expect(globalValues.action.closeModal).toHaveBeenCalledWith("state");
     });
 
     it("updates children correctly", async () => {
@@ -274,6 +280,6 @@ describe("StateModal", () => {
         expect(fetchContextValues.action.fetchText).toHaveBeenCalledTimes(2);
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenNthCalledWith(1, "foo:125");
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenNthCalledWith(2, pid);
-        expect(editorValues.action.toggleStateModal).toHaveBeenCalled();
+        expect(globalValues.action.closeModal).toHaveBeenCalledWith("state");
     });
 });

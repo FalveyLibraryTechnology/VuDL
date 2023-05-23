@@ -5,7 +5,7 @@ exports[`DatastreamModal renders 1`] = `
   className="datastreamModal"
   fullWidth={true}
   maxWidth="lg"
-  onClose={[MockFunction]}
+  onClose={[Function]}
   open={true}
 >
   <ForwardRef(DialogTitle)>
@@ -24,7 +24,7 @@ exports[`DatastreamModal renders 1`] = `
       >
         <ForwardRef(IconButton)
           className="closeButton"
-          onClick={[MockFunction]}
+          onClick={[Function]}
         >
           <Memo(ForwardRef(CloseIcon)) />
         </ForwardRef(IconButton)>
