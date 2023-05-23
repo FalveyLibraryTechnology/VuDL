@@ -43,13 +43,12 @@ export class FedoraObject {
     }
 
     public static build(pid: string, logger: winston.Logger = null, config: Config = null): FedoraObject {
-        return new FedoraObject(
-            pid,
-            config ?? Config.getInstance(),
-            Fedora.getInstance(),
-            FedoraDataCollector.getInstance(),
-            logger
-        );
+        const fedora = Fedora.getInstance();
+        // Share logger with the Fedora service so we can send messages to the right place.
+        if (logger) {
+            fedora.setLogger(logger);
+        }
+        return new FedoraObject(pid, config ?? Config.getInstance(), fedora, FedoraDataCollector.getInstance(), logger);
     }
 
     get namespace(): string {

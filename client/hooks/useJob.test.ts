@@ -18,6 +18,7 @@ describe("useJob", () => {
             minutes_since_upload: 0,
             documents: 0,
             audio: 0,
+            video: 0,
             ingesting: false,
             published: false,
         };

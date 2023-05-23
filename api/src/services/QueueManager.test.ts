@@ -133,6 +133,14 @@ describe("QueueManager", () => {
         });
     });
 
+    describe("sendNotification", () => {
+        it("will pass along values as expected", () => {
+            const spy = jest.spyOn(queueManager, "addToQueue").mockImplementation(jest.fn());
+            queueManager.sendNotification("foo", "bar");
+            expect(spy).toHaveBeenCalledWith("notify", { body: "foo", channel: "bar" });
+        });
+    });
+
     describe("queueMetadataOperation", () => {
         let jobs;
         let getJobsSpy;
