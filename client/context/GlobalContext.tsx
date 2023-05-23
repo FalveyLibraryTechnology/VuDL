@@ -100,7 +100,7 @@ export const useGlobalContext = () => {
         });
     };
     const toggleModal = (modal: string) => {
-        if (modalOpenStates[modal]) {
+        if (modalOpenStates[modal] ?? false) {
             closeModal(modal);
         } else {
             openModal(modal);
