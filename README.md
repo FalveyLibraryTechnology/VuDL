@@ -1,8 +1,12 @@
-# About this Project
+# VuDL
 
-This project provides an interface (driven by a JSON API) for managing review and pagination of jobs prior to their import into a digital repository, as well as additional tools for managing that repository after it has been populated.
+VuDL is the ingest and management platform that powers [Villanova University's Digital Library](https://digital.library.villanova.edu/).
 
-# Ingest Workflow / Assumptions
+## About this Project
+
+This project provides an interface (driven by a JSON API) for managing review and pagination of jobs prior to their import into a digital repository, as well as additional tools for managing that repository after it has been populated. It is intended to be used in combination with [Fedora Commons](https://fedora.lyrasis.org/) and [VuFind®](https://vufind.org), among other dependencies (see below for further details).
+
+## Ingest Workflow / Assumptions
 
 For data ingestion purposes, this software assumes a two-tiered set of directories, in which the top tier represents categories and the second tier represents jobs.
 
@@ -38,7 +42,7 @@ The software provides functionality for automatically generating JPEG derivative
 Job folders can also include PDF files (for document-based jobs), FLAC files (for audio-based jobs) or AVI/MKV/MOV/MP4 files (for video-based jobs).
 Videos may optionally be accompanied by .txt or .vtt files containing transcripts -- the filenames just need to match (e.g. myVideo.vtt and myVideo.mp4).
 
-# Dependencies
+## Dependencies
 
 This is a complex system which uses a large number of tools to manage a digital repository.
 
@@ -46,7 +50,7 @@ The software is written in node.js, but requires quite a few external tools to a
 
 This software is designed to run on multiple operating systems; however, Ubuntu (or other Debian flavors) tend to be the quickest and easiest because of the availability of easy-to-install packages for most of the external dependencies.
 
-## External Dependencies
+### External Dependencies
 
 - [Cantaloupe Image Server](https://cantaloupe-project.github.io/) (or another IIIF image server) - optional, but required when using VuFind (see below, and also [setup notes](docs/cantaloupe.md)).
 - [Fedora Commons](https://duraspace.org/fedora/) - required for storing repository content
@@ -62,25 +66,25 @@ This software is designed to run on multiple operating systems; however, Ubuntu 
 - [Tika](https://tika.apache.org/) - required for text extraction from document files
 - [VuFind](https://vufind.org) - strongly recommended as the public front-end for the repository
 
-## Javascript Dependencies
+### Javascript Dependencies
 
 - Node.js (developed and tested with v15)
 - NPM (`npm install -g npm`)
 - Execute `npm install` to install root node dependencies
 - Execute `npm run setup` to install node dependencies in subdirectories
 
-## Underlying Technologies
+### Underlying Technologies
 - [Express.js](https://expressjs.com)
 - [React.js](https://reactjs.org)
 - [BullMQ](https://github.com/taskforcesh/bullmq)
 
-# Set up configuration in the api directory
+## Set up configuration in the api directory
 
 Copy api/vudl.ini.dist to api/vudl.ini, and configure it using a text editor.
 
 This configuration file allows you to specify where files will be stored during ingest/processing, as well as the paths to the various external tools required by this package.
 
-# Running the dev server
+## Running the dev server
 
 In two separate terminals or panes, run:
 1. `npm run api:watch` to run Typescript for the API code
@@ -88,7 +92,7 @@ In two separate terminals or panes, run:
 
 After a few moments, a new tab should automatically open in your browser pointing to `localhost:3000`. Refresh until the app appears.
 
-# NPM Scripts
+## NPM Scripts
 
 | Script | Description |
 | - | - |
