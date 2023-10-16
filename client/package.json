@@ -10,7 +10,7 @@
     "prod": "next start",
     "snapshots": "jest --updateSnapshot",
     "start": "next dev",
-    "test": "jest --coverage",
+    "test": "jest --coverage --no-cache",
     "testWatch": "jest --watch --coverage"
   },
   "dependencies": {
