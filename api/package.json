@@ -8,7 +8,7 @@
     "start:server": "ts-node src/server.ts",
     "start:worker": "ts-node src/worker-start.ts",
     "saml:metadata": "ts-node src/saml-metadata.ts",
-    "test": "jest --coverage",
+    "test": "jest --coverage --no-cache",
     "testWatch": "jest --watch --coverage"
   },
   "dependencies": {
