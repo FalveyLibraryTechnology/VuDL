@@ -103,7 +103,6 @@ After a few moments, a new tab should automatically open in your browser pointin
 | api:lint | lint only the api code |
 | api:saml:metadata | output SAML SP metadata to share with an IdP |
 | api:setup | install npm dependencies in api/ |
-| api:wsl | run api server, restart on changes (use if on WSL or `api:dev` isn't working) |
 | | |
 | client | run react-scripts server |
 | client:build | build React code for production |
@@ -116,13 +115,11 @@ After a few moments, a new tab should automatically open in your browser pointin
 | | |
 | queue | start job queue worker (call with `-- [queuename]` to specify a non-default queue to monitor)|
 | queue:dev | start job queue worker, restart on changes |
-| queue:wsl | start job queue worker, restart on changes (use if on WSL or `api:dev` isn't working) |
 | | |
 | ingest | add all published jobs to the ingest queue |
 | | |
 | backend | start both api and worker queue servers |
 | backend:dev | start both api and worker queue servers, restart on changes |
-| backend:wsl | start both api and worker queue servers, restart on changes (use if on WSL or `api:dev` isn't working) |
 | | |
 | build | build entire project for production |
 | dev | run api, client, and queue dev servers (auto-restart) |
