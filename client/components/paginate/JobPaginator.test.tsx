@@ -41,7 +41,7 @@ describe("JobPaginator", () => {
         const wrapper = render(
             <FetchContextProvider>
                 <JobPaginator {...props} />
-            </FetchContextProvider>
+            </FetchContextProvider>,
         );
         expect(wrapper.children().text().includes(props.initialCategory)).toBeTruthy();
         expect(wrapper.children().text().includes(props.initialJob)).toBeTruthy();
@@ -53,7 +53,7 @@ describe("JobPaginator", () => {
             await mount(
                 <FetchContextProvider>
                     <JobPaginator {...props} />
-                </FetchContextProvider>
+                </FetchContextProvider>,
             );
         });
         expect(paginatorValues.action.loadJob).toHaveBeenCalledWith(props.initialCategory, props.initialJob);

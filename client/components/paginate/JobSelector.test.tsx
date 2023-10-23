@@ -12,7 +12,7 @@ jest.mock(
         function Category(props) {
             mockCategory(props);
             return <mock-Category />;
-        }
+        },
 );
 jest.mock("../shared/BasicBreadcrumbs", () => () => "BasicBreadcrumbs");
 
@@ -42,7 +42,7 @@ describe("JobSelector", () => {
         const wrapper = render(
             <FetchContextProvider>
                 <JobSelector />
-            </FetchContextProvider>
+            </FetchContextProvider>,
         );
         expect(toJson(wrapper)).toMatchSnapshot();
     });
@@ -54,7 +54,7 @@ describe("JobSelector", () => {
             await mount(
                 <FetchContextProvider>
                     <JobSelector />
-                </FetchContextProvider>
+                </FetchContextProvider>,
             );
         });
 

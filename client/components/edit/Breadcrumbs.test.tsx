@@ -32,11 +32,11 @@ describe("Breadcrumb", () => {
                 <EditorContextProvider>
                     <Breadcrumbs {...{ ...props, initiallyShallow }} />
                 </EditorContextProvider>
-            </FetchContextProvider>
+            </FetchContextProvider>,
         );
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual(
-            "http://localhost:9000/api/edit/object/foo%3A1234/parents" + (initiallyShallow ? "?shallow=1" : "")
+            "http://localhost:9000/api/edit/object/foo%3A1234/parents" + (initiallyShallow ? "?shallow=1" : ""),
         );
         wrapper.update();
         expect(toJson(wrapper)).toMatchSnapshot();
@@ -53,7 +53,7 @@ describe("Breadcrumb", () => {
                 <EditorContextProvider>
                     <Breadcrumbs />
                 </EditorContextProvider>
-            </FetchContextProvider>
+            </FetchContextProvider>,
         );
         expect(toJson(wrapper)).toMatchSnapshot();
     });

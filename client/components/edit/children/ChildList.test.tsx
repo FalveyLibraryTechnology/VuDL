@@ -17,7 +17,7 @@ function getMountedChildListComponent(props: ChildListProps) {
             <EditorContextProvider>
                 <ChildList {...props} />
             </EditorContextProvider>
-        </FetchContextProvider>
+        </FetchContextProvider>,
     );
 }
 

@@ -17,7 +17,7 @@ jest.mock(
         function Thumbnail(props) {
             mockThumbnail(props);
             return "Thumbnail";
-        }
+        },
 );
 
 describe("PaginatorList", () => {
@@ -56,7 +56,7 @@ describe("PaginatorList", () => {
                 scrollTo: expect.any(Function),
                 selected: true,
                 number: 0,
-            })
+            }),
         );
     });
 });
