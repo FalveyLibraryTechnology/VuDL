@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "comments": {
-    "dev": "tsc can't be bundled into concurrently because it suppresses the logs of other processes. Still needs to be run separately.",
-    "api:wsl/queue:wsl": "These are for Chris since WSL causes listening weirdness in nodemon."
+    "dev": "tsc can't be bundled into concurrently because it suppresses the logs of other processes. Still needs to be run separately."
   },
   "scripts": {
     "api": "cd api && npm run start:server",
@@ -16,7 +15,6 @@
     "api:setup": "cd api && npm ci",
     "api:test": "cd api && npm test",
     "api:testWatch": "cd api && npm run testWatch",
-    "api:wsl": "nodemon --legacy-watch api/bin/www",
     "client": "cd client && npm run prod",
     "client:build": "cd client && npm run build",
     "client:dev": "cd client && npm run start",
@@ -28,11 +26,9 @@
     "client:testWatch": "cd client && npm run testWatch",
     "queue": "cd api && npm run start:worker",
     "queue:dev": "cd api && npm run start:workerWatch",
-    "queue:wsl": "nodemon --legacy-watch api/worker-start.js",
     "ingest": "node api/scripts/ingest.js",
     "backend": "concurrently npm:api npm:queue",
     "backend:dev": "concurrently npm:api:dev npm:queue:dev",
-    "backend:wsl": "concurrently npm:api:wsl npm:queue:wsl",
     "build": "concurrently npm:api:build npm:client:build",
     "dev": "concurrently -c 'cyan,green,gray' npm:client:dev npm:api:dev npm:queue:dev",
     "format": "concurrently npm:client:format npm:api:format",
@@ -43,7 +39,6 @@
     "watch": "cd api && tsc --watch"
   },
   "devDependencies": {
-    "concurrently": "^6.0.2",
-    "nodemon": "^3.0.0"
+    "concurrently": "^6.0.2"
   }
 }
