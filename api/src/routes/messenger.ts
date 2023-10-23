@@ -28,7 +28,7 @@ messenger.post("/solrindex/:pid", pidSanitizer, requireToken, async function (re
     try {
         const result = await indexer.indexPid(req.params.pid);
         res.status(result.statusCode).send(
-            result.statusCode === 200 ? "ok" : ((result.body ?? {}).error ?? {}).msg ?? "error"
+            result.statusCode === 200 ? "ok" : ((result.body ?? {}).error ?? {}).msg ?? "error",
         );
     } catch (e) {
         console.error(e);

@@ -104,7 +104,7 @@ describe("FedoraObject", () => {
                 expect.stringContaining(expectedXml.trim()),
                 stream,
                 "text/xml",
-                [201, 204]
+                [201, 204],
             );
         });
     });
@@ -132,7 +132,7 @@ describe("FedoraObject", () => {
                 "info:fedora/" + pid,
                 "info:fedora/fedora-system:def/relations-external#isMemberOf",
                 "info:fedora/foo:999",
-                false
+                false,
             );
         });
     });

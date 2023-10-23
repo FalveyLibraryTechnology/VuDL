@@ -27,7 +27,7 @@ class SolrIndexer {
             SolrIndexer.instance = new SolrIndexer(
                 FedoraDataCollector.getInstance(),
                 Solr.getInstance(),
-                Config.getInstance()
+                Config.getInstance(),
             );
         }
         return SolrIndexer.instance;

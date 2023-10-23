@@ -25,7 +25,7 @@ class FedoraDataCollector {
                 Fedora.getInstance(),
                 MetadataExtractor.getInstance(),
                 Config.getInstance(),
-                TikaExtractor.getInstance()
+                TikaExtractor.getInstance(),
             );
         }
         return FedoraDataCollector.instance;
@@ -45,7 +45,7 @@ class FedoraDataCollector {
             this.fedora,
             this.extractor,
             this.tika,
-            this.config
+            this.config,
         );
     }
 
