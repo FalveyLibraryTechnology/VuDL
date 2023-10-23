@@ -99,6 +99,7 @@ After a few moments, a new tab should automatically open in your browser pointin
 | api | run node api server |
 | api:build | Build api Typescript |
 | api:dev | run api server, restart server on changes |
+| api:format | format only the api code with [Prettier](https://prettier.io) |
 | api:lint | lint only the api code |
 | api:saml:metadata | output SAML SP metadata to share with an IdP |
 | api:setup | install npm dependencies in api/ |
@@ -106,6 +107,7 @@ After a few moments, a new tab should automatically open in your browser pointin
 | | |
 | client | run react-scripts server |
 | client:build | build React code for production |
+| client:format | format only the client code with [Prettier](https://prettier.io) |
 | client:lint | lint only the api code |
 | client:setup | install npm dependencies in client/ |
 | client:snapshots | update snapshots used by test suite |

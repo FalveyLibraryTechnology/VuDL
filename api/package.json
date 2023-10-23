@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "format": "prettier --check --write *.js src/**",
+    "lint": "eslint *.js src/ --ext .ts,.js,.jsx --max-warnings 0",
     "start:serverWatch": "nodemon --watch 'vudl.ini' --watch '**/*.ts' --watch '**/*.ejs' --ignore node_modules/ src/server.ts",
     "start:workerWatch": "nodemon --watch 'vudl.ini' --watch '**/*.ts' src/worker-start.ts",
     "start:server": "ts-node src/server.ts",
@@ -51,10 +53,19 @@
     "xpath": "^0.0.32"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "@types/jest": "^27.0.2",
     "@types/node": "^14.14.33",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jsdoc": "^32.3.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
     "jest": "^27.3.1",
+    "prettier": "^2.2.1",
     "supertest": "^6.1.6",
-    "ts-jest": "^27.0.7"
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.2.4"
   }
 }
