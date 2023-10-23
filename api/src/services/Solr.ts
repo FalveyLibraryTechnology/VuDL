@@ -25,7 +25,7 @@ class Solr {
         _path = "/",
         data: string = null,
         options: Record<string, unknown> = {},
-        log = false
+        log = false,
     ): Promise<NeedleResponse> {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
         const url = this.baseUrl + "/" + path;
@@ -39,7 +39,7 @@ class Solr {
         core: string,
         solrQuery: string,
         queryParams: Record<string, string> = {},
-        log = false
+        log = false,
     ): Promise<NeedleResponse> {
         const formatter = ([key, val]) => {
             return "&" + encodeURIComponent(key) + "=" + encodeURIComponent(val);

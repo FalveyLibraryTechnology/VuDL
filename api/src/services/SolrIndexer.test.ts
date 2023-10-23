@@ -13,7 +13,7 @@ describe("SolrIndexer", () => {
             new Config({
                 articles_to_strip: ["a ", "an ", "the "],
                 LanguageMap: { en: "English" },
-            })
+            }),
         );
         indexer = SolrIndexer.getInstance();
     });
@@ -77,7 +77,7 @@ describe("SolrIndexer", () => {
         const grandparentRecord = FedoraDataCollection.build(
             grandparentPid,
             { "dc:title": ["test record"] },
-            grandparentRecordDetails
+            grandparentRecordDetails,
         );
         parentRecord.addParent(grandparentRecord);
         const getHierarchySpy = jest

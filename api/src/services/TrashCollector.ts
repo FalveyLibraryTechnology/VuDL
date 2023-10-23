@@ -25,7 +25,7 @@ class TrashCollector {
                 Fedora.getInstance(),
                 FedoraDataCollector.getInstance(),
                 Solr.getInstance(),
-                Config.getInstance()
+                Config.getInstance(),
             );
         }
         return TrashCollector.instance;
@@ -129,7 +129,7 @@ class TrashCollector {
             const result = await this.solr.query(
                 this.config.solrCore,
                 `hierarchy_all_parents_str_mv:"${pid}" AND fgs.state_txt_mv:"Deleted"`,
-                { fl: "id,fedora_parent_id_str_mv", start: offset.toString(), rows: pageSize.toString() }
+                { fl: "id,fedora_parent_id_str_mv", start: offset.toString(), rows: pageSize.toString() },
             );
             if (result.statusCode !== 200) {
                 throw new Error("Unexpected problem communicating with Solr.");

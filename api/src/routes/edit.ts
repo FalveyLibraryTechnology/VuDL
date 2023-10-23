@@ -151,7 +151,7 @@ edit.post(
             console.log("error", error);
             res.status(500).send(error.message);
         }
-    }
+    },
 );
 
 edit.get("/object/:pid/datastream/:stream/license", requireToken, datastreamSanitizer, async (req, res) => {
@@ -180,7 +180,7 @@ edit.post(
         } catch (error) {
             res.status(500).send(error.message);
         }
-    }
+    },
 );
 
 edit.post(
@@ -198,7 +198,7 @@ edit.post(
         } catch (error) {
             res.status(500).send(error.message);
         }
-    }
+    },
 );
 
 edit.post(
@@ -216,7 +216,7 @@ edit.post(
         } catch (error) {
             res.status(500).send(error.message);
         }
-    }
+    },
 );
 
 edit.get("/object/:pid/datastream/:stream/agents", requireToken, datastreamSanitizer, async (req, res) => {
@@ -292,13 +292,13 @@ edit.get(
     "/object/:pid/recursiveChildPids",
     requireToken,
     pidSanitizer,
-    getChildPidHandlerForField("hierarchy_all_parents_str_mv")
+    getChildPidHandlerForField("hierarchy_all_parents_str_mv"),
 );
 edit.get(
     "/object/:pid/directChildPids",
     requireToken,
     pidSanitizer,
-    getChildPidHandlerForField("fedora_parent_id_str_mv")
+    getChildPidHandlerForField("fedora_parent_id_str_mv"),
 );
 edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
     try {
@@ -315,7 +315,7 @@ edit.get("/object/:pid/parents", pidSanitizer, requireToken, async function (req
     try {
         const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(
             req.params.pid,
-            (req.query.shallow ?? "") == "1"
+            (req.query.shallow ?? "") == "1",
         );
         res.json(fedoraData.getParentTree());
     } catch (e) {
@@ -445,7 +445,7 @@ edit.put(
             console.error(error);
             res.status(500).send(error.message);
         }
-    }
+    },
 );
 edit.delete("/object/:pid/parent/:parentPid", requireToken, pidAndParentPidSanitizer, async function (req, res) {
     try {
@@ -517,7 +517,7 @@ edit.delete(
             console.error(error);
             res.status(500).send(error.message);
         }
-    }
+    },
 );
 edit.put(
     "/object/:pid/positionInParent/:parentPid",
@@ -551,6 +551,6 @@ edit.put(
             console.error(error);
             res.status(500).send(error.message);
         }
-    }
+    },
 );
 export default edit;

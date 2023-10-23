@@ -252,7 +252,7 @@ describe("edit", () => {
                             {},
                             {
                                 file: { filepath, mimetype },
-                            }
+                            },
                         );
                     },
                 };
@@ -277,7 +277,7 @@ describe("edit", () => {
                             {},
                             {
                                 file: { filepath, mimetype },
-                            }
+                            },
                         );
                     },
                 };
