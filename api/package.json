@@ -1,6 +1,5 @@
 {
-  "name": "vudlprepjsapi",
-  "version": "0.0.0",
+  "name": "vudl-api",
   "private": true,
   "scripts": {
     "format": "prettier --check --write *.js src/**",
