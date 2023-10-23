@@ -92,8 +92,8 @@ describe("ObjectOrder", () => {
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/foo%3A123/sortOn",
-                { body: "title", method: "PUT" }
-            )
+                { body: "title", method: "PUT" },
+            ),
         );
         expect(confirmSpy).toHaveBeenCalledTimes(1);
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
@@ -115,8 +115,8 @@ describe("ObjectOrder", () => {
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/foo%3A123/sortOn",
-                { body: "title", method: "PUT" }
-            )
+                { body: "title", method: "PUT" },
+            ),
         );
         expect(confirmSpy).toHaveBeenCalledTimes(1);
         wrapper.update();
@@ -141,8 +141,8 @@ describe("ObjectOrder", () => {
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/foo%3A125/positionInParent/foo%3A123",
-                { body: 1, method: "PUT" }
-            )
+                { body: 1, method: "PUT" },
+            ),
         );
         expect(confirmSpy).toHaveBeenCalledTimes(1);
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
@@ -167,8 +167,8 @@ describe("ObjectOrder", () => {
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/foo%3A125/positionInParent/foo%3A123",
-                { method: "DELETE" }
-            )
+                { method: "DELETE" },
+            ),
         );
         expect(confirmSpy).toHaveBeenCalledTimes(1);
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
@@ -192,15 +192,15 @@ describe("ObjectOrder", () => {
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/foo%3A125/positionInParent/foo%3A123",
-                { method: "DELETE" }
-            )
+                { method: "DELETE" },
+            ),
         );
         expect(confirmSpy).toHaveBeenCalledTimes(1);
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith(pid);
         expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/sortOn",
-            { body: "title", method: "PUT" }
+            { body: "title", method: "PUT" },
         );
         expect(fetchContextValues.action.fetchText).toHaveBeenCalledTimes(2);
     });

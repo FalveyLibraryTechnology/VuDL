@@ -118,7 +118,7 @@ describe("ParentList", () => {
         expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
-            { method: "DELETE" }
+            { method: "DELETE" },
         );
         await waitFor(() => expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalled());
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
@@ -147,7 +147,7 @@ describe("ParentList", () => {
         expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
-            { method: "DELETE" }
+            { method: "DELETE" },
         );
         await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
@@ -170,7 +170,7 @@ describe("ParentList", () => {
         expect(confirmSpy).toHaveBeenCalledWith("Are you sure you wish to remove this parent?");
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
-            { method: "DELETE" }
+            { method: "DELETE" },
         );
         await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();

@@ -11,7 +11,7 @@ jest.mock(
         function Job(props) {
             mockJob(props);
             return <mock-job />;
-        }
+        },
 );
 
 describe("JobList", () => {
@@ -31,7 +31,7 @@ describe("JobList", () => {
             expect.objectContaining({
                 category: props.category,
                 children: "testJob",
-            })
+            }),
         );
     });
 });

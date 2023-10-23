@@ -83,7 +83,7 @@ describe("ChildPosition", () => {
         await Promise.resolve();
         expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/positionInParent/foo%3A122",
-            { body: 66, method: "PUT" }
+            { body: 66, method: "PUT" },
         );
         expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith(parentPid);
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);

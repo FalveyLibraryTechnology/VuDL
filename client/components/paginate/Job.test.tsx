@@ -12,7 +12,7 @@ jest.mock(
         function JobClickable(props) {
             mockjobClickable(props);
             return "JobClickable";
-        }
+        },
 );
 
 describe("Job", () => {
@@ -31,7 +31,7 @@ describe("Job", () => {
         const wrapper = render(
             <FetchContextProvider>
                 <Job {...props} />
-            </FetchContextProvider>
+            </FetchContextProvider>,
         );
         expect(toJson(wrapper)).toMatchSnapshot();
     });

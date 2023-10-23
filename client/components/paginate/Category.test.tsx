@@ -11,7 +11,7 @@ jest.mock(
         function JobList(props) {
             mockjobList(props);
             return <mock-JobList />;
-        }
+        },
 );
 
 describe("Category", () => {
@@ -56,7 +56,7 @@ describe("Category", () => {
             expect.objectContaining({
                 category: props.data.category,
                 data: props.data.jobs,
-            })
+            }),
         );
 
         component.unmount();

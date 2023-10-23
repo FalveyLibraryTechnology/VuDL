@@ -106,8 +106,8 @@ describe("StateModal", () => {
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/foo%3A123/state",
-                { body: "Active", method: "PUT" }
-            )
+                { body: "Active", method: "PUT" },
+            ),
         );
         expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Status saved successfully.",
@@ -136,7 +136,7 @@ describe("StateModal", () => {
                 message: "No changes were made.",
                 open: true,
                 severity: "info",
-            })
+            }),
         );
         expect(fetchContextValues.action.fetchText).not.toHaveBeenCalled();
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
@@ -165,8 +165,8 @@ describe("StateModal", () => {
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/foo%3A123/state",
-                { body: "Active", method: "PUT" }
-            )
+                { body: "Active", method: "PUT" },
+            ),
         );
         expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: 'Status failed to save; "not ok"',
@@ -205,8 +205,8 @@ describe("StateModal", () => {
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/foo%3A125/state",
-                { body: "Active", method: "PUT" }
-            )
+                { body: "Active", method: "PUT" },
+            ),
         );
         expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: 'Status failed to save; "not ok"',
@@ -245,8 +245,8 @@ describe("StateModal", () => {
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/foo%3A123/state",
-                { body: "Active", method: "PUT" }
-            )
+                { body: "Active", method: "PUT" },
+            ),
         );
         expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Status saved successfully.",
@@ -256,7 +256,7 @@ describe("StateModal", () => {
         expect(fetchContextValues.action.fetchText).toHaveBeenNthCalledWith(
             1,
             "http://localhost:9000/api/edit/object/foo%3A125/state",
-            { body: "Active", method: "PUT" }
+            { body: "Active", method: "PUT" },
         );
         expect(fetchContextValues.action.fetchText).toHaveBeenCalledTimes(2);
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenNthCalledWith(1, "foo:125");

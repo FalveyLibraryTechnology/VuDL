@@ -100,7 +100,7 @@ describe("ParentPicker", () => {
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
-            { body: "", method: "PUT" }
+            { body: "", method: "PUT" },
         );
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
@@ -128,7 +128,7 @@ describe("ParentPicker", () => {
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
-            { body: "", method: "PUT" }
+            { body: "", method: "PUT" },
         );
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
         expect(editorValues.action.removeFromParentDetailsStorage).not.toHaveBeenCalled();
@@ -154,7 +154,7 @@ describe("ParentPicker", () => {
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
-            { body: "", method: "PUT" }
+            { body: "", method: "PUT" },
         );
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
         expect(editorValues.action.removeFromParentDetailsStorage).not.toHaveBeenCalled();
@@ -193,7 +193,7 @@ describe("ParentPicker", () => {
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
-            { body: "100", method: "PUT" }
+            { body: "100", method: "PUT" },
         );
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
@@ -226,12 +226,12 @@ describe("ParentPicker", () => {
         expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
             1,
             "http://localhost:9000/api/edit/object/foo%3A122/lastChildPosition",
-            { method: "GET" }
+            { method: "GET" },
         );
         expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
             2,
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
-            { body: 1000, method: "PUT" }
+            { body: 1000, method: "PUT" },
         );
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
@@ -266,12 +266,12 @@ describe("ParentPicker", () => {
         expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
             1,
             "http://localhost:9000/api/edit/object/foo%3A122/lastChildPosition",
-            { method: "GET" }
+            { method: "GET" },
         );
         expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
             2,
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
-            { body: 1, method: "PUT" }
+            { body: 1, method: "PUT" },
         );
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
