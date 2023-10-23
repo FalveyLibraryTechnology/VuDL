@@ -1,6 +1,5 @@
 {
-  "name": "vudlprepjs",
-  "version": "0.0.0",
+  "name": "vudl",
   "private": true,
   "comments": {
     "dev": "tsc can't be bundled into concurrently because it suppresses the logs of other processes. Still needs to be run separately."
