@@ -40,8 +40,10 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
           "direction": "ltr",
           "mixins": {
             "toolbar": {
-              "@media (min-width:0px) and (orientation: landscape)": {
-                "minHeight": 48,
+              "@media (min-width:0px)": {
+                "@media (orientation: landscape)": {
+                  "minHeight": 48,
+                },
               },
               "@media (min-width:600px)": {
                 "minHeight": 64,
@@ -96,8 +98,6 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "A200": "#eeeeee",
               "A400": "#bdbdbd",
               "A700": "#616161",
-              "dark": "#616161",
-              "darkChannel": "97 97 97",
             },
             "info": {
               "contrastText": "#fff",
@@ -127,9 +127,7 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
             "text": {
               "disabled": "rgba(0, 0, 0, 0.38)",
               "primary": "rgba(0, 0, 0, 0.87)",
-              "primaryChannel": "0 0 0",
               "secondary": "rgba(0, 0, 0, 0.6)",
-              "secondaryChannel": "0 0 0",
             },
             "tonalOffset": 0.2,
             "warning": {
@@ -268,6 +266,13 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "lineHeight": 1.6,
             },
             "htmlFontSize": 16,
+            "inherit": {
+              "fontFamily": "inherit",
+              "fontSize": "inherit",
+              "fontWeight": "inherit",
+              "letterSpacing": "inherit",
+              "lineHeight": "inherit",
+            },
             "overline": {
               "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.75rem",
@@ -290,6 +295,271 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "fontWeight": 500,
               "letterSpacing": "0.00714em",
               "lineHeight": 1.57,
+            },
+          },
+          "unstable_sx": [Function],
+          "unstable_sxConfig": {
+            "alignContent": {},
+            "alignItems": {},
+            "alignSelf": {},
+            "backgroundColor": {
+              "themeKey": "palette",
+              "transform": [Function],
+            },
+            "bgcolor": {
+              "cssProperty": "backgroundColor",
+              "themeKey": "palette",
+              "transform": [Function],
+            },
+            "border": {
+              "themeKey": "borders",
+              "transform": [Function],
+            },
+            "borderBottom": {
+              "themeKey": "borders",
+              "transform": [Function],
+            },
+            "borderBottomColor": {
+              "themeKey": "palette",
+            },
+            "borderColor": {
+              "themeKey": "palette",
+            },
+            "borderLeft": {
+              "themeKey": "borders",
+              "transform": [Function],
+            },
+            "borderLeftColor": {
+              "themeKey": "palette",
+            },
+            "borderRadius": {
+              "style": [Function],
+              "themeKey": "shape.borderRadius",
+            },
+            "borderRight": {
+              "themeKey": "borders",
+              "transform": [Function],
+            },
+            "borderRightColor": {
+              "themeKey": "palette",
+            },
+            "borderTop": {
+              "themeKey": "borders",
+              "transform": [Function],
+            },
+            "borderTopColor": {
+              "themeKey": "palette",
+            },
+            "bottom": {},
+            "boxShadow": {
+              "themeKey": "shadows",
+            },
+            "boxSizing": {},
+            "color": {
+              "themeKey": "palette",
+              "transform": [Function],
+            },
+            "columnGap": {
+              "style": [Function],
+            },
+            "display": {},
+            "displayPrint": {
+              "cssProperty": false,
+              "transform": [Function],
+            },
+            "flex": {},
+            "flexBasis": {},
+            "flexDirection": {},
+            "flexGrow": {},
+            "flexShrink": {},
+            "flexWrap": {},
+            "fontFamily": {
+              "themeKey": "typography",
+            },
+            "fontSize": {
+              "themeKey": "typography",
+            },
+            "fontStyle": {
+              "themeKey": "typography",
+            },
+            "fontWeight": {
+              "themeKey": "typography",
+            },
+            "gap": {
+              "style": [Function],
+            },
+            "gridArea": {},
+            "gridAutoColumns": {},
+            "gridAutoFlow": {},
+            "gridAutoRows": {},
+            "gridColumn": {},
+            "gridRow": {},
+            "gridTemplateAreas": {},
+            "gridTemplateColumns": {},
+            "gridTemplateRows": {},
+            "height": {
+              "transform": [Function],
+            },
+            "justifyContent": {},
+            "justifyItems": {},
+            "justifySelf": {},
+            "left": {},
+            "letterSpacing": {},
+            "lineHeight": {},
+            "m": {
+              "style": [Function],
+            },
+            "margin": {
+              "style": [Function],
+            },
+            "marginBlock": {
+              "style": [Function],
+            },
+            "marginBlockEnd": {
+              "style": [Function],
+            },
+            "marginBlockStart": {
+              "style": [Function],
+            },
+            "marginBottom": {
+              "style": [Function],
+            },
+            "marginInline": {
+              "style": [Function],
+            },
+            "marginInlineEnd": {
+              "style": [Function],
+            },
+            "marginInlineStart": {
+              "style": [Function],
+            },
+            "marginLeft": {
+              "style": [Function],
+            },
+            "marginRight": {
+              "style": [Function],
+            },
+            "marginTop": {
+              "style": [Function],
+            },
+            "marginX": {
+              "style": [Function],
+            },
+            "marginY": {
+              "style": [Function],
+            },
+            "maxHeight": {
+              "transform": [Function],
+            },
+            "maxWidth": {
+              "style": [Function],
+            },
+            "mb": {
+              "style": [Function],
+            },
+            "minHeight": {
+              "transform": [Function],
+            },
+            "minWidth": {
+              "transform": [Function],
+            },
+            "ml": {
+              "style": [Function],
+            },
+            "mr": {
+              "style": [Function],
+            },
+            "mt": {
+              "style": [Function],
+            },
+            "mx": {
+              "style": [Function],
+            },
+            "my": {
+              "style": [Function],
+            },
+            "order": {},
+            "overflow": {},
+            "p": {
+              "style": [Function],
+            },
+            "padding": {
+              "style": [Function],
+            },
+            "paddingBlock": {
+              "style": [Function],
+            },
+            "paddingBlockEnd": {
+              "style": [Function],
+            },
+            "paddingBlockStart": {
+              "style": [Function],
+            },
+            "paddingBottom": {
+              "style": [Function],
+            },
+            "paddingInline": {
+              "style": [Function],
+            },
+            "paddingInlineEnd": {
+              "style": [Function],
+            },
+            "paddingInlineStart": {
+              "style": [Function],
+            },
+            "paddingLeft": {
+              "style": [Function],
+            },
+            "paddingRight": {
+              "style": [Function],
+            },
+            "paddingTop": {
+              "style": [Function],
+            },
+            "paddingX": {
+              "style": [Function],
+            },
+            "paddingY": {
+              "style": [Function],
+            },
+            "pb": {
+              "style": [Function],
+            },
+            "pl": {
+              "style": [Function],
+            },
+            "position": {},
+            "pr": {
+              "style": [Function],
+            },
+            "pt": {
+              "style": [Function],
+            },
+            "px": {
+              "style": [Function],
+            },
+            "py": {
+              "style": [Function],
+            },
+            "right": {},
+            "rowGap": {
+              "style": [Function],
+            },
+            "textAlign": {},
+            "textOverflow": {},
+            "textTransform": {},
+            "top": {},
+            "typography": {
+              "cssProperty": false,
+              "themeKey": "typography",
+            },
+            "visibility": {},
+            "whiteSpace": {},
+            "width": {
+              "transform": [Function],
+            },
+            "zIndex": {
+              "themeKey": "zIndex",
             },
           },
           "zIndex": {
@@ -442,8 +712,10 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
           "direction": "ltr",
           "mixins": {
             "toolbar": {
-              "@media (min-width:0px) and (orientation: landscape)": {
-                "minHeight": 48,
+              "@media (min-width:0px)": {
+                "@media (orientation: landscape)": {
+                  "minHeight": 48,
+                },
               },
               "@media (min-width:600px)": {
                 "minHeight": 64,
@@ -498,8 +770,6 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "A200": "#eeeeee",
               "A400": "#bdbdbd",
               "A700": "#616161",
-              "dark": "#616161",
-              "darkChannel": "97 97 97",
             },
             "info": {
               "contrastText": "#fff",
@@ -529,9 +799,7 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
             "text": {
               "disabled": "rgba(0, 0, 0, 0.38)",
               "primary": "rgba(0, 0, 0, 0.87)",
-              "primaryChannel": "0 0 0",
               "secondary": "rgba(0, 0, 0, 0.6)",
-              "secondaryChannel": "0 0 0",
             },
             "tonalOffset": 0.2,
             "warning": {
@@ -670,6 +938,13 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "lineHeight": 1.6,
             },
             "htmlFontSize": 16,
+            "inherit": {
+              "fontFamily": "inherit",
+              "fontSize": "inherit",
+              "fontWeight": "inherit",
+              "letterSpacing": "inherit",
+              "lineHeight": "inherit",
+            },
             "overline": {
               "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.75rem",
@@ -692,6 +967,271 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "fontWeight": 500,
               "letterSpacing": "0.00714em",
               "lineHeight": 1.57,
+            },
+          },
+          "unstable_sx": [Function],
+          "unstable_sxConfig": {
+            "alignContent": {},
+            "alignItems": {},
+            "alignSelf": {},
+            "backgroundColor": {
+              "themeKey": "palette",
+              "transform": [Function],
+            },
+            "bgcolor": {
+              "cssProperty": "backgroundColor",
+              "themeKey": "palette",
+              "transform": [Function],
+            },
+            "border": {
+              "themeKey": "borders",
+              "transform": [Function],
+            },
+            "borderBottom": {
+              "themeKey": "borders",
+              "transform": [Function],
+            },
+            "borderBottomColor": {
+              "themeKey": "palette",
+            },
+            "borderColor": {
+              "themeKey": "palette",
+            },
+            "borderLeft": {
+              "themeKey": "borders",
+              "transform": [Function],
+            },
+            "borderLeftColor": {
+              "themeKey": "palette",
+            },
+            "borderRadius": {
+              "style": [Function],
+              "themeKey": "shape.borderRadius",
+            },
+            "borderRight": {
+              "themeKey": "borders",
+              "transform": [Function],
+            },
+            "borderRightColor": {
+              "themeKey": "palette",
+            },
+            "borderTop": {
+              "themeKey": "borders",
+              "transform": [Function],
+            },
+            "borderTopColor": {
+              "themeKey": "palette",
+            },
+            "bottom": {},
+            "boxShadow": {
+              "themeKey": "shadows",
+            },
+            "boxSizing": {},
+            "color": {
+              "themeKey": "palette",
+              "transform": [Function],
+            },
+            "columnGap": {
+              "style": [Function],
+            },
+            "display": {},
+            "displayPrint": {
+              "cssProperty": false,
+              "transform": [Function],
+            },
+            "flex": {},
+            "flexBasis": {},
+            "flexDirection": {},
+            "flexGrow": {},
+            "flexShrink": {},
+            "flexWrap": {},
+            "fontFamily": {
+              "themeKey": "typography",
+            },
+            "fontSize": {
+              "themeKey": "typography",
+            },
+            "fontStyle": {
+              "themeKey": "typography",
+            },
+            "fontWeight": {
+              "themeKey": "typography",
+            },
+            "gap": {
+              "style": [Function],
+            },
+            "gridArea": {},
+            "gridAutoColumns": {},
+            "gridAutoFlow": {},
+            "gridAutoRows": {},
+            "gridColumn": {},
+            "gridRow": {},
+            "gridTemplateAreas": {},
+            "gridTemplateColumns": {},
+            "gridTemplateRows": {},
+            "height": {
+              "transform": [Function],
+            },
+            "justifyContent": {},
+            "justifyItems": {},
+            "justifySelf": {},
+            "left": {},
+            "letterSpacing": {},
+            "lineHeight": {},
+            "m": {
+              "style": [Function],
+            },
+            "margin": {
+              "style": [Function],
+            },
+            "marginBlock": {
+              "style": [Function],
+            },
+            "marginBlockEnd": {
+              "style": [Function],
+            },
+            "marginBlockStart": {
+              "style": [Function],
+            },
+            "marginBottom": {
+              "style": [Function],
+            },
+            "marginInline": {
+              "style": [Function],
+            },
+            "marginInlineEnd": {
+              "style": [Function],
+            },
+            "marginInlineStart": {
+              "style": [Function],
+            },
+            "marginLeft": {
+              "style": [Function],
+            },
+            "marginRight": {
+              "style": [Function],
+            },
+            "marginTop": {
+              "style": [Function],
+            },
+            "marginX": {
+              "style": [Function],
+            },
+            "marginY": {
+              "style": [Function],
+            },
+            "maxHeight": {
+              "transform": [Function],
+            },
+            "maxWidth": {
+              "style": [Function],
+            },
+            "mb": {
+              "style": [Function],
+            },
+            "minHeight": {
+              "transform": [Function],
+            },
+            "minWidth": {
+              "transform": [Function],
+            },
+            "ml": {
+              "style": [Function],
+            },
+            "mr": {
+              "style": [Function],
+            },
+            "mt": {
+              "style": [Function],
+            },
+            "mx": {
+              "style": [Function],
+            },
+            "my": {
+              "style": [Function],
+            },
+            "order": {},
+            "overflow": {},
+            "p": {
+              "style": [Function],
+            },
+            "padding": {
+              "style": [Function],
+            },
+            "paddingBlock": {
+              "style": [Function],
+            },
+            "paddingBlockEnd": {
+              "style": [Function],
+            },
+            "paddingBlockStart": {
+              "style": [Function],
+            },
+            "paddingBottom": {
+              "style": [Function],
+            },
+            "paddingInline": {
+              "style": [Function],
+            },
+            "paddingInlineEnd": {
+              "style": [Function],
+            },
+            "paddingInlineStart": {
+              "style": [Function],
+            },
+            "paddingLeft": {
+              "style": [Function],
+            },
+            "paddingRight": {
+              "style": [Function],
+            },
+            "paddingTop": {
+              "style": [Function],
+            },
+            "paddingX": {
+              "style": [Function],
+            },
+            "paddingY": {
+              "style": [Function],
+            },
+            "pb": {
+              "style": [Function],
+            },
+            "pl": {
+              "style": [Function],
+            },
+            "position": {},
+            "pr": {
+              "style": [Function],
+            },
+            "pt": {
+              "style": [Function],
+            },
+            "px": {
+              "style": [Function],
+            },
+            "py": {
+              "style": [Function],
+            },
+            "right": {},
+            "rowGap": {
+              "style": [Function],
+            },
+            "textAlign": {},
+            "textOverflow": {},
+            "textTransform": {},
+            "top": {},
+            "typography": {
+              "cssProperty": false,
+              "themeKey": "typography",
+            },
+            "visibility": {},
+            "whiteSpace": {},
+            "width": {
+              "transform": [Function],
+            },
+            "zIndex": {
+              "themeKey": "zIndex",
             },
           },
           "zIndex": {

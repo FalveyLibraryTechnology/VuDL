@@ -30,6 +30,7 @@ exports[`SelectableChild can be expanded to show children 1`] = `
               "component": "svg",
               "data-testid": "IndeterminateCheckBoxIcon",
               "fontSize": "medium",
+              "hasSvgAsChild": false,
               "inheritViewBox": false,
               "instanceFontSize": undefined,
               "titleAccess": "Collapse Tree",
