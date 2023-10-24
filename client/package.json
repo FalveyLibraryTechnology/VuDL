@@ -23,7 +23,7 @@
     "@mui/x-date-pickers": "^5",
     "@tinymce/tinymce-react": "^4",
     "dayjs": "^1",
-    "html-react-parser": "^1.4.6",
+    "html-react-parser": "^4",
     "identity-obj-proxy": "^3.0.0",
     "next": "12.1.5",
     "react": "17.0.2",
