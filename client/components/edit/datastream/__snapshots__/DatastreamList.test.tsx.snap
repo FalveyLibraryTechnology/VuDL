@@ -7,11 +7,11 @@ exports[`DatastreamList renders 1`] = `
       as="ul"
       className="MuiList-root MuiList-padding"
       ownerState={
-        Object {
-          "children": Array [
+        {
+          "children": [
             <Unknown
               datastream={
-                Object {
+                {
                   "disabled": false,
                   "stream": "test0",
                 }
@@ -19,7 +19,7 @@ exports[`DatastreamList renders 1`] = `
             />,
             <Unknown
               datastream={
-                Object {
+                {
                   "disabled": true,
                   "stream": "test1",
                 }
@@ -34,14 +34,14 @@ exports[`DatastreamList renders 1`] = `
     >
       <Insertion
         cache={
-          Object {
+          {
             "insert": [Function],
-            "inserted": Object {
+            "inserted": {
               "h4y409-MuiList-root": true,
             },
             "key": "css",
             "nonce": undefined,
-            "registered": Object {},
+            "registered": {},
             "sheet": StyleSheet {
               "_alreadyInsertedOrderInsensitiveRule": true,
               "_insertTag": [Function],
@@ -61,7 +61,7 @@ exports[`DatastreamList renders 1`] = `
               "key": "css",
               "nonce": undefined,
               "prepend": undefined,
-              "tags": Array [
+              "tags": [
                 <style
                   data-emotion="css"
                   data-s=""
@@ -75,7 +75,7 @@ exports[`DatastreamList renders 1`] = `
         }
         isStringTag={true}
         serialized={
-          Object {
+          {
             "map": undefined,
             "name": "h4y409-MuiList-root",
             "next": undefined,
@@ -89,7 +89,7 @@ exports[`DatastreamList renders 1`] = `
       >
         <Component
           datastream={
-            Object {
+            {
               "disabled": false,
               "stream": "test0",
             }
@@ -100,7 +100,7 @@ exports[`DatastreamList renders 1`] = `
         </Component>
         <Component
           datastream={
-            Object {
+            {
               "disabled": true,
               "stream": "test1",
             }

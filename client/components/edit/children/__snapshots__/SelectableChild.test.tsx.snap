@@ -22,7 +22,7 @@ exports[`SelectableChild can be expanded to show children 1`] = `
           data-testid="IndeterminateCheckBoxIcon"
           focusable="false"
           ownerState={
-            Object {
+            {
               "children": <path
                 d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"
               />,
@@ -41,14 +41,14 @@ exports[`SelectableChild can be expanded to show children 1`] = `
         >
           <Insertion
             cache={
-              Object {
+              {
                 "insert": [Function],
-                "inserted": Object {
+                "inserted": {
                   "i4bv87-MuiSvgIcon-root": true,
                 },
                 "key": "css",
                 "nonce": undefined,
-                "registered": Object {},
+                "registered": {},
                 "sheet": StyleSheet {
                   "_alreadyInsertedOrderInsensitiveRule": true,
                   "_insertTag": [Function],
@@ -68,7 +68,7 @@ exports[`SelectableChild can be expanded to show children 1`] = `
                   "key": "css",
                   "nonce": undefined,
                   "prepend": undefined,
-                  "tags": Array [
+                  "tags": [
                     <style
                       data-emotion="css"
                       data-s=""
@@ -82,7 +82,7 @@ exports[`SelectableChild can be expanded to show children 1`] = `
             }
             isStringTag={true}
             serialized={
-              Object {
+              {
                 "map": undefined,
                 "name": "i4bv87-MuiSvgIcon-root",
                 "next": undefined,

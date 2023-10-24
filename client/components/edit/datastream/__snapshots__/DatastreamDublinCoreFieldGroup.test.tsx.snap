@@ -14,7 +14,7 @@ exports[`DatastreamDublinCoreFieldGroup renders locked fields 1`] = `
     >
       <DatastreamDublinCoreEditField
         fieldType="locked"
-        legalValues={Array []}
+        legalValues={[]}
         setValue={[Function]}
         value="foo"
       />
@@ -41,7 +41,7 @@ exports[`DatastreamDublinCoreFieldGroup renders unlocked fields 1`] = `
     >
       <DatastreamDublinCoreEditField
         fieldType="text"
-        legalValues={Array []}
+        legalValues={[]}
         setValue={[Function]}
         value="bar"
       />
@@ -77,7 +77,7 @@ exports[`DatastreamDublinCoreFieldGroup renders unlocked fields 1`] = `
     >
       <DatastreamDublinCoreEditField
         fieldType="text"
-        legalValues={Array []}
+        legalValues={[]}
         setValue={[Function]}
         value="baz"
       />

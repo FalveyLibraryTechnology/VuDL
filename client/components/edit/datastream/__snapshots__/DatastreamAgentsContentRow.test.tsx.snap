@@ -9,7 +9,7 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
   >
     <ForwardRef(Paper)
       sx={
-        Object {
+        {
           "alignItems": "center",
           "display": "flex",
           "padding": "0 14px",
@@ -47,7 +47,7 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
   >
     <ForwardRef(Paper)
       sx={
-        Object {
+        {
           "alignItems": "center",
           "display": "flex",
           "padding": "0 14px",
@@ -88,7 +88,7 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
     >
       <BlurSavingTextField
         options={
-          Object {
+          {
             "className": "agentNameTextField",
             "error": false,
             "label": "",
@@ -106,7 +106,7 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
   >
     <ForwardRef(Paper)
       sx={
-        Object {
+        {
           "alignItems": "center",
           "display": "flex",
           "width": "100%",
@@ -119,7 +119,7 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
       >
         <ForwardRef(ButtonGroup)
           sx={
-            Object {
+            {
               "display": "flex",
               "justifyContent": "center",
             }
@@ -137,7 +137,7 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
   <Component
     expanded={false}
     notes={
-      Array [
+      [
         "test4",
       ]
     }
