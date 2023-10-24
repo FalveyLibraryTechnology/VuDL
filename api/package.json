@@ -60,7 +60,6 @@
     "eslint-config-prettier": "^9",
     "eslint-plugin-jsdoc": "^43",
     "eslint-plugin-prettier": "^5",
-    "eslint-plugin-react": "^7",
     "jest": "^29",
     "nodemon": "^3",
     "prettier": "^3",
