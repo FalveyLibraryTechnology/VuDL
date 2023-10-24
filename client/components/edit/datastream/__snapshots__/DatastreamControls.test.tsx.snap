@@ -5,7 +5,7 @@ exports[`DatastreamControls renders 1`] = `
   class="datastreamControls MuiBox-root css-0"
 >
   <div
-    class="MuiButtonGroup-root MuiButtonGroup-text css-1or64il-MuiButtonGroup-root"
+    class="MuiButtonGroup-root MuiButtonGroup-text css-iv8nej-MuiButtonGroup-root"
     role="group"
   >
     DatastreamControlButtonDatastreamControlButtonDatastreamControlButtonDatastreamControlButtonDatastreamControlButton

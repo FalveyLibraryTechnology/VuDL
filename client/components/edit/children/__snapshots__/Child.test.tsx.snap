@@ -15,6 +15,13 @@ exports[`Child can be expanded to show children 1`] = `
           className="MuiGrid-root MuiGrid-container"
           ownerState={
             {
+              "breakpoints": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl",
+              ],
               "children": [
                 <ForwardRef(Grid)
                   item={true}
@@ -52,14 +59,10 @@ exports[`Child can be expanded to show children 1`] = `
               "container": true,
               "direction": "row",
               "item": false,
-              "lg": false,
-              "md": false,
               "rowSpacing": 0,
-              "sm": false,
+              "spacing": 0,
               "sx": {},
               "wrap": "wrap",
-              "xl": false,
-              "xs": false,
               "zeroMinWidth": false,
             }
           }
@@ -531,6 +534,13 @@ exports[`Child can be expanded to show children 1`] = `
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-8"
                 ownerState={
                   {
+                    "breakpoints": [
+                      "xs",
+                      "sm",
+                      "md",
+                      "lg",
+                      "xl",
+                    ],
                     "children": [
                       <span
                         onClick={[Function]}
@@ -551,13 +561,10 @@ exports[`Child can be expanded to show children 1`] = `
                     "container": false,
                     "direction": "row",
                     "item": true,
-                    "lg": false,
-                    "md": false,
                     "rowSpacing": 0,
-                    "sm": false,
+                    "spacing": 0,
                     "sx": {},
                     "wrap": "wrap",
-                    "xl": false,
                     "xs": 8,
                     "zeroMinWidth": false,
                   }
@@ -1045,6 +1052,7 @@ exports[`Child can be expanded to show children 1`] = `
                               "component": "svg",
                               "data-testid": "IndeterminateCheckBoxIcon",
                               "fontSize": "medium",
+                              "hasSvgAsChild": false,
                               "inheritViewBox": false,
                               "instanceFontSize": undefined,
                               "titleAccess": "Collapse Tree",
@@ -1549,6 +1557,13 @@ exports[`Child can be expanded to show children 1`] = `
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
                 ownerState={
                   {
+                    "breakpoints": [
+                      "xs",
+                      "sm",
+                      "md",
+                      "lg",
+                      "xl",
+                    ],
                     "children": [
                       <Unknown
                         pid="foo:123"
@@ -1562,13 +1577,10 @@ exports[`Child can be expanded to show children 1`] = `
                     "container": false,
                     "direction": "row",
                     "item": true,
-                    "lg": false,
-                    "md": false,
                     "rowSpacing": 0,
-                    "sm": false,
+                    "spacing": 0,
                     "sx": {},
                     "wrap": "wrap",
-                    "xl": false,
                     "xs": 4,
                     "zeroMinWidth": false,
                   }
@@ -2073,6 +2085,13 @@ exports[`Child handles empty titles appropriately 1`] = `
           className="MuiGrid-root MuiGrid-container"
           ownerState={
             {
+              "breakpoints": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl",
+              ],
               "children": [
                 <ForwardRef(Grid)
                   item={true}
@@ -2110,14 +2129,10 @@ exports[`Child handles empty titles appropriately 1`] = `
               "container": true,
               "direction": "row",
               "item": false,
-              "lg": false,
-              "md": false,
               "rowSpacing": 0,
-              "sm": false,
+              "spacing": 0,
               "sx": {},
               "wrap": "wrap",
-              "xl": false,
-              "xs": false,
               "zeroMinWidth": false,
             }
           }
@@ -2589,6 +2604,13 @@ exports[`Child handles empty titles appropriately 1`] = `
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-8"
                 ownerState={
                   {
+                    "breakpoints": [
+                      "xs",
+                      "sm",
+                      "md",
+                      "lg",
+                      "xl",
+                    ],
                     "children": [
                       <span
                         onClick={[Function]}
@@ -2609,13 +2631,10 @@ exports[`Child handles empty titles appropriately 1`] = `
                     "container": false,
                     "direction": "row",
                     "item": true,
-                    "lg": false,
-                    "md": false,
                     "rowSpacing": 0,
-                    "sm": false,
+                    "spacing": 0,
                     "sx": {},
                     "wrap": "wrap",
-                    "xl": false,
                     "xs": 8,
                     "zeroMinWidth": false,
                   }
@@ -3103,6 +3122,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                               "component": "svg",
                               "data-testid": "AddBoxIcon",
                               "fontSize": "medium",
+                              "hasSvgAsChild": false,
                               "inheritViewBox": false,
                               "instanceFontSize": undefined,
                               "titleAccess": "Expand Tree",
@@ -3607,6 +3627,13 @@ exports[`Child handles empty titles appropriately 1`] = `
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
                 ownerState={
                   {
+                    "breakpoints": [
+                      "xs",
+                      "sm",
+                      "md",
+                      "lg",
+                      "xl",
+                    ],
                     "children": [
                       <Unknown
                         pid="foo:123"
@@ -3620,13 +3647,10 @@ exports[`Child handles empty titles appropriately 1`] = `
                     "container": false,
                     "direction": "row",
                     "item": true,
-                    "lg": false,
-                    "md": false,
                     "rowSpacing": 0,
-                    "sm": false,
+                    "spacing": 0,
                     "sx": {},
                     "wrap": "wrap",
-                    "xl": false,
                     "xs": 4,
                     "zeroMinWidth": false,
                   }
@@ -4125,6 +4149,13 @@ exports[`Child renders a thumbnail 1`] = `
           className="MuiGrid-root MuiGrid-container"
           ownerState={
             {
+              "breakpoints": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl",
+              ],
               "children": [
                 <ForwardRef(Grid)
                   item={true}
@@ -4169,14 +4200,10 @@ exports[`Child renders a thumbnail 1`] = `
               "container": true,
               "direction": "row",
               "item": false,
-              "lg": false,
-              "md": false,
               "rowSpacing": 0,
-              "sm": false,
+              "spacing": 0,
               "sx": {},
               "wrap": "wrap",
-              "xl": false,
-              "xs": false,
               "zeroMinWidth": false,
             }
           }
@@ -4648,6 +4675,13 @@ exports[`Child renders a thumbnail 1`] = `
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-7"
                 ownerState={
                   {
+                    "breakpoints": [
+                      "xs",
+                      "sm",
+                      "md",
+                      "lg",
+                      "xl",
+                    ],
                     "children": [
                       <span
                         onClick={[Function]}
@@ -4668,13 +4702,10 @@ exports[`Child renders a thumbnail 1`] = `
                     "container": false,
                     "direction": "row",
                     "item": true,
-                    "lg": false,
-                    "md": false,
                     "rowSpacing": 0,
-                    "sm": false,
+                    "spacing": 0,
                     "sx": {},
                     "wrap": "wrap",
-                    "xl": false,
                     "xs": 7,
                     "zeroMinWidth": false,
                   }
@@ -5162,6 +5193,7 @@ exports[`Child renders a thumbnail 1`] = `
                               "component": "svg",
                               "data-testid": "AddBoxIcon",
                               "fontSize": "medium",
+                              "hasSvgAsChild": false,
                               "inheritViewBox": false,
                               "instanceFontSize": undefined,
                               "titleAccess": "Expand Tree",
@@ -5666,6 +5698,13 @@ exports[`Child renders a thumbnail 1`] = `
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
                 ownerState={
                   {
+                    "breakpoints": [
+                      "xs",
+                      "sm",
+                      "md",
+                      "lg",
+                      "xl",
+                    ],
                     "children": [
                       <Unknown
                         pid="foo:123"
@@ -5679,13 +5718,10 @@ exports[`Child renders a thumbnail 1`] = `
                     "container": false,
                     "direction": "row",
                     "item": true,
-                    "lg": false,
-                    "md": false,
                     "rowSpacing": 0,
-                    "sm": false,
+                    "spacing": 0,
                     "sx": {},
                     "wrap": "wrap",
-                    "xl": false,
                     "xs": 4,
                     "zeroMinWidth": false,
                   }
@@ -6169,6 +6205,13 @@ exports[`Child renders a thumbnail 1`] = `
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
                 ownerState={
                   {
+                    "breakpoints": [
+                      "xs",
+                      "sm",
+                      "md",
+                      "lg",
+                      "xl",
+                    ],
                     "children": <Unknown
                       pid="foo:123"
                     />,
@@ -6177,13 +6220,10 @@ exports[`Child renders a thumbnail 1`] = `
                     "container": false,
                     "direction": "row",
                     "item": true,
-                    "lg": false,
-                    "md": false,
                     "rowSpacing": 0,
-                    "sm": false,
+                    "spacing": 0,
                     "sx": {},
                     "wrap": "wrap",
-                    "xl": false,
                     "xs": 1,
                     "zeroMinWidth": false,
                   }
@@ -6678,6 +6718,13 @@ exports[`Child renders using ajax-loaded data 1`] = `
           className="MuiGrid-root MuiGrid-container"
           ownerState={
             {
+              "breakpoints": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl",
+              ],
               "children": [
                 <ForwardRef(Grid)
                   item={true}
@@ -6715,14 +6762,10 @@ exports[`Child renders using ajax-loaded data 1`] = `
               "container": true,
               "direction": "row",
               "item": false,
-              "lg": false,
-              "md": false,
               "rowSpacing": 0,
-              "sm": false,
+              "spacing": 0,
               "sx": {},
               "wrap": "wrap",
-              "xl": false,
-              "xs": false,
               "zeroMinWidth": false,
             }
           }
@@ -7052,6 +7095,13 @@ exports[`Child renders using ajax-loaded data 1`] = `
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-8"
                 ownerState={
                   {
+                    "breakpoints": [
+                      "xs",
+                      "sm",
+                      "md",
+                      "lg",
+                      "xl",
+                    ],
                     "children": [
                       <span
                         onClick={[Function]}
@@ -7072,13 +7122,10 @@ exports[`Child renders using ajax-loaded data 1`] = `
                     "container": false,
                     "direction": "row",
                     "item": true,
-                    "lg": false,
-                    "md": false,
                     "rowSpacing": 0,
-                    "sm": false,
+                    "spacing": 0,
                     "sx": {},
                     "wrap": "wrap",
-                    "xl": false,
                     "xs": 8,
                     "zeroMinWidth": false,
                   }
@@ -7424,6 +7471,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                               "component": "svg",
                               "data-testid": "AddBoxIcon",
                               "fontSize": "medium",
+                              "hasSvgAsChild": false,
                               "inheritViewBox": false,
                               "instanceFontSize": undefined,
                               "titleAccess": "Expand Tree",
@@ -7786,6 +7834,13 @@ exports[`Child renders using ajax-loaded data 1`] = `
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
                 ownerState={
                   {
+                    "breakpoints": [
+                      "xs",
+                      "sm",
+                      "md",
+                      "lg",
+                      "xl",
+                    ],
                     "children": [
                       <Unknown
                         pid="foo:123"
@@ -7799,13 +7854,10 @@ exports[`Child renders using ajax-loaded data 1`] = `
                     "container": false,
                     "direction": "row",
                     "item": true,
-                    "lg": false,
-                    "md": false,
                     "rowSpacing": 0,
-                    "sm": false,
+                    "spacing": 0,
                     "sx": {},
                     "wrap": "wrap",
-                    "xl": false,
                     "xs": 4,
                     "zeroMinWidth": false,
                   }
