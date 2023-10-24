@@ -7,7 +7,7 @@ exports[`ObjectSummary displays loading message when appropriate 1`] = `
   >
     <div
       style={
-        Object {
+        {
           "float": "right",
         }
       }
@@ -24,7 +24,7 @@ exports[`ObjectSummary displays loading message when appropriate 1`] = `
     <div />
     <br
       style={
-        Object {
+        {
           "clear": "both",
         }
       }
@@ -40,7 +40,7 @@ exports[`ObjectSummary renders information from metadata when available 1`] = `
   >
     <div
       style={
-        Object {
+        {
           "float": "right",
         }
       }
@@ -77,7 +77,7 @@ exports[`ObjectSummary renders information from metadata when available 1`] = `
     </Component>
     <br
       style={
-        Object {
+        {
           "clear": "both",
         }
       }

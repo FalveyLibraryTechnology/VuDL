@@ -10,9 +10,9 @@ exports[`DatastreamAgentsModifyContentRow renders 1`] = `
     </ForwardRef(IconButton)>
   }
   agent={
-    Object {
+    {
       "name": "test3",
-      "notes": Array [
+      "notes": [
         "test4",
       ],
       "role": "test1",

@@ -6,7 +6,7 @@ exports[`DatastreamAgentsContent renders 1`] = `
     container={true}
     spacing={1}
     sx={
-      Object {
+      {
         "padding": "20px 24px",
       }
     }
@@ -42,7 +42,7 @@ exports[`DatastreamAgentsContent renders 1`] = `
   </ForwardRef(Grid)>
   <ForwardRef(DialogContent)
     sx={
-      Object {
+      {
         "minHeight": "50vh",
         "width": "100%",
       }
@@ -60,7 +60,7 @@ exports[`DatastreamAgentsContent renders 1`] = `
   <ForwardRef(Divider) />
   <ForwardRef(DialogActions)
     sx={
-      Object {
+      {
         "padding": "20px 24px",
       }
     }

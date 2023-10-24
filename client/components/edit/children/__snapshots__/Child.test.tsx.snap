@@ -14,8 +14,8 @@ exports[`Child can be expanded to show children 1`] = `
           as="div"
           className="MuiGrid-root MuiGrid-container"
           ownerState={
-            Object {
-              "children": Array [
+            {
+              "children": [
                 <ForwardRef(Grid)
                   item={true}
                   xs={8}
@@ -56,20 +56,20 @@ exports[`Child can be expanded to show children 1`] = `
               "md": false,
               "rowSpacing": 0,
               "sm": false,
-              "sx": Object {},
+              "sx": {},
               "wrap": "wrap",
               "xl": false,
               "xs": false,
               "zeroMinWidth": false,
             }
           }
-          sx={Object {}}
+          sx={{}}
         >
           <Insertion
             cache={
-              Object {
+              {
                 "insert": [Function],
-                "inserted": Object {
+                "inserted": {
                   "11lq3yg-MuiGrid-root": true,
                   "176wh8e-MuiCircularProgress-circle": true,
                   "18lrjg1-MuiCircularProgress-root": true,
@@ -84,7 +84,7 @@ exports[`Child can be expanded to show children 1`] = `
                 },
                 "key": "css",
                 "nonce": undefined,
-                "registered": Object {},
+                "registered": {},
                 "sheet": StyleSheet {
                   "_alreadyInsertedOrderInsensitiveRule": true,
                   "_insertTag": [Function],
@@ -300,7 +300,7 @@ exports[`Child can be expanded to show children 1`] = `
                   "key": "css",
                   "nonce": undefined,
                   "prepend": undefined,
-                  "tags": Array [
+                  "tags": [
                     <style
                       data-emotion="css"
                       data-s=""
@@ -510,7 +510,7 @@ exports[`Child can be expanded to show children 1`] = `
             }
             isStringTag={true}
             serialized={
-              Object {
+              {
                 "map": undefined,
                 "name": "11lq3yg-MuiGrid-root",
                 "next": undefined,
@@ -530,8 +530,8 @@ exports[`Child can be expanded to show children 1`] = `
                 as="div"
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-8"
                 ownerState={
-                  Object {
-                    "children": Array [
+                  {
+                    "children": [
                       <span
                         onClick={[Function]}
                       >
@@ -555,20 +555,20 @@ exports[`Child can be expanded to show children 1`] = `
                     "md": false,
                     "rowSpacing": 0,
                     "sm": false,
-                    "sx": Object {},
+                    "sx": {},
                     "wrap": "wrap",
                     "xl": false,
                     "xs": 8,
                     "zeroMinWidth": false,
                   }
                 }
-                sx={Object {}}
+                sx={{}}
               >
                 <Insertion
                   cache={
-                    Object {
+                    {
                       "insert": [Function],
-                      "inserted": Object {
+                      "inserted": {
                         "11lq3yg-MuiGrid-root": true,
                         "176wh8e-MuiCircularProgress-circle": true,
                         "18lrjg1-MuiCircularProgress-root": true,
@@ -583,7 +583,7 @@ exports[`Child can be expanded to show children 1`] = `
                       },
                       "key": "css",
                       "nonce": undefined,
-                      "registered": Object {},
+                      "registered": {},
                       "sheet": StyleSheet {
                         "_alreadyInsertedOrderInsensitiveRule": true,
                         "_insertTag": [Function],
@@ -799,7 +799,7 @@ exports[`Child can be expanded to show children 1`] = `
                         "key": "css",
                         "nonce": undefined,
                         "prepend": undefined,
-                        "tags": Array [
+                        "tags": [
                           <style
                             data-emotion="css"
                             data-s=""
@@ -1009,7 +1009,7 @@ exports[`Child can be expanded to show children 1`] = `
                   }
                   isStringTag={true}
                   serialized={
-                    Object {
+                    {
                       "map": undefined,
                       "name": "vok43g-MuiGrid-root",
                       "next": undefined,
@@ -1037,7 +1037,7 @@ exports[`Child can be expanded to show children 1`] = `
                           data-testid="IndeterminateCheckBoxIcon"
                           focusable="false"
                           ownerState={
-                            Object {
+                            {
                               "children": <path
                                 d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"
                               />,
@@ -1056,9 +1056,9 @@ exports[`Child can be expanded to show children 1`] = `
                         >
                           <Insertion
                             cache={
-                              Object {
+                              {
                                 "insert": [Function],
-                                "inserted": Object {
+                                "inserted": {
                                   "11lq3yg-MuiGrid-root": true,
                                   "176wh8e-MuiCircularProgress-circle": true,
                                   "18lrjg1-MuiCircularProgress-root": true,
@@ -1073,7 +1073,7 @@ exports[`Child can be expanded to show children 1`] = `
                                 },
                                 "key": "css",
                                 "nonce": undefined,
-                                "registered": Object {},
+                                "registered": {},
                                 "sheet": StyleSheet {
                                   "_alreadyInsertedOrderInsensitiveRule": true,
                                   "_insertTag": [Function],
@@ -1289,7 +1289,7 @@ exports[`Child can be expanded to show children 1`] = `
                                   "key": "css",
                                   "nonce": undefined,
                                   "prepend": undefined,
-                                  "tags": Array [
+                                  "tags": [
                                     <style
                                       data-emotion="css"
                                       data-s=""
@@ -1499,7 +1499,7 @@ exports[`Child can be expanded to show children 1`] = `
                             }
                             isStringTag={true}
                             serialized={
-                              Object {
+                              {
                                 "map": undefined,
                                 "name": "i4bv87-MuiSvgIcon-root",
                                 "next": undefined,
@@ -1548,8 +1548,8 @@ exports[`Child can be expanded to show children 1`] = `
                 as="div"
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
                 ownerState={
-                  Object {
-                    "children": Array [
+                  {
+                    "children": [
                       <Unknown
                         pid="foo:123"
                       />,
@@ -1566,20 +1566,20 @@ exports[`Child can be expanded to show children 1`] = `
                     "md": false,
                     "rowSpacing": 0,
                     "sm": false,
-                    "sx": Object {},
+                    "sx": {},
                     "wrap": "wrap",
                     "xl": false,
                     "xs": 4,
                     "zeroMinWidth": false,
                   }
                 }
-                sx={Object {}}
+                sx={{}}
               >
                 <Insertion
                   cache={
-                    Object {
+                    {
                       "insert": [Function],
-                      "inserted": Object {
+                      "inserted": {
                         "11lq3yg-MuiGrid-root": true,
                         "176wh8e-MuiCircularProgress-circle": true,
                         "18lrjg1-MuiCircularProgress-root": true,
@@ -1594,7 +1594,7 @@ exports[`Child can be expanded to show children 1`] = `
                       },
                       "key": "css",
                       "nonce": undefined,
-                      "registered": Object {},
+                      "registered": {},
                       "sheet": StyleSheet {
                         "_alreadyInsertedOrderInsensitiveRule": true,
                         "_insertTag": [Function],
@@ -1810,7 +1810,7 @@ exports[`Child can be expanded to show children 1`] = `
                         "key": "css",
                         "nonce": undefined,
                         "prepend": undefined,
-                        "tags": Array [
+                        "tags": [
                           <style
                             data-emotion="css"
                             data-s=""
@@ -2020,7 +2020,7 @@ exports[`Child can be expanded to show children 1`] = `
                   }
                   isStringTag={true}
                   serialized={
-                    Object {
+                    {
                       "map": undefined,
                       "name": "gj1fbr-MuiGrid-root",
                       "next": undefined,
@@ -2072,8 +2072,8 @@ exports[`Child handles empty titles appropriately 1`] = `
           as="div"
           className="MuiGrid-root MuiGrid-container"
           ownerState={
-            Object {
-              "children": Array [
+            {
+              "children": [
                 <ForwardRef(Grid)
                   item={true}
                   xs={8}
@@ -2114,20 +2114,20 @@ exports[`Child handles empty titles appropriately 1`] = `
               "md": false,
               "rowSpacing": 0,
               "sm": false,
-              "sx": Object {},
+              "sx": {},
               "wrap": "wrap",
               "xl": false,
               "xs": false,
               "zeroMinWidth": false,
             }
           }
-          sx={Object {}}
+          sx={{}}
         >
           <Insertion
             cache={
-              Object {
+              {
                 "insert": [Function],
-                "inserted": Object {
+                "inserted": {
                   "11lq3yg-MuiGrid-root": true,
                   "176wh8e-MuiCircularProgress-circle": true,
                   "18lrjg1-MuiCircularProgress-root": true,
@@ -2142,7 +2142,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                 },
                 "key": "css",
                 "nonce": undefined,
-                "registered": Object {},
+                "registered": {},
                 "sheet": StyleSheet {
                   "_alreadyInsertedOrderInsensitiveRule": true,
                   "_insertTag": [Function],
@@ -2358,7 +2358,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                   "key": "css",
                   "nonce": undefined,
                   "prepend": undefined,
-                  "tags": Array [
+                  "tags": [
                     <style
                       data-emotion="css"
                       data-s=""
@@ -2568,7 +2568,7 @@ exports[`Child handles empty titles appropriately 1`] = `
             }
             isStringTag={true}
             serialized={
-              Object {
+              {
                 "map": undefined,
                 "name": "11lq3yg-MuiGrid-root",
                 "next": undefined,
@@ -2588,8 +2588,8 @@ exports[`Child handles empty titles appropriately 1`] = `
                 as="div"
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-8"
                 ownerState={
-                  Object {
-                    "children": Array [
+                  {
+                    "children": [
                       <span
                         onClick={[Function]}
                       >
@@ -2613,20 +2613,20 @@ exports[`Child handles empty titles appropriately 1`] = `
                     "md": false,
                     "rowSpacing": 0,
                     "sm": false,
-                    "sx": Object {},
+                    "sx": {},
                     "wrap": "wrap",
                     "xl": false,
                     "xs": 8,
                     "zeroMinWidth": false,
                   }
                 }
-                sx={Object {}}
+                sx={{}}
               >
                 <Insertion
                   cache={
-                    Object {
+                    {
                       "insert": [Function],
-                      "inserted": Object {
+                      "inserted": {
                         "11lq3yg-MuiGrid-root": true,
                         "176wh8e-MuiCircularProgress-circle": true,
                         "18lrjg1-MuiCircularProgress-root": true,
@@ -2641,7 +2641,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                       },
                       "key": "css",
                       "nonce": undefined,
-                      "registered": Object {},
+                      "registered": {},
                       "sheet": StyleSheet {
                         "_alreadyInsertedOrderInsensitiveRule": true,
                         "_insertTag": [Function],
@@ -2857,7 +2857,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                         "key": "css",
                         "nonce": undefined,
                         "prepend": undefined,
-                        "tags": Array [
+                        "tags": [
                           <style
                             data-emotion="css"
                             data-s=""
@@ -3067,7 +3067,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                   }
                   isStringTag={true}
                   serialized={
-                    Object {
+                    {
                       "map": undefined,
                       "name": "vok43g-MuiGrid-root",
                       "next": undefined,
@@ -3095,7 +3095,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                           data-testid="AddBoxIcon"
                           focusable="false"
                           ownerState={
-                            Object {
+                            {
                               "children": <path
                                 d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
                               />,
@@ -3114,9 +3114,9 @@ exports[`Child handles empty titles appropriately 1`] = `
                         >
                           <Insertion
                             cache={
-                              Object {
+                              {
                                 "insert": [Function],
-                                "inserted": Object {
+                                "inserted": {
                                   "11lq3yg-MuiGrid-root": true,
                                   "176wh8e-MuiCircularProgress-circle": true,
                                   "18lrjg1-MuiCircularProgress-root": true,
@@ -3131,7 +3131,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                                 },
                                 "key": "css",
                                 "nonce": undefined,
-                                "registered": Object {},
+                                "registered": {},
                                 "sheet": StyleSheet {
                                   "_alreadyInsertedOrderInsensitiveRule": true,
                                   "_insertTag": [Function],
@@ -3347,7 +3347,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                                   "key": "css",
                                   "nonce": undefined,
                                   "prepend": undefined,
-                                  "tags": Array [
+                                  "tags": [
                                     <style
                                       data-emotion="css"
                                       data-s=""
@@ -3557,7 +3557,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                             }
                             isStringTag={true}
                             serialized={
-                              Object {
+                              {
                                 "map": undefined,
                                 "name": "i4bv87-MuiSvgIcon-root",
                                 "next": undefined,
@@ -3606,8 +3606,8 @@ exports[`Child handles empty titles appropriately 1`] = `
                 as="div"
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
                 ownerState={
-                  Object {
-                    "children": Array [
+                  {
+                    "children": [
                       <Unknown
                         pid="foo:123"
                       />,
@@ -3624,20 +3624,20 @@ exports[`Child handles empty titles appropriately 1`] = `
                     "md": false,
                     "rowSpacing": 0,
                     "sm": false,
-                    "sx": Object {},
+                    "sx": {},
                     "wrap": "wrap",
                     "xl": false,
                     "xs": 4,
                     "zeroMinWidth": false,
                   }
                 }
-                sx={Object {}}
+                sx={{}}
               >
                 <Insertion
                   cache={
-                    Object {
+                    {
                       "insert": [Function],
-                      "inserted": Object {
+                      "inserted": {
                         "11lq3yg-MuiGrid-root": true,
                         "176wh8e-MuiCircularProgress-circle": true,
                         "18lrjg1-MuiCircularProgress-root": true,
@@ -3652,7 +3652,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                       },
                       "key": "css",
                       "nonce": undefined,
-                      "registered": Object {},
+                      "registered": {},
                       "sheet": StyleSheet {
                         "_alreadyInsertedOrderInsensitiveRule": true,
                         "_insertTag": [Function],
@@ -3868,7 +3868,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                         "key": "css",
                         "nonce": undefined,
                         "prepend": undefined,
-                        "tags": Array [
+                        "tags": [
                           <style
                             data-emotion="css"
                             data-s=""
@@ -4078,7 +4078,7 @@ exports[`Child handles empty titles appropriately 1`] = `
                   }
                   isStringTag={true}
                   serialized={
-                    Object {
+                    {
                       "map": undefined,
                       "name": "gj1fbr-MuiGrid-root",
                       "next": undefined,
@@ -4124,8 +4124,8 @@ exports[`Child renders a thumbnail 1`] = `
           as="div"
           className="MuiGrid-root MuiGrid-container"
           ownerState={
-            Object {
-              "children": Array [
+            {
+              "children": [
                 <ForwardRef(Grid)
                   item={true}
                   xs={7}
@@ -4173,20 +4173,20 @@ exports[`Child renders a thumbnail 1`] = `
               "md": false,
               "rowSpacing": 0,
               "sm": false,
-              "sx": Object {},
+              "sx": {},
               "wrap": "wrap",
               "xl": false,
               "xs": false,
               "zeroMinWidth": false,
             }
           }
-          sx={Object {}}
+          sx={{}}
         >
           <Insertion
             cache={
-              Object {
+              {
                 "insert": [Function],
-                "inserted": Object {
+                "inserted": {
                   "11lq3yg-MuiGrid-root": true,
                   "176wh8e-MuiCircularProgress-circle": true,
                   "18lrjg1-MuiCircularProgress-root": true,
@@ -4201,7 +4201,7 @@ exports[`Child renders a thumbnail 1`] = `
                 },
                 "key": "css",
                 "nonce": undefined,
-                "registered": Object {},
+                "registered": {},
                 "sheet": StyleSheet {
                   "_alreadyInsertedOrderInsensitiveRule": true,
                   "_insertTag": [Function],
@@ -4417,7 +4417,7 @@ exports[`Child renders a thumbnail 1`] = `
                   "key": "css",
                   "nonce": undefined,
                   "prepend": undefined,
-                  "tags": Array [
+                  "tags": [
                     <style
                       data-emotion="css"
                       data-s=""
@@ -4627,7 +4627,7 @@ exports[`Child renders a thumbnail 1`] = `
             }
             isStringTag={true}
             serialized={
-              Object {
+              {
                 "map": undefined,
                 "name": "11lq3yg-MuiGrid-root",
                 "next": undefined,
@@ -4647,8 +4647,8 @@ exports[`Child renders a thumbnail 1`] = `
                 as="div"
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-7"
                 ownerState={
-                  Object {
-                    "children": Array [
+                  {
+                    "children": [
                       <span
                         onClick={[Function]}
                       >
@@ -4672,20 +4672,20 @@ exports[`Child renders a thumbnail 1`] = `
                     "md": false,
                     "rowSpacing": 0,
                     "sm": false,
-                    "sx": Object {},
+                    "sx": {},
                     "wrap": "wrap",
                     "xl": false,
                     "xs": 7,
                     "zeroMinWidth": false,
                   }
                 }
-                sx={Object {}}
+                sx={{}}
               >
                 <Insertion
                   cache={
-                    Object {
+                    {
                       "insert": [Function],
-                      "inserted": Object {
+                      "inserted": {
                         "11lq3yg-MuiGrid-root": true,
                         "176wh8e-MuiCircularProgress-circle": true,
                         "18lrjg1-MuiCircularProgress-root": true,
@@ -4700,7 +4700,7 @@ exports[`Child renders a thumbnail 1`] = `
                       },
                       "key": "css",
                       "nonce": undefined,
-                      "registered": Object {},
+                      "registered": {},
                       "sheet": StyleSheet {
                         "_alreadyInsertedOrderInsensitiveRule": true,
                         "_insertTag": [Function],
@@ -4916,7 +4916,7 @@ exports[`Child renders a thumbnail 1`] = `
                         "key": "css",
                         "nonce": undefined,
                         "prepend": undefined,
-                        "tags": Array [
+                        "tags": [
                           <style
                             data-emotion="css"
                             data-s=""
@@ -5126,7 +5126,7 @@ exports[`Child renders a thumbnail 1`] = `
                   }
                   isStringTag={true}
                   serialized={
-                    Object {
+                    {
                       "map": undefined,
                       "name": "uqwprf-MuiGrid-root",
                       "next": undefined,
@@ -5154,7 +5154,7 @@ exports[`Child renders a thumbnail 1`] = `
                           data-testid="AddBoxIcon"
                           focusable="false"
                           ownerState={
-                            Object {
+                            {
                               "children": <path
                                 d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
                               />,
@@ -5173,9 +5173,9 @@ exports[`Child renders a thumbnail 1`] = `
                         >
                           <Insertion
                             cache={
-                              Object {
+                              {
                                 "insert": [Function],
-                                "inserted": Object {
+                                "inserted": {
                                   "11lq3yg-MuiGrid-root": true,
                                   "176wh8e-MuiCircularProgress-circle": true,
                                   "18lrjg1-MuiCircularProgress-root": true,
@@ -5190,7 +5190,7 @@ exports[`Child renders a thumbnail 1`] = `
                                 },
                                 "key": "css",
                                 "nonce": undefined,
-                                "registered": Object {},
+                                "registered": {},
                                 "sheet": StyleSheet {
                                   "_alreadyInsertedOrderInsensitiveRule": true,
                                   "_insertTag": [Function],
@@ -5406,7 +5406,7 @@ exports[`Child renders a thumbnail 1`] = `
                                   "key": "css",
                                   "nonce": undefined,
                                   "prepend": undefined,
-                                  "tags": Array [
+                                  "tags": [
                                     <style
                                       data-emotion="css"
                                       data-s=""
@@ -5616,7 +5616,7 @@ exports[`Child renders a thumbnail 1`] = `
                             }
                             isStringTag={true}
                             serialized={
-                              Object {
+                              {
                                 "map": undefined,
                                 "name": "i4bv87-MuiSvgIcon-root",
                                 "next": undefined,
@@ -5665,8 +5665,8 @@ exports[`Child renders a thumbnail 1`] = `
                 as="div"
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
                 ownerState={
-                  Object {
-                    "children": Array [
+                  {
+                    "children": [
                       <Unknown
                         pid="foo:123"
                       />,
@@ -5683,20 +5683,20 @@ exports[`Child renders a thumbnail 1`] = `
                     "md": false,
                     "rowSpacing": 0,
                     "sm": false,
-                    "sx": Object {},
+                    "sx": {},
                     "wrap": "wrap",
                     "xl": false,
                     "xs": 4,
                     "zeroMinWidth": false,
                   }
                 }
-                sx={Object {}}
+                sx={{}}
               >
                 <Insertion
                   cache={
-                    Object {
+                    {
                       "insert": [Function],
-                      "inserted": Object {
+                      "inserted": {
                         "11lq3yg-MuiGrid-root": true,
                         "176wh8e-MuiCircularProgress-circle": true,
                         "18lrjg1-MuiCircularProgress-root": true,
@@ -5711,7 +5711,7 @@ exports[`Child renders a thumbnail 1`] = `
                       },
                       "key": "css",
                       "nonce": undefined,
-                      "registered": Object {},
+                      "registered": {},
                       "sheet": StyleSheet {
                         "_alreadyInsertedOrderInsensitiveRule": true,
                         "_insertTag": [Function],
@@ -5927,7 +5927,7 @@ exports[`Child renders a thumbnail 1`] = `
                         "key": "css",
                         "nonce": undefined,
                         "prepend": undefined,
-                        "tags": Array [
+                        "tags": [
                           <style
                             data-emotion="css"
                             data-s=""
@@ -6137,7 +6137,7 @@ exports[`Child renders a thumbnail 1`] = `
                   }
                   isStringTag={true}
                   serialized={
-                    Object {
+                    {
                       "map": undefined,
                       "name": "gj1fbr-MuiGrid-root",
                       "next": undefined,
@@ -6168,7 +6168,7 @@ exports[`Child renders a thumbnail 1`] = `
                 as="div"
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1"
                 ownerState={
-                  Object {
+                  {
                     "children": <Unknown
                       pid="foo:123"
                     />,
@@ -6181,20 +6181,20 @@ exports[`Child renders a thumbnail 1`] = `
                     "md": false,
                     "rowSpacing": 0,
                     "sm": false,
-                    "sx": Object {},
+                    "sx": {},
                     "wrap": "wrap",
                     "xl": false,
                     "xs": 1,
                     "zeroMinWidth": false,
                   }
                 }
-                sx={Object {}}
+                sx={{}}
               >
                 <Insertion
                   cache={
-                    Object {
+                    {
                       "insert": [Function],
-                      "inserted": Object {
+                      "inserted": {
                         "11lq3yg-MuiGrid-root": true,
                         "176wh8e-MuiCircularProgress-circle": true,
                         "18lrjg1-MuiCircularProgress-root": true,
@@ -6209,7 +6209,7 @@ exports[`Child renders a thumbnail 1`] = `
                       },
                       "key": "css",
                       "nonce": undefined,
-                      "registered": Object {},
+                      "registered": {},
                       "sheet": StyleSheet {
                         "_alreadyInsertedOrderInsensitiveRule": true,
                         "_insertTag": [Function],
@@ -6425,7 +6425,7 @@ exports[`Child renders a thumbnail 1`] = `
                         "key": "css",
                         "nonce": undefined,
                         "prepend": undefined,
-                        "tags": Array [
+                        "tags": [
                           <style
                             data-emotion="css"
                             data-s=""
@@ -6635,7 +6635,7 @@ exports[`Child renders a thumbnail 1`] = `
                   }
                   isStringTag={true}
                   serialized={
-                    Object {
+                    {
                       "map": undefined,
                       "name": "u78q51-MuiGrid-root",
                       "next": undefined,
@@ -6677,8 +6677,8 @@ exports[`Child renders using ajax-loaded data 1`] = `
           as="div"
           className="MuiGrid-root MuiGrid-container"
           ownerState={
-            Object {
-              "children": Array [
+            {
+              "children": [
                 <ForwardRef(Grid)
                   item={true}
                   xs={8}
@@ -6719,20 +6719,20 @@ exports[`Child renders using ajax-loaded data 1`] = `
               "md": false,
               "rowSpacing": 0,
               "sm": false,
-              "sx": Object {},
+              "sx": {},
               "wrap": "wrap",
               "xl": false,
               "xs": false,
               "zeroMinWidth": false,
             }
           }
-          sx={Object {}}
+          sx={{}}
         >
           <Insertion
             cache={
-              Object {
+              {
                 "insert": [Function],
-                "inserted": Object {
+                "inserted": {
                   "11lq3yg-MuiGrid-root": true,
                   "176wh8e-MuiCircularProgress-circle": true,
                   "18lrjg1-MuiCircularProgress-root": true,
@@ -6745,7 +6745,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                 },
                 "key": "css",
                 "nonce": undefined,
-                "registered": Object {},
+                "registered": {},
                 "sheet": StyleSheet {
                   "_alreadyInsertedOrderInsensitiveRule": true,
                   "_insertTag": [Function],
@@ -6891,7 +6891,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                   "key": "css",
                   "nonce": undefined,
                   "prepend": undefined,
-                  "tags": Array [
+                  "tags": [
                     <style
                       data-emotion="css"
                       data-s=""
@@ -7031,7 +7031,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
             }
             isStringTag={true}
             serialized={
-              Object {
+              {
                 "map": undefined,
                 "name": "11lq3yg-MuiGrid-root",
                 "next": undefined,
@@ -7051,8 +7051,8 @@ exports[`Child renders using ajax-loaded data 1`] = `
                 as="div"
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-8"
                 ownerState={
-                  Object {
-                    "children": Array [
+                  {
+                    "children": [
                       <span
                         onClick={[Function]}
                       >
@@ -7076,20 +7076,20 @@ exports[`Child renders using ajax-loaded data 1`] = `
                     "md": false,
                     "rowSpacing": 0,
                     "sm": false,
-                    "sx": Object {},
+                    "sx": {},
                     "wrap": "wrap",
                     "xl": false,
                     "xs": 8,
                     "zeroMinWidth": false,
                   }
                 }
-                sx={Object {}}
+                sx={{}}
               >
                 <Insertion
                   cache={
-                    Object {
+                    {
                       "insert": [Function],
-                      "inserted": Object {
+                      "inserted": {
                         "11lq3yg-MuiGrid-root": true,
                         "176wh8e-MuiCircularProgress-circle": true,
                         "18lrjg1-MuiCircularProgress-root": true,
@@ -7102,7 +7102,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                       },
                       "key": "css",
                       "nonce": undefined,
-                      "registered": Object {},
+                      "registered": {},
                       "sheet": StyleSheet {
                         "_alreadyInsertedOrderInsensitiveRule": true,
                         "_insertTag": [Function],
@@ -7248,7 +7248,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                         "key": "css",
                         "nonce": undefined,
                         "prepend": undefined,
-                        "tags": Array [
+                        "tags": [
                           <style
                             data-emotion="css"
                             data-s=""
@@ -7388,7 +7388,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                   }
                   isStringTag={true}
                   serialized={
-                    Object {
+                    {
                       "map": undefined,
                       "name": "vok43g-MuiGrid-root",
                       "next": undefined,
@@ -7416,7 +7416,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                           data-testid="AddBoxIcon"
                           focusable="false"
                           ownerState={
-                            Object {
+                            {
                               "children": <path
                                 d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
                               />,
@@ -7435,9 +7435,9 @@ exports[`Child renders using ajax-loaded data 1`] = `
                         >
                           <Insertion
                             cache={
-                              Object {
+                              {
                                 "insert": [Function],
-                                "inserted": Object {
+                                "inserted": {
                                   "11lq3yg-MuiGrid-root": true,
                                   "176wh8e-MuiCircularProgress-circle": true,
                                   "18lrjg1-MuiCircularProgress-root": true,
@@ -7450,7 +7450,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                                 },
                                 "key": "css",
                                 "nonce": undefined,
-                                "registered": Object {},
+                                "registered": {},
                                 "sheet": StyleSheet {
                                   "_alreadyInsertedOrderInsensitiveRule": true,
                                   "_insertTag": [Function],
@@ -7596,7 +7596,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                                   "key": "css",
                                   "nonce": undefined,
                                   "prepend": undefined,
-                                  "tags": Array [
+                                  "tags": [
                                     <style
                                       data-emotion="css"
                                       data-s=""
@@ -7736,7 +7736,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                             }
                             isStringTag={true}
                             serialized={
-                              Object {
+                              {
                                 "map": undefined,
                                 "name": "i4bv87-MuiSvgIcon-root",
                                 "next": undefined,
@@ -7785,8 +7785,8 @@ exports[`Child renders using ajax-loaded data 1`] = `
                 as="div"
                 className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-4"
                 ownerState={
-                  Object {
-                    "children": Array [
+                  {
+                    "children": [
                       <Unknown
                         pid="foo:123"
                       />,
@@ -7803,20 +7803,20 @@ exports[`Child renders using ajax-loaded data 1`] = `
                     "md": false,
                     "rowSpacing": 0,
                     "sm": false,
-                    "sx": Object {},
+                    "sx": {},
                     "wrap": "wrap",
                     "xl": false,
                     "xs": 4,
                     "zeroMinWidth": false,
                   }
                 }
-                sx={Object {}}
+                sx={{}}
               >
                 <Insertion
                   cache={
-                    Object {
+                    {
                       "insert": [Function],
-                      "inserted": Object {
+                      "inserted": {
                         "11lq3yg-MuiGrid-root": true,
                         "176wh8e-MuiCircularProgress-circle": true,
                         "18lrjg1-MuiCircularProgress-root": true,
@@ -7829,7 +7829,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                       },
                       "key": "css",
                       "nonce": undefined,
-                      "registered": Object {},
+                      "registered": {},
                       "sheet": StyleSheet {
                         "_alreadyInsertedOrderInsensitiveRule": true,
                         "_insertTag": [Function],
@@ -7975,7 +7975,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                         "key": "css",
                         "nonce": undefined,
                         "prepend": undefined,
-                        "tags": Array [
+                        "tags": [
                           <style
                             data-emotion="css"
                             data-s=""
@@ -8115,7 +8115,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
                   }
                   isStringTag={true}
                   serialized={
-                    Object {
+                    {
                       "map": undefined,
                       "name": "gj1fbr-MuiGrid-root",
                       "next": undefined,

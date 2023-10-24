@@ -13,8 +13,8 @@ exports[`SolrIndexer renders 1`] = `
       <MuiAccordionRoot
         className="MuiAccordion-root MuiAccordion-rounded MuiAccordion-gutters"
         ownerState={
-          Object {
-            "children": Array [
+          {
+            "children": [
               <ForwardRef(AccordionSummary)
                 expandIcon={<Memo />}
               >
@@ -36,9 +36,9 @@ exports[`SolrIndexer renders 1`] = `
       >
         <Insertion
           cache={
-            Object {
+            {
               "insert": [Function],
-              "inserted": Object {
+              "inserted": {
                 "15v22id-MuiAccordionDetails-root": true,
                 "1azetr9-MuiAccordionSummary-root": true,
                 "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -53,9 +53,9 @@ exports[`SolrIndexer renders 1`] = `
               },
               "key": "css",
               "nonce": undefined,
-              "registered": Object {
+              "registered": {
                 "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
               },
               "sheet": StyleSheet {
                 "_alreadyInsertedOrderInsensitiveRule": true,
@@ -433,7 +433,7 @@ exports[`SolrIndexer renders 1`] = `
                 "key": "css",
                 "nonce": undefined,
                 "prepend": undefined,
-                "tags": Array [
+                "tags": [
                   <style
                     data-emotion="css"
                     data-s=""
@@ -804,11 +804,11 @@ exports[`SolrIndexer renders 1`] = `
           }
           isStringTag={false}
           serialized={
-            Object {
+            {
               "map": undefined,
               "name": "1xu1s89-MuiAccordion-root",
               "next": undefined,
-              "styles": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+              "styles": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
               "toString": [Function],
             }
           }
@@ -821,11 +821,11 @@ exports[`SolrIndexer renders 1`] = `
             as="div"
             className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded MuiAccordion-gutters css-1xu1s89-MuiAccordion-root"
             ownerState={
-              Object {
-                "children": Array [
+              {
+                "children": [
                   <Context.Provider
                     value={
-                      Object {
+                      {
                         "disableGutters": false,
                         "disabled": false,
                         "expanded": false,
@@ -865,9 +865,9 @@ exports[`SolrIndexer renders 1`] = `
           >
             <Insertion
               cache={
-                Object {
+                {
                   "insert": [Function],
-                  "inserted": Object {
+                  "inserted": {
                     "15v22id-MuiAccordionDetails-root": true,
                     "1azetr9-MuiAccordionSummary-root": true,
                     "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -882,9 +882,9 @@ exports[`SolrIndexer renders 1`] = `
                   },
                   "key": "css",
                   "nonce": undefined,
-                  "registered": Object {
+                  "registered": {
                     "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                    "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                    "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                   },
                   "sheet": StyleSheet {
                     "_alreadyInsertedOrderInsensitiveRule": true,
@@ -1262,7 +1262,7 @@ exports[`SolrIndexer renders 1`] = `
                     "key": "css",
                     "nonce": undefined,
                     "prepend": undefined,
-                    "tags": Array [
+                    "tags": [
                       <style
                         data-emotion="css"
                         data-s=""
@@ -1633,11 +1633,11 @@ exports[`SolrIndexer renders 1`] = `
               }
               isStringTag={true}
               serialized={
-                Object {
+                {
                   "map": undefined,
                   "name": "1elwnq4-MuiPaper-root-MuiAccordion-root",
                   "next": undefined,
-                  "styles": "label:MuiPaper-root;background-color:#fff;color:rgba(0, 0, 0, 0.87);transition:box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;border-radius:4px;box-shadow:0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;};",
+                  "styles": "label:MuiPaper-root;background-color:#fff;color:rgba(0, 0, 0, 0.87);transition:box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;border-radius:4px;box-shadow:0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;};",
                   "toString": [Function],
                 }
               }
@@ -1659,7 +1659,7 @@ exports[`SolrIndexer renders 1`] = `
                   focusVisibleClassName="Mui-focusVisible"
                   onClick={[Function]}
                   ownerState={
-                    Object {
+                    {
                       "children": "Index Single PID:",
                       "disableGutters": false,
                       "disabled": false,
@@ -1670,9 +1670,9 @@ exports[`SolrIndexer renders 1`] = `
                 >
                   <Insertion
                     cache={
-                      Object {
+                      {
                         "insert": [Function],
-                        "inserted": Object {
+                        "inserted": {
                           "15v22id-MuiAccordionDetails-root": true,
                           "1azetr9-MuiAccordionSummary-root": true,
                           "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -1687,9 +1687,9 @@ exports[`SolrIndexer renders 1`] = `
                         },
                         "key": "css",
                         "nonce": undefined,
-                        "registered": Object {
+                        "registered": {
                           "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                          "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                          "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                         },
                         "sheet": StyleSheet {
                           "_alreadyInsertedOrderInsensitiveRule": true,
@@ -2067,7 +2067,7 @@ exports[`SolrIndexer renders 1`] = `
                           "key": "css",
                           "nonce": undefined,
                           "prepend": undefined,
-                          "tags": Array [
+                          "tags": [
                             <style
                               data-emotion="css"
                               data-s=""
@@ -2438,7 +2438,7 @@ exports[`SolrIndexer renders 1`] = `
                     }
                     isStringTag={false}
                     serialized={
-                      Object {
+                      {
                         "map": undefined,
                         "name": "1azetr9-MuiAccordionSummary-root",
                         "next": undefined,
@@ -2475,14 +2475,14 @@ exports[`SolrIndexer renders 1`] = `
                       onTouchMove={[Function]}
                       onTouchStart={[Function]}
                       ownerState={
-                        Object {
+                        {
                           "aria-expanded": false,
                           "centerRipple": false,
-                          "children": Array [
+                          "children": [
                             <MuiAccordionSummaryContent
                               className="MuiAccordionSummary-content MuiAccordionSummary-contentGutters"
                               ownerState={
-                                Object {
+                                {
                                   "children": "Index Single PID:",
                                   "disableGutters": false,
                                   "disabled": false,
@@ -2496,7 +2496,7 @@ exports[`SolrIndexer renders 1`] = `
                             <MuiAccordionSummaryExpandIconWrapper
                               className="MuiAccordionSummary-expandIconWrapper"
                               ownerState={
-                                Object {
+                                {
                                   "children": "Index Single PID:",
                                   "disableGutters": false,
                                   "disabled": false,
@@ -2525,9 +2525,9 @@ exports[`SolrIndexer renders 1`] = `
                     >
                       <Insertion
                         cache={
-                          Object {
+                          {
                             "insert": [Function],
-                            "inserted": Object {
+                            "inserted": {
                               "15v22id-MuiAccordionDetails-root": true,
                               "1azetr9-MuiAccordionSummary-root": true,
                               "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -2542,9 +2542,9 @@ exports[`SolrIndexer renders 1`] = `
                             },
                             "key": "css",
                             "nonce": undefined,
-                            "registered": Object {
+                            "registered": {
                               "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                              "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                              "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                             },
                             "sheet": StyleSheet {
                               "_alreadyInsertedOrderInsensitiveRule": true,
@@ -2922,7 +2922,7 @@ exports[`SolrIndexer renders 1`] = `
                               "key": "css",
                               "nonce": undefined,
                               "prepend": undefined,
-                              "tags": Array [
+                              "tags": [
                                 <style
                                   data-emotion="css"
                                   data-s=""
@@ -3293,7 +3293,7 @@ exports[`SolrIndexer renders 1`] = `
                         }
                         isStringTag={true}
                         serialized={
-                          Object {
+                          {
                             "map": undefined,
                             "name": "sh22l5-MuiButtonBase-root-MuiAccordionSummary-root",
                             "next": undefined,
@@ -3324,7 +3324,7 @@ exports[`SolrIndexer renders 1`] = `
                         <MuiAccordionSummaryContent
                           className="MuiAccordionSummary-content MuiAccordionSummary-contentGutters"
                           ownerState={
-                            Object {
+                            {
                               "children": "Index Single PID:",
                               "disableGutters": false,
                               "disabled": false,
@@ -3335,9 +3335,9 @@ exports[`SolrIndexer renders 1`] = `
                         >
                           <Insertion
                             cache={
-                              Object {
+                              {
                                 "insert": [Function],
-                                "inserted": Object {
+                                "inserted": {
                                   "15v22id-MuiAccordionDetails-root": true,
                                   "1azetr9-MuiAccordionSummary-root": true,
                                   "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -3352,9 +3352,9 @@ exports[`SolrIndexer renders 1`] = `
                                 },
                                 "key": "css",
                                 "nonce": undefined,
-                                "registered": Object {
+                                "registered": {
                                   "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                  "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                  "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                                 },
                                 "sheet": StyleSheet {
                                   "_alreadyInsertedOrderInsensitiveRule": true,
@@ -3732,7 +3732,7 @@ exports[`SolrIndexer renders 1`] = `
                                   "key": "css",
                                   "nonce": undefined,
                                   "prepend": undefined,
-                                  "tags": Array [
+                                  "tags": [
                                     <style
                                       data-emotion="css"
                                       data-s=""
@@ -4103,7 +4103,7 @@ exports[`SolrIndexer renders 1`] = `
                             }
                             isStringTag={true}
                             serialized={
-                              Object {
+                              {
                                 "map": undefined,
                                 "name": "o4b71y-MuiAccordionSummary-content",
                                 "next": undefined,
@@ -4121,7 +4121,7 @@ exports[`SolrIndexer renders 1`] = `
                         <MuiAccordionSummaryExpandIconWrapper
                           className="MuiAccordionSummary-expandIconWrapper"
                           ownerState={
-                            Object {
+                            {
                               "children": "Index Single PID:",
                               "disableGutters": false,
                               "disabled": false,
@@ -4132,9 +4132,9 @@ exports[`SolrIndexer renders 1`] = `
                         >
                           <Insertion
                             cache={
-                              Object {
+                              {
                                 "insert": [Function],
-                                "inserted": Object {
+                                "inserted": {
                                   "15v22id-MuiAccordionDetails-root": true,
                                   "1azetr9-MuiAccordionSummary-root": true,
                                   "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -4149,9 +4149,9 @@ exports[`SolrIndexer renders 1`] = `
                                 },
                                 "key": "css",
                                 "nonce": undefined,
-                                "registered": Object {
+                                "registered": {
                                   "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                  "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                  "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                                 },
                                 "sheet": StyleSheet {
                                   "_alreadyInsertedOrderInsensitiveRule": true,
@@ -4529,7 +4529,7 @@ exports[`SolrIndexer renders 1`] = `
                                   "key": "css",
                                   "nonce": undefined,
                                   "prepend": undefined,
-                                  "tags": Array [
+                                  "tags": [
                                     <style
                                       data-emotion="css"
                                       data-s=""
@@ -4900,7 +4900,7 @@ exports[`SolrIndexer renders 1`] = `
                             }
                             isStringTag={true}
                             serialized={
-                              Object {
+                              {
                                 "map": undefined,
                                 "name": "yw020d-MuiAccordionSummary-expandIconWrapper",
                                 "next": undefined,
@@ -4923,7 +4923,7 @@ exports[`SolrIndexer renders 1`] = `
                                   data-testid="ExpandMoreIcon"
                                   focusable="false"
                                   ownerState={
-                                    Object {
+                                    {
                                       "children": <path
                                         d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
                                       />,
@@ -4940,9 +4940,9 @@ exports[`SolrIndexer renders 1`] = `
                                 >
                                   <Insertion
                                     cache={
-                                      Object {
+                                      {
                                         "insert": [Function],
-                                        "inserted": Object {
+                                        "inserted": {
                                           "15v22id-MuiAccordionDetails-root": true,
                                           "1azetr9-MuiAccordionSummary-root": true,
                                           "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -4957,9 +4957,9 @@ exports[`SolrIndexer renders 1`] = `
                                         },
                                         "key": "css",
                                         "nonce": undefined,
-                                        "registered": Object {
+                                        "registered": {
                                           "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                          "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                          "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                                         },
                                         "sheet": StyleSheet {
                                           "_alreadyInsertedOrderInsensitiveRule": true,
@@ -5337,7 +5337,7 @@ exports[`SolrIndexer renders 1`] = `
                                           "key": "css",
                                           "nonce": undefined,
                                           "prepend": undefined,
-                                          "tags": Array [
+                                          "tags": [
                                             <style
                                               data-emotion="css"
                                               data-s=""
@@ -5708,7 +5708,7 @@ exports[`SolrIndexer renders 1`] = `
                                     }
                                     isStringTag={true}
                                     serialized={
-                                      Object {
+                                      {
                                         "map": undefined,
                                         "name": "i4bv87-MuiSvgIcon-root",
                                         "next": undefined,
@@ -5750,7 +5750,7 @@ exports[`SolrIndexer renders 1`] = `
                   in={false}
                   mountOnEnter={false}
                   nodeRef={
-                    Object {
+                    {
                       "current": <div
                         class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
                         style="min-height: 0px;"
@@ -5788,7 +5788,7 @@ exports[`SolrIndexer renders 1`] = `
                   <MuiCollapseRoot
                     className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden"
                     ownerState={
-                      Object {
+                      {
                         "children": <div
                           className="MuiAccordion-region"
                           role="region"
@@ -5807,16 +5807,16 @@ exports[`SolrIndexer renders 1`] = `
                       }
                     }
                     style={
-                      Object {
+                      {
                         "minHeight": "0px",
                       }
                     }
                   >
                     <Insertion
                       cache={
-                        Object {
+                        {
                           "insert": [Function],
-                          "inserted": Object {
+                          "inserted": {
                             "15v22id-MuiAccordionDetails-root": true,
                             "1azetr9-MuiAccordionSummary-root": true,
                             "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -5831,9 +5831,9 @@ exports[`SolrIndexer renders 1`] = `
                           },
                           "key": "css",
                           "nonce": undefined,
-                          "registered": Object {
+                          "registered": {
                             "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                            "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                            "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                           },
                           "sheet": StyleSheet {
                             "_alreadyInsertedOrderInsensitiveRule": true,
@@ -6211,7 +6211,7 @@ exports[`SolrIndexer renders 1`] = `
                             "key": "css",
                             "nonce": undefined,
                             "prepend": undefined,
-                            "tags": Array [
+                            "tags": [
                               <style
                                 data-emotion="css"
                                 data-s=""
@@ -6582,7 +6582,7 @@ exports[`SolrIndexer renders 1`] = `
                       }
                       isStringTag={true}
                       serialized={
-                        Object {
+                        {
                           "map": undefined,
                           "name": "bz4dnt-MuiCollapse-root",
                           "next": undefined,
@@ -6594,7 +6594,7 @@ exports[`SolrIndexer renders 1`] = `
                     <div
                       className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
                       style={
-                        Object {
+                        {
                           "minHeight": "0px",
                         }
                       }
@@ -6602,7 +6602,7 @@ exports[`SolrIndexer renders 1`] = `
                       <MuiCollapseWrapper
                         className="MuiCollapse-wrapper MuiCollapse-vertical"
                         ownerState={
-                          Object {
+                          {
                             "children": <div
                               className="MuiAccordion-region"
                               role="region"
@@ -6623,9 +6623,9 @@ exports[`SolrIndexer renders 1`] = `
                       >
                         <Insertion
                           cache={
-                            Object {
+                            {
                               "insert": [Function],
-                              "inserted": Object {
+                              "inserted": {
                                 "15v22id-MuiAccordionDetails-root": true,
                                 "1azetr9-MuiAccordionSummary-root": true,
                                 "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -6640,9 +6640,9 @@ exports[`SolrIndexer renders 1`] = `
                               },
                               "key": "css",
                               "nonce": undefined,
-                              "registered": Object {
+                              "registered": {
                                 "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                               },
                               "sheet": StyleSheet {
                                 "_alreadyInsertedOrderInsensitiveRule": true,
@@ -7020,7 +7020,7 @@ exports[`SolrIndexer renders 1`] = `
                                 "key": "css",
                                 "nonce": undefined,
                                 "prepend": undefined,
-                                "tags": Array [
+                                "tags": [
                                   <style
                                     data-emotion="css"
                                     data-s=""
@@ -7391,7 +7391,7 @@ exports[`SolrIndexer renders 1`] = `
                           }
                           isStringTag={true}
                           serialized={
-                            Object {
+                            {
                               "map": undefined,
                               "name": "smkl36-MuiCollapse-wrapper",
                               "next": undefined,
@@ -7406,7 +7406,7 @@ exports[`SolrIndexer renders 1`] = `
                           <MuiCollapseWrapperInner
                             className="MuiCollapse-wrapperInner MuiCollapse-vertical"
                             ownerState={
-                              Object {
+                              {
                                 "children": <div
                                   className="MuiAccordion-region"
                                   role="region"
@@ -7427,9 +7427,9 @@ exports[`SolrIndexer renders 1`] = `
                           >
                             <Insertion
                               cache={
-                                Object {
+                                {
                                   "insert": [Function],
-                                  "inserted": Object {
+                                  "inserted": {
                                     "15v22id-MuiAccordionDetails-root": true,
                                     "1azetr9-MuiAccordionSummary-root": true,
                                     "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -7444,9 +7444,9 @@ exports[`SolrIndexer renders 1`] = `
                                   },
                                   "key": "css",
                                   "nonce": undefined,
-                                  "registered": Object {
+                                  "registered": {
                                     "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                    "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                    "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                                   },
                                   "sheet": StyleSheet {
                                     "_alreadyInsertedOrderInsensitiveRule": true,
@@ -7824,7 +7824,7 @@ exports[`SolrIndexer renders 1`] = `
                                     "key": "css",
                                     "nonce": undefined,
                                     "prepend": undefined,
-                                    "tags": Array [
+                                    "tags": [
                                       <style
                                         data-emotion="css"
                                         data-s=""
@@ -8195,7 +8195,7 @@ exports[`SolrIndexer renders 1`] = `
                               }
                               isStringTag={true}
                               serialized={
-                                Object {
+                                {
                                   "map": undefined,
                                   "name": "9l5vo-MuiCollapse-wrapperInner",
                                   "next": undefined,
@@ -8217,7 +8217,7 @@ exports[`SolrIndexer renders 1`] = `
                                   <MuiAccordionDetailsRoot
                                     className="MuiAccordionDetails-root"
                                     ownerState={
-                                      Object {
+                                      {
                                         "children": <Unknown
                                           setResults={[Function]}
                                         />,
@@ -8226,9 +8226,9 @@ exports[`SolrIndexer renders 1`] = `
                                   >
                                     <Insertion
                                       cache={
-                                        Object {
+                                        {
                                           "insert": [Function],
-                                          "inserted": Object {
+                                          "inserted": {
                                             "15v22id-MuiAccordionDetails-root": true,
                                             "1azetr9-MuiAccordionSummary-root": true,
                                             "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -8243,9 +8243,9 @@ exports[`SolrIndexer renders 1`] = `
                                           },
                                           "key": "css",
                                           "nonce": undefined,
-                                          "registered": Object {
+                                          "registered": {
                                             "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                            "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                            "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                                           },
                                           "sheet": StyleSheet {
                                             "_alreadyInsertedOrderInsensitiveRule": true,
@@ -8623,7 +8623,7 @@ exports[`SolrIndexer renders 1`] = `
                                             "key": "css",
                                             "nonce": undefined,
                                             "prepend": undefined,
-                                            "tags": Array [
+                                            "tags": [
                                               <style
                                                 data-emotion="css"
                                                 data-s=""
@@ -8994,7 +8994,7 @@ exports[`SolrIndexer renders 1`] = `
                                       }
                                       isStringTag={true}
                                       serialized={
-                                        Object {
+                                        {
                                           "map": undefined,
                                           "name": "15v22id-MuiAccordionDetails-root",
                                           "next": undefined,
@@ -9032,8 +9032,8 @@ exports[`SolrIndexer renders 1`] = `
       <MuiAccordionRoot
         className="MuiAccordion-root MuiAccordion-rounded MuiAccordion-gutters"
         ownerState={
-          Object {
-            "children": Array [
+          {
+            "children": [
               <ForwardRef(AccordionSummary)
                 expandIcon={<Memo />}
               >
@@ -9055,9 +9055,9 @@ exports[`SolrIndexer renders 1`] = `
       >
         <Insertion
           cache={
-            Object {
+            {
               "insert": [Function],
-              "inserted": Object {
+              "inserted": {
                 "15v22id-MuiAccordionDetails-root": true,
                 "1azetr9-MuiAccordionSummary-root": true,
                 "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -9072,9 +9072,9 @@ exports[`SolrIndexer renders 1`] = `
               },
               "key": "css",
               "nonce": undefined,
-              "registered": Object {
+              "registered": {
                 "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
               },
               "sheet": StyleSheet {
                 "_alreadyInsertedOrderInsensitiveRule": true,
@@ -9452,7 +9452,7 @@ exports[`SolrIndexer renders 1`] = `
                 "key": "css",
                 "nonce": undefined,
                 "prepend": undefined,
-                "tags": Array [
+                "tags": [
                   <style
                     data-emotion="css"
                     data-s=""
@@ -9823,11 +9823,11 @@ exports[`SolrIndexer renders 1`] = `
           }
           isStringTag={false}
           serialized={
-            Object {
+            {
               "map": undefined,
               "name": "1xu1s89-MuiAccordion-root",
               "next": undefined,
-              "styles": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+              "styles": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
               "toString": [Function],
             }
           }
@@ -9840,11 +9840,11 @@ exports[`SolrIndexer renders 1`] = `
             as="div"
             className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded MuiAccordion-gutters css-1xu1s89-MuiAccordion-root"
             ownerState={
-              Object {
-                "children": Array [
+              {
+                "children": [
                   <Context.Provider
                     value={
-                      Object {
+                      {
                         "disableGutters": false,
                         "disabled": false,
                         "expanded": false,
@@ -9884,9 +9884,9 @@ exports[`SolrIndexer renders 1`] = `
           >
             <Insertion
               cache={
-                Object {
+                {
                   "insert": [Function],
-                  "inserted": Object {
+                  "inserted": {
                     "15v22id-MuiAccordionDetails-root": true,
                     "1azetr9-MuiAccordionSummary-root": true,
                     "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -9901,9 +9901,9 @@ exports[`SolrIndexer renders 1`] = `
                   },
                   "key": "css",
                   "nonce": undefined,
-                  "registered": Object {
+                  "registered": {
                     "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                    "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                    "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                   },
                   "sheet": StyleSheet {
                     "_alreadyInsertedOrderInsensitiveRule": true,
@@ -10281,7 +10281,7 @@ exports[`SolrIndexer renders 1`] = `
                     "key": "css",
                     "nonce": undefined,
                     "prepend": undefined,
-                    "tags": Array [
+                    "tags": [
                       <style
                         data-emotion="css"
                         data-s=""
@@ -10652,11 +10652,11 @@ exports[`SolrIndexer renders 1`] = `
               }
               isStringTag={true}
               serialized={
-                Object {
+                {
                   "map": undefined,
                   "name": "1elwnq4-MuiPaper-root-MuiAccordion-root",
                   "next": undefined,
-                  "styles": "label:MuiPaper-root;background-color:#fff;color:rgba(0, 0, 0, 0.87);transition:box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;border-radius:4px;box-shadow:0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;};",
+                  "styles": "label:MuiPaper-root;background-color:#fff;color:rgba(0, 0, 0, 0.87);transition:box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;border-radius:4px;box-shadow:0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;};",
                   "toString": [Function],
                 }
               }
@@ -10678,7 +10678,7 @@ exports[`SolrIndexer renders 1`] = `
                   focusVisibleClassName="Mui-focusVisible"
                   onClick={[Function]}
                   ownerState={
-                    Object {
+                    {
                       "children": "Index Range of PIDs:",
                       "disableGutters": false,
                       "disabled": false,
@@ -10689,9 +10689,9 @@ exports[`SolrIndexer renders 1`] = `
                 >
                   <Insertion
                     cache={
-                      Object {
+                      {
                         "insert": [Function],
-                        "inserted": Object {
+                        "inserted": {
                           "15v22id-MuiAccordionDetails-root": true,
                           "1azetr9-MuiAccordionSummary-root": true,
                           "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -10706,9 +10706,9 @@ exports[`SolrIndexer renders 1`] = `
                         },
                         "key": "css",
                         "nonce": undefined,
-                        "registered": Object {
+                        "registered": {
                           "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                          "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                          "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                         },
                         "sheet": StyleSheet {
                           "_alreadyInsertedOrderInsensitiveRule": true,
@@ -11086,7 +11086,7 @@ exports[`SolrIndexer renders 1`] = `
                           "key": "css",
                           "nonce": undefined,
                           "prepend": undefined,
-                          "tags": Array [
+                          "tags": [
                             <style
                               data-emotion="css"
                               data-s=""
@@ -11457,7 +11457,7 @@ exports[`SolrIndexer renders 1`] = `
                     }
                     isStringTag={false}
                     serialized={
-                      Object {
+                      {
                         "map": undefined,
                         "name": "1azetr9-MuiAccordionSummary-root",
                         "next": undefined,
@@ -11494,14 +11494,14 @@ exports[`SolrIndexer renders 1`] = `
                       onTouchMove={[Function]}
                       onTouchStart={[Function]}
                       ownerState={
-                        Object {
+                        {
                           "aria-expanded": false,
                           "centerRipple": false,
-                          "children": Array [
+                          "children": [
                             <MuiAccordionSummaryContent
                               className="MuiAccordionSummary-content MuiAccordionSummary-contentGutters"
                               ownerState={
-                                Object {
+                                {
                                   "children": "Index Range of PIDs:",
                                   "disableGutters": false,
                                   "disabled": false,
@@ -11515,7 +11515,7 @@ exports[`SolrIndexer renders 1`] = `
                             <MuiAccordionSummaryExpandIconWrapper
                               className="MuiAccordionSummary-expandIconWrapper"
                               ownerState={
-                                Object {
+                                {
                                   "children": "Index Range of PIDs:",
                                   "disableGutters": false,
                                   "disabled": false,
@@ -11544,9 +11544,9 @@ exports[`SolrIndexer renders 1`] = `
                     >
                       <Insertion
                         cache={
-                          Object {
+                          {
                             "insert": [Function],
-                            "inserted": Object {
+                            "inserted": {
                               "15v22id-MuiAccordionDetails-root": true,
                               "1azetr9-MuiAccordionSummary-root": true,
                               "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -11561,9 +11561,9 @@ exports[`SolrIndexer renders 1`] = `
                             },
                             "key": "css",
                             "nonce": undefined,
-                            "registered": Object {
+                            "registered": {
                               "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                              "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                              "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                             },
                             "sheet": StyleSheet {
                               "_alreadyInsertedOrderInsensitiveRule": true,
@@ -11941,7 +11941,7 @@ exports[`SolrIndexer renders 1`] = `
                               "key": "css",
                               "nonce": undefined,
                               "prepend": undefined,
-                              "tags": Array [
+                              "tags": [
                                 <style
                                   data-emotion="css"
                                   data-s=""
@@ -12312,7 +12312,7 @@ exports[`SolrIndexer renders 1`] = `
                         }
                         isStringTag={true}
                         serialized={
-                          Object {
+                          {
                             "map": undefined,
                             "name": "sh22l5-MuiButtonBase-root-MuiAccordionSummary-root",
                             "next": undefined,
@@ -12343,7 +12343,7 @@ exports[`SolrIndexer renders 1`] = `
                         <MuiAccordionSummaryContent
                           className="MuiAccordionSummary-content MuiAccordionSummary-contentGutters"
                           ownerState={
-                            Object {
+                            {
                               "children": "Index Range of PIDs:",
                               "disableGutters": false,
                               "disabled": false,
@@ -12354,9 +12354,9 @@ exports[`SolrIndexer renders 1`] = `
                         >
                           <Insertion
                             cache={
-                              Object {
+                              {
                                 "insert": [Function],
-                                "inserted": Object {
+                                "inserted": {
                                   "15v22id-MuiAccordionDetails-root": true,
                                   "1azetr9-MuiAccordionSummary-root": true,
                                   "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -12371,9 +12371,9 @@ exports[`SolrIndexer renders 1`] = `
                                 },
                                 "key": "css",
                                 "nonce": undefined,
-                                "registered": Object {
+                                "registered": {
                                   "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                  "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                  "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                                 },
                                 "sheet": StyleSheet {
                                   "_alreadyInsertedOrderInsensitiveRule": true,
@@ -12751,7 +12751,7 @@ exports[`SolrIndexer renders 1`] = `
                                   "key": "css",
                                   "nonce": undefined,
                                   "prepend": undefined,
-                                  "tags": Array [
+                                  "tags": [
                                     <style
                                       data-emotion="css"
                                       data-s=""
@@ -13122,7 +13122,7 @@ exports[`SolrIndexer renders 1`] = `
                             }
                             isStringTag={true}
                             serialized={
-                              Object {
+                              {
                                 "map": undefined,
                                 "name": "o4b71y-MuiAccordionSummary-content",
                                 "next": undefined,
@@ -13140,7 +13140,7 @@ exports[`SolrIndexer renders 1`] = `
                         <MuiAccordionSummaryExpandIconWrapper
                           className="MuiAccordionSummary-expandIconWrapper"
                           ownerState={
-                            Object {
+                            {
                               "children": "Index Range of PIDs:",
                               "disableGutters": false,
                               "disabled": false,
@@ -13151,9 +13151,9 @@ exports[`SolrIndexer renders 1`] = `
                         >
                           <Insertion
                             cache={
-                              Object {
+                              {
                                 "insert": [Function],
-                                "inserted": Object {
+                                "inserted": {
                                   "15v22id-MuiAccordionDetails-root": true,
                                   "1azetr9-MuiAccordionSummary-root": true,
                                   "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -13168,9 +13168,9 @@ exports[`SolrIndexer renders 1`] = `
                                 },
                                 "key": "css",
                                 "nonce": undefined,
-                                "registered": Object {
+                                "registered": {
                                   "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                  "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                  "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                                 },
                                 "sheet": StyleSheet {
                                   "_alreadyInsertedOrderInsensitiveRule": true,
@@ -13548,7 +13548,7 @@ exports[`SolrIndexer renders 1`] = `
                                   "key": "css",
                                   "nonce": undefined,
                                   "prepend": undefined,
-                                  "tags": Array [
+                                  "tags": [
                                     <style
                                       data-emotion="css"
                                       data-s=""
@@ -13919,7 +13919,7 @@ exports[`SolrIndexer renders 1`] = `
                             }
                             isStringTag={true}
                             serialized={
-                              Object {
+                              {
                                 "map": undefined,
                                 "name": "yw020d-MuiAccordionSummary-expandIconWrapper",
                                 "next": undefined,
@@ -13942,7 +13942,7 @@ exports[`SolrIndexer renders 1`] = `
                                   data-testid="ExpandMoreIcon"
                                   focusable="false"
                                   ownerState={
-                                    Object {
+                                    {
                                       "children": <path
                                         d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
                                       />,
@@ -13959,9 +13959,9 @@ exports[`SolrIndexer renders 1`] = `
                                 >
                                   <Insertion
                                     cache={
-                                      Object {
+                                      {
                                         "insert": [Function],
-                                        "inserted": Object {
+                                        "inserted": {
                                           "15v22id-MuiAccordionDetails-root": true,
                                           "1azetr9-MuiAccordionSummary-root": true,
                                           "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -13976,9 +13976,9 @@ exports[`SolrIndexer renders 1`] = `
                                         },
                                         "key": "css",
                                         "nonce": undefined,
-                                        "registered": Object {
+                                        "registered": {
                                           "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                          "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                          "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                                         },
                                         "sheet": StyleSheet {
                                           "_alreadyInsertedOrderInsensitiveRule": true,
@@ -14356,7 +14356,7 @@ exports[`SolrIndexer renders 1`] = `
                                           "key": "css",
                                           "nonce": undefined,
                                           "prepend": undefined,
-                                          "tags": Array [
+                                          "tags": [
                                             <style
                                               data-emotion="css"
                                               data-s=""
@@ -14727,7 +14727,7 @@ exports[`SolrIndexer renders 1`] = `
                                     }
                                     isStringTag={true}
                                     serialized={
-                                      Object {
+                                      {
                                         "map": undefined,
                                         "name": "i4bv87-MuiSvgIcon-root",
                                         "next": undefined,
@@ -14769,7 +14769,7 @@ exports[`SolrIndexer renders 1`] = `
                   in={false}
                   mountOnEnter={false}
                   nodeRef={
-                    Object {
+                    {
                       "current": <div
                         class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
                         style="min-height: 0px;"
@@ -14807,7 +14807,7 @@ exports[`SolrIndexer renders 1`] = `
                   <MuiCollapseRoot
                     className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden"
                     ownerState={
-                      Object {
+                      {
                         "children": <div
                           className="MuiAccordion-region"
                           role="region"
@@ -14826,16 +14826,16 @@ exports[`SolrIndexer renders 1`] = `
                       }
                     }
                     style={
-                      Object {
+                      {
                         "minHeight": "0px",
                       }
                     }
                   >
                     <Insertion
                       cache={
-                        Object {
+                        {
                           "insert": [Function],
-                          "inserted": Object {
+                          "inserted": {
                             "15v22id-MuiAccordionDetails-root": true,
                             "1azetr9-MuiAccordionSummary-root": true,
                             "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -14850,9 +14850,9 @@ exports[`SolrIndexer renders 1`] = `
                           },
                           "key": "css",
                           "nonce": undefined,
-                          "registered": Object {
+                          "registered": {
                             "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                            "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                            "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                           },
                           "sheet": StyleSheet {
                             "_alreadyInsertedOrderInsensitiveRule": true,
@@ -15230,7 +15230,7 @@ exports[`SolrIndexer renders 1`] = `
                             "key": "css",
                             "nonce": undefined,
                             "prepend": undefined,
-                            "tags": Array [
+                            "tags": [
                               <style
                                 data-emotion="css"
                                 data-s=""
@@ -15601,7 +15601,7 @@ exports[`SolrIndexer renders 1`] = `
                       }
                       isStringTag={true}
                       serialized={
-                        Object {
+                        {
                           "map": undefined,
                           "name": "bz4dnt-MuiCollapse-root",
                           "next": undefined,
@@ -15613,7 +15613,7 @@ exports[`SolrIndexer renders 1`] = `
                     <div
                       className="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-bz4dnt-MuiCollapse-root"
                       style={
-                        Object {
+                        {
                           "minHeight": "0px",
                         }
                       }
@@ -15621,7 +15621,7 @@ exports[`SolrIndexer renders 1`] = `
                       <MuiCollapseWrapper
                         className="MuiCollapse-wrapper MuiCollapse-vertical"
                         ownerState={
-                          Object {
+                          {
                             "children": <div
                               className="MuiAccordion-region"
                               role="region"
@@ -15642,9 +15642,9 @@ exports[`SolrIndexer renders 1`] = `
                       >
                         <Insertion
                           cache={
-                            Object {
+                            {
                               "insert": [Function],
-                              "inserted": Object {
+                              "inserted": {
                                 "15v22id-MuiAccordionDetails-root": true,
                                 "1azetr9-MuiAccordionSummary-root": true,
                                 "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -15659,9 +15659,9 @@ exports[`SolrIndexer renders 1`] = `
                               },
                               "key": "css",
                               "nonce": undefined,
-                              "registered": Object {
+                              "registered": {
                                 "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                               },
                               "sheet": StyleSheet {
                                 "_alreadyInsertedOrderInsensitiveRule": true,
@@ -16039,7 +16039,7 @@ exports[`SolrIndexer renders 1`] = `
                                 "key": "css",
                                 "nonce": undefined,
                                 "prepend": undefined,
-                                "tags": Array [
+                                "tags": [
                                   <style
                                     data-emotion="css"
                                     data-s=""
@@ -16410,7 +16410,7 @@ exports[`SolrIndexer renders 1`] = `
                           }
                           isStringTag={true}
                           serialized={
-                            Object {
+                            {
                               "map": undefined,
                               "name": "smkl36-MuiCollapse-wrapper",
                               "next": undefined,
@@ -16425,7 +16425,7 @@ exports[`SolrIndexer renders 1`] = `
                           <MuiCollapseWrapperInner
                             className="MuiCollapse-wrapperInner MuiCollapse-vertical"
                             ownerState={
-                              Object {
+                              {
                                 "children": <div
                                   className="MuiAccordion-region"
                                   role="region"
@@ -16446,9 +16446,9 @@ exports[`SolrIndexer renders 1`] = `
                           >
                             <Insertion
                               cache={
-                                Object {
+                                {
                                   "insert": [Function],
-                                  "inserted": Object {
+                                  "inserted": {
                                     "15v22id-MuiAccordionDetails-root": true,
                                     "1azetr9-MuiAccordionSummary-root": true,
                                     "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -16463,9 +16463,9 @@ exports[`SolrIndexer renders 1`] = `
                                   },
                                   "key": "css",
                                   "nonce": undefined,
-                                  "registered": Object {
+                                  "registered": {
                                     "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                    "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                    "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                                   },
                                   "sheet": StyleSheet {
                                     "_alreadyInsertedOrderInsensitiveRule": true,
@@ -16843,7 +16843,7 @@ exports[`SolrIndexer renders 1`] = `
                                     "key": "css",
                                     "nonce": undefined,
                                     "prepend": undefined,
-                                    "tags": Array [
+                                    "tags": [
                                       <style
                                         data-emotion="css"
                                         data-s=""
@@ -17214,7 +17214,7 @@ exports[`SolrIndexer renders 1`] = `
                               }
                               isStringTag={true}
                               serialized={
-                                Object {
+                                {
                                   "map": undefined,
                                   "name": "9l5vo-MuiCollapse-wrapperInner",
                                   "next": undefined,
@@ -17236,7 +17236,7 @@ exports[`SolrIndexer renders 1`] = `
                                   <MuiAccordionDetailsRoot
                                     className="MuiAccordionDetails-root"
                                     ownerState={
-                                      Object {
+                                      {
                                         "children": <Unknown
                                           setResults={[Function]}
                                         />,
@@ -17245,9 +17245,9 @@ exports[`SolrIndexer renders 1`] = `
                                   >
                                     <Insertion
                                       cache={
-                                        Object {
+                                        {
                                           "insert": [Function],
-                                          "inserted": Object {
+                                          "inserted": {
                                             "15v22id-MuiAccordionDetails-root": true,
                                             "1azetr9-MuiAccordionSummary-root": true,
                                             "1elwnq4-MuiPaper-root-MuiAccordion-root": true,
@@ -17262,9 +17262,9 @@ exports[`SolrIndexer renders 1`] = `
                                           },
                                           "key": "css",
                                           "nonce": undefined,
-                                          "registered": Object {
+                                          "registered": {
                                             "css-1azetr9-MuiAccordionSummary-root": "label:MuiAccordionSummary-root;display:flex;min-height:48px;padding:0px 16px;transition:min-height 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;&.Mui-focusVisible{background-color:rgba(0, 0, 0, 0.12);}&.Mui-disabled{opacity:0.38;}&:hover:not(.Mui-disabled){cursor:pointer;}&.Mui-expanded{min-height:64px;}",
-                                            "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:\\"\\";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
+                                            "css-1xu1s89-MuiAccordion-root": "label:MuiAccordion-root;position:relative;transition:margin 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;overflow-anchor:none;&:before{position:absolute;left:0;top:-1px;right:0;height:1px;content:"";opacity:1;background-color:rgba(0, 0, 0, 0.12);transition:opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}&:first-of-type{&:before{display:none;}}&.Mui-expanded{&:before{opacity:0;}&:first-of-type{margin-top:0;}&:last-of-type{margin-bottom:0;}& + &{&:before{display:none;}}}&.Mui-disabled{background-color:rgba(0, 0, 0, 0.12);}border-radius:0;&:first-of-type{border-top-left-radius:4px;border-top-right-radius:4px;}&:last-of-type{border-bottom-left-radius:4px;border-bottom-right-radius:4px;@supports (-ms-ime-align: auto){border-bottom-left-radius:0;border-bottom-right-radius:0;}}&.Mui-expanded{margin:16px 0;}",
                                           },
                                           "sheet": StyleSheet {
                                             "_alreadyInsertedOrderInsensitiveRule": true,
@@ -17642,7 +17642,7 @@ exports[`SolrIndexer renders 1`] = `
                                             "key": "css",
                                             "nonce": undefined,
                                             "prepend": undefined,
-                                            "tags": Array [
+                                            "tags": [
                                               <style
                                                 data-emotion="css"
                                                 data-s=""
@@ -18013,7 +18013,7 @@ exports[`SolrIndexer renders 1`] = `
                                       }
                                       isStringTag={true}
                                       serialized={
-                                        Object {
+                                        {
                                           "map": undefined,
                                           "name": "15v22id-MuiAccordionDetails-root",
                                           "next": undefined,

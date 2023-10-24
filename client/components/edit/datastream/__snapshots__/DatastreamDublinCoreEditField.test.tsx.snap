@@ -75,7 +75,7 @@ exports[`DatastreamDublinCoreEditField renders an html field 1`] = `
 <Editor
   cloudChannel="6"
   init={
-    Object {
+    {
       "plugins": "code link",
     }
   }

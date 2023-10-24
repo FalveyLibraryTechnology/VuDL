@@ -18,7 +18,7 @@ exports[`ObjectThumbnail renders thumbnail when available 1`] = `
     alt=""
     src="http://localhost/files/foo/THUMBNAIL"
     style={
-      Object {
+      {
         "border": "1px solid black",
       }
     }
