@@ -36,7 +36,7 @@ export class IngestProcessor {
             level: "info",
             format: winston.format.combine(
                 winston.format.timestamp(),
-                winston.format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
+                winston.format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`),
             ),
             transports: [
                 new winston.transports.File({ filename: dir + "/ingest.log" }),
@@ -153,7 +153,7 @@ export class IngestProcessor {
             String(page.label),
             "Inactive",
             pageList.pid,
-            this.logger
+            this.logger,
         );
         await imageData.addSequenceRelationship(pageList.pid, number);
         return imageData;
@@ -165,7 +165,7 @@ export class IngestProcessor {
             String(document.label),
             "Inactive",
             documentList.pid,
-            this.logger
+            this.logger,
         );
         await documentData.addSequenceRelationship(documentList.pid, number);
         return documentData;
@@ -177,7 +177,7 @@ export class IngestProcessor {
             String(audio.filename),
             "Inactive",
             audioList.pid,
-            this.logger
+            this.logger,
         );
         await audioData.addSequenceRelationship(audioList.pid, number);
         return audioData;
@@ -189,7 +189,7 @@ export class IngestProcessor {
             String(video.filename),
             "Inactive",
             videoList.pid,
-            this.logger
+            this.logger,
         );
         await videoData.addSequenceRelationship(videoList.pid, number);
         return videoData;
@@ -205,7 +205,7 @@ export class IngestProcessor {
             "Incomplete... / Processing...",
             "Inactive",
             holdingArea.pid,
-            this.logger
+            this.logger,
         );
         // Attach thumbnail to resource:
         if (this.job.metadata.order.pages.length > 0) {

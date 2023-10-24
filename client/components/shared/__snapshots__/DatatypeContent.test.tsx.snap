@@ -11,13 +11,13 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
     <Styled(div)
       as="div"
       className="viewContentAudio MuiBox-root"
-      sx={Object {}}
+      sx={{}}
       theme={
-        Object {
-          "breakpoints": Object {
+        {
+          "breakpoints": {
             "between": [Function],
             "down": [Function],
-            "keys": Array [
+            "keys": [
               "xs",
               "sm",
               "md",
@@ -28,7 +28,7 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
             "only": [Function],
             "unit": "px",
             "up": [Function],
-            "values": Object {
+            "values": {
               "lg": 1200,
               "md": 900,
               "sm": 600,
@@ -36,21 +36,21 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "xs": 0,
             },
           },
-          "components": Object {},
+          "components": {},
           "direction": "ltr",
-          "mixins": Object {
-            "toolbar": Object {
-              "@media (min-width:0px) and (orientation: landscape)": Object {
+          "mixins": {
+            "toolbar": {
+              "@media (min-width:0px) and (orientation: landscape)": {
                 "minHeight": 48,
               },
-              "@media (min-width:600px)": Object {
+              "@media (min-width:600px)": {
                 "minHeight": 64,
               },
               "minHeight": 56,
             },
           },
-          "palette": Object {
-            "action": Object {
+          "palette": {
+            "action": {
               "activatedOpacity": 0.12,
               "active": "rgba(0, 0, 0, 0.54)",
               "disabled": "rgba(0, 0, 0, 0.26)",
@@ -64,24 +64,24 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "selectedOpacity": 0.08,
             },
             "augmentColor": [Function],
-            "background": Object {
+            "background": {
               "default": "#fff",
               "paper": "#fff",
             },
-            "common": Object {
+            "common": {
               "black": "#000",
               "white": "#fff",
             },
             "contrastThreshold": 3,
             "divider": "rgba(0, 0, 0, 0.12)",
-            "error": Object {
+            "error": {
               "contrastText": "#fff",
               "dark": "#c62828",
               "light": "#ef5350",
               "main": "#d32f2f",
             },
             "getContrastText": [Function],
-            "grey": Object {
+            "grey": {
               "100": "#f5f5f5",
               "200": "#eeeeee",
               "300": "#e0e0e0",
@@ -99,32 +99,32 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "dark": "#616161",
               "darkChannel": "97 97 97",
             },
-            "info": Object {
+            "info": {
               "contrastText": "#fff",
               "dark": "#01579b",
               "light": "#03a9f4",
               "main": "#0288d1",
             },
             "mode": "light",
-            "primary": Object {
+            "primary": {
               "contrastText": "#fff",
               "dark": "#1565c0",
               "light": "#42a5f5",
               "main": "#1976d2",
             },
-            "secondary": Object {
+            "secondary": {
               "contrastText": "#fff",
               "dark": "#7b1fa2",
               "light": "#ba68c8",
               "main": "#9c27b0",
             },
-            "success": Object {
+            "success": {
               "contrastText": "#fff",
               "dark": "#1b5e20",
               "light": "#4caf50",
               "main": "#2e7d32",
             },
-            "text": Object {
+            "text": {
               "disabled": "rgba(0, 0, 0, 0.38)",
               "primary": "rgba(0, 0, 0, 0.87)",
               "primaryChannel": "0 0 0",
@@ -132,14 +132,14 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "secondaryChannel": "0 0 0",
             },
             "tonalOffset": 0.2,
-            "warning": Object {
+            "warning": {
               "contrastText": "#fff",
               "dark": "#e65100",
               "light": "#ff9800",
               "main": "#ed6c02",
             },
           },
-          "shadows": Array [
+          "shadows": [
             "none",
             "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
             "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
@@ -166,13 +166,13 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
             "0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12)",
             "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
           ],
-          "shape": Object {
+          "shape": {
             "borderRadius": 4,
           },
           "spacing": [Function],
-          "transitions": Object {
+          "transitions": {
             "create": [Function],
-            "duration": Object {
+            "duration": {
               "complex": 375,
               "enteringScreen": 225,
               "leavingScreen": 195,
@@ -181,7 +181,7 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "shortest": 150,
               "standard": 300,
             },
-            "easing": Object {
+            "easing": {
               "easeIn": "cubic-bezier(0.4, 0, 1, 1)",
               "easeInOut": "cubic-bezier(0.4, 0, 0.2, 1)",
               "easeOut": "cubic-bezier(0.0, 0, 0.2, 1)",
@@ -189,87 +189,87 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
             },
             "getAutoHeightDuration": [Function],
           },
-          "typography": Object {
-            "body1": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+          "typography": {
+            "body1": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "1rem",
               "fontWeight": 400,
               "letterSpacing": "0.00938em",
               "lineHeight": 1.5,
             },
-            "body2": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "body2": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.875rem",
               "fontWeight": 400,
               "letterSpacing": "0.01071em",
               "lineHeight": 1.43,
             },
-            "button": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "button": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.875rem",
               "fontWeight": 500,
               "letterSpacing": "0.02857em",
               "lineHeight": 1.75,
               "textTransform": "uppercase",
             },
-            "caption": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "caption": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.75rem",
               "fontWeight": 400,
               "letterSpacing": "0.03333em",
               "lineHeight": 1.66,
             },
-            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
             "fontSize": 14,
             "fontWeightBold": 700,
             "fontWeightLight": 300,
             "fontWeightMedium": 500,
             "fontWeightRegular": 400,
-            "h1": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h1": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "6rem",
               "fontWeight": 300,
               "letterSpacing": "-0.01562em",
               "lineHeight": 1.167,
             },
-            "h2": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h2": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "3.75rem",
               "fontWeight": 300,
               "letterSpacing": "-0.00833em",
               "lineHeight": 1.2,
             },
-            "h3": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h3": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "3rem",
               "fontWeight": 400,
               "letterSpacing": "0em",
               "lineHeight": 1.167,
             },
-            "h4": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h4": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "2.125rem",
               "fontWeight": 400,
               "letterSpacing": "0.00735em",
               "lineHeight": 1.235,
             },
-            "h5": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h5": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "1.5rem",
               "fontWeight": 400,
               "letterSpacing": "0em",
               "lineHeight": 1.334,
             },
-            "h6": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h6": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "1.25rem",
               "fontWeight": 500,
               "letterSpacing": "0.0075em",
               "lineHeight": 1.6,
             },
             "htmlFontSize": 16,
-            "overline": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "overline": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.75rem",
               "fontWeight": 400,
               "letterSpacing": "0.08333em",
@@ -277,22 +277,22 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "textTransform": "uppercase",
             },
             "pxToRem": [Function],
-            "subtitle1": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "subtitle1": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "1rem",
               "fontWeight": 400,
               "letterSpacing": "0.00938em",
               "lineHeight": 1.75,
             },
-            "subtitle2": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "subtitle2": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.875rem",
               "fontWeight": 500,
               "letterSpacing": "0.00714em",
               "lineHeight": 1.57,
             },
           },
-          "zIndex": Object {
+          "zIndex": {
             "appBar": 1100,
             "drawer": 1200,
             "fab": 1050,
@@ -307,14 +307,14 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
     >
       <Insertion
         cache={
-          Object {
+          {
             "insert": [Function],
-            "inserted": Object {
+            "inserted": {
               "0": true,
             },
             "key": "css",
             "nonce": undefined,
-            "registered": Object {},
+            "registered": {},
             "sheet": StyleSheet {
               "_alreadyInsertedOrderInsensitiveRule": true,
               "_insertTag": [Function],
@@ -334,7 +334,7 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
               "key": "css",
               "nonce": undefined,
               "prepend": undefined,
-              "tags": Array [
+              "tags": [
                 <style
                   data-emotion="css"
                   data-s=""
@@ -348,7 +348,7 @@ exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
         }
         isStringTag={true}
         serialized={
-          Object {
+          {
             "map": undefined,
             "name": "0",
             "next": undefined,
@@ -413,13 +413,13 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
     <Styled(div)
       as="div"
       className="viewContentText MuiBox-root"
-      sx={Object {}}
+      sx={{}}
       theme={
-        Object {
-          "breakpoints": Object {
+        {
+          "breakpoints": {
             "between": [Function],
             "down": [Function],
-            "keys": Array [
+            "keys": [
               "xs",
               "sm",
               "md",
@@ -430,7 +430,7 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
             "only": [Function],
             "unit": "px",
             "up": [Function],
-            "values": Object {
+            "values": {
               "lg": 1200,
               "md": 900,
               "sm": 600,
@@ -438,21 +438,21 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "xs": 0,
             },
           },
-          "components": Object {},
+          "components": {},
           "direction": "ltr",
-          "mixins": Object {
-            "toolbar": Object {
-              "@media (min-width:0px) and (orientation: landscape)": Object {
+          "mixins": {
+            "toolbar": {
+              "@media (min-width:0px) and (orientation: landscape)": {
                 "minHeight": 48,
               },
-              "@media (min-width:600px)": Object {
+              "@media (min-width:600px)": {
                 "minHeight": 64,
               },
               "minHeight": 56,
             },
           },
-          "palette": Object {
-            "action": Object {
+          "palette": {
+            "action": {
               "activatedOpacity": 0.12,
               "active": "rgba(0, 0, 0, 0.54)",
               "disabled": "rgba(0, 0, 0, 0.26)",
@@ -466,24 +466,24 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "selectedOpacity": 0.08,
             },
             "augmentColor": [Function],
-            "background": Object {
+            "background": {
               "default": "#fff",
               "paper": "#fff",
             },
-            "common": Object {
+            "common": {
               "black": "#000",
               "white": "#fff",
             },
             "contrastThreshold": 3,
             "divider": "rgba(0, 0, 0, 0.12)",
-            "error": Object {
+            "error": {
               "contrastText": "#fff",
               "dark": "#c62828",
               "light": "#ef5350",
               "main": "#d32f2f",
             },
             "getContrastText": [Function],
-            "grey": Object {
+            "grey": {
               "100": "#f5f5f5",
               "200": "#eeeeee",
               "300": "#e0e0e0",
@@ -501,32 +501,32 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "dark": "#616161",
               "darkChannel": "97 97 97",
             },
-            "info": Object {
+            "info": {
               "contrastText": "#fff",
               "dark": "#01579b",
               "light": "#03a9f4",
               "main": "#0288d1",
             },
             "mode": "light",
-            "primary": Object {
+            "primary": {
               "contrastText": "#fff",
               "dark": "#1565c0",
               "light": "#42a5f5",
               "main": "#1976d2",
             },
-            "secondary": Object {
+            "secondary": {
               "contrastText": "#fff",
               "dark": "#7b1fa2",
               "light": "#ba68c8",
               "main": "#9c27b0",
             },
-            "success": Object {
+            "success": {
               "contrastText": "#fff",
               "dark": "#1b5e20",
               "light": "#4caf50",
               "main": "#2e7d32",
             },
-            "text": Object {
+            "text": {
               "disabled": "rgba(0, 0, 0, 0.38)",
               "primary": "rgba(0, 0, 0, 0.87)",
               "primaryChannel": "0 0 0",
@@ -534,14 +534,14 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "secondaryChannel": "0 0 0",
             },
             "tonalOffset": 0.2,
-            "warning": Object {
+            "warning": {
               "contrastText": "#fff",
               "dark": "#e65100",
               "light": "#ff9800",
               "main": "#ed6c02",
             },
           },
-          "shadows": Array [
+          "shadows": [
             "none",
             "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
             "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
@@ -568,13 +568,13 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
             "0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12)",
             "0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)",
           ],
-          "shape": Object {
+          "shape": {
             "borderRadius": 4,
           },
           "spacing": [Function],
-          "transitions": Object {
+          "transitions": {
             "create": [Function],
-            "duration": Object {
+            "duration": {
               "complex": 375,
               "enteringScreen": 225,
               "leavingScreen": 195,
@@ -583,7 +583,7 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "shortest": 150,
               "standard": 300,
             },
-            "easing": Object {
+            "easing": {
               "easeIn": "cubic-bezier(0.4, 0, 1, 1)",
               "easeInOut": "cubic-bezier(0.4, 0, 0.2, 1)",
               "easeOut": "cubic-bezier(0.0, 0, 0.2, 1)",
@@ -591,87 +591,87 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
             },
             "getAutoHeightDuration": [Function],
           },
-          "typography": Object {
-            "body1": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+          "typography": {
+            "body1": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "1rem",
               "fontWeight": 400,
               "letterSpacing": "0.00938em",
               "lineHeight": 1.5,
             },
-            "body2": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "body2": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.875rem",
               "fontWeight": 400,
               "letterSpacing": "0.01071em",
               "lineHeight": 1.43,
             },
-            "button": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "button": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.875rem",
               "fontWeight": 500,
               "letterSpacing": "0.02857em",
               "lineHeight": 1.75,
               "textTransform": "uppercase",
             },
-            "caption": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "caption": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.75rem",
               "fontWeight": 400,
               "letterSpacing": "0.03333em",
               "lineHeight": 1.66,
             },
-            "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
             "fontSize": 14,
             "fontWeightBold": 700,
             "fontWeightLight": 300,
             "fontWeightMedium": 500,
             "fontWeightRegular": 400,
-            "h1": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h1": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "6rem",
               "fontWeight": 300,
               "letterSpacing": "-0.01562em",
               "lineHeight": 1.167,
             },
-            "h2": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h2": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "3.75rem",
               "fontWeight": 300,
               "letterSpacing": "-0.00833em",
               "lineHeight": 1.2,
             },
-            "h3": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h3": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "3rem",
               "fontWeight": 400,
               "letterSpacing": "0em",
               "lineHeight": 1.167,
             },
-            "h4": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h4": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "2.125rem",
               "fontWeight": 400,
               "letterSpacing": "0.00735em",
               "lineHeight": 1.235,
             },
-            "h5": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h5": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "1.5rem",
               "fontWeight": 400,
               "letterSpacing": "0em",
               "lineHeight": 1.334,
             },
-            "h6": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "h6": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "1.25rem",
               "fontWeight": 500,
               "letterSpacing": "0.0075em",
               "lineHeight": 1.6,
             },
             "htmlFontSize": 16,
-            "overline": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "overline": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.75rem",
               "fontWeight": 400,
               "letterSpacing": "0.08333em",
@@ -679,22 +679,22 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "textTransform": "uppercase",
             },
             "pxToRem": [Function],
-            "subtitle1": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "subtitle1": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "1rem",
               "fontWeight": 400,
               "letterSpacing": "0.00938em",
               "lineHeight": 1.75,
             },
-            "subtitle2": Object {
-              "fontFamily": "\\"Roboto\\", \\"Helvetica\\", \\"Arial\\", sans-serif",
+            "subtitle2": {
+              "fontFamily": ""Roboto", "Helvetica", "Arial", sans-serif",
               "fontSize": "0.875rem",
               "fontWeight": 500,
               "letterSpacing": "0.00714em",
               "lineHeight": 1.57,
             },
           },
-          "zIndex": Object {
+          "zIndex": {
             "appBar": 1100,
             "drawer": 1200,
             "fab": 1050,
@@ -709,14 +709,14 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
     >
       <Insertion
         cache={
-          Object {
+          {
             "insert": [Function],
-            "inserted": Object {
+            "inserted": {
               "0": true,
             },
             "key": "css",
             "nonce": undefined,
-            "registered": Object {},
+            "registered": {},
             "sheet": StyleSheet {
               "_alreadyInsertedOrderInsensitiveRule": true,
               "_insertTag": [Function],
@@ -736,7 +736,7 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
               "key": "css",
               "nonce": undefined,
               "prepend": undefined,
-              "tags": Array [
+              "tags": [
                 <style
                   data-emotion="css"
                   data-s=""
@@ -750,7 +750,7 @@ exports[`DatatypeContent renders textarea on text primaryType 1`] = `
         }
         isStringTag={true}
         serialized={
-          Object {
+          {
             "map": undefined,
             "name": "0",
             "next": undefined,

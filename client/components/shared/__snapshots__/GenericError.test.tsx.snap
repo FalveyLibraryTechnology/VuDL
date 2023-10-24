@@ -10,7 +10,7 @@ exports[`GenericError renders 1`] = `
 >
   <Memo(ForwardRef(SentimentVeryDissatisfiedIcon))
     sx={
-      Object {
+      {
         "color": "red",
         "fontSize": "100px",
       }
@@ -22,7 +22,7 @@ exports[`GenericError renders 1`] = `
   >
     <ForwardRef(Box)
       sx={
-        Object {
+        {
           "fontSize": "24px",
           "padding": "4px",
         }
@@ -37,7 +37,7 @@ exports[`GenericError renders 1`] = `
     </ForwardRef(Box)>
     <ForwardRef(Box)
       sx={
-        Object {
+        {
           "fontSize": "16px",
           "padding": "4px",
         }

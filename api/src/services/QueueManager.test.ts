@@ -55,7 +55,7 @@ describe("QueueManager", () => {
 
         it("supports non-default queue/connection configuration", async () => {
             const customQueueManager = new QueueManager(
-                new Config({ queue: { connection: { foo: "bar" }, jobMap: { ingest: "vudl-foo" } } })
+                new Config({ queue: { connection: { foo: "bar" }, jobMap: { ingest: "vudl-foo" } } }),
             );
             await customQueueManager.ingestJob("foo");
             expect(addSpy).toHaveBeenCalledWith("ingest", { dir: "foo" });

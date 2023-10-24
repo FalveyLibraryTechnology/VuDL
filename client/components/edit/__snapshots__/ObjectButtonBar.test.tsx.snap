@@ -19,7 +19,7 @@ exports[`ObjectButtonBar renders correctly 1`] = `
   >
     <Component
       style={
-        Object {
+        {
           "height": "14px",
         }
       }

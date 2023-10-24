@@ -7,7 +7,7 @@ exports[`ChildPosition renders correctly when a sequence exists and parent is cu
   onBlur={[Function]}
   size="small"
   sx={
-    Object {
+    {
       "marginRight": 1,
       "width": "5em",
     }

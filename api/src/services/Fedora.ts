@@ -56,7 +56,7 @@ export class Fedora {
         method = "get",
         _path = "/",
         data: string | Buffer = null,
-        _options: Record<string, unknown> = {}
+        _options: Record<string, unknown> = {},
     ): Promise<NeedleResponse> {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
         const url = this.config.restBaseUrl + "/" + path;
@@ -114,13 +114,13 @@ export class Fedora {
     async deleteDatastream(
         pid: string,
         datastream: string,
-        requestOptions = { parse_response: false }
+        requestOptions = { parse_response: false },
     ): Promise<NeedleResponse> {
         return await this._request(
             "delete",
             `${pid}/${datastream}`,
             null, // Data
-            requestOptions
+            requestOptions,
         );
     }
 
@@ -134,13 +134,13 @@ export class Fedora {
     async deleteDatastreamTombstone(
         pid: string,
         datastream: string,
-        requestOptions = { parse_response: false }
+        requestOptions = { parse_response: false },
     ): Promise<NeedleResponse> {
         return await this._request(
             "delete",
             `${pid}/${datastream}/fcr:tombstone`,
             null, // Data
-            requestOptions
+            requestOptions,
         );
     }
 
@@ -155,7 +155,7 @@ export class Fedora {
             "delete",
             pid,
             null, // Data
-            requestOptions
+            requestOptions,
         );
     }
 
@@ -170,7 +170,7 @@ export class Fedora {
             "delete",
             `${pid}/fcr:tombstone`,
             null, // Data
-            requestOptions
+            requestOptions,
         );
     }
 
@@ -184,13 +184,13 @@ export class Fedora {
     async getDatastream(
         pid: string,
         datastream: string,
-        requestOptions = { parse_response: false }
+        requestOptions = { parse_response: false },
     ): Promise<NeedleResponse> {
         return await this._request(
             "get",
             pid + "/" + datastream,
             null, // Data
-            requestOptions
+            requestOptions,
         );
     }
 
@@ -258,7 +258,7 @@ export class Fedora {
         mimeType: string,
         expectedStatus = [201],
         data: string | Buffer,
-        linkHeader = ""
+        linkHeader = "",
     ): Promise<void> {
         const md5 = crypto.createHash("md5").update(data).digest("hex");
         const sha = crypto.createHash("sha512").update(data).digest("hex");
@@ -277,7 +277,7 @@ export class Fedora {
             if (!expectedStatus.includes(response.statusCode)) {
                 throw new HttpError(
                     response,
-                    `Expected ${expectedStatus} Created response, received: ${response.statusCode}`
+                    `Expected ${expectedStatus} Created response, received: ${response.statusCode}`,
                 );
             }
         };
@@ -298,7 +298,7 @@ export class Fedora {
         stream: string,
         params: DatastreamParameters,
         data: string | Buffer,
-        expectedStatus = [201]
+        expectedStatus = [201],
     ): Promise<void> {
         // First create the stream:
         await this.putDatastream(pid, stream, params.mimeType, expectedStatus, data, params.linkHeader ?? "");
@@ -308,12 +308,12 @@ export class Fedora {
         writer.addQuad(
             namedNode(""),
             namedNode("http://fedora.info/definitions/1/0/access/objState"),
-            literal(params.dsState ?? "A")
+            literal(params.dsState ?? "A"),
         );
         writer.addQuad(
             namedNode(""),
             namedNode("http://purl.org/dc/terms/title"),
-            literal(params.dsLabel ?? pid.replace(/:/g, "_") + "_" + stream)
+            literal(params.dsLabel ?? pid.replace(/:/g, "_") + "_" + stream),
         );
         const turtle = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid + "/" + stream + "/fcr:metadata";
@@ -374,7 +374,7 @@ export class Fedora {
         subject: string,
         predicate: string,
         obj: string,
-        isLiteral = false
+        isLiteral = false,
     ): Promise<void> {
         const writer = new N3.Writer({ format: "text/turtle" });
         writer.addQuad(namedNode(subject), namedNode(predicate), isLiteral ? literal(obj) : namedNode(obj));
@@ -481,7 +481,7 @@ export class Fedora {
         targetPath: string,
         insertClause: string,
         deleteClause = "",
-        whereClause = ""
+        whereClause = "",
     ): Promise<NeedleResponse> {
         const options = {
             headers: {

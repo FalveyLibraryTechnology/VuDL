@@ -13,7 +13,7 @@ jest.mock(
     "@mui/icons-material/Refresh",
     () =>
         ({ titleAccess }: { titleAccess: string }) =>
-            titleAccess
+            titleAccess,
 );
 
 describe("ObjectButtonBar", () => {

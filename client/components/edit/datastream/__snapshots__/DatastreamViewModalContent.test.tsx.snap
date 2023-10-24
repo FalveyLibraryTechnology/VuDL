@@ -4,7 +4,7 @@ exports[`DatastreamViewModalContent renders for download-only content 1`] = `
 <DatastreamViewModalContent>
   <ForwardRef(DialogContent)
     sx={
-      Object {
+      {
         "minHeight": "50vh",
       }
     }
@@ -12,7 +12,7 @@ exports[`DatastreamViewModalContent renders for download-only content 1`] = `
     <MuiDialogContentRoot
       className="MuiDialogContent-root"
       ownerState={
-        Object {
+        {
           "children": <p>
             The MIME type 
             image/tiff
@@ -26,22 +26,22 @@ exports[`DatastreamViewModalContent renders for download-only content 1`] = `
              the file instead.
           </p>,
           "dividers": false,
-          "sx": Object {
+          "sx": {
             "minHeight": "50vh",
           },
         }
       }
       sx={
-        Object {
+        {
           "minHeight": "50vh",
         }
       }
     >
       <Insertion
         cache={
-          Object {
+          {
             "insert": [Function],
-            "inserted": Object {
+            "inserted": {
               "176wh8e-MuiCircularProgress-circle": true,
               "18lrjg1-MuiCircularProgress-root": true,
               "1idz92c-MuiCircularProgress-svg": true,
@@ -52,7 +52,7 @@ exports[`DatastreamViewModalContent renders for download-only content 1`] = `
             },
             "key": "css",
             "nonce": undefined,
-            "registered": Object {},
+            "registered": {},
             "sheet": StyleSheet {
               "_alreadyInsertedOrderInsensitiveRule": true,
               "_insertTag": [Function],
@@ -142,7 +142,7 @@ exports[`DatastreamViewModalContent renders for download-only content 1`] = `
               "key": "css",
               "nonce": undefined,
               "prepend": undefined,
-              "tags": Array [
+              "tags": [
                 <style
                   data-emotion="css"
                   data-s=""
@@ -226,7 +226,7 @@ exports[`DatastreamViewModalContent renders for download-only content 1`] = `
         }
         isStringTag={true}
         serialized={
-          Object {
+          {
             "map": undefined,
             "name": "lebnmz-MuiDialogContent-root",
             "next": undefined,
@@ -260,7 +260,7 @@ exports[`DatastreamViewModalContent renders for viewable content 1`] = `
 <DatastreamViewModalContent>
   <ForwardRef(DialogContent)
     sx={
-      Object {
+      {
         "minHeight": "50vh",
       }
     }
@@ -268,28 +268,28 @@ exports[`DatastreamViewModalContent renders for viewable content 1`] = `
     <MuiDialogContentRoot
       className="MuiDialogContent-root"
       ownerState={
-        Object {
+        {
           "children": <Unknown
             data="test1"
             mimeType="test2"
           />,
           "dividers": false,
-          "sx": Object {
+          "sx": {
             "minHeight": "50vh",
           },
         }
       }
       sx={
-        Object {
+        {
           "minHeight": "50vh",
         }
       }
     >
       <Insertion
         cache={
-          Object {
+          {
             "insert": [Function],
-            "inserted": Object {
+            "inserted": {
               "176wh8e-MuiCircularProgress-circle": true,
               "18lrjg1-MuiCircularProgress-root": true,
               "1idz92c-MuiCircularProgress-svg": true,
@@ -300,7 +300,7 @@ exports[`DatastreamViewModalContent renders for viewable content 1`] = `
             },
             "key": "css",
             "nonce": undefined,
-            "registered": Object {},
+            "registered": {},
             "sheet": StyleSheet {
               "_alreadyInsertedOrderInsensitiveRule": true,
               "_insertTag": [Function],
@@ -390,7 +390,7 @@ exports[`DatastreamViewModalContent renders for viewable content 1`] = `
               "key": "css",
               "nonce": undefined,
               "prepend": undefined,
-              "tags": Array [
+              "tags": [
                 <style
                   data-emotion="css"
                   data-s=""
@@ -474,7 +474,7 @@ exports[`DatastreamViewModalContent renders for viewable content 1`] = `
         }
         isStringTag={true}
         serialized={
-          Object {
+          {
             "map": undefined,
             "name": "lebnmz-MuiDialogContent-root",
             "next": undefined,

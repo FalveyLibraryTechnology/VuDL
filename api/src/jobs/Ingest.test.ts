@@ -54,7 +54,7 @@ describe("IngestProcessor", () => {
             expect(replaceSpy).toHaveBeenCalledWith(
                 fedoraObject,
                 "<oai:dc><dc:title>fakejob_dir_fake_my</dc:title></oai:dc>",
-                "Set dc:title to ingest/process path"
+                "Set dc:title to ingest/process path",
             );
         });
     });

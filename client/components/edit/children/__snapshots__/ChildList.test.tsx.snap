@@ -10,7 +10,7 @@ exports[`ChildList allows thumbnails to be toggled on 1`] = `
       <button
         onClick={[Function]}
         style={
-          Object {
+          {
             "float": "right",
             "marginTop": "-2em",
           }
@@ -49,7 +49,7 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
       <button
         onClick={[Function]}
         style={
-          Object {
+          {
             "float": "right",
             "marginTop": "-2em",
           }
@@ -215,7 +215,7 @@ exports[`ChildList renders using SelectableChild when a callback is provided 1`]
       <button
         onClick={[Function]}
         style={
-          Object {
+          {
             "float": "right",
             "marginTop": "-2em",
           }
@@ -254,7 +254,7 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
       <button
         onClick={[Function]}
         style={
-          Object {
+          {
             "float": "right",
             "marginTop": "-2em",
           }
@@ -293,7 +293,7 @@ exports[`ChildList renders using ajax-loaded root data 1`] = `
       <button
         onClick={[Function]}
         style={
-          Object {
+          {
             "float": "right",
             "marginTop": "-2em",
           }

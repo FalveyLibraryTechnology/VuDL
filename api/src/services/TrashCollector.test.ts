@@ -235,7 +235,7 @@ describe("TrashCollector", () => {
                     fl: "id,fedora_parent_id_str_mv",
                     start: "0",
                     rows: "100000",
-                }
+                },
             );
         });
 
@@ -258,7 +258,7 @@ describe("TrashCollector", () => {
                     fl: "id,fedora_parent_id_str_mv",
                     start: "0",
                     rows: "100000",
-                }
+                },
             );
         });
 
@@ -298,7 +298,7 @@ describe("TrashCollector", () => {
                     fl: "id,fedora_parent_id_str_mv",
                     start: "0",
                     rows: "1",
-                }
+                },
             );
             expect(solrSpy).toHaveBeenCalledWith(
                 "test_core",
@@ -307,7 +307,7 @@ describe("TrashCollector", () => {
                     fl: "id,fedora_parent_id_str_mv",
                     start: "1",
                     rows: "1",
-                }
+                },
             );
             expect(solrSpy).toHaveBeenCalledTimes(2);
         });
@@ -330,7 +330,7 @@ describe("TrashCollector", () => {
                     fl: "id,fedora_parent_id_str_mv",
                     start: "0",
                     rows: "100000",
-                }
+                },
             );
         });
     });

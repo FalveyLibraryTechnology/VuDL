@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Datastream renders 1`] = `
-Array [
+[
   null,
   <li
     class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1rki8sg-MuiListItem-root"

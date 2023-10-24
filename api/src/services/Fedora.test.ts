@@ -12,7 +12,7 @@ describe("Fedora", () => {
                 restBaseUrl: "/test1",
                 username: "test2",
                 password: "test3",
-            })
+            }),
         );
         pid = "test4";
         datastream = "test5";
@@ -29,7 +29,7 @@ describe("Fedora", () => {
                 .spyOn(fedora, "_request")
                 .mockResolvedValue({ statusCode: 500, body: "internal server error" });
             expect(async () => await fedora.getDublinCore("foo:123")).rejects.toThrowError(
-                "Unexpected status code: 500"
+                "Unexpected status code: 500",
             );
         });
 
@@ -74,7 +74,7 @@ describe("Fedora", () => {
                 "patch",
                 "/" + pid,
                 ' INSERT { <subject> <predicate> "object".\n } WHERE {  }',
-                { headers: { "Content-Type": "application/sparql-update" } }
+                { headers: { "Content-Type": "application/sparql-update" } },
             );
         });
 
@@ -84,7 +84,7 @@ describe("Fedora", () => {
                 "patch",
                 "/" + pid,
                 " INSERT { <subject> <predicate> <object>.\n } WHERE {  }",
-                { headers: { "Content-Type": "application/sparql-update" } }
+                { headers: { "Content-Type": "application/sparql-update" } },
             );
         });
     });
@@ -175,7 +175,7 @@ describe("Fedora", () => {
                 "/" + pid,
                 'DELETE { <> <info:fedora/fedora-system:def/model#state> ?any . } INSERT { <> <info:fedora/fedora-system:def/model#state> "Active".\n' +
                     " } WHERE { ?id <info:fedora/fedora-system:def/model#state> ?any }",
-                { headers: { "Content-Type": "application/sparql-update" } }
+                { headers: { "Content-Type": "application/sparql-update" } },
             );
         });
     });
@@ -191,7 +191,7 @@ describe("Fedora", () => {
                 "patch",
                 "/" + pid,
                 "DELETE { <> <info:fedora/fedora-system:def/relations-external#isMemberOf> <info:fedora/foo:100> . } WHERE {  }",
-                { headers: { "Content-Type": "application/sparql-update" } }
+                { headers: { "Content-Type": "application/sparql-update" } },
             );
         });
     });
@@ -207,7 +207,7 @@ describe("Fedora", () => {
                 "patch",
                 "/" + pid,
                 'DELETE { <> <http://vudl.org/relationships#sequence> ?pos . } WHERE { ?id <http://vudl.org/relationships#sequence> ?pos . FILTER(REGEX(?pos, "foo:100#")) }',
-                { headers: { "Content-Type": "application/sparql-update" } }
+                { headers: { "Content-Type": "application/sparql-update" } },
             );
         });
     });
@@ -224,7 +224,7 @@ describe("Fedora", () => {
                 "/" + pid,
                 'DELETE { <> <http://vudl.org/relationships#sequence> ?pos . } INSERT { <info:fedora/test4> <http://vudl.org/relationships#sequence> "foo:100#2".\n' +
                     ' } WHERE { OPTIONAL { ?id <http://vudl.org/relationships#sequence> ?pos . FILTER(REGEX(?pos, "foo:100#")) } }',
-                { headers: { "Content-Type": "application/sparql-update" } }
+                { headers: { "Content-Type": "application/sparql-update" } },
             );
         });
     });
@@ -251,7 +251,7 @@ describe("Fedora", () => {
                 "/" + pid,
                 'DELETE { <> <http://vudl.org/relationships#sortOn> ?any . } INSERT { <info:fedora/test4> <http://vudl.org/relationships#sortOn> "custom".\n' +
                     " } WHERE { ?id <http://vudl.org/relationships#sortOn> ?any }",
-                { headers: { "Content-Type": "application/sparql-update" } }
+                { headers: { "Content-Type": "application/sparql-update" } },
             );
         });
 
@@ -309,7 +309,7 @@ describe("Fedora", () => {
                     "text/plain",
                     [201],
                     "my data is here",
-                    "my link header"
+                    "my link header",
                 );
             } catch (e) {
                 message = e.message;

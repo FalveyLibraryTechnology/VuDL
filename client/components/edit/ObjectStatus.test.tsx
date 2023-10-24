@@ -16,7 +16,7 @@ function getMountedObjectStatusComponent(props: ObjectStatusProps) {
                     <ObjectStatus {...props} />
                 </EditorContextProvider>
             </FetchContextProvider>
-        </GlobalContextProvider>
+        </GlobalContextProvider>,
     );
 }
 

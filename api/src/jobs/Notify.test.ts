@@ -27,7 +27,7 @@ describe("Notify", () => {
                     notify: {
                         method: badMethod,
                     },
-                })
+                }),
             );
 
             const job = { data: { body: "coo" } } as Job;
@@ -45,7 +45,7 @@ describe("Notify", () => {
                         method: "ntfy",
                         ntfy_defaultChannel: testChannel,
                     },
-                })
+                }),
             );
         });
 

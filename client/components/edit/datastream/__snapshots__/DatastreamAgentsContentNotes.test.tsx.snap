@@ -32,7 +32,7 @@ exports[`DatastreamAgentsContentNotes renders 1`] = `
             >
               <ForwardRef(TextField)
                 InputProps={
-                  Object {
+                  {
                     "endAdornment": <ForwardRef(InputAdornment)
                       position="end"
                     >
@@ -60,7 +60,7 @@ exports[`DatastreamAgentsContentNotes renders 1`] = `
             >
               <ForwardRef(TextField)
                 InputProps={
-                  Object {
+                  {
                     "endAdornment": <ForwardRef(InputAdornment)
                       position="end"
                     >

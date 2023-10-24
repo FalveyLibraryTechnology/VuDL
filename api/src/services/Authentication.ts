@@ -47,7 +47,7 @@ class Authentication {
                     return done(null, user);
                 }
                 return done(null, false);
-            }.bind(this)
+            }.bind(this),
         );
     }
 
@@ -69,7 +69,7 @@ class Authentication {
                 // There is a problem with types in passport-saml, which the below casting works around.
                 // TODO: find better solution; see https://github.com/node-saml/passport-saml/issues/549
                 (done as unknown as (x, user: User | boolean) => void)(null, user);
-            }.bind(this)
+            }.bind(this),
         );
     }
 

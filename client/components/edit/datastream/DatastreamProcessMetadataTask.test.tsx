@@ -52,7 +52,7 @@ describe("DatastreamProcessMetadataTask", () => {
                 deleteTask={jest.fn()}
                 addBelow={jest.fn()}
                 setAttributes={jest.fn()}
-            />
+            />,
         );
 
         expect(toJson(wrapper)).toMatchSnapshot();
@@ -66,7 +66,7 @@ describe("DatastreamProcessMetadataTask", () => {
                 deleteTask={jest.fn()}
                 addBelow={jest.fn()}
                 setAttributes={jest.fn()}
-            />
+            />,
         );
 
         expect(toJson(wrapper)).toMatchSnapshot();
@@ -82,7 +82,7 @@ describe("DatastreamProcessMetadataTask", () => {
                 deleteTask={jest.fn()}
                 addBelow={jest.fn()}
                 setAttributes={setAttributes}
-            />
+            />,
         );
 
         act(() => {
@@ -104,7 +104,7 @@ describe("DatastreamProcessMetadataTask", () => {
                 toolSerialNumber: "1234",
                 toolVersion: "1",
             },
-            true
+            true,
         );
     });
 
@@ -116,7 +116,7 @@ describe("DatastreamProcessMetadataTask", () => {
                 deleteTask={jest.fn()}
                 addBelow={jest.fn()}
                 setAttributes={setAttributes}
-            />
+            />,
         );
 
         const attributes = [
@@ -152,7 +152,7 @@ describe("DatastreamProcessMetadataTask", () => {
                 deleteTask={deleteTask}
                 addBelow={jest.fn()}
                 setAttributes={jest.fn()}
-            />
+            />,
         );
 
         act(() => {
@@ -169,7 +169,7 @@ describe("DatastreamProcessMetadataTask", () => {
                 deleteTask={jest.fn()}
                 addBelow={addBelow}
                 setAttributes={jest.fn()}
-            />
+            />,
         );
 
         act(() => {

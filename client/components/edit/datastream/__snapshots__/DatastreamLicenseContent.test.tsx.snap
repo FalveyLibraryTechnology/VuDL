@@ -16,7 +16,7 @@ exports[`DatastreamLicenseContent renders 1`] = `
           key="testLicenseKey"
           label="testLicense"
           sx={
-            Object {
+            {
               "margin": "0",
             }
           }

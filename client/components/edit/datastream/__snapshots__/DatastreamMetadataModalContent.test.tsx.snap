@@ -4,7 +4,7 @@ exports[`DatastreamMetadataModalContent renders 1`] = `
 <DatastreamMetadataModalContent>
   <ForwardRef(DialogContent)
     sx={
-      Object {
+      {
         "minHeight": "50vh",
       }
     }
@@ -12,28 +12,28 @@ exports[`DatastreamMetadataModalContent renders 1`] = `
     <MuiDialogContentRoot
       className="MuiDialogContent-root"
       ownerState={
-        Object {
+        {
           "children": <Unknown
             data="test1"
             mimeType="test2"
           />,
           "dividers": false,
-          "sx": Object {
+          "sx": {
             "minHeight": "50vh",
           },
         }
       }
       sx={
-        Object {
+        {
           "minHeight": "50vh",
         }
       }
     >
       <Insertion
         cache={
-          Object {
+          {
             "insert": [Function],
-            "inserted": Object {
+            "inserted": {
               "176wh8e-MuiCircularProgress-circle": true,
               "18lrjg1-MuiCircularProgress-root": true,
               "1idz92c-MuiCircularProgress-svg": true,
@@ -44,7 +44,7 @@ exports[`DatastreamMetadataModalContent renders 1`] = `
             },
             "key": "css",
             "nonce": undefined,
-            "registered": Object {},
+            "registered": {},
             "sheet": StyleSheet {
               "_alreadyInsertedOrderInsensitiveRule": true,
               "_insertTag": [Function],
@@ -134,7 +134,7 @@ exports[`DatastreamMetadataModalContent renders 1`] = `
               "key": "css",
               "nonce": undefined,
               "prepend": undefined,
-              "tags": Array [
+              "tags": [
                 <style
                   data-emotion="css"
                   data-s=""
@@ -218,7 +218,7 @@ exports[`DatastreamMetadataModalContent renders 1`] = `
         }
         isStringTag={true}
         serialized={
-          Object {
+          {
             "map": undefined,
             "name": "lebnmz-MuiDialogContent-root",
             "next": undefined,

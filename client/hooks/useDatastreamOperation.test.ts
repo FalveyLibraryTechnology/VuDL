@@ -391,11 +391,10 @@ describe("useDatastreamOperation", () => {
         let blob: Blob;
         let headers;
         let createObjectURL;
-        let createElement;
+        let createElementSpy;
         let link;
-        let body;
+        let appendChildSpy;
         beforeEach(() => {
-
             blob = new Blob(["test"], {type: 'text/pdf'});
             headers = new Headers();
             createObjectURL = jest.fn().mockReturnValue("test3");
@@ -404,17 +403,8 @@ describe("useDatastreamOperation", () => {
                 setAttribute: jest.fn(),
                 click: jest.fn()
             };
-            createElement = jest.fn().mockReturnValue(link);
-            body = {
-                appendChild: jest.fn()
-            };
-            Object.defineProperty(global, "document", {
-                value: {
-                    body,
-                    createElement
-                },
-                writable: true,
-            });
+            createElementSpy = jest.spyOn(document, 'createElement').mockReturnValue(link);
+            appendChildSpy = jest.spyOn(document.body, 'appendChild').mockImplementation(jest.fn());
             Object.defineProperty(global, "URL", {
                 value: {
                     createObjectURL
@@ -433,10 +423,10 @@ describe("useDatastreamOperation", () => {
             const { downloadDatastream } = useDatastreamOperation();
             await downloadDatastream("test1");
 
-            expect(createElement).toHaveBeenCalledWith("a");
+            expect(createElementSpy).toHaveBeenCalledWith("a");
             expect(createObjectURL).toHaveBeenCalledWith(blob);
             expect(link.setAttribute).toHaveBeenCalledWith("download", "test.jpeg");
-            expect(body.appendChild).toHaveBeenCalledWith(link);
+            expect(appendChildSpy).toHaveBeenCalledWith(link);
             expect(link.click).toHaveBeenCalled();
         });
 
