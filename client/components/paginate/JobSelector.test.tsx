@@ -1,8 +1,8 @@
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { render, mount } from "enzyme";
-import toJson from "enzyme-to-json";
+import { render } from "@testing-library/react";
+import renderer from "react-test-renderer";
 import JobSelector from "./JobSelector";
 import { FetchContextProvider } from "../../context/FetchContext";
 const mockCategory = jest.fn();
@@ -39,19 +39,19 @@ describe("JobSelector", () => {
     });
 
     it("renders", () => {
-        const wrapper = render(
+        const tree = renderer.create(
             <FetchContextProvider>
                 <JobSelector />
             </FetchContextProvider>,
         );
-        expect(toJson(wrapper)).toMatchSnapshot();
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("sets category components", async () => {
         response.json.mockResolvedValueOnce(data);
         global.fetch.mockResolvedValueOnce(response);
         await act(async () => {
-            await mount(
+            render(
                 <FetchContextProvider>
                     <JobSelector />
                 </FetchContextProvider>,
