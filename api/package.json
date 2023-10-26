@@ -68,6 +68,6 @@
     "prettier": "^3",
     "supertest": "^6",
     "ts-jest": "^29",
-    "typescript": "^4"
+    "typescript": "^5"
   }
 }
