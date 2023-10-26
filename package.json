@@ -38,6 +38,6 @@
     "watch": "cd api && tsc --watch"
   },
   "devDependencies": {
-    "concurrently": "^6.0.2"
+    "concurrently": "^8"
   }
 }
