@@ -35,7 +35,7 @@ describe("ObjectLoader", () => {
         expect(tree).toBeNull();
     });
 
-    it("loads the object as needed when optional callback is omitted", async () => {
+    it("loads the object as needed when optional callback is omitted", () => {
         render(<ObjectLoader pid="foo:123" />);
         expect(editorValues.action.loadObjectDetailsIntoStorage).toHaveBeenCalledWith("foo:123", null);
     });
