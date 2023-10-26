@@ -41,8 +41,8 @@ class JobQueue {
 
             return await this.workers[job.name].run(job);
         }, queueName);
-        this.manager.on("failed", (job: Job, failedReason: string) => {
-            console.error("Job failed; reason: " + failedReason);
+        this.manager.on("failed", (job: Job, error: Error) => {
+            console.error("Job failed; reason: " + error.message);
         });
 
         console.log("JobQueue started");
