@@ -32,7 +32,7 @@ describe("ObjectLoader", () => {
     it("renders correctly for a loaded object", () => {
         editorValues.state.objectDetailsStorage["foo:123"] = { foo: "bar" };
         const tree = renderer.create(<ObjectLoader pid="foo:123" />).toJSON();
-        expect(tree).toMatchSnapshot();
+        expect(tree).toBeNull();
     });
 
     it("loads the object as needed when optional callback is omitted", async () => {

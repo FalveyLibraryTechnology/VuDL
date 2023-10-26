@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ObjectLoader renders correctly for a loaded object 1`] = `null`;
-
 exports[`ObjectLoader renders correctly for a pending object 1`] = `
 [
   " ",
