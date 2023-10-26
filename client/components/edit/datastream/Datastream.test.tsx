@@ -18,7 +18,8 @@ describe("Datastream", () => {
             disabled: true,
         };
         // Mocking the datastream controls causes a console error; let's suppress it
-        // by mocking out console.error():
+        // by mocking out console.error().
+        // TODO: figure out why and come up with a better solution than hiding the errors.
         jest.spyOn(console, "error").mockImplementation(jest.fn());
         const tree = renderer.create(<Datastream datastream={datastream} />);
         expect(tree.toJSON()).toMatchSnapshot();

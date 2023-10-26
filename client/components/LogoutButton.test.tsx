@@ -27,6 +27,7 @@ describe("LogoutButton", () => {
         // Clicking a link will trigger a console error about navigation not being
         // implemented -- but that doesn't hurt the test, so let's suppress it by
         // mocking the error method.
+        // TODO: figure out why and come up with a better solution than hiding the errors.
         jest.spyOn(console, "error").mockImplementation(jest.fn());
 
         expect(sessionStorage.removeItem).not.toHaveBeenCalledWith("token");
