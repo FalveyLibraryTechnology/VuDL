@@ -1,6 +1,9 @@
 {
   "name": "vudl-client",
   "private": true,
+  "engine": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "build": "next build",
     "check-types": "tsc --noemit",
@@ -36,7 +39,7 @@
     "@testing-library/react": "^12",
     "@testing-library/react-hooks": "^8",
     "@types/jest": "^29",
-    "@types/node": "^16.11.12",
+    "@types/node": "^18",
     "@types/react": "^17",
     "@typescript-eslint/eslint-plugin": "^5",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8",

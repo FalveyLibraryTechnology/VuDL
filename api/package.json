@@ -1,6 +1,9 @@
 {
   "name": "vudl-api",
   "private": true,
+  "engine": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "format": "prettier --check --write *.js src/**",
     "lint": "eslint *.js src/ --ext .ts,.js,.jsx --max-warnings 0",
@@ -55,7 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@types/jest": "^29",
-    "@types/node": "^14.14.33",
+    "@types/node": "^18",
     "eslint": "^8",
     "eslint-config-prettier": "^9",
     "eslint-plugin-jsdoc": "^43",
