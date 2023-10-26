@@ -1,7 +1,9 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { shallow, mount } from "enzyme";
+import { shallow } from "enzyme";
 import toJson from "enzyme-to-json";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import ParentsModal from "./ParentsModal";
 
 const mockUseEditorContext = jest.fn();
@@ -49,11 +51,9 @@ describe("ParentsModal", () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it("toggles the modal", () => {
-        const component = mount(<ParentsModal />);
-        component.find("button").simulate("click");
-
+    it("toggles the modal", async () => {
+        render(<ParentsModal />);
+        await userEvent.setup().click(screen.getByRole("button"));
         expect(editorValues.action.toggleParentsModal).toHaveBeenCalled();
-        component.unmount();
     });
 });
