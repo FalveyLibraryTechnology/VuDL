@@ -24,7 +24,7 @@ describe("DatastreamAgentsContentNotes", () => {
 
     it("edits a note", () => {
         render(<DatastreamAgentsContentNotes expanded={false} notes={notes} setNotes={setNotes} />);
-        const inputs = screen.getAllByRole("textbox", { "hidden": true })
+        const inputs = screen.getAllByRole("textbox", { hidden: true });
         fireEvent.change(inputs[0], { target: { value: "test2" } });
 
         expect(setNotes).toHaveBeenCalledWith(notes);
