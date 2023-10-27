@@ -68,7 +68,7 @@ const DatastreamAgentsContentRow = ({
                     <FormControl fullWidth={true}>
                         <NativeSelect
                             className="agentRoleSelect"
-                            inputProps={{"aria-label": "Select Role"}}
+                            inputProps={{ "aria-label": "Select Role" }}
                             value={role}
                             error={role === ""}
                             onChange={(event) => onRoleChange(event.target.value)}
@@ -93,7 +93,7 @@ const DatastreamAgentsContentRow = ({
                     <FormControl fullWidth={true}>
                         <NativeSelect
                             className="agentTypeSelect"
-                            inputProps={{"aria-label": "Select Type"}}
+                            inputProps={{ "aria-label": "Select Type" }}
                             value={type}
                             error={type === ""}
                             onChange={(event) => onTypeChange(event.target.value)}

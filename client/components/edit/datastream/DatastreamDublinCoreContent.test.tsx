@@ -1,11 +1,9 @@
 import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
 import DatastreamDublinCoreContent from "./DatastreamDublinCoreContent";
-import Button from "@mui/material/Button";
-import { act } from "react-dom/test-utils";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
