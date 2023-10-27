@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { act } from "react-dom/test-utils";
 import { waitFor } from "@testing-library/react";
 import { mount, render } from "enzyme";
-import toJson from "enzyme-to-json";
+import renderer from "react-test-renderer";
 import CreateObject from "./CreateObject";
 import { FetchContextProvider } from "../../../context/FetchContext";
 
@@ -65,21 +65,33 @@ describe("CreateObject", () => {
     }
 
     it("renders appropriately with default settings", async () => {
-        const wrapper = render(getCreateObjectToTest({}));
-        expect(toJson(wrapper)).toMatchSnapshot();
+        let tree;
+        await renderer.act(async () => {
+            tree = renderer.create(getCreateObjectToTest({}));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
-    it("renders appropriately with noParent and parent change enabled", () => {
+    it("renders appropriately with noParent and parent change enabled", async () => {
         props.allowNoParentPid = true;
-        const wrapper = render(getCreateObjectToTest(props));
-        expect(toJson(wrapper)).toMatchSnapshot();
+        let tree;
+        await renderer.act(async () => {
+            tree = renderer.create(getCreateObjectToTest(props));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
-    it("renders appropriately with editing disabled", () => {
+    it("renders appropriately with editing disabled", async () => {
         props.parentPid = "foo:1234";
         props.allowChangeParentPid = false;
-        const wrapper = render(getCreateObjectToTest(props));
-        expect(toJson(wrapper)).toMatchSnapshot();
+        let tree;
+        await renderer.act(async () => {
+            tree = renderer.create(getCreateObjectToTest(props));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("submits appropriate data in default case", async () => {
