@@ -22,6 +22,11 @@ describe("PidPicker", () => {
         return <PidPicker selected={selected} parents={parents} setSelected={callback} />;
     };
 
+    const checkSnapshot = (selected = "", parents: Array<Parent> = []) => {
+        const wrapper = shallow(getPicker(selected, parents));
+        expect(toJson(wrapper)).toMatchSnapshot();
+    };
+
     beforeEach(() => {
         callback = jest.fn();
         favoritePidsCatalog = { "foo:123": "first test", "foo:124": "second test" };
@@ -32,8 +37,7 @@ describe("PidPicker", () => {
     });
 
     it("renders correctly with favorite PIDs", () => {
-        const wrapper = shallow(getPicker());
-        expect(toJson(wrapper)).toMatchSnapshot();
+        checkSnapshot();
     });
 
     it("sets selected PID when you click a favorite button", () => {
@@ -54,8 +58,7 @@ describe("PidPicker", () => {
     });
 
     it("renders correctly with a selected PID", () => {
-        const wrapper = shallow(getPicker("selected:123"));
-        expect(toJson(wrapper)).toMatchSnapshot();
+        checkSnapshot("selected:123");
     });
 
     it("renders correctly with parents", () => {
@@ -63,8 +66,7 @@ describe("PidPicker", () => {
             { pid: "foo", title: "Foo" },
             { pid: "bar", title: "Bar" },
         ];
-        const wrapper = shallow(getPicker("", parents));
-        expect(toJson(wrapper)).toMatchSnapshot();
+        checkSnapshot("", parents);
     });
 
     it("allows you to clear a selected PID", () => {
@@ -77,7 +79,6 @@ describe("PidPicker", () => {
 
     it("renders correctly without favorite PIDs", () => {
         editorValues.state.favoritePidsCatalog = [];
-        const wrapper = shallow(getPicker());
-        expect(toJson(wrapper)).toMatchSnapshot();
+        checkSnapshot();
     });
 });
