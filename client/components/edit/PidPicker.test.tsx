@@ -1,7 +1,9 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { shallow, mount } from "enzyme";
+import { shallow } from "enzyme";
 import toJson from "enzyme-to-json";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import PidPicker from "./PidPicker";
 import { Parent } from "./PidPicker";
 
@@ -40,21 +42,19 @@ describe("PidPicker", () => {
         checkSnapshot();
     });
 
-    it("sets selected PID when you click a favorite button", () => {
-        const component = mount(getPicker());
-        component.find("button").at(1).simulate("click");
+    it("sets selected PID when you click a favorite button", async () => {
+        render(getPicker());
+        await userEvent.setup().click(screen.getByText("first test"));
 
         expect(callback).toHaveBeenCalledWith("foo:123");
-        component.unmount();
     });
 
-    it("sets selected PID when you use manual entry", () => {
-        const component = mount(getPicker());
-        component.find("input").simulate("change", { target: { value: "bar" } });
-        component.find("button").at(0).simulate("click");
+    it("sets selected PID when you use manual entry", async () => {
+        render(getPicker());
+        fireEvent.change(screen.getByRole("textbox", { hidden: true }), { target: { value: "bar" } });
+        await userEvent.setup().click(screen.getByText("Set"));
 
         expect(callback).toHaveBeenCalledWith("bar");
-        component.unmount();
     });
 
     it("renders correctly with a selected PID", () => {
@@ -69,12 +69,11 @@ describe("PidPicker", () => {
         checkSnapshot("", parents);
     });
 
-    it("allows you to clear a selected PID", () => {
-        const component = mount(getPicker("selected:123"));
-        component.find("button").simulate("click");
+    it("allows you to clear a selected PID", async () => {
+        render(getPicker("selected:123"));
+        await userEvent.setup().click(screen.getByText("Clear"));
 
         expect(callback).toHaveBeenCalledWith("");
-        component.unmount();
     });
 
     it("renders correctly without favorite PIDs", () => {
