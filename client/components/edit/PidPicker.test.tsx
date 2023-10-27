@@ -1,9 +1,8 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { shallow } from "enzyme";
-import toJson from "enzyme-to-json";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import renderer from "react-test-renderer";
 import PidPicker from "./PidPicker";
 import { Parent } from "./PidPicker";
 
@@ -14,6 +13,8 @@ jest.mock("../../context/EditorContext", () => ({
     },
 }));
 jest.mock("./children/ChildList", () => () => "ChildList");
+jest.mock("@mui/material/AccordionSummary", () => (props) => "AccordionSummary: " + JSON.stringify(props.children));
+jest.mock("@mui/icons-material/ExpandMore", () => () => "Icon");
 
 describe("PidPicker", () => {
     let callback: () => void;
@@ -25,8 +26,8 @@ describe("PidPicker", () => {
     };
 
     const checkSnapshot = (selected = "", parents: Array<Parent> = []) => {
-        const wrapper = shallow(getPicker(selected, parents));
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(getPicker(selected, parents)).toJSON();
+        expect(tree).toMatchSnapshot();
     };
 
     beforeEach(() => {
