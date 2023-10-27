@@ -1,9 +1,10 @@
 import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
-import { ChildProps, Child } from "./Child";
+import { act } from "react-dom/test-utils";
+import userEvent from "@testing-library/user-event";import { ChildProps, Child } from "./Child";
 import { EditorContextProvider, ObjectDetails } from "../../../context/EditorContext";
 import { FetchContextProvider } from "../../../context/FetchContext";
 
@@ -51,6 +52,10 @@ describe("Child", () => {
         });
     });
 
+    afterEach(() => {
+        jest.resetAllMocks();
+    });
+
     it("renders using ajax-loaded data", async () => {
         const wrapper = getMountedChildComponent(props);
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
@@ -79,14 +84,23 @@ describe("Child", () => {
     });
 
     it("can be expanded to show children", async () => {
-        const wrapper = getMountedChildComponent(props);
-        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        const expandIcon = wrapper.find("svg title").at(0);
-        expect(expandIcon.text()).toEqual("Expand Tree");
-        expandIcon.simulate("click");
-        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        // Suppress unexplained key error. TODO: identify cause
+        jest.spyOn(console, "error").mockImplementation(jest.fn());
+        await act(async () => {
+            render(getMountedChildComponent(props));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        });
+        // There should initially be an expand button and no children:
+        const expandIcon = screen.getByRole("img", { name: "Expand Tree" });
+        expect(screen.queryAllByText("ChildList")).toHaveLength(0);
+        // Click expand:
+        await act(async () => {
+            await userEvent.setup().click(expandIcon);
+            await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2));
+        });
+        // There should now be a collapse button and children:
+        screen.getByRole("img", { name: "Collapse Tree" });
+        expect(screen.queryAllByText("ChildList")).toHaveLength(1);
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
-        wrapper.update();
-        expect(toJson(wrapper)).toMatchSnapshot();
     });
 });
