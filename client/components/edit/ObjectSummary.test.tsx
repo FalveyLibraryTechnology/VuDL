@@ -33,7 +33,9 @@ describe("ObjectSummary", () => {
         jest.spyOn(editorValues.action, "extractFirstMetadataValue").mockReturnValue("");
         const loadSpy = jest.spyOn(editorValues.action, "loadCurrentObjectDetails");
         let tree;
-        renderer.act(() => { tree = renderer.create(<ObjectSummary />); });
+        renderer.act(() => {
+            tree = renderer.create(<ObjectSummary />);
+        });
         expect(tree.toJSON()).toMatchSnapshot();
         expect(loadSpy).toHaveBeenCalledTimes(1);
     });

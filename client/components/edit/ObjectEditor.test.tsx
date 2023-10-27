@@ -36,7 +36,9 @@ describe("ObjectEditor", () => {
     });
 
     it("calls initializeCatalog", () => {
-        renderer.act(() => { renderer.create(<ObjectEditor pid="foo:123" />) });
+        renderer.act(() => {
+            renderer.create(<ObjectEditor pid="foo:123" />);
+        });
         expect(editorValues.action.initializeCatalog).toHaveBeenCalled();
         expect(editorValues.action.setCurrentPid).toHaveBeenCalledWith("foo:123");
         expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();

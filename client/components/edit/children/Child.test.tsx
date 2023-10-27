@@ -4,7 +4,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { mount } from "enzyme";
 import toJson from "enzyme-to-json";
 import { act } from "react-dom/test-utils";
-import userEvent from "@testing-library/user-event";import { ChildProps, Child } from "./Child";
+import userEvent from "@testing-library/user-event";
+import { ChildProps, Child } from "./Child";
 import { EditorContextProvider, ObjectDetails } from "../../../context/EditorContext";
 import { FetchContextProvider } from "../../../context/FetchContext";
 

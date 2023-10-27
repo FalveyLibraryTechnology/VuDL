@@ -18,7 +18,7 @@ describe("DatatypeContent", () => {
         const tree = renderer.create(<DatatypeContent {...props} />);
 
         expect(tree.toJSON()).toMatchSnapshot();
-        expect(tree.root.findByType('img')).toBeTruthy();
+        expect(tree.root.findByType("img")).toBeTruthy();
     });
 
     it("renders textarea on text primaryType", () => {
@@ -27,7 +27,7 @@ describe("DatatypeContent", () => {
         const tree = renderer.create(<DatatypeContent {...props} />);
 
         expect(tree.toJSON()).toMatchSnapshot();
-        expect(tree.root.findByType('div').props.children).toContain(props.data);
+        expect(tree.root.findByType("div").props.children).toContain(props.data);
     });
 
     it("renders object on application/pdf", () => {
@@ -36,7 +36,7 @@ describe("DatatypeContent", () => {
         const tree = renderer.create(<DatatypeContent {...props} />);
 
         expect(tree.toJSON()).toMatchSnapshot();
-        expect(tree.root.findByType('object')).toBeTruthy();
+        expect(tree.root.findByType("object")).toBeTruthy();
     });
 
     it("renders audio tag on audio primaryType", () => {
@@ -45,6 +45,6 @@ describe("DatatypeContent", () => {
         const tree = renderer.create(<DatatypeContent {...props} />);
 
         expect(tree.toJSON()).toMatchSnapshot();
-        expect(tree.root.findByType('audio')).toBeTruthy();
+        expect(tree.root.findByType("audio")).toBeTruthy();
     });
 });

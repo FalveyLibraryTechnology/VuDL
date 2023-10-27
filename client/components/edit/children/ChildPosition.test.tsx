@@ -74,7 +74,7 @@ describe("ChildPosition", () => {
         render(<ChildPosition pid={pid} parentPid={parentPid} />);
         await act(async () => {
             const textField = screen.getByRole("textbox");
-            fireEvent.blur(textField, { target: { value: '66' } });
+            fireEvent.blur(textField, { target: { value: "66" } });
         });
         expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/positionInParent/foo%3A122",
@@ -90,7 +90,7 @@ describe("ChildPosition", () => {
         editorValues.state.objectDetailsStorage[parentPid] = { pid: parentPid, sortOn: "custom" };
         render(<ChildPosition pid={pid} parentPid={parentPid} />);
         const textField = screen.getByRole("textbox");
-        fireEvent.blur(textField, { target: { value: '73' } });
+        fireEvent.blur(textField, { target: { value: "73" } });
         expect(fetchContextValues.action.fetchText).not.toHaveBeenCalled();
         expect(editorValues.action.clearPidFromChildListStorage).not.toHaveBeenCalled();
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
