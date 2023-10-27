@@ -1,11 +1,8 @@
 import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { act } from "react-dom/test-utils";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
-import { mount } from "enzyme";
-import toJson from "enzyme-to-json";
 import SinglePidIndexer from "./SinglePidIndexer";
 
 const mockUseFetchContext = jest.fn();
@@ -17,7 +14,6 @@ jest.mock("../../context/FetchContext", () => ({
 
 describe("SinglePidIndexer", () => {
     let fetchContextValues;
-    let wrapper;
     let setResults;
     beforeEach(() => {
         fetchContextValues = {
