@@ -1,7 +1,8 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
 import ParentPicker from "./ParentPicker";
 import { waitFor } from "@testing-library/dom";
@@ -93,11 +94,10 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "title",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").simulate("click");
+            await userEvent.setup().click(screen.getByRole("button"));
             await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
@@ -121,11 +121,10 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "title",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").simulate("click");
+            await userEvent.setup().click(screen.getByRole("button"));
             await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
@@ -147,11 +146,10 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "title",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").simulate("click");
+            await userEvent.setup().click(screen.getByRole("button"));
             await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
@@ -184,14 +182,12 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "custom",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("input").simulate("change", { target: { value: "100" } });
+            fireEvent.change(screen.getByRole("textbox", { name: "Position:" }), { target: { value: "100" } });
             await Promise.resolve();
-            wrapper.update();
-            wrapper.find("button").at(1).simulate("click");
+            await userEvent.setup().click(screen.getByRole("button", { name: "Add" }));
             await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
@@ -214,16 +210,14 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "custom",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").simulate("click");
+            await userEvent.setup().click(screen.getByRole("button"));
             await waitFor(() => expect(fetchValues.action.fetchText).toHaveBeenCalled());
         });
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").at(1).simulate("click");
+            await userEvent.setup().click(screen.getByRole("button", { name: "Add" }));
             await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
@@ -254,16 +248,14 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "custom",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").simulate("click");
+            await userEvent.setup().click(screen.getByRole("button"));
             await waitFor(() => expect(fetchValues.action.fetchText).toHaveBeenCalled());
         });
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").at(1).simulate("click");
+            await userEvent.setup().click(screen.getByRole("button", { name: "Add" }));
             await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
