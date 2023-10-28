@@ -5,14 +5,18 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import renderer from "react-test-renderer";
 import DatastreamDublinCoreEditField from "./DatastreamDublinCoreEditField";
 
-jest.mock("@mui/material/FormControl", () => ({ disabled = false, children = null }) => {
-    return (
-        <>
-            {"FormControl" + (disabled ? " (disabled))" : "")}
-            {children}
-        </>
-    );
-});
+jest.mock(
+    "@mui/material/FormControl",
+    () =>
+        function FormControl({ disabled = false, children = null }: { disabled: boolean; children: unknown }) {
+            return (
+                <>
+                    {"FormControl" + (disabled ? " (disabled))" : "")}
+                    {children}
+                </>
+            );
+        },
+);
 jest.mock("../../shared/BlurSavingTextField", () => (props) => `BlurSavingTextField: ${JSON.stringify(props)}`);
 let tinyMceOnBlur: (a: unknown, b: unknown) => void;
 jest.mock("@tinymce/tinymce-react", () => {
