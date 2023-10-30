@@ -1,7 +1,7 @@
 import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import { mount, shallow } from "enzyme";
-import toJson from "enzyme-to-json";
+import { mount } from "enzyme";
+import renderer from "react-test-renderer";
 import DatastreamProcessMetadataTask from "./DatastreamProcessMetadataTask";
 import BlurSavingTextField from "../../shared/BlurSavingTextField";
 import { ProcessMetadataTask } from "../../../context/ProcessMetadataContext";
@@ -16,6 +16,11 @@ jest.mock("../../../context/EditorContext", () => ({
         return mockUseEditorContext();
     },
 }));
+
+jest.mock("../../shared/BlurSavingTextField", () => (props) => `BlurSavingTextField: ${JSON.stringify(props)}`);
+jest.mock("@mui/material/Grid", () => (props) => props.children);
+jest.mock("@mui/icons-material/AddCircle", () => (props) => props.titleAccess);
+jest.mock("@mui/icons-material/Delete", () => (props) => props.titleAccess);
 
 describe("DatastreamProcessMetadataTask", () => {
     let editorValues;
@@ -46,30 +51,30 @@ describe("DatastreamProcessMetadataTask", () => {
     });
 
     it("renders without tool presets", () => {
-        const wrapper = shallow(
+        const tree = renderer.create(
             <DatastreamProcessMetadataTask
                 task={task}
                 deleteTask={jest.fn()}
                 addBelow={jest.fn()}
                 setAttributes={jest.fn()}
             />,
-        );
+        ).toJSON();
 
-        expect(toJson(wrapper)).toMatchSnapshot();
+        expect(tree).toMatchSnapshot();
     });
 
     it("renders with tool presets", () => {
         editorValues.state.toolPresets.push({ label: "My Tool" });
-        const wrapper = shallow(
+        const tree = renderer.create(
             <DatastreamProcessMetadataTask
                 task={task}
                 deleteTask={jest.fn()}
                 addBelow={jest.fn()}
                 setAttributes={jest.fn()}
             />,
-        );
+        ).toJSON();
 
-        expect(toJson(wrapper)).toMatchSnapshot();
+        expect(tree).toMatchSnapshot();
     });
 
     it("applies tool presets", () => {
