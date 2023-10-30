@@ -4,6 +4,7 @@ import { shallow, mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { waitFor } from "@testing-library/react";
 import toJson from "enzyme-to-json";
+import renderer from "react-test-renderer";
 import StateModal from "./StateModal";
 import Checkbox from "@mui/material/Checkbox";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -51,8 +52,11 @@ describe("StateModal", () => {
 
     it("renders correctly when closed", () => {
         editorValues.state.isStateModalOpen = false;
-        const wrapper = shallow(<StateModal />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        let tree;
+        renderer.act(() => {
+            tree = renderer.create(<StateModal />);
+        });
+        expect(tree.toJSON()).toBeNull();
     });
 
     it("renders correctly for a pending object", () => {
