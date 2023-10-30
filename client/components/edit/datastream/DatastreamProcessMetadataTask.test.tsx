@@ -51,28 +51,32 @@ describe("DatastreamProcessMetadataTask", () => {
     });
 
     it("renders without tool presets", () => {
-        const tree = renderer.create(
-            <DatastreamProcessMetadataTask
-                task={task}
-                deleteTask={jest.fn()}
-                addBelow={jest.fn()}
-                setAttributes={jest.fn()}
-            />,
-        ).toJSON();
+        const tree = renderer
+            .create(
+                <DatastreamProcessMetadataTask
+                    task={task}
+                    deleteTask={jest.fn()}
+                    addBelow={jest.fn()}
+                    setAttributes={jest.fn()}
+                />,
+            )
+            .toJSON();
 
         expect(tree).toMatchSnapshot();
     });
 
     it("renders with tool presets", () => {
         editorValues.state.toolPresets.push({ label: "My Tool" });
-        const tree = renderer.create(
-            <DatastreamProcessMetadataTask
-                task={task}
-                deleteTask={jest.fn()}
-                addBelow={jest.fn()}
-                setAttributes={jest.fn()}
-            />,
-        ).toJSON();
+        const tree = renderer
+            .create(
+                <DatastreamProcessMetadataTask
+                    task={task}
+                    deleteTask={jest.fn()}
+                    addBelow={jest.fn()}
+                    setAttributes={jest.fn()}
+                />,
+            )
+            .toJSON();
 
         expect(tree).toMatchSnapshot();
     });
