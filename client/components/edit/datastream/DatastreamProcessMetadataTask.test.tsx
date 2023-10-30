@@ -1,14 +1,10 @@
 import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import { mount } from "enzyme";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
 import DatastreamProcessMetadataTask from "./DatastreamProcessMetadataTask";
-import BlurSavingTextField from "../../shared/BlurSavingTextField";
 import { ProcessMetadataTask } from "../../../context/ProcessMetadataContext";
-import Delete from "@mui/icons-material/Delete";
-import AddCircle from "@mui/icons-material/AddCircle";
-import { act } from "react-dom/test-utils";
-import NativeSelect from "@mui/material/NativeSelect";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
@@ -16,8 +12,11 @@ jest.mock("../../../context/EditorContext", () => ({
         return mockUseEditorContext();
     },
 }));
-
-jest.mock("../../shared/BlurSavingTextField", () => (props) => `BlurSavingTextField: ${JSON.stringify(props)}`);
+let mockBlurSavingSetters: Array<(val: string) => void> = [];
+jest.mock("../../shared/BlurSavingTextField", () => (props) => {
+    mockBlurSavingSetters.push(props.setValue);
+    return `BlurSavingTextField: ${JSON.stringify(props)}`;
+});
 jest.mock("@mui/material/Grid", () => (props) => props.children);
 jest.mock("@mui/icons-material/AddCircle", () => (props) => props.titleAccess);
 jest.mock("@mui/icons-material/Delete", () => (props) => props.titleAccess);
@@ -27,6 +26,7 @@ describe("DatastreamProcessMetadataTask", () => {
     let task: ProcessMetadataTask;
 
     beforeEach(() => {
+        mockBlurSavingSetters = [];
         editorValues = {
             state: {
                 toolPresets: [],
@@ -77,11 +77,11 @@ describe("DatastreamProcessMetadataTask", () => {
         expect(tree).toMatchSnapshot();
     });
 
-    it("applies tool presets", () => {
+    it("applies tool presets", async () => {
         editorValues.state.toolPresets.push({ label: "Tool 1" });
         editorValues.state.toolPresets.push({ label: "Tool 2", serialNumber: "1234", version: "1" });
         const setAttributes = jest.fn();
-        const wrapper = mount(
+        render(
             <DatastreamProcessMetadataTask
                 task={{}}
                 deleteTask={jest.fn()}
@@ -90,16 +90,9 @@ describe("DatastreamProcessMetadataTask", () => {
             />,
         );
 
-        act(() => {
-            wrapper
-                .find(NativeSelect)
-                .props()
-                .onChange({ target: { value: "1" } });
-        });
-        wrapper.update();
-        act(() => {
-            wrapper.find("button").at(0).simulate("click");
-        });
+        const select = screen.getByRole("combobox");
+        fireEvent.change(select, { target: { value: "1" } });
+        await userEvent.setup().click(screen.getByText("Apply Preset"));
 
         expect(setAttributes).toHaveBeenCalledWith(
             {
@@ -115,7 +108,7 @@ describe("DatastreamProcessMetadataTask", () => {
 
     it("saves values", () => {
         const setAttributes = jest.fn();
-        const wrapper = mount(
+        render(
             <DatastreamProcessMetadataTask
                 task={task}
                 deleteTask={jest.fn()}
@@ -135,23 +128,15 @@ describe("DatastreamProcessMetadataTask", () => {
             "toolVersion",
             "toolSerialNumber",
         ];
-        act(() => {
-            attributes.forEach((value, index) => {
-                wrapper
-                    .find(BlurSavingTextField)
-                    .at(index)
-                    .props()
-                    .setValue(value + "foo");
-            });
-        });
         attributes.forEach((value, index) => {
+            mockBlurSavingSetters[index](value + "foo");
             expect(setAttributes).toHaveBeenNthCalledWith(index + 1, { [value]: `${value}foo` });
         });
     });
 
-    it("deletes tasks", () => {
+    it("deletes tasks", async () => {
         const deleteTask = jest.fn();
-        const wrapper = mount(
+        render(
             <DatastreamProcessMetadataTask
                 task={task}
                 deleteTask={deleteTask}
@@ -160,15 +145,13 @@ describe("DatastreamProcessMetadataTask", () => {
             />,
         );
 
-        act(() => {
-            wrapper.find(Delete).parent().props().onClick();
-        });
+        await userEvent.setup().click(screen.getByText("Delete Task"));
         expect(deleteTask).toHaveBeenCalled();
     });
 
-    it("inserts values below", () => {
+    it("inserts values below", async () => {
         const addBelow = jest.fn();
-        const wrapper = mount(
+        render(
             <DatastreamProcessMetadataTask
                 task={task}
                 deleteTask={jest.fn()}
@@ -177,9 +160,7 @@ describe("DatastreamProcessMetadataTask", () => {
             />,
         );
 
-        act(() => {
-            wrapper.find(AddCircle).parent().props().onClick();
-        });
+        await userEvent.setup().click(screen.getByText("Add Below"));
         expect(addBelow).toHaveBeenCalled();
     });
 });
