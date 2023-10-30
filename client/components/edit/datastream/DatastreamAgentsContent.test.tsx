@@ -61,28 +61,15 @@ describe("DatastreamAgentsContent", () => {
         jest.clearAllMocks();
     });
 
-    it("renders", async () => {
+    it("renders, and calls getAgents on render", async () => {
         datastreamOperationValues.getAgents.mockResolvedValue([]);
         let tree;
         await renderer.act(async () => {
             tree = renderer.create(<DatastreamAgentsContent />);
             await waitFor(() => expect(datastreamOperationValues.getAgents).toHaveBeenCalled());
         });
-        expect(tree.toJSON()).toMatchSnapshot();
-    });
-
-    it("calls getAgents on render", async () => {
-        datastreamOperationValues.getAgents.mockResolvedValue([]);
-
-        const wrapper = mount(<DatastreamAgentsContent />);
-        await act(async () => {
-            await Promise.resolve(wrapper);
-            await new Promise((resolve) => setImmediate(resolve));
-            wrapper.update();
-        });
-
-        expect(datastreamOperationValues.getAgents).toHaveBeenCalled();
         expect(editorValues.action.setCurrentAgents).toHaveBeenCalled();
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("saves current changes on save changes click", async () => {
