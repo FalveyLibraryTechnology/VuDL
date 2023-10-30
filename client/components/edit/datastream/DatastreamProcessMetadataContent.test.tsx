@@ -1,7 +1,7 @@
 import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import { mount, shallow } from "enzyme";
-import toJson from "enzyme-to-json";
+import { mount } from "enzyme";
+import renderer from "react-test-renderer";
 import DatastreamProcessMetadataContent from "./DatastreamProcessMetadataContent";
 import { waitFor } from "@testing-library/react";
 import Button from "@mui/material/Button";
@@ -53,6 +53,19 @@ describe("DatastreamProcessMetadataContent", () => {
         return wrapper;
     };
 
+    const getRenderedTree = async (fakeData = {}) => {
+        datastreamOperationValues.getProcessMetadata.mockResolvedValue(fakeData);
+        processMetadataValues.state = fakeData;
+
+        const tree = renderer.create(<DatastreamProcessMetadataContent />);
+
+        await renderer.act(async () => {
+            await waitFor(() => expect(processMetadataValues.action.setMetadata).toHaveBeenCalledWith(fakeData));
+        });
+
+        return tree.toJSON();
+    };
+
     beforeEach(() => {
         datastreamOperationValues = {
             uploadProcessMetadata: jest.fn(),
@@ -82,19 +95,19 @@ describe("DatastreamProcessMetadataContent", () => {
     });
 
     it("renders a loading message if content is unavailable", () => {
-        const wrapper = shallow(<DatastreamProcessMetadataContent />);
-
-        expect(toJson(wrapper)).toMatchSnapshot();
+        datastreamOperationValues.getProcessMetadata.mockResolvedValue({});
+        const tree = renderer.create(<DatastreamProcessMetadataContent />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
     it("renders a form when empty data is loaded", async () => {
-        const wrapper = await getMountedComponent();
+        const tree = await getRenderedTree();
         expect(processMetadataValues.action.addTask).toHaveBeenCalledWith(0);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        expect(tree).toMatchSnapshot();
     });
 
     it("renders a form when non-empty data is loaded", async () => {
-        const wrapper = await getMountedComponent({
+        const tree = await getRenderedTree({
             processLabel: "label",
             processCreator: "creator",
             processDateTime: "datetime",
@@ -102,7 +115,7 @@ describe("DatastreamProcessMetadataContent", () => {
             tasks: [{ id: 1 }, { id: 2 }],
         });
         expect(processMetadataValues.action.addTask).not.toHaveBeenCalled();
-        expect(toJson(wrapper)).toMatchSnapshot();
+        expect(tree).toMatchSnapshot();
     });
 
     it("has a working save button", async () => {
