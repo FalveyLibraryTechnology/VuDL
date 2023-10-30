@@ -1,10 +1,10 @@
 import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import { mount } from "enzyme";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
 import DatastreamProcessMetadataContent from "./DatastreamProcessMetadataContent";
 import { waitFor } from "@testing-library/react";
-import Button from "@mui/material/Button";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
@@ -25,7 +25,9 @@ jest.mock("../../../hooks/useDatastreamOperation", () => () => {
     return mockUseDatastreamOperation();
 });
 
-const DatastreamProcessMetadataTask = function DatastreamProcessMetadataTask() {
+let mockDatastreamProcessMetadataTaskProps = [];
+const DatastreamProcessMetadataTask = function DatastreamProcessMetadataTask(props) {
+    mockDatastreamProcessMetadataTaskProps.push(props);
     return "";
 };
 jest.mock("./DatastreamProcessMetadataTask", () => DatastreamProcessMetadataTask);
@@ -40,17 +42,13 @@ describe("DatastreamProcessMetadataContent", () => {
     let editorValues;
     let processMetadataValues;
 
-    const getMountedComponent = async (fakeData = {}) => {
+    const renderComponent = async (fakeData = {}) => {
         datastreamOperationValues.getProcessMetadata.mockResolvedValue(fakeData);
         processMetadataValues.state = fakeData;
 
-        const wrapper = mount(<DatastreamProcessMetadataContent />);
+        render(<DatastreamProcessMetadataContent />);
 
         await waitFor(() => expect(processMetadataValues.action.setMetadata).toHaveBeenCalledWith(fakeData));
-
-        wrapper.update();
-
-        return wrapper;
     };
 
     const getRenderedTree = async (fakeData = {}) => {
@@ -74,6 +72,7 @@ describe("DatastreamProcessMetadataContent", () => {
         mockUseDatastreamOperation.mockReturnValue(datastreamOperationValues);
         editorValues = { action: { toggleDatastreamModal: jest.fn() } };
         mockUseEditorContext.mockReturnValue(editorValues);
+        mockDatastreamProcessMetadataTaskProps = [];
         processMetadataValues = {
             state: {},
             action: {
@@ -119,27 +118,27 @@ describe("DatastreamProcessMetadataContent", () => {
     });
 
     it("has a working save button", async () => {
-        const wrapper = await getMountedComponent();
-        await wrapper.find(".uploadProcessMetadataButton").find(Button).props().onClick();
+        await renderComponent();
+        await userEvent.setup().click(screen.getByText("Save"));
         expect(datastreamOperationValues.uploadProcessMetadata).toHaveBeenCalledWith(processMetadataValues.state);
     });
 
     it("supports task updates", async () => {
-        const wrapper = await getMountedComponent({ tasks: [{ id: 1 }] });
+        await renderComponent({ tasks: [{ id: 1 }] });
         const attr = { foo: "bar" };
-        wrapper.find(DatastreamProcessMetadataTask).props().setAttributes(attr, true);
+        mockDatastreamProcessMetadataTaskProps[0].setAttributes(attr, true);
         expect(processMetadataValues.action.updateTaskAttributes).toHaveBeenCalledWith(0, attr);
     });
 
     it("supports adding tasks", async () => {
-        const wrapper = await getMountedComponent({ tasks: [{ id: 1 }] });
-        wrapper.find(DatastreamProcessMetadataTask).props().addBelow();
+        await renderComponent({ tasks: [{ id: 1 }] });
+        mockDatastreamProcessMetadataTaskProps[0].addBelow();
         expect(processMetadataValues.action.addTask).toHaveBeenCalledWith(1);
     });
 
     it("supports deleting tasks", async () => {
-        const wrapper = await getMountedComponent({ tasks: [{ id: 1 }] });
-        wrapper.find(DatastreamProcessMetadataTask).props().deleteTask();
+        await renderComponent({ tasks: [{ id: 1 }] });
+        mockDatastreamProcessMetadataTaskProps[0].deleteTask();
         expect(processMetadataValues.action.deleteTask).toHaveBeenCalledWith(0);
     });
 });
