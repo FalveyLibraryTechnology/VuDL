@@ -1,7 +1,7 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { shallow, mount } from "enzyme";
-import toJson from "enzyme-to-json";
+import { mount } from "enzyme";
+import renderer from "react-test-renderer";
 import ParentList from "./ParentList";
 import { waitFor } from "@testing-library/dom";
 
@@ -17,6 +17,8 @@ jest.mock("../../../context/FetchContext", () => ({
         return mockUseFetchContext();
     },
 }));
+
+jest.mock("@mui/icons-material/Delete", () => (props) => props.titleAccess);
 
 describe("ParentList", () => {
     let editorValues;
@@ -96,18 +98,18 @@ describe("ParentList", () => {
                 },
             },
         };
-        const wrapper = shallow(<ParentList pid={pid} />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<ParentList pid={pid} />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
     it("renders a populated parent list correctly (shallow mode)", () => {
-        const wrapper = shallow(<ParentList pid={pid} />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<ParentList pid={pid} />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
     it("renders a populated parent list correctly (full mode)", () => {
-        const wrapper = shallow(<ParentList pid={pid} initiallyShallow={false} />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<ParentList pid={pid} initiallyShallow={false} />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
     it("deletes parents on button click plus confirmation", async () => {
