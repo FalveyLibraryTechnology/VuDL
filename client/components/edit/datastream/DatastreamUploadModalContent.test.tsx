@@ -1,8 +1,7 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { mount, shallow } from "enzyme";
 import { act } from "react-dom/test-utils";
-import toJson from "enzyme-to-json";
+import { fireEvent, render, screen } from "@testing-library/react";
 import renderer from "react-test-renderer";
 import DatastreamUploadModalContent from "./DatastreamUploadModalContent";
 
@@ -58,10 +57,10 @@ describe("DatastreamUploadModalContent", () => {
 
     it("calls uploadFile on click", async () => {
         datastreamOperationValues.uploadFile.mockResolvedValue("upload worked");
-        const wrapper = mount(<DatastreamUploadModalContent />);
+        render(<DatastreamUploadModalContent />);
 
         await act(async () => {
-            wrapper.find(".uploadFileButton").simulate("change", {
+            fireEvent.change(screen.getByLabelText("Upload File"), {
                 target: {
                     files: [
                         {
@@ -70,7 +69,6 @@ describe("DatastreamUploadModalContent", () => {
                     ],
                 },
             });
-            wrapper.update();
         });
         expect(datastreamOperationValues.uploadFile).toHaveBeenCalled();
     });
