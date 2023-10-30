@@ -1,10 +1,11 @@
 import React from "react";
 import { setImmediate } from "timers";
 import { describe, beforeEach, afterEach, expect, it, jest } from "@jest/globals";
-import { mount, shallow } from "enzyme";
+import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
-import toJson from "enzyme-to-json";
+import renderer from "react-test-renderer";
 import DatastreamAgentsContent from "./DatastreamAgentsContent";
+import { waitFor } from "@testing-library/react";
 
 const mockDatastreamAgentsModifyContentRow = jest.fn();
 jest.mock("./DatastreamAgentsModifyContentRow", () => (props) => {
@@ -26,6 +27,7 @@ const mockUseDatastreamOperation = jest.fn();
 jest.mock("../../../hooks/useDatastreamOperation", () => () => {
     return mockUseDatastreamOperation();
 });
+jest.mock("@mui/material/Grid", () => (props) => props.children);
 
 describe("DatastreamAgentsContent", () => {
     let editorValues;
@@ -59,9 +61,14 @@ describe("DatastreamAgentsContent", () => {
         jest.clearAllMocks();
     });
 
-    it("renders", () => {
-        const wrapper = shallow(<DatastreamAgentsContent />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+    it("renders", async () => {
+        datastreamOperationValues.getAgents.mockResolvedValue([]);
+        let tree;
+        await renderer.act(async () => {
+            tree = renderer.create(<DatastreamAgentsContent />);
+            await waitFor(() => expect(datastreamOperationValues.getAgents).toHaveBeenCalled());
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("calls getAgents on render", async () => {
