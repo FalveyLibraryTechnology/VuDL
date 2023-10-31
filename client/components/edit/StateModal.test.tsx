@@ -1,9 +1,8 @@
 import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { shallow, mount } from "enzyme";
+import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { waitFor } from "@testing-library/react";
-import toJson from "enzyme-to-json";
 import renderer from "react-test-renderer";
 import StateModal from "./StateModal";
 import Checkbox from "@mui/material/Checkbox";
@@ -22,6 +21,20 @@ jest.mock("../../context/FetchContext", () => ({
         return mockUseFetchContext();
     },
 }));
+
+jest.mock("./ObjectLoader", () => (args) => JSON.stringify(args));
+
+jest.mock("@mui/material/Dialog", () => (props) => {
+    return <>
+        {"Dialog"}
+        {props.open ? "open" : "closed"}
+        {props.children}
+    </>
+});
+jest.mock("@mui/material/DialogTitle", () => (props) => props.children);
+jest.mock("@mui/material/DialogContent", () => (props) => props.children);
+jest.mock("@mui/material/Grid", () => (props) => props.children);
+jest.mock("@mui/icons-material/Close", () => () => "CloseIcon");
 
 describe("StateModal", () => {
     let editorValues;
@@ -56,36 +69,37 @@ describe("StateModal", () => {
         renderer.act(() => {
             tree = renderer.create(<StateModal />);
         });
-        expect(tree.toJSON()).toBeNull();
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("renders correctly for a pending object", () => {
-        const wrapper = shallow(<StateModal />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        let tree;
+        renderer.act(() => {
+            tree = renderer.create(<StateModal />);
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("renders correctly for a loaded object with children", async () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, state: "Active" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 100 });
-        let wrapper;
-        await act(async () => {
-            wrapper = mount(<StateModal />);
+        let tree;
+        await renderer.act(async () => {
+            tree = renderer.create(<StateModal />);
+            await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
         });
-        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
-        wrapper.update();
-        expect(toJson(wrapper)).toMatchSnapshot();
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("renders correctly for a loaded object without children", async () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, state: "Active" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 0 });
-        let wrapper;
-        await act(async () => {
-            wrapper = mount(<StateModal />);
+        let tree;
+        await renderer.act(async () => {
+            tree = renderer.create(<StateModal />);
+            await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
         });
-        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
-        wrapper.update();
-        expect(toJson(wrapper)).toMatchSnapshot();
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("saves data correctly", async () => {
