@@ -1,6 +1,6 @@
 import crypto = require("crypto");
 import passport = require("passport");
-import saml = require("passport-saml");
+import saml = require("@node-saml/passport-saml");
 import LocalStrategy = require("passport-local");
 import Config from "../models/Config";
 import { User, Database } from "./Database";
@@ -70,6 +70,7 @@ class Authentication {
                 // TODO: find better solution; see https://github.com/node-saml/passport-saml/issues/549
                 (done as unknown as (x, user: User | boolean) => void)(null, user);
             }.bind(this),
+            () => null,
         );
     }
 
