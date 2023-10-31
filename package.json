@@ -1,6 +1,9 @@
 {
   "name": "vudl",
   "private": true,
+  "engine": {
+    "node": ">=18.0.0"
+  },
   "comments": {
     "dev": "tsc can't be bundled into concurrently because it suppresses the logs of other processes. Still needs to be run separately."
   },
@@ -38,6 +41,6 @@
     "watch": "cd api && tsc --watch"
   },
   "devDependencies": {
-    "concurrently": "^6.0.2"
+    "concurrently": "^8"
   }
 }

@@ -1,7 +1,8 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { shallow, mount } from "enzyme";
-import toJson from "enzyme-to-json";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import renderer from "react-test-renderer";
 import EditParentsButton from "./EditParentsButton";
 
 const mockUseEditorContext = jest.fn();
@@ -39,16 +40,15 @@ describe("EditParentsButton", () => {
     });
 
     it("renders", () => {
-        const wrapper = shallow(<EditParentsButton pid={pid} />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<EditParentsButton pid={pid} />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
-    it("sets up modal on click", () => {
-        const component = mount(<EditParentsButton pid={pid} />);
-        component.find("button").simulate("click");
+    it("sets up modal on click", async () => {
+        render(<EditParentsButton pid={pid} />);
+        await userEvent.setup().click(screen.getByRole("button"));
 
         expect(editorValues.action.setParentsModalActivePid).toHaveBeenCalledWith(pid);
         expect(globalValues.action.openModal).toHaveBeenCalledWith("parents");
-        component.unmount();
     });
 });

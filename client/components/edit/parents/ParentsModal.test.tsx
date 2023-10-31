@@ -1,7 +1,8 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { shallow, mount } from "enzyme";
-import toJson from "enzyme-to-json";
+import renderer from "react-test-renderer";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import ParentsModal from "./ParentsModal";
 
 const mockUseEditorContext = jest.fn();
@@ -16,9 +17,13 @@ jest.mock("../../../context/GlobalContext", () => ({
         return mockUseGlobalContext();
     },
 }));
-jest.mock("../ObjectLoader", () => () => "ObjectLoader");
-jest.mock("./ParentList", () => () => "ParentList");
-jest.mock("./ParentPicker", () => () => "ParentPicker");
+jest.mock("@mui/material/Dialog", () => (props) => props.children);
+jest.mock("@mui/material/DialogContent", () => (props) => props.children);
+jest.mock("@mui/material/DialogTitle", () => (props) => props.children);
+jest.mock("@mui/material/Grid", () => (props) => props.children);
+jest.mock("../ObjectLoader", () => (props) => "ObjectLoader: " + JSON.stringify(props));
+jest.mock("./ParentList", () => (props) => "ParentList: " + JSON.stringify(props));
+jest.mock("./ParentPicker", () => (props) => "ParentPicker: " + JSON.stringify(props));
 
 describe("ParentsModal", () => {
     let editorValues;
@@ -45,30 +50,28 @@ describe("ParentsModal", () => {
     });
 
     it("renders correctly for a non-loaded PID", () => {
-        const wrapper = shallow(<ParentsModal />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<ParentsModal />).toJSON();
+        expect(tree).toMatchSnapshot();
         expect(globalValues.action.isModalOpen).toHaveBeenCalledWith("parents");
     });
 
     it("renders correctly for a loaded PID", () => {
         editorValues.state.objectDetailsStorage[pid] = { pid };
-        const wrapper = shallow(<ParentsModal />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<ParentsModal />).toJSON();
+        expect(tree).toMatchSnapshot();
         expect(globalValues.action.isModalOpen).toHaveBeenCalledWith("parents");
     });
 
     it("renders correctly when PID is unset", () => {
         editorValues.state.parentsModalActivePid = null;
-        const wrapper = shallow(<ParentsModal />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<ParentsModal />).toJSON();
+        expect(tree).toMatchSnapshot();
         expect(globalValues.action.isModalOpen).toHaveBeenCalledWith("parents");
     });
 
-    it("toggles the modal", () => {
-        const component = mount(<ParentsModal />);
-        component.find("button").simulate("click");
-
+    it("toggles the modal", async () => {
+        render(<ParentsModal />);
+        await userEvent.setup().click(screen.getByRole("button"));
         expect(globalValues.action.closeModal).toHaveBeenCalledWith("parents");
-        component.unmount();
     });
 });

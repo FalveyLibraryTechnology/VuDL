@@ -1,8 +1,8 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { mount, shallow } from "enzyme";
+import { fireEvent, render, screen } from "@testing-library/react";
+import renderer from "react-test-renderer";
 import { act } from "react-dom/test-utils";
-import toJson from "enzyme-to-json";
 import DatastreamLicenseContent from "./DatastreamLicenseContent";
 
 jest.mock("@mui/material/RadioGroup", () => () => "RadioGroup");
@@ -42,17 +42,15 @@ describe("DatastreamLicenseContent", () => {
     });
 
     it("renders", () => {
-        const wrapper = shallow(<DatastreamLicenseContent />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<DatastreamLicenseContent />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
     it("calls uploadLicense on click", async () => {
         datastreamOperationValues.uploadLicense.mockResolvedValue("upload worked");
-        const wrapper = mount(<DatastreamLicenseContent />);
-
         await act(async () => {
-            wrapper.find("button.uploadLicenseButton").simulate("click");
-            wrapper.update();
+            await render(<DatastreamLicenseContent />);
+            await fireEvent.click(screen.getByRole("button", { name: "Save" }));
         });
         expect(datastreamOperationValues.getLicenseKey).toHaveBeenCalled();
         expect(datastreamOperationValues.uploadLicense).toHaveBeenCalled();

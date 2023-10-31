@@ -1,57 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ObjectStatus defaults to unknown state 1`] = `
-<GlobalContextProvider>
-  <FetchContextProvider>
-    <EditorContextProvider>
-      <ObjectStatus
-        pid="foo:123"
-      >
-        <ObjectLoader
-          pid="foo:123"
-        />
-        <button
-          className="unknown"
-          onClick={[Function]}
-        >
-          <span
-            className="indicator"
-          >
-            ◉
-          </span>
-           
-          Unknown
-        </button>
-      </ObjectStatus>
-    </EditorContextProvider>
-  </FetchContextProvider>
-</GlobalContextProvider>
+[
+  <button
+    className="unknown"
+    onClick={[Function]}
+  >
+    <span
+      className="indicator"
+    >
+      ◉
+    </span>
+     
+    Unknown
+  </button>,
+  ",",
+]
 `;
 
 exports[`ObjectStatus displays the state found in the response 1`] = `
-<GlobalContextProvider>
-  <FetchContextProvider>
-    <EditorContextProvider>
-      <ObjectStatus
-        pid="foo:123"
-      >
-        <ObjectLoader
-          pid="foo:123"
-        />
-        <button
-          className="inactive"
-          onClick={[Function]}
-        >
-          <span
-            className="indicator"
-          >
-            ◉
-          </span>
-           
-          Inactive
-        </button>
-      </ObjectStatus>
-    </EditorContextProvider>
-  </FetchContextProvider>
-</GlobalContextProvider>
+[
+  <button
+    className="inactive"
+    onClick={[Function]}
+  >
+    <span
+      className="indicator"
+    >
+      ◉
+    </span>
+     
+    Inactive
+  </button>,
+  ",",
+]
 `;

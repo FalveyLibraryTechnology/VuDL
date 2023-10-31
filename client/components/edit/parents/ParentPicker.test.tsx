@@ -1,8 +1,9 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { mount, shallow } from "enzyme";
 import { act } from "react-dom/test-utils";
-import toJson from "enzyme-to-json";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import renderer from "react-test-renderer";
 import ParentPicker from "./ParentPicker";
 import { waitFor } from "@testing-library/dom";
 
@@ -32,12 +33,12 @@ const placeholderFunction = (pid: string) => {
 let errorCallback = placeholderFunction;
 jest.mock("../ObjectLoader", () => (args) => {
     errorCallback = args.errorCallback;
-    return "ObjectLoader";
+    return "ObjectLoader: " + JSON.stringify(args);
 });
 let setSelected = placeholderFunction;
 jest.mock("../PidPicker", () => (args) => {
     setSelected = args.setSelected;
-    return "PidPicker";
+    return "PidPicker: " + JSON.stringify(args);
 });
 
 describe("ParentPicker", () => {
@@ -77,25 +78,27 @@ describe("ParentPicker", () => {
     });
 
     it("renders correctly with no data loaded", () => {
-        const wrapper = shallow(<ParentPicker pid={pid} />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<ParentPicker pid={pid} />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
     it("renders correctly with a selected but unloaded parent", async () => {
-        const wrapper = mount(<ParentPicker pid={pid} />);
-        act(() => setSelected(parentPid));
-        wrapper.update();
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<ParentPicker pid={pid} />);
+        renderer.act(() => {
+            setSelected(parentPid);
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("renders correctly with a selected, loaded, title-sorted parent", async () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "title",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
-        act(() => setSelected(parentPid));
-        wrapper.update();
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<ParentPicker pid={pid} />);
+        renderer.act(() => {
+            setSelected(parentPid);
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("adds a title-sorted parent", async () => {
@@ -103,11 +106,10 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "title",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").simulate("click");
+            await userEvent.setup().click(screen.getByRole("button"));
             await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
@@ -131,11 +133,10 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "title",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").simulate("click");
+            await userEvent.setup().click(screen.getByRole("button"));
             await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
@@ -157,11 +158,10 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "title",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").simulate("click");
+            await userEvent.setup().click(screen.getByRole("button"));
             await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
@@ -182,10 +182,11 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "custom",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
-        act(() => setSelected(parentPid));
-        wrapper.update();
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<ParentPicker pid={pid} />);
+        renderer.act(() => {
+            setSelected(parentPid);
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("adds a custom-sorted parent with manual position entry", async () => {
@@ -193,14 +194,12 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "custom",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("input").simulate("change", { target: { value: "100" } });
+            fireEvent.change(screen.getByRole("textbox", { name: "Position:" }), { target: { value: "100" } });
             await Promise.resolve();
-            wrapper.update();
-            wrapper.find("button").at(1).simulate("click");
+            await userEvent.setup().click(screen.getByRole("button", { name: "Add" }));
             await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
@@ -223,16 +222,14 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "custom",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").simulate("click");
+            await userEvent.setup().click(screen.getByRole("button"));
             await waitFor(() => expect(fetchValues.action.fetchText).toHaveBeenCalled());
         });
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").at(1).simulate("click");
+            await userEvent.setup().click(screen.getByRole("button", { name: "Add" }));
             await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
@@ -263,16 +260,14 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "custom",
         };
-        const wrapper = mount(<ParentPicker pid={pid} />);
+        render(<ParentPicker pid={pid} />);
         act(() => setSelected(parentPid));
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").simulate("click");
+            await userEvent.setup().click(screen.getByRole("button"));
             await waitFor(() => expect(fetchValues.action.fetchText).toHaveBeenCalled());
         });
-        wrapper.update();
         await act(async () => {
-            wrapper.find("button").at(1).simulate("click");
+            await userEvent.setup().click(screen.getByRole("button", { name: "Add" }));
             await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
@@ -296,19 +291,18 @@ describe("ParentPicker", () => {
     });
 
     it("handles object loading errors gracefully", async () => {
-        const wrapper = mount(<ParentPicker pid={pid} />);
-        await act(async () => {
+        const tree = renderer.create(<ParentPicker pid={pid} />);
+        await renderer.act(async () => {
             setSelected(parentPid);
             await Promise.resolve();
             errorCallback(parentPid);
             await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
-        wrapper.update();
         expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Cannot load details for foo:122. Are you sure this is a valid PID?",
             open: true,
             severity: "error",
         });
-        expect(toJson(wrapper)).toMatchSnapshot();
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 });
