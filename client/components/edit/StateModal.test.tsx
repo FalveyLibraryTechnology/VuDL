@@ -1,12 +1,10 @@
 import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
-import { waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import renderer from "react-test-renderer";
 import StateModal from "./StateModal";
-import Checkbox from "@mui/material/Checkbox";
-import RadioGroup from "@mui/material/RadioGroup";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../context/EditorContext", () => ({
@@ -24,13 +22,19 @@ jest.mock("../../context/FetchContext", () => ({
 
 jest.mock("./ObjectLoader", () => (args) => JSON.stringify(args));
 
-jest.mock("@mui/material/Dialog", () => (props) => {
-    return <>
-        {"Dialog"}
-        {props.open ? "open" : "closed"}
-        {props.children}
-    </>
-});
+jest.mock(
+    "@mui/material/Dialog",
+    () =>
+        function MockDialog(props: { open: boolean; children: unknown }) {
+            return (
+                <>
+                    {"Dialog"}
+                    {props.open ? "open" : "closed"}
+                    {props.children}
+                </>
+            );
+        },
+);
 jest.mock("@mui/material/DialogTitle", () => (props) => props.children);
 jest.mock("@mui/material/DialogContent", () => (props) => props.children);
 jest.mock("@mui/material/Grid", () => (props) => props.children);
@@ -106,20 +110,11 @@ describe("StateModal", () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, state: "Inactive" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 0 });
         fetchContextValues.action.fetchText.mockResolvedValue("ok");
-        let wrapper;
         await act(async () => {
-            wrapper = mount(<StateModal />);
-        });
-        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
-        wrapper.update();
-        await act(async () => {
-            wrapper
-                .find(RadioGroup)
-                .props()
-                .onChange({ target: { value: "Active" } });
-        });
-        await act(async () => {
-            wrapper.find("button").at(1).simulate("click");
+            render(<StateModal />);
+            await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+            await userEvent.setup().click(screen.getByText("Active"));
+            await userEvent.setup().click(screen.getByText("Save"));
         });
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
@@ -140,14 +135,10 @@ describe("StateModal", () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, state: "Inactive" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 0 });
         fetchContextValues.action.fetchText.mockResolvedValue("ok");
-        let wrapper;
         await act(async () => {
-            wrapper = mount(<StateModal />);
-        });
-        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
-        wrapper.update();
-        await act(async () => {
-            wrapper.find("button").at(1).simulate("click");
+            render(<StateModal />);
+            await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+            await userEvent.setup().click(screen.getByText("Save"));
         });
         await waitFor(() =>
             expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
@@ -165,20 +156,11 @@ describe("StateModal", () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, state: "Inactive" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 0 });
         fetchContextValues.action.fetchText.mockResolvedValue("not ok");
-        let wrapper;
         await act(async () => {
-            wrapper = mount(<StateModal />);
-        });
-        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
-        wrapper.update();
-        await act(async () => {
-            wrapper
-                .find(RadioGroup)
-                .props()
-                .onChange({ target: { value: "Active" } });
-        });
-        await act(async () => {
-            wrapper.find("button").at(1).simulate("click");
+            render(<StateModal />);
+            await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+            await userEvent.setup().click(screen.getByText("Active"));
+            await userEvent.setup().click(screen.getByText("Save"));
         });
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
@@ -199,26 +181,12 @@ describe("StateModal", () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, state: "Inactive" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 1, docs: [{ id: "foo:125" }] });
         fetchContextValues.action.fetchText.mockResolvedValue("not ok");
-        let wrapper;
         await act(async () => {
-            wrapper = mount(<StateModal />);
-        });
-        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
-        wrapper.update();
-        await act(async () => {
-            wrapper
-                .find(RadioGroup)
-                .props()
-                .onChange({ target: { value: "Active" } });
-        });
-        await act(async () => {
-            wrapper
-                .find(Checkbox)
-                .props()
-                .onChange({ target: { checked: true } });
-        });
-        await act(async () => {
-            wrapper.find("button").at(1).simulate("click");
+            render(<StateModal />);
+            await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+            await userEvent.setup().click(screen.getByText("Active"));
+            await userEvent.setup().click(screen.getByText("Update 1 children to match"));
+            await userEvent.setup().click(screen.getByText("Save"));
         });
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
@@ -239,26 +207,12 @@ describe("StateModal", () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, state: "Inactive" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 1, docs: [{ id: "foo:125" }] });
         fetchContextValues.action.fetchText.mockResolvedValue("ok");
-        let wrapper;
         await act(async () => {
-            wrapper = mount(<StateModal />);
-        });
-        await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
-        wrapper.update();
-        await act(async () => {
-            wrapper
-                .find(RadioGroup)
-                .props()
-                .onChange({ target: { value: "Active" } });
-        });
-        await act(async () => {
-            wrapper
-                .find(Checkbox)
-                .props()
-                .onChange({ target: { checked: true } });
-        });
-        await act(async () => {
-            wrapper.find("button").at(1).simulate("click");
+            render(<StateModal />);
+            await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
+            await userEvent.setup().click(screen.getByText("Active"));
+            await userEvent.setup().click(screen.getByText("Update 1 children to match"));
+            await userEvent.setup().click(screen.getByText("Save"));
         });
         await waitFor(() =>
             expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
