@@ -70,6 +70,7 @@ class Authentication {
                 // TODO: find better solution; see https://github.com/node-saml/passport-saml/issues/549
                 (done as unknown as (x, user: User | boolean) => void)(null, user);
             }.bind(this),
+            // TODO: implement a logout function here:
             () => null,
         );
     }
