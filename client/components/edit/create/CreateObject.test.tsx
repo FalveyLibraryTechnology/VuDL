@@ -2,8 +2,9 @@ import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { act } from "react-dom/test-utils";
 import { waitFor } from "@testing-library/react";
-import { mount, render } from "enzyme";
-import toJson from "enzyme-to-json";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import renderer from "react-test-renderer";
 import CreateObject from "./CreateObject";
 import { FetchContextProvider } from "../../../context/FetchContext";
 
@@ -65,40 +66,47 @@ describe("CreateObject", () => {
     }
 
     it("renders appropriately with default settings", async () => {
-        const wrapper = render(getCreateObjectToTest({}));
-        expect(toJson(wrapper)).toMatchSnapshot();
+        let tree;
+        await renderer.act(async () => {
+            tree = renderer.create(getCreateObjectToTest({}));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
-    it("renders appropriately with noParent and parent change enabled", () => {
+    it("renders appropriately with noParent and parent change enabled", async () => {
         props.allowNoParentPid = true;
-        const wrapper = render(getCreateObjectToTest(props));
-        expect(toJson(wrapper)).toMatchSnapshot();
+        let tree;
+        await renderer.act(async () => {
+            tree = renderer.create(getCreateObjectToTest(props));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
-    it("renders appropriately with editing disabled", () => {
+    it("renders appropriately with editing disabled", async () => {
         props.parentPid = "foo:1234";
         props.allowChangeParentPid = false;
-        const wrapper = render(getCreateObjectToTest(props));
-        expect(toJson(wrapper)).toMatchSnapshot();
+        let tree;
+        await renderer.act(async () => {
+            tree = renderer.create(getCreateObjectToTest(props));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+        });
+        expect(tree.toJSON()).toMatchSnapshot();
     });
 
     it("submits appropriate data in default case", async () => {
-        let wrapper;
-        await waitFor(() => {
-            wrapper = mount(getCreateObjectToTest(props));
-        });
-        act(() => {
+        await act(async () => {
+            render(getCreateObjectToTest(props));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
             nodeSelectFunction(new Event("event-foo"), "model-foo");
             // Test that category select has no effect:
             nodeSelectFunction(new Event("event-foo"), "__categoryWillBeIgnored");
         });
-        wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
-        wrapper.find("input[name='parent']").simulate("change", { target: { value: "foo:1234" } });
+        fireEvent.change(screen.getByRole("textbox", { name: "Title" }), { target: { value: "Test Title" } });
+        fireEvent.change(screen.getByRole("textbox", { name: "Parent ID" }), { target: { value: "foo:1234" } });
         await act(async () => {
-            await waitFor(() => {
-                wrapper.find("form").simulate("submit");
-            });
-            wrapper.update();
+            await userEvent.setup().click(screen.getByRole("button", { name: "Create Object" }));
         });
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
         expect(submittedData).toEqual({
@@ -116,24 +124,20 @@ describe("CreateObject", () => {
             method: "POST",
             mode: "cors",
         });
-        expect(wrapper.text()).toContain("Object created:");
+        expect(screen.queryAllByText("Object created:")).toHaveLength(1);
     });
 
     it("pre-fills parent pid using parentPid property", async () => {
         props.parentPid = "foo:1234";
         props.allowChangeParentPid = false;
-        let wrapper;
-        await waitFor(() => {
-            wrapper = mount(getCreateObjectToTest(props));
-        });
-        act(() => {
+        await act(async () => {
+            render(getCreateObjectToTest(props));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
             nodeSelectFunction(new Event("event-foo"), "model-foo");
         });
-        wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
+        fireEvent.change(screen.getByRole("textbox", { name: "Title" }), { target: { value: "Test Title" } });
         await act(async () => {
-            await waitFor(() => {
-                wrapper.find("form").simulate("submit");
-            });
+            await userEvent.setup().click(screen.getByRole("button", { name: "Create Object" }));
         });
         expect(treeItems.length).toEqual(3); // make sure setFakeModels is working
         expect(submittedData).toEqual({
@@ -156,20 +160,17 @@ describe("CreateObject", () => {
     it("submits appropriate data with active state and no parent", async () => {
         props.parentPid = "foo:1234";
         props.allowNoParentPid = true;
-        let wrapper;
-        await waitFor(() => {
-            wrapper = mount(getCreateObjectToTest(props));
-        });
-        act(() => {
+        await act(async () => {
+            render(getCreateObjectToTest(props));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
             nodeSelectFunction(new Event("event-foo"), "model-foo");
         });
-        wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
-        wrapper.find("input[name='state'][value='Active']").simulate("change", { target: { value: "Active" } });
-        wrapper.find("input[name='noParent']").simulate("change", { target: { checked: true } });
+        fireEvent.change(screen.getByRole("textbox", { name: "Title" }), { target: { value: "Test Title" } });
+        const user = userEvent.setup();
         await act(async () => {
-            await waitFor(() => {
-                wrapper.find("form").simulate("submit");
-            });
+            await user.click(screen.getByRole("radio", { name: "Active" }));
+            await user.click(screen.getByRole("checkbox", { name: "No parent PID" }));
+            await user.click(screen.getByRole("button", { name: "Create Object" }));
         });
         expect(submittedData).toEqual({
             body: JSON.stringify({
@@ -191,20 +192,17 @@ describe("CreateObject", () => {
     it("checks no parent when parent pid is cleared", async () => {
         props.parentPid = "foo:1234";
         props.allowNoParentPid = true;
-        let wrapper;
-        await waitFor(() => {
-            wrapper = mount(getCreateObjectToTest(props));
-        });
-        act(() => {
+        await act(async () => {
+            render(getCreateObjectToTest(props));
+            await waitFor(() => expect(global.fetch).toHaveBeenCalled());
             nodeSelectFunction(new Event("event-foo"), "model-foo");
         });
-        wrapper.find("input[name='title']").simulate("change", { target: { value: "Test Title" } });
-        wrapper.find("input[name='state'][value='Active']").simulate("change", { target: { value: "Active" } });
-        wrapper.find("input[name='parent']").simulate("change", { target: { value: "" } });
+        const user = userEvent.setup();
         await act(async () => {
-            await waitFor(() => {
-                wrapper.find("form").simulate("submit");
-            });
+            fireEvent.change(screen.getByRole("textbox", { name: "Title" }), { target: { value: "Test Title" } });
+            await user.click(screen.getByRole("radio", { name: "Active" }));
+            fireEvent.change(screen.getByRole("textbox", { name: "Parent ID" }), { target: { value: "" } });
+            await user.click(screen.getByRole("button", { name: "Create Object" }));
         });
         expect(submittedData).toEqual({
             body: JSON.stringify({

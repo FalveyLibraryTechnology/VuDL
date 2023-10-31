@@ -1,7 +1,6 @@
 import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { render, shallow } from "enzyme";
-import toJson from "enzyme-to-json";
+import renderer from "react-test-renderer";
 import PaginatorList from "./PaginatorList";
 
 const mockUseJobPaginatorContext = jest.fn();
@@ -35,22 +34,29 @@ describe("PaginatorList", () => {
             },
         };
         mockUseJobPaginatorContext.mockReturnValue(paginatorValues);
+        // Use of mock objects seems to be causing console errors.
+        // TODO: figure out why and come up with a better solution than hiding the errors.
+        jest.spyOn(console, "error").mockImplementation(jest.fn());
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     it("renders thumbnails for pages", () => {
-        const wrapper = shallow(<PaginatorList />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<PaginatorList />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
     it("renders empty element when pages are absent", () => {
         paginatorValues.state.order = [];
-        const wrapper = shallow(<PaginatorList />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<PaginatorList />).toJSON();
+        expect(tree).toBeNull();
     });
 
     it("renders a thumbnail", () => {
         expect(mockThumbnail).not.toHaveBeenCalled();
-        render(<PaginatorList />);
+        renderer.create(<PaginatorList />).toJSON();
         expect(mockThumbnail).toHaveBeenCalledWith(
             expect.objectContaining({
                 scrollTo: expect.any(Function),

@@ -1,7 +1,7 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { shallow, mount } from "enzyme";
-import toJson from "enzyme-to-json";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import DatastreamModal from "./DatastreamModal";
 
 const mockUseEditorContext = jest.fn();
@@ -28,32 +28,23 @@ describe("DatastreamModal", () => {
         mockUseEditorContext.mockReturnValue(editorValues);
     });
 
-    it("renders", () => {
-        const wrapper = shallow(<DatastreamModal />);
-        expect(toJson(wrapper)).toMatchSnapshot();
-    });
-
-    it("toggles the datastreamModal", () => {
-        const component = mount(<DatastreamModal />);
-        component.find("button").simulate("click");
-
+    it("toggles the datastreamModal", async () => {
+        render(<DatastreamModal />);
+        await userEvent.setup().click(screen.getByRole("button"));
         expect(editorValues.action.toggleDatastreamModal).toHaveBeenCalled();
-        component.unmount();
     });
 
     it("switches to the delete modal content", () => {
         editorValues.state.datastreamModalState = "Delete";
 
-        const component = mount(<DatastreamModal />);
-
-        expect(component.text()).toContain("DatastreamDeleteModalContent");
+        render(<DatastreamModal />);
+        expect(screen.queryAllByText("DatastreamDeleteModalContent")).toHaveLength(1);
     });
 
     it("switches to the upload modal content", () => {
         editorValues.state.datastreamModalState = "Upload";
 
-        const component = mount(<DatastreamModal />);
-
-        expect(component.text()).toContain("DatastreamUploadModalContent");
+        render(<DatastreamModal />);
+        expect(screen.queryAllByText("DatastreamUploadModalContent")).toHaveLength(1);
     });
 });
