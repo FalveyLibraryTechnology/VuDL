@@ -4,15 +4,18 @@ import Config from "../models/Config";
 
 class Solr {
     private static instance: Solr;
+    cacheDir: boolean | string;
     baseUrl: string;
 
-    constructor(baseUrl: string) {
+    constructor(baseUrl: string, cacheDir: boolean | string = false) {
         this.baseUrl = baseUrl;
+        this.cacheDir = cacheDir;
     }
 
     public static getInstance(): Solr {
         if (!Solr.instance) {
-            Solr.instance = new Solr(Config.getInstance().solrUrl);
+            const config = Config.getInstance();
+            Solr.instance = new Solr(config.solrUrl, config.solrDocumentCacheDir);
         }
         return Solr.instance;
     }
@@ -48,7 +51,16 @@ class Solr {
         return this._request("get", core + "/select?q=" + encodeURIComponent(solrQuery) + extras, null, {}, log);
     }
 
+    /**
+     * Returns the path to the PID file in the document cache if caching is enabled, false otherwise.
+     *
+     * @param pid PID being indexed
+     * @returns boolean | string
+     */
     protected getDocumentCachePath(pid: string): boolean | string {
+        if (this.cacheDir === false) {
+            return false;
+        }
         // Create a file path that will prevent too many files from being stored in the
         // same directory together:
         const [namespace, number] = pid.split(":");
@@ -57,7 +69,7 @@ class Solr {
         const chunk1 = paddedNumber.substring(len - 9, len - 6);
         const chunk2 = paddedNumber.substring(len - 6, len - 3);
         const chunk3 = paddedNumber.substring(len - 3, len);
-        return `${namespace}/${chunk1}/${chunk2}/${chunk3}/${number}.json`;
+        return `${this.cacheDir}/${namespace}/${chunk1}/${chunk2}/${chunk3}/${number}.json`;
     }
 
     public async deleteRecord(core: string, pid: string): Promise<NeedleResponse> {

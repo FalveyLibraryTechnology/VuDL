@@ -48,6 +48,11 @@ vufind_url = "https://myserver"
 solr_url = "http://localhost:8983/solr"
 solr_core = "biblio"
 
+# Directory where you can cache documents as they are sent to Solr; this cache can
+# then be used to quickly rebuild the Solr index without having to rebuild all of
+# the data from Fedora. Comment out to disable caching.
+#solr_document_cache_dir = /path/to/solr/cache/directory
+
 # Temp directory used for PDF generation
 pdf_directory = "/tmp/"
 
