@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Fixed
 
 - Date normalization bug (October is no longer converted to January).
+- Missing exception messages no longer cause fatal errors in messenger routes.
 
 ## 2.0 - 2023-07-12
 
