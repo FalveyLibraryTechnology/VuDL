@@ -1,4 +1,3 @@
-import Config from "../models/Config";
 import SolrCache from "./SolrCache";
 import * as fs from "fs";
 import glob = require("glob");
