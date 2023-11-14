@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- Optional on-disk caching of Solr documents (see solr_document_cache_dir in vudl.ini).
 
 ### Changed
 
