@@ -129,6 +129,10 @@ class Config {
         return this.ini["solr_url"] ?? "http://localhost:8983/solr";
     }
 
+    get solrDocumentCacheDir(): boolean | string {
+        return this.ini["solr_document_cache_dir"] ?? false;
+    }
+
     get allowedOrigins(): string[] {
         return this.ini["allowed_origins"] ?? [];
     }

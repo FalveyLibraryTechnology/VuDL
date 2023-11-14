@@ -141,6 +141,14 @@ describe("QueueManager", () => {
         });
     });
 
+    describe("performCacheReindexOperation", () => {
+        it("will pass along values as expected", () => {
+            const spy = jest.spyOn(queueManager, "addToQueue").mockImplementation(jest.fn());
+            queueManager.performCacheReindexOperation("foo");
+            expect(spy).toHaveBeenCalledWith("reindex", { file: "foo" });
+        });
+    });
+
     describe("queueMetadataOperation", () => {
         let jobs;
         let getJobsSpy;
