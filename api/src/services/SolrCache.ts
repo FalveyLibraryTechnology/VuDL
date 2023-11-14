@@ -1,5 +1,6 @@
 import Config from "../models/Config";
 import { existsSync, mkdirSync, rmSync, writeFileSync } from "fs";
+import glob = require("glob");
 import path = require("path");
 
 class SolrCache {
@@ -58,6 +59,24 @@ class SolrCache {
             mkdirSync(dirname, { recursive: true });
         }
         writeFileSync(file, data);
+    }
+
+    /**
+     * Returns an array of JSON files in the cache when cache is enabled, false otherwise.
+     */
+    public getDocumentsFromCache(): Array<string> | false {
+        if (this.cacheDir === false) {
+            return false;
+        }
+        let pattern = this.cacheDir + "/**/**/**/*.json";
+        const options: Record<string, unknown> = { nocase: true };
+        // Special case for Windows -- we need to account for drive letters:
+        const colonIndex = pattern.indexOf(":");
+        if (colonIndex > -1) {
+            options.root = pattern.substring(0, colonIndex + 2);
+            pattern = pattern.substring(colonIndex + 1);
+        }
+        return glob.sync(pattern, options);
     }
 }
 
