@@ -48,15 +48,35 @@ class Solr {
         return this._request("get", core + "/select?q=" + encodeURIComponent(solrQuery) + extras, null, {}, log);
     }
 
+    protected getDocumentCachePath(pid: string): boolean | string {
+        // Create a file path that will prevent too many files from being stored in the
+        // same directory together:
+        const [namespace, number] = pid.split(":");
+        const paddedNumber = "0000000000" + number;
+        const len = paddedNumber.length;
+        const chunk1 = paddedNumber.substring(len - 9, len - 6);
+        const chunk2 = paddedNumber.substring(len - 6, len - 3);
+        const chunk3 = paddedNumber.substring(len - 3, len);
+        return `${namespace}/${chunk1}/${chunk2}/${chunk3}/${number}.json`;
+    }
+
     public async deleteRecord(core: string, pid: string): Promise<NeedleResponse> {
         // Strip double quotes from PID -- they should never be present, and it protects
         // against malicious query manipulation.
         const data = JSON.stringify({ delete: { query: 'id:"' + pid.replace(/["]/g, "") + '"' } });
+        const cacheFile = this.getDocumentCachePath(pid);
+        if (cacheFile !== false) {
+            console.log(cacheFile);
+        }
         return this.updateSolr(core, data);
     }
 
     public async indexRecord(core: string, _data: Record<string, unknown>): Promise<NeedleResponse> {
         const data = JSON.stringify({ add: { doc: _data } });
+        const cacheFile = this.getDocumentCachePath(_data.id as string);
+        if (cacheFile !== false) {
+            console.log(cacheFile);
+        }
         return this.updateSolr(core, data);
     }
 
