@@ -482,6 +482,7 @@ lockDuration = 30000
 #index = "vudl-light"
 #ingest = "vudl-heavy"
 #metadata = "vudl-medium"
+#reindex = "vudl-light"
 
 # This section controls how BullMQ connects to Redis.
 # See the ioredis documentation (https://ioredis.readthedocs.io/en/latest/API/) for available options.

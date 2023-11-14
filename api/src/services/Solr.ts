@@ -2,6 +2,7 @@ import http = require("needle");
 import { NeedleResponse } from "./interfaces";
 import Config from "../models/Config";
 import SolrCache from "./SolrCache";
+import { readFileSync } from "fs";
 
 class Solr {
     private static instance: Solr;
@@ -62,6 +63,11 @@ class Solr {
     public async indexRecord(core: string, _data: Record<string, unknown>): Promise<NeedleResponse> {
         const data = JSON.stringify({ add: { doc: _data } });
         this.cache.writeToCacheIfEnabled(_data.id as string, data);
+        return this.updateSolr(core, data);
+    }
+
+    public async reindexFromFile(core: string, filename): Promise<NeedleResponse> {
+        const data = readFileSync(filename).toString();
         return this.updateSolr(core, data);
     }
 
