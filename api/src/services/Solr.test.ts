@@ -16,7 +16,7 @@ describe("Solr", () => {
         const updateSpy = jest.spyOn(solr, "updateSolr").mockImplementation(jest.fn());
         const cacheSpy = jest.spyOn(SolrCache.getInstance(), "purgeFromCacheIfEnabled").mockImplementation(jest.fn());
         solr.deleteRecord("foo", "bar");
-        expect(updateSpy).toHaveBeenCalledWith("foo", "{\"delete\":{\"query\":\"id:\\\"bar\\\"\"}}");
+        expect(updateSpy).toHaveBeenCalledWith("foo", '{"delete":{"query":"id:\\"bar\\""}}');
         expect(cacheSpy).toHaveBeenCalledWith("bar");
     });
 
@@ -24,7 +24,7 @@ describe("Solr", () => {
         const updateSpy = jest.spyOn(solr, "updateSolr").mockImplementation(jest.fn());
         const cacheSpy = jest.spyOn(SolrCache.getInstance(), "writeToCacheIfEnabled").mockImplementation(jest.fn());
         solr.indexRecord("foo", { id: "bar", foo: "baz" });
-        const expectedDoc = "{\"add\":{\"doc\":{\"id\":\"bar\",\"foo\":\"baz\"}}}";
+        const expectedDoc = '{"add":{"doc":{"id":"bar","foo":"baz"}}}';
         expect(updateSpy).toHaveBeenCalledWith("foo", expectedDoc);
         expect(cacheSpy).toHaveBeenCalledWith("bar", expectedDoc);
     });
