@@ -1,8 +1,6 @@
 import http = require("needle");
 import { NeedleResponse } from "./interfaces";
 import Config from "../models/Config";
-import { existsSync, mkdirSync, rmSync, writeFileSync } from "fs";
-import path = require("path");
 import SolrCache from "./SolrCache";
 
 class Solr {
