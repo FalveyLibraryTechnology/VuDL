@@ -1,6 +1,8 @@
 import http = require("needle");
 import { NeedleResponse } from "./interfaces";
 import Config from "../models/Config";
+import { existsSync, mkdirSync, rmSync, writeFileSync } from "fs";
+import path = require("path");
 
 class Solr {
     private static instance: Solr;
@@ -55,9 +57,9 @@ class Solr {
      * Returns the path to the PID file in the document cache if caching is enabled, false otherwise.
      *
      * @param pid PID being indexed
-     * @returns boolean | string
+     * @returns false | string
      */
-    protected getDocumentCachePath(pid: string): boolean | string {
+    protected getDocumentCachePath(pid: string): false | string {
         if (this.cacheDir === false) {
             return false;
         }
@@ -72,23 +74,38 @@ class Solr {
         return `${this.cacheDir}/${namespace}/${chunk1}/${chunk2}/${chunk3}/${number}.json`;
     }
 
+    protected purgeFromCacheIfEnabled(pid: string): void {
+        const cacheFile = this.getDocumentCachePath(pid);
+        if (cacheFile !== false && existsSync(cacheFile as string)) {
+            rmSync(cacheFile as string);
+        }
+    }
+
     public async deleteRecord(core: string, pid: string): Promise<NeedleResponse> {
         // Strip double quotes from PID -- they should never be present, and it protects
         // against malicious query manipulation.
         const data = JSON.stringify({ delete: { query: 'id:"' + pid.replace(/["]/g, "") + '"' } });
-        const cacheFile = this.getDocumentCachePath(pid);
-        if (cacheFile !== false) {
-            console.log(cacheFile);
-        }
+        this.purgeFromCacheIfEnabled(pid);
         return this.updateSolr(core, data);
+    }
+
+    protected writeToCacheIfEnabled(pid: string, data: string): void {
+        // Get filename; if it's false, cache is disabled:
+        const file = this.getDocumentCachePath(pid);
+        if (file === false) {
+            return;
+        }
+
+        const dirname = path.dirname(file);
+        if (!existsSync(dirname)) {
+            mkdirSync(dirname, { recursive: true });
+        }
+        writeFileSync(file, data);
     }
 
     public async indexRecord(core: string, _data: Record<string, unknown>): Promise<NeedleResponse> {
         const data = JSON.stringify({ add: { doc: _data } });
-        const cacheFile = this.getDocumentCachePath(_data.id as string);
-        if (cacheFile !== false) {
-            console.log(cacheFile);
-        }
+        this.writeToCacheIfEnabled(_data.id as string, data);
         return this.updateSolr(core, data);
     }
 
