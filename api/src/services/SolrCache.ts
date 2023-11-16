@@ -1,9 +1,13 @@
 import Config from "../models/Config";
-import { existsSync, mkdirSync, rmSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import glob = require("glob");
 import path = require("path");
 
-class SolrCache {
+export interface SolrAddDoc {
+    add?: { doc?: Record<string, unknown> };
+}
+
+export class SolrCache {
     private static instance: SolrCache;
     cacheDir: boolean | string;
 
@@ -47,18 +51,27 @@ class SolrCache {
         }
     }
 
+    /**
+     * Write a file to disk, creating the full directory path if necessary.
+     *
+     * @param file Filename
+     * @param data Data to save
+     */
+    protected writeFile(file: string, data: string): void {
+        const dirname = path.dirname(file);
+        if (!existsSync(dirname)) {
+            mkdirSync(dirname, { recursive: true });
+        }
+        writeFileSync(file, data);
+    }
+
     public writeToCacheIfEnabled(pid: string, data: string): void {
         // Get filename; if it's false, cache is disabled:
         const file = this.getDocumentCachePath(pid);
         if (file === false) {
             return;
         }
-
-        const dirname = path.dirname(file);
-        if (!existsSync(dirname)) {
-            mkdirSync(dirname, { recursive: true });
-        }
-        writeFileSync(file, data);
+        this.writeFile(file, data);
     }
 
     /**
@@ -77,6 +90,43 @@ class SolrCache {
             pattern = pattern.substring(colonIndex + 1);
         }
         return glob.sync(pattern, options);
+    }
+
+    public readSolrAddDocFromFile(file: string): SolrAddDoc {
+        return JSON.parse(readFileSync(file).toString());
+    }
+
+    public exportCombinedFiles(targetDir: string, batchSize = 1000): void {
+        const docs = this.getDocumentsFromCache();
+
+        // No contents?  Nothing to do.
+        if (docs === false) {
+            return;
+        }
+
+        let document: Array<object> = [];
+        let currentBatch: { file: string; size: number } = { file: null, size: 0 };
+        docs.forEach((file) => {
+            const nextObject = this.readSolrAddDocFromFile(file);
+            if (nextObject?.add?.doc === undefined) {
+                console.error(`Fatal error: Unexpected data in ${file}`);
+                return;
+            }
+            document.push(nextObject.add.doc);
+            if (currentBatch.file === null) {
+                currentBatch.file = file.replace(new RegExp("^" + this.cacheDir), targetDir);
+                console.log(`Starting batch ${currentBatch.file}`);
+            }
+            currentBatch.size++;
+            if (currentBatch.size == batchSize) {
+                this.writeFile(currentBatch.file, JSON.stringify(document));
+                document = [];
+                currentBatch = { file: null, size: 0 };
+            }
+        });
+        if (currentBatch.size > 0) {
+            this.writeFile(currentBatch.file, JSON.stringify(document));
+        }
     }
 }
 
