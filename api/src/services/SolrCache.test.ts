@@ -1,4 +1,4 @@
-import SolrCache from "./SolrCache";
+import { SolrAddDoc, SolrCache } from "./SolrCache";
 import * as fs from "fs";
 import glob = require("glob");
 
@@ -21,6 +21,7 @@ describe("SolrCache", () => {
         const rmSpy = jest.spyOn(fs, "rmSync").mockImplementation(jest.fn());
         cache.purgeFromCacheIfEnabled("vudl:123");
         cache.writeToCacheIfEnabled("vudl:123", "foo");
+        cache.exportCombinedFiles("/bar", 2);
         expect(existsSpy).not.toHaveBeenCalled();
         expect(mkdirSpy).not.toHaveBeenCalled();
         expect(writeFileSpy).not.toHaveBeenCalled();
@@ -76,5 +77,50 @@ describe("SolrCache", () => {
         const list = cache.getDocumentsFromCache();
         expect(list).toEqual(fakeOutput);
         expect(globSpy).toHaveBeenCalledWith("/foo/**/**/**/*.json", { nocase: true, root: "c:/" });
+    });
+
+    it("exports and combines the cache", () => {
+        const cache = new SolrCache("/foo");
+        const docsSpy = jest
+            .spyOn(cache, "getDocumentsFromCache")
+            .mockReturnValue(["/foo/one", "/foo/two", "/foo/three"]);
+        const readSpy = jest.spyOn(cache, "readSolrAddDocFromFile").mockImplementation((file: string): SolrAddDoc => {
+            return { add: { doc: { file } } };
+        });
+        const existsSpy = jest.spyOn(fs, "existsSync").mockReturnValue(true);
+        const writeSpy = jest.spyOn(fs, "writeFileSync").mockImplementation(jest.fn());
+        const logSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
+        cache.exportCombinedFiles("/bar", 2);
+        expect(docsSpy).toHaveBeenCalledTimes(1);
+        expect(readSpy).toHaveBeenCalledTimes(3);
+        expect(existsSpy).toHaveBeenCalled();
+        expect(writeSpy).toHaveBeenCalledTimes(2);
+        expect(writeSpy).toHaveBeenCalledWith("/bar/one", '[{"file":"/foo/one"},{"file":"/foo/two"}]');
+        expect(writeSpy).toHaveBeenCalledWith("/bar/three", '[{"file":"/foo/three"}]');
+        expect(logSpy).toHaveBeenCalledTimes(2);
+        expect(logSpy).toHaveBeenCalledWith("Starting batch /bar/one");
+        expect(logSpy).toHaveBeenCalledWith("Starting batch /bar/three");
+    });
+
+    it("skips and reports bad files while exporting", () => {
+        const cache = new SolrCache("/foo");
+        const docsSpy = jest
+            .spyOn(cache, "getDocumentsFromCache")
+            .mockReturnValue(["/foo/one", "/foo/two", "/foo/three"]);
+        const readSpy = jest.spyOn(cache, "readSolrAddDocFromFile").mockImplementation(jest.fn());
+        const existsSpy = jest.spyOn(fs, "existsSync").mockImplementation(jest.fn());
+        const writeSpy = jest.spyOn(fs, "writeFileSync").mockImplementation(jest.fn());
+        const logSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
+        const errorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
+        cache.exportCombinedFiles("/bar", 2);
+        expect(docsSpy).toHaveBeenCalledTimes(1);
+        expect(readSpy).toHaveBeenCalledTimes(3);
+        expect(existsSpy).not.toHaveBeenCalled();
+        expect(writeSpy).not.toHaveBeenCalled();
+        expect(logSpy).not.toHaveBeenCalled();
+        expect(errorSpy).toHaveBeenCalledTimes(3);
+        expect(errorSpy).toHaveBeenCalledWith("Fatal error: Unexpected data in /foo/one");
+        expect(errorSpy).toHaveBeenCalledWith("Fatal error: Unexpected data in /foo/two");
+        expect(errorSpy).toHaveBeenCalledWith("Fatal error: Unexpected data in /foo/three");
     });
 });

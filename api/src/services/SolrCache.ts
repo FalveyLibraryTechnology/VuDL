@@ -3,7 +3,11 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import glob = require("glob");
 import path = require("path");
 
-class SolrCache {
+export interface SolrAddDoc {
+    add?: { doc?: Record<string, unknown> };
+}
+
+export class SolrCache {
     private static instance: SolrCache;
     cacheDir: boolean | string;
 
@@ -88,6 +92,10 @@ class SolrCache {
         return glob.sync(pattern, options);
     }
 
+    public readSolrAddDocFromFile(file: string): SolrAddDoc {
+        return JSON.parse(readFileSync(file).toString());
+    }
+
     public exportCombinedFiles(targetDir: string, batchSize = 1000): void {
         const docs = this.getDocumentsFromCache();
 
@@ -99,8 +107,8 @@ class SolrCache {
         let document: Array<object> = [];
         let currentBatch: { file: string; size: number } = { file: null, size: 0 };
         docs.forEach((file) => {
-            const nextObject = JSON.parse(readFileSync(file).toString());
-            if (nextObject?.add?.doc === null) {
+            const nextObject = this.readSolrAddDocFromFile(file);
+            if (nextObject?.add?.doc === undefined) {
                 console.error(`Fatal error: Unexpected data in ${file}`);
                 return;
             }
