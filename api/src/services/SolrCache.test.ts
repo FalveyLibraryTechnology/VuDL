@@ -21,7 +21,7 @@ describe("SolrCache", () => {
         const rmSpy = jest.spyOn(fs, "rmSync").mockImplementation(jest.fn());
         cache.purgeFromCacheIfEnabled("vudl:123");
         cache.writeToCacheIfEnabled("vudl:123", "foo");
-        cache.exportCombinedFiles("/bar", 2);
+        cache.exportCombinedFiles("/bar");
         expect(existsSpy).not.toHaveBeenCalled();
         expect(mkdirSpy).not.toHaveBeenCalled();
         expect(writeFileSpy).not.toHaveBeenCalled();
@@ -122,5 +122,12 @@ describe("SolrCache", () => {
         expect(errorSpy).toHaveBeenCalledWith("Fatal error: Unexpected data in /foo/one");
         expect(errorSpy).toHaveBeenCalledWith("Fatal error: Unexpected data in /foo/two");
         expect(errorSpy).toHaveBeenCalledWith("Fatal error: Unexpected data in /foo/three");
+    });
+
+    it("can read Solr docs from disk", () => {
+        const cache = new SolrCache();
+        const readSpy = jest.spyOn(fs, "readFileSync").mockReturnValue('{"add":{"doc":{}}}');
+        expect(cache.readSolrAddDocFromFile("foo")).toEqual({ add: { doc: {} } });
+        expect(readSpy).toHaveBeenCalledWith("foo");
     });
 });
