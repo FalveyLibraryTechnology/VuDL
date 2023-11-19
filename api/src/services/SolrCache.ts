@@ -23,14 +23,18 @@ export class SolrCache {
         return SolrCache.instance;
     }
 
+    public isEnabled(): boolean {
+        return this.cacheDir !== false;
+    }
+
     /**
      * Returns the path to the PID file in the document cache if caching is enabled, false otherwise.
      *
      * @param pid PID being indexed
      * @returns false | string
      */
-    public getDocumentCachePath(pid: string): false | string {
-        if (this.cacheDir === false) {
+    public getDocumentCachePath(pid: string, extension: string = "json"): false | string {
+        if (!this.isEnabled()) {
             return false;
         }
         // Create a file path that will prevent too many files from being stored in the
@@ -41,7 +45,34 @@ export class SolrCache {
         const chunk1 = paddedNumber.substring(len - 9, len - 6);
         const chunk2 = paddedNumber.substring(len - 6, len - 3);
         const chunk3 = paddedNumber.substring(len - 3, len);
-        return `${this.cacheDir}/${namespace}/${chunk1}/${chunk2}/${chunk3}/${number}.json`;
+        return `${this.cacheDir}/${namespace}/${chunk1}/${chunk2}/${chunk3}/${number}.${extension}`;
+    }
+
+    public getLockFileForPid(pid: string, action: string): string {
+        if (!this.isEnabled()) {
+            throw new Error("getLockFileForPid not supported when cache disabled");
+        }
+        return this.getDocumentCachePath(pid, action + ".lock") as string;
+    }
+
+    public lockPidIfEnabled(pid: string, action: string): void {
+        if (this.isEnabled()) {
+            writeFileSync(this.getLockFileForPid(pid, action), "");
+        }
+    }
+
+    public unlockPidIfEnabled(pid: string, action: string): void {
+        if (!this.isEnabled()) {
+            return;
+        }
+        const file = this.getLockFileForPid(pid, action);
+        if (existsSync(file)) {
+            rmSync(file);
+        }
+    }
+
+    public isPidLocked(pid: string, action: string) {
+        return existsSync(this.getLockFileForPid(pid, action));
     }
 
     public purgeFromCacheIfEnabled(pid: string): void {
@@ -78,7 +109,7 @@ export class SolrCache {
      * Returns an array of JSON files in the cache when cache is enabled, false otherwise.
      */
     public getDocumentsFromCache(): Array<string> | false {
-        if (this.cacheDir === false) {
+        if (!this.isEnabled()) {
             return false;
         }
         let pattern = this.cacheDir + "/**/**/**/*.json";

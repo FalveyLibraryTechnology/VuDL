@@ -1,6 +1,7 @@
 import { Job } from "bullmq";
 import QueueJob from "./QueueJobInterface";
 import SolrIndexer from "../services/SolrIndexer";
+import SolrCache from "../services/SolrCache";
 
 class Index implements QueueJob {
     async run(job: Job): Promise<void> {
@@ -9,6 +10,11 @@ class Index implements QueueJob {
             throw new Error("No pid provided!");
         }
         const indexer = SolrIndexer.getInstance();
+
+        // Unlock the PID if it is locked so subsequent jobs can be queued:
+        const cache = SolrCache.getInstance();
+        cache.unlockPidIfEnabled(job.data.pid, job.data.action);
+
         let result = null;
         switch (job.data.action) {
             case "delete":
