@@ -31,9 +31,10 @@ export class SolrCache {
      * Returns the path to the PID file in the document cache if caching is enabled, false otherwise.
      *
      * @param pid PID being indexed
+     * @param extension File extension to use (default = json)
      * @returns false | string
      */
-    public getDocumentCachePath(pid: string, extension: string = "json"): false | string {
+    public getDocumentCachePath(pid: string, extension = "json"): false | string {
         if (!this.isEnabled()) {
             return false;
         }
