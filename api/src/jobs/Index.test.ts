@@ -28,7 +28,7 @@ describe("Index", () => {
             job = {
                 data: {
                     action: "delete",
-                    pid: 123,
+                    pid: "vudl:123",
                 },
             } as Job;
             jest.spyOn(SolrIndexer, "getInstance").mockReturnValue(indexer);
@@ -47,7 +47,7 @@ describe("Index", () => {
 
             expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
             expect(consoleLogSpy).toHaveBeenCalledTimes(1);
-            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "delete", pid: 123 });
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "delete", pid: "vudl:123" });
             expect(indexer.deletePid).toHaveBeenCalledWith(job.data.pid);
         });
 
@@ -86,7 +86,7 @@ describe("Index", () => {
 
             expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
             expect(consoleLogSpy).toHaveBeenCalledTimes(1);
-            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: 123 });
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: "vudl:123" });
             expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
         });
 
@@ -102,7 +102,7 @@ describe("Index", () => {
             await expect(index.run(job)).rejects.toThrow(/Problem performing/);
 
             expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Problem performing delete on 123: unspecified error");
+            expect(consoleErrorSpy).toHaveBeenCalledWith("Problem performing delete on vudl:123: unspecified error");
         });
     });
 });

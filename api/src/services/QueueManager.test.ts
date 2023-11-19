@@ -2,6 +2,7 @@ import QueueManager from "./QueueManager";
 import { Queue } from "bullmq";
 import * as BullMQ from "bullmq";
 import Config from "../models/Config";
+import SolrCache from "../services/SolrCache";
 
 let workerArgs;
 function workerConstructor(...args) {
@@ -13,6 +14,7 @@ jest.mock("bullmq", () => {
         Worker: jest.fn().mockImplementation(workerConstructor),
     };
 });
+
 Queue.prototype.add = jest.fn();
 Queue.prototype.close = jest.fn();
 Queue.prototype.getJobs = jest.fn();
@@ -56,6 +58,7 @@ describe("QueueManager", () => {
         it("supports non-default queue/connection configuration", async () => {
             const customQueueManager = new QueueManager(
                 new Config({ queue: { connection: { foo: "bar" }, jobMap: { ingest: "vudl-foo" } } }),
+                new SolrCache(false),
             );
             await customQueueManager.ingestJob("foo");
             expect(addSpy).toHaveBeenCalledWith("ingest", { dir: "foo" });
