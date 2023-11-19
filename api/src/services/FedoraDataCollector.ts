@@ -49,6 +49,7 @@ class FedoraDataCollector {
             fedoraDetails = this.extractor.extractFedoraDetails(RDF);
             fedoraDatastreams = this.extractor.extractFedoraDatastreams(RDF);
         } else {
+            // Parse data out of local cache (reversing work done by Solr indexer)
             metadata = {};
             fedoraDetails = {};
             const keys = Object.keys(cachedRecord);
