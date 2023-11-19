@@ -1,17 +1,20 @@
 import { Queue, Job, Worker, WorkerOptions, Processor } from "bullmq";
 import Config from "../models/Config";
+import SolrCache from "./SolrCache";
 
 class QueueManager {
     private static instance: QueueManager;
     protected config: Config;
+    protected cache: SolrCache;
 
-    constructor(config: Config) {
+    constructor(config: Config, cache: SolrCache) {
         this.config = config;
+        this.cache = cache;
     }
 
     public static getInstance(): QueueManager {
         if (!QueueManager.instance) {
-            QueueManager.instance = new QueueManager(Config.getInstance());
+            QueueManager.instance = new QueueManager(Config.getInstance(), SolrCache.getInstance());
         }
         return QueueManager.instance;
     }
@@ -76,6 +79,9 @@ class QueueManager {
         if (!force && this.isAlreadyAwaitingAction(jobs, "index", queueJob)) {
             console.log(`Skipping queue; ${pid} is already awaiting ${action}.`);
         } else {
+            // Clear the cache for the pid that needs to be reindexed; we don't want to read an
+            // outdated version while updates are pending:
+            this.cache.purgeFromCacheIfEnabled(pid);
             await q.add("index", { pid, action });
         }
         q.close();
