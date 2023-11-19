@@ -92,6 +92,15 @@ export class SolrCache {
         return glob.sync(pattern, options);
     }
 
+    public getDocumentFromCache(pid: string): Record<string, unknown> | false {
+        const path = this.getDocumentCachePath(pid);
+        if (path && existsSync(path)) {
+            const doc = this.readSolrAddDocFromFile(path);
+            return doc?.add?.doc ?? false;
+        }
+        return false;
+    }
+
     public readSolrAddDocFromFile(file: string): SolrAddDoc {
         return JSON.parse(readFileSync(file).toString());
     }
