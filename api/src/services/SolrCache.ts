@@ -58,7 +58,7 @@ export class SolrCache {
 
     public lockPidIfEnabled(pid: string, action: string): void {
         if (this.isEnabled()) {
-            writeFileSync(this.getLockFileForPid(pid, action), "");
+            this.writeFile(this.getLockFileForPid(pid, action), "");
         }
     }
 
