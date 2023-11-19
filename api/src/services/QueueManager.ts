@@ -70,6 +70,9 @@ class QueueManager {
     }
 
     protected async hasPendingIndexJob(q, queueJob): Promise<boolean> {
+        if (this.cache.isEnabled()) {
+            return this.cache.isPidLocked(queueJob.pid, queueJob.action);
+        }
         const jobs = await q.getJobs("wait");
         return this.isAlreadyAwaitingAction(jobs, "index", queueJob);
     }
@@ -80,12 +83,13 @@ class QueueManager {
         // that is already awaiting indexing.
         const q = this.getQueue(this.getQueueNameForJob("index"));
         const queueJob = { pid, action };
-        if (!force && (await this.hasPendingIndexJob(q, queueJob))) {
+        if (!force && await this.hasPendingIndexJob(q, queueJob)) {
             console.log(`Skipping queue; ${pid} is already awaiting ${action}.`);
         } else {
             // Clear the cache for the pid that needs to be reindexed; we don't want to read an
             // outdated version while updates are pending:
             this.cache.purgeFromCacheIfEnabled(pid);
+            this.cache.lockPidIfEnabled(pid, action);
             await q.add("index", queueJob);
         }
         q.close();
