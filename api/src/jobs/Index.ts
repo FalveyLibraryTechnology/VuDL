@@ -13,14 +13,15 @@ class Index implements QueueJob {
 
         // Unlock the PID if it is locked so subsequent jobs can be queued:
         const cache = SolrCache.getInstance();
-        cache.unlockPidIfEnabled(job.data.pid, job.data.action);
 
         let result = null;
         switch (job.data.action) {
             case "delete":
+                cache.unlockPidIfEnabled(job.data.pid, job.data.action);
                 result = await indexer.deletePid(job.data.pid);
                 break;
             case "index":
+                cache.unlockPidIfEnabled(job.data.pid, job.data.action);
                 result = await indexer.indexPid(job.data.pid);
                 break;
             default:
