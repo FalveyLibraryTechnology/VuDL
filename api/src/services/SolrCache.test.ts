@@ -185,6 +185,7 @@ describe("SolrCache", () => {
         });
         expect(cache.getDocumentFromCache("foo:123")).toEqual({ foo: "bar" });
         expect(existsSpy).toHaveBeenCalledWith("/foo/foo/000/000/123/123.json");
+        expect(readSpy).toHaveBeenCalledTimes(1);
     });
 
     it("disallows lock file generation when disabled", () => {
