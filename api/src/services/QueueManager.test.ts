@@ -3,7 +3,6 @@ import { Queue } from "bullmq";
 import * as BullMQ from "bullmq";
 import Config from "../models/Config";
 import SolrCache from "../services/SolrCache";
-import Solr from "./Solr";
 
 let workerArgs;
 function workerConstructor(...args) {
