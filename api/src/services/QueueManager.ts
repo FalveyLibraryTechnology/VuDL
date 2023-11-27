@@ -69,7 +69,7 @@ class QueueManager {
         return await this.addToQueue("reindex", { file });
     }
 
-    protected async hasPendingIndexJob(q, queueJob): Promise<boolean> {
+    public async hasPendingIndexJob(q, queueJob): Promise<boolean> {
         if (this.cache.isEnabled()) {
             return this.cache.isPidLocked(queueJob.pid, queueJob.action);
         }
@@ -95,7 +95,11 @@ class QueueManager {
         q.close();
     }
 
-    isAlreadyAwaitingAction(jobs: Array<Job>, name: string, { pid, action }: { pid: string; action: string }): boolean {
+    protected isAlreadyAwaitingAction(
+        jobs: Array<Job>,
+        name: string,
+        { pid, action }: { pid: string; action: string },
+    ): boolean {
         const matchingJob = jobs.find((job) => {
             return job.name === name && job.data.pid === pid;
         });
