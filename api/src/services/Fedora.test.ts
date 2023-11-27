@@ -71,6 +71,20 @@ describe("Fedora", () => {
         });
     });
 
+    describe("addDatastream", () => {
+        it("can add a datastream", async () => {
+            const putSpy = jest.spyOn(fedora, "putDatastream").mockImplementation(jest.fn());
+            const patchSpy = jest.spyOn(fedora, "patchRdf").mockReturnValue({ statusCode: 204 });
+            await fedora.addDatastream(pid, "MASTER", { mimeType: "foo/bar" }, "content");
+            expect(putSpy).toHaveBeenCalledWith(pid, "MASTER", "foo/bar", [201], "content", "");
+            const expectedTurtle =
+                '<> <http://fedora.info/definitions/1/0/access/objState> "A";\n    <http://purl.org/dc/terms/title> "test4_MASTER".\n';
+            expect(patchSpy).toHaveBeenCalledWith(`/${pid}/MASTER/fcr:metadata`, expectedTurtle);
+            expect(purgeCacheSpy).toHaveBeenCalledTimes(1);
+            expect(purgeCacheSpy).toHaveBeenCalledWith(pid);
+        });
+    });
+
     describe("addRelationship", () => {
         beforeEach(() => {
             requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 204 });
@@ -182,6 +196,21 @@ describe("Fedora", () => {
             expect(addDatastreamSpy).toHaveBeenCalledWith("foo:123", "DC", expectedParams, expectedXml, [201]);
             // The cache purge would be called by add datastream, but since that's stubbed out, we expect no cache purging:
             expect(purgeCacheSpy).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("modifyObjectLabel", () => {
+        it("can modify an object label", async () => {
+            const patchSpy = jest.spyOn(fedora, "patchRdf").mockReturnValue({ statusCode: 204 });
+            await fedora.modifyObjectLabel(pid, "new title");
+            const expectedInsert =
+                '<> <http://purl.org/dc/terms/title> "new title";\n    <info:fedora/fedora-system:def/model#label> "new title".\n';
+            const expectedDelete =
+                "<> <http://purl.org/dc/terms/title> ?any ; <info:fedora/fedora-system:def/model#label> ?any .";
+            const expectedWhere = "?id <http://purl.org/dc/terms/title> ?any";
+            expect(patchSpy).toHaveBeenCalledWith(`/${pid}`, expectedInsert, expectedDelete, expectedWhere);
+            expect(purgeCacheSpy).toHaveBeenCalledTimes(1);
+            expect(purgeCacheSpy).toHaveBeenCalledWith(pid);
         });
     });
 
