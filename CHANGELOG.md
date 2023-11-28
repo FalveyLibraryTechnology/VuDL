@@ -2,11 +2,12 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## Next Release - TBD
+## 2.1 - 2023-11-28
 
 ### Added
 
-- Optional on-disk caching of Solr documents (see solr_document_cache_dir in vudl.ini).
+- Optional on-disk caching of Solr documents (see solr_document_cache_dir in vudl.ini) to improve indexing and queueing performance.
+- Tools for rebuilding the Solr index from the on-disk cache.
 
 ### Changed
 
