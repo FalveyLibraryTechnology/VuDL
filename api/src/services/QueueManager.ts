@@ -1,17 +1,20 @@
 import { Queue, Job, Worker, WorkerOptions, Processor } from "bullmq";
 import Config from "../models/Config";
+import SolrCache from "./SolrCache";
 
 class QueueManager {
     private static instance: QueueManager;
     protected config: Config;
+    protected cache: SolrCache;
 
-    constructor(config: Config) {
+    constructor(config: Config, cache: SolrCache) {
         this.config = config;
+        this.cache = cache;
     }
 
     public static getInstance(): QueueManager {
         if (!QueueManager.instance) {
-            QueueManager.instance = new QueueManager(Config.getInstance());
+            QueueManager.instance = new QueueManager(Config.getInstance(), SolrCache.getInstance());
         }
         return QueueManager.instance;
     }
@@ -66,22 +69,37 @@ class QueueManager {
         return await this.addToQueue("reindex", { file });
     }
 
+    public async hasPendingIndexJob(q, queueJob): Promise<boolean> {
+        if (this.cache.isEnabled()) {
+            return this.cache.isPidLocked(queueJob.pid, queueJob.action);
+        }
+        const jobs = await q.getJobs("wait");
+        return this.isAlreadyAwaitingAction(jobs, "index", queueJob);
+    }
+
     public async performIndexOperation(pid: string, action: string, force = false): Promise<void> {
         // Fedora often fires many change events about the same object in rapid succession;
         // we don't want to index more times than we have to, so let's not re-queue anything
         // that is already awaiting indexing.
         const q = this.getQueue(this.getQueueNameForJob("index"));
-        const jobs = await q.getJobs("wait");
         const queueJob = { pid, action };
-        if (!force && this.isAlreadyAwaitingAction(jobs, "index", queueJob)) {
+        if (!force && (await this.hasPendingIndexJob(q, queueJob))) {
             console.log(`Skipping queue; ${pid} is already awaiting ${action}.`);
         } else {
-            await q.add("index", { pid, action });
+            // Clear the cache for the pid that needs to be reindexed; we don't want to read an
+            // outdated version while updates are pending:
+            this.cache.purgeFromCacheIfEnabled(pid);
+            this.cache.lockPidIfEnabled(pid, action);
+            await q.add("index", queueJob);
         }
         q.close();
     }
 
-    isAlreadyAwaitingAction(jobs: Array<Job>, name: string, { pid, action }: { pid: string; action: string }): boolean {
+    protected isAlreadyAwaitingAction(
+        jobs: Array<Job>,
+        name: string,
+        { pid, action }: { pid: string; action: string },
+    ): boolean {
         const matchingJob = jobs.find((job) => {
             return job.name === name && job.data.pid === pid;
         });
