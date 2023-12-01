@@ -38,7 +38,7 @@ describe("Index", () => {
                 },
             } as Job;
             jest.spyOn(SolrIndexer, "getInstance").mockReturnValue(indexer);
-            queueSpy = jest.spyOn(QueueManager.getInstance(), "getActiveIndexJobsForPid").mockResolvedValue([]);
+            queueSpy = jest.spyOn(QueueManager.getInstance(), "getActiveIndexJobsForPid").mockResolvedValue([job]);
             consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
             consoleLogSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
             unlockPidSpy = jest.spyOn(SolrCache.getInstance(), "unlockPidIfEnabled").mockImplementation(jest.fn());
@@ -114,7 +114,7 @@ describe("Index", () => {
         it("retries, sleeps and times out when there is a pid conflict", async () => {
             const badJob = JSON.parse(JSON.stringify(job));
             job.id = "2";
-            queueSpy.mockResolvedValue([badJob]);
+            queueSpy.mockResolvedValue([badJob, job]);
             const sleepSpy = jest.spyOn(index, "sleep").mockImplementation(jest.fn());
             await expect(index.run(job)).rejects.toThrow(/Exceeded retries waiting for queue to clear/);
             expect(sleepSpy).toHaveBeenCalledTimes(60);
