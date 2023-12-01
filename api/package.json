@@ -5,6 +5,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
+    "build": "npx tsc",
     "format": "prettier --check --write *.js src/**",
     "lint": "eslint *.js src/ --ext .ts,.js,.jsx --max-warnings 0",
     "start:serverWatch": "nodemon --watch 'vudl.ini' --watch '**/*.ts' --watch '**/*.ejs' --ignore node_modules/ src/server.ts",
@@ -13,7 +14,8 @@
     "start:worker": "ts-node src/worker-start.ts",
     "saml:metadata": "ts-node src/saml-metadata.ts",
     "test": "jest --coverage --no-cache",
-    "testWatch": "jest --watch --coverage"
+    "testWatch": "jest --watch --coverage",
+    "watch": "npx tsc --watch"
   },
   "dependencies": {
     "@node-saml/passport-saml": "^4",
@@ -46,7 +48,7 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pdfkit": "^0.13.0",
-    "sharp": "^0.31.0",
+    "sharp": "^0.33.0",
     "sqlite3": "^5",
     "tmp": "^0.2.1",
     "ts-node": "^10",

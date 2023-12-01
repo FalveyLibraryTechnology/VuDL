@@ -1,6 +1,8 @@
 import Index from "./Index";
 import { Job } from "bullmq";
 import { NeedleResponse } from "../services/interfaces";
+import QueueManager from "../services/QueueManager";
+import SolrCache from "../services/SolrCache";
 import SolrIndexer from "../services/SolrIndexer";
 
 jest.mock("../services/SolrIndexer");
@@ -17,6 +19,9 @@ describe("Index", () => {
         let needleResponse: NeedleResponse;
         let consoleErrorSpy;
         let consoleLogSpy;
+        let unlockPidSpy;
+        let queueSpy;
+
         beforeEach(() => {
             needleResponse = {
                 statusCode: 200,
@@ -26,14 +31,17 @@ describe("Index", () => {
                 indexPid: jest.fn(),
             };
             job = {
+                id: "1",
                 data: {
                     action: "delete",
-                    pid: 123,
+                    pid: "vudl:123",
                 },
             } as Job;
             jest.spyOn(SolrIndexer, "getInstance").mockReturnValue(indexer);
+            queueSpy = jest.spyOn(QueueManager.getInstance(), "getActiveIndexJobsForPid").mockResolvedValue([job]);
             consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
             consoleLogSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
+            unlockPidSpy = jest.spyOn(SolrCache.getInstance(), "unlockPidIfEnabled").mockImplementation(jest.fn());
         });
 
         afterEach(() => {
@@ -47,14 +55,16 @@ describe("Index", () => {
 
             expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
             expect(consoleLogSpy).toHaveBeenCalledTimes(1);
-            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "delete", pid: 123 });
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "delete", pid: "vudl:123" });
             expect(indexer.deletePid).toHaveBeenCalledWith(job.data.pid);
+            expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "delete");
         });
 
         it("handles empty job gracefully", async () => {
             jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
 
             await expect(index.run(null)).rejects.toThrow(/No pid provided/);
+            expect(unlockPidSpy).not.toHaveBeenCalled();
         });
 
         it("handles empty data gracefully", async () => {
@@ -62,6 +72,7 @@ describe("Index", () => {
             jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
 
             await expect(index.run(job)).rejects.toThrow(/No pid provided/);
+            expect(unlockPidSpy).not.toHaveBeenCalled();
         });
 
         it("handles missing pid gracefully", async () => {
@@ -69,6 +80,7 @@ describe("Index", () => {
             jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
 
             await expect(index.run(job)).rejects.toThrow(/No pid provided/);
+            expect(unlockPidSpy).not.toHaveBeenCalled();
         });
 
         it("handles missing action gracefully", async () => {
@@ -76,6 +88,7 @@ describe("Index", () => {
             jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
 
             await expect(index.run(job)).rejects.toThrow(/Unexpected index action: undefined/);
+            expect(unlockPidSpy).not.toHaveBeenCalled();
         });
 
         it("indexes the pid", async () => {
@@ -86,14 +99,26 @@ describe("Index", () => {
 
             expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
             expect(consoleLogSpy).toHaveBeenCalledTimes(1);
-            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: 123 });
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: "vudl:123" });
             expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
+            expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "index");
         });
 
         it("throws an error when action does not exist", async () => {
             job.data.action = "fake action";
 
             await expect(index.run(job)).rejects.toThrow(/Unexpected index/);
+            expect(unlockPidSpy).not.toHaveBeenCalled();
+        });
+
+        it("retries, sleeps and times out when there is a pid conflict", async () => {
+            const badJob = JSON.parse(JSON.stringify(job));
+            job.id = "2";
+            queueSpy.mockResolvedValue([badJob, job]);
+            const sleepSpy = jest.spyOn(index, "sleep").mockImplementation(jest.fn());
+            await expect(index.run(job)).rejects.toThrow(/Exceeded retries waiting for queue to clear/);
+            expect(sleepSpy).toHaveBeenCalledTimes(60);
+            expect(sleepSpy).toHaveBeenCalledWith(1000);
         });
 
         it("throws an error for statusCode not 200", async () => {
@@ -102,7 +127,8 @@ describe("Index", () => {
             await expect(index.run(job)).rejects.toThrow(/Problem performing/);
 
             expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Problem performing delete on 123: unspecified error");
+            expect(consoleErrorSpy).toHaveBeenCalledWith("Problem performing delete on vudl:123: unspecified error");
+            expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "delete");
         });
     });
 });
