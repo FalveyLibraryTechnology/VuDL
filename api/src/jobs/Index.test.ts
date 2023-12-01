@@ -1,6 +1,7 @@
 import Index from "./Index";
 import { Job } from "bullmq";
 import { NeedleResponse } from "../services/interfaces";
+import QueueManager from "../services/QueueManager";
 import SolrCache from "../services/SolrCache";
 import SolrIndexer from "../services/SolrIndexer";
 
@@ -19,6 +20,8 @@ describe("Index", () => {
         let consoleErrorSpy;
         let consoleLogSpy;
         let unlockPidSpy;
+        let queueSpy;
+
         beforeEach(() => {
             needleResponse = {
                 statusCode: 200,
@@ -28,12 +31,14 @@ describe("Index", () => {
                 indexPid: jest.fn(),
             };
             job = {
+                id: "1",
                 data: {
                     action: "delete",
                     pid: "vudl:123",
                 },
             } as Job;
             jest.spyOn(SolrIndexer, "getInstance").mockReturnValue(indexer);
+            queueSpy = jest.spyOn(QueueManager.getInstance(), "getActiveIndexJobsForPid").mockResolvedValue([]);
             consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
             consoleLogSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
             unlockPidSpy = jest.spyOn(SolrCache.getInstance(), "unlockPidIfEnabled").mockImplementation(jest.fn());
@@ -104,6 +109,16 @@ describe("Index", () => {
 
             await expect(index.run(job)).rejects.toThrow(/Unexpected index/);
             expect(unlockPidSpy).not.toHaveBeenCalled();
+        });
+
+        it("retries, sleeps and times out when there is a pid conflict", async () => {
+            const badJob = JSON.parse(JSON.stringify(job));
+            job.id = "2";
+            queueSpy.mockResolvedValue([badJob]);
+            const sleepSpy = jest.spyOn(index, "sleep").mockImplementation(jest.fn());
+            await expect(index.run(job)).rejects.toThrow(/Exceeded retries waiting for queue to clear/);
+            expect(sleepSpy).toHaveBeenCalledTimes(60);
+            expect(sleepSpy).toHaveBeenCalledWith(1000);
         });
 
         it("throws an error for statusCode not 200", async () => {
