@@ -66,9 +66,7 @@ class Authentication {
                     const db = Database.getInstance();
                     user = await db.getOrCreateUser(profile.nameID);
                 }
-                // There is a problem with types in passport-saml, which the below casting works around.
-                // TODO: find better solution; see https://github.com/node-saml/passport-saml/issues/549
-                (done as unknown as (x, user: User | boolean) => void)(null, user);
+                done(null, user);
             }.bind(this),
             // TODO: implement a logout function here:
             () => null,
@@ -82,11 +80,11 @@ class Authentication {
     }
 
     public initializePassport(): void {
-        passport.serializeUser(function (user, done) {
+        passport.serializeUser(function (user: User, done) {
             done(null, user.id);
         });
 
-        passport.deserializeUser(async function (id, done) {
+        passport.deserializeUser(async function (id: string, done) {
             const user = await Database.getInstance().getUserBy("id", id);
             done(null, user);
         });
