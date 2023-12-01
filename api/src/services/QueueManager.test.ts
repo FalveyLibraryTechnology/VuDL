@@ -227,4 +227,21 @@ describe("QueueManager", () => {
             expect(addSpy).toHaveBeenCalledWith("metadata", { pid: "123", action: "add" });
         });
     });
+
+    describe("getActiveIndexJobsForPid", () => {
+        it("will return a filtered list of jobs", async () => {
+            const jobs = [
+                { data: { pid: "foo" } } as BullMQ.Job,
+                { data: { pid: "bar" } } as BullMQ.Job,
+                { data: { pid: "baz" } } as BullMQ.Job,
+                { data: { pid: "foo" } } as BullMQ.Job,
+            ];
+            const getJobsSpy = jest.spyOn(Queue.prototype, "getJobs").mockResolvedValue(jobs);
+            const result = await queueManager.getActiveIndexJobsForPid("foo");
+            expect(getJobsSpy).toHaveBeenCalledWith("active");
+            expect(result.length).toEqual(2);
+            expect(result[0].data.pid).toEqual("foo");
+            expect(result[1].data.pid).toEqual("foo");
+        });
+    });
 });

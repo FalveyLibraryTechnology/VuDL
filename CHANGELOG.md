@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- Race condition when processing the same index job in multiple queues.
 
 ## 2.1 - 2023-11-28
 
