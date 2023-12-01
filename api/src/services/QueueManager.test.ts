@@ -238,6 +238,7 @@ describe("QueueManager", () => {
             ];
             const getJobsSpy = jest.spyOn(Queue.prototype, "getJobs").mockResolvedValue(jobs);
             const result = await queueManager.getActiveIndexJobsForPid("foo");
+            expect(getJobsSpy).toHaveBeenCalledWith("active");
             expect(result.length).toEqual(2);
             expect(result[0].data.pid).toEqual("foo");
             expect(result[1].data.pid).toEqual("foo");
