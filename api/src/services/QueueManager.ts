@@ -108,7 +108,9 @@ class QueueManager {
 
     public async getActiveIndexJobsForPid(pid: string): Promise<Array<Job>> {
         const q = this.getQueue(this.getQueueNameForJob("index"));
-        return (await q.getJobs("active")).filter((job) => job.data.pid === pid);
+        const result = (await q.getJobs("active")).filter((job) => job.data.pid === pid);
+        q.close();
+        return result;
     }
 
     public async queueMetadataOperation(pid: string, action: string, force = false): Promise<void> {
