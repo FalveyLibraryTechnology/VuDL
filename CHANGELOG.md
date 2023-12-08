@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
+- Index jobs now fail when missing parents are detected.
 - Index workers now retry up to 3 times before throwing exceptions.
 - Updated dependencies.
 

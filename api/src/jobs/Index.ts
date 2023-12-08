@@ -1,4 +1,5 @@
 import { Job } from "bullmq";
+import Config from "../models/Config";
 import QueueJob from "./QueueJobInterface";
 import QueueManager from "../services/QueueManager";
 import SolrIndexer from "../services/SolrIndexer";
@@ -74,6 +75,17 @@ class Index implements QueueJob {
         while (attempt++ < maxAttempts) {
             try {
                 const result = await indexOperation();
+                // Special case: if we have no parents, we should double check that nothing
+                // has gone wrong. If an object is in the process of being created, we might
+                // index it before its parents have been attached; if that happens, we should
+                // wait and try again so as not to cause confusion in the index.
+                if (
+                    job.data.action === "index" &&
+                    (indexer.getLastIndexResults()?.fedora_parent_id_str_mv ?? []).length < 1 &&
+                    !Config.getInstance().topLevelPids.includes(job.data.pid)
+                ) {
+                    throw new Error(`${job.data.pid} has no parents and is not a configured top-level pid`);
+                }
                 if (result.statusCode !== 200) {
                     const msg =
                         `Problem performing ${job.data.action} on ${job.data.pid}: ` +

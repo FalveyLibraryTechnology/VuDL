@@ -15,6 +15,7 @@ class SolrIndexer {
     config: Config;
     fedoraDataCollector: FedoraDataCollector;
     solr: Solr;
+    lastIndexResults: SolrFields | null = null;
 
     constructor(fedoraDataCollector: FedoraDataCollector, solr: Solr, config: Config) {
         this.fedoraDataCollector = fedoraDataCollector;
@@ -68,8 +69,8 @@ class SolrIndexer {
     }
 
     async indexPid(pid: string): Promise<NeedleResponse> {
-        const fedoraFields = await this.getFields(pid);
-        return await this.solr.indexRecord(this.config.solrCore, fedoraFields);
+        this.lastIndexResults = await this.getFields(pid);
+        return await this.solr.indexRecord(this.config.solrCore, this.lastIndexResults);
     }
 
     async getFields(pid: string): Promise<SolrFields> {
@@ -348,6 +349,10 @@ class SolrIndexer {
         }
 
         return fields;
+    }
+
+    public getLastIndexResults(): SolrFields | null {
+        return this.lastIndexResults;
     }
 }
 
