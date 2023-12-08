@@ -22,15 +22,7 @@ class Index implements QueueJob {
         return isFirst;
     }
 
-    async run(job: Job): Promise<void> {
-        if (typeof job?.data?.pid === "undefined") {
-            throw new Error("No pid provided!");
-        }
-
-        // We don't want a race condition where two workers are indexing the same
-        // job at the same time, and an earlier version of the data gets written after
-        // a later version. If multiple jobs are working on the same pid at once, we
-        // need to wait so that the work gets done in the proper order.
+    protected async waitForEarlierIndexersToComplete(job): Promise<void> {
         let tries = 0;
         const maxTries = 60; // wait for up to a minute
         while (!(await this.isFirstMatchingJob(job))) {
@@ -40,6 +32,18 @@ class Index implements QueueJob {
                 throw new Error("Exceeded retries waiting for queue to clear");
             }
         }
+    }
+
+    async run(job: Job): Promise<void> {
+        if (typeof job?.data?.pid === "undefined") {
+            throw new Error("No pid provided!");
+        }
+
+        // We don't want a race condition where two workers are indexing the same
+        // job at the same time, and an earlier version of the data gets written after
+        // a later version. If multiple jobs are working on the same pid at once, we
+        // need to wait so that the work gets done in the proper order.
+        await this.waitForEarlierIndexersToComplete(job);
 
         console.log("Indexing...", job?.data);
         const indexer = SolrIndexer.getInstance();
@@ -47,25 +51,47 @@ class Index implements QueueJob {
         // Unlock the PID if it is locked so subsequent jobs can be queued:
         const cache = SolrCache.getInstance();
 
-        let result = null;
+        let indexOperation = null;
         switch (job.data.action) {
             case "delete":
-                cache.unlockPidIfEnabled(job.data.pid, job.data.action);
-                result = await indexer.deletePid(job.data.pid);
+                indexOperation = async () => await indexer.deletePid(job.data.pid);
                 break;
             case "index":
-                cache.unlockPidIfEnabled(job.data.pid, job.data.action);
-                result = await indexer.indexPid(job.data.pid);
+                indexOperation = async () => await indexer.indexPid(job.data.pid);
                 break;
             default:
                 throw new Error("Unexpected index action: " + job.data.action);
         }
-        if (result.statusCode !== 200) {
-            const msg =
-                `Problem performing ${job.data.action} on ${job.data.pid}: ` +
-                (((result.body ?? {}).error ?? {}).msg ?? "unspecified error");
-            console.error(msg);
-            throw new Error(msg);
+
+        // Unlock the PID before we start work, so if changes occur while we are
+        // working, they get queued up appropriately.
+        cache.unlockPidIfEnabled(job.data.pid, job.data.action);
+
+        // Attempt to index inside a retry loop, so if various problems occur, we
+        // have a chance of automatically recovering and proceeding with the indexing.
+        const maxAttempts = 3;
+        let attempt = 0;
+        while (attempt++ < maxAttempts) {
+            try {
+                const result = await indexOperation();
+                if (result.statusCode !== 200) {
+                    const msg =
+                        `Problem performing ${job.data.action} on ${job.data.pid}: ` +
+                        (((result.body ?? {}).error ?? {}).msg ?? "unspecified error");
+                    throw new Error(msg);
+                }
+                return;
+            } catch (e) {
+                // Always log the error
+                console.error(e);
+                // If we're not on our last attempt, retry; otherwise, rethrow
+                if (attempt < maxAttempts) {
+                    console.error("Retrying...");
+                    await this.sleep(500);
+                } else {
+                    throw e;
+                }
+            }
         }
     }
 }

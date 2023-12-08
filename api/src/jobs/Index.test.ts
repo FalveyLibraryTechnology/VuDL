@@ -124,11 +124,19 @@ describe("Index", () => {
         it("throws an error for statusCode not 200", async () => {
             needleResponse.statusCode = 404;
             jest.spyOn(indexer, "deletePid").mockResolvedValue(needleResponse);
+            const sleepSpy = jest.spyOn(index, "sleep").mockImplementation(jest.fn());
             await expect(index.run(job)).rejects.toThrow(/Problem performing/);
 
-            expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
-            expect(consoleErrorSpy).toHaveBeenCalledWith("Problem performing delete on vudl:123: unspecified error");
+            expect(consoleErrorSpy).toHaveBeenCalledTimes(5);
+            const expectedError = new Error("Problem performing delete on vudl:123: unspecified error");
+            expect(consoleErrorSpy).toHaveBeenNthCalledWith(1, expectedError);
+            expect(consoleErrorSpy).toHaveBeenNthCalledWith(2, "Retrying...");
+            expect(consoleErrorSpy).toHaveBeenNthCalledWith(3, expectedError);
+            expect(consoleErrorSpy).toHaveBeenNthCalledWith(4, "Retrying...");
+            expect(consoleErrorSpy).toHaveBeenNthCalledWith(5, expectedError);
             expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "delete");
+            expect(sleepSpy).toHaveBeenCalledTimes(2);
+            expect(sleepSpy).toHaveBeenCalledWith(500);
         });
     });
 });
