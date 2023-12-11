@@ -493,13 +493,13 @@ port = 6379
 
 # These settings control the behavior of the indexer job processor
 [indexer]
-# Number of times to re-check that the current job is the earliest running job for
+# Total number of times to check that the current job is the earliest running job for
 # its pid before giving up.
 lockRetries = 60
 # Time (in ms) to wait before re-checking the lock, when an earlier job processor
 # is working on the active processor's pid.
 lockWaitMs = 1000
-# Number of times to retry an index job after an exception has occurred
+# Total number of times to try an index job before giving up due to exceptions
 exceptionRetries = 10
 # Time (in ms) to wait between retries after encountering an indexing exception
 exceptionWaitMs = 500
