@@ -23,12 +23,11 @@ class Index implements QueueJob {
         return isFirst;
     }
 
-    protected async waitForEarlierIndexersToComplete(job): Promise<void> {
+    protected async waitForEarlierIndexersToComplete(job, maxTries = 60, sleepMs = 1000): Promise<void> {
         let tries = 0;
-        const maxTries = 60; // wait for up to a minute
         while (!(await this.isFirstMatchingJob(job))) {
             console.log("Waiting for an earlier job to complete...");
-            await this.sleep(1000);
+            await this.sleep(sleepMs);
             if (++tries >= maxTries) {
                 throw new Error("Exceeded retries waiting for queue to clear");
             }
@@ -40,11 +39,13 @@ class Index implements QueueJob {
             throw new Error("No pid provided!");
         }
 
+        const config = Config.getInstance();
+
         // We don't want a race condition where two workers are indexing the same
         // job at the same time, and an earlier version of the data gets written after
         // a later version. If multiple jobs are working on the same pid at once, we
         // need to wait so that the work gets done in the proper order.
-        await this.waitForEarlierIndexersToComplete(job);
+        await this.waitForEarlierIndexersToComplete(job, config.indexerLockRetries, config.indexerLockWaitMs);
 
         console.log("Indexing...", job?.data);
         const indexer = SolrIndexer.getInstance();
@@ -70,7 +71,7 @@ class Index implements QueueJob {
 
         // Attempt to index inside a retry loop, so if various problems occur, we
         // have a chance of automatically recovering and proceeding with the indexing.
-        const maxAttempts = 3;
+        const maxAttempts = config.indexerExceptionRetries;
         let attempt = 0;
         while (attempt++ < maxAttempts) {
             try {
@@ -82,7 +83,7 @@ class Index implements QueueJob {
                 if (
                     job.data.action === "index" &&
                     (indexer.getLastIndexResults()?.fedora_parent_id_str_mv ?? []).length < 1 &&
-                    !Config.getInstance().topLevelPids.includes(job.data.pid)
+                    !config.topLevelPids.includes(job.data.pid)
                 ) {
                     throw new Error(`${job.data.pid} has no parents and is not a configured top-level pid`);
                 }
@@ -99,7 +100,7 @@ class Index implements QueueJob {
                 // If we're not on our last attempt, retry; otherwise, rethrow
                 if (attempt < maxAttempts) {
                     console.error("Retrying...");
-                    await this.sleep(500);
+                    await this.sleep(config.indexerExceptionWaitMs);
                 } else {
                     throw e;
                 }
