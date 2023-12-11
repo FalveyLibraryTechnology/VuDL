@@ -1,6 +1,7 @@
 import Index from "./Index";
 import { Job } from "bullmq";
 import { NeedleResponse } from "../services/interfaces";
+import Config from "../models/Config";
 import QueueManager from "../services/QueueManager";
 import SolrCache from "../services/SolrCache";
 import SolrIndexer from "../services/SolrIndexer";
@@ -145,6 +146,7 @@ describe("Index", () => {
         });
 
         it("throws an error for statusCode not 200", async () => {
+            Config.setInstance(new Config({ indexer: { exceptionRetries: "3", exceptionWaitMs: "100" } }));
             needleResponse.statusCode = 404;
             jest.spyOn(indexer, "deletePid").mockResolvedValue(needleResponse);
             await expect(index.run(job)).rejects.toThrow(/Problem performing/);
@@ -158,7 +160,7 @@ describe("Index", () => {
             expect(consoleErrorSpy).toHaveBeenNthCalledWith(5, expectedError);
             expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "delete");
             expect(sleepSpy).toHaveBeenCalledTimes(2);
-            expect(sleepSpy).toHaveBeenCalledWith(500);
+            expect(sleepSpy).toHaveBeenCalledWith(100);
         });
     });
 });
