@@ -80,10 +80,9 @@ export class SolrCache {
     }
 
     public unlockPidIfEnabled(pid: string, action: string): void {
-        if (!this.isEnabled()) {
-            return;
+        if (this.isEnabled()) {
+            this.tolerantDeleteFile(this.getLockFileForPid(pid, action));
         }
-        this.tolerantDeleteFile(this.getLockFileForPid(pid, action));
     }
 
     public isPidLocked(pid: string, action: string) {
