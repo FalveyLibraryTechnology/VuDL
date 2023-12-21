@@ -115,6 +115,22 @@ describe("Index", () => {
             expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "index");
         });
 
+        it("handles Solr errors during existing document retrieval", async () => {
+            job.data.action = "index";
+            const badResponse = {
+                statusCode: 500,
+            } as NeedleResponse;
+            querySpy.mockResolvedValue(badResponse);
+
+            let error = null;
+            try {
+                await index.run(job);
+            } catch (e) {
+                error = e;
+            }
+            expect(error).toEqual(new Error("Unexpected Solr response code."));
+        });
+
         it("retries indexing the pid if parents are missing unexpectedly", async () => {
             job.data.action = "index";
             jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
@@ -205,6 +221,22 @@ describe("Index", () => {
             expect(performSpy).toHaveBeenCalledTimes(2);
             expect(performSpy).toHaveBeenCalledWith("child:123", "index");
             expect(performSpy).toHaveBeenCalledWith("child:124", "index");
+        });
+
+        it("handles Solr errors during reindexing of children", async () => {
+            job.data.action = "reindex_children";
+            const queryResponse = {
+                statusCode: 500,
+            } as NeedleResponse;
+            querySpy.mockResolvedValue(queryResponse);
+
+            let error = null;
+            try {
+                await index.run(job);
+            } catch (e) {
+                error = e;
+            }
+            expect(error).toEqual(new Error("Unexpected problem communicating with Solr."));
         });
     });
 });
