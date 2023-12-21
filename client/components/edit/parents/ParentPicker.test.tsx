@@ -7,6 +7,12 @@ import renderer from "react-test-renderer";
 import ParentPicker from "./ParentPicker";
 import { waitFor } from "@testing-library/dom";
 
+const mockUseGlobalContext = jest.fn();
+jest.mock("../../../context/GlobalContext", () => ({
+    useGlobalContext: () => {
+        return mockUseGlobalContext();
+    },
+}));
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
     useEditorContext: () => {
@@ -36,11 +42,17 @@ jest.mock("../PidPicker", () => (args) => {
 });
 
 describe("ParentPicker", () => {
+    let globalValues;
     let editorValues;
     let fetchValues;
     const pid = "foo:123";
     const parentPid = "foo:122";
     beforeEach(() => {
+        globalValues = {
+            action: {
+                setSnackbarState: jest.fn(),
+            },
+        };
         editorValues = {
             state: {
                 objectDetailsStorage: {},
@@ -49,7 +61,6 @@ describe("ParentPicker", () => {
                 clearPidFromChildListStorage: jest.fn(),
                 removeFromObjectDetailsStorage: jest.fn(),
                 removeFromParentDetailsStorage: jest.fn(),
-                setSnackbarState: jest.fn(),
             },
         };
         fetchValues = {
@@ -57,6 +68,7 @@ describe("ParentPicker", () => {
                 fetchText: jest.fn(),
             },
         };
+        mockUseGlobalContext.mockReturnValue(globalValues);
         mockUseEditorContext.mockReturnValue(editorValues);
         mockUseFetchContext.mockReturnValue(fetchValues);
     });
@@ -98,7 +110,7 @@ describe("ParentPicker", () => {
         act(() => setSelected(parentPid));
         await act(async () => {
             await userEvent.setup().click(screen.getByRole("button"));
-            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+            await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
@@ -107,7 +119,7 @@ describe("ParentPicker", () => {
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith(parentPid);
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Successfully added foo:123 to foo:122",
             open: true,
             severity: "info",
@@ -125,7 +137,7 @@ describe("ParentPicker", () => {
         act(() => setSelected(parentPid));
         await act(async () => {
             await userEvent.setup().click(screen.getByRole("button"));
-            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+            await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
@@ -134,7 +146,7 @@ describe("ParentPicker", () => {
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
         expect(editorValues.action.removeFromParentDetailsStorage).not.toHaveBeenCalled();
         expect(editorValues.action.clearPidFromChildListStorage).not.toHaveBeenCalled();
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "kaboom",
             open: true,
             severity: "error",
@@ -150,7 +162,7 @@ describe("ParentPicker", () => {
         act(() => setSelected(parentPid));
         await act(async () => {
             await userEvent.setup().click(screen.getByRole("button"));
-            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+            await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
@@ -159,7 +171,7 @@ describe("ParentPicker", () => {
         expect(editorValues.action.removeFromObjectDetailsStorage).not.toHaveBeenCalled();
         expect(editorValues.action.removeFromParentDetailsStorage).not.toHaveBeenCalled();
         expect(editorValues.action.clearPidFromChildListStorage).not.toHaveBeenCalled();
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "not ok",
             open: true,
             severity: "error",
@@ -188,7 +200,7 @@ describe("ParentPicker", () => {
             fireEvent.change(screen.getByRole("textbox", { name: "Position:" }), { target: { value: "100" } });
             await Promise.resolve();
             await userEvent.setup().click(screen.getByRole("button", { name: "Add" }));
-            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+            await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
             "http://localhost:9000/api/edit/object/foo%3A123/parent/foo%3A122",
@@ -197,7 +209,7 @@ describe("ParentPicker", () => {
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith(parentPid);
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Successfully added foo:123 to foo:122",
             open: true,
             severity: "info",
@@ -218,7 +230,7 @@ describe("ParentPicker", () => {
         });
         await act(async () => {
             await userEvent.setup().click(screen.getByRole("button", { name: "Add" }));
-            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+            await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
             1,
@@ -233,7 +245,7 @@ describe("ParentPicker", () => {
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith(parentPid);
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Successfully added foo:123 to foo:122",
             open: true,
             severity: "info",
@@ -256,7 +268,7 @@ describe("ParentPicker", () => {
         });
         await act(async () => {
             await userEvent.setup().click(screen.getByRole("button", { name: "Add" }));
-            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+            await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
         expect(fetchValues.action.fetchText).toHaveBeenNthCalledWith(
             1,
@@ -271,7 +283,7 @@ describe("ParentPicker", () => {
         expect(editorValues.action.removeFromObjectDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.removeFromParentDetailsStorage).toHaveBeenCalledWith(pid);
         expect(editorValues.action.clearPidFromChildListStorage).toHaveBeenCalledWith(parentPid);
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Successfully added foo:123 to foo:122",
             open: true,
             severity: "info",
@@ -284,9 +296,9 @@ describe("ParentPicker", () => {
             setSelected(parentPid);
             await Promise.resolve();
             errorCallback(parentPid);
-            await waitFor(() => expect(editorValues.action.setSnackbarState).toHaveBeenCalled());
+            await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         });
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Cannot load details for foo:122. Are you sure this is a valid PID?",
             open: true,
             severity: "error",
