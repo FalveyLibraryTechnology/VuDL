@@ -52,7 +52,7 @@ class Index implements QueueJob {
         const queue = QueueManager.getInstance();
         let offset = 0;
         let numFound = 0;
-        const pageSize = 1;
+        const pageSize = 1000;
         do {
             const result = await solr.query(config.solrCore, `fedora_parent_id_str_mv:"${pid}"`, {
                 fl: "id",
