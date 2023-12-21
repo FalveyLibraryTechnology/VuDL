@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- Problem with cached data getting "stuck" when re-indexing.
 - Race condition when processing the same index job in multiple queues.
 
 ## 2.1 - 2023-11-28
