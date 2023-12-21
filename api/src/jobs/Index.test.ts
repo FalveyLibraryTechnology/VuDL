@@ -113,6 +113,72 @@ describe("Index", () => {
             expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: "vudl:123" });
             expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
             expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "index");
+            expect(performSpy).not.toHaveBeenCalled();
+        });
+
+        it("detects title changes during indexing that require reindexing of children", async () => {
+            job.data.action = "index";
+            jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
+            const queryResponse = {
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 1,
+                        start: 0,
+                        docs: [
+                            {
+                                id: "vudl:123",
+                                title: "old title",
+                            },
+                        ],
+                    },
+                },
+            } as NeedleResponse;
+            querySpy.mockResolvedValue(queryResponse);
+
+            await index.run(job);
+
+            expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+            expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: "vudl:123" });
+            expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
+            expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "index");
+            expect(performSpy).toHaveBeenCalledWith("vudl:123", "reindex_children");
+        });
+
+        it("detects parent changes during indexing that require reindexing of children", async () => {
+            job.data.action = "index";
+            jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
+            const queryResponse = {
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 1,
+                        start: 0,
+                        docs: [
+                            {
+                                id: "vudl:123",
+                                fedora_parent_id_str_mv: ["foo:2"],
+                                hierarchy_all_parents_str_mv: ["foo:2"],
+                            },
+                        ],
+                    },
+                },
+            } as NeedleResponse;
+            querySpy.mockResolvedValue(queryResponse);
+            indexer.getLastIndexResults.mockReturnValue({
+                fedora_parent_id_str_mv: ["foo:1"],
+                hierarchy_all_parents_str_mv: ["foo:1"],
+            });
+
+            await index.run(job);
+
+            expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+            expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: "vudl:123" });
+            expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
+            expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "index");
+            expect(performSpy).toHaveBeenCalledWith("vudl:123", "reindex_children");
         });
 
         it("handles Solr errors during existing document retrieval", async () => {
@@ -150,6 +216,7 @@ describe("Index", () => {
             expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: "vudl:123" });
             expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
             expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "index");
+            expect(performSpy).not.toHaveBeenCalled();
         });
 
         it("throws an error when action does not exist", async () => {
@@ -192,7 +259,7 @@ describe("Index", () => {
                 statusCode: 200,
                 body: {
                     response: {
-                        numFound: 1,
+                        numFound: 2,
                         start: 0,
                         docs: [
                             {

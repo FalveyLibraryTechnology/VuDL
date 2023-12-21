@@ -84,6 +84,14 @@ class Index implements QueueJob {
         const newHierarchyTitle: string = (newResults?.hierarchy_top_title ?? "") as string;
         const oldParents: Array<string> = (existingSolrDocument?.hierarchy_all_parents_str_mv ?? []) as Array<string>;
         const newParents: Array<string> = (newResults?.hierarchy_all_parents_str_mv ?? []) as Array<string>;
+
+        // If we have no old title or parents, this is almost certainly the first time this record
+        // has been indexed, so the following comparisons are not meaningful. We'll assume that there
+        // is no point in modifying children at this stage.
+        if (oldTitle.length === 0 && oldParents.length === 0) {
+            return false;
+        }
+
         // We need to reindex children if our title has changed, or if our parents have changed:
         if (
             oldTitle !== newTitle ||
