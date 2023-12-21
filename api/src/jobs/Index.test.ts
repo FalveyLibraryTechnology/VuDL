@@ -3,6 +3,7 @@ import { Job } from "bullmq";
 import { NeedleResponse } from "../services/interfaces";
 import Config from "../models/Config";
 import QueueManager from "../services/QueueManager";
+import Solr from "../services/Solr";
 import SolrCache from "../services/SolrCache";
 import SolrIndexer from "../services/SolrIndexer";
 
@@ -23,6 +24,8 @@ describe("Index", () => {
         let sleepSpy;
         let unlockPidSpy;
         let queueSpy;
+        let querySpy;
+        let performSpy;
 
         beforeEach(() => {
             needleResponse = {
@@ -47,6 +50,8 @@ describe("Index", () => {
             consoleLogSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
             unlockPidSpy = jest.spyOn(SolrCache.getInstance(), "unlockPidIfEnabled").mockImplementation(jest.fn());
             sleepSpy = jest.spyOn(index, "sleep").mockImplementation(jest.fn());
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockImplementation(jest.fn());
+            performSpy = jest.spyOn(QueueManager.getInstance(), "performIndexOperation").mockImplementation(jest.fn());
         });
 
         afterEach(() => {
@@ -99,6 +104,7 @@ describe("Index", () => {
         it("indexes the pid", async () => {
             job.data.action = "index";
             jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
+            querySpy.mockResolvedValue(needleResponse);
 
             await index.run(job);
 
@@ -107,12 +113,95 @@ describe("Index", () => {
             expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: "vudl:123" });
             expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
             expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "index");
+            expect(performSpy).not.toHaveBeenCalled();
+        });
+
+        it("detects title changes during indexing that require reindexing of children", async () => {
+            job.data.action = "index";
+            jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
+            const queryResponse = {
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 1,
+                        start: 0,
+                        docs: [
+                            {
+                                id: "vudl:123",
+                                title: "old title",
+                            },
+                        ],
+                    },
+                },
+            } as NeedleResponse;
+            querySpy.mockResolvedValue(queryResponse);
+
+            await index.run(job);
+
+            expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+            expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: "vudl:123" });
+            expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
+            expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "index");
+            expect(performSpy).toHaveBeenCalledWith("vudl:123", "reindex_children");
+        });
+
+        it("detects parent changes during indexing that require reindexing of children", async () => {
+            job.data.action = "index";
+            jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
+            const queryResponse = {
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 1,
+                        start: 0,
+                        docs: [
+                            {
+                                id: "vudl:123",
+                                fedora_parent_id_str_mv: ["foo:2"],
+                                hierarchy_all_parents_str_mv: ["foo:2"],
+                            },
+                        ],
+                    },
+                },
+            } as NeedleResponse;
+            querySpy.mockResolvedValue(queryResponse);
+            indexer.getLastIndexResults.mockReturnValue({
+                fedora_parent_id_str_mv: ["foo:1"],
+                hierarchy_all_parents_str_mv: ["foo:1"],
+            });
+
+            await index.run(job);
+
+            expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+            expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: "vudl:123" });
+            expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
+            expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "index");
+            expect(performSpy).toHaveBeenCalledWith("vudl:123", "reindex_children");
+        });
+
+        it("handles Solr errors during existing document retrieval", async () => {
+            job.data.action = "index";
+            const badResponse = {
+                statusCode: 500,
+            } as NeedleResponse;
+            querySpy.mockResolvedValue(badResponse);
+
+            let error = null;
+            try {
+                await index.run(job);
+            } catch (e) {
+                error = e;
+            }
+            expect(error).toEqual(new Error("Unexpected Solr response code."));
         });
 
         it("retries indexing the pid if parents are missing unexpectedly", async () => {
             job.data.action = "index";
             jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
             indexer.getLastIndexResults.mockReturnValueOnce({ fedora_parent_id_str_mv: [] });
+            querySpy.mockResolvedValue(needleResponse);
 
             await index.run(job);
 
@@ -127,6 +216,7 @@ describe("Index", () => {
             expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "index", pid: "vudl:123" });
             expect(indexer.indexPid).toHaveBeenCalledWith(job.data.pid);
             expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "index");
+            expect(performSpy).not.toHaveBeenCalled();
         });
 
         it("throws an error when action does not exist", async () => {
@@ -161,6 +251,59 @@ describe("Index", () => {
             expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "delete");
             expect(sleepSpy).toHaveBeenCalledTimes(2);
             expect(sleepSpy).toHaveBeenCalledWith(100);
+        });
+
+        it("reindexes children", async () => {
+            job.data.action = "reindex_children";
+            const queryResponse = {
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 2,
+                        start: 0,
+                        docs: [
+                            {
+                                id: "child:123",
+                            },
+                            {
+                                id: "child:124",
+                            },
+                        ],
+                    },
+                },
+            } as NeedleResponse;
+            querySpy.mockResolvedValue(queryResponse);
+
+            await index.run(job);
+
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"vudl:123"', {
+                fl: "id",
+                start: "0",
+                rows: "1000",
+            });
+            expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+            expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "reindex_children", pid: "vudl:123" });
+            expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "reindex_children");
+            expect(performSpy).toHaveBeenCalledTimes(2);
+            expect(performSpy).toHaveBeenCalledWith("child:123", "index");
+            expect(performSpy).toHaveBeenCalledWith("child:124", "index");
+        });
+
+        it("handles Solr errors during reindexing of children", async () => {
+            job.data.action = "reindex_children";
+            const queryResponse = {
+                statusCode: 500,
+            } as NeedleResponse;
+            querySpy.mockResolvedValue(queryResponse);
+
+            let error = null;
+            try {
+                await index.run(job);
+            } catch (e) {
+                error = e;
+            }
+            expect(error).toEqual(new Error("Unexpected problem communicating with Solr."));
         });
     });
 });
