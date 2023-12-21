@@ -3,6 +3,7 @@ import { Job } from "bullmq";
 import { NeedleResponse } from "../services/interfaces";
 import Config from "../models/Config";
 import QueueManager from "../services/QueueManager";
+import Solr from "../services/Solr";
 import SolrCache from "../services/SolrCache";
 import SolrIndexer from "../services/SolrIndexer";
 
@@ -23,6 +24,7 @@ describe("Index", () => {
         let sleepSpy;
         let unlockPidSpy;
         let queueSpy;
+        let querySpy;
 
         beforeEach(() => {
             needleResponse = {
@@ -47,6 +49,7 @@ describe("Index", () => {
             consoleLogSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
             unlockPidSpy = jest.spyOn(SolrCache.getInstance(), "unlockPidIfEnabled").mockImplementation(jest.fn());
             sleepSpy = jest.spyOn(index, "sleep").mockImplementation(jest.fn());
+            querySpy = jest.spyOn(Solr.getInstance(), "query").mockImplementation(jest.fn());
         });
 
         afterEach(() => {
@@ -99,6 +102,7 @@ describe("Index", () => {
         it("indexes the pid", async () => {
             job.data.action = "index";
             jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
+            querySpy.mockResolvedValue(needleResponse);
 
             await index.run(job);
 
@@ -113,6 +117,7 @@ describe("Index", () => {
             job.data.action = "index";
             jest.spyOn(indexer, "indexPid").mockResolvedValue(needleResponse);
             indexer.getLastIndexResults.mockReturnValueOnce({ fedora_parent_id_str_mv: [] });
+            querySpy.mockResolvedValue(needleResponse);
 
             await index.run(job);
 
