@@ -25,6 +25,7 @@ describe("Index", () => {
         let unlockPidSpy;
         let queueSpy;
         let querySpy;
+        let performSpy;
 
         beforeEach(() => {
             needleResponse = {
@@ -50,6 +51,7 @@ describe("Index", () => {
             unlockPidSpy = jest.spyOn(SolrCache.getInstance(), "unlockPidIfEnabled").mockImplementation(jest.fn());
             sleepSpy = jest.spyOn(index, "sleep").mockImplementation(jest.fn());
             querySpy = jest.spyOn(Solr.getInstance(), "query").mockImplementation(jest.fn());
+            performSpy = jest.spyOn(QueueManager.getInstance(), "performIndexOperation").mockImplementation(jest.fn());
         });
 
         afterEach(() => {
@@ -166,6 +168,43 @@ describe("Index", () => {
             expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "delete");
             expect(sleepSpy).toHaveBeenCalledTimes(2);
             expect(sleepSpy).toHaveBeenCalledWith(100);
+        });
+
+        it("reindexes children", async () => {
+            job.data.action = "reindex_children";
+            const queryResponse = {
+                statusCode: 200,
+                body: {
+                    response: {
+                        numFound: 1,
+                        start: 0,
+                        docs: [
+                            {
+                                id: "child:123",
+                            },
+                            {
+                                id: "child:124",
+                            },
+                        ],
+                    },
+                },
+            } as NeedleResponse;
+            querySpy.mockResolvedValue(queryResponse);
+
+            await index.run(job);
+
+            expect(querySpy).toHaveBeenCalledWith("biblio", 'fedora_parent_id_str_mv:"vudl:123"', {
+                fl: "id",
+                start: "0",
+                rows: "1000",
+            });
+            expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+            expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+            expect(consoleLogSpy).toHaveBeenCalledWith("Indexing...", { action: "reindex_children", pid: "vudl:123" });
+            expect(unlockPidSpy).toHaveBeenCalledWith("vudl:123", "reindex_children");
+            expect(performSpy).toHaveBeenCalledTimes(2);
+            expect(performSpy).toHaveBeenCalledWith("child:123", "index");
+            expect(performSpy).toHaveBeenCalledWith("child:124", "index");
         });
     });
 });
