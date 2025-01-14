@@ -28,7 +28,8 @@ const ObjectButtonBar = ({ pid }: ObjectButtonBarProps): React.ReactElement => {
                 onClick={() => clearPidFromChildListStorage(pid)}
                 title="Refresh children"
             >
-                <RefreshIcon /> Refresh
+                <RefreshIcon />
+                Refresh
             </button>
             <ObjectPreviewButton pid={pid} />
             <DeleteObjectButton pid={pid} />
