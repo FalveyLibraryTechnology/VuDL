@@ -18,8 +18,8 @@ function getStatusIcon(statusText: string) {
     switch (statusText) {
         case "Active":
             return <CheckCircleIcon />;
-		case "Deleted":
-			return <CloseIcon />;
+        case "Deleted":
+            return <CloseIcon />;
         case "Inactive":
             return <ModeStandbyIcon />;
     }
