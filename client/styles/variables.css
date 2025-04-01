@@ -32,14 +32,14 @@
 	--selected: var(--amber-200);
 	--selected-text: black;
 
-	--info: var(--sky-200);
-	--info-text: var(--sky-900);
+	--info: var(--sky-100);
+	--info-text: var(--sky-800);
 
-    --success: var(--green-200);
-    --success-text: var(--green-900);
+    --success: var(--green-100);
+    --success-text: var(--green-800);
 
-    --danger: var(--red-200);
-    --danger-text: var(--red-950);
+    --danger: var(--red-100);
+    --danger-text: var(--red-800);
 
     --object-status-active: var(--green-600);
     --object-status-inactive: var(--yellow-600);
