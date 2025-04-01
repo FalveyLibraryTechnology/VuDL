@@ -1,8 +1,9 @@
 .infobox {
-	padding-inline: clamp(1rem, 5%, 3rem);
+	padding-inline: 1lh;
     padding-block: 1rem;
 	color: var(--info-text);
     background-color: var(--info);
+    border: 1px solid var(--sky-500);
 }
 
 .infobox h2 {

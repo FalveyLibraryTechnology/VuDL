@@ -1,4 +1,5 @@
 .status_btn {
+    min-width: 120px;
     text-align: start;
 }
 

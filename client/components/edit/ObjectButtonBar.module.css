@@ -1,11 +1,10 @@
 .objectBar {
     display: grid;
-	grid-template-columns: repeat(4, minmax(120px, 1fr));
-	width: min-content;
-	max-width: 100%;
+	grid-template-columns: repeat(4, auto);
+	width: fit-content;
 
     & button {
-		width: 100%;
+		width: fit-content;
         white-space: nowrap;
 		border-color: transparent;
 		background-color: transparent;
