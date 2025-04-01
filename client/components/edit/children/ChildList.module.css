@@ -1,8 +1,8 @@
 .childlist {
 	padding-inline: 1rem;
 	padding-block: 1px;
-	color: var(--panel-text);
-	background-color: var(--panel);
+	color: CanvasText;
+	background-color: var(--soft);
 }
 
 .childlist__list {
@@ -12,7 +12,7 @@
 }
 .childlist__list > li {
     margin-block: 0;
-    border-block-start: 1px solid var(--border);
+    border-block-start: 1px solid var(--edge);
 }
 
 .childlist__item {

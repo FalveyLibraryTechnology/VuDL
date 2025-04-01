@@ -1,10 +1,12 @@
 @layer reset {
+	html {
+		color-scheme: light;
+	}
+
     body {
         padding: 0;
         font-family: var(--family-sans-serif);
         line-height: 1.5;
-        background-color: var(--canvas);
-        color: var(--canvas-text);
     }
 }
 
@@ -95,16 +97,16 @@
 		line-height: normal;
         text-decoration: none;
         background-color: var(--button-face);
-        border: 1px solid var(--border);
+        border: 1px solid var(--edge);
         border-radius: 0.25rem;
         cursor: pointer;
 
         &:hover {
-            color: var(--canvas);
-            background-color: var(--canvas-text);
-            border-color: var(--canvas-text);
+            color: Canvas;
+            background-color: CanvasText;
+            border-color: CanvasText;
 
-            --outline-color: var(--canvas-text);
+            --outline-color: CanvasText;
         }
     }
 
@@ -125,5 +127,5 @@ svg.css-i4bv87-MuiSvgIcon-root {
 
 /* MUI: modal */
 .css-tlc64q-MuiPaper-root-MuiDialog-paper {
-    background-color: var(--canvas);
+    background-color: Canvas;
 }
