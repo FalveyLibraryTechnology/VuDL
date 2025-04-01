@@ -43,7 +43,7 @@ export const ObjectStatus = ({ pid }: ObjectStatusProps): React.ReactElement => 
         openModal("state");
     };
     const stateMsg = loaded ? (
-        <button onClick={clickAction} className={styles[stateText.toLowerCase()]}>
+        <button onClick={clickAction} className={`${styles.status_btn} ${styles[stateText.toLowerCase()]}`}>
             <span className={styles.indicator}>{getStatusIcon(stateText)}</span>&nbsp;
             {stateText}
         </button>

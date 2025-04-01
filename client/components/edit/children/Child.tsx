@@ -82,7 +82,7 @@ export const Child = ({
                 <Grid item xs="none">
                     <CopyPidButton pid={pid} />
                 </Grid>
-                <Grid item xs="auto" style={{ textAlign: "right" }}>
+                <Grid item xs="none" style={{ textAlign: "right" }}>
                     {loaded ? <ObjectButtonBar pid={pid} /> : ""}
                     <ObjectLoader pid={pid} />
                 </Grid>

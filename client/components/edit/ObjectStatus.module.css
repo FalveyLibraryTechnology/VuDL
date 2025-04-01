@@ -1,3 +1,7 @@
+.status_btn {
+    text-align: start;
+}
+
 .active .indicator {
     color: var(--object-status-active);
 }
