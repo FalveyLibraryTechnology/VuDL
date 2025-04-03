@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import LoadingButton from "@mui/lab/LoadingButton";
-import Tooltip from "@mui/material/Tooltip";
+import styles from "./Datastream.module.css";
+import Button from "@mui/material/Button";
 import DataObject from "@mui/icons-material/DataObject";
 import Download from "@mui/icons-material/Download";
 import Delete from "@mui/icons-material/Delete";
@@ -52,20 +52,15 @@ const DatastreamControlButton = ({
         };
     };
     return (
-        <Tooltip title={modalState}>
-            <span>
-                <LoadingButton
-                    className="datastreamControlButton"
-                    loading={isLoading}
-                    aria-label={modalState}
-                    disabled={modalState !== "Upload" && disabled}
-                    onClick={onClick(modalState)}
-                    size="small"
-                >
-                    {Icons[modalState]}
-                </LoadingButton>
-            </span>
-        </Tooltip>
+        <Button
+            className={styles.datastreamControlButton}
+            disabled={modalState !== "Upload" && disabled}
+            onClick={onClick(modalState)}
+            aria-label={modalState}
+            title={modalState}
+        >
+            {Icons[modalState]}
+        </Button>
     );
 };
 

@@ -127,7 +127,7 @@ export const ChildList = ({
     const endNumber = startNumber + pageSize - 1;
     const paginatorLabel =
         children.numFound > 1 ? (
-            <p className={styles.childlist__pagination}>
+            <p class={styles.childlist__pagination}>
                 Showing {startNumber} - {children.numFound < endNumber ? children.numFound : endNumber} of{" "}
                 {children.numFound}
             </p>
@@ -135,16 +135,17 @@ export const ChildList = ({
     return (
         <div className={styles.childlist}>
             <Grid container spacing={2} alignItems="center">
-                <Grid item xs="auto" sx={{ "&:empty": { display: "none" } }}>
-                    {thumbsButton}
-                    {modelsButton}
-                    {childButton}
-                </Grid>
                 <Grid item xs="auto">
                     {paginatorLabel}
                 </Grid>
                 <Grid item xs="auto">
                     {paginator}
+                </Grid>
+                <Grid item xs>&nbsp;</Grid>
+                <Grid item xs="auto" className={styles.childlist__toggles}>
+                    {thumbsButton}
+                    {modelsButton}
+                    {childButton}
                 </Grid>
             </Grid>
             <ul className={styles.childlist__list}>{contents.length ? contents : <em>Empty.</em>}</ul>

@@ -3,7 +3,7 @@
     padding-block: 1rem;
 	color: var(--info-text);
     background-color: var(--info);
-    border: 1px solid var(--sky-500);
+    border: 1px solid var(--sky-400);
 }
 
 .infobox h2 {
@@ -11,9 +11,9 @@
 }
 
 .infobox.infobox button {
-	width: auto;
-	margin-inline-end: 1rem;
-	margin-block-end: 1rem;
+	min-width: unset;
+	margin-inline-end: 1ch;
+	font-size: 10pt;
 	color: var(--button-text);
 	background-color: var(--button-face);
 	border-color: var(--info-text);

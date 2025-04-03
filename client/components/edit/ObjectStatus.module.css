@@ -1,32 +1,47 @@
 .status_btn {
     min-width: 120px;
-    text-align: start;
+
+    &:is(:hover, &:focus) {
+        color: white;
+    }
 }
 
-.active .indicator {
-    color: var(--object-status-active);
-}
-.active:is(:hover, :focus) .indicator {
-    color: var(--object-status-active-hover);
+.status_btn.active {
+    background-color: var(--object-status-active);
+
+    &:hover, &:focus {
+        color: white;
+        background-color: var(--object-status-active-text);
+        border-color: var(--object-status-active-text);
+    }
 }
 
-.inactive .indicator {
-    color: var(--object-status-inactive);
-}
-.inactive:is(:hover, :focus) .indicator {
-    color: var(--object-status-inactive-hover);
+.status_btn.inactive {
+    background-color: var(--object-status-inactive);
+
+    &:hover, &:focus {
+        color: white;
+        background-color: var(--object-status-inactive-text);
+        border-color: var(--object-status-inactive-text);
+    }
 }
 
-.deleted .indicator {
-    color: var(--object-status-deleted);
-}
-.deleted:is(:hover, :focus) .indicator {
-    color: var(--object-status-deleted-hover);
+.status_btn.deleted {
+    background-color: var(--object-status-deleted);
+
+    &:hover, &:focus {
+        color: white;
+        background-color: var(--object-status-deleted-text);
+        border-color: var(--object-status-deleted-text);
+    }
 }
 
-.unknown .indicator {
-    color: var(--object-status-unknown);
-}
-.unknown:is(:hover, :focus) .indicator {
-    color: var(--object-status-unknown-hover);
+.status_btn.unknown {
+    background-color: var(--object-status-unknown);
+
+    &:hover, &:focus {
+        color: white;
+        background-color: var(--object-status-unknown-text);
+        border-color: var(--object-status-unknown-text);
+    }
 }

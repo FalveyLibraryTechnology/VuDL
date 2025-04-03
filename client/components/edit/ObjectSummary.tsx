@@ -39,7 +39,7 @@ const ObjectSummary = (): React.ReactElement => {
             </div>
             <h2>{title}</h2>
             <div>{HtmlReactParser(description)}</div>
-            {loaded ? <ObjectButtonBar pid={currentPid} /> : ""}
+            {loaded ? <div style={{ marginBlock: "1rem" }}><ObjectButtonBar pid={currentPid} /></div> : ""}
             {loaded ? <ObjectOrder pid={currentPid} /> : ""}
             {loaded ? <ObjectChildCounts pid={currentPid} /> : ""}
             PID: {currentPid} <CopyPidButton pid={currentPid} />

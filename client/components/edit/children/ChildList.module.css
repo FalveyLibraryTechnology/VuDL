@@ -36,6 +36,11 @@ svg.childlist__expandicon {
 	color: var(--text-muted);
 }
 
+.childlist__toggles {
+	display: flex;
+	gap: 1ch;
+}
+
 /* Nested */
 
 .childlist__list {
