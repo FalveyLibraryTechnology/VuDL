@@ -3,24 +3,24 @@
     padding-block: 1rem;
 	color: var(--info-text);
     background-color: var(--info);
-    border: 1px solid var(--sky-400);
+    border: 1px solid var(--info-border);
 }
 
 .infobox h2 {
     margin: 0;
 }
 
-.infobox.infobox button {
+.infobox button {
 	min-width: unset;
 	margin-inline-end: 1ch;
+	padding-block: 0.5em 0.4em;
 	font-size: 10pt;
-	color: var(--button-text);
-	background-color: var(--button-face);
-	border-color: var(--info-text);
+	background-color: white;
+    border: 1px solid black;
 
-	&:hover, &:focus {
-		color: var(--button-hover-text);
-		background-color: var(--button-hover);
-		border-color: var(--button-hover);
-	}
+    &:hover,
+    &:focus {
+    	color: white;
+    	background-color: black;
+    }
 }

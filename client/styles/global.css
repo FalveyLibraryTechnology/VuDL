@@ -70,7 +70,7 @@
     .breadcrumbs {
         width: fit-content;
         margin-block: 1rem;
-        padding-inline: 1rem;
+        padding-inline: 0;
         padding-block: 0.5rem;
         font-size: 0.875rem;
         list-style: none;

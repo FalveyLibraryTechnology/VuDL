@@ -29,11 +29,13 @@
     --active: oklch(0.577 0.245 27.325); /* Tailwind red-600 */
     --active-text: white;
 
-	--selected: var(--amber-200);
+	--selected: var(--emerald-200);
 	--selected-text: black;
+    --selected-border: var(--emerald-500);
 
 	--info: var(--sky-100);
 	--info-text: var(--sky-800);
+    --info-border: var(--sky-500);
 
     --success: var(--green-100);
     --success-text: var(--green-800);
@@ -41,13 +43,13 @@
     --danger: var(--red-100);
     --danger-text: var(--red-800);
 
-    --object-status-active: var(--green-600);
-    --object-status-inactive: var(--yellow-600);
-    --object-status-deleted: var(--red-600);
-    --object-status-unknown: var(--gray-600);
+    --object-status-active: var(--emerald-200);
+    --object-status-inactive: var(--yellow-200);
+    --object-status-deleted: var(--red-200);
+    --object-status-unknown: var(--gray-200);
 
-    --object-status-active-hover: var(--green-300);
-    --object-status-inactive-hover: var(--yellow-300);
-    --object-status-deleted-hover: var(--red-300);
-    --object-status-unknown-hover: var(--gray-300);
+    --object-status-active-text: var(--emerald-800);
+    --object-status-inactive-text: var(--yellow-800);
+    --object-status-deleted-text: var(--red-800);
+    --object-status-unknown-text: var(--gray-800);
 }

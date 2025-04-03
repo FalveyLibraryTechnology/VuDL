@@ -26,7 +26,7 @@ const JobPaginator = ({ initialCategory, initialJob }: JobPaginatorProps): React
 
     return (
         <>
-            <ul className="breadcrumbs" style={{ marginBlockEnd: 0 }}>
+            <ul className="breadcrumbs">
                 <li>
                     <Link href="/">Main Menu</Link>
                 </li>

@@ -1,6 +1,13 @@
+.datastream {
+	margin-block: 0.125em;
+	padding-block: 0.375em;
+	border: 1px solid transparent;
+}
+
 .enabled {
 	color: var(--selected-text);
     background-color: var(--selected);
+    border-color: var(--selected-border);
 }
 
 div[role="group"] .datastreamControlButton {

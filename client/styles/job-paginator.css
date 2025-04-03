@@ -145,7 +145,7 @@ label input[type="radio"] {
 }
 .thumbnail.selected {
     background-color: var(--selected);
-    border-color: var(--amber-500);
+    border-color: var(--selected-border);
 }
 .thumbnail img {
     display: block;
