@@ -13,6 +13,11 @@ var MagicLabeler = {
     suffixes: [", recto", ", verso", ", front", ", back"],
 
     adjustNumericLabel: function (prior: string, delta: number) {
+        // If it's a range, pick the last number in the range:
+        var priorParts = prior.split('-');
+        if (priorParts.length === 2 && parseInt(priorParts[1]) > 0) {
+            return parseInt(priorParts[1]) + delta;
+        }
         // If it's an integer, this is simple:
         if (parseInt(prior) > 0) {
             return parseInt(prior) + delta;

@@ -417,6 +417,7 @@ describe("Fedora", () => {
                     "Content-Type": "text/plain",
                     Digest: "md5=ce851d9cd2bee2c2eeceaea99e62145d, sha-512=a4daa746ea902fe69c45dbce6ded92306206b75928e3df01b395ee896f08e5209a92493bc3f951ada968f1dc264552d9a92747adfbab1892bb6ebc1ac757d307",
                     Link: "my link header",
+                    "Overwrite-Tombstone": "true",
                 },
             });
         });
@@ -433,6 +434,7 @@ describe("Fedora", () => {
                     "Content-Type": "text/plain",
                     Digest: "md5=ce851d9cd2bee2c2eeceaea99e62145d, sha-512=a4daa746ea902fe69c45dbce6ded92306206b75928e3df01b395ee896f08e5209a92493bc3f951ada968f1dc264552d9a92747adfbab1892bb6ebc1ac757d307",
                     Link: "my link header",
+                    "Overwrite-Tombstone": "true",
                 },
             });
             expect(logSpy).toHaveBeenCalledWith("Encountered 409 error; retry #1...");

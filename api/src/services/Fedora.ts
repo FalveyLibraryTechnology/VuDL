@@ -271,6 +271,7 @@ export class Fedora {
         const md5 = crypto.createHash("md5").update(data).digest("hex");
         const sha = crypto.createHash("sha512").update(data).digest("hex");
         const headers: Record<string, string> = {
+            "Overwrite-Tombstone": "true",
             "Content-Disposition": 'attachment; filename="' + stream + '"',
             "Content-Type": mimeType,
             Digest: "md5=" + md5 + ", sha-512=" + sha,
