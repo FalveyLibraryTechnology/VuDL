@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./Datastream.module.css";
 import Button from "@mui/material/Button";
 import DataObject from "@mui/icons-material/DataObject";
@@ -29,7 +29,6 @@ const DatastreamControlButton = ({
     datastream,
     disabled,
 }: DatastreamControlButtonProps): React.ReactElement => {
-    const [isLoading, setLoading] = useState(false);
     const {
         action: { setActiveDatastream, setDatastreamModalState },
     } = useEditorContext();
