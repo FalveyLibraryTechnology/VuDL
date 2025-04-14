@@ -1,11 +1,11 @@
 .objectBar {
-    display: grid;
+	display: grid;
 	grid-template-columns: repeat(4, auto);
 	width: fit-content;
 
-    & button {
+	& button {
 		width: fit-content;
-        white-space: nowrap;
+		white-space: nowrap;
 		border-color: transparent;
 		background-color: transparent;
 
@@ -13,6 +13,6 @@
 		&:focus {
 			border-color: black;
 			background-color: black;
-	    }
+		}
 	}
 }
