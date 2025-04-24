@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import styles from "./DeleteObjectButton.module.css";
 import { useEditorContext } from "../../context/EditorContext";
 import Delete from "@mui/icons-material/Delete";
 import { getObjectParentsUrl, getObjectRecursiveChildPidsUrl } from "../../util/routes";
@@ -90,7 +91,7 @@ const DeleteObjectButton = ({ pid }: DeleteObjectButtonProps): React.ReactElemen
     };
     const visible = statusMessage.length === 0 && trashPid && loaded && childPidResponse?.loading !== true;
     return visible ? (
-        <button onClick={performDelete}>
+        <button className={`object-delete-btn ${styles.deleteBtn}`} onClick={performDelete}>
             <Delete style={{ height: "14px" }} titleAccess="Delete Object and Children" />
         </button>
     ) : (

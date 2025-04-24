@@ -12,15 +12,11 @@
 
 .infobox button {
 	min-width: unset;
-	margin-inline-end: 1ch;
 	padding-block: 0.5em 0.4em;
 	font-size: 10pt;
-	background-color: white;
-    border: 1px solid black;
 
-    &:hover,
-    &:focus {
-    	color: white;
-    	background-color: black;
-    }
+	&:not(:hover,:focus) {
+		background-color: white;
+	    border-color: black;
+	}
 }
