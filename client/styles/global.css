@@ -1,7 +1,7 @@
 @layer reset {
-	html {
-		color-scheme: light;
-	}
+    html {
+        color-scheme: light;
+    }
 
     body {
         padding: 0;
@@ -39,10 +39,10 @@
     :is(a, button, input, textarea, summary):focus,
     /* :focus-visible styles */
     :is(a, button, input, textarea):focus-visible {
-		position: relative;
+        position: relative;
         outline: var(--outline-size) var(--outline-style) var(--outline-color);
         outline-offset: var(--outline-offset, var(--outline-size));
-		z-index: 100;
+        z-index: 100;
     }
 
     /* Remove fallback :focus styles when :focus-visible is available */
@@ -82,7 +82,7 @@
     }
 
     .breadcrumbs li:not(:first-child):before {
-		color: var(--text-muted);
+        color: var(--text-muted);
         content: " ❭ ";
     }
 
@@ -94,7 +94,7 @@
         padding-inline: 1rem;
         padding-block: 0.5rem;
         color: var(--button-text);
-		line-height: normal;
+        line-height: normal;
         text-decoration: none;
         background-color: var(--button-face);
         border: 1px solid var(--edge);

@@ -1,31 +1,31 @@
 .datastream {
-	margin-block: 0.125em;
-	padding-block: 0.375em;
-	border: 1px solid transparent;
+    margin-block: 0.125em;
+    padding-block: 0.375em;
+    border: 1px solid transparent;
 }
 
 .enabled {
-	color: var(--selected-text);
+    color: var(--selected-text);
     background-color: var(--selected);
     border-color: var(--selected-border);
 }
 
 div[role="group"] .datastreamControlButton {
-	font-size: 14pt;
-	color: inherit;
-	border-color: var(--mute);
-	opacity: 0.75;
-	transition: none;
+    font-size: 14pt;
+    color: inherit;
+    border-color: var(--mute);
+    opacity: 0.75;
+    transition: none;
 
-	&:disabled {
-		opacity: 0.75;
-		color: var(--mute);
-		border-color: var(--mute);
-	}
+    &:disabled {
+        opacity: 0.75;
+        color: var(--mute);
+        border-color: var(--mute);
+    }
 
-	&:hover,
-	&:focus {
-		color: white;
-		background-color: black;
-	}
+    &:hover,
+    &:focus {
+        color: white;
+        background-color: black;
+    }
 }

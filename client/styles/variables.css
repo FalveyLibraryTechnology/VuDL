@@ -1,10 +1,10 @@
 /* Harmony colors imported in _app.tsx */
 
 :root {
-	--soft: var(--zinc-100);
-	--edge: var(--zinc-500);
-	--mute: var(--zinc-700);
-	--text: var(--zinc-900);
+    --soft: var(--zinc-100);
+    --edge: var(--zinc-500);
+    --mute: var(--zinc-700);
+    --text: var(--zinc-900);
 }
 
 :root {
@@ -29,12 +29,12 @@
     --active: oklch(0.577 0.245 27.325); /* Tailwind red-600 */
     --active-text: white;
 
-	--selected: var(--emerald-200);
-	--selected-text: black;
+    --selected: var(--emerald-200);
+    --selected-text: black;
     --selected-border: var(--emerald-500);
 
-	--info: var(--sky-100);
-	--info-text: var(--sky-800);
+    --info: var(--sky-100);
+    --info-text: var(--sky-800);
     --info-border: var(--sky-500);
 
     --success: var(--green-100);

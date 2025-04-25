@@ -1,7 +1,7 @@
 .infobox {
-	padding-inline: 1lh;
+    padding-inline: 1lh;
     padding-block: 1rem;
-	color: var(--info-text);
+    color: var(--info-text);
     background-color: var(--info);
     border: 1px solid var(--info-border);
 }
@@ -11,12 +11,12 @@
 }
 
 .infobox button {
-	min-width: unset;
-	padding-block: 0.5em 0.4em;
-	font-size: 10pt;
+    min-width: unset;
+    padding-block: 0.5em 0.4em;
+    font-size: 10pt;
 
-	&:not(:hover,:focus) {
-		background-color: white;
-	    border-color: black;
-	}
+    &:not(:hover,:focus) {
+        background-color: white;
+        border-color: black;
+    }
 }

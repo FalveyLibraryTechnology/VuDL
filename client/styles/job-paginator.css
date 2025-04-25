@@ -1,11 +1,11 @@
 /* Layout */
 
 body:has(#paginator) {
-	background-color: var(--soft);
+    background-color: var(--soft);
 }
 
 .controls {
-	font-size: 14px;
+    font-size: 14px;
 }
 
 .pageList {
@@ -171,7 +171,7 @@ label input[type="radio"] {
     left: -1px;
     padding-inline: 0.75ch;
     padding-block: 0.25ch;
-	font-family: monospace;
+    font-family: monospace;
     font-weight: 700;
     font-size: 10px;
     color: var(--mute);
