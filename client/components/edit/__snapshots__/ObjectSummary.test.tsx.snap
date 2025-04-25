@@ -57,7 +57,15 @@ exports[`ObjectSummary renders information from metadata when available 1`] = `
       !
     </p>
   </div>
-  ObjectButtonBar
+  <div
+    style={
+      {
+        "marginBlock": "1rem",
+      }
+    }
+  >
+    ObjectButtonBar
+  </div>
   ObjectOrder
   ObjectChildCounts
   PID: 

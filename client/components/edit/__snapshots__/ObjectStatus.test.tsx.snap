@@ -3,7 +3,7 @@
 exports[`ObjectStatus defaults to unknown state 1`] = `
 [
   <button
-    className="unknown"
+    className="status_btn unknown"
     onClick={[Function]}
   >
     <span
@@ -31,7 +31,7 @@ exports[`ObjectStatus defaults to unknown state 1`] = `
 exports[`ObjectStatus displays the state found in the response 1`] = `
 [
   <button
-    className="inactive"
+    className="status_btn inactive"
     onClick={[Function]}
   >
     <span

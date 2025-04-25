@@ -4,6 +4,7 @@ exports[`ObjectOrder defaults to title order for a pending object 1`] = `
 <div>
   Current sort: 
   title
+   
   <button
     onClick={[Function]}
   >
@@ -17,6 +18,7 @@ exports[`ObjectOrder displays a custom-sorted object correctly 1`] = `
 <div>
   Current sort: 
   custom
+   
   <button
     onClick={[Function]}
   >

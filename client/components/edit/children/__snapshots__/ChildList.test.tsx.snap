@@ -9,6 +9,17 @@ exports[`ChildList allows child counts to be toggled on 1`] = `
   >
     <div
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+    >
+       
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
     >
       <button
         onClick={[Function]}
@@ -26,12 +37,6 @@ exports[`ChildList allows child counts to be toggled on 1`] = `
         Hide Child Counts
       </button>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
   </div>
   <ul
     className="childlist__list"
@@ -52,6 +57,17 @@ exports[`ChildList allows models to be toggled on 1`] = `
   >
     <div
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+    >
+       
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
     >
       <button
         onClick={[Function]}
@@ -69,12 +85,6 @@ exports[`ChildList allows models to be toggled on 1`] = `
         Show Child Counts
       </button>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
   </div>
   <ul
     className="childlist__list"
@@ -95,6 +105,17 @@ exports[`ChildList allows thumbnails to be toggled on 1`] = `
   >
     <div
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+    >
+       
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
     >
       <button
         onClick={[Function]}
@@ -112,12 +133,6 @@ exports[`ChildList allows thumbnails to be toggled on 1`] = `
         Show Child Counts
       </button>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
   </div>
   <ul
     className="childlist__list"
@@ -139,6 +154,31 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
     <div
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
     >
+      <p
+        className="childlist__pagination"
+      >
+        Showing 
+        1
+         - 
+        10
+         of
+         
+        10000
+      </p>
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    >
+      Pagination
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+    >
+       
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
+    >
       <button
         onClick={[Function]}
       >
@@ -154,24 +194,6 @@ exports[`ChildList displays a paginator when appropriate 1`] = `
       >
         Show Child Counts
       </button>
-    </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    >
-      <p>
-        Showing 
-        1
-         - 
-        10
-         of
-         
-        10000
-      </p>
-    </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    >
-      Pagination
     </div>
   </div>
   <ul
@@ -220,6 +242,17 @@ exports[`ChildList renders using SelectableChild when a callback is provided 1`]
   >
     <div
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+    >
+       
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
     >
       <button
         onClick={[Function]}
@@ -237,12 +270,6 @@ exports[`ChildList renders using SelectableChild when a callback is provided 1`]
         Show Child Counts
       </button>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
   </div>
   <ul
     className="childlist__list"
@@ -263,6 +290,17 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
   >
     <div
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+    >
+       
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
     >
       <button
         onClick={[Function]}
@@ -280,12 +318,6 @@ exports[`ChildList renders using ajax-loaded object data 1`] = `
         Show Child Counts
       </button>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
   </div>
   <ul
     className="childlist__list"
@@ -306,6 +338,17 @@ exports[`ChildList renders using ajax-loaded root data 1`] = `
   >
     <div
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    />
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+    >
+       
+    </div>
+    <div
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
     >
       <button
         onClick={[Function]}
@@ -323,12 +366,6 @@ exports[`ChildList renders using ajax-loaded root data 1`] = `
         Show Child Counts
       </button>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
   </div>
   <ul
     className="childlist__list"

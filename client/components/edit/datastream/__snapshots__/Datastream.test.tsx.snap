@@ -11,7 +11,7 @@ exports[`Datastream renders 1`] = `
     data-emotion="css 1rki8sg-MuiListItem-root"
   />,
   <li
-    className="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1rki8sg-MuiListItem-root"
+    className="MuiListItem-root datastream  MuiListItem-gutters MuiListItem-padding css-1rki8sg-MuiListItem-root"
     disabled={false}
   >
     <style

@@ -49,7 +49,7 @@ exports[`Child handles empty titles appropriately 1`] = `
       CopyPidButton
     </div>
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-none css-116ifgy-MuiGrid-root"
       style={
         {
           "textAlign": "right",
@@ -116,7 +116,7 @@ exports[`Child renders a thumbnail 1`] = `
       CopyPidButton
     </div>
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-none css-116ifgy-MuiGrid-root"
       style={
         {
           "textAlign": "right",
@@ -183,7 +183,7 @@ exports[`Child renders child counts 1`] = `
       CopyPidButton
     </div>
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-none css-116ifgy-MuiGrid-root"
       style={
         {
           "textAlign": "right",
@@ -251,7 +251,7 @@ exports[`Child renders thumbnail and child counts 1`] = `
       CopyPidButton
     </div>
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-none css-116ifgy-MuiGrid-root"
       style={
         {
           "textAlign": "right",
@@ -313,7 +313,7 @@ exports[`Child renders using ajax-loaded data 1`] = `
       CopyPidButton
     </div>
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-none css-116ifgy-MuiGrid-root"
       style={
         {
           "textAlign": "right",
