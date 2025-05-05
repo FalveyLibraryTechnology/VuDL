@@ -13,7 +13,6 @@ import "../styles/reset.css";
 import "../styles/variables.css";
 import "../styles/global.css";
 import "../styles/job-paginator.css";
-import "../styles/object-editor.css";
 
 function MyApp({ Component, pageProps }: { Component: React.ReactNode }): React.ReactElement {
     return (
