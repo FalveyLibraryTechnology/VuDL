@@ -1,3 +1,9 @@
+/**
+ * Harmony Color Palette
+ * https://github.com/evilmartians/harmony
+ * Copyright (c) 2023 Evil Martians. MIT License.
+ */
+
 :root {
     --red-50: oklch(0.988281 0.0046875 20);
     --red-100: oklch(0.966797 0.0171875 20);
