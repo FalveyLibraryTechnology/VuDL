@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./DatastreamControlButton.module.css";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Tooltip from "@mui/material/Tooltip";
 import DataObject from "@mui/icons-material/DataObject";
@@ -55,7 +56,7 @@ const DatastreamControlButton = ({
         <Tooltip title={modalState}>
             <span>
                 <LoadingButton
-                    className="datastreamControlButton"
+                    className={styles.datastreamControlButton}
                     loading={isLoading}
                     aria-label={modalState}
                     disabled={modalState !== "Upload" && disabled}

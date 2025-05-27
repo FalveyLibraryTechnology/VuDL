@@ -11,6 +11,13 @@
 }
 
 @layer global {
+    a {
+        &:hover,
+        &:focus {
+            color: black;
+        }
+    }
+
     h1 {
         margin-block-start: 0;
     }
@@ -93,6 +100,7 @@
         display: inline-block;
         padding-inline: 1rem;
         padding-block: 0.5rem;
+        font-size: 1em;
         color: var(--button-text);
         line-height: normal;
         text-decoration: none;
@@ -120,12 +128,12 @@
 }
 
 /* MUI: better default icon size */
-svg.css-i4bv87-MuiSvgIcon-root {
+svg[class*="MuiSvgIcon-root"] {
     font-size: 1em;
     vertical-align: top;
 }
 
 /* MUI: modal */
-.css-tlc64q-MuiPaper-root-MuiDialog-paper {
+[class*="MuiPaper-root"][class*="MuiDialog-paper"] {
     background-color: Canvas;
 }

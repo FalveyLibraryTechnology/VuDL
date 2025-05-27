@@ -13,7 +13,6 @@
 .infobox button {
     min-width: unset;
     padding-block: 0.5em 0.4em;
-    font-size: 10pt;
 
     &:not(:hover,:focus) {
         background-color: white;
