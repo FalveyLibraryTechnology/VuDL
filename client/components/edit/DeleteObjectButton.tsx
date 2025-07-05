@@ -42,7 +42,7 @@ const DeleteObjectButton = ({ pid }: DeleteObjectButtonProps): React.ReactElemen
         if (loaded) {
             loadChildren();
         }
-    }, [loaded]);
+    }, [loaded, pid]);
 
     const performDelete = async function () {
         const msg =
