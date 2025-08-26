@@ -130,7 +130,7 @@ class Config {
     }
 
     get initialPidValue(): number {
-        return parseInt(this.ini["fedora_initial_pid"] ?? "1");
+        return parseInt(this.ini["fedora_initial_pid"] ?? "0");
     }
 
     get dataModels(): Record<string, string> {
