@@ -1,6 +1,12 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import useDatastreamOperation from "./useDatastreamOperation";
 
+const mockUseGlobalContext = jest.fn();
+jest.mock("../context/GlobalContext", () => ({
+    useGlobalContext: () => {
+        return mockUseGlobalContext();
+    },
+}));
 const mockUseFetchContext = jest.fn();
 jest.mock("../context/FetchContext", () => ({
     useFetchContext: () => {
@@ -15,6 +21,7 @@ jest.mock("../context/EditorContext", () => ({
 }));
 
 describe("useDatastreamOperation", () => {
+    let globalValues;
     let fetchValues;
     let editorValues;
     let currentPid;
@@ -33,6 +40,12 @@ describe("useDatastreamOperation", () => {
                 },
             },
         };
+        globalValues = {
+            action: {
+                setSnackbarState: jest.fn(),
+                closeModal: jest.fn()
+            },
+        };
         fetchValues = {
             action: {
                 fetchBlob: jest.fn(),
@@ -48,11 +61,10 @@ describe("useDatastreamOperation", () => {
                 datastreamsCatalog
             },
             action: {
-                setSnackbarState: jest.fn(),
-                toggleDatastreamModal: jest.fn(),
                 loadCurrentObjectDetails: jest.fn()
             },
         };
+        mockUseGlobalContext.mockReturnValue(globalValues);
         mockUseFetchContext.mockReturnValue(fetchValues);
         mockUseEditorContext.mockReturnValue(editorValues);
     });
@@ -75,7 +87,7 @@ describe("useDatastreamOperation", () => {
                 })
             );
             expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload worked",
                 severity: "success",
@@ -87,12 +99,12 @@ describe("useDatastreamOperation", () => {
             await uploadFile({
                 type: "image/illegaltype",
             });
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: expect.stringContaining("Illegal mime type"),
                 severity: "error",
             });
-            expect(editorValues.action.toggleDatastreamModal).toHaveBeenCalled();
+            expect(globalValues.action.closeModal).toHaveBeenCalled();
         });
 
         it("returns illegal mime type when catalog cannot find datastream", async () => {
@@ -103,12 +115,12 @@ describe("useDatastreamOperation", () => {
                 type: "image/png",
             });
 
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: expect.stringContaining("Illegal mime type"),
                 severity: "error",
             });
-            expect(editorValues.action.toggleDatastreamModal).toHaveBeenCalled();
+            expect(globalValues.action.closeModal).toHaveBeenCalled();
         });
     });
 
@@ -139,7 +151,7 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload agents worked",
                 severity: "success",
@@ -160,7 +172,62 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    open: true,
+                    message: "Upload failure!",
+                    severity: "error"
+                })
+            );
+        });
+    });
+
+    describe("uploadDublinCore", () => {
+        let metadata;
+        beforeEach(() => {
+            metadata = {
+                "dc:title": ["foo"],
+            };
+            editorValues.state.activeDatastream = "DC";
+        });
+
+        it("uploads DC with success", async () => {
+            fetchValues.action.fetchText.mockResolvedValue("upload DC works");
+
+            const { uploadDublinCore } = useDatastreamOperation();
+            await uploadDublinCore(metadata);
+
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/DC/dublinCore",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({ metadata }),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
+                open: true,
+                message: "upload DC works",
+                severity: "success",
+            });
+        });
+
+        it("fails to upload the DC", async () => {
+            fetchValues.action.fetchText.mockRejectedValue(new Error("Upload failure!"));
+
+            const { uploadDublinCore } = useDatastreamOperation();
+            await uploadDublinCore(metadata);
+
+            expect(editorValues.action.loadCurrentObjectDetails).not.toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/vudl%3A123/datastream/DC/dublinCore",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({ metadata }),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Upload failure!",
@@ -190,7 +257,7 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "upload license works",
                 severity: "success",
@@ -211,7 +278,60 @@ describe("useDatastreamOperation", () => {
                 }),
                 { "Content-Type": "application/json"}
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    open: true,
+                    message: "Upload failure!",
+                    severity: "error"
+                })
+            );
+        });
+    });
+
+    describe("uploadProcessMetadata ", () => {
+        beforeEach(() => {
+            editorValues.state.activeDatastream = "PROCESS-MD";
+        });
+
+        it("uploads process metadata with success", async () => {
+            fetchValues.action.fetchText.mockResolvedValue("upload works");
+
+            const { uploadProcessMetadata  } = useDatastreamOperation();
+            const input = { foo: "bar" };
+            await uploadProcessMetadata(input);
+
+            expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/PROCESS-MD/processMetadata",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({processMetadata: input}),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
+                open: true,
+                message: "upload works",
+                severity: "success",
+            });
+        });
+
+        it("fails to upload the process metadata", async () => {
+            fetchValues.action.fetchText.mockRejectedValue(new Error("Upload failure!"));
+
+            const { uploadProcessMetadata } = useDatastreamOperation();
+            const input = { foo: "bar" };
+            await uploadProcessMetadata(input);
+
+            expect(editorValues.action.loadCurrentObjectDetails).not.toHaveBeenCalled();
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/vudl%3A123/datastream/PROCESS-MD/processMetadata",
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({processMetadata: input}),
+                }),
+                { "Content-Type": "application/json"}
+            );
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Upload failure!",
@@ -235,7 +355,7 @@ describe("useDatastreamOperation", () => {
                 })
             );
             expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Delete success!",
@@ -257,7 +377,7 @@ describe("useDatastreamOperation", () => {
                 })
             );
 
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Delete failure!",
@@ -271,11 +391,10 @@ describe("useDatastreamOperation", () => {
         let blob: Blob;
         let headers;
         let createObjectURL;
-        let createElement;
+        let createElementSpy;
         let link;
-        let body;
+        let appendChildSpy;
         beforeEach(() => {
-
             blob = new Blob(["test"], {type: 'text/pdf'});
             headers = new Headers();
             createObjectURL = jest.fn().mockReturnValue("test3");
@@ -284,17 +403,8 @@ describe("useDatastreamOperation", () => {
                 setAttribute: jest.fn(),
                 click: jest.fn()
             };
-            createElement = jest.fn().mockReturnValue(link);
-            body = {
-                appendChild: jest.fn()
-            };
-            Object.defineProperty(global, "document", {
-                value: {
-                    body,
-                    createElement
-                },
-                writable: true,
-            });
+            createElementSpy = jest.spyOn(document, 'createElement').mockReturnValue(link);
+            appendChildSpy = jest.spyOn(document.body, 'appendChild').mockImplementation(jest.fn());
             Object.defineProperty(global, "URL", {
                 value: {
                     createObjectURL
@@ -313,10 +423,10 @@ describe("useDatastreamOperation", () => {
             const { downloadDatastream } = useDatastreamOperation();
             await downloadDatastream("test1");
 
-            expect(createElement).toHaveBeenCalledWith("a");
+            expect(createElementSpy).toHaveBeenCalledWith("a");
             expect(createObjectURL).toHaveBeenCalledWith(blob);
             expect(link.setAttribute).toHaveBeenCalledWith("download", "test.jpeg");
-            expect(body.appendChild).toHaveBeenCalledWith(link);
+            expect(appendChildSpy).toHaveBeenCalledWith(link);
             expect(link.click).toHaveBeenCalled();
         });
 
@@ -334,7 +444,7 @@ describe("useDatastreamOperation", () => {
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/test1/download"
             );
 
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Incorrect file format",
@@ -355,7 +465,7 @@ describe("useDatastreamOperation", () => {
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/test1/download"
             );
 
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Incorrect file format",
@@ -374,7 +484,7 @@ describe("useDatastreamOperation", () => {
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/test1/download"
             );
 
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     message: "Download failure!",
@@ -437,7 +547,7 @@ describe("useDatastreamOperation", () => {
             await viewDatastream();
 
             expect(fetchValues.action.fetchBlob).toHaveBeenCalled();
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith(
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith(
                 expect.objectContaining({
                     open: true,
                     severity: "error",
@@ -475,7 +585,7 @@ describe("useDatastreamOperation", () => {
             expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/LICENSE/license"
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "fetch license failed",
                 severity: "error"
@@ -509,7 +619,7 @@ describe("useDatastreamOperation", () => {
         });
 
 
-        it("fails to fetch the license key", async () => {
+        it("fails to fetch the agents", async () => {
             fetchValues.action.fetchJSON.mockRejectedValue(new Error("fetch agents failed"));
 
             const { getAgents } = useDatastreamOperation();
@@ -518,9 +628,47 @@ describe("useDatastreamOperation", () => {
             expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
                 "http://localhost:9000/api/edit/object/vudl%3A123/datastream/AGENTS/agents"
             );
-            expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
                 open: true,
                 message: "fetch agents failed",
+                severity: "error"
+            });
+        });
+    });
+
+    describe("getProcessMetadata", () => {
+        let expectedMetadata: Record<string, string>;
+        beforeEach(() => {
+            expectedMetadata = { foo: "bar" };
+            editorValues.state.activeDatastream = "PROCESS-MD";
+            editorValues.state.currentDatastreams = ["PROCESS-MD"];
+        });
+
+        it("returns process metadata for the active datastream", async () => {
+            fetchValues.action.fetchJSON.mockResolvedValue(expectedMetadata);
+
+            const { getProcessMetadata } = useDatastreamOperation();
+            const agents = await getProcessMetadata();
+
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/PROCESS-MD/processMetadata"
+            );
+            expect(agents).toEqual(expectedMetadata);
+        });
+
+
+        it("fails to fetch the process metadata", async () => {
+            fetchValues.action.fetchJSON.mockRejectedValue(new Error("fetch process metadata failed"));
+
+            const { getProcessMetadata } = useDatastreamOperation();
+            await getProcessMetadata();
+
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/vudl%3A123/datastream/PROCESS-MD/processMetadata"
+            );
+            expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
+                open: true,
+                message: "fetch process metadata failed",
                 severity: "error"
             });
         });

@@ -1,34 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import { useEditorContext } from "../../../context/EditorContext";
-import { useFetchContext } from "../../../context/FetchContext";
-import { getParentUrl } from "../../../util/routes";
 import Delete from "@mui/icons-material/Delete";
 
 export interface ParentListProps {
     pid: string;
+    initiallyShallow?: boolean;
 }
 
-const ParentList = ({ pid }: ParentListProps): React.ReactElement => {
+const ParentList = ({ pid, initiallyShallow = true }: ParentListProps): React.ReactElement => {
+    const {
+        action: { setSnackbarState },
+    } = useGlobalContext();
     const {
         state: { parentDetailsStorage },
-        action: {
-            clearPidFromChildListStorage,
-            loadParentDetailsIntoStorage,
-            removeFromObjectDetailsStorage,
-            removeFromParentDetailsStorage,
-            setSnackbarState,
-        },
+        action: { detachObjectFromParent, loadParentDetailsIntoStorage },
     } = useEditorContext();
-    const {
-        action: { fetchText },
-    } = useFetchContext();
-    const loaded = Object.prototype.hasOwnProperty.call(parentDetailsStorage, pid);
+    const [shallow, setShallow] = useState<boolean>(initiallyShallow);
+    const dataForPid = Object.prototype.hasOwnProperty.call(parentDetailsStorage, pid as string)
+        ? parentDetailsStorage[pid]
+        : {};
+    const key = shallow ? "shallow" : "full";
+    const loaded = Object.prototype.hasOwnProperty.call(dataForPid, key);
 
     useEffect(() => {
         if (!loaded) {
-            loadParentDetailsIntoStorage(pid);
+            loadParentDetailsIntoStorage(pid, shallow);
         }
-    }, [loaded]);
+    }, [loaded, shallow]);
 
     const showSnackbarMessage = (message: string, severity: string) => {
         setSnackbarState({
@@ -42,27 +41,13 @@ const ParentList = ({ pid }: ParentListProps): React.ReactElement => {
         if (!confirm("Are you sure you wish to remove this parent?")) {
             return;
         }
-        const target = getParentUrl(pid, parentPid);
-        let result: string;
-        try {
-            result = await fetchText(target, { method: "DELETE" });
-        } catch (e) {
-            result = (e as Error).message ?? "Unexpected error";
-        }
-        if (result === "ok") {
-            // Clear and reload the cached object and its parents, since these have now changed!
-            removeFromObjectDetailsStorage(pid);
-            removeFromParentDetailsStorage(pid);
-            // Clear any cached lists belonging to the parent PID, because the
-            // order has potentially changed!
-            clearPidFromChildListStorage(parentPid);
-            showSnackbarMessage(`Successfully removed ${pid} from ${parentPid}`, "info");
-        } else {
-            showSnackbarMessage(result, "error");
-        }
+        const result = await detachObjectFromParent(pid, parentPid);
+        result === "ok"
+            ? showSnackbarMessage(`Successfully removed ${pid} from ${parentPid}`, "info")
+            : showSnackbarMessage(result, "error");
     };
 
-    const parents = (loaded ? parentDetailsStorage[pid].parents ?? [] : []).map((parent) => {
+    const parents = (loaded ? parentDetailsStorage[pid][key].parents ?? [] : []).map((parent) => {
         let parentChain = "";
         let nextNode = (parent.parents ?? [])[0] ?? null;
         while (nextNode) {
@@ -78,12 +63,12 @@ const ParentList = ({ pid }: ParentListProps): React.ReactElement => {
                 </td>
                 <td>{parent.pid ?? ""}</td>
                 <td>{parent.title ?? "Unknown title"}</td>
-                <td>{parentChain}</td>
+                <td>{shallow ? <button onClick={() => setShallow(false)}>Show More</button> : parentChain}</td>
             </tr>
         );
     });
     return (
-        <table border="1">
+        <table border={1}>
             <tbody>
                 {parents.length > 0 ? (
                     parents

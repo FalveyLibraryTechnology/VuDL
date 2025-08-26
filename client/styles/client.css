@@ -154,6 +154,7 @@ label input[type="radio"] {
 .thumbnail img {
     display: block;
     width: 100%;
+    max-height: 100%;
     object-fit: contain;
 }
 
@@ -187,6 +188,10 @@ label input[type="radio"] {
 }
 #zoomyStatus {
     text-align: center;
+}
+
+.preview img {
+  border: 1px solid black;
 }
 
 .MuiTreeItem-root.Mui-selected,

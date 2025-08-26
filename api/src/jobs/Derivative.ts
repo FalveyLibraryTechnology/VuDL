@@ -6,7 +6,6 @@ import JobMetadata from "../models/JobMetadata";
 import PageOrder from "../models/PageOrder";
 import QueueJob from "./QueueJobInterface";
 
-// TODO: Abstract Job?
 class Derivative implements QueueJob {
     async run(job: Job): Promise<void> {
         console.log(": build derivatives: " + job.data.dir);
@@ -25,16 +24,16 @@ class Derivative implements QueueJob {
         });
 
         // Wait for all image generation
-        Promise.all(generatingPromises).then(() => {
-            // Delete lock file
-            try {
-                console.log(": build derivatives done");
-                const metadata = new JobMetadata(job.data);
-                fs.unlinkSync(metadata.derivativeLockfile);
-            } catch (e) {
-                console.error("lock file not deleted: " + job.data.dir);
-            }
-        });
+        await Promise.all(generatingPromises);
+
+        // Delete lock file
+        try {
+            console.log(": build derivatives done");
+            const metadata = new JobMetadata(job.data);
+            fs.rmSync(metadata.derivativeLockfile);
+        } catch (e) {
+            console.error("lock file not deleted: " + job.data.dir);
+        }
     }
 }
 

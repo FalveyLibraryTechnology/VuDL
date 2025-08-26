@@ -1,42 +1,75 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ObjectSummary displays loading message when appropriate 1`] = `
-<ObjectSummary>
+<div
+  className="infobox"
+>
   <div
-    className="infobox"
+    style={
+      {
+        "float": "right",
+      }
+    }
   >
-    <h2>
-      Loading...
-    </h2>
-    <div />
+    ObjectThumbnail
   </div>
-</ObjectSummary>
+  <h2>
+    Loading...
+  </h2>
+  <div />
+  PID: 
+  foo:123
+   
+  CopyPidButton
+  <br
+    style={
+      {
+        "clear": "both",
+      }
+    }
+  />
+</div>
 `;
 
 exports[`ObjectSummary renders information from metadata when available 1`] = `
-<ObjectSummary>
+<div
+  className="infobox"
+>
   <div
-    className="infobox"
+    style={
+      {
+        "float": "right",
+      }
+    }
   >
-    <h2>
-      My title
-    </h2>
-    <div>
-      <p>
-        Hello 
-        <b
-          key="1"
-        >
-          world
-        </b>
-        !
-      </p>
-    </div>
-    <Component
-      pid="foo:123"
-    >
-      ObjectStatus
-    </Component>
+    ObjectThumbnail
+    ObjectModels
   </div>
-</ObjectSummary>
+  <h2>
+    My title
+  </h2>
+  <div>
+    <p>
+      Hello 
+      <b>
+        world
+      </b>
+      !
+    </p>
+  </div>
+  ObjectButtonBar
+  ObjectOrder
+  ObjectChildCounts
+  PID: 
+  foo:123
+   
+  CopyPidButton
+  <br
+    style={
+      {
+        "clear": "both",
+      }
+    }
+  />
+</div>
 `;

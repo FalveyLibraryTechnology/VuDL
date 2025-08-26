@@ -3,10 +3,24 @@ import { useEditorContext } from "../../../context/EditorContext";
 import DatastreamAgentsContent from "./DatastreamAgentsContent";
 import DatastreamLicenseContent from "./DatastreamLicenseContent";
 import DatastreamUploadContent from "./DatastreamUploadContent";
+import DatastreamDublinCoreContent from "./DatastreamDublinCoreContent";
+import DatastreamProcessMetadataContent from "./DatastreamProcessMetadataContent";
+import { DublinCoreMetadataContextProvider } from "../../../context/DublinCoreMetadataContext";
+import { ProcessMetadataContextProvider } from "../../../context/ProcessMetadataContext";
 
-const uploadModalMapping = {
+const uploadModalMapping: Record<string, React.ReactElement> = {
     LICENSE: <DatastreamLicenseContent />,
     AGENTS: <DatastreamAgentsContent />,
+    DC: (
+        <DublinCoreMetadataContextProvider>
+            <DatastreamDublinCoreContent />
+        </DublinCoreMetadataContextProvider>
+    ),
+    "PROCESS-MD": (
+        <ProcessMetadataContextProvider>
+            <DatastreamProcessMetadataContent />
+        </ProcessMetadataContextProvider>
+    ),
 };
 
 const DatastreamUploadModalContent = (): React.ReactElement => {

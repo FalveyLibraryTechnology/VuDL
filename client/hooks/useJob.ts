@@ -11,20 +11,31 @@ interface JobStatus {
     ingesting: boolean;
     documents: number;
     audio: number;
+    video: number;
     ingest_info: string;
 }
 
-const useJob = ({ category, children }) => {
+export interface JobProps {
+    category: string;
+    children: string;
+}
+
+export interface ActionInterface {
+    onClick: (e: any) => void;
+    text: string;
+}
+
+const useJob = ({ category, children }: JobProps) => {
     const {
         action: { makeRequest, fetchJSON },
     } = useFetchContext();
-    const [statusText, setStatusText] = useState([]);
-    const [published, setPublished] = useState();
+    const [statusText, setStatusText] = useState<Array<string>>([]);
+    const [published, setPublished] = useState<boolean>(false);
     const [clickWarning, setClickWarning] = useState("");
-    const [action, setAction] = useState(null);
+    const [action, setAction] = useState<ActionInterface|null>(null);
     const [ingestInfo, setIngestInfo] = useState("");
     const [clickable, setClickable] = useState(false);
-    const timeoutRef = useRef();
+    const timeoutRef = useRef<NodeJS.Timeout|null>(null);
     const derivativeTypeCount = 3;
 
     const getPublishedStatusText = ({ derivatives, ingesting, published }) => {
@@ -52,14 +63,15 @@ const useJob = ({ category, children }) => {
         return ["derivatives: " + percentDone.toFixed(2) + "% built"];
     };
 
-    const getJobStatusText = ({ derivatives, documents, audio, ingesting, published }) => {
-        if (derivatives.expected === 0 && documents === 0 && audio === 0) {
+    const getJobStatusText = ({ derivatives, documents, audio, video, ingesting, published }) => {
+        if (derivatives.expected === 0 && documents === 0 && audio === 0 && video === 0) {
             return ["empty job"];
         }
         const pageCount = parseInt(derivatives.expected / derivativeTypeCount);
         return [
             ...(documents > 0 ? [`${documents} document${documents > 1 ? "s" : ""}`] : []),
             ...(audio > 0 ? [`${audio} audio`] : []),
+            ...(video > 0 ? [`${video} video`] : []),
             `${pageCount} page${pageCount > 1 ? "s" : ""}`,
             ...getPublishedStatusText({ derivatives, ingesting, published }),
         ];
@@ -69,6 +81,7 @@ const useJob = ({ category, children }) => {
         minutes_since_upload,
         documents,
         audio,
+        video,
         ingesting,
         published
     }: JobStatus) => {
@@ -82,7 +95,7 @@ const useJob = ({ category, children }) => {
             }
             return [
                 getAgeString(minutes_since_upload),
-                ...getJobStatusText({ derivatives, documents, audio, ingesting, published }),
+                ...getJobStatusText({ derivatives, documents, audio, video, ingesting, published }),
             ];
         }
         return ["loading..."];
@@ -103,7 +116,9 @@ const useJob = ({ category, children }) => {
         setClickable(false);
         setClickWarning("");
         setAction(null);
-        await updateStatus();
+        if (!timeoutRef.current) {
+            await updateStatus(e);
+        }
     };
 
     const ingest = async (e) => {
@@ -124,11 +139,13 @@ const useJob = ({ category, children }) => {
         setClickable(false);
         setClickWarning("");
         setAction(null);
-        await updateStatus(e);
+        if (!timeoutRef.current) {
+            await updateStatus(e);
+        }
     };
 
-    const updateStatus = async (e) => {
-        if (typeof e !== "undefined") {
+    const updateStatus = async (e = null) => {
+        if (typeof e !== "undefined" && e) {
             e.stopPropagation();
         }
         try {
@@ -141,11 +158,14 @@ const useJob = ({ category, children }) => {
                 (typeof response.ingest_info !== "undefined" && response?.ingest_info.length > 0)
             ) {
                 timeoutRef.current = setTimeout(updateStatus, 1000);
+            } else {
+                timeoutRef.current = null;
             }
         } catch (error) {
-            setIngestInfo([]);
+            setIngestInfo("");
             setPublished(false);
             console.error(error);
+            timeoutRef.current = null;
         }
     };
 

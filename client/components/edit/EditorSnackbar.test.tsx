@@ -1,21 +1,22 @@
 import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { shallow, mount } from "enzyme";
-import toJson from "enzyme-to-json";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import renderer from "react-test-renderer";
 import EditorSnackbar from "./EditorSnackbar";
 
-const mockUseEditorContext = jest.fn();
-jest.mock("../../context/EditorContext", () => ({
-    useEditorContext: () => {
-        return mockUseEditorContext();
+const mockUseGlobalContext = jest.fn();
+jest.mock("../../context/GlobalContext", () => ({
+    useGlobalContext: () => {
+        return mockUseGlobalContext();
     },
 }));
 jest.mock("./children/ChildList", () => () => "ChildList");
 
 describe("EditorSnackbar", () => {
-    let editorValues;
+    let globalValues;
     beforeEach(() => {
-        editorValues = {
+        globalValues = {
             state: {
                 snackbarState: {
                     message: "test1",
@@ -27,20 +28,26 @@ describe("EditorSnackbar", () => {
                 setSnackbarState: jest.fn(),
             },
         };
-        mockUseEditorContext.mockReturnValue(editorValues);
+        mockUseGlobalContext.mockReturnValue(globalValues);
     });
 
     it("renders", () => {
-        const wrapper = shallow(<EditorSnackbar />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer
+            .create(<EditorSnackbar />, {
+                createNodeMock: (node: Node) => {
+                    return document.createElement(node.type);
+                },
+            })
+            .toJSON();
+        expect(tree).toMatchSnapshot();
     });
 
-    it("closes", () => {
-        const component = mount(<EditorSnackbar />);
+    it("closes", async () => {
+        render(<EditorSnackbar />);
 
-        component.find("button.editorSnackBarAlertCloseButton").simulate("click");
+        await userEvent.setup().click(screen.getByRole("button"));
 
-        expect(editorValues.action.setSnackbarState).toHaveBeenCalledWith({
+        expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             open: false,
             message: "",
             severity: "info",

@@ -4,14 +4,21 @@ import ChildList from "./ChildList";
 import AddBox from "@mui/icons-material/AddBox";
 import IndeterminateCheckBox from "@mui/icons-material/IndeterminateCheckBox";
 import { extractFirstMetadataValue } from "../../../util/metadata";
+import ObjectThumbnail from "../ObjectThumbnail";
 
 export interface SelectableChildProps {
     pid: string;
     selectCallback: (pid: string) => void;
     initialTitle: string;
+    thumbnail?: boolean;
 }
 
-export const SelectableChild = ({ pid, selectCallback, initialTitle }: SelectableChildProps): React.ReactElement => {
+export const SelectableChild = ({
+    pid,
+    selectCallback,
+    initialTitle,
+    thumbnail = false,
+}: SelectableChildProps): React.ReactElement => {
     const {
         state: { objectDetailsStorage },
     } = useEditorContext();
@@ -25,7 +32,11 @@ export const SelectableChild = ({ pid, selectCallback, initialTitle }: Selectabl
             {expanded ? <IndeterminateCheckBox titleAccess="Collapse Tree" /> : <AddBox titleAccess="Expand Tree" />}
         </span>
     );
-    const childList = expanded ? <ChildList pid={pid} selectCallback={selectCallback} pageSize={10} /> : "";
+    const childList = expanded ? (
+        <ChildList pid={pid} selectCallback={selectCallback} pageSize={10} forceThumbs={thumbnail} />
+    ) : (
+        ""
+    );
     return (
         <>
             {expandControl}
@@ -35,6 +46,12 @@ export const SelectableChild = ({ pid, selectCallback, initialTitle }: Selectabl
                 }}
             >
                 {(title.length > 0 ? title : "-") + " [" + pid + "]"}
+                {thumbnail ? (
+                    <>
+                        <br />
+                        <ObjectThumbnail pid={pid} />
+                    </>
+                ) : null}
             </button>
             {childList}
         </>

@@ -1,20 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ParentList renders a populated parent list correctly 1`] = `
+exports[`ParentList renders a populated parent list correctly (full mode) 1`] = `
 <table
-  border="1"
+  border={1}
 >
   <tbody>
-    <tr
-      key="parentlist_foo:123_foo:122"
-    >
+    <tr>
       <td>
         <button
           onClick={[Function]}
         >
-          <Memo(ForwardRef(DeleteIcon))
-            titleAccess="Delete parent foo:122"
-          />
+          Delete parent foo:122
         </button>
       </td>
       <td>
@@ -31,14 +27,43 @@ exports[`ParentList renders a populated parent list correctly 1`] = `
 </table>
 `;
 
-exports[`ParentList renders an empty list correctly 1`] = `
+exports[`ParentList renders a populated parent list correctly (shallow mode) 1`] = `
 <table
-  border="1"
+  border={1}
 >
   <tbody>
-    <tr
-      key="parentlist_foo:123_null"
-    >
+    <tr>
+      <td>
+        <button
+          onClick={[Function]}
+        >
+          Delete parent foo:122
+        </button>
+      </td>
+      <td>
+        foo:122
+      </td>
+      <td>
+        Parent
+      </td>
+      <td>
+        <button
+          onClick={[Function]}
+        >
+          Show More
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+`;
+
+exports[`ParentList renders an empty list correctly 1`] = `
+<table
+  border={1}
+>
+  <tbody>
+    <tr>
       <td>
         No parents defined.
       </td>

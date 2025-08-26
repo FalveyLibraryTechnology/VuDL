@@ -1,5 +1,6 @@
 import { useFetchContext } from "../context/FetchContext";
 import { useEditorContext } from "../context/EditorContext";
+import { useGlobalContext } from "../context/GlobalContext";
 import {
     deleteObjectDatastreamUrl,
     downloadObjectDatastreamUrl,
@@ -8,16 +9,21 @@ import {
     postObjectDatastreamUrl,
     viewObjectDatastreamUrl,
     getObjectDatastreamMetadataUrl,
-    objectDatastreamAgentsUrl
+    objectDatastreamAgentsUrl,
+    objectDatastreamDublinCoreUrl,
+    objectDatastreamProcessMetadataUrl
  } from "../util/routes";
 
 const useDatastreamOperation = () => {
     const {
+        action: { setSnackbarState, closeModal },
+    } = useGlobalContext();
+    const {
         action: { fetchBlob, fetchJSON, fetchText },
     } = useFetchContext();
     const {
-        state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams },
-        action: { setSnackbarState, toggleDatastreamModal, loadCurrentObjectDetails },
+        state: { currentPid, activeDatastream, datastreamsCatalog, currentDatastreams, processMetadataDefaults },
+        action: { loadCurrentObjectDetails },
     } = useEditorContext();
 
     const isAllowedMimeType = (mimeType) => {
@@ -49,15 +55,14 @@ const useDatastreamOperation = () => {
                 message: text,
                 severity: "success",
             });
-            toggleDatastreamModal();
         } catch (err) {
             setSnackbarState({
                 open: true,
                 message: err.message,
                 severity: "error",
             });
-            toggleDatastreamModal();
         }
+        closeModal("datastream");
     };
 
     const uploadAgents = async (agents) => {
@@ -83,6 +88,30 @@ const useDatastreamOperation = () => {
         }
     };
 
+    const uploadDublinCore = async (metadata) => {
+        try {
+            const text = await fetchText(objectDatastreamDublinCoreUrl(currentPid, activeDatastream), {
+                method: "POST",
+                body: JSON.stringify({
+                    metadata
+                })
+            }, { "Content-Type": "application/json" });
+            await loadCurrentObjectDetails();
+            setSnackbarState({
+                open: true,
+                message: text,
+                severity: "success",
+            });
+        } catch (err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
+        }
+        closeModal("datastream");
+    };
+
     const uploadLicense = async (licenseKey) => {
         try {
             const text = await fetchText(objectDatastreamLicenseUrl(currentPid, activeDatastream), {
@@ -104,7 +133,31 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
-        toggleDatastreamModal();
+        closeModal("datastream");
+    };
+
+    const uploadProcessMetadata = async (processMetadata) => {
+        try {
+            const text = await fetchText(objectDatastreamProcessMetadataUrl(currentPid, activeDatastream), {
+                method: "POST",
+                body: JSON.stringify({
+                    processMetadata
+                })
+            }, { "Content-Type": "application/json" });
+            await loadCurrentObjectDetails();
+            setSnackbarState({
+                open: true,
+                message: text,
+                severity: "success",
+            });
+        } catch (err) {
+            setSnackbarState({
+                open: true,
+                message: err.message,
+                severity: "error",
+            });
+        }
+        closeModal("datastream");
     };
 
     const deleteDatastream = async () => {
@@ -125,7 +178,7 @@ const useDatastreamOperation = () => {
                 severity: "error",
             });
         }
-        toggleDatastreamModal();
+        closeModal("datastream");
     };
 
     const downloadDatastream = async (datastream) => {
@@ -220,10 +273,30 @@ const useDatastreamOperation = () => {
         }
         return  "";
     };
-    const getAgents = async (): Promise<Array<object>> => {
-        if(currentDatastreams.includes(activeDatastream)) {
+    const getProcessMetadata = async (overridePid: string | null = null, force = false): Promise<object> => {
+        // We should only try to fetch the data if we know the datastream is available; if there's an
+        // overridePid provided, however, we can't check as easily, so we need to have an upstream check
+        // and use the force flag to bypass the currentDatastreams check.
+        if(force || currentDatastreams.includes(activeDatastream)) {
             try {
-                return await fetchJSON(objectDatastreamAgentsUrl(currentPid, activeDatastream));
+                return await fetchJSON(objectDatastreamProcessMetadataUrl(overridePid ?? currentPid, activeDatastream));
+            } catch(err) {
+                setSnackbarState({
+                    open: true,
+                    message: err.message,
+                    severity: "error",
+                });
+            }
+        }
+        return processMetadataDefaults;
+    };
+    const getAgents = async (overridePid: string | null = null, force = false): Promise<Array<object>> => {
+        // We should only try to fetch the data if we know the datastream is available; if there's an
+        // overridePid provided, however, we can't check as easily, so we need to have an upstream check
+        // and use the force flag to bypass the currentDatastreams check.
+        if(force || currentDatastreams.includes(activeDatastream)) {
+            try {
+                return await fetchJSON(objectDatastreamAgentsUrl(overridePid ?? currentPid, activeDatastream));
             } catch(err) {
                 setSnackbarState({
                     open: true,
@@ -236,14 +309,17 @@ const useDatastreamOperation = () => {
     };
     return {
         uploadAgents,
+        uploadDublinCore,
         uploadFile,
         uploadLicense,
+        uploadProcessMetadata,
         deleteDatastream,
         downloadDatastream,
         viewDatastream,
         viewMetadata,
         getDatastreamMimetype,
         getLicenseKey,
+        getProcessMetadata,
         getAgents
     };
 };

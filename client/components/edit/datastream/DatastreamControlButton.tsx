@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Tooltip from "@mui/material/Tooltip";
 import DataObject from "@mui/icons-material/DataObject";
@@ -7,6 +7,7 @@ import Delete from "@mui/icons-material/Delete";
 import Preview from "@mui/icons-material/Preview";
 import UploadFile from "@mui/icons-material/UploadFile";
 import { useEditorContext } from "../../../context/EditorContext";
+import { useGlobalContext } from "../../../context/GlobalContext";
 import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 
 const Icons = {
@@ -29,30 +30,19 @@ const DatastreamControlButton = ({
     disabled,
 }: DatastreamControlButtonProps): React.ReactElement => {
     const [isLoading, setLoading] = useState(false);
-    const [disabledMimetype, setDisabledMimetype] = useState(false);
     const {
-        action: { toggleDatastreamModal, setActiveDatastream, setDatastreamModalState },
+        action: { setActiveDatastream, setDatastreamModalState },
     } = useEditorContext();
-    const { downloadDatastream, getDatastreamMimetype } = useDatastreamOperation();
-    useEffect(() => {
-        const enableButton = async () => {
-            setLoading(true);
-            const mimeType = await getDatastreamMimetype(datastream);
-            if (mimeType == "image/tiff") {
-                setDisabledMimetype(true);
-            }
-            setLoading(false);
-        };
-        if (modalState === "View" && !disabled) {
-            enableButton();
-        }
-    }, []);
+    const {
+        action: { openModal },
+    } = useGlobalContext();
+    const { downloadDatastream } = useDatastreamOperation();
     const onClick = (modalState) => {
         if (modalState !== "Download") {
             return () => {
                 setActiveDatastream(datastream);
                 setDatastreamModalState(modalState);
-                toggleDatastreamModal();
+                openModal("datastream");
             };
         }
         return async () => {
@@ -68,7 +58,7 @@ const DatastreamControlButton = ({
                     className="datastreamControlButton"
                     loading={isLoading}
                     aria-label={modalState}
-                    disabled={(modalState !== "Upload" && disabled) || disabledMimetype}
+                    disabled={modalState !== "Upload" && disabled}
                     onClick={onClick(modalState)}
                     size="small"
                 >

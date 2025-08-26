@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
-import TextField from "@mui/material/TextField";
 import { useEditorContext } from "../../../context/EditorContext";
 
 import ExpandCircleDown from "@mui/icons-material/ExpandCircleDown";
@@ -10,6 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import DatastreamAgentsContentNotes from "./DatastreamAgentsContentNotes";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Paper from "@mui/material/Paper";
+
+import BlurSavingTextField from "../../shared/BlurSavingTextField";
 
 interface DatastreamAgentsContentRowProps {
     agent: {
@@ -42,6 +43,21 @@ const DatastreamAgentsContentRow = ({
     const { types, roles, defaults } = agentsCatalog;
     const { role, type, name, notes } = agent;
     const [expanded, setExpanded] = useState(initialExpand);
+    const nameFieldOptions = {
+        className: "agentNameTextField",
+        error: name === "",
+        label: namesHelperText,
+    };
+    const setName = (name) => {
+        const { role, type } = defaults;
+        if (agent.name === "" && agent.role === "") {
+            onRoleChange(role);
+        }
+        if (agent.name === "" && agent.type === "") {
+            onTypeChange(type);
+        }
+        onNameChange(name);
+    };
     return (
         <>
             <Grid container item xs={3}>
@@ -52,6 +68,7 @@ const DatastreamAgentsContentRow = ({
                     <FormControl fullWidth={true}>
                         <NativeSelect
                             className="agentRoleSelect"
+                            inputProps={{ "aria-label": "Select Role" }}
                             value={role}
                             error={role === ""}
                             onChange={(event) => onRoleChange(event.target.value)}
@@ -76,6 +93,7 @@ const DatastreamAgentsContentRow = ({
                     <FormControl fullWidth={true}>
                         <NativeSelect
                             className="agentTypeSelect"
+                            inputProps={{ "aria-label": "Select Type" }}
                             value={type}
                             error={type === ""}
                             onChange={(event) => onTypeChange(event.target.value)}
@@ -94,22 +112,7 @@ const DatastreamAgentsContentRow = ({
             </Grid>
             <Grid container item xs={5}>
                 <FormControl fullWidth={true}>
-                    <TextField
-                        className="agentNameTextField"
-                        error={name === ""}
-                        value={name}
-                        label={namesHelperText}
-                        onChange={(event) => {
-                            const { role, type } = defaults;
-                            if (agent.name === "" && agent.role === "") {
-                                onRoleChange(role);
-                            }
-                            if (agent.name === "" && agent.type === "") {
-                                onTypeChange(type);
-                            }
-                            onNameChange(event.target.value);
-                        }}
-                    />
+                    <BlurSavingTextField options={nameFieldOptions} value={name} setValue={setName} />
                 </FormControl>
             </Grid>
             <Grid container item xs={1}>

@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ObjectButtonBar renders correctly 1`] = `
+[
+  "ObjectStatus",
+  "EditParentsButton",
+  <button
+    onClick={[Function]}
+  >
+    Refresh children
+  </button>,
+  "ObjectPreviewButton",
+  "DeleteObjectButton",
+]
+`;

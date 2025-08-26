@@ -6,6 +6,7 @@ describe("useJobHelper", () => {
     test.each([
         [1, "1 minute old"],
         [2, "2 minutes old"],
+        [20, "20 minutes old"],
         [61, "1 hour old"],
         [121, "2 hours old"],
         [1440, "1 day old"],

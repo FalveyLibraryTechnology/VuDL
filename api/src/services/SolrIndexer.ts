@@ -5,6 +5,7 @@ import FedoraDataCollector from "./FedoraDataCollector";
 import http = require("needle");
 import { NeedleResponse } from "./interfaces";
 import Solr from "./Solr";
+import SolrCache from "./SolrCache";
 
 interface SolrFields {
     [key: string]: string | Array<string>;
@@ -15,11 +16,14 @@ class SolrIndexer {
     config: Config;
     fedoraDataCollector: FedoraDataCollector;
     solr: Solr;
+    solrCache: SolrCache;
+    lastIndexResults: SolrFields | null = null;
 
-    constructor(fedoraDataCollector: FedoraDataCollector, solr: Solr, config: Config) {
+    constructor(fedoraDataCollector: FedoraDataCollector, solr: Solr, solrCache: SolrCache, config: Config) {
         this.fedoraDataCollector = fedoraDataCollector;
         this.config = config;
         this.solr = solr;
+        this.solrCache = solrCache;
     }
 
     public static getInstance(): SolrIndexer {
@@ -27,7 +31,8 @@ class SolrIndexer {
             SolrIndexer.instance = new SolrIndexer(
                 FedoraDataCollector.getInstance(),
                 Solr.getInstance(),
-                Config.getInstance()
+                SolrCache.getInstance(),
+                Config.getInstance(),
             );
         }
         return SolrIndexer.instance;
@@ -58,7 +63,7 @@ class SolrIndexer {
             typeof response.results.getFirstIndexed !== "string" ||
             typeof response.results.getLastIndexed !== "string"
         ) {
-            throw new Error("Unexpected change tracker response.");
+            throw new Error(`Unexpected change tracker response: ${JSON.stringify(response)}.`);
         }
         return response.results;
     }
@@ -68,8 +73,12 @@ class SolrIndexer {
     }
 
     async indexPid(pid: string): Promise<NeedleResponse> {
-        const fedoraFields = await this.getFields(pid);
-        return await this.solr.indexRecord(this.config.solrCore, fedoraFields);
+        // Clear cache to ensure we retrieve fresh data from Fedora:
+        this.solrCache.purgeFromCacheIfEnabled(pid);
+        // Fetch and store latest details:
+        this.lastIndexResults = await this.getFields(pid);
+        // Send to Solr:
+        return await this.solr.indexRecord(this.config.solrCore, this.lastIndexResults);
     }
 
     async getFields(pid: string): Promise<SolrFields> {
@@ -99,7 +108,7 @@ class SolrIndexer {
         for (const sequence of fedoraData.sequences) {
             const [seqPid, seqNum] = sequence.split("#", 2);
             sequenceIndex[seqPid] = seqNum;
-            const sequence_str = seqPid.replace(":", "_");
+            const sequence_str = seqPid.replace(/:/g, "_");
             const dynamic_sequence_field_name = "sequence_" + sequence_str + "_str";
             fields[dynamic_sequence_field_name] = this.padNumber(seqNum);
         }
@@ -183,7 +192,7 @@ class SolrIndexer {
         // Load all the Dublin Core data into dynamic fields AND allfields:
         fields.allfields = [];
         for (const field in fedoraData.metadata) {
-            const fieldName = field.replace(":", ".") + "_txt_mv";
+            const fieldName = field.replace(/:/g, ".") + "_txt_mv";
             fields[fieldName] = fedoraData.metadata[field];
             fields.allfields = fields.allfields.concat(fedoraData.metadata[field]);
         }
@@ -348,6 +357,10 @@ class SolrIndexer {
         }
 
         return fields;
+    }
+
+    public getLastIndexResults(): SolrFields | null {
+        return this.lastIndexResults;
     }
 }
 

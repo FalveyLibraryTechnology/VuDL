@@ -64,6 +64,10 @@ class Config {
         return this.ini["fits_command"];
     }
 
+    get sessionKey(): string {
+        return this.ini["session_key"] ?? "vanilla hot cocoa";
+    }
+
     get tesseractPath(): string {
         return this.ini["tesseract_path"];
     }
@@ -109,6 +113,10 @@ class Config {
         return this.ini["java_path"] ?? "java";
     }
 
+    get tikaConfigFile(): string {
+        return this.ini["tika_config_file"] ?? null;
+    }
+
     get tikaPath(): string {
         return this.ini["tika_path"];
     }
@@ -119,6 +127,10 @@ class Config {
 
     get solrUrl(): string {
         return this.ini["solr_url"] ?? "http://localhost:8983/solr";
+    }
+
+    get solrDocumentCacheDir(): boolean | string {
+        return this.ini["solr_document_cache_dir"] ?? false;
     }
 
     get allowedOrigins(): string[] {
@@ -134,11 +146,27 @@ class Config {
     }
 
     get dataModels(): Record<string, string> {
-        return this.ini["data_models"];
+        return (
+            this.ini["data_models"] ?? {
+                Image: "vudl-system:ImageData",
+                PDF: "vudl-system:PDFData",
+                DOC: "vudl-system:DOCData",
+                Audio: "vudl-system:AudioData",
+                Video: "vudl-system:VideoData",
+                XLS: "vudl-system:XLSData",
+                Text: "vudl-system:TextData",
+            }
+        );
     }
 
     get collectionModels(): Record<string, string> {
-        return this.ini["collection_models"];
+        return (
+            this.ini["collection_models"] ?? {
+                List: "vudl-system:ListCollection",
+                Resource: "vudl-system:ResourceCollection",
+                Folder: "vudl-system:FolderCollection",
+            }
+        );
     }
 
     get institution(): string {
@@ -157,8 +185,17 @@ class Config {
         return this.ini["articles_to_strip"] ?? [];
     }
 
+    get trashPid(): string | null {
+        return this.ini["trash_pid"] ?? null;
+    }
+
     get favoritePids(): Array<string> {
-        return this.ini["favorite_pids"] ?? [];
+        const favorites = this.ini["favorite_pids"] ?? [];
+        const trash = this.trashPid;
+        if (trash && !favorites.includes(trash)) {
+            favorites.push(trash);
+        }
+        return favorites;
     }
 
     get languageMap(): Record<string, string> {
@@ -239,6 +276,75 @@ class Config {
 
     get agentTypes(): Array<string> {
         return this.ini?.["agent"]?.["types"] ?? [];
+    }
+
+    get dublinCoreFields(): Record<string, Record<string, string | Array<string>>> {
+        return this.ini?.["dublin_core"] ?? {};
+    }
+
+    get redisConnectionSettings(): Record<string, string> {
+        return this.ini?.["queue"]?.["connection"] ?? {};
+    }
+
+    get redisDefaultQueueName(): string {
+        return this.ini?.["queue"]?.["defaultQueueName"] ?? "vudl";
+    }
+
+    get redisQueueJobMap(): Record<string, string> {
+        return this.ini?.["queue"]?.["jobMap"] ?? {};
+    }
+
+    get redisLockDuration(): number {
+        return parseInt(this.ini?.["queue"]?.["lockDuration"] ?? "30000");
+    }
+
+    get processMetadataDefaults(): Record<string, string> {
+        return this.ini?.["process_metadata_defaults"] ?? {};
+    }
+
+    get toolPresets(): Array<Record<string, string>> {
+        return this.ini?.["tool_presets"] ?? [];
+    }
+
+    get sharpOptions(): Record<string, unknown> {
+        const pixelLimit = this.ini?.["sharp"]?.["limitInputPixels"] ?? "268402689";
+        return {
+            limitInputPixels: parseInt(pixelLimit),
+        };
+    }
+
+    get max409Retries(): number {
+        return this.ini["max_409_retries"] ?? 3;
+    }
+
+    get maxUploadSize(): number {
+        return this.ini?.["upload"]?.["sizeLimit"] ?? 200 * 1024 * 1024;
+    }
+
+    get notifyMethod(): string {
+        return this.ini?.["notify"]?.["method"] ?? "ntfy";
+    }
+
+    get ntfyConfig(): Record<string, string> {
+        return {
+            defaultChannel: this.ini?.["notify"]?.["ntfy_defaultChannel"] ?? "vudl-ntfy",
+        };
+    }
+
+    get indexerLockRetries(): number {
+        return parseInt(this.ini?.["indexer"]?.["lockRetries"] ?? 60);
+    }
+
+    get indexerLockWaitMs(): number {
+        return parseInt(this.ini?.["indexer"]?.["lockWaitMs"] ?? 1000);
+    }
+
+    get indexerExceptionRetries(): number {
+        return parseInt(this.ini?.["indexer"]?.["exceptionRetries"] ?? 10);
+    }
+
+    get indexerExceptionWaitMs(): number {
+        return parseInt(this.ini?.["indexer"]?.["exceptionWaitMs"] ?? 500);
     }
 }
 

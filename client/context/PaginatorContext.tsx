@@ -134,23 +134,25 @@ export const usePaginatorContext = () => {
         setPage(currentPage - 1);
     };
 
-    const updatePagesByStatus = (status) => {
+    const updatePagesByStatus = (order, status) => {
         const {
             file_problems: { deleted, added },
         } = status;
         const message = [];
+        let newOrder = order;
         if (deleted.length > 0) {
             message.push(deleted.length + " file(s) have been removed from the job since the last edit.\n");
-            setOrder(getNonRemovedPages(order, deleted));
+            newOrder = getNonRemovedPages(newOrder, deleted);
         }
 
         if (added.length > 0) {
             message.push(added.length + " file(s) have been added to the job since the last edit.\n");
-            setOrder(getAddedPages(order, added));
+            newOrder = getAddedPages(newOrder, added);
         }
 
         if (message.length) {
-            alert(message.join());
+            alert(message.join(""));
+            setOrder(newOrder);
         }
     };
 
@@ -173,11 +175,16 @@ export const usePaginatorContext = () => {
 
     const loadJob = async (initialCategory, initialJob) => {
         initialize(initialCategory, initialJob);
+        // There was a problem where switching jobs would sometimes fail to redraw the display,
+        // because the filenames in the order for the new job overlapped with filenames from the
+        // order in the previously-loaded job. To avoid this, we should always clear out the
+        // whole order before loading new data.
+        setOrder([]);
+        setMagicLabelCache([]); // clear label cache whenever there is a change
         const { order } = await fetchJSON(getJobUrl(initialCategory, initialJob));
         setOrder(order);
         setCurrentPage(0);
-        updatePagesByStatus(await fetchJSON(getJobUrl(initialCategory, initialJob, "/status")));
-        dispatchEvent(new Event("Prep.loaded"));
+        updatePagesByStatus(order, await fetchJSON(getJobUrl(initialCategory, initialJob, "/status")));
     };
 
     const deletePage = async () => {

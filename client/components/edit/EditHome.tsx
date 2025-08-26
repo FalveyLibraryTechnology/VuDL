@@ -1,3 +1,4 @@
+import Breadcrumbs from "./Breadcrumbs";
 import React, { useEffect } from "react";
 import ChildList from "./children/ChildList";
 import ParentsModal from "./parents/ParentsModal";
@@ -16,6 +17,7 @@ const EditHome = (): React.ReactElement => {
     }, []);
     return (
         <div>
+            <Breadcrumbs />
             <h1>Editor</h1>
             <h2>Tools</h2>
             <ul>

@@ -7,6 +7,8 @@ const { namedNode, literal } = DataFactory;
 import { NeedleResponse } from "./interfaces";
 import xmlescape = require("xml-escape");
 import { HttpError } from "../models/HttpError";
+import winston = require("winston");
+import SolrCache from "./SolrCache";
 
 export interface DatastreamParameters {
     dsLabel?: string;
@@ -29,15 +31,18 @@ export interface DC {
 
 export class Fedora {
     private static instance: Fedora;
+    protected logger: winston.Logger = null;
     config: Config;
+    cache: SolrCache;
 
-    constructor(config: Config) {
+    constructor(config: Config, cache: SolrCache) {
         this.config = config;
+        this.cache = cache;
     }
 
     public static getInstance(): Fedora {
         if (!Fedora.instance) {
-            Fedora.instance = new Fedora(Config.getInstance());
+            Fedora.instance = new Fedora(Config.getInstance(), SolrCache.getInstance());
         }
         return Fedora.instance;
     }
@@ -54,7 +59,7 @@ export class Fedora {
         method = "get",
         _path = "/",
         data: string | Buffer = null,
-        _options: Record<string, unknown> = {}
+        _options: Record<string, unknown> = {},
     ): Promise<NeedleResponse> {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
         const url = this.config.restBaseUrl + "/" + path;
@@ -112,33 +117,67 @@ export class Fedora {
     async deleteDatastream(
         pid: string,
         datastream: string,
-        requestOptions = { parse_response: false }
+        requestOptions = { parse_response: false },
     ): Promise<NeedleResponse> {
+        this.cache.purgeFromCacheIfEnabled(pid);
         return await this._request(
             "delete",
             `${pid}/${datastream}`,
             null, // Data
-            requestOptions
+            requestOptions,
         );
     }
 
     /**
+     * Purge datastream from Fedora by removing its tombstone
      *
      * @param pid Record id
      * @param datastream Which stream to request
      * @param requestOptions Parse JSON (true) or return raw (false, default)
-     * @returns
      */
     async deleteDatastreamTombstone(
         pid: string,
         datastream: string,
-        requestOptions = { parse_response: false }
+        requestOptions = { parse_response: false },
     ): Promise<NeedleResponse> {
+        this.cache.purgeFromCacheIfEnabled(pid);
         return await this._request(
             "delete",
             `${pid}/${datastream}/fcr:tombstone`,
             null, // Data
-            requestOptions
+            requestOptions,
+        );
+    }
+
+    /**
+     * Delete object from Fedora
+     *
+     * @param pid Record id
+     * @param parse Parse JSON (true) or return raw (false, default)
+     */
+    async deleteObject(pid: string, requestOptions = { parse_response: false }): Promise<NeedleResponse> {
+        this.cache.purgeFromCacheIfEnabled(pid);
+        return await this._request(
+            "delete",
+            pid,
+            null, // Data
+            requestOptions,
+        );
+    }
+
+    /**
+     * Purge object from Fedora by removing its tombstone
+     *
+     * @param pid Record id
+     * @param requestOptions Parse JSON (true) or return raw (false, default)
+     */
+    async deleteObjectTombstone(pid: string, requestOptions = { parse_response: false }): Promise<NeedleResponse> {
+        this.cache.purgeFromCacheIfEnabled(pid);
+        return await this._request(
+            "delete",
+            `${pid}/fcr:tombstone`,
+            null, // Data
+            requestOptions,
         );
     }
 
@@ -152,13 +191,13 @@ export class Fedora {
     async getDatastream(
         pid: string,
         datastream: string,
-        requestOptions = { parse_response: false }
+        requestOptions = { parse_response: false },
     ): Promise<NeedleResponse> {
         return await this._request(
             "get",
             pid + "/" + datastream,
             null, // Data
-            requestOptions
+            requestOptions,
         );
     }
 
@@ -172,10 +211,43 @@ export class Fedora {
     async getDublinCore(pid: string): Promise<DC> {
         const requestOptions = { parse_response: true };
         const response = await this.getDatastream(pid, "DC", requestOptions);
+        // If the DC doesn't exist yet, return an empty object.
+        if (response.statusCode === 404) {
+            return <DC>{};
+        }
         if (response.statusCode !== 200) {
             throw new Error("Unexpected status code: " + response.statusCode);
         }
         return <DC>response.body;
+    }
+
+    /**
+     * Call the callback, and retry if it yields a 409 response. Number of retries
+     * is based on configuration in vudl.ini (and retries can be disabled by setting
+     * retry count to 0).
+     *
+     * @param callback Callback to attempt
+     */
+    async callWith409Retry(callback: () => Promise<void>): Promise<void> {
+        const maxRetries = this.config.max409Retries;
+        let retries = 0;
+        while (retries <= maxRetries) {
+            try {
+                await callback();
+                return;
+            } catch (e) {
+                if (e.statusCode ?? null === 409) {
+                    retries++;
+                    if (retries <= maxRetries) {
+                        this.log(`Encountered 409 error; retry #${retries}...`);
+                    } else {
+                        throw e;
+                    }
+                } else {
+                    throw e;
+                }
+            }
+        }
     }
 
     /**
@@ -193,11 +265,13 @@ export class Fedora {
         mimeType: string,
         expectedStatus = [201],
         data: string | Buffer,
-        linkHeader = ""
+        linkHeader = "",
     ): Promise<void> {
+        this.cache.purgeFromCacheIfEnabled(pid);
         const md5 = crypto.createHash("md5").update(data).digest("hex");
         const sha = crypto.createHash("sha512").update(data).digest("hex");
         const headers: Record<string, string> = {
+            "Overwrite-Tombstone": "true",
             "Content-Disposition": 'attachment; filename="' + stream + '"',
             "Content-Type": mimeType,
             Digest: "md5=" + md5 + ", sha-512=" + sha,
@@ -207,30 +281,36 @@ export class Fedora {
             options.headers.Link = linkHeader;
         }
         const targetPath = "/" + pid + "/" + stream;
-        const response = await this._request("put", targetPath, data, options);
-        if (!expectedStatus.includes(response.statusCode)) {
-            throw new HttpError(
-                response,
-                `Expected ${expectedStatus} Created response, received: ${response.statusCode}`
-            );
-        }
+        const callback = async () => {
+            const response = await this._request("put", targetPath, data, options);
+            if (!expectedStatus.includes(response.statusCode)) {
+                throw new HttpError(
+                    response,
+                    `Expected ${expectedStatus} Created response, received: ${response.statusCode}`,
+                );
+            }
+        };
+        await this.callWith409Retry(callback);
     }
 
     /**
      * Add a datastream to Fedora.
      *
-     * @param pid    Object containing datastream
-     * @param stream Name of stream
-     * @param params Additional parameters
-     * @param data   Content to write to stream
+     * @param pid            Object containing datastream
+     * @param stream         Name of stream
+     * @param params         Additional parameters
+     * @param data           Content to write to stream
+     * @param expectedStatus Array of expected legal HTTP response codes
      */
     async addDatastream(
         pid: string,
         stream: string,
         params: DatastreamParameters,
         data: string | Buffer,
-        expectedStatus = [201]
+        expectedStatus = [201],
     ): Promise<void> {
+        this.cache.purgeFromCacheIfEnabled(pid);
+
         // First create the stream:
         await this.putDatastream(pid, stream, params.mimeType, expectedStatus, data, params.linkHeader ?? "");
 
@@ -239,12 +319,12 @@ export class Fedora {
         writer.addQuad(
             namedNode(""),
             namedNode("http://fedora.info/definitions/1/0/access/objState"),
-            literal(params.dsState ?? "A")
+            literal(params.dsState ?? "A"),
         );
         writer.addQuad(
             namedNode(""),
             namedNode("http://purl.org/dc/terms/title"),
-            literal(params.dsLabel ?? pid.replace(":", "_") + "_" + stream)
+            literal(params.dsLabel ?? pid.replace(/:/g, "_") + "_" + stream),
         );
         const turtle = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid + "/" + stream + "/fcr:metadata";
@@ -261,6 +341,7 @@ export class Fedora {
      * @param title New label to apply
      */
     async modifyObjectLabel(pid: string, title: string): Promise<void> {
+        this.cache.purgeFromCacheIfEnabled(pid);
         const writer = new N3.Writer({ format: "text/turtle" });
         this.addLabelToContainerGraph(writer, title);
         const insertClause = this.getOutputFromWriter(writer);
@@ -280,6 +361,7 @@ export class Fedora {
      * @param state New state to set
      */
     async modifyObjectState(pid: string, state: string): Promise<void> {
+        this.cache.purgeFromCacheIfEnabled(pid);
         const writer = new N3.Writer({ format: "text/turtle" });
         writer.addQuad(namedNode(""), namedNode("info:fedora/fedora-system:def/model#state"), literal(state));
         const insertClause = this.getOutputFromWriter(writer);
@@ -305,8 +387,9 @@ export class Fedora {
         subject: string,
         predicate: string,
         obj: string,
-        isLiteral = false
+        isLiteral = false,
     ): Promise<void> {
+        this.cache.purgeFromCacheIfEnabled(pid);
         const writer = new N3.Writer({ format: "text/turtle" });
         writer.addQuad(namedNode(subject), namedNode(predicate), isLiteral ? literal(obj) : namedNode(obj));
         const turtle = this.getOutputFromWriter(writer);
@@ -324,11 +407,57 @@ export class Fedora {
      * @param parentPid Parent PID to update
      */
     async deleteParentRelationship(pid: string, parentPid: string): Promise<void> {
+        this.cache.purgeFromCacheIfEnabled(pid);
         const predicate = "info:fedora/fedora-system:def/relations-external#isMemberOf";
         const targetPath = "/" + pid;
         const insertClause = "";
         const deleteClause = `<> <${predicate}> <info:fedora/${parentPid}> .`;
         const whereClause = "";
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
+    /**
+     * This method removes existing parents from a PID and attaches a new one.
+     *
+     * @param pid       PID to update
+     * @param parentPid Parent PID to update
+     * @param pos       Position within parent (null to skip setting position)
+     */
+    async movePidToParent(pid: string, parentPid: string, pos: number | null): Promise<void> {
+        // First delete all sequences:
+        this.cache.purgeFromCacheIfEnabled(pid);
+        await this.deleteSequencesMatchingRegEx(pid, ".*");
+
+        // Now remove all existing parents and add the new parent/position:
+        const parentPredicate = "info:fedora/fedora-system:def/relations-external#isMemberOf";
+        const sequencePredicate = "http://vudl.org/relationships#sequence";
+        const targetPath = "/" + pid;
+        const insertClause =
+            `<> <${parentPredicate}> <info:fedora/${parentPid}> .` +
+            (pos === null ? "" : ` <> <${sequencePredicate}> "${parentPid}#${pos}"`);
+        const deleteClause = `<> <${parentPredicate}> ?parent .`;
+        const whereClause = deleteClause;
+        const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
+        if (patchResponse.statusCode !== 204) {
+            throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
+        }
+    }
+
+    /**
+     * This method removes sequence data matching a PID and regular expression.
+     *
+     * @param pid   PID to update
+     * @param regex Regex to match
+     */
+    async deleteSequencesMatchingRegEx(pid: string, regex: string): Promise<void> {
+        const predicate = "http://vudl.org/relationships#sequence";
+        const targetPath = "/" + pid;
+        const insertClause = "";
+        const deleteClause = `<> <${predicate}> ?pos .`;
+        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${regex}"))`;
         const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
         if (patchResponse.statusCode !== 204) {
             throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
@@ -342,11 +471,29 @@ export class Fedora {
      * @param parentPid Parent PID to update
      */
     async deleteSequenceRelationship(pid: string, parentPid: string): Promise<void> {
-        const predicate = "http://vudl.org/relationships#sequence";
+        this.cache.purgeFromCacheIfEnabled(pid);
+        await this.deleteSequencesMatchingRegEx(pid, `${parentPid}#`);
+    }
+
+    /**
+     * This method changes the "sort on" property of a collection.
+     *
+     * @param pid    PID to update
+     * @param sortOn New sort value
+     */
+    async updateSortOnRelationship(pid: string, sortOn: string): Promise<void> {
+        if (sortOn !== "title" && sortOn !== "custom") {
+            throw new Error("Unexpected sortOn value: " + sortOn);
+        }
+        this.cache.purgeFromCacheIfEnabled(pid);
+        const subject = "info:fedora/" + pid;
+        const predicate = "http://vudl.org/relationships#sortOn";
+        const writer = new N3.Writer({ format: "text/turtle" });
+        writer.addQuad(namedNode(subject), namedNode(predicate), literal(sortOn));
+        const insertClause = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid;
-        const insertClause = "";
-        const deleteClause = `<> <${predicate}> ?pos .`;
-        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#"))`;
+        const deleteClause = `<> <${predicate}> ?any .`;
+        const whereClause = `?id <${predicate}> ?any`;
         const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
         if (patchResponse.statusCode !== 204) {
             throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
@@ -356,13 +503,13 @@ export class Fedora {
     /**
      * This method changes the sequential position of a pid within a specified parent pid.
      * It is the responsibility of the caller to ensure that parentPid is a legal parent of pid.
-     * This will NOT insert a new position; it only updates existing values.
      *
      * @param pid         PID to update
      * @param parentPid   Parent PID to update
      * @param newPosition New position to set
      */
     async updateSequenceRelationship(pid: string, parentPid: string, newPosition: number): Promise<void> {
+        this.cache.purgeFromCacheIfEnabled(pid);
         const subject = "info:fedora/" + pid;
         const predicate = "http://vudl.org/relationships#sequence";
         const writer = new N3.Writer({ format: "text/turtle" });
@@ -370,7 +517,7 @@ export class Fedora {
         const insertClause = this.getOutputFromWriter(writer);
         const targetPath = "/" + pid;
         const deleteClause = `<> <${predicate}> ?pos .`;
-        const whereClause = `?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#"))`;
+        const whereClause = `OPTIONAL { ?id <${predicate}> ?pos . FILTER(REGEX(?pos, "${parentPid}#")) }`;
         const patchResponse = await this.patchRdf(targetPath, insertClause, deleteClause, whereClause);
         if (patchResponse.statusCode !== 204) {
             throw new Error("Expected 204 No Content response, received: " + patchResponse.statusCode);
@@ -389,7 +536,7 @@ export class Fedora {
         targetPath: string,
         insertClause: string,
         deleteClause = "",
-        whereClause = ""
+        whereClause = "",
     ): Promise<NeedleResponse> {
         const options = {
             headers: {
@@ -473,6 +620,26 @@ export class Fedora {
             logMessage: "Create initial Dublin Core record",
         };
         await this.addDatastream(pid, "DC", params, xml, [201]);
+    }
+
+    /**
+     * Send a message to the active logger (if any).
+     *
+     * @param message Message to log
+     */
+    log(message: string): void {
+        if (this.logger && message.length > 0) {
+            this.logger.info(message);
+        }
+    }
+
+    /**
+     * Set the active logger
+     *
+     * @param logger Logger object to use (or null to disable logging)
+     */
+    setLogger(logger: winston.Logger | null): void {
+        this.logger = logger;
     }
 }
 

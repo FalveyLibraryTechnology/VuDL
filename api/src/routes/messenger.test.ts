@@ -162,6 +162,18 @@ describe("messenger", () => {
             expect(queueManager.performIndexOperation).toHaveBeenNthCalledWith(2, "foo:4", "index");
             expect(queueManager.performIndexOperation).toHaveBeenNthCalledWith(3, "foo:5", "index");
         });
+        it("will handle queue exceptions gracefully", async () => {
+            queueManager.performIndexOperation.mockImplementation(() => {
+                throw new Error("kaboom");
+            });
+            const response = await request(app)
+                .post("/messenger/queuesolrindex")
+                .set("Authorization", "Bearer test")
+                .set("Content-Type", "application/json")
+                .send(JSON.stringify(body))
+                .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+            expect(response.text).toEqual("Index operation failed, iteration 3, error: kaboom");
+        });
     });
 
     describe("post /camel", () => {

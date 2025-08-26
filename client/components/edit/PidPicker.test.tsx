@@ -1,8 +1,11 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { shallow, mount } from "enzyme";
-import toJson from "enzyme-to-json";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import renderer from "react-test-renderer";
 import PidPicker from "./PidPicker";
+import { Parent } from "./PidPicker";
+import { getRecentPidsCatalog } from "../../util/RecentPidsCatalog";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../context/EditorContext", () => ({
@@ -11,17 +14,26 @@ jest.mock("../../context/EditorContext", () => ({
     },
 }));
 jest.mock("./children/ChildList", () => () => "ChildList");
+jest.mock("@mui/material/AccordionSummary", () => (props) => "AccordionSummary: " + JSON.stringify(props.children));
+jest.mock("@mui/icons-material/ExpandMore", () => () => "Icon");
+jest.mock("../../util/RecentPidsCatalog");
 
 describe("PidPicker", () => {
     let callback: () => void;
     let editorValues;
     let favoritePidsCatalog: Record<string, string>;
 
-    const getPicker = (selected = "") => {
-        return <PidPicker selected={selected} setSelected={callback} />;
+    const getPicker = (selected = "", parents: Array<Parent> = []) => {
+        return <PidPicker selected={selected} parents={parents} setSelected={callback} />;
+    };
+
+    const checkSnapshot = (selected = "", parents: Array<Parent> = []) => {
+        const tree = renderer.create(getPicker(selected, parents)).toJSON();
+        expect(tree).toMatchSnapshot();
     };
 
     beforeEach(() => {
+        getRecentPidsCatalog.mockReturnValue({});
         callback = jest.fn();
         favoritePidsCatalog = { "foo:123": "first test", "foo:124": "second test" };
         editorValues = {
@@ -31,43 +43,58 @@ describe("PidPicker", () => {
     });
 
     it("renders correctly with favorite PIDs", () => {
-        const wrapper = shallow(getPicker());
-        expect(toJson(wrapper)).toMatchSnapshot();
+        checkSnapshot();
     });
 
-    it("sets selected PID when you click a favorite button", () => {
-        const component = mount(getPicker());
-        component.find("button").at(1).simulate("click");
+    it("sets selected PID when you click a favorite button", async () => {
+        render(getPicker());
+        await userEvent.setup().click(screen.getByText("first test"));
 
         expect(callback).toHaveBeenCalledWith("foo:123");
-        component.unmount();
     });
 
-    it("sets selected PID when you use manual entry", () => {
-        const component = mount(getPicker());
-        component.find("input").simulate("change", { target: { value: "bar" } });
-        component.find("button").at(0).simulate("click");
+    it("sets selected PID when you click a recent button", async () => {
+        getRecentPidsCatalog.mockReturnValue({ "foo:125": "recent test" });
+        render(getPicker());
+        await userEvent.setup().click(screen.getByText("recent test"));
+
+        expect(callback).toHaveBeenCalledWith("foo:125");
+    });
+
+    it("sets selected PID when you use manual entry", async () => {
+        render(getPicker());
+        fireEvent.change(screen.getByRole("textbox", { hidden: true }), { target: { value: "bar" } });
+        await userEvent.setup().click(screen.getByText("Set"));
 
         expect(callback).toHaveBeenCalledWith("bar");
-        component.unmount();
     });
 
     it("renders correctly with a selected PID", () => {
-        const wrapper = shallow(getPicker("selected:123"));
-        expect(toJson(wrapper)).toMatchSnapshot();
+        checkSnapshot("selected:123");
     });
 
-    it("allows you to clear a selected PID", () => {
-        const component = mount(getPicker("selected:123"));
-        component.find("button").simulate("click");
+    it("renders correctly with parents", () => {
+        const parents = [
+            { pid: "foo", title: "Foo" },
+            { pid: "bar", title: "Bar" },
+        ];
+        checkSnapshot("", parents);
+    });
+
+    it("allows you to clear a selected PID", async () => {
+        render(getPicker("selected:123"));
+        await userEvent.setup().click(screen.getByText("Clear"));
 
         expect(callback).toHaveBeenCalledWith("");
-        component.unmount();
+    });
+
+    it("renders correctly with recent PIDs", () => {
+        getRecentPidsCatalog.mockReturnValue(editorValues.state.favoritePidsCatalog);
+        checkSnapshot();
     });
 
     it("renders correctly without favorite PIDs", () => {
         editorValues.state.favoritePidsCatalog = [];
-        const wrapper = shallow(getPicker());
-        expect(toJson(wrapper)).toMatchSnapshot();
+        checkSnapshot();
     });
 });

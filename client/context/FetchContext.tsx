@@ -16,6 +16,12 @@ const FetchContext = createContext({});
  */
 const fetchReducer = (state, { type, payload }) => {
     switch (type) {
+        case "CLEAR_TOKEN":
+            sessionStorage.removeItem("token");
+            return {
+                ...state,
+                token: null,
+            };
         case "UPDATE_TOKEN":
             sessionStorage.setItem("token", payload);
             return {
@@ -74,6 +80,16 @@ export const useFetchContext = () => {
     };
 
     /**
+     * Clear the login token.
+     */
+    const clearToken = () => {
+        dispatch({
+            type: "CLEAR_TOKEN",
+            payload: null,
+        });
+    }
+
+    /**
      * Return a customizable response when making a request.
      * If first response return a 401 unauthorized status,
      * attempt to refresh token and call the request again.
@@ -81,7 +97,7 @@ export const useFetchContext = () => {
      * @param {Object} params - The request parameters
      * @param {Object} headers - The request parameter headers
      */
-    const makeRequest = async (url, params = {}, headers = {}) => {
+    const makeRequest = async (url: string, params = {}, headers = {}) => {
         const response = await fetch(
             url,
             fetchParams(params, {
@@ -89,7 +105,7 @@ export const useFetchContext = () => {
                 Authorization: `Token ${token}`,
             })
         );
-        if (response.status == 401) {
+        if (response?.status == 401) {
             const token = await refreshToken();
             return token
                 ? await fetch(
@@ -156,6 +172,7 @@ export const useFetchContext = () => {
             token,
         },
         action: {
+            clearToken,
             fetchBlob,
             fetchJSON,
             fetchText,

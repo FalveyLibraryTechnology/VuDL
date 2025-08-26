@@ -21,6 +21,14 @@ class PageOrder {
             pattern = pattern.substring(colonIndex + 1);
         }
         const files = glob.sync(pattern, options);
+        // Sort ignoring extensions, otherwise "a_back.tif" sorts before "a.tif"
+        // due to comparison between "." and "_".
+        files.sort((a: string, b: string): number => {
+            const aParts: Array<string> = a.split(".");
+            const bParts: Array<string> = b.split(".");
+            const firstPartResults: number = aParts[0].localeCompare(bParts[0]);
+            return firstPartResults === 0 ? a.localeCompare(b) : firstPartResults;
+        });
         const pages = files.map((file) => {
             return new Page(path.basename(file), null);
         });

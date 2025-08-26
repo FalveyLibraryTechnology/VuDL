@@ -2,21 +2,28 @@ import Config from "../models/Config";
 import Fedora from "./Fedora";
 import FedoraDataCollector from "./FedoraDataCollector";
 import MetadataExtractor from "./MetadataExtractor";
+import SolrCache from "./SolrCache";
+import TikaExtractor from "./TikaExtractor";
 
 describe("FedoraDataCollector", () => {
     let collector;
+    let getHierarchySpy;
+    let getObjectDataSpy;
+    const pid = "test:123";
+    const parentPid = "test:124";
+
     beforeEach(() => {
         Config.setInstance(new Config({}));
         collector = FedoraDataCollector.getInstance();
+        getHierarchySpy = jest.spyOn(collector, "getHierarchy");
+        getObjectDataSpy = jest.spyOn(collector, "getObjectData");
     });
 
     afterEach(() => {
         jest.restoreAllMocks();
     });
 
-    it("retrieves an appropriate hierarchy", async () => {
-        const pid = "test:123";
-        const parentPid = "test:124";
+    const runStandardNonCachedTest = async (shallow: boolean) => {
         const fedora = Fedora.getInstance();
         const extractor = MetadataExtractor.getInstance();
         const dcGenerator = function (name) {
@@ -45,7 +52,7 @@ describe("FedoraDataCollector", () => {
             .spyOn(extractor, "extractFedoraDatastreams")
             .mockReturnValueOnce(["stream1"])
             .mockReturnValueOnce(["stream2"]);
-        const result = await collector.getHierarchy(pid);
+        const result = await collector.getHierarchy(pid, shallow);
         expect(dublinCoreSpy).toHaveBeenCalledTimes(2);
         expect(dublinCoreSpy).toHaveBeenNthCalledWith(1, pid);
         expect(dublinCoreSpy).toHaveBeenNthCalledWith(2, parentPid);
@@ -72,5 +79,43 @@ describe("FedoraDataCollector", () => {
         expect(parent.fedoraDetails).toEqual(details2);
         expect(parent.fedoraDatastreams).toEqual(["stream2"]);
         expect(parent.parents.length).toEqual(0);
+    };
+
+    it("retrieves an appropriate full hierarchy", async () => {
+        await runStandardNonCachedTest(false);
+        expect(getHierarchySpy).toHaveBeenCalledWith(parentPid);
+    });
+
+    it("retrieves an appropriate shallow hierarchy", async () => {
+        await runStandardNonCachedTest(true);
+        expect(getHierarchySpy).not.toHaveBeenCalledWith(parentPid);
+        expect(getObjectDataSpy).toHaveBeenCalledWith(parentPid);
+    });
+
+    it("can retrieve data from the cache", async () => {
+        const cache = new SolrCache("/foo");
+        const mockDoc = {
+            pid: [pid],
+            "dc.title": ["test1"],
+            "fgs.fedorafield": ["foo"],
+            "relsext.parentfield": ["bar"],
+            meaningless_junk: ["ignore me"],
+            datastream_str_mv: ["stream1", "stream2"],
+        };
+        const cacheSpy = jest.spyOn(cache, "getDocumentFromCache").mockReturnValue(mockDoc);
+        const collector = new FedoraDataCollector(
+            Fedora.getInstance(),
+            MetadataExtractor.getInstance(),
+            Config.getInstance(),
+            TikaExtractor.getInstance(),
+            cache,
+        );
+        const result = await collector.getObjectData(pid);
+        expect(cacheSpy).toHaveBeenCalledTimes(1);
+        expect(result.pid).toEqual(pid);
+        expect(result.title).toEqual("test1");
+        expect(result.fedoraDetails).toEqual({ fedorafield: ["foo"], parentfield: ["bar"] });
+        expect(result.fedoraDatastreams).toEqual(["stream1", "stream2"]);
+        expect(result.parents.length).toEqual(0);
     });
 });

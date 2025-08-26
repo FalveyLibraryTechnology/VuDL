@@ -34,14 +34,23 @@ const getPidActionUrl = (pid: string, action: string): string => {
     return `${editObjectUrl}/${encodeURIComponent(pid)}/${action}`;
 }
 
+const getObjectChildCountsUrl = (pid: string): string => {
+    return getPidActionUrl(pid, "childCounts");
+}
+
 const getObjectChildrenUrl = (pid: string, start = 0, rows = 10): string => {
     const base = pid.length > 0 ? getPidActionUrl(pid, "children") : `${apiUrl}/edit/topLevelObjects`;
     return `${base}?start=${start}&rows=${rows}`;
 }
 
-const getObjectRecursiveChildPidsUrl = (pid: string, start = 0, rows = 10): string => {
+const getObjectDirectChildPidsUrl = (pid: string, start = 0, rows = 10, sort: string|null = null): string => {
+    const base = getPidActionUrl(pid, "directChildPids");
+    return `${base}?start=${start}&rows=${rows}` + (sort ? `&sort=${encodeURIComponent(sort)}` : "");
+}
+
+const getObjectRecursiveChildPidsUrl = (pid: string, start = 0, rows = 10, sort: string|null = null): string => {
     const base = getPidActionUrl(pid, "recursiveChildPids");
-    return `${base}?start=${start}&rows=${rows}`;
+    return `${base}?start=${start}&rows=${rows}` + (sort ? `&sort=${encodeURIComponent(sort)}` : "");
 }
 
 const getObjectDetailsUrl = (pid: string): string => {
@@ -52,8 +61,12 @@ const getObjectLastChildPositionUrl = (pid: string): string => {
     return getPidActionUrl(pid, "lastChildPosition");
 }
 
-const getObjectParentsUrl = (pid: string): string => {
-    return getPidActionUrl(pid, "parents");
+const getObjectParentsUrl = (pid: string, shallow = false): string => {
+    return getPidActionUrl(pid, "parents") + (shallow ? "?shallow=1" : "");
+}
+
+const getObjectSortOnUrl = (pid: string): string => {
+    return getPidActionUrl(pid, "sortOn");
 }
 
 const getObjectStateUrl = (pid: string): string => {
@@ -88,6 +101,10 @@ const getObjectDatastreamMetadataUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "metadata");
 }
 
+const getMoveToParentUrl = (pid: string, parentPid: string) => {
+    return getPidActionUrl(pid, `moveToParent/${encodeURIComponent(parentPid)}`);
+}
+
 const getParentUrl = (pid: string, parentPid: string) => {
     return getPidActionUrl(pid, `parent/${encodeURIComponent(parentPid)}`);
 }
@@ -102,6 +119,14 @@ const objectDatastreamLicenseUrl = (pid: string, datastream: string) => {
 
 const objectDatastreamAgentsUrl = (pid: string, datastream: string) => {
     return getDatastreamActionUrl(pid, datastream, "agents")
+};
+
+const objectDatastreamDublinCoreUrl = (pid: string, datastream: string) => {
+    return getDatastreamActionUrl(pid, datastream, "dublinCore")
+};
+
+const objectDatastreamProcessMetadataUrl = (pid: string, datastream: string): string => {
+    return getDatastreamActionUrl(pid, datastream, "processMetadata")
 };
 
 export {
@@ -119,11 +144,15 @@ export {
     getDerivUrl,
     getIngestUrl,
     getStatusUrl,
+    getMoveToParentUrl,
+    getObjectChildCountsUrl,
     getObjectChildrenUrl,
     getObjectDetailsUrl,
     getObjectLastChildPositionUrl,
     getObjectParentsUrl,
+    getObjectDirectChildPidsUrl,
     getObjectRecursiveChildPidsUrl,
+    getObjectSortOnUrl,
     getObjectStateUrl,
     getParentUrl,
     getPositionInParentUrl,
@@ -134,5 +163,7 @@ export {
     getObjectDatastreamMimetypeUrl,
     getObjectDatastreamMetadataUrl,
     objectDatastreamLicenseUrl,
-    objectDatastreamAgentsUrl
+    objectDatastreamAgentsUrl,
+    objectDatastreamDublinCoreUrl,
+    objectDatastreamProcessMetadataUrl,
 };

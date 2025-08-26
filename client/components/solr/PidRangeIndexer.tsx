@@ -20,10 +20,10 @@ const PidRangeIndexer = ({ setResults }: PidRangeIndexerProps): React.ReactEleme
                     `${baseUrl}/messenger/queuesolrindex`,
                     {
                         method: "POST",
-                        body: JSON.stringify({ prefix, to, from }),
+                        body: JSON.stringify({ prefix: prefix.trim(), to: to.trim(), from: from.trim() }),
                     },
-                    { "Content-Type": "application/json" }
-                )
+                    { "Content-Type": "application/json" },
+                ),
             );
         } catch (error) {
             setResults((error as Error).message);

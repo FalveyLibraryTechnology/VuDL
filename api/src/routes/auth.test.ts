@@ -1,4 +1,5 @@
 import * as request from "supertest";
+import * as session from "express-session";
 import { StatusCodes } from "http-status-codes";
 import app from "../app";
 import { getAuthRouter } from "./auth";
@@ -7,6 +8,7 @@ import Config from "../models/Config";
 describe("index", () => {
     beforeAll(() => {
         Config.setInstance(new Config({}));
+        app.use(session({ secret: "testing", resave: true, saveUninitialized: true }));
         app.use("/auth", getAuthRouter());
     });
     beforeEach(() => {
@@ -40,7 +42,7 @@ describe("index", () => {
                 Authentication: {
                     require_passwords: "false",
                 },
-            })
+            }),
         );
         const response = await request(app).get("/auth/login").expect(StatusCodes.OK);
         expect(response.text).not.toContain("Login failed; please try again.");

@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express"; // Types
 import passport = require("passport");
 import Config from "../models/Config";
-import Database from "../services/Database";
+import { Database, User } from "../services/Database";
 
 interface NextFunction {
     (err?: Error): void;
@@ -12,11 +12,13 @@ const loginPath = "/api/auth/login";
 export function authenticate(req: Request, res: Response, next?: NextFunction): void {
     const authMethod = passport.authenticate(Config.getInstance().authenticationStrategy, {
         failureRedirect: loginPath + "?fail=true",
+        // We need to remember the referer when we regenerate the session so that post-login redirect works:
+        keepSessionInfo: true,
     });
     authMethod(req, res, next);
 }
 
-function saveSessionReferer(req: Request) {
+function saveSessionReferer(req) {
     req.session.referer = req.originalUrl;
 }
 
@@ -92,9 +94,10 @@ export function getAuthRouter(): Router {
     // which, in this example, will redirect the user to the referring URL.
     authRouter.post("/login", authenticate, postLoginRedirect);
 
-    authRouter.get("/logout", function (req, res) {
-        req.logout();
-        res.redirect(Config.getInstance().clientUrl);
+    authRouter.get("/logout", passport.initialize(), async function (req, res) {
+        await req.logout(() => {
+            res.redirect(Config.getInstance().clientUrl);
+        });
     });
 
     authRouter.get("/token/confirm/:token", async function (req: Request, res: Response) {
@@ -106,7 +109,7 @@ export function getAuthRouter(): Router {
         if (!req.user) {
             return res.sendStatus(401);
         }
-        const token = await Database.getInstance().makeToken(req.user);
+        const token = await Database.getInstance().makeToken(req.user as User);
         req.session.token = token;
         res.json(token);
     });

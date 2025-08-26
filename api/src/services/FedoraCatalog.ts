@@ -23,9 +23,15 @@ export interface License {
 }
 export interface CompleteCatalog {
     agents: Agents;
+    dublinCoreFields: Record<string, Record<string, string | Array<string>>>;
     licenses: Record<string, License>;
     models: Record<string, FedoraModel>;
     favoritePids: Record<string, string>;
+    trashPid: string | null;
+    processMetadataDefaults: Record<string, string>;
+    toolPresets: Array<Record<string, string>>;
+    topLevelPids: Array<string>;
+    vufindUrl: string;
 }
 
 class FedoraCatalog {
@@ -47,16 +53,32 @@ class FedoraCatalog {
     }
 
     async getCompleteCatalog(): Promise<CompleteCatalog> {
-        const { models, licenses, agentDefaults, agentRoles, agentTypes } = this.config;
+        const {
+            models,
+            licenses,
+            agentDefaults,
+            agentRoles,
+            agentTypes,
+            processMetadataDefaults,
+            toolPresets,
+            topLevelPids,
+            vufindUrl,
+        } = this.config;
         return {
             agents: {
                 defaults: agentDefaults,
                 roles: agentRoles,
                 types: agentTypes,
             },
+            dublinCoreFields: this.getDublinCoreFields(),
             favoritePids: await this.getFavoritePids(),
+            trashPid: this.config.trashPid,
             models,
             licenses,
+            toolPresets,
+            topLevelPids,
+            processMetadataDefaults,
+            vufindUrl,
         };
     }
 
@@ -76,13 +98,17 @@ class FedoraCatalog {
         }, {});
     }
 
+    getDublinCoreFields(): Record<string, Record<string, string | Array<string>>> {
+        return this.config.dublinCoreFields;
+    }
+
     async getFavoritePids(): Promise<Record<string, string>> {
         const pids = this.config.favoritePids;
         const result = {};
         if (pids.length > 0) {
             const query = pids
                 .map((pid) => {
-                    return `id:"${pid.replace('"', "")}"`;
+                    return `id:"${pid.replace(/["]/g, "")}"`;
                 })
                 .join(" OR ");
             const solrResponse = await this.solr.query(this.config.solrCore, query, {

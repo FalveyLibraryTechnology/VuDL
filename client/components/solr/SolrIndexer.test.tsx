@@ -1,11 +1,11 @@
 import React from "react";
 import { describe, expect, it, jest } from "@jest/globals";
-import { mount } from "enzyme";
-import toJson from "enzyme-to-json";
+import renderer from "react-test-renderer";
 import SolrIndexer from "./SolrIndexer";
 
 jest.mock("./SinglePidIndexer", () => () => "SinglePidIndexer");
 jest.mock("./PidRangeIndexer", () => () => "PidRangeIndexer");
+jest.mock("../shared/BasicBreadcrumbs", () => () => "BasicBreadcrumbs");
 
 const mockUseFetchContext = jest.fn();
 jest.mock("../../context/FetchContext", () => ({
@@ -16,7 +16,7 @@ jest.mock("../../context/FetchContext", () => ({
 
 describe("SolrIndexer", () => {
     it("renders", () => {
-        const wrapper = mount(<SolrIndexer />);
-        expect(toJson(wrapper)).toMatchSnapshot();
+        const tree = renderer.create(<SolrIndexer />).toJSON();
+        expect(tree).toMatchSnapshot();
     });
 });

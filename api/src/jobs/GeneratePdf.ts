@@ -8,20 +8,33 @@ import http = require("needle");
 import PDFDocument = require("pdfkit");
 import QueueJobInterface from "./QueueJobInterface";
 import tmp = require("tmp");
+import FedoraDataCollector from "../services/FedoraDataCollector";
 
-class PdfGenerator {
+export class PdfGenerator {
     protected pid: string;
     protected config: Config;
     protected objectFactory: FedoraObjectFactory;
+    protected fedoraDataCollector: FedoraDataCollector;
 
-    constructor(pid: string, config: Config, objectFactory: FedoraObjectFactory) {
+    constructor(
+        pid: string,
+        config: Config,
+        objectFactory: FedoraObjectFactory,
+        fedoraDataCollector: FedoraDataCollector,
+    ) {
         this.pid = pid;
         this.config = config;
         this.objectFactory = objectFactory;
+        this.fedoraDataCollector = fedoraDataCollector;
     }
 
     public static build(pid: string): PdfGenerator {
-        return new PdfGenerator(pid, Config.getInstance(), FedoraObjectFactory.getInstance());
+        return new PdfGenerator(
+            pid,
+            Config.getInstance(),
+            FedoraObjectFactory.getInstance(),
+            FedoraDataCollector.getInstance(),
+        );
     }
 
     private hasPdfAlready(manifest): boolean {
@@ -60,7 +73,8 @@ class PdfGenerator {
             fs.writeFileSync(pageFile, response.body);
             const img = pdfObj.openImage(pageFile);
             pdfObj.addPage({ size: [img.width, img.height] }).image(img, 0, 0);
-            fs.unlinkSync(pageFile);
+            fs.truncateSync(pageFile, 0);
+            fs.rmSync(pageFile);
         }
         pdfObj.end();
         // Wait for the PDF to finish generating (i.e. for the write stream to be closed):
@@ -80,14 +94,14 @@ class PdfGenerator {
         return pdf;
     }
 
-    private async addPdfToPid(pdf: string): Promise<void> {
-        const documentList = await this.objectFactory.build("ListCollection", "Document List", "Active", this.pid);
-        const pdfObject = await this.buildDocument(documentList, 1);
+    private async addPdfToPid(pdf: string, state: string): Promise<void> {
+        const documentList = await this.objectFactory.build("ListCollection", "Document List", state, this.pid);
+        const pdfObject = await this.buildDocument(documentList, 1, state);
         await this.addDatastreamsToDocument(pdf, pdfObject);
     }
 
-    private async buildDocument(documentList: FedoraObject, number: number): Promise<FedoraObject> {
-        const documentData = await this.objectFactory.build("PDFData", "PDF", "Active", documentList.pid);
+    private async buildDocument(documentList: FedoraObject, number: number, state: string): Promise<FedoraObject> {
+        const documentData = await this.objectFactory.build("PDFData", "PDF", state, documentList.pid);
         await documentData.addSequenceRelationship(documentList.pid, number);
         return documentData;
     }
@@ -110,9 +124,16 @@ class PdfGenerator {
             return;
         }
         const largeJpegs = this.getLargeJpegs(manifest);
+        if (largeJpegs.length == 0) {
+            console.log(this.pid + " contains no images; exiting early.");
+            return;
+        }
         const pdf = await this.generatePdf(largeJpegs);
-        await this.addPdfToPid(pdf);
-        fs.unlinkSync(pdf);
+        // Look up parent object state so newly-generated objects can match it:
+        const fedoraData = await this.fedoraDataCollector.getObjectData(this.pid);
+        await this.addPdfToPid(pdf, fedoraData.state);
+        fs.truncateSync(pdf, 0);
+        fs.rmSync(pdf);
     }
 }
 
