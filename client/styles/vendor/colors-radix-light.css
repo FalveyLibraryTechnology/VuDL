@@ -1,3 +1,7 @@
+/**
+ * @see https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale
+ * @see https://www.radix-ui.com/colors/docs/palette-composition/composing-a-palette
+ */
 :root {
     --amber-01: oklch(0.994 0.003 84.62);
     --amber-02: oklch(0.9862 0.024 100.26);
