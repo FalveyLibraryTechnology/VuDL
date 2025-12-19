@@ -21,7 +21,7 @@ body:has(#paginator) {
 
 .top-row {
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     width: 100%;
     margin-block: 0.25rem;
 }

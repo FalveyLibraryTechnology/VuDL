@@ -1,10 +1,10 @@
 button.datastreamControlButton {
-	font-size: 16pt;
-	transition: none;
+    font-size: 16pt;
+    transition: none;
 
-	&:hover,
-	&:focus {
-		color: white;
-		background-color: black;
-	}
+    &:hover,
+    &:focus {
+        color: white;
+        background-color: black;
+    }
 }
