@@ -7,7 +7,7 @@ import { FetchContextProvider } from "../context/FetchContext";
 import LogoutButton from "../components/LogoutButton";
 
 import "../styles/vendor/modern-normalize.css";
-import "../styles/vendor/colors-harmony.css";
+import "../styles/vendor/colors-radix-light.css";
 
 import "../styles/reset.css";
 import "../styles/variables.css";

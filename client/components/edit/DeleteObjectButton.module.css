@@ -1,7 +1,7 @@
 .deleteBtn {
     &:hover,
     &:focus {
-        background-color: var(--red-700);
-        border-color: var(--red-700);
+        background-color: var(--red-11);
+        border-color: var(--red-11);
     }
 }
