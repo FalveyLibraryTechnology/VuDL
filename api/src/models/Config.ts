@@ -22,7 +22,7 @@ class Config {
             let config;
             try {
                 config = ini.parse(fs.readFileSync(filename, "utf-8"));
-            } catch (e) {
+            } catch {
                 console.warn(`Could not load ${filename}; defaulting to empty configuration.`);
                 config = {};
             }
@@ -142,7 +142,7 @@ class Config {
     }
 
     get initialPidValue(): number {
-        return parseInt(this.ini["fedora_initial_pid"] ?? "1");
+        return parseInt(this.ini["fedora_initial_pid"] ?? "0");
     }
 
     get dataModels(): Record<string, string> {

@@ -30,20 +30,21 @@ const DeleteObjectButton = ({ pid }: DeleteObjectButtonProps): React.ReactElemen
         });
     };
 
-    const [childPidResponse, setChildPidResponse] = useState({ loading: true });
+    const [childPidResponse, setChildPidResponse] = useState({ pid: null });
     const [statusMessage, setStatusMessage] = useState<string>("");
     const loaded = Object.prototype.hasOwnProperty.call(objectDetailsStorage, pid);
     useEffect(() => {
         async function loadChildren() {
             const url = getObjectRecursiveChildPidsUrl(pid, 0, 0);
             const response = await fetchJSON(url);
+            response.pid = pid;
             setChildPidResponse(response);
         }
-        setChildPidResponse({ loading: true });
+        setChildPidResponse({ pid: null });
         if (loaded) {
             loadChildren();
         }
-    }, [loaded]);
+    }, [loaded, pid]);
 
     const performDelete = async function () {
         const msg =
@@ -89,7 +90,7 @@ const DeleteObjectButton = ({ pid }: DeleteObjectButtonProps): React.ReactElemen
         showSnackbarMessage("Delete operation complete.", "info");
         setStatusMessage("");
     };
-    const visible = statusMessage.length === 0 && trashPid && loaded && childPidResponse?.loading !== true;
+    const visible = statusMessage.length === 0 && trashPid && loaded && childPidResponse?.pid === pid;
     return visible ? (
         <button className={`object-delete-btn ${styles.deleteBtn}`} onClick={performDelete}>
             <Delete style={{ height: "14px" }} titleAccess="Delete Object and Children" />

@@ -210,7 +210,7 @@ describe("DatastreamManager", () => {
 
         it("throws an error when mime type is invalid", async () => {
             hasValidMimeTypeSpy.mockReturnValue(false);
-            expect(datastreamManager.uploadFile(pid, stream, filepath, mimeType)).rejects.toThrowError(
+            expect(datastreamManager.uploadFile(pid, stream, filepath, mimeType)).rejects.toThrow(
                 "Invalid mime type: " + mimeType,
             );
         });

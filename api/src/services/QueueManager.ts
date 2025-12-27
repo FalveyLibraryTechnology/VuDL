@@ -1,4 +1,4 @@
-import { Queue, Job, Worker, WorkerOptions, Processor } from "bullmq";
+import { Queue, Job, Worker, WorkerOptions, QueueOptions, Processor } from "bullmq";
 import Config from "../models/Config";
 import SolrCache from "./SolrCache";
 
@@ -23,7 +23,7 @@ class QueueManager {
         QueueManager.instance = manager;
     }
 
-    protected get queueBaseOptions(): Record<string, Record<string, string>> {
+    protected get queueBaseOptions(): QueueOptions & WorkerOptions {
         return {
             connection: this.config.redisConnectionSettings,
         };
@@ -34,7 +34,7 @@ class QueueManager {
     }
 
     public getWorker(callback: Processor, queueName: string = null): Worker {
-        const options = this.queueBaseOptions as WorkerOptions;
+        const options: WorkerOptions = this.queueBaseOptions;
         options.lockDuration = this.config.redisLockDuration;
         return new Worker(queueName ?? this.config.redisDefaultQueueName, callback, options);
     }

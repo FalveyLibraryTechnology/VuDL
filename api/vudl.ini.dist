@@ -14,7 +14,7 @@ fedora_pid_namespace = "vudl"
 base_url = "http://localhost:8080/rest"
 
 # The first number for the PID generator to use:
-fedora_initial_pid = "1"
+fedora_initial_pid = "0"
 
 # The maximum number of times to retry a PUT to Fedora after receiving a 409 error
 max_409_retries = 3
@@ -145,7 +145,7 @@ filename = "./data/auth.sqlite3"
 # To set up a MySQL/MariaDB database, run these commands in the database client:
 #    create database vudl;
 #    create user 'your_database_user'@'localhost' identified by 'your_database_password';
-#    grant all on vudl.* to 'vudl'@'localhost';
+#    grant all on vudl.* to 'your_database_user'@'localhost';
 #host = 127.0.0.1
 #port = 3306
 #user = your_database_user

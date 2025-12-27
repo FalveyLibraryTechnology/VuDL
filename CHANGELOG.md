@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.5.1 - 2025-07-05
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Updated dependencies.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Fixed bug causing incorrect descendent counts when deleting objects.
+
 ## 2.5 - 2025-02-13
 
 ### Added

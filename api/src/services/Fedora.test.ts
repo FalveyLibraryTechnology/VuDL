@@ -31,9 +31,7 @@ describe("Fedora", () => {
             requestSpy = jest
                 .spyOn(fedora, "_request")
                 .mockResolvedValue({ statusCode: 500, body: "internal server error" });
-            expect(async () => await fedora.getDublinCore("foo:123")).rejects.toThrowError(
-                "Unexpected status code: 500",
-            );
+            expect(async () => await fedora.getDublinCore("foo:123")).rejects.toThrow("Unexpected status code: 500");
             expect(purgeCacheSpy).not.toHaveBeenCalled();
         });
 
@@ -54,7 +52,7 @@ describe("Fedora", () => {
     describe("getRdf", () => {
         it("will fail if an unexpected status code is received", async () => {
             requestSpy = jest.spyOn(fedora, "_request").mockResolvedValue({ statusCode: 404, body: "not found" });
-            expect(async () => await fedora.getRdf("foo:123")).rejects.toThrowError("Unexpected status code: 404");
+            expect(async () => await fedora.getRdf("foo:123")).rejects.toThrow("Unexpected status code: 404");
             expect(purgeCacheSpy).not.toHaveBeenCalled();
         });
 

@@ -32,7 +32,7 @@ export function requireLogin(req: Request, res: Response, next?: NextFunction): 
 
 export async function requireToken(req: Request, res: Response, next?: NextFunction): Promise<void> {
     // Check for API key in header or session
-    const userToken = req.header("Authorization") ? req.header("Authorization").slice(6) : req.session.token ?? null;
+    const userToken = req.header("Authorization") ? req.header("Authorization").slice(6) : (req.session.token ?? null);
 
     if (await Database.getInstance().confirmToken(userToken)) {
         return next();

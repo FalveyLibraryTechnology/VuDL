@@ -387,14 +387,9 @@ describe("edit", () => {
             IncomingForm.mockImplementation((options) => {
                 lastOptions = options;
                 return {
+                    on: () => {},
                     parse: (req, callback) => {
-                        callback(
-                            false,
-                            {},
-                            {
-                                file: { filepath, mimetype },
-                            },
-                        );
+                        callback(false, {}, { file: [{ filepath, mimetype }] });
                     },
                 };
             });
@@ -412,14 +407,9 @@ describe("edit", () => {
         it("handles exceptions", async () => {
             IncomingForm.mockImplementation(() => {
                 return {
+                    on: () => {},
                     parse: (req, callback) => {
-                        callback(
-                            false,
-                            {},
-                            {
-                                file: { filepath, mimetype },
-                            },
-                        );
+                        callback(false, {}, { file: [{ filepath, mimetype }] });
                     },
                 };
             });

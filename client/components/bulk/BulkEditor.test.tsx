@@ -69,7 +69,7 @@ describe("BulkEditor", () => {
             { "Content-Type": "application/json" },
         );
         const resultList = screen.getByTitle("Selected Records");
-        expect(resultList.innerHTML).toEqual("Unexpected token i in JSON at position 0");
+        expect(resultList.innerHTML).toEqual("Unexpected token 'i', \"invalid JSON\" is not valid JSON");
     });
 
     it("changes nothing if you submit without making selections", async () => {
