@@ -97,9 +97,9 @@ ingest.get("/:category/:job/:image/:size", sanitizeParameters(), requireToken, a
 });
 
 ingest.delete(
-    "/:category/:job/:image/*",
+    "/:category/:job/:image/\\*",
     ingest.delete(
-        "/:category/:job/:image/*",
+        "/:category/:job/:image/\\*",
         sanitizeParameters({ 0: /^\*$/ }),
         requireToken,
         async function (req, res) {
