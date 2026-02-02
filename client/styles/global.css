@@ -125,6 +125,10 @@
 
         --outline-color: var(--primary);
     }
+
+    .hidden {
+        display: none;
+    }
 }
 
 /* MUI: better default icon size */

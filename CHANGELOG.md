@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- Restored .hidden CSS class accidentally removed in v2.6.
 
 ## 2.6 - 2026-02-02
 
