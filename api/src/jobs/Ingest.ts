@@ -281,9 +281,21 @@ export class IngestProcessor {
         fs.rmSync(target + "/ingest.lock");
     }
 
+    async pregenerateDerivatives(): Promise<void> {
+        if (this.job.metadata.order.pages.length > 0) {
+            await this.generateOcrForAllPages();
+        }
+        if (this.job.metadata.audio.list.length > 0) {
+            await this.generateAllAudioDerivatives();
+        }
+    }
+
     async doIngest(): Promise<void> {
         const startTime = Date.now();
         this.logger.info("Beginning ingest.");
+        // Pre-generate derivatives to reduce the odds of something going wrong mid-ingest;
+        // if you skip pre-generation, the process will still work with on-demand generation.
+        await this.pregenerateDerivatives();
         this.logger.info("Target collection ID: " + this.category.targetCollectionId);
         const holdingArea = FedoraObject.build(this.category.targetCollectionId, this.logger);
         if ((await holdingArea.getSortOn()) == "custom") {
@@ -297,9 +309,6 @@ export class IngestProcessor {
         // (this was already a TODO in the Ruby code; low priority)
 
         if (this.job.metadata.order.pages.length > 0) {
-            // Pregenerate OCR to reduce odds of a failure mid-ingest; if you comment out this line,
-            // the process will still work, but OCR will happen "on demand."
-            await this.generateOcrForAllPages();
             await this.addPages(await this.buildListCollection(resource, "Page List"));
         }
 
@@ -308,9 +317,6 @@ export class IngestProcessor {
         }
 
         if (this.job.metadata.audio.list.length > 0) {
-            // Pre-generate derivatives to reduce the odds of something going wrong mid-ingest;
-            // if you comment out this line, the process will still work with on-demand generation.
-            await this.generateAllAudioDerivatives();
             await this.addAudio(await this.buildListCollection(resource, "Audio List"));
         }
 
