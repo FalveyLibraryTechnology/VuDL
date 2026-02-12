@@ -94,6 +94,17 @@ export class IngestProcessor {
         }
     }
 
+    async generateOcrForAllPages(): Promise<void> {
+        const order = this.job.metadata.order.pages;
+        for (const i in order) {
+            const page = order[i];
+            const number = parseInt(i) + 1;
+            this.logger.info("Checking/generating OCR for page " + number + " of " + order.length);
+            const image = ImageFile.build(this.job.dir + "/" + page.filename);
+            await image.ocr();
+        }
+    }
+
     async addPages(pageList: FedoraObject): Promise<void> {
         const order = this.job.metadata.order.pages;
         for (const i in order) {
@@ -122,6 +133,17 @@ export class IngestProcessor {
             this.logger.info("Adding " + number + " of " + order.length + " - " + document.filename);
             const data = await this.buildDocument(documentList, document, number);
             await this.addDatastreamsToDocument(document, data);
+        }
+    }
+
+    async generateAllAudioDerivatives(): Promise<void> {
+        const order = this.job.metadata.audio.list;
+        for (const i in order) {
+            const audio = order[i];
+            const number = parseInt(i) + 1;
+            this.logger.info("Pregenerating derivatives for image " + number);
+            audio.derivative("MP3");
+            audio.derivative("OGG");
         }
     }
 
@@ -275,6 +297,9 @@ export class IngestProcessor {
         // (this was already a TODO in the Ruby code; low priority)
 
         if (this.job.metadata.order.pages.length > 0) {
+            // Pregenerate OCR to reduce odds of a failure mid-ingest; if you comment out this line,
+            // the process will still work, but OCR will happen "on demand."
+            await this.generateOcrForAllPages();
             await this.addPages(await this.buildListCollection(resource, "Page List"));
         }
 
@@ -283,6 +308,9 @@ export class IngestProcessor {
         }
 
         if (this.job.metadata.audio.list.length > 0) {
+            // Pre-generate derivatives to reduce the odds of something going wrong mid-ingest;
+            // if you comment out this line, the process will still work with on-demand generation.
+            await this.generateAllAudioDerivatives();
             await this.addAudio(await this.buildListCollection(resource, "Audio List"));
         }
 
