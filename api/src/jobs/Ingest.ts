@@ -141,7 +141,7 @@ export class IngestProcessor {
         for (const i in order) {
             const audio = order[i];
             const number = parseInt(i) + 1;
-            this.logger.info("Pregenerating derivatives for image " + number);
+            this.logger.info("Pregenerating derivatives for audio file " + number);
             audio.derivative("MP3");
             audio.derivative("OGG");
         }
@@ -155,6 +155,18 @@ export class IngestProcessor {
             this.logger.info("Adding " + number + " of " + order.length + " - " + audio.filename);
             const audioData = await this.buildAudio(audioList, audio, number);
             await this.addDatastreamsToAudio(audio, audioData);
+        }
+    }
+
+    async generateAllVideoDerivatives(): Promise<void> {
+        const order = this.job.metadata.video.list;
+        for (const i in order) {
+            const video = order[i];
+            const number = parseInt(i) + 1;
+            this.logger.info("Pregenerating derivatives for video file " + number);
+            if (video.mimeType !== "video/mp4") {
+                video.derivative("MP4");
+            }
         }
     }
 
@@ -287,6 +299,9 @@ export class IngestProcessor {
         }
         if (this.job.metadata.audio.list.length > 0) {
             await this.generateAllAudioDerivatives();
+        }
+        if (this.job.metadata.video.list.length > 0) {
+            await this.generateAllVideoDerivatives();
         }
     }
 
