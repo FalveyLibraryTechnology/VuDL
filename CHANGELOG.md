@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
+- Ingest workflows now create derivatives up-front to reduce mid-ingest problems.
 - Updated dependencies.
 
 ### Deprecated
