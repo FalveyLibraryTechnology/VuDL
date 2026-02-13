@@ -75,7 +75,7 @@ ingest.put("/:category/:job", sanitizeParameters(), requireToken, function (req,
         }
         job.metadata.save();
         res.json({ status: "ok" });
-    } catch (e) {
+    } catch {
         res.status(500).json({ status: "error saving job" });
     }
 });
@@ -97,9 +97,9 @@ ingest.get("/:category/:job/:image/:size", sanitizeParameters(), requireToken, a
 });
 
 ingest.delete(
-    "/:category/:job/:image/*",
+    "/:category/:job/:image/\\*",
     ingest.delete(
-        "/:category/:job/:image/*",
+        "/:category/:job/:image/\\*",
         sanitizeParameters({ 0: /^\*$/ }),
         requireToken,
         async function (req, res) {

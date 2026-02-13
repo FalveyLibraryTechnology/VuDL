@@ -5,6 +5,7 @@ import Config from "./Config";
 import { DatastreamParameters, Fedora } from "../services/Fedora";
 import FedoraDataCollector from "../services/FedoraDataCollector";
 import { execSync } from "child_process";
+import crypto = require("crypto");
 import { Agent } from "../services/interfaces";
 
 export interface ObjectParameters {
@@ -76,8 +77,33 @@ export class FedoraObject {
         await this.fedora.deleteDatastreamTombstone(this.pid, stream);
     }
 
+    async computeDigestHeaderForFile(filename: string): Promise<string> {
+        // Compute digest by streaming the file once (avoids loading the whole file into memory)
+        const md5Hash = crypto.createHash("md5");
+        const sha512Hash = crypto.createHash("sha512");
+        await new Promise<void>((resolve, reject) => {
+            const rs = fs.createReadStream(filename);
+            rs.on("data", (chunk: Buffer) => {
+                md5Hash.update(chunk);
+                sha512Hash.update(chunk);
+            });
+            rs.on("end", () => resolve());
+            rs.on("error", (err) => reject(err));
+        });
+        const md5 = md5Hash.digest("hex");
+        const sha512 = sha512Hash.digest("hex");
+        return `md5=${md5}, sha-512=${sha512}`;
+    }
+
     async addDatastreamFromFile(filename: string, stream: string, mimeType: string): Promise<void> {
-        await this.addDatastreamFromStringOrBuffer(fs.readFileSync(filename), stream, mimeType, [201]);
+        // Create a fresh read stream for the upload
+        const readStream = fs.createReadStream(filename);
+        const digestHeader = await this.computeDigestHeaderForFile(filename);
+        const params: DatastreamParameters = {
+            mimeType: mimeType,
+            logMessage: "Initial Ingest addDatastream - " + stream,
+        };
+        await this.fedora.addDatastream(this.pid, stream, params, readStream, [201], digestHeader);
     }
 
     async updateDatastreamFromFile(filename: string, stream: string, mimeType: string): Promise<void> {
@@ -106,6 +132,16 @@ export class FedoraObject {
             logMessage: "Initial Ingest addDatastream - MASTER-MD",
         };
         const fitsXml = this.fitsMasterMetadata(filename);
+
+        // Check if MASTER-MD exists and delete it if it does
+        try {
+            const checkResponse = await this.fedora.getDatastream(this.pid, "MASTER-MD");
+            if (checkResponse.statusCode === 200) {
+                await this.deleteDatastream("MASTER-MD");
+            }
+        } catch {
+            // No existing MASTER-MD to delete
+        }
         await this.addDatastream("MASTER-MD", params, fitsXml, [201, 204]);
     }
 
@@ -219,6 +255,10 @@ export class FedoraObject {
 
     async getDatastreamAsBuffer(datastream: string): Promise<Buffer> {
         return this.fedora.getDatastreamAsBuffer(this.pid, datastream);
+    }
+
+    async downloadDatastreamToTempFile(datastream: string, treatMissingAsEmpty = false): Promise<string> {
+        return this.fedora.downloadDatastreamToTempFile(this.pid, datastream, treatMissingAsEmpty);
     }
 
     async getDatastreamMetadata(datastream: string): Promise<string> {

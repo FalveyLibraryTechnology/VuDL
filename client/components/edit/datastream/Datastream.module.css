@@ -1,3 +1,31 @@
+.datastream {
+    margin-block: 0.125em;
+    padding-block: 0.375em;
+    border: 1px solid transparent;
+}
+
 .enabled {
-    background-color: #d5e3a5;
+    color: var(--selected-text);
+    background-color: var(--selected);
+    border-color: var(--selected-border);
+}
+
+div[role="group"] .datastreamControlButton {
+    font-size: 14pt;
+    color: inherit;
+    border-color: var(--mute);
+    opacity: 0.75;
+    transition: none;
+
+    &:disabled {
+        opacity: 0.75;
+        color: var(--mute);
+        border-color: var(--mute);
+    }
+
+    &:hover,
+    &:focus {
+        color: white;
+        background-color: black;
+    }
 }

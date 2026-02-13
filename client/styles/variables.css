@@ -1,0 +1,55 @@
+/* Radix colors imported in _app.tsx */
+
+:root {
+    --soft: var(--slate-02);
+    --edge: var(--slate-07);
+    --mute: var(--slate-11);
+    --text: var(--slate-12);
+}
+
+:root {
+    --text-muted: var(--mute);
+
+    --family-sans-serif: system-ui, ui-sans-serif, sans-serif;
+    --family-serif: ui-serif, serif;
+    --family-monospace: ui-monospace, monospace;
+
+    --primary: var(--sky-11);
+    --primary-text: white;
+
+    --secondary: var(--mute);
+    --secondary-text: white;
+
+    --button-face: white;
+    --button-text: black;
+
+    --button-hover: black;
+    --button-hover-text: white;
+
+    --active: var(--red-11);
+    --active-text: white;
+
+    --selected: var(--green-03);
+    --selected-text: black;
+    --selected-border: var(--green-07);
+
+    --info: var(--sky-02);
+    --info-text: var(--sky-11);
+    --info-border: var(--sky-07);
+
+    --success: var(--green-02);
+    --success-text: var(--green-11);
+
+    --danger: var(--red-02);
+    --danger-text: var(--red-11);
+
+    --object-status-active: var(--green-03);
+    --object-status-inactive: var(--yellow-03);
+    --object-status-deleted: var(--red-03);
+    --object-status-unknown: var(--gray-03);
+
+    --object-status-active-text: var(--green-11);
+    --object-status-inactive-text: var(--yellow-11);
+    --object-status-deleted-text: var(--red-11);
+    --object-status-unknown-text: var(--gray-11);
+}

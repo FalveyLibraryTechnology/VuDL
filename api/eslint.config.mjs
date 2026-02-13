@@ -20,5 +20,8 @@ export default [
         languageOptions: {
             parser: tsParser,
         },
+	rules: { 
+		"@typescript-eslint/no-require-imports": "off" 
+	},
     }
 ];

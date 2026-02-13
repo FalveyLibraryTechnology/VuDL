@@ -22,7 +22,7 @@ class Config {
             let config;
             try {
                 config = ini.parse(fs.readFileSync(filename, "utf-8"));
-            } catch (e) {
+            } catch {
                 console.warn(`Could not load ${filename}; defaulting to empty configuration.`);
                 config = {};
             }

@@ -31,7 +31,7 @@ describe("Notify", () => {
             );
 
             const job = { data: { body: "coo" } } as Job;
-            expect(async () => await notify.run(job)).rejects.toThrowError(`Notify: invalid method '${badMethod}'`);
+            expect(async () => await notify.run(job)).rejects.toThrow(`Notify: invalid method '${badMethod}'`);
         });
     });
 
@@ -68,7 +68,7 @@ describe("Notify", () => {
         describe("errors", () => {
             it("throws on no body", () => {
                 const job = { data: {} } as Job;
-                expect(async () => await notify.run(job)).rejects.toThrowError("Notify: no body specified");
+                expect(async () => await notify.run(job)).rejects.toThrow("Notify: no body specified");
             });
         });
     });

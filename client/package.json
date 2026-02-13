@@ -2,7 +2,7 @@
   "name": "vudl-client",
   "private": true,
   "engine": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "build": "next build",
@@ -19,7 +19,6 @@
   "dependencies": {
     "@date-io/dayjs": "^2",
     "@emotion/styled": "^11",
-    "@fortawesome/fontawesome-free": "^6",
     "@mui/icons-material": "^5",
     "@mui/lab": "^5.0.0-alpha.150",
     "@mui/material": "^5",
@@ -43,7 +42,7 @@
     "@types/react": "^18",
     "@typescript-eslint/eslint-plugin": "^6",
     "eslint": "^8",
-    "eslint-config-next": "^14",
+    "eslint-config-next": "^15",
     "eslint-config-prettier": "^9",
     "eslint-plugin-prettier": "^5",
     "eslint-plugin-react": "^7",

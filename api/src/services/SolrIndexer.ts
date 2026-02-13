@@ -251,8 +251,8 @@ class SolrIndexer {
 
         // If this is a data model, we want to pull the date from its parent.
         const dateString = fedoraData.models.includes("vudl-system:DataModel")
-            ? (vufindParents[0]?.metadata["dc:date"] ?? [])[0] ?? ""
-            : (fields["dc.date_txt_mv"] ?? [])[0] ?? "";
+            ? ((vufindParents[0]?.metadata["dc:date"] ?? [])[0] ?? "")
+            : ((fields["dc.date_txt_mv"] ?? [])[0] ?? "");
         const strippedDate = parseInt(dateString.substring(0, 4));
         if (strippedDate > this.config.minimumValidYear) {
             fields.publishDate = String(strippedDate);

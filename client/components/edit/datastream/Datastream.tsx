@@ -14,7 +14,7 @@ const Datastream = ({ datastream }: DatastreamProps): React.ReactElement => {
     const { stream, disabled } = datastream;
     return (
         <ListItem
-            classes={disabled ? {} : { root: styles.enabled }}
+            classes={{ root: `${styles.datastream} ${disabled ? "" : styles.enabled}` }}
             secondaryAction={<DatastreamControls datastream={stream} disabled={disabled} />}
         >
             <ListItemText primary={stream} />

@@ -72,7 +72,7 @@ const ObjectOrder = ({ pid }: ObjectOrderProps): React.ReactElement => {
         <div>{statusMessage}</div>
     ) : (
         <div>
-            Current sort: {currentSort}
+            Current sort: {currentSort}&nbsp;
             <button
                 onClick={() => {
                     changeSort(otherSort);

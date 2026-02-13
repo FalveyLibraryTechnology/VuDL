@@ -1,6 +1,5 @@
 import { Job as QueueJob } from "bullmq";
 import fs = require("fs");
-import tmp = require("tmp");
 import Config from "../models/Config";
 import { FedoraObject } from "../models/FedoraObject";
 import FedoraObjectFactory from "../services/FedoraObjectFactory";
@@ -23,15 +22,15 @@ class MetadataProcessor {
 
     async addMasterMetadataDatastream(): Promise<void> {
         const fedoraObject: FedoraObject = FedoraObject.build(this.pid, null, this.config);
-        const dataStream: Buffer = await fedoraObject.getDatastreamAsBuffer("MASTER");
-        const contentFile = tmp.fileSync();
-        fs.writeFileSync(contentFile.name, dataStream);
-        await fedoraObject.addMasterMetadataDatastream(contentFile.name);
-        fs.truncateSync(contentFile.name, 0);
-        fs.rmSync(contentFile.name);
+        // Stream the MASTER datastream directly to a temporary file to avoid
+        // buffering very large files into memory, then run FITS on that file.
+        const contentPath = await fedoraObject.downloadDatastreamToTempFile("MASTER");
+        await fedoraObject.addMasterMetadataDatastream(contentPath);
+        fs.truncateSync(contentPath, 0);
+        fs.rmSync(contentPath);
         // FITS XML will have been generated in /tmp as a side-effect; clean it up:
-        fs.truncateSync(contentFile.name + ".fits.xml", 0);
-        fs.rmSync(contentFile.name + ".fits.xml");
+        fs.truncateSync(contentPath + ".fits.xml", 0);
+        fs.rmSync(contentPath + ".fits.xml");
     }
 
     async run(): Promise<void> {

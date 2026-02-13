@@ -9,6 +9,8 @@ import xmlescape = require("xml-escape");
 import { HttpError } from "../models/HttpError";
 import winston = require("winston");
 import SolrCache from "./SolrCache";
+import fs = require("fs");
+import tmp = require("tmp");
 
 export interface DatastreamParameters {
     dsLabel?: string;
@@ -58,7 +60,7 @@ export class Fedora {
     protected _request(
         method = "get",
         _path = "/",
-        data: string | Buffer = null,
+        data: string | Buffer | NodeJS.ReadableStream = null,
         _options: Record<string, unknown> = {},
     ): Promise<NeedleResponse> {
         const path = _path[0] == "/" ? _path.slice(1) : _path;
@@ -202,6 +204,53 @@ export class Fedora {
     }
 
     /**
+     * Download a datastream directly to a temporary file to avoid buffering
+     * large files into memory.
+     *
+     * @param pid Record id
+     * @param datastream Which stream to request
+     * @param treatMissingAsEmpty If true, return empty temp file on 404
+     */
+    async downloadDatastreamToTempFile(pid: string, datastream: string, treatMissingAsEmpty = false): Promise<string> {
+        const url = this.config.restBaseUrl + "/" + pid + "/" + datastream;
+        const auth = {
+            username: this.config.fedoraUsername,
+            password: this.config.fedoraPassword,
+        };
+
+        return new Promise((resolve, reject) => {
+            const tmpobj = tmp.fileSync();
+            const writeStream = fs.createWriteStream(tmpobj.name);
+
+            const req = http.get(url, auth);
+
+            req.on("response", (res) => {
+                if (res.statusCode === 200) {
+                    req.pipe(writeStream);
+                    writeStream.on("finish", () => {
+                        resolve(tmpobj.name);
+                    });
+                    writeStream.on("error", (err) => {
+                        fs.unlinkSync(tmpobj.name);
+                        reject(err);
+                    });
+                } else if (res.statusCode === 404 && treatMissingAsEmpty) {
+                    // create empty file and return its path
+                    writeStream.end(() => resolve(tmpobj.name));
+                } else {
+                    fs.unlinkSync(tmpobj.name);
+                    reject(new Error("Unexpected response for " + pid + "/" + datastream + ": " + res.statusCode));
+                }
+            });
+
+            req.on("error", (err) => {
+                fs.unlinkSync(tmpobj.name);
+                reject(err);
+            });
+        });
+    }
+
+    /**
      * Get DC datastream from Fedora
      *
      * Cast to DC type
@@ -264,18 +313,31 @@ export class Fedora {
         stream: string,
         mimeType: string,
         expectedStatus = [201],
-        data: string | Buffer,
+        data: string | Buffer | NodeJS.ReadableStream,
         linkHeader = "",
+        precomputedDigest = "",
     ): Promise<void> {
         this.cache.purgeFromCacheIfEnabled(pid);
-        const md5 = crypto.createHash("md5").update(data).digest("hex");
-        const sha = crypto.createHash("sha512").update(data).digest("hex");
         const headers: Record<string, string> = {
             "Overwrite-Tombstone": "true",
             "Content-Disposition": 'attachment; filename="' + stream + '"',
             "Content-Type": mimeType,
-            Digest: "md5=" + md5 + ", sha-512=" + sha,
         };
+
+        // If caller supplied a precomputed digest (for streaming upload), use it.
+        if (precomputedDigest && precomputedDigest.length > 0) {
+            headers.Digest = precomputedDigest;
+        } else {
+            // For string/Buffer payloads, compute digests here.
+            if (typeof data === "string" || Buffer.isBuffer(data)) {
+                const md5 = crypto.createHash("md5").update(data).digest("hex");
+                const sha = crypto.createHash("sha512").update(data).digest("hex");
+                headers.Digest = "md5=" + md5 + ", sha-512=" + sha;
+            } else {
+                // No precomputed digest and data is a stream — cannot compute here.
+                throw new Error("Streaming data requires a precomputed digest header to be provided");
+            }
+        }
         const options = { headers: headers };
         if (linkHeader.length > 0) {
             options.headers.Link = linkHeader;
@@ -306,13 +368,22 @@ export class Fedora {
         pid: string,
         stream: string,
         params: DatastreamParameters,
-        data: string | Buffer,
+        data: string | Buffer | NodeJS.ReadableStream,
         expectedStatus = [201],
+        precomputedDigest = "",
     ): Promise<void> {
         this.cache.purgeFromCacheIfEnabled(pid);
 
         // First create the stream:
-        await this.putDatastream(pid, stream, params.mimeType, expectedStatus, data, params.linkHeader ?? "");
+        await this.putDatastream(
+            pid,
+            stream,
+            params.mimeType,
+            expectedStatus,
+            data,
+            params.linkHeader ?? "",
+            precomputedDigest,
+        );
 
         // Now set appropriate metadata:
         const writer = new N3.Writer({ format: "text/turtle" });

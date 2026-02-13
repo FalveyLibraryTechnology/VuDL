@@ -20,11 +20,6 @@ jest.mock("knex", () => {
         Knex: jest.fn(),
     };
 });
-jest.mock("nanoid", () => {
-    return {
-        nanoid: jest.fn(() => "nanoid"),
-    };
-});
 
 describe("Database", () => {
     beforeEach(() => {
@@ -53,7 +48,7 @@ describe("Database", () => {
             throw new Error("no such table");
         });
         const token = await database.makeToken({ id: 1, username: "foo", password: "bar", hash: "xyzzy" });
-        expect(token).toEqual("nanoid");
+        expect(token).toEqual("nanoid"); // value comes from mock in __mocks__ directory
         expect(userSpy).toHaveBeenCalledTimes(1);
         expect(userSpy).toHaveBeenCalledWith("id", -1);
         expect(schema.createTable).toHaveBeenCalledTimes(3);
@@ -65,7 +60,7 @@ describe("Database", () => {
         const database = await Database.getInstance();
         const userSpy = jest.spyOn(database, "getUserBy").mockResolvedValue(null);
         const token = await database.makeToken({ id: 1, username: "foo", password: "bar", hash: "xyzzy" });
-        expect(token).toEqual("nanoid");
+        expect(token).toEqual("nanoid"); // value comes from mock in __mocks__ directory
         expect(userSpy).toHaveBeenCalledTimes(1);
         expect(userSpy).toHaveBeenCalledWith("id", -1);
         expect(schema.createTable).toHaveBeenCalledTimes(0);

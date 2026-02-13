@@ -1,19 +1,47 @@
-.active .indicator {
-    color: green;
+.status_btn {
+    min-width: 120px;
+
+    &:is(:hover, &:focus) {
+        color: white;
+    }
 }
 
-.inactive .indicator {
-    color: yellow;
+.status_btn.active {
+    background-color: var(--object-status-active);
+
+    &:hover, &:focus {
+        color: white;
+        background-color: var(--object-status-active-text);
+        border-color: var(--object-status-active-text);
+    }
 }
 
-.deleted .indicator {
-    color: red;
+.status_btn.inactive {
+    background-color: var(--object-status-inactive);
+
+    &:hover, &:focus {
+        color: white;
+        background-color: var(--object-status-inactive-text);
+        border-color: var(--object-status-inactive-text);
+    }
 }
 
-.unknown .indicator {
-    color: gray;
+.status_btn.deleted {
+    background-color: var(--object-status-deleted);
+
+    &:hover, &:focus {
+        color: white;
+        background-color: var(--object-status-deleted-text);
+        border-color: var(--object-status-deleted-text);
+    }
 }
 
-.indicator {
-    text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+.status_btn.unknown {
+    background-color: var(--object-status-unknown);
+
+    &:hover, &:focus {
+        color: white;
+        background-color: var(--object-status-unknown-text);
+        border-color: var(--object-status-unknown-text);
+    }
 }

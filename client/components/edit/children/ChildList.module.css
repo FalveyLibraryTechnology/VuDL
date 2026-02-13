@@ -1,7 +1,67 @@
 .childlist {
-    list-style-type: none;
+    padding-inline: 1rem;
+    padding-block: 1px;
+    color: CanvasText;
+    background-color: var(--soft);
 }
 
-.childlist li {
-    border-top: 1px solid gray;
+.childlist__list {
+    margin-block: 0;
+    padding-inline: 0;
+    list-style-type: none;
+}
+.childlist__list > li {
+    margin-block: 0;
+    border-block-start: 1px solid var(--edge);
+}
+
+.childlist__item {
+    margin-block: 0;
+    padding-block: 0.25rem;
+}
+
+svg.childlist__expandicon {
+    font-size: 21px;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+        color: var(--active);
+    }
+}
+
+.childlist__pid {
+    font-family: var(--family-monospace);
+    text-align: end;
+    color: var(--text-muted);
+}
+
+.childlist__toggles {
+    display: flex;
+    gap: 1ch;
+}
+
+/* Nested */
+
+.childlist__list {
+    .childlist {
+        margin-inline-start: 0.5rem;
+        margin-block-end: -0.25em;
+        padding-inline-end: 0;
+        border-inline-start: 1px solid var(--edge);
+    }
+
+    .childlist__pagination {
+        margin-block: 0.25em;
+        font-size: 10pt;
+    }
+}
+
+/* Pagination alignment */
+
+.childlist .pagination {
+    margin-block-end: 1px;
+}
+.childlist .pagination li {
+    margin: 0;
 }

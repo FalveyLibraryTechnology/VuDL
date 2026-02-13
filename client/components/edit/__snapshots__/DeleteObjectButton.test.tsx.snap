@@ -2,6 +2,7 @@
 
 exports[`DeleteObjectButton renders correctly when data is loaded 1`] = `
 <button
+  className="object-delete-btn deleteBtn"
   onClick={[Function]}
 >
   DeleteIcon

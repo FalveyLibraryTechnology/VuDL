@@ -1,9 +1,21 @@
 .infobox {
-    background-color: lightgray;
-    border: 1px solid black;
-    padding: 5px;
+    padding-inline: 1lh;
+    padding-block: 1rem;
+    color: var(--info-text);
+    background-color: var(--info);
+    border: 1px solid var(--info-border);
 }
 
 .infobox h2 {
     margin: 0;
+}
+
+.infobox button {
+    min-width: unset;
+    padding-block: 0.5em 0.4em;
+
+    &:not(:hover,:focus) {
+        background-color: white;
+        border-color: black;
+    }
 }

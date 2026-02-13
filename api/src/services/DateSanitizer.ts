@@ -32,7 +32,7 @@ export default class DateSanitizer {
                 } else {
                     return null;
                 }
-            } catch (e) {
+            } catch {
                 return null;
             }
         }

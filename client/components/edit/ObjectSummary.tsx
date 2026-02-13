@@ -1,7 +1,8 @@
-import styles from "./ObjectSummary.module.css";
-import CopyPidButton from "./CopyPidButton";
 import React, { useEffect } from "react";
 import HtmlReactParser from "html-react-parser";
+
+import styles from "./ObjectSummary.module.css";
+import CopyPidButton from "./CopyPidButton";
 import { useEditorContext } from "../../context/EditorContext";
 import ObjectButtonBar from "./ObjectButtonBar";
 import ObjectModels from "./ObjectModels";
@@ -38,7 +39,13 @@ const ObjectSummary = (): React.ReactElement => {
             </div>
             <h2>{title}</h2>
             <div>{HtmlReactParser(description)}</div>
-            {loaded ? <ObjectButtonBar pid={currentPid} /> : ""}
+            {loaded ? (
+                <div style={{ marginBlock: "1rem" }}>
+                    <ObjectButtonBar pid={currentPid} />
+                </div>
+            ) : (
+                ""
+            )}
             {loaded ? <ObjectOrder pid={currentPid} /> : ""}
             {loaded ? <ObjectChildCounts pid={currentPid} /> : ""}
             PID: {currentPid} <CopyPidButton pid={currentPid} />

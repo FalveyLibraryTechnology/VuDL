@@ -31,7 +31,7 @@ class Derivative implements QueueJob {
             console.log(": build derivatives done");
             const metadata = new JobMetadata(job.data);
             fs.rmSync(metadata.derivativeLockfile);
-        } catch (e) {
+        } catch {
             console.error("lock file not deleted: " + job.data.dir);
         }
     }

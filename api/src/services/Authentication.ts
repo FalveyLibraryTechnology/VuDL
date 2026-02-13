@@ -1,6 +1,7 @@
 import crypto = require("crypto");
 import passport = require("passport");
 import saml = require("@node-saml/passport-saml");
+import type { Profile } from "@node-saml/node-saml";
 import LocalStrategy = require("passport-local");
 import Config from "../models/Config";
 import { User, Database } from "./Database";
@@ -60,17 +61,20 @@ class Authentication {
                 idpCert: this.config.samlCertificate,
                 wantAssertionsSigned: false,
                 wantAuthnResponseSigned: false,
+                passReqToCallback: false,
             },
-            async function (profile, done) {
-                let user: User | boolean = false;
-                if (this.isLegalUsername(profile.nameID)) {
+            async (profile: Profile | null, done: saml.VerifiedCallback) => {
+                let user: User | null = null;
+                if (this.isLegalUsername(profile?.nameID)) {
                     const db = Database.getInstance();
                     user = await db.getOrCreateUser(profile.nameID);
                 }
-                done(null, user);
-            }.bind(this),
-            // TODO: implement a logout function here:
-            () => null,
+                done(null, user ? (user as unknown as Record<string, unknown>) : undefined);
+            },
+            (profile: Profile | null, done: saml.VerifiedCallback) => {
+                // TODO: implement a logout function here:
+                done(null);
+            },
         );
     }
 
@@ -95,7 +99,7 @@ class Authentication {
             passport.use(this.getLocalStrategy());
         } else if (authStrategy === "saml") {
             const samlStrategy = this.getSamlStrategy();
-            passport.use(samlStrategy);
+            passport.use(samlStrategy as unknown as passport.Strategy);
         } else {
             throw new Error(`Unsupported auth strategy: ${authStrategy}`);
         }

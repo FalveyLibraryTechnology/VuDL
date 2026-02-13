@@ -33,7 +33,7 @@ const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
             <h1>Editor: Object {pid}</h1>
             <ObjectSummary />
             <Grid container>
-                <Grid item xs={4}>
+                <Grid item md>
                     <Box>
                         <h3>Object Tools</h3>
                         <ul>
@@ -43,7 +43,7 @@ const ObjectEditor = ({ pid }: ObjectEditorProps): React.ReactElement => {
                         </ul>
                     </Box>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item md>
                     <Box>
                         <h3>Datastreams</h3>
                         <DatastreamList />

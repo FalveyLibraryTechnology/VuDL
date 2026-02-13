@@ -1,0 +1,22 @@
+.objectBar {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    width: fit-content;
+
+    & button {
+        width: fit-content;
+        white-space: nowrap;
+        border-inline-width: 0;
+        border-radius: 0;
+
+        &:first-child {
+            border-inline-start-width: 1px;
+            border-radius: 4px 0 0 4px;
+        }
+
+        &:last-child {
+            border-inline-end-width: 1px;
+            border-radius: 0 4px 4px 0;
+        }
+    }
+}
