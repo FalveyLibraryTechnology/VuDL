@@ -187,7 +187,7 @@ async function getChildCounts(req, res) {
     res.json(response);
 }
 
-function uploadFile(req, res, next) {
+function uploadFile(req: express.Request<{ pid: string; stream: string }>, res, next) {
     const { pid, stream } = req.params;
     const form = new IncomingForm({ multiples: true, maxFileSize: Config.getInstance().maxUploadSize });
 
@@ -213,7 +213,7 @@ edit.post(
     requireToken,
     bodyParser.json(),
     datastreamSanitizer,
-    async function (req, res) {
+    async function (req: express.Request<{ pid: string; stream: string }>, res) {
         const { pid, stream } = req.params;
         const { licenseKey } = req.body;
         try {
@@ -227,23 +227,28 @@ edit.post(
     },
 );
 
-edit.get("/object/:pid/datastream/:stream/license", requireToken, datastreamSanitizer, async (req, res) => {
-    try {
-        const { pid, stream } = req.params;
-        const datastream = DatastreamManager.getInstance();
-        const licenseKey = await datastream.getLicenseKey(pid, stream);
-        res.status(200).send(licenseKey);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
+edit.get(
+    "/object/:pid/datastream/:stream/license",
+    requireToken,
+    datastreamSanitizer,
+    async (req: express.Request<{ pid: string; stream: string }>, res) => {
+        try {
+            const { pid, stream } = req.params;
+            const datastream = DatastreamManager.getInstance();
+            const licenseKey = await datastream.getLicenseKey(pid, stream);
+            res.status(200).send(licenseKey);
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    },
+);
 
 edit.post(
     "/object/:pid/datastream/:stream/agents",
     requireToken,
     bodyParser.json(),
     datastreamSanitizer,
-    async (req, res) => {
+    async (req: express.Request<{ pid: string; stream: string }>, res) => {
         try {
             const { pid, stream } = req.params;
             const { agents } = req.body;
@@ -261,7 +266,7 @@ edit.post(
     requireToken,
     bodyParser.json(),
     datastreamSanitizer,
-    async (req, res) => {
+    async (req: express.Request<{ pid: string; stream: string }>, res) => {
         try {
             const { pid, stream } = req.params;
             const { processMetadata } = req.body;
@@ -279,7 +284,7 @@ edit.post(
     requireToken,
     bodyParser.json(),
     datastreamSanitizer,
-    async (req, res) => {
+    async (req: express.Request<{ pid: string; stream: string }>, res) => {
         try {
             const { pid, stream } = req.params;
             const { metadata } = req.body;
@@ -292,58 +297,78 @@ edit.post(
     },
 );
 
-edit.get("/object/:pid/datastream/:stream/agents", requireToken, datastreamSanitizer, async (req, res) => {
-    try {
-        const { pid, stream } = req.params;
-        const datastream = DatastreamManager.getInstance();
-        const agents = await datastream.getAgents(pid, stream);
-        res.status(200).send(agents);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
+edit.get(
+    "/object/:pid/datastream/:stream/agents",
+    requireToken,
+    datastreamSanitizer,
+    async (req: express.Request<{ pid: string; stream: string }>, res) => {
+        try {
+            const { pid, stream } = req.params;
+            const datastream = DatastreamManager.getInstance();
+            const agents = await datastream.getAgents(pid, stream);
+            res.status(200).send(agents);
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    },
+);
 
-edit.get("/object/:pid/datastream/:stream/metadata", requireToken, datastreamSanitizer, async (req, res) => {
-    try {
-        const { pid, stream } = req.params;
-        const datastream = DatastreamManager.getInstance();
-        const metadata = await datastream.getMetadata(pid, stream);
-        res.status(200).send(metadata);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
+edit.get(
+    "/object/:pid/datastream/:stream/metadata",
+    requireToken,
+    datastreamSanitizer,
+    async (req: express.Request<{ pid: string; stream: string }>, res) => {
+        try {
+            const { pid, stream } = req.params;
+            const datastream = DatastreamManager.getInstance();
+            const metadata = await datastream.getMetadata(pid, stream);
+            res.status(200).send(metadata);
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    },
+);
 
-edit.get("/object/:pid/datastream/:stream/processMetadata", requireToken, datastreamSanitizer, async (req, res) => {
-    try {
-        const { pid, stream } = req.params;
-        const datastream = DatastreamManager.getInstance();
-        const metadata = await datastream.getProcessMetadata(pid, stream);
-        res.status(200).send(metadata);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
+edit.get(
+    "/object/:pid/datastream/:stream/processMetadata",
+    requireToken,
+    datastreamSanitizer,
+    async (req: express.Request<{ pid: string; stream: string }>, res) => {
+        try {
+            const { pid, stream } = req.params;
+            const datastream = DatastreamManager.getInstance();
+            const metadata = await datastream.getProcessMetadata(pid, stream);
+            res.status(200).send(metadata);
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    },
+);
 
 edit.get("/topLevelObjects", requireToken, getChildren);
 edit.get("/object/:pid/children", requireToken, pidSanitizer, getChildren);
 edit.get("/object/:pid/childCounts", requireToken, pidSanitizer, getChildCounts);
-edit.get("/object/:pid/lastChildPosition", requireToken, pidSanitizer, async (req, res) => {
-    const cleanPid = req.params.pid.replace(/["]/g, "");
-    const query = `fedora_parent_id_str_mv:"${cleanPid}"`;
-    const sequenceField = `sequence_${cleanPid.replace(/:/g, "_")}_str`;
-    const sort = `${sequenceField} DESC`;
-    const config = Config.getInstance();
-    const solr = Solr.getInstance();
-    const rows = "1";
-    const result = await solr.query(config.solrCore, query, { sort, fl: sequenceField, rows });
-    if (result.statusCode !== 200) {
-        res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
-        return;
-    }
-    const docs = result?.body?.response?.docs ?? [];
-    res.status(200).send(docs?.[0]?.[sequenceField] ?? "0");
-});
+edit.get(
+    "/object/:pid/lastChildPosition",
+    requireToken,
+    pidSanitizer,
+    async (req: express.Request<{ pid: string }>, res) => {
+        const cleanPid = req.params.pid.replace(/["]/g, "");
+        const query = `fedora_parent_id_str_mv:"${cleanPid}"`;
+        const sequenceField = `sequence_${cleanPid.replace(/:/g, "_")}_str`;
+        const sort = `${sequenceField} DESC`;
+        const config = Config.getInstance();
+        const solr = Solr.getInstance();
+        const rows = "1";
+        const result = await solr.query(config.solrCore, query, { sort, fl: sequenceField, rows });
+        if (result.statusCode !== 200) {
+            res.status(result.statusCode ?? 500).send("Unexpected Solr response code.");
+            return;
+        }
+        const docs = result?.body?.response?.docs ?? [];
+        res.status(200).send(docs?.[0]?.[sequenceField] ?? "0");
+    },
+);
 function getChildPidHandlerForField(field) {
     return async function (req, res) {
         const cleanPid = req.params.pid.replace(/["]/g, "");
@@ -374,117 +399,153 @@ edit.get(
     pidSanitizer,
     getChildPidHandlerForField("fedora_parent_id_str_mv"),
 );
-edit.get("/object/:pid/details", requireToken, pidSanitizer, async function (req, res) {
-    try {
-        const { fedoraDatastreams, metadata, models, pid, sortOn, sequences, state } =
-            await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
-        res.json({ datastreams: fedoraDatastreams, metadata, models, pid, sortOn, sequences, state });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
-    }
-});
-
-edit.get("/object/:pid/parents", pidSanitizer, requireToken, async function (req, res) {
-    try {
-        const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(
-            req.params.pid,
-            (req.query.shallow ?? "") == "1",
-        );
-        res.json(fedoraData.getParentTree());
-    } catch (e) {
-        console.error("Error retrieving breadcrumbs: " + e);
-        res.status(500).send("Unexpected error!!");
-    }
-});
-
-edit.get("/object/:pid/datastream/:stream/download", datastreamSanitizer, requireToken, async function (req, res) {
-    try {
-        const pid = req.params.pid;
-        const stream = req.params.stream;
-        const datastream = DatastreamManager.getInstance();
-        const mimeType = await datastream.getMimeType(pid, stream);
-        const fileType = mimeType?.split("/")?.[1];
-        const fileName = `${pid.replace(/:/g, "_")}_${stream}.${fileType}`;
-        const buffer = await datastream.downloadBuffer(pid, stream);
-        res.header({
-            "Access-Control-Expose-Headers": "Content-Disposition",
-            "Content-Disposition": `attachment; filename=${fileName}`,
-            "Content-Type": mimeType,
-        });
-        res.status(200).send(buffer);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
-    }
-});
-
-edit.delete("/object/:pid/datastream/:stream", requireToken, datastreamSanitizer, async function (req, res) {
-    const pid = req.params.pid;
-    const stream = req.params.stream;
-    const datastreamManager = DatastreamManager.getInstance();
-
-    try {
-        await datastreamManager.deleteDatastream(pid, stream);
-        res.status(200).send("Datastream successfully deleted");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
-    }
-});
-
-edit.get("/object/:pid/datastream/:stream/view", requireToken, datastreamSanitizer, async function (req, res) {
-    try {
-        const pid = req.params.pid;
-        const stream = req.params.stream;
-        const datastream = DatastreamManager.getInstance();
-        const mimeType = await datastream.getMimeType(pid, stream);
-        const buffer = await datastream.downloadBuffer(pid, stream);
-        res.header({
-            "Content-Disposition": "inline",
-            "Content-Type": mimeType,
-        });
-        res.status(200).send(buffer);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
-    }
-});
-
-edit.get("/object/:pid/datastream/:stream/mimetype", requireToken, datastreamSanitizer, async function (req, res) {
-    try {
-        const pid = req.params.pid;
-        const stream = req.params.stream;
-        const datastream = DatastreamManager.getInstance();
-        const mimeType = await datastream.getMimeType(pid, stream);
-        res.status(200).send(mimeType);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
-    }
-});
-
-edit.put("/object/:pid/state", requireToken, pidSanitizer, bodyParser.text(), async function (req, res) {
-    try {
-        const pid = req.params.pid;
-        const fedora = Fedora.getInstance();
-        const state = req.body;
-        const legalStates = ["Active", "Deleted", "Inactive"];
-        if (!legalStates.includes(state)) {
-            res.status(400).send(`Illegal state: ${state}`);
-            return;
+edit.get(
+    "/object/:pid/details",
+    requireToken,
+    pidSanitizer,
+    async function (req: express.Request<{ pid: string }>, res) {
+        try {
+            const { fedoraDatastreams, metadata, models, pid, sortOn, sequences, state } =
+                await FedoraDataCollector.getInstance().getObjectData(req.params.pid);
+            res.json({ datastreams: fedoraDatastreams, metadata, models, pid, sortOn, sequences, state });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
         }
-        // Only update state if it's different from the existing one:
-        const existing = await FedoraDataCollector.getInstance().getObjectData(pid);
-        if (existing.state !== state) {
-            await fedora.modifyObjectState(pid, state);
+    },
+);
+
+edit.get(
+    "/object/:pid/parents",
+    pidSanitizer,
+    requireToken,
+    async function (req: express.Request<{ pid: string }>, res) {
+        try {
+            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(
+                req.params.pid,
+                (req.query.shallow ?? "") == "1",
+            );
+            res.json(fedoraData.getParentTree());
+        } catch (e) {
+            console.error("Error retrieving breadcrumbs: " + e);
+            res.status(500).send("Unexpected error!!");
         }
-        res.status(200).send("ok");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
-    }
-});
+    },
+);
+
+edit.get(
+    "/object/:pid/datastream/:stream/download",
+    datastreamSanitizer,
+    requireToken,
+    async function (req: express.Request<{ pid: string; stream: string }>, res) {
+        try {
+            const pid = req.params.pid;
+            const stream = req.params.stream;
+            const datastream = DatastreamManager.getInstance();
+            const mimeType = await datastream.getMimeType(pid, stream);
+            const fileType = mimeType?.split("/")?.[1];
+            const fileName = `${pid.replace(/:/g, "_")}_${stream}.${fileType}`;
+            const buffer = await datastream.downloadBuffer(pid, stream);
+            res.header({
+                "Access-Control-Expose-Headers": "Content-Disposition",
+                "Content-Disposition": `attachment; filename=${fileName}`,
+                "Content-Type": mimeType,
+            });
+            res.status(200).send(buffer);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
+    },
+);
+
+edit.delete(
+    "/object/:pid/datastream/:stream",
+    requireToken,
+    datastreamSanitizer,
+    async function (req: express.Request<{ pid: string; stream: string }>, res) {
+        const pid = req.params.pid;
+        const stream = req.params.stream;
+        const datastreamManager = DatastreamManager.getInstance();
+
+        try {
+            await datastreamManager.deleteDatastream(pid, stream);
+            res.status(200).send("Datastream successfully deleted");
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
+    },
+);
+
+edit.get(
+    "/object/:pid/datastream/:stream/view",
+    requireToken,
+    datastreamSanitizer,
+    async function (req: express.Request<{ pid: string; stream: string }>, res) {
+        try {
+            const pid = req.params.pid;
+            const stream = req.params.stream;
+            const datastream = DatastreamManager.getInstance();
+            const mimeType = await datastream.getMimeType(pid, stream);
+            const buffer = await datastream.downloadBuffer(pid, stream);
+            res.header({
+                "Content-Disposition": "inline",
+                "Content-Type": mimeType,
+            });
+            res.status(200).send(buffer);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
+    },
+);
+
+edit.get(
+    "/object/:pid/datastream/:stream/mimetype",
+    requireToken,
+    datastreamSanitizer,
+    async function (req: express.Request<{ pid: string; stream: string }>, res) {
+        try {
+            const pid = req.params.pid;
+            const stream = req.params.stream;
+            const datastream = DatastreamManager.getInstance();
+            const mimeType = await datastream.getMimeType(pid, stream);
+            res.status(200).send(mimeType);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
+    },
+);
+
+edit.put(
+    "/object/:pid/state",
+    requireToken,
+    pidSanitizer,
+    bodyParser.text(),
+    async function (req: express.Request<{ pid: string }>, res) {
+        try {
+            const pid = req.params.pid;
+            const fedora = Fedora.getInstance();
+            const state = req.body;
+            const legalStates = ["Active", "Deleted", "Inactive"];
+            if (!legalStates.includes(state)) {
+                res.status(400).send(`Illegal state: ${state}`);
+                return;
+            }
+            // Only update state if it's different from the existing one:
+            const existing = await FedoraDataCollector.getInstance().getObjectData(pid);
+            if (existing.state !== state) {
+                await fedora.modifyObjectState(pid, state);
+            }
+            res.status(200).send("ok");
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
+        }
+    },
+);
 
 const pidAndParentPidSanitizer = sanitizeParameters({ pid: pidSanitizeRegEx, parentPid: pidSanitizeRegEx });
 edit.post(
@@ -492,7 +553,7 @@ edit.post(
     requireToken,
     pidAndParentPidSanitizer,
     bodyParser.text(),
-    async function (req, res) {
+    async function (req: express.Request<{ pid: string; parentPid: string }>, res) {
         try {
             const { pid, parentPid } = req.params;
             const pos = parseInt(req.body);
@@ -519,7 +580,7 @@ edit.put(
     requireToken,
     pidAndParentPidSanitizer,
     bodyParser.text(),
-    async function (req, res) {
+    async function (req: express.Request<{ pid: string; parentPid: string }>, res) {
         try {
             const { pid, parentPid } = req.params;
             const pos = parseInt(req.body);
@@ -545,56 +606,67 @@ edit.put(
         }
     },
 );
-edit.delete("/object/:pid/parent/:parentPid", requireToken, pidAndParentPidSanitizer, async function (req, res) {
-    try {
-        const pid = req.params.pid;
-        const parent = req.params.parentPid;
-        const fedora = Fedora.getInstance();
+edit.delete(
+    "/object/:pid/parent/:parentPid",
+    requireToken,
+    pidAndParentPidSanitizer,
+    async function (req: express.Request<{ pid: string; parentPid: string }>, res) {
+        try {
+            const pid = req.params.pid;
+            const parent = req.params.parentPid;
+            const fedora = Fedora.getInstance();
 
-        // Validate the input
-        const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid, true);
-        const legalParent = fedoraData.parents.find((current) => current.pid === parent);
-        if (!legalParent) {
-            res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
-            return;
+            // Validate the input
+            const fedoraData = await FedoraDataCollector.getInstance().getHierarchy(pid, true);
+            const legalParent = fedoraData.parents.find((current) => current.pid === parent);
+            if (!legalParent) {
+                res.status(400).send(`${parent} is not an immediate parent of ${pid}.`);
+                return;
+            }
+
+            // If we got this far, we can safely update things
+            if ((legalParent as FedoraDataCollection).sortOn == "custom") {
+                await fedora.deleteSequenceRelationship(pid, parent);
+            }
+            await fedora.deleteParentRelationship(pid, parent);
+            res.status(200).send("ok");
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
         }
+    },
+);
+edit.put(
+    "/object/:pid/sortOn",
+    requireToken,
+    pidSanitizer,
+    bodyParser.text(),
+    async function (req: express.Request<{ pid: string }>, res) {
+        try {
+            const pid = req.params.pid;
+            const fedora = Fedora.getInstance();
+            const sortOn = req.body;
 
-        // If we got this far, we can safely update things
-        if ((legalParent as FedoraDataCollection).sortOn == "custom") {
-            await fedora.deleteSequenceRelationship(pid, parent);
+            // Validate the input
+            if (sortOn !== "title" && sortOn !== "custom") {
+                res.status(400).send(`Unrecognized sortOn value: ${sortOn}. Legal values: custom, title`);
+                return;
+            }
+
+            // If we got this far, we can safely update things
+            await fedora.updateSortOnRelationship(pid, sortOn);
+            res.status(200).send("ok");
+        } catch (error) {
+            console.error(error);
+            res.status(500).send(error.message);
         }
-        await fedora.deleteParentRelationship(pid, parent);
-        res.status(200).send("ok");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
-    }
-});
-edit.put("/object/:pid/sortOn", requireToken, pidSanitizer, bodyParser.text(), async function (req, res) {
-    try {
-        const pid = req.params.pid;
-        const fedora = Fedora.getInstance();
-        const sortOn = req.body;
-
-        // Validate the input
-        if (sortOn !== "title" && sortOn !== "custom") {
-            res.status(400).send(`Unrecognized sortOn value: ${sortOn}. Legal values: custom, title`);
-            return;
-        }
-
-        // If we got this far, we can safely update things
-        await fedora.updateSortOnRelationship(pid, sortOn);
-        res.status(200).send("ok");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
-    }
-});
+    },
+);
 edit.delete(
     "/object/:pid/positionInParent/:parentPid",
     requireToken,
     pidAndParentPidSanitizer,
-    async function (req, res) {
+    async function (req: express.Request<{ pid: string; parentPid: string }>, res) {
         try {
             const pid = req.params.pid;
             const parent = req.params.parentPid;
@@ -622,7 +694,7 @@ edit.put(
     requireToken,
     pidAndParentPidSanitizer,
     bodyParser.text(),
-    async function (req, res) {
+    async function (req: express.Request<{ pid: string; parentPid: string }>, res) {
         try {
             const pid = req.params.pid;
             const parent = req.params.parentPid;

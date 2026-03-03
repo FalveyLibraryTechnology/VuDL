@@ -100,7 +100,7 @@ export function getAuthRouter(): Router {
         });
     });
 
-    authRouter.get("/token/confirm/:token", async function (req: Request, res: Response) {
+    authRouter.get("/token/confirm/:token", async function (req: Request<{ token: string }>, res: Response) {
         const isGood = await Database.getInstance().confirmToken(req.params.token);
         res.sendStatus(isGood ? 200 : 401);
     });

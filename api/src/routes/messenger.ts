@@ -7,34 +7,49 @@ import { requireToken } from "./auth";
 import { pidSanitizer } from "./sanitize";
 const messenger = express.Router();
 
-messenger.post("/pdfgenerator/:pid", pidSanitizer, requireToken, async function (req, res) {
-    QueueManager.getInstance().generatePdf(req.params.pid);
-    res.status(200).send("ok");
-});
+messenger.post(
+    "/pdfgenerator/:pid",
+    pidSanitizer,
+    requireToken,
+    async function (req: express.Request<{ pid: string }>, res) {
+        QueueManager.getInstance().generatePdf(req.params.pid);
+        res.status(200).send("ok");
+    },
+);
 
-messenger.get("/solrindex/:pid", pidSanitizer, requireToken, async function (req, res) {
-    const indexer = SolrIndexer.getInstance();
-    try {
-        const fedoraFields = await indexer.getFields(req.params.pid);
-        res.send(JSON.stringify(fedoraFields, null, "\t"));
-    } catch (e) {
-        console.error(e);
-        res.status(500).send(e.message ?? "unexpected exception");
-    }
-});
+messenger.get(
+    "/solrindex/:pid",
+    pidSanitizer,
+    requireToken,
+    async function (req: express.Request<{ pid: string }>, res) {
+        const indexer = SolrIndexer.getInstance();
+        try {
+            const fedoraFields = await indexer.getFields(req.params.pid);
+            res.send(JSON.stringify(fedoraFields, null, "\t"));
+        } catch (e) {
+            console.error(e);
+            res.status(500).send(e.message ?? "unexpected exception");
+        }
+    },
+);
 
-messenger.post("/solrindex/:pid", pidSanitizer, requireToken, async function (req, res) {
-    const indexer = SolrIndexer.getInstance();
-    try {
-        const result = await indexer.indexPid(req.params.pid);
-        res.status(result.statusCode).send(
-            result.statusCode === 200 ? "ok" : (((result.body ?? {}).error ?? {}).msg ?? "error"),
-        );
-    } catch (e) {
-        console.error(e);
-        res.status(500).send(e.message ?? "unexpected exception");
-    }
-});
+messenger.post(
+    "/solrindex/:pid",
+    pidSanitizer,
+    requireToken,
+    async function (req: express.Request<{ pid: string }>, res) {
+        const indexer = SolrIndexer.getInstance();
+        try {
+            const result = await indexer.indexPid(req.params.pid);
+            res.status(result.statusCode).send(
+                result.statusCode === 200 ? "ok" : (((result.body ?? {}).error ?? {}).msg ?? "error"),
+            );
+        } catch (e) {
+            console.error(e);
+            res.status(500).send(e.message ?? "unexpected exception");
+        }
+    },
+);
 
 messenger.post("/queuesolrindex", requireToken, bodyParser.json(), async function (req, res) {
     const body = req?.body ?? {};

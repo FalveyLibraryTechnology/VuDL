@@ -80,21 +80,26 @@ ingest.put("/:category/:job", sanitizeParameters(), requireToken, function (req,
     }
 });
 
-ingest.get("/:category/:job/:image/:size", sanitizeParameters(), requireToken, async function (req, res) {
-    const legalSizes: Record<string, string> = {
-        thumb: "THUMBNAIL",
-        medium: "MEDIUM",
-        large: "LARGE",
-    };
-    const image: string = req.params.image;
-    const size: string = req.params.size;
-    const job = getJobFromRequest(req);
-    if (job == null) {
-        return res.status(404).json({ error: "Job not found" });
-    }
-    const deriv = await job.getImage(image).derivative(legalSizes[size] ?? "THUMBNAIL");
-    res.sendFile(deriv);
-});
+ingest.get(
+    "/:category/:job/:image/:size",
+    sanitizeParameters(),
+    requireToken,
+    async function (req: express.Request<{ category: string; job: string; image: string; size: string }>, res) {
+        const legalSizes: Record<string, string> = {
+            thumb: "THUMBNAIL",
+            medium: "MEDIUM",
+            large: "LARGE",
+        };
+        const image: string = req.params.image;
+        const size: string = req.params.size;
+        const job = getJobFromRequest(req);
+        if (job == null) {
+            return res.status(404).json({ error: "Job not found" });
+        }
+        const deriv = await job.getImage(image).derivative(legalSizes[size] ?? "THUMBNAIL");
+        res.sendFile(deriv);
+    },
+);
 
 ingest.delete(
     "/:category/:job/:image/\\*",
@@ -102,7 +107,7 @@ ingest.delete(
         "/:category/:job/:image/\\*",
         sanitizeParameters({ 0: /^\*$/ }),
         requireToken,
-        async function (req, res) {
+        async function (req: express.Request<{ category: string; job: string; image: string }>, res) {
             const image: string = req.params.image;
             const job = getJobFromRequest(req);
             if (job == null) {
