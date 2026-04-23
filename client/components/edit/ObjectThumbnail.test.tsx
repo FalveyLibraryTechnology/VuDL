@@ -1,6 +1,5 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import ObjectThumbnail from "./ObjectThumbnail";
 
 const mockUseEditorContext = jest.fn();
@@ -24,14 +23,14 @@ describe("ObjectThumbnail", () => {
     });
 
     it("displays unavailable message when appropriate", async () => {
-        const tree = renderer.create(<ObjectThumbnail pid={pid} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ObjectThumbnail pid={pid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders thumbnail when available", async () => {
         editorValues.state.vufindUrl = "http://localhost";
         editorValues.state.objectDetailsStorage[pid] = { datastreams: ["THUMBNAIL"] };
-        const tree = renderer.create(<ObjectThumbnail pid={pid} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ObjectThumbnail pid={pid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 });

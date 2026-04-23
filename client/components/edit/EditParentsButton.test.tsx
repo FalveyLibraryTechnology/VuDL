@@ -1,8 +1,6 @@
-import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import EditParentsButton from "./EditParentsButton";
 
 const mockUseEditorContext = jest.fn();
@@ -40,8 +38,8 @@ describe("EditParentsButton", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<EditParentsButton pid={pid} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<EditParentsButton pid={pid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("sets up modal on click", async () => {

@@ -1,7 +1,5 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render } from "@testing-library/react";
-import renderer from "react-test-renderer";
 import ObjectLoader from "./ObjectLoader";
 
 const mockUseEditorContext = jest.fn();
@@ -25,14 +23,14 @@ describe("ObjectLoader", () => {
         mockUseEditorContext.mockReturnValue(editorValues);
     });
     it("renders correctly for a pending object", () => {
-        const tree = renderer.create(<ObjectLoader pid="foo:123" />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ObjectLoader pid="foo:123" />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders correctly for a loaded object", () => {
         editorValues.state.objectDetailsStorage["foo:123"] = { foo: "bar" };
-        const tree = renderer.create(<ObjectLoader pid="foo:123" />).toJSON();
-        expect(tree).toBeNull();
+        const { asFragment } = render(<ObjectLoader pid="foo:123" />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("loads the object as needed when optional callback is omitted", () => {

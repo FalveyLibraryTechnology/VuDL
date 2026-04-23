@@ -47,7 +47,7 @@ const DatastreamProcessMetadataTask = ({
     const presetControl =
         toolPresetKeys.length > 0 ? (
             <>
-                <Grid item xs={7}>
+                <Grid size={7}>
                     <FormControl fullWidth={true}>
                         <label>
                             Select a preset tool:
@@ -67,7 +67,7 @@ const DatastreamProcessMetadataTask = ({
                         </label>
                     </FormControl>
                 </Grid>
-                <Grid item xs={5}>
+                <Grid size={5}>
                     <button onClick={applyToolPreset}>Apply Preset</button>
                 </Grid>
             </>
@@ -76,9 +76,9 @@ const DatastreamProcessMetadataTask = ({
         <>
             <hr style={{ marginBottom: "20px" }} />
             <Grid container spacing={1}>
-                <Grid item xs={11}>
+                <Grid size={11}>
                     <Grid container spacing={1} style={{ marginBottom: "10px" }}>
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Task Sequence" }}
@@ -87,7 +87,7 @@ const DatastreamProcessMetadataTask = ({
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Task Label" }}
@@ -96,7 +96,7 @@ const DatastreamProcessMetadataTask = ({
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Task Description" }}
@@ -105,7 +105,7 @@ const DatastreamProcessMetadataTask = ({
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Task Individual" }}
@@ -115,7 +115,7 @@ const DatastreamProcessMetadataTask = ({
                             </FormControl>
                         </Grid>
                         {presetControl}
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Task Tool" }}
@@ -124,7 +124,7 @@ const DatastreamProcessMetadataTask = ({
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Tool Description" }}
@@ -133,7 +133,7 @@ const DatastreamProcessMetadataTask = ({
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid size={2}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Tool Make" }}
@@ -142,7 +142,7 @@ const DatastreamProcessMetadataTask = ({
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid size={2}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Tool Version" }}
@@ -151,7 +151,7 @@ const DatastreamProcessMetadataTask = ({
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid size={2}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Tool Serial Number" }}
@@ -162,7 +162,7 @@ const DatastreamProcessMetadataTask = ({
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={1}>
+                <Grid size={1}>
                     <IconButton onClick={addBelow}>
                         <AddCircle titleAccess="Add Below" />
                     </IconButton>

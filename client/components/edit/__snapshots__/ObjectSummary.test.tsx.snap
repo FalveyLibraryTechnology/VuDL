@@ -1,83 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ObjectSummary displays loading message when appropriate 1`] = `
-<div
-  className="infobox"
->
+<DocumentFragment>
   <div
-    style={
-      {
-        "float": "right",
-      }
-    }
+    class="infobox"
   >
-    ObjectThumbnail
+    <div
+      style="float: right;"
+    >
+      ObjectThumbnail
+    </div>
+    <h2>
+      Loading...
+    </h2>
+    <div />
+    PID: foo:123 CopyPidButton
+    <br
+      style="clear: both;"
+    />
   </div>
-  <h2>
-    Loading...
-  </h2>
-  <div />
-  PID: 
-  foo:123
-   
-  CopyPidButton
-  <br
-    style={
-      {
-        "clear": "both",
-      }
-    }
-  />
-</div>
+</DocumentFragment>
 `;
 
 exports[`ObjectSummary renders information from metadata when available 1`] = `
-<div
-  className="infobox"
->
+<DocumentFragment>
   <div
-    style={
-      {
-        "float": "right",
-      }
-    }
+    class="infobox"
   >
-    ObjectThumbnail
-    ObjectModels
+    <div
+      style="float: right;"
+    >
+      ObjectThumbnailObjectModels
+    </div>
+    <h2>
+      My title
+    </h2>
+    <div>
+      <p>
+        Hello 
+        <b>
+          world
+        </b>
+        !
+      </p>
+    </div>
+    <div
+      style="margin-block: 1rem;"
+    >
+      ObjectButtonBar
+    </div>
+    ObjectOrderObjectChildCountsPID: foo:123 CopyPidButton
+    <br
+      style="clear: both;"
+    />
   </div>
-  <h2>
-    My title
-  </h2>
-  <div>
-    <p>
-      Hello 
-      <b>
-        world
-      </b>
-      !
-    </p>
-  </div>
-  <div
-    style={
-      {
-        "marginBlock": "1rem",
-      }
-    }
-  >
-    ObjectButtonBar
-  </div>
-  ObjectOrder
-  ObjectChildCounts
-  PID: 
-  foo:123
-   
-  CopyPidButton
-  <br
-    style={
-      {
-        "clear": "both",
-      }
-    }
-  />
-</div>
+</DocumentFragment>
 `;

@@ -1,8 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen, waitFor } from "@testing-library/react";
-import renderer from "react-test-renderer";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import userEvent from "@testing-library/user-event";
 import { ChildProps, Child } from "./Child";
 import { EditorContextProvider, ObjectDetails } from "../../../context/EditorContext";
@@ -60,58 +58,58 @@ describe("Child", () => {
     });
 
     it("renders using ajax-loaded data", async () => {
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(getChildComponent(props));
+        let asFragment;
+        await act(async () => {
+            asFragment = render(getChildComponent(props)).asFragment;
         });
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders a thumbnail", async () => {
         props.thumbnail = true;
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(getChildComponent(props));
+        let asFragment;
+        await act(async () => {
+            asFragment = render(getChildComponent(props)).asFragment;
         });
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders child counts", async () => {
         props.showChildCounts = true;
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(getChildComponent(props));
+        let asFragment;
+        await act(async () => {
+            asFragment = render(getChildComponent(props)).asFragment;
         });
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders thumbnail and child counts", async () => {
         props.thumbnail = true;
         props.showChildCounts = true;
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(getChildComponent(props));
+        let asFragment;
+        await act(async () => {
+            asFragment = render(getChildComponent(props)).asFragment;
         });
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/details");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("handles empty titles appropriately", async () => {
         props.initialTitle = "";
         response.metadata = {};
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(getChildComponent(props));
+        let asFragment;
+        await act(async () => {
+            asFragment = render(getChildComponent(props)).asFragment;
         });
         await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("can be expanded to show children", async () => {

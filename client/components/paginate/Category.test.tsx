@@ -1,8 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import Category from "./Category";
 
 const mockjobList = jest.fn();
@@ -35,8 +33,8 @@ describe("Category", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<Category {...props} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<Category {...props} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders no jobs", () => {

@@ -1,31 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatastreamAgentsContentRow renders 1`] = `
-[
+<DocumentFragment>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-grid-xs-3 css-bm8k05-MuiGrid-root"
+    class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-grid-xs-3 css-bfz6d7-MuiGrid-root"
   >
     <div
-      className="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-1v1quuu-MuiPaper-root"
+      class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-3540vd-MuiPaper-root"
     >
       <div
-        className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <div
-          className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root agentRoleSelect css-1eed5fa-MuiInputBase-root-MuiInput-root"
-          onClick={[Function]}
+          class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root agentRoleSelect css-5h82ro-MuiInputBase-root-MuiInput-root"
         >
           <select
-            aria-invalid={false}
+            aria-invalid="false"
             aria-label="Select Role"
-            className="MuiNativeSelect-select MuiNativeSelect-outlined MuiInputBase-input MuiInput-input css-19ygod6-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
-            disabled={false}
-            onAnimationStart={[Function]}
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            required={false}
-            value="test1"
+            class="MuiNativeSelect-select MuiNativeSelect-outlined MuiInputBase-input MuiInput-input css-b4m9gu-MuiNativeSelect-root-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
           >
             <option
               value=""
@@ -37,8 +29,8 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
             </option>
           </select>
           <svg
-            aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiNativeSelect-icon MuiNativeSelect-iconOutlined css-1g12qau-MuiSvgIcon-root-MuiNativeSelect-icon"
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiNativeSelect-icon MuiNativeSelect-iconOutlined css-1bjnys1-MuiSvgIcon-root-MuiNativeSelect-root-MuiNativeSelect-icon"
             data-testid="ArrowDropDownIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -50,31 +42,23 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
         </div>
       </div>
     </div>
-  </div>,
+  </div>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-grid-xs-3 css-bm8k05-MuiGrid-root"
+    class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-grid-xs-3 css-bfz6d7-MuiGrid-root"
   >
     <div
-      className="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-1v1quuu-MuiPaper-root"
+      class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-3540vd-MuiPaper-root"
     >
       <div
-        className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <div
-          className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root agentTypeSelect css-1eed5fa-MuiInputBase-root-MuiInput-root"
-          onClick={[Function]}
+          class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root agentTypeSelect css-5h82ro-MuiInputBase-root-MuiInput-root"
         >
           <select
-            aria-invalid={false}
+            aria-invalid="false"
             aria-label="Select Type"
-            className="MuiNativeSelect-select MuiNativeSelect-outlined MuiInputBase-input MuiInput-input css-19ygod6-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
-            disabled={false}
-            onAnimationStart={[Function]}
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            required={false}
-            value="test2"
+            class="MuiNativeSelect-select MuiNativeSelect-outlined MuiInputBase-input MuiInput-input css-b4m9gu-MuiNativeSelect-root-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
           >
             <option
               value=""
@@ -86,8 +70,8 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
             </option>
           </select>
           <svg
-            aria-hidden={true}
-            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiNativeSelect-icon MuiNativeSelect-iconOutlined css-1g12qau-MuiSvgIcon-root-MuiNativeSelect-icon"
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiNativeSelect-icon MuiNativeSelect-iconOutlined css-1bjnys1-MuiSvgIcon-root-MuiNativeSelect-root-MuiNativeSelect-icon"
             data-testid="ArrowDropDownIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -99,43 +83,36 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
         </div>
       </div>
     </div>
-  </div>,
+  </div>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-grid-xs-5 css-1e830u-MuiGrid-root"
+    class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-grid-xs-5 css-stpzej-MuiGrid-root"
   >
     <div
-      className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+      class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
     >
       <div
-        className="MuiFormControl-root MuiTextField-root agentNameTextField css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+        class="MuiFormControl-root MuiTextField-root agentNameTextField css-1xp5r68-MuiFormControl-root-MuiTextField-root"
       >
         <div
-          className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-          onClick={[Function]}
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
         >
           <input
-            aria-invalid={false}
-            autoFocus={false}
-            className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-            disabled={false}
-            id=":r0:"
-            onAnimationStart={[Function]}
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            required={false}
+            aria-invalid="false"
+            class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+            id="_r_0_"
             type="text"
             value="test3"
           />
           <fieldset
-            aria-hidden={true}
-            className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
           >
             <legend
-              className="css-ihdtdm"
+              class="css-1nf2c5d-MuiNotchedOutlined-root"
             >
               <span
-                className="notranslate"
+                aria-hidden="true"
+                class="notranslate"
               >
                 ​
               </span>
@@ -144,55 +121,41 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
         </div>
       </div>
     </div>
-  </div>,
+  </div>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-item MuiGrid-grid-xs-1 css-1yzby0e-MuiGrid-root"
+    class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-grid-xs-1 css-1lq76pe-MuiGrid-root"
   >
     <div
-      className="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-1jqvn0k-MuiPaper-root"
+      class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-qkuwr6-MuiPaper-root"
     >
       <div
-        className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <div
-          className="MuiButtonGroup-root MuiButtonGroup-outlined css-1gvj8qq-MuiButtonGroup-root"
+          class="MuiButtonGroup-root MuiButtonGroup-outlined MuiButtonGroup-horizontal MuiButtonGroup-colorPrimary css-1uv3h2m-MuiButtonGroup-root"
           role="group"
         >
           <button
-            className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
-            disabled={false}
-            onBlur={[Function]}
-            onClick={[Function]}
-            onContextMenu={[Function]}
-            onDragLeave={[Function]}
-            onFocus={[Function]}
-            onKeyDown={[Function]}
-            onKeyUp={[Function]}
-            onMouseDown={[Function]}
-            onMouseLeave={[Function]}
-            onMouseUp={[Function]}
-            onTouchEnd={[Function]}
-            onTouchMove={[Function]}
-            onTouchStart={[Function]}
-            tabIndex={0}
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
+            tabindex="0"
             type="button"
           >
             <svg
-              aria-hidden={true}
-              className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
               data-testid="ExpandCircleDownIcon"
               focusable="false"
               viewBox="0 0 24 24"
             >
               <path
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 13.5L7.5 11l1.42-1.41L12 12.67l3.08-3.08L16.5 11 12 15.5z"
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m0 13.5L7.5 11l1.42-1.41L12 12.67l3.08-3.08L16.5 11z"
               />
             </svg>
           </button>
         </div>
       </div>
     </div>
-  </div>,
-  "DatastreamAgentsContentNotes",
-]
+  </div>
+  DatastreamAgentsContentNotes
+</DocumentFragment>
 `;

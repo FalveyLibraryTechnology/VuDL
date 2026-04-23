@@ -1,8 +1,6 @@
-import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import DatastreamDublinCoreContent from "./DatastreamDublinCoreContent";
 
 const mockUseEditorContext = jest.fn();
@@ -73,9 +71,9 @@ describe("DatastreamDublinCoreContent ", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<DatastreamDublinCoreContent />).toJSON();
+        const { asFragment } = render(<DatastreamDublinCoreContent />);
 
-        expect(tree).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
         // Our default data has nothing loaded, and current DC shouldn't be set
         // until data loads.
         expect(dcValues.action.setCurrentDublinCore).not.toHaveBeenCalled();

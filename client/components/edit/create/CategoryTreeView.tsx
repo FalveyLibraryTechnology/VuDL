@@ -1,6 +1,6 @@
 import React, { Dispatch } from "react";
 import { TreeItem } from "@mui/x-tree-view/TreeItem";
-import { TreeView } from "@mui/x-tree-view/TreeView";
+import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
 
 interface CategoryTreeViewProps {
     models: Record<string, string>;
@@ -8,27 +8,30 @@ interface CategoryTreeViewProps {
 }
 
 const CategoryTreeView = ({ models, setSelectedModel }: CategoryTreeViewProps): React.ReactElement => {
-    function handleSelect(event, model) {
-        event.preventDefault();
-        // Ignore categories
-        if (model.slice(0, 2) == "__") {
+    const handleItemSelectionToggle = (event: React.SyntheticEvent | null, itemId: string, isSelected: boolean) => {
+        // Only process when item is selected (not deselected)
+        if (!isSelected) {
             return;
         }
-        setSelectedModel(model);
-        return false;
-    }
+        // Ignore categories (those that start with __)
+        if (itemId.startsWith("__")) {
+            return;
+        }
+        setSelectedModel(itemId);
+    };
+
     return (
-        <TreeView defaultCollapseIcon={"➖"} defaultExpandIcon={"➕"} onNodeSelect={handleSelect}>
+        <SimpleTreeView onItemSelectionToggle={handleItemSelectionToggle}>
             {Object.entries(models).map(([category, categoryValue]) => {
                 return (
-                    <TreeItem key={category} nodeId={`__${category}`} label={category}>
+                    <TreeItem itemId={`__${category}`} key={category} id={`__${category}`} label={category}>
                         {Object.entries(categoryValue).map(([model, value]) => {
-                            return <TreeItem key={model} nodeId={value} label={model} />;
+                            return <TreeItem itemId={value} key={model} id={value} label={model} />;
                         })}
                     </TreeItem>
                 );
             })}
-        </TreeView>
+        </SimpleTreeView>
     );
 };
 

@@ -1,7 +1,5 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
-import renderer from "react-test-renderer";
 import JobPaginatorZoomToggle from "./JobPaginatorZoomToggle";
 
 const mockUseJobPaginatorContext = jest.fn();
@@ -34,15 +32,15 @@ describe("JobPaginatorZoomToggle", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<JobPaginatorZoomToggle />).toJSON();
-        expect(tree).toEqual("PaginatorZoomy");
+        render(<JobPaginatorZoomToggle />);
+        expect(screen.queryAllByText("PaginatorZoomy")).toHaveLength(1);
     });
 
     it("renders preview not available", () => {
         paginatorValues.state.order = [];
-        const tree = renderer.create(<JobPaginatorZoomToggle />).toJSON();
-        expect(tree).toMatchSnapshot();
-        expect(JSON.stringify(tree).includes("Preview not available")).toBeTruthy();
+        const { asFragment } = render(<JobPaginatorZoomToggle />);
+        expect(asFragment()).toMatchSnapshot();
+        expect(asFragment().textContent.includes("Preview not available")).toBeTruthy();
     });
 
     it("renders PaginatorZoomy", () => {

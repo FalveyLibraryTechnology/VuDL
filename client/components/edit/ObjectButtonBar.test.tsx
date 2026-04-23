@@ -1,9 +1,7 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { waitFor } from "@testing-library/react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import * as EditorContextModule from "../../context/EditorContext";
 import ObjectButtonBar from "./ObjectButtonBar";
 
@@ -34,8 +32,8 @@ describe("ObjectButtonBar", () => {
     });
 
     it("renders correctly", async () => {
-        const tree = renderer.create(<ObjectButtonBar pid={pid} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ObjectButtonBar pid={pid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("can refresh a list of children", async () => {

@@ -1,19 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ObjectThumbnail displays unavailable message when appropriate 1`] = `
-<span>
-  No Thumbnail
-</span>
+<DocumentFragment>
+  <span>
+    No Thumbnail
+  </span>
+</DocumentFragment>
 `;
 
 exports[`ObjectThumbnail renders thumbnail when available 1`] = `
-<img
-  alt=""
-  src="http://localhost/files/foo/THUMBNAIL"
-  style={
-    {
-      "border": "1px solid black",
-    }
-  }
-/>
+<DocumentFragment>
+  <img
+    alt=""
+    src="http://localhost/files/foo/THUMBNAIL"
+    style="border: 1px solid black;"
+  />
+</DocumentFragment>
 `;

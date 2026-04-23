@@ -109,7 +109,7 @@ const StateModal = (): React.ReactElement => {
             <p>{statusMessage}</p>
         ) : (
             <Grid container>
-                <Grid item xs={12}>
+                <Grid size={12}>
                     <FormControl>
                         <FormLabel id="state-modal-group-label">State</FormLabel>
                         <RadioGroup
@@ -124,10 +124,8 @@ const StateModal = (): React.ReactElement => {
                         </RadioGroup>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12}>
-                    {childrenCheckbox}
-                </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>{childrenCheckbox}</Grid>
+                <Grid size={12}>
                     <button onClick={save}>Save</button>
                 </Grid>
             </Grid>
@@ -136,10 +134,8 @@ const StateModal = (): React.ReactElement => {
         <Dialog className="stateModal" open={isModalOpen("state")} onClose={closeStateModal} fullWidth={true}>
             <DialogTitle>
                 <Grid container>
-                    <Grid item xs={11}>
-                        State Editor ({stateModalActivePid})
-                    </Grid>
-                    <Grid item xs={1}>
+                    <Grid size={11}>State Editor ({stateModalActivePid})</Grid>
+                    <Grid size={1}>
                         <IconButton className="closeButton" onClick={closeStateModal}>
                             <CloseIcon />
                         </IconButton>

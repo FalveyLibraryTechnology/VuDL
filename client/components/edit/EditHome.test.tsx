@@ -1,7 +1,5 @@
-import React from "react";
 import { describe, expect, it } from "@jest/globals";
-import { waitFor } from "@testing-library/react";
-import renderer from "react-test-renderer";
+import { render, waitFor } from "@testing-library/react";
 import EditHome from "./EditHome";
 
 const mockUseEditorContext = jest.fn();
@@ -28,13 +26,8 @@ describe("EditHome", () => {
         mockUseEditorContext.mockReturnValue(editorValues);
     });
     it("renders", async () => {
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(<EditHome />);
-
-            await waitFor(() => expect(editorValues.action.initializeCatalog).toHaveBeenCalled());
-        });
-
-        expect(tree.toJSON()).toMatchSnapshot();
+        const { asFragment } = render(<EditHome />);
+        await waitFor(() => expect(editorValues.action.initializeCatalog).toHaveBeenCalled());
+        expect(asFragment()).toMatchSnapshot();
     });
 });

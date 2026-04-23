@@ -1,8 +1,6 @@
-import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import DatastreamAgentsContentNotes from "./DatastreamAgentsContentNotes";
 
 describe("DatastreamAgentsContentNotes", () => {
@@ -18,8 +16,8 @@ describe("DatastreamAgentsContentNotes", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<DatastreamAgentsContentNotes expanded={false} notes={notes} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<DatastreamAgentsContentNotes expanded={false} notes={notes} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("edits a note", () => {

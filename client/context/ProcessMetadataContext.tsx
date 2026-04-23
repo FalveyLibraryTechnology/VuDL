@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useReducer } from "react";
-import PropTypes from "prop-types";
 
 const ProcessMetadataContext = createContext({});
 
@@ -38,13 +37,13 @@ const resynchronizeTaskIds = (tasks: Array<ProcessMetadataTask>): Array<ProcessM
         task.id = "" + (parseInt(i) + 1);
         return task;
     });
-}
+};
 
-const processMetadataReducer = (state: ProcessMetadata, { type, payload }: { type: string, payload: unknown }) => {
+const processMetadataReducer = (state: ProcessMetadata, { type, payload }: { type: string; payload: unknown }) => {
     if (type === "UPDATE_METADATA") {
         return payload;
     } else if (type === "UPDATE_TASK_ATTRIBUTES") {
-        const { index, attributes } = payload as { index: number, attributes: Record<string, string>};
+        const { index, attributes } = payload as { index: number; attributes: Record<string, string> };
         const tasks = (state.tasks ?? []).map((task, i) => {
             if (i === index) {
                 return {
@@ -56,7 +55,7 @@ const processMetadataReducer = (state: ProcessMetadata, { type, payload }: { typ
         });
         return {
             ...state,
-            tasks
+            tasks,
         };
     } else if (type === "ADD_TASK") {
         const index = payload as number;
@@ -84,85 +83,89 @@ const processMetadataReducer = (state: ProcessMetadata, { type, payload }: { typ
             ...state,
             tasks: resynchronizeTaskIds((state.tasks ?? []).filter((task, i) => i !== index)),
         };
-    } else if(Object.keys(reducerMapping).includes(type)) {
+    } else if (Object.keys(reducerMapping).includes(type)) {
         return {
             ...state,
-            [reducerMapping[type]]: payload
+            [reducerMapping[type]]: payload,
         };
     }
     console.error(`processMetadata action type: ${type} does not exist`);
     return state;
 };
 
-export const ProcessMetadataContextProvider = ({ children }) => {
+interface ProcessMetadataContextProviderProps {
+    children?: React.ReactNode;
+}
+
+export const ProcessMetadataContextProvider = ({ children }: ProcessMetadataContextProviderProps) => {
     const [state, dispatch] = useReducer(processMetadataReducer, {});
     const value = { state, dispatch };
     return <ProcessMetadataContext.Provider value={value}>{children}</ProcessMetadataContext.Provider>;
 };
 
 export const useProcessMetadataContext = () => {
-    const {
-        state,
-        dispatch,
-    } = useContext(ProcessMetadataContext) as { state: ProcessMetadata, dispatch: (params: unknown) => void };
+    const { state, dispatch } = useContext(ProcessMetadataContext) as {
+        state: ProcessMetadata;
+        dispatch: (params: unknown) => void;
+    };
 
     const addTask = (index: number): void => {
         dispatch({
             type: "ADD_TASK",
-            payload: index
+            payload: index,
         });
-    }
+    };
 
     const deleteTask = (index: number): void => {
         dispatch({
             type: "DELETE_TASK",
-            payload: index
+            payload: index,
         });
-    }
+    };
 
     const updateTaskAttribute = (index: number, attribute: string, value: string): void => {
         updateTaskAttributes(index, { [attribute]: value });
-    }
+    };
 
     const updateTaskAttributes = (index: number, attributes: Record<string, string>): void => {
         dispatch({
             type: "UPDATE_TASK_ATTRIBUTES",
-            payload: { index, attributes }
+            payload: { index, attributes },
         });
-    }
+    };
 
     const setMetadata = (metadata: ProcessMetadata): void => {
         dispatch({
             type: "UPDATE_METADATA",
-            payload: metadata
+            payload: metadata,
         });
     };
 
     const setProcessCreator = (value: string): void => {
         dispatch({
             type: "UPDATE_PROCESS_CREATOR",
-            payload: value
+            payload: value,
         });
     };
 
     const setProcessDateTime = (value: string | null): void => {
         dispatch({
             type: "UPDATE_PROCESS_DATE_TIME",
-            payload: value ?? ""
+            payload: value ?? "",
         });
     };
 
     const setProcessLabel = (value: string): void => {
         dispatch({
             type: "UPDATE_PROCESS_LABEL",
-            payload: value
+            payload: value,
         });
     };
 
     const setProcessOrganization = (value: string): void => {
         dispatch({
             type: "UPDATE_PROCESS_ORGANIZATION",
-            payload: value
+            payload: value,
         });
     };
 
@@ -180,10 +183,6 @@ export const useProcessMetadataContext = () => {
             setProcessOrganization,
         },
     };
-};
-
-ProcessMetadataContextProvider.propTypes = {
-    children: PropTypes.node,
 };
 
 export default { ProcessMetadataContextProvider, useProcessMetadataContext };

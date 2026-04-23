@@ -7,7 +7,7 @@ const PaginatorList = (): React.ReactElement => {
         state: { order, currentPage },
     } = usePaginatorContext();
     const pageCount = order.length;
-    const pageList = useRef();
+    const pageList = useRef(undefined);
     const thumbRefs = useRef([]);
     const scrollTo = (number) => {
         const pageListOffset = pageList.current.offsetTop;

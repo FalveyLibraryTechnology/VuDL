@@ -1,6 +1,5 @@
-import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import DatastreamDublinCoreValues from "./DatastreamDublinCoreValues";
 
 jest.mock("./DatastreamDublinCoreFieldGroup", () => (props) => {
@@ -53,7 +52,8 @@ describe("DatastreamDublinCoreValues", () => {
     });
 
     it("renders a field group for each field type in the current Dublin Core", () => {
-        const tree = renderer.create(<DatastreamDublinCoreValues />).toJSON();
-        expect(tree).toEqual(["dc:identifier", "dc:title"]);
+        const { asFragment } = render(<DatastreamDublinCoreValues />);
+        expect(asFragment().textContent.includes("dc:identifier")).toBeTruthy();
+        expect(asFragment().textContent.includes("dc:title")).toBeTruthy();
     });
 });

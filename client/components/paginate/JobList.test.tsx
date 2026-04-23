@@ -1,6 +1,5 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import JobList from "./JobList";
 
 const mockJob = jest.fn();
@@ -24,8 +23,8 @@ describe("JobList", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<JobList {...props} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<JobList {...props} />);
+        expect(asFragment()).toMatchSnapshot();
         expect(mockJob).toHaveBeenCalledWith(
             expect.objectContaining({
                 category: props.category,

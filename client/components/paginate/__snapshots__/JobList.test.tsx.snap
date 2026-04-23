@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`JobList renders 1`] = `
-<ul>
-  <mock-job />
-</ul>
+<DocumentFragment>
+  <ul>
+    <mock-job />
+  </ul>
+</DocumentFragment>
 `;

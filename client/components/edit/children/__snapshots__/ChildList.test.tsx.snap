@@ -1,378 +1,344 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ChildList allows child counts to be toggled on 1`] = `
-<div
-  className="childlist"
->
+<DocumentFragment>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-ofrcno-MuiGrid-root"
+    class="childlist"
   >
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-mwb7rv-MuiGrid-root"
     >
-       
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-grow css-1ynczkt-MuiGrid-root"
+      >
+         
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto childlist__toggles css-1hef13s-MuiGrid-root"
+      >
+        <button>
+          Show Thumbnails
+        </button>
+        <button>
+          Show Models
+        </button>
+        <button>
+          Hide Child Counts
+        </button>
+      </div>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
+    <ul
+      class="childlist__list"
     >
-      <button
-        onClick={[Function]}
-      >
-        Show Thumbnails
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Models
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Hide Child Counts
-      </button>
-    </div>
+      <li>
+        Child
+      </li>
+    </ul>
   </div>
-  <ul
-    className="childlist__list"
-  >
-    <li>
-      Child
-    </li>
-  </ul>
-</div>
+</DocumentFragment>
 `;
 
 exports[`ChildList allows models to be toggled on 1`] = `
-<div
-  className="childlist"
->
+<DocumentFragment>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-ofrcno-MuiGrid-root"
+    class="childlist"
   >
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-mwb7rv-MuiGrid-root"
     >
-       
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-grow css-1ynczkt-MuiGrid-root"
+      >
+         
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto childlist__toggles css-1hef13s-MuiGrid-root"
+      >
+        <button>
+          Show Thumbnails
+        </button>
+        <button>
+          Hide Models
+        </button>
+        <button>
+          Show Child Counts
+        </button>
+      </div>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
+    <ul
+      class="childlist__list"
     >
-      <button
-        onClick={[Function]}
-      >
-        Show Thumbnails
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Hide Models
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Child Counts
-      </button>
-    </div>
+      <li>
+        Child
+      </li>
+    </ul>
   </div>
-  <ul
-    className="childlist__list"
-  >
-    <li>
-      Child
-    </li>
-  </ul>
-</div>
+</DocumentFragment>
 `;
 
 exports[`ChildList allows thumbnails to be toggled on 1`] = `
-<div
-  className="childlist"
->
+<DocumentFragment>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-ofrcno-MuiGrid-root"
+    class="childlist"
   >
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-mwb7rv-MuiGrid-root"
     >
-       
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-grow css-1ynczkt-MuiGrid-root"
+      >
+         
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto childlist__toggles css-1hef13s-MuiGrid-root"
+      >
+        <button>
+          Hide Thumbnails
+        </button>
+        <button>
+          Show Models
+        </button>
+        <button>
+          Show Child Counts
+        </button>
+      </div>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
+    <ul
+      class="childlist__list"
     >
-      <button
-        onClick={[Function]}
-      >
-        Hide Thumbnails
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Models
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Child Counts
-      </button>
-    </div>
+      <li>
+        Child
+      </li>
+    </ul>
   </div>
-  <ul
-    className="childlist__list"
-  >
-    <li>
-      Child
-    </li>
-  </ul>
-</div>
+</DocumentFragment>
 `;
 
 exports[`ChildList displays a paginator when appropriate 1`] = `
-<div
-  className="childlist"
->
+<DocumentFragment>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-ofrcno-MuiGrid-root"
+    class="childlist"
   >
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-mwb7rv-MuiGrid-root"
     >
-      <p
-        className="childlist__pagination"
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
       >
-        Showing 
-        1
-         - 
-        10
-         of
-         
-        10000
-      </p>
+        <p
+          class="childlist__pagination"
+        >
+          Showing 1 - 10 of 10000
+        </p>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      >
+        Pagination
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-grow css-1ynczkt-MuiGrid-root"
+      >
+         
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto childlist__toggles css-1hef13s-MuiGrid-root"
+      >
+        <button>
+          Show Thumbnails
+        </button>
+        <button>
+          Show Models
+        </button>
+        <button>
+          Show Child Counts
+        </button>
+      </div>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
+    <ul
+      class="childlist__list"
     >
-      Pagination
-    </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
-    >
-       
-    </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
-    >
-      <button
-        onClick={[Function]}
-      >
-        Show Thumbnails
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Models
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Child Counts
-      </button>
-    </div>
+      <li>
+        Child
+      </li>
+      <li>
+        Child
+      </li>
+      <li>
+        Child
+      </li>
+      <li>
+        Child
+      </li>
+      <li>
+        Child
+      </li>
+      <li>
+        Child
+      </li>
+      <li>
+        Child
+      </li>
+      <li>
+        Child
+      </li>
+      <li>
+        Child
+      </li>
+      <li>
+        Child
+      </li>
+    </ul>
   </div>
-  <ul
-    className="childlist__list"
-  >
-    <li>
-      Child
-    </li>
-    <li>
-      Child
-    </li>
-    <li>
-      Child
-    </li>
-    <li>
-      Child
-    </li>
-    <li>
-      Child
-    </li>
-    <li>
-      Child
-    </li>
-    <li>
-      Child
-    </li>
-    <li>
-      Child
-    </li>
-    <li>
-      Child
-    </li>
-    <li>
-      Child
-    </li>
-  </ul>
-</div>
+</DocumentFragment>
 `;
 
 exports[`ChildList renders using SelectableChild when a callback is provided 1`] = `
-<div
-  className="childlist"
->
+<DocumentFragment>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-ofrcno-MuiGrid-root"
+    class="childlist"
   >
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-mwb7rv-MuiGrid-root"
     >
-       
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-grow css-1ynczkt-MuiGrid-root"
+      >
+         
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto childlist__toggles css-1hef13s-MuiGrid-root"
+      >
+        <button>
+          Show Thumbnails
+        </button>
+        <button>
+          Show Models
+        </button>
+        <button>
+          Show Child Counts
+        </button>
+      </div>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
+    <ul
+      class="childlist__list"
     >
-      <button
-        onClick={[Function]}
-      >
-        Show Thumbnails
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Models
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Child Counts
-      </button>
-    </div>
+      <li>
+        SelectableChild
+      </li>
+    </ul>
   </div>
-  <ul
-    className="childlist__list"
-  >
-    <li>
-      SelectableChild
-    </li>
-  </ul>
-</div>
+</DocumentFragment>
 `;
 
 exports[`ChildList renders using ajax-loaded object data 1`] = `
-<div
-  className="childlist"
->
+<DocumentFragment>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-ofrcno-MuiGrid-root"
+    class="childlist"
   >
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-mwb7rv-MuiGrid-root"
     >
-       
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-grow css-1ynczkt-MuiGrid-root"
+      >
+         
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto childlist__toggles css-1hef13s-MuiGrid-root"
+      >
+        <button>
+          Show Thumbnails
+        </button>
+        <button>
+          Show Models
+        </button>
+        <button>
+          Show Child Counts
+        </button>
+      </div>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
+    <ul
+      class="childlist__list"
     >
-      <button
-        onClick={[Function]}
-      >
-        Show Thumbnails
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Models
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Child Counts
-      </button>
-    </div>
+      <li>
+        Child
+      </li>
+    </ul>
   </div>
-  <ul
-    className="childlist__list"
-  >
-    <li>
-      Child
-    </li>
-  </ul>
-</div>
+</DocumentFragment>
 `;
 
 exports[`ChildList renders using ajax-loaded root data 1`] = `
-<div
-  className="childlist"
->
+<DocumentFragment>
   <div
-    className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-ofrcno-MuiGrid-root"
+    class="childlist"
   >
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto css-1wrgmsj-MuiGrid-root"
-    />
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true css-1vd824g-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-mwb7rv-MuiGrid-root"
     >
-       
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto css-1hef13s-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-grow css-1ynczkt-MuiGrid-root"
+      >
+         
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-auto childlist__toggles css-1hef13s-MuiGrid-root"
+      >
+        <button>
+          Show Thumbnails
+        </button>
+        <button>
+          Show Models
+        </button>
+        <button>
+          Show Child Counts
+        </button>
+      </div>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto childlist__toggles css-1wrgmsj-MuiGrid-root"
+    <ul
+      class="childlist__list"
     >
-      <button
-        onClick={[Function]}
-      >
-        Show Thumbnails
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Models
-      </button>
-      <button
-        onClick={[Function]}
-      >
-        Show Child Counts
-      </button>
-    </div>
+      <li>
+        Child
+      </li>
+    </ul>
   </div>
-  <ul
-    className="childlist__list"
-  >
-    <li>
-      Child
-    </li>
-  </ul>
-</div>
+</DocumentFragment>
 `;

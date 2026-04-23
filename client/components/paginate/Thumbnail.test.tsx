@@ -1,8 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import Thumbnail from "./Thumbnail";
 
 const mockUseJobPaginatorContext = jest.fn();
@@ -48,8 +46,8 @@ describe("Thumbnail", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<Thumbnail {...props} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<Thumbnail {...props} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders initial state and calls appropriate functions when selected", () => {

@@ -1,20 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ObjectButtonBar renders correctly 1`] = `
-<div
-  className="objectBar"
->
-  ObjectStatus
-  EditParentsButton
-  <button
-    className="refreshBtn"
-    onClick={[Function]}
-    title="Refresh children"
-    type="button"
+<DocumentFragment>
+  <div
+    class="objectBar"
   >
-    Refresh
-  </button>
-  ObjectPreviewButton
-  DeleteObjectButton
-</div>
+    ObjectStatusEditParentsButton
+    <button
+      class="refreshBtn"
+      title="Refresh children"
+      type="button"
+    >
+      Refresh
+    </button>
+    ObjectPreviewButtonDeleteObjectButton
+  </div>
+</DocumentFragment>
 `;

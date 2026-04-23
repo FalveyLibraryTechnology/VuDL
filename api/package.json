@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npx tsc",
     "format": "prettier --check --write *.js src/**",
-    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint *.js src/ -c eslint.config.mjs --max-warnings 0",
+    "lint": "prettier --check *.js src/** && ESLINT_USE_FLAT_CONFIG=true eslint *.js src/ -c eslint.config.mjs --max-warnings 0",
     "start:serverWatch": "nodemon --watch 'vudl.ini' --watch '**/*.ts' --watch '**/*.ejs' --ignore node_modules/ src/server.ts",
     "start:workerWatch": "nodemon --watch 'vudl.ini' --watch '**/*.ts' src/worker-start.ts",
     "start:server": "ts-node src/server.ts",

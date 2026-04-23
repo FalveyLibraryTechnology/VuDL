@@ -33,15 +33,15 @@ const DatastreamAgentsContentNotes = ({
         setNotes(notes);
     };
     return (
-        <Grid container item xs={12}>
+        <Grid container size={12}>
             <FormControl fullWidth={true}>
                 <Collapse in={expanded}>
-                    <Grid container item xs={12}>
+                    <Grid container size={12}>
                         <FormControl fullWidth={true}>
                             <Grid container spacing={1}>
                                 {notes.map((note, i) => {
                                     return (
-                                        <Grid key={i} container item xs={12}>
+                                        <Grid key={i} container size={12}>
                                             <TextField
                                                 className="noteModifyTextField"
                                                 label="Note"
@@ -65,7 +65,7 @@ const DatastreamAgentsContentNotes = ({
                                         </Grid>
                                     );
                                 })}
-                                <Grid container item xs={12}>
+                                <Grid container size={12}>
                                     <TextField
                                         className="noteAddTextField"
                                         required={true}

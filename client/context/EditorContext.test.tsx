@@ -12,15 +12,13 @@ jest.mock("./FetchContext", () => ({
 describe("useEditorContext", () => {
     let fetchValues: Record<string, Record<string, () => unknown>>;
     beforeEach(() => {
-        fetchValues =  {
+        fetchValues = {
             action: {
                 fetchJSON: jest.fn(),
                 fetchText: jest.fn(),
-            }
+            },
         };
-        mockUseFetchContext.mockReturnValue(
-            fetchValues
-        );
+        mockUseFetchContext.mockReturnValue(fetchValues);
     });
 
     afterEach(() => {
@@ -28,7 +26,7 @@ describe("useEditorContext", () => {
     });
     describe("setCurrentAgents", () => {
         it("sets the current agents", async () => {
-            const agents = [{ role: "test1", type: "test2", name: "test3", notes: [ "test4" ]}];
+            const agents = [{ role: "test1", type: "test2", name: "test3", notes: ["test4"] }];
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
             expect(result.current.state.currentAgents).toHaveLength(0);
@@ -104,7 +102,13 @@ describe("useEditorContext", () => {
             const favoritePids = { pid: "foo" };
             const agents = { agent: "bar" };
             const dublinCoreFields = { field: "xyzzy" };
-            fetchValues.action.fetchJSON.mockResolvedValue({ models, licenses, favoritePids, agents, dublinCoreFields });
+            fetchValues.action.fetchJSON.mockResolvedValue({
+                models,
+                licenses,
+                favoritePids,
+                agents,
+                dublinCoreFields,
+            });
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
 
             await act(async () => {
@@ -164,11 +168,11 @@ describe("useEditorContext", () => {
                         datastreams: {
                             THUMBNAIL: {
                                 allowedType: "image",
-                                allowedSubtypes: "jpeg,gif,png"
-                            }
-                        }
-                    }
-                }
+                                allowedSubtypes: "jpeg,gif,png",
+                            },
+                        },
+                    },
+                },
             });
 
             await act(async () => {
@@ -176,9 +180,7 @@ describe("useEditorContext", () => {
             });
 
             fetchValues.action.fetchJSON.mockResolvedValueOnce({
-                models: [
-                    "vudl-system:CoreModel"
-                ]
+                models: ["vudl-system:CoreModel"],
             });
 
             await act(async () => {
@@ -226,6 +228,7 @@ describe("useEditorContext", () => {
             });
             await result.current.action.loadCurrentObjectDetails();
             await waitFor(() => expect(fetchValues.action.fetchJSON).toHaveBeenCalled());
+            await waitFor(() => expect(result.current.state.objectDetailsStorage).toHaveProperty("test:123"));
             expect(result.current.action.extractFirstMetadataValue("field", "default")).toEqual("foo");
         });
     });
@@ -246,7 +249,9 @@ describe("useEditorContext", () => {
             });
             expect(Object.keys(result.current.state.objectDetailsStorage)).toEqual(["test:123"]);
             expect(fetchValues.action.fetchJSON).toHaveBeenCalledTimes(1);
-            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/test%3A123/details");
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/test%3A123/details",
+            );
         });
 
         it("ignores null pids", async () => {
@@ -260,14 +265,18 @@ describe("useEditorContext", () => {
         });
 
         it("handles exceptions", async () => {
-            const fetchSpy = jest.spyOn(fetchValues.action, "fetchJSON").mockImplementation(() => { throw new Error("kaboom"); });
+            const fetchSpy = jest.spyOn(fetchValues.action, "fetchJSON").mockImplementation(() => {
+                throw new Error("kaboom");
+            });
             const consoleSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
             await act(async () => {
                 await result.current.action.loadObjectDetailsIntoStorage("test:123");
             });
             expect(fetchSpy).toHaveBeenCalledTimes(1);
-            expect(consoleSpy).toHaveBeenCalledWith("Problem fetching details from http://localhost:9000/api/edit/object/test%3A123/details");
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Problem fetching details from http://localhost:9000/api/edit/object/test%3A123/details",
+            );
         });
     });
 
@@ -280,7 +289,11 @@ describe("useEditorContext", () => {
                 await result.current.action.loadObjectDetailsIntoStorage("test:124");
                 await result.current.action.loadObjectDetailsIntoStorage("test:125");
             });
-            expect(Object.keys(result.current.state.objectDetailsStorage)).toEqual(["test:123", "test:124", "test:125"]);
+            expect(Object.keys(result.current.state.objectDetailsStorage)).toEqual([
+                "test:123",
+                "test:124",
+                "test:125",
+            ]);
             await act(async () => {
                 await result.current.action.removeFromObjectDetailsStorage("test:124");
             });
@@ -297,18 +310,24 @@ describe("useEditorContext", () => {
             });
             expect(Object.keys(result.current.state.childCountsStorage)).toEqual(["test:123"]);
             expect(fetchValues.action.fetchJSON).toHaveBeenCalledTimes(1);
-            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/test%3A123/childCounts");
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/test%3A123/childCounts",
+            );
         });
 
         it("handles exceptions", async () => {
-            const fetchSpy = jest.spyOn(fetchValues.action, "fetchJSON").mockImplementation(() => { throw new Error("kaboom"); });
+            const fetchSpy = jest.spyOn(fetchValues.action, "fetchJSON").mockImplementation(() => {
+                throw new Error("kaboom");
+            });
             const consoleSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
             await act(async () => {
                 await result.current.action.loadChildCountsIntoStorage("test:123");
             });
             expect(fetchSpy).toHaveBeenCalledTimes(1);
-            expect(consoleSpy).toHaveBeenCalledWith("Problem fetching child count data from http://localhost:9000/api/edit/object/test%3A123/childCounts");
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Problem fetching child count data from http://localhost:9000/api/edit/object/test%3A123/childCounts",
+            );
         });
     });
 
@@ -321,18 +340,24 @@ describe("useEditorContext", () => {
             });
             expect(Object.keys(result.current.state.childListStorage)).toEqual(["test:123_1_10"]);
             expect(fetchValues.action.fetchJSON).toHaveBeenCalledTimes(1);
-            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/test%3A123/children?start=0&rows=10");
+            expect(fetchValues.action.fetchJSON).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/test%3A123/children?start=0&rows=10",
+            );
         });
 
         it("handles exceptions", async () => {
-            const fetchSpy = jest.spyOn(fetchValues.action, "fetchJSON").mockImplementation(() => { throw new Error("kaboom"); });
+            const fetchSpy = jest.spyOn(fetchValues.action, "fetchJSON").mockImplementation(() => {
+                throw new Error("kaboom");
+            });
             const consoleSpy = jest.spyOn(console, "error").mockImplementation(jest.fn());
             const { result } = await renderHook(() => useEditorContext(), { wrapper: EditorContextProvider });
             await act(async () => {
                 await result.current.action.loadChildrenIntoStorage("test:123", 1, 10);
             });
             expect(fetchSpy).toHaveBeenCalledTimes(1);
-            expect(consoleSpy).toHaveBeenCalledWith("Problem fetching tree data from http://localhost:9000/api/edit/object/test%3A123/children?start=0&rows=10");
+            expect(consoleSpy).toHaveBeenCalledWith(
+                "Problem fetching tree data from http://localhost:9000/api/edit/object/test%3A123/children?start=0&rows=10",
+            );
         });
     });
 
@@ -345,7 +370,11 @@ describe("useEditorContext", () => {
                 await result.current.action.loadChildrenIntoStorage("test:123", 11, 10);
                 await result.current.action.loadChildrenIntoStorage("test:1234", 1, 10);
             });
-            expect(Object.keys(result.current.state.childListStorage)).toEqual(["test:123_1_10", "test:123_11_10", "test:1234_1_10"]);
+            expect(Object.keys(result.current.state.childListStorage)).toEqual([
+                "test:123_1_10",
+                "test:123_11_10",
+                "test:1234_1_10",
+            ]);
             await act(async () => {
                 await result.current.action.clearPidFromChildListStorage("test:123");
             });
@@ -404,7 +433,9 @@ describe("useEditorContext", () => {
                 await result.current.action.loadParentDetailsIntoStorage("test:123", false, callback);
             });
             expect(callback).toHaveBeenCalledWith("test:123");
-            expect(errorSpy).toHaveBeenCalledWith("Problem fetching parent details from http://localhost:9000/api/edit/object/test%3A123/parents");
+            expect(errorSpy).toHaveBeenCalledWith(
+                "Problem fetching parent details from http://localhost:9000/api/edit/object/test%3A123/parents",
+            );
         });
     });
 
@@ -434,7 +465,11 @@ describe("useEditorContext", () => {
                 await result.current.action.loadParentDetailsIntoStorage("test:124");
                 await result.current.action.loadParentDetailsIntoStorage("test:125");
             });
-            expect(Object.keys(result.current.state.parentDetailsStorage)).toEqual(["test:123", "test:124", "test:125"]);
+            expect(Object.keys(result.current.state.parentDetailsStorage)).toEqual([
+                "test:123",
+                "test:124",
+                "test:125",
+            ]);
             await act(async () => {
                 await result.current.action.removeFromParentDetailsStorage("test:124");
             });
@@ -450,7 +485,7 @@ describe("useEditorContext", () => {
             // Load an object into storage so we can test that it gets cleared out after updates:
             const fakeObjectDetails = { foo: "bar" };
             fetchValues.action.fetchJSON.mockResolvedValue(fakeObjectDetails);
-            await act(async() => {
+            await act(async () => {
                 await result.current.action.loadObjectDetailsIntoStorage(pid);
             });
             expect(result.current.state.objectDetailsStorage[pid]).toEqual(fakeObjectDetails);
@@ -461,7 +496,10 @@ describe("useEditorContext", () => {
                 updateResult = await result.current.action.updateObjectState(pid, "Active", 0, statusCallback);
             });
             expect(statusCallback).toHaveBeenCalledWith("Saving status for test:123 (0 more remaining)...");
-            expect(fetchValues.action.fetchText).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/test%3A123/state", {"body": "Active", "method": "PUT"});
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/test%3A123/state",
+                { body: "Active", method: "PUT" },
+            );
             expect(updateResult).toEqual(["Status saved successfully.", "success"]);
             // Object storage should now be empty due to clearing of changed data:
             expect(result.current.state.objectDetailsStorage).toEqual({});
@@ -476,8 +514,11 @@ describe("useEditorContext", () => {
                 updateResult = await result.current.action.updateObjectState(pid, "Active", 0, statusCallback);
             });
             expect(statusCallback).toHaveBeenCalledWith("Saving status for test:123 (0 more remaining)...");
-            expect(fetchValues.action.fetchText).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/test%3A123/state", {"body": "Active", "method": "PUT"});
-            expect(updateResult).toEqual(["Status failed to save; \"not ok\"", "error"]);
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/test%3A123/state",
+                { body: "Active", method: "PUT" },
+            );
+            expect(updateResult).toEqual(['Status failed to save; "not ok"', "error"]);
         });
 
         it("handles child save failure gracefully", async () => {
@@ -496,7 +537,7 @@ describe("useEditorContext", () => {
             });
             expect(statusCallback).toHaveBeenCalledTimes(1);
             expect(statusCallback).toHaveBeenCalledWith("Saving status for foo:125 (1 more remaining)...");
-            expect(updateResult.message).toEqual("Status failed to save; \"not ok\"");
+            expect(updateResult.message).toEqual('Status failed to save; "not ok"');
         });
 
         it("updates children correctly", async () => {
@@ -511,7 +552,10 @@ describe("useEditorContext", () => {
             expect(statusCallback).toHaveBeenCalledTimes(2);
             expect(statusCallback).toHaveBeenCalledWith("Saving status for foo:125 (1 more remaining)...");
             expect(statusCallback).toHaveBeenCalledWith("Saving status for test:123 (0 more remaining)...");
-            expect(fetchValues.action.fetchText).toHaveBeenCalledWith("http://localhost:9000/api/edit/object/test%3A123/state", {"body": "Active", "method": "PUT"});
+            expect(fetchValues.action.fetchText).toHaveBeenCalledWith(
+                "http://localhost:9000/api/edit/object/test%3A123/state",
+                { body: "Active", method: "PUT" },
+            );
             expect(updateResult).toEqual(["Status saved successfully.", "success"]);
             // Object storage should now be empty due to clearing of changed data:
             expect(result.current.state.objectDetailsStorage).toEqual({});
@@ -528,19 +572,19 @@ describe("useEditorContext", () => {
             // Load data into storage so we can test that it gets cleared out after updates:
             const fakeObjectDetails = { foo: "bar" };
             fetchValues.action.fetchJSON.mockResolvedValue(fakeObjectDetails);
-            await act(async() => {
+            await act(async () => {
                 await result.current.action.loadObjectDetailsIntoStorage(pid);
             });
             expect(result.current.state.objectDetailsStorage[pid]).toEqual(fakeObjectDetails);
             const fakeParentDetails = ["foo", "bar"];
             fetchValues.action.fetchJSON.mockResolvedValue(fakeParentDetails);
-            await act(async() => {
+            await act(async () => {
                 await result.current.action.loadParentDetailsIntoStorage(pid);
             });
             expect(result.current.state.parentDetailsStorage[pid]["full"]).toEqual(fakeParentDetails);
             const fakeChildPage = ["boop"];
             fetchValues.action.fetchJSON.mockResolvedValue(fakeChildPage);
-            await act(async() => {
+            await act(async () => {
                 await result.current.action.loadChildrenIntoStorage("foo:122", 1, 1);
             });
             const expectedKey = result.current.action.getChildListStorageKey("foo:122", 1, 1);
@@ -590,19 +634,19 @@ describe("useEditorContext", () => {
             // Load data into storage so we can test that it gets cleared out after updates:
             const fakeObjectDetails = { foo: "bar" };
             fetchValues.action.fetchJSON.mockResolvedValue(fakeObjectDetails);
-            await act(async() => {
+            await act(async () => {
                 await result.current.action.loadObjectDetailsIntoStorage(pid);
             });
             expect(result.current.state.objectDetailsStorage[pid]).toEqual(fakeObjectDetails);
             const fakeParentDetails = ["foo", "bar"];
             fetchValues.action.fetchJSON.mockResolvedValue(fakeParentDetails);
-            await act(async() => {
+            await act(async () => {
                 await result.current.action.loadParentDetailsIntoStorage(pid);
             });
             expect(result.current.state.parentDetailsStorage[pid]["full"]).toEqual(fakeParentDetails);
             const fakeChildPage = ["boop"];
             fetchValues.action.fetchJSON.mockResolvedValue(fakeChildPage);
-            await act(async() => {
+            await act(async () => {
                 await result.current.action.loadChildrenIntoStorage("foo:122", 1, 1);
             });
             const expectedKey = result.current.action.getChildListStorageKey("foo:122", 1, 1);
@@ -652,19 +696,19 @@ describe("useEditorContext", () => {
             // Load data into storage so we can test that it gets cleared out after updates:
             const fakeObjectDetails = { foo: "bar" };
             fetchValues.action.fetchJSON.mockResolvedValue(fakeObjectDetails);
-            await act(async() => {
+            await act(async () => {
                 await result.current.action.loadObjectDetailsIntoStorage(pid);
             });
             expect(result.current.state.objectDetailsStorage[pid]).toEqual(fakeObjectDetails);
             const fakeParentDetails = ["foo", "bar"];
             fetchValues.action.fetchJSON.mockResolvedValue(fakeParentDetails);
-            await act(async() => {
+            await act(async () => {
                 await result.current.action.loadParentDetailsIntoStorage(pid);
             });
             expect(result.current.state.parentDetailsStorage[pid]["full"]).toEqual(fakeParentDetails);
             const fakeChildPage = ["boop"];
             fetchValues.action.fetchJSON.mockResolvedValue(fakeChildPage);
-            await act(async() => {
+            await act(async () => {
                 await result.current.action.loadChildrenIntoStorage("foo:122", 1, 1);
             });
             const expectedKey = result.current.action.getChildListStorageKey("foo:122", 1, 1);

@@ -1,247 +1,119 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatastreamAgentsContent renders, and calls getAgents on render 1`] = `
-[
+<DocumentFragment>
   <div
-    className="MuiDialogContent-root css-pvro84-MuiDialogContent-root"
+    class="MuiDialogContent-root css-d831pz-MuiDialogContent-root"
   >
     <div
-      className="MuiBox-root css-1hjmj0z"
+      class="MuiBox-root css-1hjmj0z"
     >
-      Tab: Editor
-      Tab: Clone
+      Tab: EditorTab: Clone
     </div>
     <div
-      style={
-        {
-          "display": "block",
-        }
-      }
+      style="display: block;"
     >
-      Role
-      Type
-      Name
-      Actions
-      DatastreamAgentsAddContentRow
+      RoleTypeNameActionsDatastreamAgentsAddContentRow
     </div>
     <div
-      style={
-        {
-          "display": "none",
-        }
-      }
+      style="display: none;"
     >
       <div>
         PidPicker: {"selected":""}
       </div>
     </div>
-  </div>,
+  </div>
   <hr
-    className="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
-  />,
+    class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
+  />
   <div
-    className="MuiDialogActions-root MuiDialogActions-spacing css-1wawfzm-MuiDialogActions-root"
+    class="MuiDialogActions-root MuiDialogActions-spacing css-x4djkb-MuiDialogActions-root"
   >
     <h6
-      className="MuiTypography-root MuiTypography-subtitle1 css-1tvjuyl-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-subtitle1 css-1piln7r-MuiTypography-root"
     >
       You possibly have unsaved changes. Please save them.
     </h6>
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsSaveChangesButton css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsSaveChangesButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Save Changes
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsSaveCloseButton css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsSaveCloseButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Save And Close
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsCancelButton css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsCancelButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Cancel
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
-  </div>,
-]
+  </div>
+</DocumentFragment>
 `;
 
 exports[`DatastreamAgentsContent supports tab switching 1`] = `
-[
+<DocumentFragment>
   <div
-    className="MuiDialogContent-root css-pvro84-MuiDialogContent-root"
+    class="MuiDialogContent-root css-d831pz-MuiDialogContent-root"
   >
     <div
-      className="MuiBox-root css-1hjmj0z"
+      class="MuiBox-root css-1hjmj0z"
     >
-      Tab: Editor
-      Tab: Clone
+      Tab: EditorTab: Clone
     </div>
     <div
-      style={
-        {
-          "display": "none",
-        }
-      }
+      style="display: none;"
     >
-      Role
-      Type
-      Name
-      Actions
-      DatastreamAgentsAddContentRow
+      RoleTypeNameActionsDatastreamAgentsAddContentRow
     </div>
     <div
-      style={
-        {
-          "display": "block",
-        }
-      }
+      style="display: block;"
     >
       <div>
         PidPicker: {"selected":""}
       </div>
     </div>
-  </div>,
+  </div>
   <hr
-    className="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
-  />,
+    class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
+  />
   <div
-    className="MuiDialogActions-root MuiDialogActions-spacing css-1wawfzm-MuiDialogActions-root"
+    class="MuiDialogActions-root MuiDialogActions-spacing css-x4djkb-MuiDialogActions-root"
   >
     <h6
-      className="MuiTypography-root MuiTypography-subtitle1 css-1tvjuyl-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-subtitle1 css-1piln7r-MuiTypography-root"
     >
       You possibly have unsaved changes. Please save them.
     </h6>
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsSaveChangesButton css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsSaveChangesButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Save Changes
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsSaveCloseButton css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsSaveCloseButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Save And Close
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsCancelButton css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary agentsCancelButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Cancel
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
-  </div>,
-]
+  </div>
+</DocumentFragment>
 `;

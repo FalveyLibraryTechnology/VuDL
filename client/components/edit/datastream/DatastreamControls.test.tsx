@@ -1,6 +1,5 @@
-import React from "react";
 import { describe, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import { DatastreamModalStates } from "../../../context/EditorContext";
 import DatastreamControls from "./DatastreamControls";
 
@@ -13,8 +12,8 @@ jest.mock("./DatastreamControlButton", () => (props) => {
 describe("DatastreamControls", () => {
     it("renders", () => {
         const datastream = "test1";
-        const tree = renderer.create(<DatastreamControls datastream={datastream} disabled={false} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<DatastreamControls datastream={datastream} disabled={false} />);
+        expect(asFragment()).toMatchSnapshot();
         expect(mockDatastreamControlButton).toHaveBeenCalledWith({
             modalState: DatastreamModalStates.UPLOAD,
             datastream,

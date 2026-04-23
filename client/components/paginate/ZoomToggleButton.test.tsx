@@ -1,8 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import ZoomToggleButton from "./ZoomToggleButton";
 
 describe("ZoomToggleButton", () => {
@@ -16,8 +14,8 @@ describe("ZoomToggleButton", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<ZoomToggleButton {...props} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ZoomToggleButton {...props} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders correctly when zoom is off", () => {

@@ -2,7 +2,6 @@ import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import * as EditorContextModule from "../../context/EditorContext";
 import ObjectPreviewButton from "./ObjectPreviewButton";
 
@@ -19,14 +18,15 @@ describe("ObjectPreviewButton", () => {
     });
 
     it("renders correctly without VuFind URL", async () => {
-        const tree = renderer.create(<ObjectPreviewButton pid={pid} />).toJSON();
-        expect(tree).toBeNull();
+        render(<ObjectPreviewButton pid={pid} />);
+        const previewButton = screen.queryByRole("button");
+        expect(previewButton).toBeNull();
     });
 
     it("renders correctly with VuFind URL", async () => {
         mockContext.state.vufindUrl = "http://localhost";
-        const tree = renderer.create(<ObjectPreviewButton pid={pid} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ObjectPreviewButton pid={pid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("can open a VuFind preview URL", async () => {

@@ -1,6 +1,5 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import ObjectModels from "./ObjectModels";
 
 const mockUseEditorContext = jest.fn();
@@ -25,12 +24,12 @@ describe("ObjectModels", () => {
         editorValues.state.objectDetailsStorage["foo:123"] = {
             models: ["vudl-system:CoreModel", "vudl-system:CollectionModel", "vudl-system:FolderCollection"],
         };
-        const tree = renderer.create(<ObjectModels pid="foo:123" />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ObjectModels pid="foo:123" />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders nothing when data is missing", async () => {
-        const tree = renderer.create(<ObjectModels pid="foo:123" />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ObjectModels pid="foo:123" />);
+        expect(asFragment()).toMatchSnapshot();
     });
 });

@@ -1,6 +1,6 @@
-import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import userEvent from "@testing-library/user-event";
+import { render, act, screen } from "@testing-library/react";
 import DatastreamDublinCoreAddButtons from "./DatastreamDublinCoreAddButtons";
 import { waitFor } from "@testing-library/react";
 
@@ -18,7 +18,11 @@ jest.mock("../../../context/DublinCoreMetadataContext", () => ({
     },
 }));
 
-jest.mock("../PidPicker", () => (props) => "PidPicker: " + JSON.stringify(props));
+let setSelectedGlobal;
+jest.mock("../PidPicker", () => (props) => {
+    setSelectedGlobal = props.setSelected;
+    return "PidPicker: " + JSON.stringify(props);
+});
 
 describe("DatastreamDublinCoreAddButtons", () => {
     let dcValues;
@@ -56,17 +60,17 @@ describe("DatastreamDublinCoreAddButtons", () => {
     });
 
     it("renders without selected clone pid", () => {
-        const tree = renderer.create(<DatastreamDublinCoreAddButtons />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<DatastreamDublinCoreAddButtons />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders with selected clone pid", () => {
         editorValues.state.objectDetailsStorage["foo"] = {};
-        const tree = renderer.create(<DatastreamDublinCoreAddButtons />);
-        renderer.act(() => {
-            tree.root.children[4].props.setSelected("foo");
+        const { asFragment } = render(<DatastreamDublinCoreAddButtons />);
+        act(() => {
+            setSelectedGlobal("foo");
         });
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders with appropriate parent details (using shallow storage)", () => {
@@ -75,8 +79,8 @@ describe("DatastreamDublinCoreAddButtons", () => {
                 parents: [{ pid: "parent:123", title: "Parent" }],
             },
         };
-        const tree = renderer.create(<DatastreamDublinCoreAddButtons />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<DatastreamDublinCoreAddButtons />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders with appropriate parent details (using full storage)", () => {
@@ -85,38 +89,36 @@ describe("DatastreamDublinCoreAddButtons", () => {
                 parents: [{ pid: "parent:123", title: "Parent" }],
             },
         };
-        const tree = renderer.create(<DatastreamDublinCoreAddButtons />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<DatastreamDublinCoreAddButtons />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
-    it("adds new fields on click", () => {
-        const tree = renderer.create(<DatastreamDublinCoreAddButtons />);
-        renderer.act(() => {
-            tree.root.findAllByType("button")[1].props.onClick();
+    it("adds new fields on click", async () => {
+        await act(async () => {
+            render(<DatastreamDublinCoreAddButtons />);
         });
+        await userEvent.setup().click(screen.getAllByRole("button")[1]);
         expect(dcValues.action.addValueAbove).toHaveBeenCalledWith("dc:description", 0, "");
     });
 
     it("loads details for cloned pids", async () => {
-        const tree = renderer.create(<DatastreamDublinCoreAddButtons />);
-        await renderer.act(async () => {
-            tree.root.children[4].props.setSelected("foo");
+        render(<DatastreamDublinCoreAddButtons />);
+        await act(async () => {
+            await setSelectedGlobal("foo");
             await waitFor(() => expect(editorValues.action.loadObjectDetailsIntoStorage).toHaveBeenCalled());
         });
         expect(editorValues.action.loadObjectDetailsIntoStorage).toHaveBeenCalledWith("foo", expect.anything());
     });
 
-    it("clones metadata", () => {
+    it("clones metadata", async () => {
         editorValues.state.objectDetailsStorage["foo"] = {
             metadata: { "dc:identifier": ["foo"], "dc:title": ["added"], "dc:description": ["bar"] },
         };
-        const tree = renderer.create(<DatastreamDublinCoreAddButtons />);
-        renderer.act(() => {
-            tree.root.children[4].props.setSelected("foo");
+        render(<DatastreamDublinCoreAddButtons />);
+        await act(async () => {
+            await setSelectedGlobal("foo");
         });
-        renderer.act(() => {
-            tree.root.findAllByType("button")[2].props.onClick();
-        });
+        await userEvent.setup().click(screen.getAllByRole("button")[2]);
         expect(dcValues.action.mergeValues).toHaveBeenCalledWith({
             "dc:title": ["added"],
             "dc:description": ["bar"],

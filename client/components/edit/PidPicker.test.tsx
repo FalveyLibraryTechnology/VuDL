@@ -2,7 +2,6 @@ import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import PidPicker from "./PidPicker";
 import { Parent } from "./PidPicker";
 import { getRecentPidsCatalog } from "../../util/RecentPidsCatalog";
@@ -28,8 +27,8 @@ describe("PidPicker", () => {
     };
 
     const checkSnapshot = (selected = "", parents: Array<Parent> = []) => {
-        const tree = renderer.create(getPicker(selected, parents)).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(getPicker(selected, parents));
+        expect(asFragment()).toMatchSnapshot();
     };
 
     beforeEach(() => {

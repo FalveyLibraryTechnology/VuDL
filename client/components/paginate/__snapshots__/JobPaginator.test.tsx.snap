@@ -1,16 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`JobPaginator renders 1`] = `
-[
+<DocumentFragment>
   <ul
-    className="breadcrumbs"
+    class="breadcrumbs"
   >
     <li>
       <a
         href="/"
-        onClick={[Function]}
-        onMouseEnter={[Function]}
-        onTouchStart={[Function]}
       >
         Main Menu
       </a>
@@ -18,34 +15,28 @@ exports[`JobPaginator renders 1`] = `
     <li>
       <a
         href="/paginate"
-        onClick={[Function]}
-        onMouseEnter={[Function]}
-        onTouchStart={[Function]}
       >
         Paginator
       </a>
     </li>
     <li>
-      testCategory
-       
-      testJob
+      testCategory testJob
     </li>
-  </ul>,
+  </ul>
   <div
-    className="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+    class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row css-d64g0g-MuiGrid-root"
     id="paginator"
   >
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-1osj8n2-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-6 css-1ml5fja-MuiGrid-root"
     >
       JobPaginatorZoomToggle
     </div>
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6 css-1osj8n2-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-6 css-1ml5fja-MuiGrid-root"
     >
-      PaginatorControls
-      PaginatorList
+      PaginatorControlsPaginatorList
     </div>
-  </div>,
-]
+  </div>
+</DocumentFragment>
 `;

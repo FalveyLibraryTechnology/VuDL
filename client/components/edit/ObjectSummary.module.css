@@ -14,7 +14,7 @@
     min-width: unset;
     padding-block: 0.5em 0.4em;
 
-    &:not(:hover,:focus) {
+    &:not(:hover, :focus) {
         background-color: white;
         border-color: black;
     }

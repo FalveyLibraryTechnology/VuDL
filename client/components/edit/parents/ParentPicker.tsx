@@ -44,9 +44,11 @@ const ParentPicker = ({ pid }: ParentPickerProps): React.ReactElement => {
     const addParent = async () => {
         setStatusMessage("Saving...");
         const result = await attachObjectToParent(pid, selectedParentPid, position);
-        result === "ok"
-            ? showSnackbarMessage(`Successfully added ${pid} to ${selectedParentPid}`, "info")
-            : showSnackbarMessage(result, "error");
+        if (result === "ok") {
+            showSnackbarMessage(`Successfully added ${pid} to ${selectedParentPid}`, "info");
+        } else {
+            showSnackbarMessage(result, "error");
+        }
         setStatusMessage("");
     };
 
@@ -65,9 +67,11 @@ const ParentPicker = ({ pid }: ParentPickerProps): React.ReactElement => {
         }
         setStatusMessage("Saving...");
         const result = await moveObjectToParent(pid, selectedParentPid, position);
-        result === "ok"
-            ? showSnackbarMessage(`Successfully moved ${pid} to ${selectedParentPid}`, "info")
-            : showSnackbarMessage(result, "error");
+        if (result === "ok") {
+            showSnackbarMessage(`Successfully moved ${pid} to ${selectedParentPid}`, "info");
+        } else {
+            showSnackbarMessage(result, "error");
+        }
         setStatusMessage("");
     };
 
@@ -76,7 +80,7 @@ const ParentPicker = ({ pid }: ParentPickerProps): React.ReactElement => {
         let result: string;
         try {
             result = await fetchText(target, { method: "GET" });
-        } catch (e) {
+        } catch {
             result = "0";
         }
         setPosition((parseInt(result) + 1).toString());

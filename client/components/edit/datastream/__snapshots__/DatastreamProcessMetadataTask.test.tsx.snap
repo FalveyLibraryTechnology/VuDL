@@ -1,53 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatastreamProcessMetadataTask renders with tool presets 1`] = `
-[
+<DocumentFragment>
   <hr
-    style={
-      {
-        "marginBottom": "20px",
-      }
-    }
-  />,
+    style="margin-bottom: 20px;"
+  />
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Task Sequence"},"value":"seq"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Task Label"},"value":"lab"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Task Description"},"value":"des"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Task Individual"},"value":"ind"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     <label>
       Select a preset tool:
       <div
-        className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root css-1eed5fa-MuiInputBase-root-MuiInput-root"
-        onClick={[Function]}
+        class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root css-5h82ro-MuiInputBase-root-MuiInput-root"
       >
         <select
-          aria-invalid={false}
-          className="MuiNativeSelect-select MuiNativeSelect-outlined MuiInputBase-input MuiInput-input css-19ygod6-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
-          disabled={false}
-          onAnimationStart={[Function]}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
-          required={false}
-          value="0"
+          aria-invalid="false"
+          class="MuiNativeSelect-select MuiNativeSelect-outlined MuiInputBase-input MuiInput-input css-b4m9gu-MuiNativeSelect-root-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
         >
           <option
             value="0"
@@ -56,8 +44,8 @@ exports[`DatastreamProcessMetadataTask renders with tool presets 1`] = `
           </option>
         </select>
         <svg
-          aria-hidden={true}
-          className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiNativeSelect-icon MuiNativeSelect-iconOutlined css-1g12qau-MuiSvgIcon-root-MuiNativeSelect-icon"
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiNativeSelect-icon MuiNativeSelect-iconOutlined css-1bjnys1-MuiSvgIcon-root-MuiNativeSelect-root-MuiNativeSelect-icon"
           data-testid="ArrowDropDownIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -68,183 +56,115 @@ exports[`DatastreamProcessMetadataTask renders with tool presets 1`] = `
         </svg>
       </div>
     </label>
-  </div>,
-  <button
-    onClick={[Function]}
-  >
+  </div>
+  <button>
     Apply Preset
-  </button>,
+  </button>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Task Tool"},"value":"tool-lab"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Tool Description"},"value":"tool-des"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Tool Make"},"value":"tool-mak"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Tool Version"},"value":"tool-ver"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Tool Serial Number"},"value":"tool-ser"}
-  </div>,
+  </div>
   <button
-    className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
-    disabled={false}
-    onBlur={[Function]}
-    onClick={[MockFunction]}
-    onContextMenu={[Function]}
-    onDragLeave={[Function]}
-    onFocus={[Function]}
-    onKeyDown={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseLeave={[Function]}
-    onMouseUp={[Function]}
-    onTouchEnd={[Function]}
-    onTouchMove={[Function]}
-    onTouchStart={[Function]}
-    tabIndex={0}
+    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
+    tabindex="0"
     type="button"
   >
     Add Below
-    <span
-      className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-    />
-  </button>,
+  </button>
   <button
-    className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
-    disabled={false}
-    onBlur={[Function]}
-    onClick={[MockFunction]}
-    onContextMenu={[Function]}
-    onDragLeave={[Function]}
-    onFocus={[Function]}
-    onKeyDown={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseLeave={[Function]}
-    onMouseUp={[Function]}
-    onTouchEnd={[Function]}
-    onTouchMove={[Function]}
-    onTouchStart={[Function]}
-    tabIndex={0}
+    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
+    tabindex="0"
     type="button"
   >
     Delete Task
-    <span
-      className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-    />
-  </button>,
-]
+  </button>
+</DocumentFragment>
 `;
 
 exports[`DatastreamProcessMetadataTask renders without tool presets 1`] = `
-[
+<DocumentFragment>
   <hr
-    style={
-      {
-        "marginBottom": "20px",
-      }
-    }
-  />,
+    style="margin-bottom: 20px;"
+  />
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Task Sequence"},"value":"seq"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Task Label"},"value":"lab"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Task Description"},"value":"des"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Task Individual"},"value":"ind"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Task Tool"},"value":"tool-lab"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Tool Description"},"value":"tool-des"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Tool Make"},"value":"tool-mak"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Tool Version"},"value":"tool-ver"}
-  </div>,
+  </div>
   <div
-    className="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     BlurSavingTextField: {"options":{"label":"Tool Serial Number"},"value":"tool-ser"}
-  </div>,
+  </div>
   <button
-    className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
-    disabled={false}
-    onBlur={[Function]}
-    onClick={[MockFunction]}
-    onContextMenu={[Function]}
-    onDragLeave={[Function]}
-    onFocus={[Function]}
-    onKeyDown={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseLeave={[Function]}
-    onMouseUp={[Function]}
-    onTouchEnd={[Function]}
-    onTouchMove={[Function]}
-    onTouchStart={[Function]}
-    tabIndex={0}
+    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
+    tabindex="0"
     type="button"
   >
     Add Below
-  </button>,
+  </button>
   <button
-    className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
-    disabled={false}
-    onBlur={[Function]}
-    onClick={[MockFunction]}
-    onContextMenu={[Function]}
-    onDragLeave={[Function]}
-    onFocus={[Function]}
-    onKeyDown={[Function]}
-    onKeyUp={[Function]}
-    onMouseDown={[Function]}
-    onMouseLeave={[Function]}
-    onMouseUp={[Function]}
-    onTouchEnd={[Function]}
-    onTouchMove={[Function]}
-    onTouchStart={[Function]}
-    tabIndex={0}
+    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
+    tabindex="0"
     type="button"
   >
     Delete Task
-  </button>,
-]
+  </button>
+</DocumentFragment>
 `;

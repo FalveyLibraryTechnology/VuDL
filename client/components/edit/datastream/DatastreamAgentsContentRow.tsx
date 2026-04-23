@@ -60,7 +60,7 @@ const DatastreamAgentsContentRow = ({
     };
     return (
         <>
-            <Grid container item xs={3}>
+            <Grid container size={3}>
                 <Paper
                     variant="outlined"
                     sx={{ display: "flex", alignItems: "center", width: "100%", padding: "0 14px" }}
@@ -85,7 +85,7 @@ const DatastreamAgentsContentRow = ({
                     </FormControl>
                 </Paper>
             </Grid>
-            <Grid container item xs={3}>
+            <Grid container size={3}>
                 <Paper
                     variant="outlined"
                     sx={{ display: "flex", alignItems: "center", width: "100%", padding: "0 14px" }}
@@ -110,12 +110,12 @@ const DatastreamAgentsContentRow = ({
                     </FormControl>
                 </Paper>
             </Grid>
-            <Grid container item xs={5}>
+            <Grid container size={5}>
                 <FormControl fullWidth={true}>
                     <BlurSavingTextField options={nameFieldOptions} value={name} setValue={setName} />
                 </FormControl>
             </Grid>
-            <Grid container item xs={1}>
+            <Grid container size={1}>
                 <Paper variant="outlined" sx={{ display: "flex", alignItems: "center", width: "100%" }}>
                     <FormControl fullWidth={true}>
                         <ButtonGroup sx={{ display: "flex", justifyContent: "center" }}>

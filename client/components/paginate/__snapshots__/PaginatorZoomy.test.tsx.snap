@@ -1,14 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PaginatorZoomy renders 1`] = `
-<div>
-  <div
-    id="zoomyStatus"
-  >
-    Loading...
+<DocumentFragment>
+  <div>
+    <div
+      id="zoomyStatus"
+    >
+      Loading...
+    </div>
+    <canvas
+      id="zoomy"
+    />
   </div>
-  <canvas
-    id="zoomy"
-  />
-</div>
+</DocumentFragment>
 `;

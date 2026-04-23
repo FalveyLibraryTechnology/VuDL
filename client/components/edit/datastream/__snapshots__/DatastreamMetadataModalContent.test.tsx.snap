@@ -1,9 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatastreamMetadataModalContent renders 1`] = `
-<div
-  className="MuiDialogContent-root css-lebnmz-MuiDialogContent-root"
->
-  DatatypeContent: {"data":"test1","mimeType":"test2"}
-</div>
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-1tu99jp-MuiDialogContent-root"
+  >
+    DatatypeContent: {"data":"test1","mimeType":"test2"}
+  </div>
+</DocumentFragment>
 `;

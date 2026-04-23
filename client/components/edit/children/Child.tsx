@@ -62,7 +62,7 @@ export const Child = ({
     ) : null;
     const hasExtraTools = thumbnail || models || showChildCounts;
     const extraTools = hasExtraTools ? (
-        <Grid item>
+        <Grid>
             {thumbnail ? <ObjectThumbnail pid={pid} /> : ""}
             {showChildCounts ? <ObjectChildCounts pid={pid} /> : ""}
             {models ? <ObjectModels pid={pid} /> : ""}
@@ -71,18 +71,18 @@ export const Child = ({
     return (
         <div className={styles.childlist__item}>
             <Grid container spacing={2} alignItems="center">
-                <Grid item xs>
+                <Grid size="grow">
                     {expandControl} {loaded && parentPid ? <ChildPosition pid={pid} parentPid={parentPid} /> : ""}
                     <Link href={"/edit/object/" + pid}>{title || "(no title)"}</Link>
                 </Grid>
                 {extraTools}
-                <Grid item xs={1} className={styles.childlist__pid}>
+                <Grid className={styles.childlist__pid} size={1}>
                     {pid}
                 </Grid>
-                <Grid item xs="none">
+                <Grid size="none">
                     <CopyPidButton pid={pid} />
                 </Grid>
-                <Grid item xs="none" style={{ textAlign: "right" }}>
+                <Grid style={{ textAlign: "right" }} size="none">
                     {loaded ? <ObjectButtonBar pid={pid} /> : ""}
                     <ObjectLoader pid={pid} />
                 </Grid>

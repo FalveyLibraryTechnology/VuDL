@@ -1,10 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DeleteObjectButton renders correctly when data is loaded 1`] = `
-<button
-  className="object-delete-btn deleteBtn"
-  onClick={[Function]}
->
-  DeleteIcon
-</button>
+<DocumentFragment>
+  <button
+    class="object-delete-btn deleteBtn"
+  >
+    DeleteIcon
+  </button>
+</DocumentFragment>
 `;
+
+exports[`DeleteObjectButton renders correctly when data is not loaded 1`] = `<DocumentFragment />`;

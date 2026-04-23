@@ -1,8 +1,6 @@
-import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import DatastreamProcessMetadataTask from "./DatastreamProcessMetadataTask";
 import { ProcessMetadataTask } from "../../../context/ProcessMetadataContext";
 
@@ -51,34 +49,28 @@ describe("DatastreamProcessMetadataTask", () => {
     });
 
     it("renders without tool presets", () => {
-        const tree = renderer
-            .create(
-                <DatastreamProcessMetadataTask
-                    task={task}
-                    deleteTask={jest.fn()}
-                    addBelow={jest.fn()}
-                    setAttributes={jest.fn()}
-                />,
-            )
-            .toJSON();
-
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(
+            <DatastreamProcessMetadataTask
+                task={task}
+                deleteTask={jest.fn()}
+                addBelow={jest.fn()}
+                setAttributes={jest.fn()}
+            />,
+        );
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders with tool presets", () => {
         editorValues.state.toolPresets.push({ label: "My Tool" });
-        const tree = renderer
-            .create(
-                <DatastreamProcessMetadataTask
-                    task={task}
-                    deleteTask={jest.fn()}
-                    addBelow={jest.fn()}
-                    setAttributes={jest.fn()}
-                />,
-            )
-            .toJSON();
-
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(
+            <DatastreamProcessMetadataTask
+                task={task}
+                deleteTask={jest.fn()}
+                addBelow={jest.fn()}
+                setAttributes={jest.fn()}
+            />,
+        );
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("applies tool presets", async () => {

@@ -1,9 +1,7 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import DeleteObjectButton from "./DeleteObjectButton";
 
 const mockUseGlobalContext = jest.fn();
@@ -71,22 +69,16 @@ describe("DeleteObjectButton", () => {
     });
 
     it("renders correctly when data is not loaded", () => {
-        let tree;
-        renderer.act(() => {
-            tree = renderer.create(<DeleteObjectButton pid={pid} />);
-        });
-        expect(tree.toJSON()).toEqual(null);
+        const { asFragment } = render(<DeleteObjectButton pid={pid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders correctly when data is loaded", async () => {
         editorValues.state.objectDetailsStorage[pid] = { foo: "bar" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 100 });
-        let tree;
-        renderer.act(() => {
-            tree = renderer.create(<DeleteObjectButton pid={pid} />);
-        });
+        const { asFragment } = render(<DeleteObjectButton pid={pid} />);
         await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("can be aborted via confirm", async () => {

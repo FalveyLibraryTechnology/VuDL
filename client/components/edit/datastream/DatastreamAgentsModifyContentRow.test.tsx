@@ -1,6 +1,5 @@
-import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import DatastreamAgentsModifyContentRow from "./DatastreamAgentsModifyContentRow";
 
 let datastreamAgentsContentRowProps;
@@ -46,8 +45,8 @@ describe("DatastreamAgentsModifyContentRow", () => {
     });
 
     it("proxies DatastreamAgentsContextRow", () => {
-        const tree = renderer.create(<DatastreamAgentsModifyContentRow {...props} />).toJSON();
-        expect(tree).toEqual("DatastreamAgentsContentRow");
+        const { asFragment } = render(<DatastreamAgentsModifyContentRow {...props} />);
+        expect(asFragment()).toMatchSnapshot();
         expect(datastreamAgentsContentRowProps.agent).toEqual(props.agent);
     });
 });

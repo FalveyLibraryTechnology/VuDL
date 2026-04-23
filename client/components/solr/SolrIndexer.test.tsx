@@ -1,6 +1,5 @@
-import React from "react";
 import { describe, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import SolrIndexer from "./SolrIndexer";
 
 jest.mock("./SinglePidIndexer", () => () => "SinglePidIndexer");
@@ -16,7 +15,7 @@ jest.mock("../../context/FetchContext", () => ({
 
 describe("SolrIndexer", () => {
     it("renders", () => {
-        const tree = renderer.create(<SolrIndexer />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<SolrIndexer />);
+        expect(asFragment()).toMatchSnapshot();
     });
 });

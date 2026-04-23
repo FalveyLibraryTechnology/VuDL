@@ -1,28 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatastreamViewModalContent renders for download-only content 1`] = `
-<div
-  className="MuiDialogContent-root css-lebnmz-MuiDialogContent-root"
->
-  <p>
-    The MIME type 
-    image/tiff
-     cannot be displayed in your browser. Please
-     
-    <button
-      onClick={[Function]}
-    >
-      download
-    </button>
-     the file instead.
-  </p>
-</div>
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-1tu99jp-MuiDialogContent-root"
+  >
+    <p>
+      The MIME type image/tiff cannot be displayed in your browser. Please 
+      <button>
+        download
+      </button>
+       the file instead.
+    </p>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`DatastreamViewModalContent renders for viewable content 1`] = `
-<div
-  className="MuiDialogContent-root css-lebnmz-MuiDialogContent-root"
->
-  DatatypeContent: {"data":"test1","mimeType":"test2"}
-</div>
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-1tu99jp-MuiDialogContent-root"
+  >
+    DatatypeContent: {"data":"test1","mimeType":"test2"}
+  </div>
+</DocumentFragment>
 `;

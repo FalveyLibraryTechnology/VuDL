@@ -35,17 +35,16 @@ const DatastreamDublinCoreContent = (): React.ReactElement => {
         <>
             <DialogContent>
                 <Grid container spacing={1}>
-                    <Grid item xs={8}>
+                    <Grid size={8}>
                         <DatastreamDublinCoreValues />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid size={4}>
                         <DatastreamDublinCoreAddButtons />
                         <h3>Other Tools</h3>
                         <ObjectPreviewButton pid={currentPid} />
                     </Grid>
                 </Grid>
             </DialogContent>
-
             <DialogActions>
                 <Button
                     className="uploadDublinCoreButton"

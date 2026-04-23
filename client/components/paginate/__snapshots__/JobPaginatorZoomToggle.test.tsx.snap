@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`JobPaginatorZoomToggle renders preview not available 1`] = `
-<div>
-  Preview not available.
-</div>
+<DocumentFragment>
+  <div>
+    Preview not available.
+  </div>
+</DocumentFragment>
 `;

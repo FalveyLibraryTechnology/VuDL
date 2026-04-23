@@ -1,9 +1,7 @@
-import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import DatastreamControlButton from "./DatastreamControlButton";
 
 const mockUseEditorContext = jest.fn();
@@ -45,8 +43,8 @@ describe("DatastreamControlButton", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<DatastreamControlButton modalState="Upload" datastream="THUMBNAIL" />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<DatastreamControlButton modalState="Upload" datastream="THUMBNAIL" />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("downloads the datastream", async () => {

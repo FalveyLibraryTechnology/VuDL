@@ -1,8 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import PaginatorControlGroup from "./PaginatorControlGroup";
 
 describe("PaginatorControlGroup", () => {
@@ -17,8 +15,8 @@ describe("PaginatorControlGroup", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<PaginatorControlGroup {...props} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<PaginatorControlGroup {...props} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("calls callback on child click", async () => {

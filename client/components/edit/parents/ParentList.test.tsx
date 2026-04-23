@@ -1,8 +1,6 @@
-import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import ParentList from "./ParentList";
 import { waitFor } from "@testing-library/dom";
 
@@ -95,18 +93,18 @@ describe("ParentList", () => {
                 },
             },
         };
-        const tree = renderer.create(<ParentList pid={pid} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ParentList pid={pid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders a populated parent list correctly (shallow mode)", () => {
-        const tree = renderer.create(<ParentList pid={pid} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ParentList pid={pid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders a populated parent list correctly (full mode)", () => {
-        const tree = renderer.create(<ParentList pid={pid} initiallyShallow={false} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ParentList pid={pid} initiallyShallow={false} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("deletes parents on button click plus confirmation", async () => {

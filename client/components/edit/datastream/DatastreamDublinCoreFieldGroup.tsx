@@ -34,7 +34,7 @@ const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.Rea
         );
         return (
             <Grid container spacing={1} key={key}>
-                <Grid item xs={10}>
+                <Grid size={10}>
                     <DatastreamDublinCoreEditField
                         value={value}
                         setValue={(value) => replaceValue(field, i, value)}
@@ -42,9 +42,7 @@ const DatastreamDublinCoreFieldGroup = ({ field }: { field: string }): React.Rea
                         legalValues={catalogData.values ?? []}
                     />
                 </Grid>
-                <Grid item xs={2}>
-                    {buttons}
-                </Grid>
+                <Grid size={2}>{buttons}</Grid>
             </Grid>
         );
     });

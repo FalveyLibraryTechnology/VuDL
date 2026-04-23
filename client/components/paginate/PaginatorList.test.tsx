@@ -1,6 +1,5 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import PaginatorList from "./PaginatorList";
 
 const mockUseJobPaginatorContext = jest.fn();
@@ -44,19 +43,20 @@ describe("PaginatorList", () => {
     });
 
     it("renders thumbnails for pages", () => {
-        const tree = renderer.create(<PaginatorList />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<PaginatorList />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders empty element when pages are absent", () => {
         paginatorValues.state.order = [];
-        const tree = renderer.create(<PaginatorList />).toJSON();
-        expect(tree).toBeNull();
+        const { container } = render(<PaginatorList />);
+        expect(container.firstChild).toBeNull();
     });
 
     it("renders a thumbnail", () => {
         expect(mockThumbnail).not.toHaveBeenCalled();
-        renderer.create(<PaginatorList />).toJSON();
+        const { asFragment } = render(<PaginatorList />);
+        expect(asFragment()).toMatchSnapshot();
         expect(mockThumbnail).toHaveBeenCalledWith(
             expect.objectContaining({
                 scrollTo: expect.any(Function),

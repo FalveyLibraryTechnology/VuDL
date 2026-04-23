@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useReducer, Dispatch, ReactNode } from "react";
 
 interface SnackbarState {
-    open: boolean,
-    message: string,
-    severity: string
+    open: boolean;
+    message: string;
+    severity: string;
 }
 
 interface GlobalState {
@@ -29,16 +29,16 @@ const initialGlobalState: GlobalState = {
 };
 
 type Action =
-    | { type: 'OPEN_MODAL'; payload: string }
-    | { type: 'CLOSE_MODAL'; payload: string }
-    | { type: 'SET_SNACKBAR_STATE'; payload: SnackbarState };
+    | { type: "OPEN_MODAL"; payload: string }
+    | { type: "CLOSE_MODAL"; payload: string }
+    | { type: "SET_SNACKBAR_STATE"; payload: SnackbarState };
 
 /**
  * Update the shared states of react components.
  */
 const globalReducer = (state: GlobalState, action: Action): GlobalState => {
     switch (action.type) {
-        case 'OPEN_MODAL':
+        case "OPEN_MODAL":
             return {
                 ...state,
                 modalOpenStates: {
@@ -46,7 +46,7 @@ const globalReducer = (state: GlobalState, action: Action): GlobalState => {
                     [action.payload]: true,
                 },
             };
-        case 'CLOSE_MODAL':
+        case "CLOSE_MODAL":
             return {
                 ...state,
                 modalOpenStates: {
@@ -54,7 +54,7 @@ const globalReducer = (state: GlobalState, action: Action): GlobalState => {
                     [action.payload]: false,
                 },
             };
-        case 'SET_SNACKBAR_STATE':
+        case "SET_SNACKBAR_STATE":
             return {
                 ...state,
                 snackbarState: action.payload,
@@ -79,11 +79,7 @@ const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
  */
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
     const [state, dispatch] = useReducer(globalReducer, initialGlobalState);
-    return (
-        <GlobalContext.Provider value={{ state, dispatch }}>
-            {children}
-        </GlobalContext.Provider>
-    );
+    return <GlobalContext.Provider value={{ state, dispatch }}>{children}</GlobalContext.Provider>;
 };
 
 export const useGlobalContext = () => {
@@ -101,13 +97,13 @@ export const useGlobalContext = () => {
     const openModal = (modal: string) => {
         dispatch({
             type: "OPEN_MODAL",
-            payload: modal
+            payload: modal,
         });
     };
     const closeModal = (modal: string) => {
         dispatch({
             type: "CLOSE_MODAL",
-            payload: modal
+            payload: modal,
         });
     };
     const toggleModal = (modal: string) => {
@@ -123,7 +119,7 @@ export const useGlobalContext = () => {
     const setSnackbarState = (snackbarState: SnackbarState) => {
         dispatch({
             type: "SET_SNACKBAR_STATE",
-            payload: snackbarState
+            payload: snackbarState,
         });
     };
 
@@ -143,9 +139,9 @@ export const useGlobalContext = () => {
             setSnackbarState,
         },
     };
-}
+};
 
 export default {
     GlobalContextProvider,
-    useGlobalContext
-}
+    useGlobalContext,
+};

@@ -1,7 +1,7 @@
-import React from "react";
+import { act } from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { waitFor } from "@testing-library/react";
-import renderer from "react-test-renderer";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { ChildListProps, ChildList } from "./ChildList";
 import { EditorContextProvider } from "../../../context/EditorContext";
 import { FetchContextProvider } from "../../../context/FetchContext";
@@ -11,7 +11,7 @@ jest.mock("./Child", () => () => "Child");
 jest.mock("./SelectableChild", () => () => "SelectableChild");
 
 function getMountedChildListComponent(props: ChildListProps) {
-    return renderer.create(
+    return render(
         <FetchContextProvider>
             <EditorContextProvider>
                 <ChildList {...props} />
@@ -41,69 +41,68 @@ describe("ChildList", () => {
     });
 
     it("renders using ajax-loaded root data", async () => {
-        let tree;
-        await renderer.act(async () => {
-            tree = getMountedChildListComponent(props);
-            await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        let asFragment;
+        await act(async () => {
+            asFragment = getMountedChildListComponent(props).asFragment;
         });
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("allows thumbnails to be toggled on", async () => {
-        let tree;
-        await renderer.act(async () => {
-            tree = getMountedChildListComponent(props);
-            await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-            expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
-            tree.root
-                .find((element) => {
-                    return element?.children[0] === "Show Thumbnails";
-                })
-                .props.onClick();
+        const user = userEvent.setup();
+        let asFragment;
+        await act(async () => {
+            asFragment = getMountedChildListComponent(props).asFragment;
         });
-        expect(tree.toJSON()).toMatchSnapshot();
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
+        const thumbnailsButton = await waitFor(() => screen.getByRole("button", { name: /show thumbnails/i }));
+        await user.click(thumbnailsButton);
+        expect(screen.getByRole("button", { name: /hide thumbnails/i })).toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("allows models to be toggled on", async () => {
-        let tree;
-        await renderer.act(async () => {
-            tree = getMountedChildListComponent(props);
-            await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-            expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
-            tree.root
-                .find((element) => {
-                    return element?.children[0] === "Show Models";
-                })
-                .props.onClick();
+        const user = userEvent.setup();
+        let asFragment;
+        await act(async () => {
+            asFragment = getMountedChildListComponent(props).asFragment;
         });
-        expect(tree.toJSON()).toMatchSnapshot();
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
+        const modelsButton = await waitFor(() => screen.getByRole("button", { name: /show models/i }));
+        await user.click(modelsButton);
+        expect(screen.getByRole("button", { name: /hide models/i })).toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("allows child counts to be toggled on", async () => {
-        let tree;
-        await renderer.act(async () => {
-            tree = getMountedChildListComponent(props);
-            await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-            expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
-            tree.root
-                .find((element) => {
-                    return element?.children[0] === "Show Child Counts";
-                })
-                .props.onClick();
+        const user = userEvent.setup();
+        let asFragment;
+        await act(async () => {
+            asFragment = getMountedChildListComponent(props).asFragment;
         });
-        expect(tree.toJSON()).toMatchSnapshot();
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
+        const childCountsButton = await waitFor(() => screen.getByRole("button", { name: /show child counts/i }));
+        await user.click(childCountsButton);
+        expect(screen.getByRole("button", { name: /hide child counts/i })).toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders using SelectableChild when a callback is provided", async () => {
         props.selectCallback = jest.fn();
-        let tree;
-        await renderer.act(async () => {
-            tree = getMountedChildListComponent(props);
-            await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        let asFragment;
+        await act(async () => {
+            asFragment = getMountedChildListComponent(props).asFragment;
         });
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
-        expect(tree.toJSON()).toMatchSnapshot();
+        await waitFor(() => expect(screen.getByText("SelectableChild")).toBeInTheDocument());
+        expect(screen.queryByText("Child")).not.toBeInTheDocument();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("displays a paginator when appropriate", async () => {
@@ -125,23 +124,23 @@ describe("ChildList", () => {
                 { id: "foo:133", title: "hello10" },
             ],
         };
-        let tree;
-        await renderer.act(async () => {
-            tree = getMountedChildListComponent(props);
-            await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        let asFragment;
+        await act(async () => {
+            asFragment = getMountedChildListComponent(props).asFragment;
         });
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/topLevelObjects?start=0&rows=10");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders using ajax-loaded object data", async () => {
         props.pid = "foo:123";
-        let tree;
-        await renderer.act(async () => {
-            tree = getMountedChildListComponent(props);
-            await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
+        let asFragment;
+        await act(async () => {
+            asFragment = getMountedChildListComponent(props).asFragment;
         });
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual("http://localhost:9000/api/edit/object/foo%3A123/children?start=0&rows=10");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 });

@@ -1,8 +1,6 @@
-import React from "react";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render } from "@testing-library/react";
-import renderer from "react-test-renderer";
 import JobPaginator from "./JobPaginator";
 import { FetchContextProvider } from "../../context/FetchContext";
 
@@ -38,17 +36,14 @@ describe("JobPaginator", () => {
     });
 
     it("renders", () => {
-        const tree = renderer
-            .create(
-                <FetchContextProvider>
-                    <JobPaginator {...props} />
-                </FetchContextProvider>,
-            )
-            .toJSON();
-        const treeString = JSON.stringify(tree);
-        expect(treeString.includes(props.initialCategory)).toBeTruthy();
-        expect(treeString.includes(props.initialJob)).toBeTruthy();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(
+            <FetchContextProvider>
+                <JobPaginator {...props} />
+            </FetchContextProvider>,
+        );
+        expect(asFragment().textContent.includes(props.initialCategory)).toBeTruthy();
+        expect(asFragment().textContent.includes(props.initialJob)).toBeTruthy();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("should loadJob from useEffect", async () => {

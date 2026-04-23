@@ -1,9 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`PaginatorList renders a thumbnail 1`] = `
+<DocumentFragment>
+  <div
+    class="pageList"
+  >
+    Thumbnail
+  </div>
+</DocumentFragment>
+`;
+
 exports[`PaginatorList renders thumbnails for pages 1`] = `
-<div
-  className="pageList"
->
-  Thumbnail
-</div>
+<DocumentFragment>
+  <div
+    class="pageList"
+  >
+    Thumbnail
+  </div>
+</DocumentFragment>
 `;

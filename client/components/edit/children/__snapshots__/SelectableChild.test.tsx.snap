@@ -1,143 +1,123 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SelectableChild handles empty initial titles appropriately 1`] = `
-[
-  <span
-    onClick={[Function]}
-  >
+<DocumentFragment>
+  <span>
     <svg
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
       data-testid="AddBoxIcon"
       focusable="false"
       role="img"
       viewBox="0 0 24 24"
     >
       <path
-        d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+        d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4z"
       />
       <title>
         Expand Tree
       </title>
     </svg>
-  </span>,
-  <button
-    onClick={[Function]}
-  >
+  </span>
+  <button>
     - [foo:123]
-  </button>,
-]
+  </button>
+</DocumentFragment>
 `;
 
 exports[`SelectableChild handles missing object details storage title metadata correctly 1`] = `
-[
-  <span
-    onClick={[Function]}
-  >
+<DocumentFragment>
+  <span>
     <svg
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
       data-testid="AddBoxIcon"
       focusable="false"
       role="img"
       viewBox="0 0 24 24"
     >
       <path
-        d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+        d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4z"
       />
       <title>
         Expand Tree
       </title>
     </svg>
-  </span>,
-  <button
-    onClick={[Function]}
-  >
+  </span>
+  <button>
     - [foo:123]
-  </button>,
-]
+  </button>
+</DocumentFragment>
 `;
 
 exports[`SelectableChild renders thumbnails 1`] = `
-[
-  <span
-    onClick={[Function]}
-  >
+<DocumentFragment>
+  <span>
     <svg
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
       data-testid="AddBoxIcon"
       focusable="false"
       role="img"
       viewBox="0 0 24 24"
     >
       <path
-        d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+        d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4z"
       />
       <title>
         Expand Tree
       </title>
     </svg>
-  </span>,
-  <button
-    onClick={[Function]}
-  >
+  </span>
+  <button>
     initial title [foo:123]
     <br />
     ObjectThumbnail
-  </button>,
-]
+  </button>
+</DocumentFragment>
 `;
 
 exports[`SelectableChild renders using object details storage data 1`] = `
-[
-  <span
-    onClick={[Function]}
-  >
+<DocumentFragment>
+  <span>
     <svg
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
       data-testid="AddBoxIcon"
       focusable="false"
       role="img"
       viewBox="0 0 24 24"
     >
       <path
-        d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+        d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4z"
       />
       <title>
         Expand Tree
       </title>
     </svg>
-  </span>,
-  <button
-    onClick={[Function]}
-  >
+  </span>
+  <button>
     loaded title [foo:123]
-  </button>,
-]
+  </button>
+</DocumentFragment>
 `;
 
 exports[`SelectableChild renders using provided default data 1`] = `
-[
-  <span
-    onClick={[Function]}
-  >
+<DocumentFragment>
+  <span>
     <svg
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
       data-testid="AddBoxIcon"
       focusable="false"
       role="img"
       viewBox="0 0 24 24"
     >
       <path
-        d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+        d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4z"
       />
       <title>
         Expand Tree
       </title>
     </svg>
-  </span>,
-  <button
-    onClick={[Function]}
-  >
+  </span>
+  <button>
     initial title [foo:123]
-  </button>,
-]
+  </button>
+</DocumentFragment>
 `;

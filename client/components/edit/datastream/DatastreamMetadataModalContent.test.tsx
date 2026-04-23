@@ -1,7 +1,6 @@
-import React from "react";
+import { act } from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { waitFor } from "@testing-library/react";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import DatastreamMetadataModalContent from "./DatastreamMetadataModalContent";
 
 const mockUseDatastreamOperation = jest.fn();
@@ -37,12 +36,11 @@ describe("DatastreamMetadataModalContent", () => {
             mimeType: "test2",
         };
         datastreamOperationValues.viewMetadata.mockResolvedValue(response);
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(<DatastreamMetadataModalContent />);
-            await waitFor(() => expect(datastreamOperationValues.viewMetadata).toHaveBeenCalled());
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<DatastreamMetadataModalContent />).asFragment;
         });
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
         expect(mockDatatypeContent).toHaveBeenCalledWith(response);
     });
 });

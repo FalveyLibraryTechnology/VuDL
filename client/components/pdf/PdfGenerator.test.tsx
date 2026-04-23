@@ -1,9 +1,7 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import PdfGenerator from "./PdfGenerator";
 
 const mockUseFetchContext = jest.fn();
@@ -25,12 +23,15 @@ describe("PdfGenerator", () => {
         mockUseFetchContext.mockReturnValue(fetchContextValues);
     });
 
-    it("renders", () => {
-        const tree = renderer.create(<PdfGenerator />).toJSON();
-        expect(tree).toMatchSnapshot();
+    it("renders", async () => {
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<PdfGenerator />).asFragment;
+        });
+        expect(asFragment()).toMatchSnapshot();
     });
 
-    it("changes the pid input", () => {
+    it("changes the pid input", async () => {
         render(<PdfGenerator />);
         const input = screen.getByRole("textbox");
         fireEvent.change(input, {

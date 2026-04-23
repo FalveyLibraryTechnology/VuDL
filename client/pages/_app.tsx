@@ -1,4 +1,3 @@
-/* eslint react/prop-types: 0 */
 import React from "react";
 import { GlobalContextProvider } from "../context/GlobalContext";
 import { PaginatorContextProvider } from "../context/PaginatorContext";

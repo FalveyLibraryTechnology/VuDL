@@ -1,8 +1,6 @@
-import React from "react";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render } from "@testing-library/react";
-import renderer from "react-test-renderer";
 import JobSelector from "./JobSelector";
 import { FetchContextProvider } from "../../context/FetchContext";
 const mockCategory = jest.fn();
@@ -41,15 +39,16 @@ describe("JobSelector", () => {
     it("renders", async () => {
         response.json.mockResolvedValueOnce({});
         global.fetch.mockResolvedValueOnce(response);
-        let tree;
-        await renderer.act(() => {
-            tree = renderer.create(
+        let asFragment;
+        await act(async () => {
+            const result = render(
                 <FetchContextProvider>
                     <JobSelector />
                 </FetchContextProvider>,
             );
+            asFragment = result.asFragment;
         });
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("sets category components", async () => {

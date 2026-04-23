@@ -1,6 +1,5 @@
-import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import DatastreamAgentsAddContentRow from "./DatastreamAgentsAddContentRow";
 
 const mockDatastreamAgentsContentRow = jest.fn();
@@ -47,8 +46,8 @@ describe("DatastreamAgentsAddContentRow", () => {
     });
 
     it("proxies DatastreamAgentsContextRow", () => {
-        const tree = renderer.create(<DatastreamAgentsAddContentRow {...props} />).toJSON();
-        expect(tree).toEqual("DatastreamAgentsContentRow");
+        const { asFragment } = render(<DatastreamAgentsAddContentRow {...props} />);
+        expect(asFragment()).toMatchSnapshot();
         expect(datastreamAgentsContentRowProps.agent).toEqual(props.agent);
     });
 });

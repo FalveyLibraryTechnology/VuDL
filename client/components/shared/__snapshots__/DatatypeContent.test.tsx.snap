@@ -1,42 +1,50 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatatypeContent renders audio tag on audio primaryType 1`] = `
-<div
-  className="viewContentAudio MuiBox-root css-0"
->
-  <audio
-    autoPlay={true}
-    controls={true}
-    preload="auto"
+<DocumentFragment>
+  <div
+    class="viewContentAudio MuiBox-root css-0"
   >
-    <source
-      src="testAudio"
-      type="audio/mpeg3"
-    />
-  </audio>
-</div>
+    <audio
+      autoplay=""
+      controls=""
+      preload="auto"
+    >
+      <source
+        src="testAudio"
+        type="audio/mpeg3"
+      />
+    </audio>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`DatatypeContent renders img on image primaryType 1`] = `
-<img
-  alt="Datastream Image"
-  className="viewContentImage"
-  src="test1"
-/>
+<DocumentFragment>
+  <img
+    alt="Datastream Image"
+    class="viewContentImage"
+    src="test1"
+  />
+</DocumentFragment>
 `;
 
 exports[`DatatypeContent renders object on application/pdf 1`] = `
-<object
-  className="viewContentObject"
-  data="testPdf"
-  type="application/pdf"
-/>
+<DocumentFragment>
+  <object
+    class="viewContentObject"
+    data="testPdf"
+    type="application/pdf"
+  />
+</DocumentFragment>
 `;
 
 exports[`DatatypeContent renders textarea on text primaryType 1`] = `
-<div
-  className="viewContentText MuiBox-root css-0"
->
-  testXml
-</div>
+<DocumentFragment>
+  <div
+    class="viewContentText MuiBox-root css-0"
+  >
+    testXml
+  </div>
+</DocumentFragment>
 `;

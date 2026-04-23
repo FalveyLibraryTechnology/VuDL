@@ -1,9 +1,7 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import ObjectOrder from "./ObjectOrder";
 
 const mockUseEditorContext = jest.fn();
@@ -24,7 +22,7 @@ describe("ObjectOrder", () => {
     let editorValues;
     let fetchContextValues;
     const pid = "foo:123";
-    beforeEach(() => {
+    beforeEach(async () => {
         editorValues = {
             state: {
                 objectDetailsStorage: {},
@@ -34,7 +32,9 @@ describe("ObjectOrder", () => {
                 removeFromObjectDetailsStorage: jest.fn(),
             },
         };
-        mockUseEditorContext.mockReturnValue(editorValues);
+        await act(async () => {
+            mockUseEditorContext.mockReturnValue(editorValues);
+        });
         fetchContextValues = {
             action: {
                 fetchJSON: jest.fn(),
@@ -48,18 +48,21 @@ describe("ObjectOrder", () => {
         jest.resetAllMocks();
     });
 
-    function checkSnapshot() {
-        const tree = renderer.create(<ObjectOrder pid={pid} />).toJSON();
-        expect(tree).toMatchSnapshot();
-    }
-
-    it("defaults to title order for a pending object", () => {
-        checkSnapshot();
+    it("defaults to title order for a pending object", async () => {
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<ObjectOrder pid={pid} />).asFragment;
+        });
+        expect(asFragment()).toMatchSnapshot();
     });
 
-    it("displays a custom-sorted object correctly", () => {
+    it("displays a custom-sorted object correctly", async () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, sortOn: "custom" };
-        checkSnapshot();
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<ObjectOrder pid={pid} />).asFragment;
+        });
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("can be aborted via confirmation dialog", async () => {

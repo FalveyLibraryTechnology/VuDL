@@ -1,29 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ObjectOrder defaults to title order for a pending object 1`] = `
-<div>
-  Current sort: 
-  title
-   
-  <button
-    onClick={[Function]}
-  >
-    Change to 
-    custom
-  </button>
-</div>
+<DocumentFragment>
+  <div>
+    Current sort: title 
+    <button>
+      Change to custom
+    </button>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`ObjectOrder displays a custom-sorted object correctly 1`] = `
-<div>
-  Current sort: 
-  custom
-   
-  <button
-    onClick={[Function]}
-  >
-    Change to 
-    title
-  </button>
-</div>
+<DocumentFragment>
+  <div>
+    Current sort: custom 
+    <button>
+      Change to title
+    </button>
+  </div>
+</DocumentFragment>
 `;

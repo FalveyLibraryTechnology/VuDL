@@ -10,21 +10,21 @@ describe("useGlobalContext", () => {
             expect(result.current.state.snackbarState).toEqual({
                 open: false,
                 message: "",
-                severity: "info"
+                severity: "info",
             });
 
             await act(async () => {
                 await result.current.action.setSnackbarState({
                     open: true,
                     message: "oh no!",
-                    severity: "error"
+                    severity: "error",
                 });
             });
 
             expect(result.current.state.snackbarState).toEqual({
                 open: true,
                 message: "oh no!",
-                severity: "error"
+                severity: "error",
             });
         });
     });

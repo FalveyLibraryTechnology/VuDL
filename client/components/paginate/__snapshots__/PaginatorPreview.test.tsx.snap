@@ -1,13 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`PaginatorPreview does not render image 1`] = `[Function]`;
+
 exports[`PaginatorPreview renders 1`] = `
-<div
-  className="preview"
->
-  <img
-    alt=""
-    className="preview-image"
-    src="testImage"
-  />
+<div>
+  <div
+    class="preview"
+  >
+    <img
+      alt=""
+      class="preview-image"
+      src="testImage"
+    />
+  </div>
 </div>
 `;

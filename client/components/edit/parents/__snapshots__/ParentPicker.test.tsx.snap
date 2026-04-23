@@ -1,68 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ParentPicker handles object loading errors gracefully 1`] = `
-[
-  "PidPicker: {"selected":""}",
-  <br />,
-  "Please select a valid PID.",
-]
+<DocumentFragment>
+  PidPicker: {"selected":""}
+  <br />
+  Please select a valid PID.
+</DocumentFragment>
 `;
 
 exports[`ParentPicker renders correctly with a selected but unloaded parent 1`] = `
-[
-  "ObjectLoader: {"pid":"foo:122"}",
-  "PidPicker: {"selected":"foo:122"}",
-  <br />,
-  "Please select a valid PID.",
-]
+<DocumentFragment>
+  ObjectLoader: {"pid":"foo:122"}PidPicker: {"selected":"foo:122"}
+  <br />
+  Please select a valid PID.
+</DocumentFragment>
 `;
 
 exports[`ParentPicker renders correctly with a selected, loaded, custom-sorted parent 1`] = `
-[
-  "ObjectLoader: {"pid":"foo:122"}",
-  "PidPicker: {"selected":"foo:122"}",
-  <br />,
+<DocumentFragment>
+  ObjectLoader: {"pid":"foo:122"}PidPicker: {"selected":"foo:122"}
+  <br />
   <div>
     <label>
       Position: 
       <input
-        onChange={[Function]}
         type="text"
         value=""
       />
     </label>
-    <button
-      onClick={[Function]}
-    >
+    <button>
       Set to Last Position in Parent
     </button>
-  </div>,
-  "Please enter a position.",
-]
+  </div>
+  Please enter a position.
+</DocumentFragment>
 `;
 
 exports[`ParentPicker renders correctly with a selected, loaded, title-sorted parent 1`] = `
-[
-  "ObjectLoader: {"pid":"foo:122"}",
-  "PidPicker: {"selected":"foo:122"}",
-  <br />,
-  <button
-    onClick={[Function]}
-  >
+<DocumentFragment>
+  ObjectLoader: {"pid":"foo:122"}PidPicker: {"selected":"foo:122"}
+  <br />
+  <button>
     Add Parent
-  </button>,
-  <button
-    onClick={[Function]}
-  >
+  </button>
+  <button>
     Move Here
-  </button>,
-]
+  </button>
+</DocumentFragment>
 `;
 
 exports[`ParentPicker renders correctly with no data loaded 1`] = `
-[
-  "PidPicker: {"selected":""}",
-  <br />,
-  "Please select a valid PID.",
-]
+<DocumentFragment>
+  PidPicker: {"selected":""}
+  <br />
+  Please select a valid PID.
+</DocumentFragment>
 `;

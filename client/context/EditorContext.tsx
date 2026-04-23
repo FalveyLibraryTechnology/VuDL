@@ -21,12 +21,12 @@ export interface ObjectDetails {
     pid: string;
     sortOn: string;
     state: string;
-};
+}
 
 interface ChildrenResultPage {
     numFound?: number;
     start?: number;
-    docs?: Record<string, string|string[]>[];
+    docs?: Record<string, string | string[]>[];
 }
 
 export interface FedoraDatastream {
@@ -53,14 +53,14 @@ export interface ChildCounts {
 interface EditorState {
     modelsCatalog: Record<string, FedoraModel>;
     licensesCatalog: Record<string, License>;
-    agentsCatalog: Record<string, Object>;
+    agentsCatalog: Record<string, object>;
     dublinCoreFieldCatalog: Record<string, Record<string, string>>;
     favoritePidsCatalog: Record<string, string>;
     trashPid: string | null;
     processMetadataDefaults: Record<string, string>;
     toolPresets: Array<Record<string, string>>;
     vufindUrl: string;
-    currentAgents: Array<Object>;
+    currentAgents: Array<object>;
     currentPid: string | null;
     activeDatastream: string | null;
     isDatastreamModalOpen: boolean;
@@ -111,9 +111,8 @@ export const DatastreamModalStates = {
     VIEW: "View",
     METADATA: "Metadata",
     DOWNLOAD: "Download",
-    DELETE: "Delete"
+    DELETE: "Delete",
 };
-
 
 const EditorContext = createContext({});
 
@@ -142,7 +141,7 @@ const reducerMapping: Record<string, string> = {
 /**
  * Update the shared states of react components.
  */
-const editorReducer = (state: EditorState, { type, payload }: { type: string, payload: unknown}) => {
+const editorReducer = (state: EditorState, { type, payload }: { type: string; payload: unknown }) => {
     if (type === "ADD_TO_OBJECT_DETAILS_STORAGE") {
         const { key, details } = payload as { key: string; details: ObjectDetails };
         const objectDetailsStorage = {
@@ -151,7 +150,7 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
         objectDetailsStorage[key] = details;
         return {
             ...state,
-            objectDetailsStorage
+            objectDetailsStorage,
         };
     } else if (type === "REMOVE_FROM_OBJECT_DETAILS_STORAGE") {
         const { key } = payload as { key: string };
@@ -161,7 +160,7 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
         delete objectDetailsStorage[key];
         return {
             ...state,
-            objectDetailsStorage
+            objectDetailsStorage,
         };
     } else if (type === "ADD_TO_PARENT_DETAILS_STORAGE") {
         const { shallow, key, details } = payload as { shallow: boolean; key: string; details: TreeNode };
@@ -174,7 +173,7 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
         };
         return {
             ...state,
-            parentDetailsStorage
+            parentDetailsStorage,
         };
     } else if (type === "REMOVE_FROM_PARENT_DETAILS_STORAGE") {
         const { key } = payload as { key: string };
@@ -184,7 +183,7 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
         delete parentDetailsStorage[key];
         return {
             ...state,
-            parentDetailsStorage
+            parentDetailsStorage,
         };
     } else if (type === "ADD_TO_CHILD_LIST_STORAGE") {
         const { key, children } = payload as { key: string; children: ChildrenResultPage };
@@ -194,17 +193,17 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
         childListStorage[key] = children;
         return {
             ...state,
-            childListStorage
+            childListStorage,
         };
     } else if (type === "ADD_TO_CHILD_COUNTS_STORAGE") {
-        const { key, counts }  = payload as { key: string, counts: ChildCounts };
+        const { key, counts } = payload as { key: string; counts: ChildCounts };
         const childCountsStorage = {
             ...state.childCountsStorage,
         };
         childCountsStorage[key] = counts;
         return {
             ...state,
-            childCountsStorage
+            childCountsStorage,
         };
     } else if (type === "CLEAR_PID_FROM_CHILD_LIST_STORAGE") {
         const { pid } = payload as { pid: string };
@@ -216,13 +215,13 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
         }
         return {
             ...state,
-            childListStorage
+            childListStorage,
         };
     } else if (type === "RESET_CHILD_LIST_STORAGE") {
         const childListStorage: Record<string, ChildrenResultPage> = {};
         return {
             ...state,
-            childListStorage
+            childListStorage,
         };
     } else if (type === "CLEAR_PID_FROM_CHILD_COUNTS_STORAGE") {
         const { pid } = payload as { pid: string };
@@ -234,12 +233,12 @@ const editorReducer = (state: EditorState, { type, payload }: { type: string, pa
         }
         return {
             ...state,
-            childCountsStorage
+            childCountsStorage,
         };
-    } else if(Object.keys(reducerMapping).includes(type)){
+    } else if (Object.keys(reducerMapping).includes(type)) {
         return {
             ...state,
-            [reducerMapping[type]]: payload
+            [reducerMapping[type]]: payload,
         };
     } else {
         console.error(`fetch action type: ${type} does not exist`);
@@ -255,10 +254,8 @@ export const EditorContextProvider = ({ children }) => {
 
 export const useEditorContext = () => {
     const {
-        action: {
-            fetchJSON, fetchText
-        }
-    }= useFetchContext();
+        action: { fetchJSON, fetchText },
+    } = useFetchContext();
     const {
         state: {
             currentAgents,
@@ -287,18 +284,20 @@ export const useEditorContext = () => {
 
     const currentDatastreams = objectDetailsStorage?.[currentPid]?.datastreams ?? [];
     const currentModels = objectDetailsStorage?.[currentPid]?.models ?? [];
-    const modelsDatastreams = currentModels.reduce((acc: Array<string>, model: string) => {
-        const name = model.split(":")?.[1];
-        return [
-            ...acc,
-            ...(name && modelsCatalog.hasOwnProperty(name) ? Object.keys(modelsCatalog[name].datastreams) : [])
-        ];
-    }, []).map((stream: string) => {
-        return {
-            disabled: !currentDatastreams.includes(stream),
-            stream
-        };
-    });
+    const modelsDatastreams = currentModels
+        .reduce((acc: Array<string>, model: string) => {
+            const name = model.split(":")?.[1];
+            return [
+                ...acc,
+                ...(name && modelsCatalog.hasOwnProperty(name) ? Object.keys(modelsCatalog[name].datastreams) : []),
+            ];
+        }, [])
+        .map((stream: string) => {
+            return {
+                disabled: !currentDatastreams.includes(stream),
+                stream,
+            };
+        });
 
     const addToObjectDetailsStorage = (key: string, details: ObjectDetails) => {
         dispatch({
@@ -331,28 +330,28 @@ export const useEditorContext = () => {
     const setCurrentAgents = (currentAgents) => {
         dispatch({
             type: "SET_CURRENT_AGENTS",
-            payload: currentAgents
+            payload: currentAgents,
         });
     };
 
     const setAgentsCatalog = (agentsCatalog) => {
         dispatch({
             type: "SET_AGENTS_CATALOG",
-            payload: agentsCatalog
+            payload: agentsCatalog,
         });
     };
 
     const setDublinCoreFieldCatalog = (dcCatalog: Record<string, Record<string, string>>) => {
         dispatch({
             type: "SET_DUBLIN_CORE_FIELD_CATALOG",
-            payload: dcCatalog
+            payload: dcCatalog,
         });
     };
 
     const setTopLevelPids = (pids: Array<string>) => {
         dispatch({
             type: "SET_TOP_LEVEL_PIDS",
-            payload: pids
+            payload: pids,
         });
     };
 
@@ -382,7 +381,7 @@ export const useEditorContext = () => {
         const url = getObjectDetailsUrl(pid);
         try {
             addToObjectDetailsStorage(pid, await fetchJSON(url));
-        } catch (e) {
+        } catch {
             if (errorCallback) {
                 errorCallback(pid);
             }
@@ -390,7 +389,11 @@ export const useEditorContext = () => {
         }
     };
 
-    const loadParentDetailsIntoStorage = async (pid: string, shallow = false, errorCallback: ((pid: string) => void) | null = null) => {
+    const loadParentDetailsIntoStorage = async (
+        pid: string,
+        shallow = false,
+        errorCallback: ((pid: string) => void) | null = null,
+    ) => {
         // Ignore null values:
         if (pid === null) {
             return;
@@ -398,7 +401,7 @@ export const useEditorContext = () => {
         const url = getObjectParentsUrl(pid, shallow);
         try {
             addToParentDetailsStorage(pid, await fetchJSON(url), shallow);
-        } catch (e) {
+        } catch {
             if (errorCallback) {
                 errorCallback(pid);
             }
@@ -411,28 +414,28 @@ export const useEditorContext = () => {
             type: "CLEAR_PID_FROM_CHILD_LIST_STORAGE",
             payload: { pid },
         });
-    }
+    };
 
     const resetChildListStorage = () => {
         dispatch({
             type: "RESET_CHILD_LIST_STORAGE",
             payload: {},
         });
-    }
+    };
 
     const clearPidFromChildCountsStorage = (pid: string) => {
         dispatch({
             type: "CLEAR_PID_FROM_CHILD_COUNTS_STORAGE",
             payload: { pid },
         });
-    }
+    };
 
     const loadChildrenIntoStorage = async (pid: string, page: number, pageSize: number) => {
         const key = getChildListStorageKey(pid, page, pageSize);
         const url = getObjectChildrenUrl(pid, (page - 1) * pageSize, pageSize);
         try {
             addToChildListStorage(key, await fetchJSON(url));
-        } catch (e) {
+        } catch {
             console.error("Problem fetching tree data from " + url);
         }
     };
@@ -441,7 +444,7 @@ export const useEditorContext = () => {
         const url = getObjectChildCountsUrl(pid);
         try {
             addToChildCountsStorage(pid, await fetchJSON(url));
-        } catch (e) {
+        } catch {
             console.error("Problem fetching child count data from " + url);
         }
     };
@@ -449,91 +452,91 @@ export const useEditorContext = () => {
     const setFavoritePidsCatalog = (favoritePidsCatalog: Record<string, string>) => {
         dispatch({
             type: "SET_FAVORITE_PIDS_CATALOG",
-            payload: favoritePidsCatalog
+            payload: favoritePidsCatalog,
         });
-    }
+    };
 
     const setTrashPid = (trashPid: string) => {
         dispatch({
             type: "SET_TRASH_PID",
-            payload: trashPid
+            payload: trashPid,
         });
-    }
+    };
 
     const setProcessMetadataDefaults = (defaults: Record<string, string>) => {
         dispatch({
             type: "SET_PROCESS_METADATA_DEFAULTS",
-            payload: defaults
+            payload: defaults,
         });
-    }
+    };
 
     const setToolPresets = (toolPresets: Array<Record<string, string>>) => {
         dispatch({
             type: "SET_TOOL_PRESETS",
-            payload: toolPresets
+            payload: toolPresets,
         });
-    }
+    };
 
     const setVuFindUrl = (url: string) => {
         dispatch({
             type: "SET_VUFIND_URL",
-            payload: url
+            payload: url,
         });
     };
 
     const setModelsCatalog = (modelsCatalog: Record<string, FedoraModel>) => {
         dispatch({
             type: "SET_MODELS_CATALOG",
-            payload: modelsCatalog
+            payload: modelsCatalog,
         });
     };
 
     const setLicensesCatalog = (licensesCatalog: Record<string, License>) => {
         dispatch({
             type: "SET_LICENSES_CATALOG",
-            payload: licensesCatalog
+            payload: licensesCatalog,
         });
     };
 
     const setCurrentPid = (pid: string) => {
         dispatch({
             type: "SET_CURRENT_PID",
-            payload: pid
+            payload: pid,
         });
     };
 
     const setDatastreamModalState = (datastreamModalState: boolean) => {
         dispatch({
             type: "SET_DATASTREAM_MODAL_STATE",
-            payload: datastreamModalState
+            payload: datastreamModalState,
         });
     };
 
     const setParentsModalActivePid = (pid: string) => {
         dispatch({
             type: "SET_PARENTS_MODAL_ACTIVE_PID",
-            payload: pid
+            payload: pid,
         });
     };
 
     const setStateModalActivePid = (pid: string) => {
         dispatch({
             type: "SET_STATE_MODAL_ACTIVE_PID",
-            payload: pid
+            payload: pid,
         });
     };
 
     const setActiveDatastream = (datastream: string) => {
         dispatch({
             type: "SET_ACTIVE_DATASTREAM",
-            payload: datastream
-        })
+            payload: datastream,
+        });
     };
 
     const datastreamsCatalog = Object.values(modelsCatalog).reduce((acc: Record<string, FedoraDatastream>, model) => {
         return {
             ...acc,
-            ...(model as FedoraModel).datastreams
+            ...(model as FedoraModel).datastreams,
         };
     }, {});
 
@@ -550,7 +553,7 @@ export const useEditorContext = () => {
             setDublinCoreFieldCatalog(response.dublinCoreFields || {});
             setTopLevelPids(response.topLevelPids || []);
             setVuFindUrl(response.vufindUrl ?? "");
-        } catch(err) {
+        } catch {
             console.error(`Problem fetching object catalog from ${editObjectCatalogUrl}`);
         }
     };
@@ -562,9 +565,14 @@ export const useEditorContext = () => {
     const extractFirstMetadataValue = function (field: string, defaultValue: string): string {
         const currentMetadata = objectDetailsStorage?.[currentPid]?.metadata ?? {};
         return utilExtractFirstMetadataValue(currentMetadata, field, defaultValue);
-    }
+    };
 
-    const updateSingleObjectState = async (pid: string, newState: string, setStatusMessage: (msg: string) => void, remaining: number = 0): Promise<string> => {
+    const updateSingleObjectState = async (
+        pid: string,
+        newState: string,
+        setStatusMessage: (msg: string) => void,
+        remaining: number = 0,
+    ): Promise<string> => {
         setStatusMessage(`Saving status for ${pid} (${remaining} more remaining)...`);
         const target = getObjectStateUrl(pid);
         const result = await fetchText(target, { method: "PUT", body: newState });
@@ -575,16 +583,32 @@ export const useEditorContext = () => {
         return result;
     };
 
-    const saveObjectStateForChildPage = async (response, newState: string, found: number, total: number, setStatusMessage: (msg: string) => void): Promise<boolean> => {
+    const saveObjectStateForChildPage = async (
+        response,
+        newState: string,
+        found: number,
+        total: number,
+        setStatusMessage: (msg: string) => void,
+    ): Promise<boolean> => {
         for (let i = 0; i < response.docs.length; i++) {
-            const result = await updateSingleObjectState(response.docs[i].id, newState, setStatusMessage, total - (found + i));
+            const result = await updateSingleObjectState(
+                response.docs[i].id,
+                newState,
+                setStatusMessage,
+                total - (found + i),
+            );
             if (result !== "ok") {
                 throw new Error(`Status failed to save; "${result}"`);
             }
         }
     };
 
-    const applyObjectStateToChildren = async (pid: string, newState: string, expectedTotal: number, setStatusMessage: (msg: string) => void): Promise<boolean> => {
+    const applyObjectStateToChildren = async (
+        pid: string,
+        newState: string,
+        expectedTotal: number,
+        setStatusMessage: (msg: string) => void,
+    ): Promise<boolean> => {
         const childPageSize = 1000;
         let found = 0;
         while (found < expectedTotal) {
@@ -604,15 +628,20 @@ export const useEditorContext = () => {
      * @param setStatusMessage   Callback function to display status messages as we work
      * @returns An array for updating snackbar messages (first element = message, second element = level)
      */
-    const updateObjectState = async function (pid: string, newState: string, expectedChildCount: number = 0, setStatusMessage: (msg: string) => void): Promise<Array<string>> {
+    const updateObjectState = async function (
+        pid: string,
+        newState: string,
+        expectedChildCount: number = 0,
+        setStatusMessage: (msg: string) => void,
+    ): Promise<Array<string>> {
         if (expectedChildCount > 0) {
             await applyObjectStateToChildren(pid, newState, expectedChildCount, setStatusMessage);
         }
         const result = await updateSingleObjectState(pid, newState, setStatusMessage);
-        return (result === "ok")
+        return result === "ok"
             ? ["Status saved successfully.", "success"]
             : [`Status failed to save; "${result}"`, "error"];
-    }
+    };
 
     /**
      * Attach a child object to the specified parent.
@@ -754,10 +783,10 @@ export const useEditorContext = () => {
             getParentCountForPid,
         },
     };
-}
+};
 
 export default {
     EditorContextProvider,
     DatastreamModalStates,
-    useEditorContext
-}
+    useEditorContext,
+};

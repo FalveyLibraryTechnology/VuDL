@@ -1,11 +1,9 @@
-import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import DatastreamProcessMetadataContent from "./DatastreamProcessMetadataContent";
 import { waitFor } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 
 const mockUseGlobalContext = jest.fn();
 jest.mock("../../../context/GlobalContext", () => ({
@@ -71,27 +69,13 @@ describe("DatastreamProcessMetadataContent", () => {
         datastreamOperationValues.getProcessMetadata.mockResolvedValue(fakeData);
         processMetadataValues.state = fakeData;
 
-        render(<DatastreamProcessMetadataContent />);
-
-        await waitFor(() => expect(processMetadataValues.action.setMetadata).toHaveBeenCalledWith(fakeData));
-    };
-
-    const getRenderedTree = async (fakeData = {}, extraStep: (() => void) | null = null) => {
-        datastreamOperationValues.getProcessMetadata.mockResolvedValue(fakeData);
-        processMetadataValues.state = fakeData;
-
-        const tree = renderer.create(<DatastreamProcessMetadataContent />);
-
-        await renderer.act(async () => {
-            await waitFor(() => expect(processMetadataValues.action.setMetadata).toHaveBeenCalledWith(fakeData));
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<DatastreamProcessMetadataContent />).asFragment;
         });
 
-        if (extraStep) {
-            await renderer.act(async () => {
-                extraStep();
-            });
-        }
-        return tree.toJSON();
+        await waitFor(() => expect(processMetadataValues.action.setMetadata).toHaveBeenCalledWith(fakeData));
+        expect(asFragment()).toMatchSnapshot();
     };
 
     beforeEach(() => {
@@ -133,30 +117,28 @@ describe("DatastreamProcessMetadataContent", () => {
         jest.clearAllMocks();
     });
 
-    it("renders a loading message if content is unavailable", () => {
+    it("renders a loading message if content is unavailable", async () => {
         datastreamOperationValues.getProcessMetadata.mockResolvedValue({});
-        const tree = renderer.create(<DatastreamProcessMetadataContent />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = await act(async () => render(<DatastreamProcessMetadataContent />));
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders a form when empty data is loaded", async () => {
-        const tree = await getRenderedTree();
+        await renderComponent();
         expect(processMetadataValues.action.addTask).toHaveBeenCalledWith(0);
-        expect(tree).toMatchSnapshot();
     });
 
     it("supports tab switching", async () => {
-        const tree = await getRenderedTree({}, () => {
+        await renderComponent({}, () => {
             if (tabChangeFunction) {
                 tabChangeFunction(null, 1);
             }
         });
         expect(processMetadataValues.action.addTask).toHaveBeenCalledWith(0);
-        expect(tree).toMatchSnapshot();
     });
 
     it("renders a form when non-empty data is loaded", async () => {
-        const tree = await getRenderedTree({
+        await renderComponent({
             processLabel: "label",
             processCreator: "creator",
             processDateTime: "datetime",
@@ -164,7 +146,6 @@ describe("DatastreamProcessMetadataContent", () => {
             tasks: [{ id: 1 }, { id: 2 }],
         });
         expect(processMetadataValues.action.addTask).not.toHaveBeenCalled();
-        expect(tree).toMatchSnapshot();
     });
 
     it("has a working save button", async () => {
@@ -177,7 +158,9 @@ describe("DatastreamProcessMetadataContent", () => {
         await renderComponent();
         expect(pidPickerFunction).not.toBeNull();
         await act(async () => {
-            pidPickerFunction && pidPickerFunction("");
+            if (pidPickerFunction) {
+                pidPickerFunction("");
+            }
         });
         expect(editorContext.action.loadObjectDetailsIntoStorage).not.toHaveBeenCalled();
     });
@@ -193,7 +176,9 @@ describe("DatastreamProcessMetadataContent", () => {
         );
         expect(pidPickerFunction).not.toBeNull();
         await act(async () => {
-            pidPickerFunction && pidPickerFunction("foo:123");
+            if (pidPickerFunction) {
+                pidPickerFunction("foo:123");
+            }
         });
         expect(alertSpy).toHaveBeenCalledWith("Cannot load PID: foo:123");
     });
@@ -202,7 +187,9 @@ describe("DatastreamProcessMetadataContent", () => {
         await renderComponent();
         expect(pidPickerFunction).not.toBeNull();
         await act(async () => {
-            pidPickerFunction && pidPickerFunction("foo:123");
+            if (pidPickerFunction) {
+                pidPickerFunction("foo:123");
+            }
         });
         expect(editorContext.action.loadObjectDetailsIntoStorage).toHaveBeenCalledWith("foo:123", expect.anything());
     });
@@ -217,7 +204,9 @@ describe("DatastreamProcessMetadataContent", () => {
         await renderComponent();
         expect(pidPickerFunction).not.toBeNull();
         await act(async () => {
-            pidPickerFunction && pidPickerFunction("foo:123");
+            if (pidPickerFunction) {
+                pidPickerFunction("foo:123");
+            }
         });
         await userEvent.setup().click(screen.getByText("Clone"));
         expect(alertSpy).toHaveBeenCalledWith("foo:123 does not contain a PROCESS-MD datastream.");
@@ -232,7 +221,9 @@ describe("DatastreamProcessMetadataContent", () => {
         await renderComponent();
         expect(pidPickerFunction).not.toBeNull();
         await act(async () => {
-            pidPickerFunction && pidPickerFunction("foo:123");
+            if (pidPickerFunction) {
+                pidPickerFunction("foo:123");
+            }
         });
         await userEvent.setup().click(screen.getByText("Clone"));
         expect(datastreamOperationValues.getProcessMetadata).toHaveBeenCalledWith("foo:123", true);

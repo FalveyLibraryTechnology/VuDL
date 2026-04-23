@@ -1,6 +1,4 @@
-import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ParentsModal from "./ParentsModal";
@@ -50,22 +48,22 @@ describe("ParentsModal", () => {
     });
 
     it("renders correctly for a non-loaded PID", () => {
-        const tree = renderer.create(<ParentsModal />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ParentsModal />);
+        expect(asFragment()).toMatchSnapshot();
         expect(globalValues.action.isModalOpen).toHaveBeenCalledWith("parents");
     });
 
     it("renders correctly for a loaded PID", () => {
         editorValues.state.objectDetailsStorage[pid] = { pid };
-        const tree = renderer.create(<ParentsModal />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ParentsModal />);
+        expect(asFragment()).toMatchSnapshot();
         expect(globalValues.action.isModalOpen).toHaveBeenCalledWith("parents");
     });
 
     it("renders correctly when PID is unset", () => {
         editorValues.state.parentsModalActivePid = null;
-        const tree = renderer.create(<ParentsModal />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ParentsModal />);
+        expect(asFragment()).toMatchSnapshot();
         expect(globalValues.action.isModalOpen).toHaveBeenCalledWith("parents");
     });
 

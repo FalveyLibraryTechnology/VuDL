@@ -1,59 +1,54 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ObjectEditor renders 1`] = `
-<div>
-  Breadcrumbs
-  <h1>
-    Editor: Object 
-    foo:123
-  </h1>
-  ObjectSummary
-  <div
-    className="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
-  >
+<DocumentFragment>
+  <div>
+    Breadcrumbs
+    <h1>
+      Editor: Object foo:123
+    </h1>
+    ObjectSummary
     <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-md-true css-ehu4kr-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row css-d64g0g-MuiGrid-root"
     >
       <div
-        className="MuiBox-root css-0"
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-md-grow css-gmajdv-MuiGrid-root"
       >
-        <h3>
-          Object Tools
-        </h3>
-        <ul>
-          <li>
-            <a
-              href="/edit/object/foo:123/newChild"
-              onClick={[Function]}
-              onMouseEnter={[Function]}
-              onTouchStart={[Function]}
-            >
-              Create New Child Object
-            </a>
-          </li>
-        </ul>
+        <div
+          class="MuiBox-root css-0"
+        >
+          <h3>
+            Object Tools
+          </h3>
+          <ul>
+            <li>
+              <a
+                href="/edit/object/foo:123/newChild"
+              >
+                Create New Child Object
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-md-true css-ehu4kr-MuiGrid-root"
-    >
       <div
-        className="MuiBox-root css-0"
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-md-grow css-gmajdv-MuiGrid-root"
       >
-        <h3>
-          Datastreams
-        </h3>
-        DatastreamList
+        <div
+          class="MuiBox-root css-0"
+        >
+          <h3>
+            Datastreams
+          </h3>
+          DatastreamList
+        </div>
       </div>
     </div>
+    DatastreamModalParentsModalStateModal
+    <h2>
+      Contents
+    </h2>
+    ChildListEditorSnackbar
   </div>
-  DatastreamModal
-  ParentsModal
-  StateModal
-  <h2>
-    Contents
-  </h2>
-  ChildList
-  EditorSnackbar
-</div>
+</DocumentFragment>
 `;

@@ -1,6 +1,5 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import ObjectEditor from "./ObjectEditor";
 
 const mockUseEditorContext = jest.fn();
@@ -31,14 +30,12 @@ describe("ObjectEditor", () => {
         mockUseEditorContext.mockReturnValue(editorValues);
     });
     it("renders", () => {
-        const tree = renderer.create(<ObjectEditor pid="foo:123" />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ObjectEditor pid="foo:123" />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("calls initializeCatalog", () => {
-        renderer.act(() => {
-            renderer.create(<ObjectEditor pid="foo:123" />);
-        });
+        render(<ObjectEditor pid="foo:123" />);
         expect(editorValues.action.initializeCatalog).toHaveBeenCalled();
         expect(editorValues.action.setCurrentPid).toHaveBeenCalledWith("foo:123");
         expect(editorValues.action.loadCurrentObjectDetails).toHaveBeenCalled();

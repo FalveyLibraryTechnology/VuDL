@@ -1,8 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import renderer from "react-test-renderer";
 import ChildPosition from "./ChildPosition";
 
 const mockUseEditorContext = jest.fn();
@@ -46,24 +44,24 @@ describe("ChildPosition", () => {
     it("renders correctly when no sort or sequence exists", () => {
         editorValues.state.objectDetailsStorage[pid] = { pid };
         editorValues.state.objectDetailsStorage[parentPid] = { pid: parentPid };
-        const tree = renderer.create(<ChildPosition pid={pid} parentPid={parentPid} />).toJSON();
-        expect(tree).toBeNull();
+        const { asFragment } = render(<ChildPosition pid={pid} parentPid={parentPid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders correctly when a sequence exists and parent is not custom sorted", () => {
         const sequences = [`${parentPid}#73`];
         editorValues.state.objectDetailsStorage[pid] = { pid, sequences };
         editorValues.state.objectDetailsStorage[parentPid] = { pid: parentPid, sortOn: "title" };
-        const tree = renderer.create(<ChildPosition pid={pid} parentPid={parentPid} />).toJSON();
-        expect(tree).toBeNull();
+        const { asFragment } = render(<ChildPosition pid={pid} parentPid={parentPid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders correctly when a sequence exists and parent is custom sorted", () => {
         const sequences = [`${parentPid}#73`];
         editorValues.state.objectDetailsStorage[pid] = { pid, sequences };
         editorValues.state.objectDetailsStorage[parentPid] = { pid: parentPid, sortOn: "custom" };
-        const tree = renderer.create(<ChildPosition pid={pid} parentPid={parentPid} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ChildPosition pid={pid} parentPid={parentPid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("saves changes when the input is changed", async () => {

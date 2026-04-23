@@ -1,32 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ObjectLoader renders correctly for a loaded object 1`] = `<DocumentFragment />`;
+
 exports[`ObjectLoader renders correctly for a pending object 1`] = `
-[
-  " ",
+<DocumentFragment>
+   
   <span
-    className="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-18lrjg1-MuiCircularProgress-root"
+    class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-1wxecgq-MuiCircularProgress-root"
     role="progressbar"
-    style={
-      {
-        "height": "1em",
-        "width": "1em",
-      }
-    }
+    style="width: 1em; height: 1em;"
   >
     <svg
-      className="MuiCircularProgress-svg css-1idz92c-MuiCircularProgress-svg"
+      class="MuiCircularProgress-svg css-54pwck-MuiCircularProgress-svg"
       viewBox="22 22 44 44"
     >
       <circle
-        className="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-176wh8e-MuiCircularProgress-circle"
-        cx={44}
-        cy={44}
+        class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-19t5dcl-MuiCircularProgress-circle"
+        cx="44"
+        cy="44"
         fill="none"
-        r={20.2}
-        strokeWidth={3.6}
-        style={{}}
+        r="20.2"
+        stroke-width="3.6"
       />
     </svg>
-  </span>,
-]
+  </span>
+</DocumentFragment>
 `;

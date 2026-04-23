@@ -1,9 +1,7 @@
-import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import ParentPicker from "./ParentPicker";
 import { waitFor } from "@testing-library/dom";
 
@@ -78,27 +76,27 @@ describe("ParentPicker", () => {
     });
 
     it("renders correctly with no data loaded", () => {
-        const tree = renderer.create(<ParentPicker pid={pid} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<ParentPicker pid={pid} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders correctly with a selected but unloaded parent", async () => {
-        const tree = renderer.create(<ParentPicker pid={pid} />);
-        renderer.act(() => {
+        const { asFragment } = render(<ParentPicker pid={pid} />);
+        act(() => {
             setSelected(parentPid);
         });
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders correctly with a selected, loaded, title-sorted parent", async () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "title",
         };
-        const tree = renderer.create(<ParentPicker pid={pid} />);
-        renderer.act(() => {
+        const { asFragment } = render(<ParentPicker pid={pid} />);
+        act(() => {
             setSelected(parentPid);
         });
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("adds a title-sorted parent", async () => {
@@ -228,11 +226,11 @@ describe("ParentPicker", () => {
         editorValues.state.objectDetailsStorage[parentPid] = {
             sortOn: "custom",
         };
-        const tree = renderer.create(<ParentPicker pid={pid} />);
-        renderer.act(() => {
+        const { asFragment } = render(<ParentPicker pid={pid} />);
+        act(() => {
             setSelected(parentPid);
         });
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("adds a custom-sorted parent with manual position entry", async () => {
@@ -306,19 +304,20 @@ describe("ParentPicker", () => {
     });
 
     it("handles object loading errors gracefully", async () => {
-        const tree = renderer.create(<ParentPicker pid={pid} />);
-        await renderer.act(async () => {
+        const { asFragment } = render(<ParentPicker pid={pid} />);
+        act(() => {
             setSelected(parentPid);
         });
-        await renderer.act(async () => {
+        act(() => {
             errorCallback(parentPid);
         });
+
         await waitFor(() => expect(globalValues.action.setSnackbarState).toHaveBeenCalled());
         expect(globalValues.action.setSnackbarState).toHaveBeenCalledWith({
             message: "Cannot load details for foo:122. Are you sure this is a valid PID?",
             open: true,
             severity: "error",
         });
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 });

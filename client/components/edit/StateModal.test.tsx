@@ -1,9 +1,7 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import StateModal from "./StateModal";
 
 const mockUseGlobalContext = jest.fn();
@@ -85,47 +83,47 @@ describe("StateModal", () => {
         jest.resetAllMocks();
     });
 
-    it("renders correctly when closed", () => {
+    it("renders correctly when closed", async () => {
         globalValues.action.isModalOpen.mockReturnValue(false);
-        let tree;
-        renderer.act(() => {
-            tree = renderer.create(<StateModal />);
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<StateModal />).asFragment;
         });
         expect(globalValues.action.isModalOpen).toHaveBeenCalledWith("state");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
-    it("renders correctly for a pending object", () => {
-        let tree;
-        renderer.act(() => {
-            tree = renderer.create(<StateModal />);
+    it("renders correctly for a pending object", async () => {
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<StateModal />).asFragment;
         });
         expect(globalValues.action.isModalOpen).toHaveBeenCalledWith("state");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders correctly for a loaded object with children", async () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, state: "Active" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 100 });
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(<StateModal />);
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<StateModal />).asFragment;
         });
         await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
         expect(globalValues.action.isModalOpen).toHaveBeenCalledWith("state");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders correctly for a loaded object without children", async () => {
         editorValues.state.objectDetailsStorage[pid] = { pid, state: "Active" };
         fetchContextValues.action.fetchJSON.mockResolvedValue({ numFound: 0 });
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(<StateModal />);
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<StateModal />).asFragment;
         });
         await waitFor(() => expect(fetchContextValues.action.fetchJSON).toHaveBeenCalled());
         expect(globalValues.action.isModalOpen).toHaveBeenCalledWith("state");
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("saves data correctly", async () => {

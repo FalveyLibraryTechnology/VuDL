@@ -1,12 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`JobClickable renders 1`] = `
-<a
-  href="/paginate/testCategory/testChildren"
-  onClick={[Function]}
-  onMouseEnter={[Function]}
-  onTouchStart={[Function]}
->
-  testChildren
-</a>
+<DocumentFragment>
+  <a
+    href="/paginate/testCategory/testChildren"
+  >
+    testChildren
+  </a>
+</DocumentFragment>
 `;

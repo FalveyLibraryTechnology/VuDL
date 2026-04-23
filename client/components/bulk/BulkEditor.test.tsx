@@ -1,8 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import renderer from "react-test-renderer";
 import BulkEditor from "./BulkEditor";
 
 const mockUseEditorContext = jest.fn();
@@ -46,8 +44,8 @@ describe("BulkEditor", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<BulkEditor />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<BulkEditor />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("reports failure if it receives bad JSON", async () => {

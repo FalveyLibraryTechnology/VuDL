@@ -1,7 +1,7 @@
-import React from "react";
 import { beforeEach, describe, expect, it } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render, screen } from "@testing-library/react";
 import PaginatorPreview from "./PaginatorPreview";
+import { act } from "react";
 
 describe("PaginatorPreview", () => {
     let props;
@@ -12,15 +12,22 @@ describe("PaginatorPreview", () => {
         };
     });
 
-    it("renders", () => {
-        const tree = renderer.create(<PaginatorPreview {...props} />).toJSON();
-        expect(tree).toMatchSnapshot();
-        expect(tree.children[0].props.className).toEqual("preview-image");
+    it("renders", async () => {
+        let container;
+        await act(async () => {
+            container = render(<PaginatorPreview {...props} />).container;
+        });
+        expect(container.innerHTML).toContain("preview-image");
+        expect(container).toMatchSnapshot();
     });
 
-    it("does not render image", () => {
+    it("does not render image", async () => {
         props.img = "";
-        const tree = renderer.create(<PaginatorPreview {...props} />).toJSON();
-        expect(JSON.stringify(tree).includes("preview-image")).toBeFalsy();
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<PaginatorPreview {...props} />).asFragment;
+        });
+        expect(screen.queryByRole("img")).not.toBeInTheDocument();
+        expect(asFragment).toMatchSnapshot();
     });
 });

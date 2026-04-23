@@ -1,8 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import EditorSnackbar from "./EditorSnackbar";
 
 const mockUseGlobalContext = jest.fn();
@@ -32,14 +30,12 @@ describe("EditorSnackbar", () => {
     });
 
     it("renders", () => {
-        const tree = renderer
-            .create(<EditorSnackbar />, {
-                createNodeMock: (node: Node) => {
-                    return document.createElement(node.type);
-                },
-            })
-            .toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<EditorSnackbar />, {
+            createNodeMock: (node: Node) => {
+                return document.createElement(node.type);
+            },
+        });
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("closes", async () => {

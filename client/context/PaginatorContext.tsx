@@ -52,7 +52,7 @@ const paginatorReducer = (state, { type, payload }) => {
 };
 
 interface PaginatorContextProviderProps {
-    children: ReactNode
+    children: ReactNode;
 }
 
 export const PaginatorContextProvider = ({ children }: PaginatorContextProviderProps) => {
@@ -214,12 +214,12 @@ export const usePaginatorContext = () => {
                 alert(
                     `Derivative images have not been generated yet. Please` +
                         ` go back to the main menu and hit the "build" button` +
-                        ` for this job before publishing it.`
+                        ` for this job before publishing it.`,
                 );
                 return false;
             }
             return window.confirm(
-                "Are you sure you wish to publish this job? You will not be able to make any further edits."
+                "Are you sure you wish to publish this job? You will not be able to make any further edits.",
             );
         }
         return true;
@@ -240,12 +240,12 @@ export const usePaginatorContext = () => {
                     },
                     {
                         "Content-Type": "application/json",
-                    }
+                    },
                 );
                 alert("Success!");
                 window.location.assign("/paginate"); // TODO: Route better?
                 dispatchEvent(new Event("Prep.saved"));
-            } catch (error) {
+            } catch {
                 alert("Unable to save!");
             }
         }

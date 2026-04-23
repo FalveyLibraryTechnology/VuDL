@@ -38,10 +38,10 @@ const JobPaginator = ({ initialCategory, initialJob }: JobPaginatorProps): React
                 </li>
             </ul>
             <Grid container id="paginator">
-                <Grid item xs={6}>
+                <Grid size={6}>
                     <JobPaginatorZoomToggle />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                     <PaginatorControls />
                     <PaginatorList />
                 </Grid>

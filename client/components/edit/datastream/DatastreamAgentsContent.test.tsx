@@ -1,9 +1,7 @@
-import React from "react";
 import { describe, beforeEach, afterEach, expect, it, jest } from "@jest/globals";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { act } from "react-dom/test-utils";
-import renderer from "react-test-renderer";
+import { act } from "react";
 import DatastreamAgentsContent from "./DatastreamAgentsContent";
 
 const mockDatastreamAgentsModifyContentRow = jest.fn();
@@ -94,27 +92,29 @@ describe("DatastreamAgentsContent", () => {
 
     it("renders, and calls getAgents on render", async () => {
         datastreamOperationValues.getAgents.mockResolvedValue([]);
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(<DatastreamAgentsContent />);
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<DatastreamAgentsContent />).asFragment;
         });
         await waitFor(() => expect(datastreamOperationValues.getAgents).toHaveBeenCalled());
         expect(editorValues.action.setCurrentAgents).toHaveBeenCalled();
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("supports tab switching", async () => {
         datastreamOperationValues.getAgents.mockResolvedValue([]);
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(<DatastreamAgentsContent />);
+        let asFragment;
+        await act(async () => {
+            asFragment = render(<DatastreamAgentsContent />).asFragment;
         });
         await waitFor(() => expect(datastreamOperationValues.getAgents).toHaveBeenCalled());
-        await renderer.act(async () => {
-            tabChangeFunction && tabChangeFunction(null, 1);
+        await act(async () => {
+            if (tabChangeFunction) {
+                tabChangeFunction(null, 1);
+            }
         });
         expect(editorValues.action.setCurrentAgents).toHaveBeenCalled();
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("saves current changes on save changes click", async () => {
@@ -157,7 +157,9 @@ describe("DatastreamAgentsContent", () => {
         await renderComponent();
         expect(pidPickerFunction).not.toBeNull();
         await act(async () => {
-            pidPickerFunction && pidPickerFunction("");
+            if (pidPickerFunction) {
+                pidPickerFunction("");
+            }
         });
         expect(editorValues.action.loadObjectDetailsIntoStorage).not.toHaveBeenCalled();
     });
@@ -174,7 +176,9 @@ describe("DatastreamAgentsContent", () => {
         );
         expect(pidPickerFunction).not.toBeNull();
         await act(async () => {
-            pidPickerFunction && pidPickerFunction("foo:123");
+            if (pidPickerFunction) {
+                pidPickerFunction("foo:123");
+            }
         });
         expect(alertSpy).toHaveBeenCalledWith("Cannot load PID: foo:123");
     });
@@ -184,7 +188,9 @@ describe("DatastreamAgentsContent", () => {
         await renderComponent();
         expect(pidPickerFunction).not.toBeNull();
         await act(async () => {
-            pidPickerFunction && pidPickerFunction("foo:123");
+            if (pidPickerFunction) {
+                pidPickerFunction("foo:123");
+            }
         });
         expect(editorValues.action.loadObjectDetailsIntoStorage).toHaveBeenCalledWith("foo:123", expect.anything());
     });
@@ -200,7 +206,9 @@ describe("DatastreamAgentsContent", () => {
         await renderComponent();
         expect(pidPickerFunction).not.toBeNull();
         await act(async () => {
-            pidPickerFunction && pidPickerFunction("foo:123");
+            if (pidPickerFunction) {
+                pidPickerFunction("foo:123");
+            }
         });
         await userEvent.setup().click(screen.getByText("Clone"));
         expect(alertSpy).toHaveBeenCalledWith("foo:123 does not contain an AGENTS datastream.");
@@ -216,7 +224,9 @@ describe("DatastreamAgentsContent", () => {
         await renderComponent();
         expect(pidPickerFunction).not.toBeNull();
         await act(async () => {
-            pidPickerFunction && pidPickerFunction("foo:123");
+            if (pidPickerFunction) {
+                pidPickerFunction("foo:123");
+            }
         });
         await userEvent.setup().click(screen.getByText("Clone"));
         expect(datastreamOperationValues.getAgents).toHaveBeenCalledWith("foo:123", true);

@@ -37,10 +37,8 @@ const ParentsModal = (): React.ReactElement => {
         <Dialog className="parentsModal" open={isModalOpen("parents")} onClose={closeParentModal} fullWidth={true}>
             <DialogTitle>
                 <Grid container>
-                    <Grid item xs={11}>
-                        Parents Editor ({parentsModalActivePid})
-                    </Grid>
-                    <Grid item xs={1}>
+                    <Grid size={11}>Parents Editor ({parentsModalActivePid})</Grid>
+                    <Grid size={1}>
                         <IconButton className="closeButton" onClick={closeParentModal}>
                             <CloseIcon />
                         </IconButton>

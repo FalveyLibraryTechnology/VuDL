@@ -1,8 +1,7 @@
 import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import renderer from "react-test-renderer";
 import DatastreamDublinCoreEditField from "./DatastreamDublinCoreEditField";
 
 jest.mock(
@@ -54,33 +53,33 @@ describe("DatastreamDublinCoreEditField", () => {
     });
 
     it("renders a text field", () => {
-        const tree = renderer.create(getField()).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(getField());
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders an html field", () => {
         fieldType = "html";
-        const tree = renderer.create(getField()).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(getField());
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders an unknown field", () => {
         fieldType = "unknown";
-        const tree = renderer.create(getField()).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(getField());
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders a locked field", () => {
         fieldType = "locked";
-        const tree = renderer.create(getField()).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(getField());
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders a dropdown field", () => {
         fieldType = "dropdown";
         legalValues = ["foo", "bar", "baz"];
-        const tree = renderer.create(getField()).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(getField());
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("changes the dropdown value", () => {
@@ -96,8 +95,8 @@ describe("DatastreamDublinCoreEditField", () => {
 
     it("renders a dropdown field with an unexpected value", () => {
         fieldType = "dropdown";
-        const tree = renderer.create(getField()).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(getField());
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("saves the HTML editor output", () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import DatastreamList from "./DatastreamList";
 
 const mockUseEditorContext = jest.fn();
@@ -30,8 +30,8 @@ describe("DatastreamList", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<DatastreamList />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<DatastreamList />);
+        expect(asFragment()).toMatchSnapshot();
         expect(mockDatastream).toHaveBeenCalledWith({
             datastream: { stream: "test0", disabled: false },
         });

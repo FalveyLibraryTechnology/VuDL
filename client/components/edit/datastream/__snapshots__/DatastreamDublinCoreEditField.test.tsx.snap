@@ -1,19 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatastreamDublinCoreEditField renders a dropdown field 1`] = `
-[
-  "FormControl",
+<DocumentFragment>
+  FormControl
   <div
-    className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiNativeSelect-root css-bz5ng3-MuiInputBase-root-MuiInput-root"
-    onClick={[Function]}
+    class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiNativeSelect-root css-1cmet5c-MuiInputBase-root-MuiInput-root"
   >
     <select
-      className="MuiNativeSelect-select MuiNativeSelect-standard MuiInputBase-input MuiInput-input css-1dmqq7i-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
-      onAnimationStart={[Function]}
-      onBlur={[Function]}
-      onChange={[Function]}
-      onFocus={[Function]}
-      value="foo"
+      class="MuiNativeSelect-select MuiNativeSelect-standard MuiInputBase-input MuiInput-input css-1xaqj7c-MuiNativeSelect-root-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
     >
       <option
         value="foo"
@@ -32,8 +26,8 @@ exports[`DatastreamDublinCoreEditField renders a dropdown field 1`] = `
       </option>
     </select>
     <svg
-      aria-hidden={true}
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiNativeSelect-icon MuiNativeSelect-iconStandard css-10bey84-MuiSvgIcon-root-MuiNativeSelect-icon"
+      aria-hidden="true"
+      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiNativeSelect-icon MuiNativeSelect-iconStandard css-ahzrpl-MuiSvgIcon-root-MuiNativeSelect-root-MuiNativeSelect-icon"
       data-testid="ArrowDropDownIcon"
       focusable="false"
       viewBox="0 0 24 24"
@@ -42,24 +36,18 @@ exports[`DatastreamDublinCoreEditField renders a dropdown field 1`] = `
         d="M7 10l5 5 5-5z"
       />
     </svg>
-  </div>,
-]
+  </div>
+</DocumentFragment>
 `;
 
 exports[`DatastreamDublinCoreEditField renders a dropdown field with an unexpected value 1`] = `
-[
-  "FormControl",
+<DocumentFragment>
+  FormControl
   <div
-    className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiNativeSelect-root css-bz5ng3-MuiInputBase-root-MuiInput-root"
-    onClick={[Function]}
+    class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiNativeSelect-root css-1cmet5c-MuiInputBase-root-MuiInput-root"
   >
     <select
-      className="MuiNativeSelect-select MuiNativeSelect-standard MuiInputBase-input MuiInput-input css-1dmqq7i-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
-      onAnimationStart={[Function]}
-      onBlur={[Function]}
-      onChange={[Function]}
-      onFocus={[Function]}
-      value="foo"
+      class="MuiNativeSelect-select MuiNativeSelect-standard MuiInputBase-input MuiInput-input css-1xaqj7c-MuiNativeSelect-root-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
     >
       <option
         value="foo"
@@ -68,8 +56,8 @@ exports[`DatastreamDublinCoreEditField renders a dropdown field with an unexpect
       </option>
     </select>
     <svg
-      aria-hidden={true}
-      className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiNativeSelect-icon MuiNativeSelect-iconStandard css-10bey84-MuiSvgIcon-root-MuiNativeSelect-icon"
+      aria-hidden="true"
+      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiNativeSelect-icon MuiNativeSelect-iconStandard css-ahzrpl-MuiSvgIcon-root-MuiNativeSelect-root-MuiNativeSelect-icon"
       data-testid="ArrowDropDownIcon"
       focusable="false"
       viewBox="0 0 24 24"
@@ -78,58 +66,57 @@ exports[`DatastreamDublinCoreEditField renders a dropdown field with an unexpect
         d="M7 10l5 5 5-5z"
       />
     </svg>
-  </div>,
-]
+  </div>
+</DocumentFragment>
 `;
 
 exports[`DatastreamDublinCoreEditField renders a locked field 1`] = `
-[
-  "FormControl",
-  "FormControl (disabled))",
+<DocumentFragment>
+  FormControlFormControl (disabled))
   <div
-    className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-    onClick={[Function]}
+    class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
   >
     <input
-      autoFocus={false}
-      className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-      id=":r0:"
-      onAnimationStart={[Function]}
-      onBlur={[Function]}
-      onChange={[Function]}
-      onFocus={[Function]}
+      class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+      id="_r_0_"
       type="text"
       value="foo"
     />
     <fieldset
-      aria-hidden={true}
-      className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+      aria-hidden="true"
+      class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
     >
       <legend
-        className="css-ihdtdm"
+        class="css-1nf2c5d-MuiNotchedOutlined-root"
       >
         <span
-          className="notranslate"
+          aria-hidden="true"
+          class="notranslate"
         >
           ​
         </span>
       </legend>
     </fieldset>
-  </div>,
-]
+  </div>
+</DocumentFragment>
 `;
 
 exports[`DatastreamDublinCoreEditField renders a text field 1`] = `
-[
-  "FormControl",
-  "BlurSavingTextField: {"value":"foo"}",
-]
+<DocumentFragment>
+  FormControlBlurSavingTextField: {"value":"foo"}
+</DocumentFragment>
 `;
 
-exports[`DatastreamDublinCoreEditField renders an html field 1`] = `"TinyMCE"`;
+exports[`DatastreamDublinCoreEditField renders an html field 1`] = `
+<DocumentFragment>
+  TinyMCE
+</DocumentFragment>
+`;
 
 exports[`DatastreamDublinCoreEditField renders an unknown field 1`] = `
-<p>
-  Unsupported type (unknown): foo
-</p>
+<DocumentFragment>
+  <p>
+    Unsupported type (unknown): foo
+  </p>
+</DocumentFragment>
 `;

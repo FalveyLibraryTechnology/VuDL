@@ -1,8 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import { SelectableChildProps, SelectableChild } from "./SelectableChild";
 
 jest.mock("./ChildList", () => () => "ChildList");
@@ -27,8 +25,8 @@ describe("SelectableChild", () => {
     });
 
     function checkSnapshot() {
-        const tree = renderer.create(<SelectableChild {...props} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<SelectableChild {...props} />);
+        expect(asFragment()).toMatchSnapshot();
     }
 
     it("renders using provided default data", async () => {

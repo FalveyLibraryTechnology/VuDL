@@ -7,7 +7,6 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import TextField from "@mui/material/TextField";
 import useDatastreamOperation from "../../../hooks/useDatastreamOperation";
 import { useGlobalContext } from "../../../context/GlobalContext";
 import { useProcessMetadataContext } from "../../../context/ProcessMetadataContext";
@@ -19,6 +18,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
 import { useEditorContext } from "../../../context/EditorContext";
 import PidPicker from "../PidPicker";
+import dayjs from "dayjs";
 
 // Whenever a task is added or removed, we need to revise the keys on the task
 // components so that React renders correctly. This counter is incremented on each
@@ -135,7 +135,7 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
                 </Box>
                 <div style={{ display: tab == EDIT_TAB ? "block" : "none" }}>
                     <Grid container spacing={1} style={{ marginBottom: "10px" }}>
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Process Label" }}
@@ -144,7 +144,7 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Process Creator" }}
@@ -153,17 +153,21 @@ const DatastreamProcessMetadataContent = (): React.ReactElement => {
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DateTimePicker
-                                    renderInput={(props) => <TextField {...props} />}
                                     label="Process Date/Time"
-                                    value={processMetadata.processDateTime ?? ""}
+                                    value={
+                                        processMetadata.processDateTime ? dayjs(processMetadata.processDateTime) : null
+                                    }
                                     onChange={setProcessDateTime}
+                                    slotProps={{
+                                        textField: { fullWidth: true },
+                                    }}
                                 />
                             </LocalizationProvider>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid size={3}>
                             <FormControl fullWidth={true}>
                                 <BlurSavingTextField
                                     options={{ label: "Process Organization" }}

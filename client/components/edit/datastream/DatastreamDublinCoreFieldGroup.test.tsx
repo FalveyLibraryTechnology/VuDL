@@ -1,7 +1,7 @@
-import React from "react";
 import { describe, afterEach, expect, it, jest } from "@jest/globals";
-import renderer from "react-test-renderer";
+import { render, screen } from "@testing-library/react";
 import DatastreamDublinCoreFieldGroup from "./DatastreamDublinCoreFieldGroup";
+import userEvent from "@testing-library/user-event";
 
 const mockUseEditorContext = jest.fn();
 jest.mock("../../../context/EditorContext", () => ({
@@ -57,39 +57,38 @@ describe("DatastreamDublinCoreFieldGroup", () => {
     });
 
     it("renders unlocked fields", () => {
-        const tree = renderer.create(<DatastreamDublinCoreFieldGroup field="dc:title" />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<DatastreamDublinCoreFieldGroup field="dc:title" />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders locked fields", () => {
-        const tree = renderer.create(<DatastreamDublinCoreFieldGroup field="dc:identifier" />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<DatastreamDublinCoreFieldGroup field="dc:identifier" />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
-    it("inserts values below", () => {
-        const tree = renderer.create(<DatastreamDublinCoreFieldGroup field="dc:title" />);
-        const buttons = tree.root.findAllByType("button");
-        renderer.act(() => {
-            expect(buttons[2].children[0].props.titleAccess).toEqual("Add Below");
-            buttons[2].props.onClick();
-        });
+    it("inserts values below", async () => {
+        render(<DatastreamDublinCoreFieldGroup field="dc:title" />);
+        const addButtons = screen.getAllByRole("button", { name: /add below/i });
+        const addButton = addButtons[1];
+        await userEvent.click(addButton);
         expect(dcValues.action.addValueBelow).toHaveBeenCalledWith("dc:title", 1, "");
     });
 
-    it("deletes rows", () => {
-        const tree = renderer.create(<DatastreamDublinCoreFieldGroup field="dc:title" />);
-        const buttons = tree.root.findAllByType("button");
-        renderer.act(() => {
-            expect(buttons[1].children[0].props.titleAccess).toEqual("Delete Row");
-            buttons[1].props.onClick();
-        });
+    it("deletes rows", async () => {
+        render(<DatastreamDublinCoreFieldGroup field="dc:title" />);
+        const deleteButtons = screen.getAllByRole("button", { name: /delete row/i });
+        const deleteButton = deleteButtons[0];
+        await userEvent.click(deleteButton);
         expect(dcValues.action.deleteValue).toHaveBeenCalledWith("dc:title", 0);
     });
 
-    it("saves values appropriately", () => {
-        const tree = renderer.create(<DatastreamDublinCoreFieldGroup field="dc:title" />);
-        const inputs = tree.root.findAllByType("input");
-        inputs[1].props.onBlur({ target: { value: "xyzzy" } });
+    it("saves values appropriately", async () => {
+        render(<DatastreamDublinCoreFieldGroup field="dc:title" />);
+        const inputs = screen.getAllByRole("textbox");
+        const input = inputs[1];
+        await userEvent.clear(input);
+        await userEvent.type(input, "xyzzy");
+        await userEvent.tab();
         expect(dcValues.action.replaceValue).toHaveBeenCalledWith("dc:title", 1, "xyzzy");
     });
 });

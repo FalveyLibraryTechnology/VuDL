@@ -1,7 +1,5 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { waitFor } from "@testing-library/react";
-import renderer from "react-test-renderer";
+import { render, waitFor } from "@testing-library/react";
 import Breadcrumbs from "./Breadcrumbs";
 import { EditorContextProvider } from "../../context/EditorContext";
 import { FetchContextProvider } from "../../context/FetchContext";
@@ -26,21 +24,18 @@ describe("Breadcrumb", () => {
     });
 
     async function runStandardSnapshotTest(initiallyShallow: boolean) {
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(
-                <FetchContextProvider>
-                    <EditorContextProvider>
-                        <Breadcrumbs {...{ ...props, initiallyShallow }} />
-                    </EditorContextProvider>
-                </FetchContextProvider>,
-            );
-            await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
-        });
+        const { asFragment } = render(
+            <FetchContextProvider>
+                <EditorContextProvider>
+                    <Breadcrumbs {...{ ...props, initiallyShallow }} />
+                </EditorContextProvider>
+            </FetchContextProvider>,
+        );
+        await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1));
         expect(lastRequestUrl).toEqual(
             "http://localhost:9000/api/edit/object/foo%3A1234/parents" + (initiallyShallow ? "?shallow=1" : ""),
         );
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     }
 
     function getObject(pid, title, parents = []) {
@@ -49,14 +44,14 @@ describe("Breadcrumb", () => {
 
     it("renders without a pid", () => {
         props = {};
-        const tree = renderer.create(
+        const { asFragment } = render(
             <FetchContextProvider>
                 <EditorContextProvider>
                     <Breadcrumbs />
                 </EditorContextProvider>
             </FetchContextProvider>,
         );
-        expect(tree.toJSON()).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders using ajax-loaded object data (no parents, shallow mode)", async () => {

@@ -1,21 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Thumbnail renders 1`] = `
-<div
-  className="thumbnail selected"
-  onClick={[Function]}
->
-  <img
-    alt="thumbnail 1"
-    src="www.testurl.com"
-  />
+<DocumentFragment>
   <div
-    className="number"
+    class="thumbnail selected"
   >
-    2
+    <img
+      alt="thumbnail 1"
+      src="www.testurl.com"
+    />
+    <div
+      class="number"
+    >
+      2
+    </div>
+    <div
+      class="label magic"
+    />
   </div>
-  <div
-    className="label magic"
-  />
-</div>
+</DocumentFragment>
 `;

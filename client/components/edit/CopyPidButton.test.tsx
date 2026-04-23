@@ -1,5 +1,3 @@
-import React from "react";
-import renderer from "react-test-renderer";
 import CopyPidButton from "./CopyPidButton";
 import userEvent from "@testing-library/user-event";
 import { render, screen } from "@testing-library/react";
@@ -13,8 +11,8 @@ jest.mock(
 
 describe("CopyPidButton", () => {
     it("renders", async () => {
-        const tree = renderer.create(<CopyPidButton pid="foo" />);
-        expect(tree.toJSON()).toMatchSnapshot();
+        const { asFragment } = render(<CopyPidButton pid="foo" />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("copies text to clipboard", async () => {

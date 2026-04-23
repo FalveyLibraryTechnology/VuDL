@@ -58,7 +58,7 @@ describe("useFetchContext", () => {
             expect(result.current.state.token).toEqual(token);
 
             // Now clear the token
-            await act(async() => {
+            await act(async () => {
                 result.current.action.clearToken();
             });
             expect(result.current.state.token).toEqual(null);
@@ -78,7 +78,7 @@ describe("useFetchContext", () => {
                 url,
                 expect.objectContaining({
                     method: "GET",
-                })
+                }),
             );
             expect(response.json).toHaveBeenCalled();
         });
@@ -97,7 +97,7 @@ describe("useFetchContext", () => {
                 url,
                 expect.objectContaining({
                     method: "GET",
-                })
+                }),
             );
             expect(response.json).not.toHaveBeenCalled();
         });
@@ -115,7 +115,7 @@ describe("useFetchContext", () => {
                 url,
                 expect.objectContaining({
                     method: "GET",
-                })
+                }),
             );
             expect(response.text).toHaveBeenCalled();
         });
@@ -135,7 +135,7 @@ describe("useFetchContext", () => {
                 url,
                 expect.objectContaining({
                     method: "GET",
-                })
+                }),
             );
             expect(response.text).toHaveBeenCalled();
         });
@@ -157,7 +157,7 @@ describe("useFetchContext", () => {
                 url,
                 expect.objectContaining({
                     method: "GET",
-                })
+                }),
             );
             expect(response.blob).toHaveBeenCalled();
         });
@@ -176,7 +176,7 @@ describe("useFetchContext", () => {
                 url,
                 expect.objectContaining({
                     method: "GET",
-                })
+                }),
             );
             expect(response.blob).not.toHaveBeenCalled();
         });

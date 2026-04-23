@@ -1,42 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DatastreamProcessMetadataContent renders a form when empty data is loaded 1`] = `
-[
+exports[`DatastreamProcessMetadataContent can be canceled 1`] = `
+<DocumentFragment>
   <div
-    className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
   >
-    Digital Provenance
-    Tab: Editor
-    Tab: Clone
+    Digital ProvenanceTab: EditorTab: Clone
     <div
-      style={
-        {
-          "display": "block",
-        }
-      }
+      style="display: block;"
     >
       Process Label
       <div
-        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-        onClick={[Function]}
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
-          autoFocus={false}
-          className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-          id=":r3:"
-          onAnimationStart={[Function]}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_26_"
           type="text"
           value=""
         />
         <fieldset
-          aria-hidden={true}
-          className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            className="css-yjsfm1"
+            class="css-1n64csd-MuiNotchedOutlined-root"
           >
             <span>
               Process Label
@@ -46,26 +34,20 @@ exports[`DatastreamProcessMetadataContent renders a form when empty data is load
       </div>
       Process Creator
       <div
-        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-        onClick={[Function]}
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
-          autoFocus={false}
-          className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-          id=":r4:"
-          onAnimationStart={[Function]}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_27_"
           type="text"
           value=""
         />
         <fieldset
-          aria-hidden={true}
-          className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            className="css-yjsfm1"
+            class="css-1n64csd-MuiNotchedOutlined-root"
           >
             <span>
               Process Creator
@@ -73,29 +55,22 @@ exports[`DatastreamProcessMetadataContent renders a form when empty data is load
           </legend>
         </fieldset>
       </div>
-      LocalizationProvider
-      Process Organization
+      LocalizationProviderProcess Organization
       <div
-        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-        onClick={[Function]}
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
-          autoFocus={false}
-          className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-          id=":r5:"
-          onAnimationStart={[Function]}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_28_"
           type="text"
           value=""
         />
         <fieldset
-          aria-hidden={true}
-          className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            className="css-yjsfm1"
+            class="css-1n64csd-MuiNotchedOutlined-root"
           >
             <span>
               Process Organization
@@ -103,116 +78,619 @@ exports[`DatastreamProcessMetadataContent renders a form when empty data is load
           </legend>
         </fieldset>
       </div>
-      <button
-        onClick={[Function]}
-      >
+      <button>
         Add Task
       </button>
     </div>
     <div
-      style={
-        {
-          "display": "none",
-        }
-      }
+      style="display: none;"
     >
       <div>
         PidPicker: {"selected":""}
       </div>
     </div>
-  </div>,
+  </div>
   <div
-    className="MuiDialogActions-root MuiDialogActions-spacing css-knqc4i-MuiDialogActions-root"
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
   >
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Save
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Cancel
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
-  </div>,
-]
+  </div>
+</DocumentFragment>
 `;
 
-exports[`DatastreamProcessMetadataContent renders a form when non-empty data is loaded 1`] = `
-[
+exports[`DatastreamProcessMetadataContent can clone metadata from another PID 1`] = `
+<DocumentFragment>
   <div
-    className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
   >
-    Digital Provenance
-    Tab: Editor
-    Tab: Clone
+    Digital ProvenanceTab: EditorTab: Clone
     <div
-      style={
-        {
-          "display": "block",
-        }
-      }
+      style="display: block;"
     >
       Process Label
       <div
-        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-        onClick={[Function]}
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
-          autoFocus={false}
-          className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-          id=":r9:"
-          onAnimationStart={[Function]}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1d_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1e_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1f_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      <button>
+        Add Task
+      </button>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent handles errors that occur during PID cloning 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_u_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_v_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_10_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      <button>
+        Add Task
+      </button>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent has a working save button 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_k_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_l_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_m_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      <button>
+        Add Task
+      </button>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent ignores empty PIDs in clone input 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_p_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_q_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_r_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      <button>
+        Add Task
+      </button>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent renders a form when empty data is loaded 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_5_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_6_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_7_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      <button>
+        Add Task
+      </button>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent renders a form when non-empty data is loaded 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_f_"
           type="text"
           value="label"
         />
         <fieldset
-          aria-hidden={true}
-          className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            className="css-yjsfm1"
+            class="css-1n64csd-MuiNotchedOutlined-root"
           >
             <span>
               Process Label
@@ -222,26 +700,20 @@ exports[`DatastreamProcessMetadataContent renders a form when non-empty data is 
       </div>
       Process Creator
       <div
-        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-        onClick={[Function]}
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
-          autoFocus={false}
-          className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-          id=":ra:"
-          onAnimationStart={[Function]}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_g_"
           type="text"
           value="creator"
         />
         <fieldset
-          aria-hidden={true}
-          className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            className="css-yjsfm1"
+            class="css-1n64csd-MuiNotchedOutlined-root"
           >
             <span>
               Process Creator
@@ -249,29 +721,22 @@ exports[`DatastreamProcessMetadataContent renders a form when non-empty data is 
           </legend>
         </fieldset>
       </div>
-      LocalizationProvider
-      Process Organization
+      LocalizationProviderProcess Organization
       <div
-        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-        onClick={[Function]}
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
-          autoFocus={false}
-          className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-          id=":rb:"
-          onAnimationStart={[Function]}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_h_"
           type="text"
           value="organization"
         />
         <fieldset
-          aria-hidden={true}
-          className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            className="css-yjsfm1"
+            class="css-1n64csd-MuiNotchedOutlined-root"
           >
             <span>
               Process Organization
@@ -281,117 +746,59 @@ exports[`DatastreamProcessMetadataContent renders a form when non-empty data is 
       </div>
     </div>
     <div
-      style={
-        {
-          "display": "none",
-        }
-      }
+      style="display: none;"
     >
       <div>
         PidPicker: {"selected":""}
       </div>
     </div>
-  </div>,
+  </div>
   <div
-    className="MuiDialogActions-root MuiDialogActions-spacing css-knqc4i-MuiDialogActions-root"
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
   >
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Save
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Cancel
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
-  </div>,
-]
+  </div>
+</DocumentFragment>
 `;
 
 exports[`DatastreamProcessMetadataContent renders a loading message if content is unavailable 1`] = `
-<div
-  className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
->
-  Loading...
-</div>
-`;
-
-exports[`DatastreamProcessMetadataContent supports tab switching 1`] = `
-[
+<DocumentFragment>
   <div
-    className="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
   >
-    Digital Provenance
-    Tab: Editor
-    Tab: Clone
+    Digital ProvenanceTab: EditorTab: Clone
     <div
-      style={
-        {
-          "display": "none",
-        }
-      }
+      style="display: block;"
     >
       Process Label
       <div
-        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-        onClick={[Function]}
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
-          autoFocus={false}
-          className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-          id=":r6:"
-          onAnimationStart={[Function]}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_0_"
           type="text"
           value=""
         />
         <fieldset
-          aria-hidden={true}
-          className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            className="css-yjsfm1"
+            class="css-1n64csd-MuiNotchedOutlined-root"
           >
             <span>
               Process Label
@@ -401,26 +808,20 @@ exports[`DatastreamProcessMetadataContent supports tab switching 1`] = `
       </div>
       Process Creator
       <div
-        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-        onClick={[Function]}
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
-          autoFocus={false}
-          className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-          id=":r7:"
-          onAnimationStart={[Function]}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1_"
           type="text"
           value=""
         />
         <fieldset
-          aria-hidden={true}
-          className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            className="css-yjsfm1"
+            class="css-1n64csd-MuiNotchedOutlined-root"
           >
             <span>
               Process Creator
@@ -428,29 +829,22 @@ exports[`DatastreamProcessMetadataContent supports tab switching 1`] = `
           </legend>
         </fieldset>
       </div>
-      LocalizationProvider
-      Process Organization
+      LocalizationProviderProcess Organization
       <div
-        className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
-        onClick={[Function]}
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
-          autoFocus={false}
-          className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-          id=":r8:"
-          onAnimationStart={[Function]}
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_2_"
           type="text"
           value=""
         />
         <fieldset
-          aria-hidden={true}
-          className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
         >
           <legend
-            className="css-yjsfm1"
+            class="css-1n64csd-MuiNotchedOutlined-root"
           >
             <span>
               Process Organization
@@ -458,75 +852,692 @@ exports[`DatastreamProcessMetadataContent supports tab switching 1`] = `
           </legend>
         </fieldset>
       </div>
-      <button
-        onClick={[Function]}
-      >
+      <button>
         Add Task
       </button>
     </div>
     <div
-      style={
-        {
-          "display": "block",
-        }
-      }
+      style="display: none;"
     >
       <div>
         PidPicker: {"selected":""}
       </div>
     </div>
-  </div>,
+  </div>
   <div
-    className="MuiDialogActions-root MuiDialogActions-spacing css-knqc4i-MuiDialogActions-root"
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
   >
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Save
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onContextMenu={[Function]}
-      onDragLeave={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
       type="button"
     >
       Cancel
-      <span
-        className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </button>
-  </div>,
-]
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent supports adding tasks 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1s_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1t_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1u_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent supports deleting tasks 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_21_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_22_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_23_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent supports loading PID data into storage after selection for cloning 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_13_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_14_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_15_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      <button>
+        Add Task
+      </button>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent supports tab switching 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_a_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_b_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_c_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      <button>
+        Add Task
+      </button>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent supports task updates 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1n_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1o_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1p_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`DatastreamProcessMetadataContent validates datastreams before cloning metadata from another PID 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiDialogContent-root css-kw13he-MuiDialogContent-root"
+  >
+    Digital ProvenanceTab: EditorTab: Clone
+    <div
+      style="display: block;"
+    >
+      Process Label
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_18_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Label
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      Process Creator
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_19_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Creator
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      LocalizationProviderProcess Organization
+      <div
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+          id="_r_1a_"
+          type="text"
+          value=""
+        />
+        <fieldset
+          aria-hidden="true"
+          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+        >
+          <legend
+            class="css-1n64csd-MuiNotchedOutlined-root"
+          >
+            <span>
+              Process Organization
+            </span>
+          </legend>
+        </fieldset>
+      </div>
+      <button>
+        Add Task
+      </button>
+    </div>
+    <div
+      style="display: none;"
+    >
+      <div>
+        PidPicker: {"selected":""}
+      </div>
+    </div>
+  </div>
+  <div
+    class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary uploadProcessMetadataButton css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Save
+    </button>
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
+      tabindex="0"
+      type="button"
+    >
+      Cancel
+    </button>
+  </div>
+</DocumentFragment>
 `;

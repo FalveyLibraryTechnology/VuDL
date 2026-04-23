@@ -1,7 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it } from "@jest/globals";
-import renderer from "react-test-renderer";
 import JobClickable from "./JobClickable";
+import { render } from "@testing-library/react";
 
 describe("JobClickable", () => {
     let props;
@@ -15,7 +14,7 @@ describe("JobClickable", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<JobClickable {...props} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<JobClickable {...props} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 });

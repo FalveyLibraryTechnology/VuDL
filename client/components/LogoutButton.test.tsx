@@ -2,7 +2,6 @@ import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import LogoutButton from "./LogoutButton";
 
 const mockUseFetchContext = jest.fn();
@@ -27,20 +26,14 @@ describe("LogoutButton", () => {
     });
 
     it("renders correctly when logged in", async () => {
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(<LogoutButton />);
-        });
-        expect(tree.toJSON()).toMatchSnapshot();
+        const { asFragment } = render(<LogoutButton />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders correctly when logged out", async () => {
         fetchValues.state.token = null;
-        let tree;
-        await renderer.act(async () => {
-            tree = renderer.create(<LogoutButton />);
-        });
-        expect(tree.toJSON()).toMatchSnapshot();
+        const { asFragment } = render(<LogoutButton />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("clears the token", async () => {

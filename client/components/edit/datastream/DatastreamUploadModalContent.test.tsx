@@ -1,8 +1,6 @@
-import React from "react";
 import { describe, beforeEach, expect, it, jest } from "@jest/globals";
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import renderer from "react-test-renderer";
 import DatastreamUploadModalContent from "./DatastreamUploadModalContent";
 
 const mockUseDatastreamOperation = jest.fn();
@@ -37,22 +35,22 @@ describe("DatastreamUploadModalContent", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<DatastreamUploadModalContent />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<DatastreamUploadModalContent />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders DatastreamLicenseContent", () => {
         editorValues.state.activeDatastream = "LICENSE";
 
-        const tree = renderer.create(<DatastreamUploadModalContent />).toJSON();
-        expect(tree).toEqual("DatastreamLicenseContent");
+        const { container } = render(<DatastreamUploadModalContent />);
+        expect(container.innerHTML).toEqual("DatastreamLicenseContent");
     });
 
     it("renders DatastreamAgentContent", () => {
         editorValues.state.activeDatastream = "AGENTS";
 
-        const tree = renderer.create(<DatastreamUploadModalContent />).toJSON();
-        expect(tree).toEqual("DatastreamAgentsContent");
+        const { container } = render(<DatastreamUploadModalContent />);
+        expect(container.innerHTML).toEqual("DatastreamAgentsContent");
     });
 
     it("calls uploadFile on click", async () => {

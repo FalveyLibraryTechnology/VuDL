@@ -1,8 +1,6 @@
-import React from "react";
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import renderer from "react-test-renderer";
 import SinglePidIndexer from "./SinglePidIndexer";
 
 const mockUseFetchContext = jest.fn();
@@ -26,8 +24,8 @@ describe("SinglePidIndexer", () => {
     });
 
     it("renders", () => {
-        const tree = renderer.create(<SinglePidIndexer setResults={setResults} />).toJSON();
-        expect(tree).toMatchSnapshot();
+        const { asFragment } = render(<SinglePidIndexer setResults={setResults} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("changes the pid input", () => {

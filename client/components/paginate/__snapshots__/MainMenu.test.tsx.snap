@@ -1,88 +1,75 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MainMenu renders 1`] = `
-<div
-  className="main-menu"
->
-  <h1
-    className="main-menu-heading"
+<DocumentFragment>
+  <div
+    class="main-menu"
   >
-    VuDL Admin
-  </h1>
-  <h2
-    className="main-menu-core-functions-heading"
-  >
-    Core Functions
-  </h2>
-  <ul
-    className="main-menu-core-functions-list"
-  >
-    <li>
-      <a
-        href="/paginate"
-        onClick={[Function]}
-        onMouseEnter={[Function]}
-        onTouchStart={[Function]}
-      >
-        Job Paginator
-      </a>
-    </li>
-    <li>
-      <a
-        href="/edit"
-        onClick={[Function]}
-        onMouseEnter={[Function]}
-        onTouchStart={[Function]}
-      >
-        Object Editor
-      </a>
-    </li>
-  </ul>
-  <h2
-    className="main-menu-other-tools-heading"
-  >
-    Other Tools
-  </h2>
-  <ul
-    className="main-menu-other-tools-list"
-  >
-    <li>
-      <a
-        href="http://localhost:9000/queue"
-      >
-        Arena (Job Queue Manager)
-      </a>
-    </li>
-    <li>
-      <a
-        href="/bulk"
-        onClick={[Function]}
-        onMouseEnter={[Function]}
-        onTouchStart={[Function]}
-      >
-        Bulk Editor
-      </a>
-    </li>
-    <li>
-      <a
-        href="/pdf"
-        onClick={[Function]}
-        onMouseEnter={[Function]}
-        onTouchStart={[Function]}
-      >
-        PDF Generator
-      </a>
-    </li>
-    <li>
-      <a
-        href="/solr"
-        onClick={[Function]}
-        onMouseEnter={[Function]}
-        onTouchStart={[Function]}
-      >
-        Solr Indexer
-      </a>
-    </li>
-  </ul>
-</div>
+    <h1
+      class="main-menu-heading"
+    >
+      VuDL Admin
+    </h1>
+    <h2
+      class="main-menu-core-functions-heading"
+    >
+      Core Functions
+    </h2>
+    <ul
+      class="main-menu-core-functions-list"
+    >
+      <li>
+        <a
+          href="/paginate"
+        >
+          Job Paginator
+        </a>
+      </li>
+      <li>
+        <a
+          href="/edit"
+        >
+          Object Editor
+        </a>
+      </li>
+    </ul>
+    <h2
+      class="main-menu-other-tools-heading"
+    >
+      Other Tools
+    </h2>
+    <ul
+      class="main-menu-other-tools-list"
+    >
+      <li>
+        <a
+          href="http://localhost:9000/queue"
+        >
+          Arena (Job Queue Manager)
+        </a>
+      </li>
+      <li>
+        <a
+          href="/bulk"
+        >
+          Bulk Editor
+        </a>
+      </li>
+      <li>
+        <a
+          href="/pdf"
+        >
+          PDF Generator
+        </a>
+      </li>
+      <li>
+        <a
+          href="/solr"
+        >
+          Solr Indexer
+        </a>
+      </li>
+    </ul>
+  </div>
+</DocumentFragment>
 `;
