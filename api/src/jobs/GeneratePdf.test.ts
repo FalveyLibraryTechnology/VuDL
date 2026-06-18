@@ -21,9 +21,9 @@ describe("PdfGenerator", () => {
 
     it("matches new object state to parent object state", async () => {
         const manifest = {
-            sequences: [{ canvases: [{ images: [{ resource: { "@id": "http://foo/bar.jpg" } }] }] }],
+            items: [{ items: [{ items: [{ body: { id: "http://foo/bar.jpg" } }] }] }],
         };
-        http.mockResolvedValueOnce({ statusCode: 200, body: manifest });
+        http.mockResolvedValueOnce({ statusCode: 200, body: JSON.stringify(manifest) });
         const fakePdf = "/path/to/foo.pdf";
         const generatePdfSpy = jest.spyOn(generator, "generatePdf").mockResolvedValue(fakePdf);
         const addPdfToPidSpy = jest.spyOn(generator, "addPdfToPid").mockImplementation(jest.fn());
@@ -32,7 +32,7 @@ describe("PdfGenerator", () => {
             .spyOn(FedoraDataCollector.getInstance(), "getObjectData")
             .mockResolvedValue(fedoraObject);
         await generator.run();
-        expect(generatePdfSpy).toHaveBeenCalledWith(["http://foo/bar.jpg"]);
+        expect(generatePdfSpy).toHaveBeenCalledWith(["http://foo/bar.jpg/full/full/0/default.jpg"]);
         expect(addPdfToPidSpy).toHaveBeenCalledWith(fakePdf, "Unknown");
         expect(getObjectSpy).toHaveBeenCalledWith("test:123");
         expect(fs.truncateSync).toHaveBeenCalledWith(fakePdf, 0);
@@ -78,9 +78,9 @@ describe("GeneratePdf", () => {
 
         it("short-circuits if there is already a PDF", async () => {
             const manifest = {
-                sequences: [{ rendering: [{ format: "application/pdf" }] }],
+                rendering: [{ format: "application/pdf" }],
             };
-            http.mockResolvedValueOnce({ statusCode: 200, body: manifest });
+            http.mockResolvedValueOnce({ statusCode: 200, body: JSON.stringify(manifest) });
             const consoleSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
             await generatePdf.run(job);
             expect(http).toHaveBeenCalledWith("get", "http://foo/Item/test:123/Manifest");
@@ -90,7 +90,7 @@ describe("GeneratePdf", () => {
 
         it("short-circuits if there are no pages", async () => {
             const manifest = {};
-            http.mockResolvedValueOnce({ statusCode: 200, body: manifest });
+            http.mockResolvedValueOnce({ statusCode: 200, body: JSON.stringify(manifest) });
             const consoleSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
             await generatePdf.run(job);
             expect(http).toHaveBeenCalledWith("get", "http://foo/Item/test:123/Manifest");

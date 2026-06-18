@@ -38,7 +38,8 @@ export class PdfGenerator {
     }
 
     private hasPdfAlready(manifest): boolean {
-        const rendering = (((manifest ?? {}).sequences ?? [])[0] ?? {}).rendering ?? [];
+        const manifestJson = JSON.parse(manifest);
+        const rendering = (manifestJson ?? {}).rendering ?? [];
         if (rendering.length === 0) {
             return false;
         }
@@ -49,9 +50,20 @@ export class PdfGenerator {
     }
 
     private getLargeJpegs(manifest): string[] {
-        const canvases = (((manifest ?? {}).sequences ?? [])[0] ?? {}).canvases ?? [];
-        return canvases.map((current) => {
-            return current.images[0].resource["@id"];
+        const manifestJson = JSON.parse(manifest);
+        const canvases = (manifestJson ?? {}).items ?? [];
+        return canvases.flatMap((canvas) => {
+            const annotationPages = (canvas ?? {}).items ?? [];
+            return annotationPages.flatMap((page) => {
+                const annotations = (page ?? {}).items ?? [];
+                return annotations
+                    .filter((annotation) => annotation.body?.id)
+                    .map((annotation) => {
+                        // Convert IIIF Image Service endpoint to full-size image URL
+                        const serviceId = annotation.body.id;
+                        return serviceId + "/full/full/0/default.jpg";
+                    });
+            });
         });
     }
 
