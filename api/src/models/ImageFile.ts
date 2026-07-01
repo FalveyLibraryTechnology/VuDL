@@ -1,4 +1,4 @@
-import Sharp = require("sharp");
+import sharp from "sharp";
 import path = require("path");
 
 import { execSync } from "child_process";
@@ -42,7 +42,7 @@ class ImageFile {
             return deriv;
         }
 
-        const image = Sharp(this.filename, this.config.sharpOptions);
+        const image = sharp(this.filename, this.config.sharpOptions);
         const constraint = this.constraintForSize(size);
 
         const metadata = await image.metadata();

@@ -44,7 +44,7 @@ describe("MetadataExtractor", () => {
                                 <DIGIPROVMD:process_organization>Falvey Memorial Library, Villanova University</DIGIPROVMD:process_organization>
                             </DIGIPROVMD:DIGIPROVMD>
                         `;
-            expect(metadataExtractor.getProcessMetadata(xml)).toEqual({
+            expect(metadataExtractor.getProcessMetadata(xml.trim())).toEqual({
                 processCreator: "first",
                 processDateTime: "2022-10-05T07:00:00",
                 processLabel: "Digitize Original Item",

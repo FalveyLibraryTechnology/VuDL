@@ -1,6 +1,6 @@
-import checkdate = require("locutus/php/datetime/checkdate");
-import dateFormat = require("locutus/php/datetime/date");
-import strtotime = require("locutus/php/datetime/strtotime");
+import { checkdate } from "locutus/php/datetime/checkdate";
+import { date as dateFormat } from "locutus/php/datetime/date";
+import { strtotime } from "locutus/php/datetime/strtotime";
 
 export default class DateSanitizer {
     static sanitize(_date: string): string {
@@ -77,9 +77,9 @@ export default class DateSanitizer {
         }
 
         // Make sure month/day/year combination is legal. Make it legal if it isn't.
-        if (!checkdate(month, day, year)) {
+        if (!checkdate(Number(month), Number(day), Number(year))) {
             day = "01";
-            if (!checkdate(month, day, year)) {
+            if (!checkdate(Number(month), Number(day), Number(year))) {
                 month = "01";
             }
         }

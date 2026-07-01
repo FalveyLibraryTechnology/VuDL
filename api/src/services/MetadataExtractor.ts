@@ -92,7 +92,8 @@ class MetadataExtractor {
      * @returns   Map of extracted data
      */
     public extractFedoraDetails(RDF: string): Record<string, Array<string>> {
-        const RDF_XML = this.xmlParser.parseFromString(RDF, "text/xml");
+        // 'as unknown as Document' work around for XMLDom bug: https://github.com/xmldom/xmldom/issues/724
+        const RDF_XML = this.xmlParser.parseFromString(RDF, "text/xml") as unknown as Document;
         // We want to extract all values from the following namespaces, so we'll define the list
         // and use it to build an Xpath query to fetch everything:
         const namespaces = {
@@ -131,7 +132,7 @@ class MetadataExtractor {
      * @returns   List of datastreams (binaries) inside the container
      */
     public extractFedoraDatastreams(RDF: string): Array<string> {
-        const RDF_XML = this.xmlParser.parseFromString(RDF, "text/xml");
+        const RDF_XML = this.xmlParser.parseFromString(RDF, "text/xml") as unknown as Document;
         const raw =
             this.extractRDFXML(
                 RDF_XML,
@@ -153,7 +154,7 @@ class MetadataExtractor {
      * @returns   License URI
      */
     public extractLicense(XML: string): string {
-        const parsedXml = this.xmlParser.parseFromString(XML, "text/xml");
+        const parsedXml = this.xmlParser.parseFromString(XML, "text/xml") as unknown as Document;
         const namespaces = {
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
             METS: "http://www.loc.gov/METS/",
@@ -174,7 +175,7 @@ class MetadataExtractor {
      * @returns   List of agent names
      */
     public extractAgents(xml: string): Record<string, Array<string>> {
-        const RDF_XML = this.xmlParser.parseFromString(xml, "text/xml");
+        const RDF_XML = this.xmlParser.parseFromString(xml, "text/xml") as unknown as Document;
         return this.extractRDFXML(
             RDF_XML,
             {
@@ -191,7 +192,7 @@ class MetadataExtractor {
      * @returns   List of agent details
      */
     public getAgents(xml: string): Array<Agent> {
-        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml");
+        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml") as unknown as Document;
         const namespaces = {
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
             METS: "http://www.loc.gov/METS/",
@@ -226,7 +227,7 @@ class MetadataExtractor {
     }
 
     public extractAgentsAttributes(xml: string): Record<string, string> {
-        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml");
+        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml") as unknown as Document;
         const namespaces = {
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
             METS: "http://www.loc.gov/METS/",
@@ -276,7 +277,7 @@ class MetadataExtractor {
             process_label: "processLabel",
             process_organization: "processOrganization",
         };
-        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml");
+        const parsedXml = this.xmlParser.parseFromString(xml, "text/xml") as unknown as Document;
         const namespaces = {
             PMD: "http://www.loc.gov/PMD",
         };
@@ -315,7 +316,7 @@ class MetadataExtractor {
      * @returns   Map of extracted details
      */
     public extractFitsData(xml: string): Record<string, Array<string>> {
-        const RDF_XML = this.xmlParser.parseFromString(xml, "text/xml");
+        const RDF_XML = this.xmlParser.parseFromString(xml.trim(), "text/xml") as unknown as Document;
         const namespaces = {
             rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
             fits: "http://hul.harvard.edu/ois/xml/ns/fits/fits_output",
@@ -340,7 +341,7 @@ class MetadataExtractor {
      * @returns   Map of extracted relevant details
      */
     public extractThumbnailDetails(xml: string): Record<string, Array<string>> {
-        const RDF_XML = this.xmlParser.parseFromString(xml, "text/xml");
+        const RDF_XML = this.xmlParser.parseFromString(xml, "text/xml") as unknown as Document;
         return this.extractRDFXML(
             RDF_XML,
             {
@@ -352,7 +353,7 @@ class MetadataExtractor {
     }
 
     public extractEbuCore(xml: string, xpathQuery: string): Record<string, Array<string>> {
-        const RDF_XML = this.xmlParser.parseFromString(xml, "text/xml");
+        const RDF_XML = this.xmlParser.parseFromString(xml, "text/xml") as unknown as Document;
         return this.extractRDFXML(
             RDF_XML,
             {
