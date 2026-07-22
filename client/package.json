@@ -7,8 +7,8 @@
   "scripts": {
     "build": "next build",
     "check-types": "tsc --noemit",
-    "format": "prettier --check --write *.js *.ts components/** context/** pages/**",
-    "lint": "prettier --check *.js *.ts components/** context/** pages/** && ESLINT_USE_FLAT_CONFIG=true eslint *.js components/ context/ pages/ -c eslint.config.mjs --max-warnings 0",
+    "format": "prettier --check --no-error-on-unmatched-pattern --write *.js *.ts components/** context/** pages/**",
+    "lint": "prettier --no-error-on-unmatched-pattern --check *.js *.ts components/** context/** pages/** && ESLINT_USE_FLAT_CONFIG=true eslint *.js components/ context/ pages/ -c eslint.config.mjs --max-warnings 0",
     "postinstall": "cp -r ./node_modules/tinymce ./public/",
     "prod": "next start",
     "snapshots": "jest --updateSnapshot",
