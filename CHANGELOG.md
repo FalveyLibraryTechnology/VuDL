@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## Next Release - TBD
+## 2.6.2 - 2026-08-03
 
 ### Added
 
@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Changed
 
 - Updated dependencies.
+- Began increasing type strictness to prepare for Typescript 6.
 
 ### Deprecated
 
