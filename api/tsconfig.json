@@ -2,9 +2,13 @@
     "compilerOptions": {
       "sourceMap": true,
       "allowJs": true,
-      "target": "es5",
+      "target": "es2022",
+      "module": "commonjs",
+      "strict": false,
       "outDir": "./dist",
-      "skipLibCheck": true
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "types": ["jest"]
     },
     "include": [
       "./src/**/*"

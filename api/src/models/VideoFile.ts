@@ -9,7 +9,7 @@ class VideoFile extends AbstractAVFile {
         return new VideoFile(filename, dir, Config.getInstance());
     }
 
-    static fromRaw(raw: Record<string, string>, config: Config = null): VideoFile {
+    static fromRaw(raw: Record<string, string>, config: Config | null = null): VideoFile {
         return new VideoFile(raw.filename, raw.label, config ?? Config.getInstance());
     }
 

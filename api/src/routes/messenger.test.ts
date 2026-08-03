@@ -1,4 +1,4 @@
-import * as request from "supertest";
+import request from "supertest";
 import { StatusCodes } from "http-status-codes";
 import app from "../app";
 import messenger from "./messenger";

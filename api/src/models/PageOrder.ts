@@ -30,7 +30,7 @@ class PageOrder {
             return firstPartResults === 0 ? a.localeCompare(b) : firstPartResults;
         });
         const pages = files.map((file) => {
-            return new Page(path.basename(file), null);
+            return new Page(path.basename(file), "");
         });
         return new PageOrder(pages);
     }

@@ -1,5 +1,7 @@
+/// <reference path="../types/pdfkit-augment.d.ts" />
 import { createWriteStream, openSync, closeSync, existsSync as fileExists, statSync } from "fs";
 import PDFDocument = require("pdfkit");
+
 import path = require("path");
 
 import Config from "./Config";
@@ -11,7 +13,7 @@ import QueueManager from "../services/QueueManager";
 class Job {
     dir: string;
     name: string;
-    _metadata: JobMetadata = null;
+    _metadata: JobMetadata | null = null;
     config: Config;
     queue: QueueManager;
 
@@ -71,7 +73,7 @@ class Job {
 
     protected async getLargeJpegs(): Promise<Array<string>> {
         const pages = this.metadata.order.pages;
-        const jpegs = [];
+        const jpegs: string[] = [];
         for (const i in pages) {
             const image = ImageFile.build(this.dir + pages[i].filename);
             jpegs[i] = await image.derivative("LARGE");

@@ -1,6 +1,6 @@
 import Solr from "./Solr";
 import SolrCache from "./SolrCache";
-import * as fs from "fs";
+import fs from "fs";
 
 describe("Solr", () => {
     let solr;

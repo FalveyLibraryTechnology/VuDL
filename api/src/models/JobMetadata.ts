@@ -16,12 +16,12 @@ interface JobMetadataRaw {
 
 class JobMetadata {
     job: Job;
-    page: PageRaw;
+    page: PageRaw | null = null;
     _filename: string;
-    _order: PageOrder = null;
-    _documents: DocumentOrder = null;
-    _audio: AudioOrder = null;
-    _video: VideoOrder = null;
+    _order: PageOrder | null = null;
+    _documents: DocumentOrder | null = null;
+    _audio: AudioOrder | null = null;
+    _video: VideoOrder | null = null;
     published = false;
 
     constructor(job: Job) {
@@ -58,7 +58,7 @@ class JobMetadata {
         return this.job.dir + "/derivatives.lock";
     }
 
-    get derivativeStatus(): Record<string, unknown> {
+    get derivativeStatus(): { expected: number; processed: number; building: boolean } {
         const lockfileExists: boolean = fs.existsSync(this.derivativeLockfile);
         const status = {
             expected: 0,
@@ -121,7 +121,9 @@ class JobMetadata {
 
     get ingestInfo(): string {
         const logfile: string = this.job.dir + "/ingest.log";
-        return fs.existsSync(logfile) ? fs.readFileSync(logfile, "utf-8").split("\n").filter(Boolean).pop() : "";
+        return fs.existsSync(logfile)
+            ? (fs.readFileSync(logfile, "utf-8").split("\n").filter(Boolean).pop() ?? "")
+            : "";
     }
 
     get order(): PageOrder {

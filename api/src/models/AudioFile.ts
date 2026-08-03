@@ -8,7 +8,7 @@ class AudioFile extends AbstractAVFile {
         return new AudioFile(filename, dir, Config.getInstance());
     }
 
-    static fromRaw(raw: Record<string, string>, config: Config = null): AudioFile {
+    static fromRaw(raw: Record<string, string>, config: Config | null = null): AudioFile {
         return new AudioFile(raw.filename, raw.label, config ?? Config.getInstance());
     }
 }

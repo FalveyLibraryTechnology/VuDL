@@ -29,14 +29,14 @@ class QueueManager {
         };
     }
 
-    protected getQueue(queueName: string = null): Queue {
-        return new Queue(queueName ?? this.config.redisDefaultQueueName, this.queueBaseOptions);
+    protected getQueue(queueName: string = ""): Queue {
+        return new Queue(queueName || this.config.redisDefaultQueueName, this.queueBaseOptions);
     }
 
-    public getWorker(callback: Processor, queueName: string = null): Worker {
+    public getWorker(callback: Processor, queueName: string = ""): Worker {
         const options: WorkerOptions = this.queueBaseOptions;
         options.lockDuration = this.config.redisLockDuration;
-        return new Worker(queueName ?? this.config.redisDefaultQueueName, callback, options);
+        return new Worker(queueName || this.config.redisDefaultQueueName, callback, options);
     }
 
     protected getQueueNameForJob(jobName: string): string {
@@ -61,7 +61,7 @@ class QueueManager {
         return await this.addToQueue("ingest", { dir });
     }
 
-    public async sendNotification(body: string, channel: string | null = null): Promise<void> {
+    public async sendNotification(body: string, channel: string = ""): Promise<void> {
         return await this.addToQueue("notify", { body, channel });
     }
 
@@ -69,7 +69,7 @@ class QueueManager {
         return await this.addToQueue("reindex", { file });
     }
 
-    public async hasPendingIndexJob(q, queueJob): Promise<boolean> {
+    public async hasPendingIndexJob(q: Queue, queueJob: { pid: string; action: string }): Promise<boolean> {
         if (this.cache.isEnabled()) {
             return this.cache.isPidLocked(queueJob.pid, queueJob.action);
         }

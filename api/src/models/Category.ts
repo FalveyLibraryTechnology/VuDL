@@ -5,7 +5,7 @@ import path = require("path");
 
 import Job from "./Job";
 
-export class CategoryRaw {
+export interface CategoryRaw {
     category: string;
     jobs: Array<string>;
 }

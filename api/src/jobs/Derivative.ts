@@ -12,7 +12,7 @@ class Derivative implements QueueJob {
 
         // For each page
         const order = PageOrder.fromJob(job.data);
-        const generatingPromises = [];
+        const generatingPromises: Promise<string>[] = [];
         order.raw.forEach((page) => {
             // For each size
             const image = ImageFile.build(`${job.data.dir}/${page.filename}`);

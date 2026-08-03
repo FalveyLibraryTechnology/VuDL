@@ -1,5 +1,5 @@
-import * as request from "supertest";
-import * as session from "express-session";
+import request from "supertest";
+import session from "express-session";
 import { StatusCodes } from "http-status-codes";
 import app from "../app";
 import { getAuthRouter } from "./auth";

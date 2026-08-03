@@ -5,19 +5,19 @@ const mockDerivative = {
     run: jest.fn(),
 };
 jest.mock("../jobs/Derivative", () => {
-    return { default: jest.fn().mockImplementation(() => mockDerivative) };
+    return { __esModule: true, default: jest.fn().mockImplementation(() => mockDerivative) };
 });
 jest.mock("../jobs/GeneratePdf", () => {
-    return { default: jest.fn() };
+    return { __esModule: true, default: jest.fn() };
 });
 jest.mock("../jobs/Index", () => {
-    return { default: jest.fn() };
+    return { __esModule: true, default: jest.fn() };
 });
 jest.mock("../jobs/Ingest", () => {
-    return { default: jest.fn() };
+    return { __esModule: true, default: jest.fn() };
 });
 jest.mock("../jobs/Metadata", () => {
-    return { default: jest.fn() };
+    return { __esModule: true, default: jest.fn() };
 });
 
 describe("JobQueue", () => {

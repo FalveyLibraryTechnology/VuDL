@@ -1,5 +1,5 @@
 import { SolrAddDoc, SolrCache } from "./SolrCache";
-import * as fs from "fs";
+import fs from "fs";
 import glob = require("glob");
 
 describe("SolrCache", () => {

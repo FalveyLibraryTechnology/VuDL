@@ -20,8 +20,9 @@ export default [
         languageOptions: {
             parser: tsParser,
         },
-	rules: { 
-		"@typescript-eslint/no-require-imports": "off" 
+	rules: {
+		"@typescript-eslint/no-require-imports": "off",
+		"@typescript-eslint/triple-slash-reference": "off"
 	},
     }
 ];

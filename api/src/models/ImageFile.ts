@@ -1,10 +1,7 @@
 import sharp from "sharp";
 import path = require("path");
-
 import { execSync } from "child_process";
-
 import Config from "./Config";
-
 import fs = require("fs");
 
 class ImageFile {

@@ -16,8 +16,8 @@ describe("Derivative", () => {
 
     describe("run", () => {
         let job: Job;
-        let consoleErrorSpy;
-        let consoleLogSpy;
+        let consoleErrorSpy: jest.SpyInstance;
+        let consoleLogSpy: jest.SpyInstance;
         beforeEach(() => {
             job = {
                 data: {
