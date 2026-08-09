@@ -18,7 +18,7 @@ class Job {
     queue: QueueManager;
 
     constructor(dir: string, config: Config, queue: QueueManager) {
-        this.dir = dir;
+        this.dir = dir.endsWith("/") ? dir : dir + "/";
         this.name = path.basename(dir);
         this.config = config;
         this.queue = queue;
@@ -41,7 +41,7 @@ class Job {
     }
 
     getImage(fileName: string): ImageFile {
-        return ImageFile.build(this.dir + "/" + fileName);
+        return ImageFile.build(this.dir + fileName);
     }
 
     async makeDerivatives(): Promise<void> {
@@ -75,14 +75,14 @@ class Job {
         const pages = this.metadata.order.pages;
         const jpegs: string[] = [];
         for (const i in pages) {
-            const image = ImageFile.build(this.dir + "/" + pages[i].filename);
+            const image = ImageFile.build(this.dir + pages[i].filename);
             jpegs[i] = await image.derivative("LARGE");
         }
         return jpegs;
     }
 
     async generatePdf(): Promise<string> {
-        const filename = this.dir + "/pages.pdf";
+        const filename = this.dir + "pages.pdf";
         const jpegs = await this.getLargeJpegs();
         await this.imagesToPdf(jpegs, filename);
         if (!fileExists(filename)) {
