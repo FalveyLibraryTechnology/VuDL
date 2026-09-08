@@ -13,41 +13,7 @@ exports[`BulkEditor renders 1`] = `
     <div
       class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
     >
-      <div
-        class="MuiFormControl-root MuiTextField-root css-1xp5r68-MuiFormControl-root-MuiTextField-root"
-      >
-        <label
-          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root"
-          data-shrink="false"
-          for="top-level-pid"
-          id="top-level-pid-label"
-        >
-          Top Level PID
-        </label>
-        <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
-        >
-          <input
-            aria-invalid="false"
-            class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-            id="top-level-pid"
-            type="text"
-            value=""
-          />
-          <fieldset
-            aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
-          >
-            <legend
-              class="css-1n64csd-MuiNotchedOutlined-root"
-            >
-              <span>
-                Top Level PID
-              </span>
-            </legend>
-          </fieldset>
-        </div>
-      </div>
+      PidPicker: {"selected":""}
     </div>
     <div
       class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
@@ -156,52 +122,6 @@ exports[`BulkEditor renders 1`] = `
         class="MuiFormGroup-root MuiRadioGroup-root css-1mac7pt-MuiFormGroup-root"
         role="radiogroup"
       >
-        <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
-        >
-          <span
-            class="MuiButtonBase-root MuiRadio-root MuiRadio-colorPrimary PrivateSwitchBase-root MuiRadio-root MuiRadio-colorPrimary Mui-checked MuiRadio-root MuiRadio-colorPrimary css-1q72ply-MuiButtonBase-root-MuiSwitchBase-root-MuiRadio-root"
-          >
-            <input
-              checked=""
-              class="PrivateSwitchBase-input css-12xagqm-MuiSwitchBase-root"
-              name="choose-operation"
-              type="radio"
-              value="none"
-            />
-            <span
-              class="css-9oxshb-MuiRadioButtonIcon-root"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-iy8fvg-MuiSvgIcon-root-MuiRadioButtonIcon-root"
-                data-testid="RadioButtonUncheckedIcon"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
-                />
-              </svg>
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1pqw2bl-MuiSvgIcon-root-MuiRadioButtonIcon-root"
-                data-testid="RadioButtonCheckedIcon"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M8.465 8.465C9.37 7.56 10.62 7 12 7C14.76 7 17 9.24 17 12C17 13.38 16.44 14.63 15.535 15.535C14.63 16.44 13.38 17 12 17C9.24 17 7 14.76 7 12C7 10.62 7.56 9.37 8.465 8.465Z"
-                />
-              </svg>
-            </span>
-          </span>
-          <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
-          >
-            None
-          </span>
-        </label>
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
@@ -339,6 +259,13 @@ exports[`BulkEditor renders 1`] = `
         </label>
       </div>
     </div>
+    <h2>
+      Results:
+    </h2>
+    <pre
+      id="bulkEditResults"
+      title="Bulk Edit Results"
+    />
   </div>
 </DocumentFragment>
 `;

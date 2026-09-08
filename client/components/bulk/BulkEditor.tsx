@@ -13,6 +13,7 @@ import FormLabel from "@mui/material/FormLabel";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
+import PidPicker from "../edit/PidPicker";
 
 const BulkEditor = (): React.ReactElement => {
     const {
@@ -128,7 +129,7 @@ const BulkEditor = (): React.ReactElement => {
         }
         return replacements;
     };
-    const isReplacementFormValid = async (replacements: Array<FieldReplacement>) => {
+    const isReplacementFormValid = (replacements: Array<FieldReplacement>) => {
         if (findString == "") {
             setResults("No search string provided.");
             return false;
@@ -147,7 +148,7 @@ const BulkEditor = (): React.ReactElement => {
         }
         return true;
     };
-    const isFieldReplacementFormValid = async (replacements: Array<FieldReplacement>) => {
+    const isFieldReplacementFormValid = (replacements: Array<FieldReplacement>) => {
         if (replaceString == "" && replaceField == "") {
             setResults("No replacement string provided.");
             return false;
@@ -226,13 +227,7 @@ const BulkEditor = (): React.ReactElement => {
             <BasicBreadcrumbs />
             <h1>Bulk Editor</h1>
             <h2>Record Selector</h2>
-            <FormControl fullWidth>
-                <BlurSavingTextField
-                    value={topPid}
-                    setValue={setTopPid}
-                    options={{ id: "top-level-pid", label: "Top Level PID", variant: "outlined" }}
-                />
-            </FormControl>
+            <FormControl fullWidth>{<PidPicker selected={topPid} setSelected={setTopPid} />}</FormControl>
             <FormControl fullWidth>
                 <BlurSavingTextField
                     value={query}
@@ -261,9 +256,15 @@ const BulkEditor = (): React.ReactElement => {
                     aria-labelledby="choose-operation-label"
                     name="choose-operation"
                     value={operation}
-                    onChange={(event) => setOperation(event.target.value)}
+                    onChange={(event) => {
+                        setOperation(event.target.value);
+                        setResults("");
+                        setFindString("");
+                        setReplaceString("");
+                        setReplaceField("");
+                        setLicenseKey("");
+                    }}
                 >
-                    <FormControlLabel value="none" control={<Radio />} label="None" />
                     <FormControlLabel value="license" control={<Radio />} label="Change License" />
                     <FormControlLabel value="dcFields" control={<Radio />} label="Change DC Fields" />
                     <FormControlLabel value="replaceDcFields" control={<Radio />} label="Replace DC Fields" />
@@ -298,10 +299,6 @@ const BulkEditor = (): React.ReactElement => {
                             Apply Changes
                         </button>
                     </FormControl>
-                    <h2>Results:</h2>
-                    <pre title="Bulk Edit Results" id="bulkEditResults">
-                        {results}
-                    </pre>
                 </>
             )}
 
@@ -345,10 +342,6 @@ const BulkEditor = (): React.ReactElement => {
                     <FormControl>
                         <button onClick={() => doReplaceFieldText()}>Replace in Field</button>
                     </FormControl>
-                    <h2>Results:</h2>
-                    <pre title="Bulk Edit Results" id="bulkEditResults">
-                        {results}
-                    </pre>
                 </>
             )}
             {operation === "replaceDcFields" && (
@@ -384,12 +377,12 @@ const BulkEditor = (): React.ReactElement => {
                     <FormControl>
                         <button onClick={() => doReplaceFieldText()}>Replace Field</button>
                     </FormControl>
-                    <h2>Results:</h2>
-                    <pre title="Bulk Edit Results" id="bulkEditResults">
-                        {results}
-                    </pre>
                 </>
             )}
+            <h2>Results:</h2>
+            <pre title="Bulk Edit Results" id="bulkEditResults">
+                {results}
+            </pre>
         </div>
     );
 };

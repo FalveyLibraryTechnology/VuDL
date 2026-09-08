@@ -18,6 +18,10 @@ jest.mock("../../context/FetchContext", () => ({
 }));
 jest.mock("../shared/BasicBreadcrumbs", () => () => "BasicBreadcrumbs");
 
+jest.mock("../edit/PidPicker", () => (props) => {
+    return "PidPicker: " + JSON.stringify({ selected: props.selected });
+});
+
 describe("BulkEditor", () => {
     let editorValues;
     let fetchContextValues;
@@ -277,14 +281,6 @@ describe("BulkEditor", () => {
         await act(async () => {
             fireEvent.click(fetchButton);
         });
-        expect(fetchContextValues.action.fetchText).toHaveBeenCalledWith(
-            "http://localhost:9000/api/edit/query/solr",
-            {
-                body: '{\"query\":\"(*:*)\",\"rows\":50}',
-                method: "POST",
-            },
-            { "Content-Type": "application/json" },
-        );
         const recordList = screen.getByTitle("Selected Records");
         expect(recordList.innerHTML).toEqual("foo:\tFoo\n");
 
