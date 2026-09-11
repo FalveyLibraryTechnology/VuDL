@@ -222,36 +222,8 @@ const BulkEditor = (): React.ReactElement => {
         }
     };
 
-    return (
-        <div>
-            <BasicBreadcrumbs />
-            <h1>Bulk Editor</h1>
-            <h2>Record Selector</h2>
-            <FormControl fullWidth>
-                <BlurSavingTextField
-                    value={query}
-                    setValue={setQuery}
-                    options={{ id: "search-query", label: "Search Query", variant: "outlined" }}
-                />
-            </FormControl>
-            <label>Limit to children of this PID (optional):</label>
-            <FormControl fullWidth>
-                <PidPicker selected={topPid} setSelected={setTopPid} />
-            </FormControl>
-            <FormControl fullWidth>
-                <BlurSavingTextField
-                    value={limit}
-                    setValue={setLimit}
-                    options={{ id: "result-limit", label: "Result Limit", variant: "outlined" }}
-                />
-            </FormControl>
-            <FormControl>
-                <button onClick={() => doFetchRecords()}>Fetch Records</button>
-            </FormControl>
-            <p>{`${selectedRecordIds.length} selected.`}</p>
-            <pre title="Selected Records" id="selectedRecords">
-                {selectedRecords}
-            </pre>
+    let operationControls = selectedRecordIds.length < 1 ? "" :
+        <>
             <h2>Choose Operation</h2>
             <FormControl>
                 <FormLabel id="choose-operation-label"></FormLabel>
@@ -386,6 +358,39 @@ const BulkEditor = (): React.ReactElement => {
             <pre title="Bulk Edit Results" id="bulkEditResults">
                 {results}
             </pre>
+        </>;
+
+    return (
+        <div>
+            <BasicBreadcrumbs />
+            <h1>Bulk Editor</h1>
+            <h2>Record Selector</h2>
+            <FormControl fullWidth>
+                <BlurSavingTextField
+                    value={query}
+                    setValue={setQuery}
+                    options={{ id: "search-query", label: "Search Query", variant: "outlined" }}
+                />
+            </FormControl>
+            <label>Limit to children of this PID (optional):</label>
+            <FormControl fullWidth>
+                <PidPicker selected={topPid} setSelected={setTopPid} />
+            </FormControl>
+            <FormControl fullWidth>
+                <BlurSavingTextField
+                    value={limit}
+                    setValue={setLimit}
+                    options={{ id: "result-limit", label: "Result Limit", variant: "outlined" }}
+                />
+            </FormControl>
+            <FormControl>
+                <button onClick={() => doFetchRecords()}>Fetch Records</button>
+            </FormControl>
+            <p>{`${selectedRecordIds.length} selected.`}</p>
+            <pre title="Selected Records" id="selectedRecords">
+                {selectedRecords}
+            </pre>
+            {operationControls}
         </div>
     );
 };
