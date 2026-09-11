@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.7.0 - TBD
+
+### Added
+
+- Expanded Bulk Editor functionality to include replacing text in DC fields.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- PDF generation now works with v3 IIIF manifests.
+
 ## 2.6.2 - 2026-08-03
 
 ### Added
