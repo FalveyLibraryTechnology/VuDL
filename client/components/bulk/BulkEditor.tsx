@@ -227,13 +227,16 @@ const BulkEditor = (): React.ReactElement => {
             <BasicBreadcrumbs />
             <h1>Bulk Editor</h1>
             <h2>Record Selector</h2>
-            <FormControl fullWidth>{<PidPicker selected={topPid} setSelected={setTopPid} />}</FormControl>
             <FormControl fullWidth>
                 <BlurSavingTextField
                     value={query}
                     setValue={setQuery}
                     options={{ id: "search-query", label: "Search Query", variant: "outlined" }}
                 />
+            </FormControl>
+            <label>Limit to children of this PID (optional):</label>
+            <FormControl fullWidth>
+                <PidPicker selected={topPid} setSelected={setTopPid} />
             </FormControl>
             <FormControl fullWidth>
                 <BlurSavingTextField
