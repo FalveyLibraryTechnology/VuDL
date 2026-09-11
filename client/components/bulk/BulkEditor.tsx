@@ -222,143 +222,151 @@ const BulkEditor = (): React.ReactElement => {
         }
     };
 
-    let operationControls = selectedRecordIds.length < 1 ? "" :
-        <>
-            <h2>Choose Operation</h2>
-            <FormControl>
-                <FormLabel id="choose-operation-label"></FormLabel>
-                <RadioGroup
-                    aria-labelledby="choose-operation-label"
-                    name="choose-operation"
-                    value={operation}
-                    onChange={(event) => {
-                        setOperation(event.target.value);
-                        setResults("");
-                        setFindString("");
-                        setReplaceString("");
-                        setReplaceField("");
-                        setLicenseKey("");
-                    }}
-                >
-                    <FormControlLabel value="license" control={<Radio />} label="Change License" />
-                    <FormControlLabel value="dcFields" control={<Radio />} label="Change DC Fields" />
-                    <FormControlLabel value="replaceDcFields" control={<Radio />} label="Replace DC Fields" />
-                </RadioGroup>
-            </FormControl>
+    let operationControls =
+        selectedRecordIds.length < 1 ? (
+            ""
+        ) : (
+            <>
+                <h2>Choose Operation</h2>
+                <FormControl>
+                    <FormLabel id="choose-operation-label"></FormLabel>
+                    <RadioGroup
+                        aria-labelledby="choose-operation-label"
+                        name="choose-operation"
+                        value={operation}
+                        onChange={(event) => {
+                            setOperation(event.target.value);
+                            setResults("");
+                            setFindString("");
+                            setReplaceString("");
+                            setReplaceField("");
+                            setLicenseKey("");
+                        }}
+                    >
+                        <FormControlLabel value="license" control={<Radio />} label="Change License" />
+                        <FormControlLabel value="dcFields" control={<Radio />} label="Change DC Fields" />
+                        <FormControlLabel value="replaceDcFields" control={<Radio />} label="Replace DC Fields" />
+                    </RadioGroup>
+                </FormControl>
 
-            {operation === "license" && (
-                <>
-                    <h3>Replace License</h3>
-                    <FormControl fullWidth>
-                        <InputLabel id="choose-new-license-label">Choose New License</InputLabel>
-                        <Select
-                            labelId="choose-new-license-label"
-                            label="Choose New License"
-                            value={licenseKey}
-                            onChange={(event) => setLicenseKey(event.target.value)}
-                        >
-                            <MenuItem key="nochange" value="">
-                                Do not change license.
-                            </MenuItem>
-                            {Object.entries(licensesCatalog).map(([key, license]) => {
-                                return (
-                                    <MenuItem key={key} value={key}>
-                                        {license.name}
-                                    </MenuItem>
-                                );
-                            })}
-                        </Select>
-                    </FormControl>
-                    <FormControl>
-                        <button id="bulkEditSubmit" onClick={() => doApplyChanges()}>
-                            Apply Changes
-                        </button>
-                    </FormControl>
-                </>
-            )}
+                {operation === "license" && (
+                    <>
+                        <h3>Replace License</h3>
+                        <FormControl fullWidth>
+                            <InputLabel id="choose-new-license-label">Choose New License</InputLabel>
+                            <Select
+                                labelId="choose-new-license-label"
+                                label="Choose New License"
+                                value={licenseKey}
+                                onChange={(event) => setLicenseKey(event.target.value)}
+                            >
+                                <MenuItem key="nochange" value="">
+                                    Do not change license.
+                                </MenuItem>
+                                {Object.entries(licensesCatalog).map(([key, license]) => {
+                                    return (
+                                        <MenuItem key={key} value={key}>
+                                            {license.name}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                        </FormControl>
+                        <FormControl>
+                            <button id="bulkEditSubmit" onClick={() => doApplyChanges()}>
+                                Apply Changes
+                            </button>
+                        </FormControl>
+                    </>
+                )}
 
-            {operation === "dcFields" && (
-                <>
-                    <h2>Replace Text in DC Field</h2>
-                    <FormControl fullWidth>
-                        <InputLabel id="dc-field-label">Field</InputLabel>
-                        <Select
-                            labelId="dc-field-label"
-                            label="Field"
-                            value={dcField}
-                            onChange={(event) => setDcField(event.target.value)}
-                        >
-                            {Object.entries(dublinCoreFieldCatalog)
-                                .filter(([, field]) => field.type !== "locked")
-                                .map(([key, field]) => (
-                                    <MenuItem key={key} value={key}>
-                                        {field.label}
-                                    </MenuItem>
-                                ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl fullWidth>
-                        <BlurSavingTextField
-                            value={findString}
-                            setValue={setFindString}
-                            options={{ id: "find", label: "Find", variant: "outlined" }}
-                        />
-                    </FormControl>
-                    <FormControl fullWidth>
-                        <BlurSavingTextField
-                            value={replaceString}
-                            setValue={setReplaceString}
-                            options={{ id: "replace-with", label: "Replace With", variant: "outlined" }}
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <button onClick={() => doPreviewFieldText()}>Preview Changes</button>
-                    </FormControl>
-                    <FormControl>
-                        <button onClick={() => doReplaceFieldText()}>Replace in Field</button>
-                    </FormControl>
-                </>
-            )}
-            {operation === "replaceDcFields" && (
-                <>
-                    <h2>Replace DC Field</h2>
-                    <FormControl fullWidth>
-                        <InputLabel id="dc-field-label">Field</InputLabel>
-                        <Select
-                            labelId="dc-field-label"
-                            label="Field"
-                            value={dcField}
-                            onChange={(event) => setDcField(event.target.value)}
-                        >
-                            {Object.entries(dublinCoreFieldCatalog)
-                                .filter(([, field]) => field.type !== "locked")
-                                .map(([key, field]) => (
-                                    <MenuItem key={key} value={key}>
-                                        {field.label}
-                                    </MenuItem>
-                                ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl fullWidth>
-                        <BlurSavingTextField
-                            value={replaceField}
-                            setValue={setReplaceField}
-                            options={{ id: "replace-whole-field-with", label: "New Field text", variant: "outlined" }}
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <button onClick={() => doPreviewReplaceField()}>Preview Changes</button>
-                    </FormControl>
-                    <FormControl>
-                        <button onClick={() => doReplaceFieldText()}>Replace Field</button>
-                    </FormControl>
-                </>
-            )}
-            <h2>Results:</h2>
-            <pre title="Bulk Edit Results" id="bulkEditResults">
-                {results}
-            </pre>
-        </>;
+                {operation === "dcFields" && (
+                    <>
+                        <h2>Replace Text in DC Field</h2>
+                        <FormControl fullWidth>
+                            <InputLabel id="dc-field-label">Field</InputLabel>
+                            <Select
+                                labelId="dc-field-label"
+                                label="Field"
+                                value={dcField}
+                                onChange={(event) => setDcField(event.target.value)}
+                            >
+                                {Object.entries(dublinCoreFieldCatalog)
+                                    .filter(([, field]) => field.type !== "locked")
+                                    .map(([key, field]) => (
+                                        <MenuItem key={key} value={key}>
+                                            {field.label}
+                                        </MenuItem>
+                                    ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth>
+                            <BlurSavingTextField
+                                value={findString}
+                                setValue={setFindString}
+                                options={{ id: "find", label: "Find", variant: "outlined" }}
+                            />
+                        </FormControl>
+                        <FormControl fullWidth>
+                            <BlurSavingTextField
+                                value={replaceString}
+                                setValue={setReplaceString}
+                                options={{ id: "replace-with", label: "Replace With", variant: "outlined" }}
+                            />
+                        </FormControl>
+                        <FormControl>
+                            <button onClick={() => doPreviewFieldText()}>Preview Changes</button>
+                        </FormControl>
+                        <FormControl>
+                            <button onClick={() => doReplaceFieldText()}>Replace in Field</button>
+                        </FormControl>
+                    </>
+                )}
+                {operation === "replaceDcFields" && (
+                    <>
+                        <h2>Replace DC Field</h2>
+                        <FormControl fullWidth>
+                            <InputLabel id="dc-field-label">Field</InputLabel>
+                            <Select
+                                labelId="dc-field-label"
+                                label="Field"
+                                value={dcField}
+                                onChange={(event) => setDcField(event.target.value)}
+                            >
+                                {Object.entries(dublinCoreFieldCatalog)
+                                    .filter(([, field]) => field.type !== "locked")
+                                    .map(([key, field]) => (
+                                        <MenuItem key={key} value={key}>
+                                            {field.label}
+                                        </MenuItem>
+                                    ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth>
+                            <BlurSavingTextField
+                                value={replaceField}
+                                setValue={setReplaceField}
+                                options={{
+                                    id: "replace-whole-field-with",
+                                    label: "New Field text",
+                                    variant: "outlined",
+                                }}
+                            />
+                        </FormControl>
+                        <FormControl>
+                            <button onClick={() => doPreviewReplaceField()}>Preview Changes</button>
+                        </FormControl>
+                        <FormControl>
+                            <button onClick={() => doReplaceFieldText()}>Replace Field</button>
+                        </FormControl>
+                    </>
+                )}
+                <h2>Results:</h2>
+                <pre title="Bulk Edit Results" id="bulkEditResults">
+                    {results}
+                </pre>
+            </>
+        );
 
     return (
         <div>
