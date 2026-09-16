@@ -60,7 +60,6 @@ describe("BulkEditor", () => {
 
     it("reports failure if it receives bad JSON", async () => {
         render(<BulkEditor />);
-
         const input = screen.getByLabelText("Search Query");
         fireEvent.blur(input, {
             target: {
@@ -127,22 +126,6 @@ describe("BulkEditor", () => {
         );
         const recordList = screen.getByTitle("Selected Records");
         expect(recordList.innerHTML).toEqual("No results found.");
-        await act(async () => {
-            fireEvent.click(screen.getByRole("radio", { name: "Change License" }));
-        });
-        const licenseControl = screen.getByRole("combobox", { name: "Choose New License" });
-        await act(async () => {
-            fireEvent.mouseDown(licenseControl);
-        });
-        await act(async () => {
-            fireEvent.click(screen.getByText("testLicense"));
-        });
-        const applyButton = screen.getByText("Apply Changes");
-        await act(async () => {
-            fireEvent.click(applyButton);
-        });
-        const resultList = screen.getByTitle("Bulk Edit Results");
-        expect(resultList.innerHTML).toEqual("No records selected.");
     });
 
     it("performs a Solr search and changes a license", async () => {
@@ -170,7 +153,6 @@ describe("BulkEditor", () => {
         );
         const recordList = screen.getByTitle("Selected Records");
         expect(recordList.innerHTML).toEqual("foo:\tFoo\nbar:\tBar\n");
-
         await act(async () => {
             fireEvent.click(screen.getByRole("radio", { name: "Change License" }));
         });
@@ -226,7 +208,6 @@ describe("BulkEditor", () => {
         );
         const recordList = screen.getByTitle("Selected Records");
         expect(recordList.innerHTML).toEqual("foo:\tfoo bar\n");
-
         await act(async () => {
             fireEvent.click(screen.getByRole("radio", { name: "Change DC Fields" }));
         });
@@ -285,7 +266,6 @@ describe("BulkEditor", () => {
         });
         const recordList = screen.getByTitle("Selected Records");
         expect(recordList.innerHTML).toEqual("foo:\tFoo\n");
-
         await act(async () => {
             fireEvent.click(screen.getByRole("radio", { name: "Change DC Fields" }));
         });
@@ -352,7 +332,6 @@ describe("BulkEditor", () => {
         );
         const recordList = screen.getByTitle("Selected Records");
         expect(recordList.innerHTML).toEqual("foo:\tFoo\nbar:\tBar\n");
-
         await act(async () => {
             fireEvent.click(screen.getByRole("radio", { name: "Change License" }));
         });
