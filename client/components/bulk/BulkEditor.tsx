@@ -21,7 +21,6 @@ const BulkEditor = (): React.ReactElement => {
         action: { initializeCatalog },
     } = useEditorContext();
     const [operation, setOperation] = useState("none");
-    const [hasFetched, setHasFetched] = useState(false);
     const [results, setResults] = useState("");
     const [selectedRecords, setSelectedRecords] = useState("");
     const [licenseKey, setLicenseKey] = useState("");
@@ -42,7 +41,6 @@ const BulkEditor = (): React.ReactElement => {
     }, []);
 
     const doFetchRecords = async () => {
-        setHasFetched(true);
         try {
             const queryParts = [];
             if (query.trim().length > 0) {
