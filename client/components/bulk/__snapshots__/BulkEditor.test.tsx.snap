@@ -19,8 +19,8 @@ exports[`BulkEditor renders 1`] = `
         <label
           class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root"
           data-shrink="false"
-          for="outlined-basic"
-          id="outlined-basic-label"
+          for="search-query"
+          id="search-query-label"
         >
           Search Query
         </label>
@@ -30,7 +30,7 @@ exports[`BulkEditor renders 1`] = `
           <input
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-            id="outlined-basic"
+            id="search-query"
             type="text"
             value=""
           />
@@ -49,6 +49,14 @@ exports[`BulkEditor renders 1`] = `
         </div>
       </div>
     </div>
+    <label>
+      Limit to children of this PID (optional):
+    </label>
+    <div
+      class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
+    >
+      PidPicker: {"selected":""}
+    </div>
     <div
       class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
     >
@@ -58,8 +66,8 @@ exports[`BulkEditor renders 1`] = `
         <label
           class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
           data-shrink="true"
-          for="outlined-basic"
-          id="outlined-basic-label"
+          for="result-limit"
+          id="result-limit-label"
         >
           Result Limit
         </label>
@@ -69,7 +77,7 @@ exports[`BulkEditor renders 1`] = `
           <input
             aria-invalid="false"
             class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-            id="outlined-basic"
+            id="result-limit"
             type="text"
             value="50"
           />
@@ -101,83 +109,6 @@ exports[`BulkEditor renders 1`] = `
     <pre
       id="selectedRecords"
       title="Selected Records"
-    />
-    <h2>
-      Changes to Apply
-    </h2>
-    <div
-      class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
-    >
-      <label
-        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root"
-        data-shrink="false"
-      >
-        Choose New License
-      </label>
-      <div
-        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-sc8y68-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
-      >
-        <div
-          aria-expanded="false"
-          aria-haspopup="listbox"
-          class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-18jp67o-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
-          role="combobox"
-          tabindex="0"
-        >
-          <span
-            aria-hidden="true"
-            class="notranslate"
-          >
-            ​
-          </span>
-        </div>
-        <input
-          aria-hidden="true"
-          aria-invalid="false"
-          class="MuiSelect-nativeInput css-j0riat-MuiSelect-nativeInput"
-          tabindex="-1"
-          value=""
-        />
-        <svg
-          aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-1rfqz7c-MuiSvgIcon-root-MuiNativeSelect-root-MuiSelect-icon"
-          data-testid="ArrowDropDownIcon"
-          focusable="false"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M7 10l5 5 5-5z"
-          />
-        </svg>
-        <fieldset
-          aria-hidden="true"
-          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
-        >
-          <legend
-            class="css-1n64csd-MuiNotchedOutlined-root"
-          >
-            <span>
-              Choose New License
-            </span>
-          </legend>
-        </fieldset>
-      </div>
-    </div>
-    <div
-      class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-    >
-      <button
-        id="bulkEditSubmit"
-      >
-        Apply Changes
-      </button>
-    </div>
-    <h2>
-      Results:
-    </h2>
-    <pre
-      id="bulkEditResults"
-      title="Bulk Edit Results"
     />
   </div>
 </DocumentFragment>
