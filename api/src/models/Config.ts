@@ -36,6 +36,10 @@ class Config {
         Config.instance = config;
     }
 
+    get jobNamePrefix(): string {
+        return (this.ini["job_name_prefix"] ?? "") as string;
+    }
+
     get backendUrl(): string {
         return (this.ini["backend_url"] ?? "http://localhost:9000") as string;
     }
