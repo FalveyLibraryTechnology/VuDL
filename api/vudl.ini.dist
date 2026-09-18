@@ -90,6 +90,9 @@ holding_area_path = "/opt/holdingarea"
 # Base path where processed files are moved after ingestion.
 processed_area_path = "/opt/processed"
 
+# Prefix to add to all newly-ingested job names (e.g. "_" to sort new jobs to top of holding area)
+job_name_prefix = ""
+
 # Allowed origins, IPs, and addresses for CORS
 allowed_origins[] = http://localhost:3000 # api
 allowed_origins[] = http://localhost:9000 # client

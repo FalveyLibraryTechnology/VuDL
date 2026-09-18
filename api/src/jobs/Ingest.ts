@@ -251,7 +251,7 @@ export class IngestProcessor {
     }
 
     async finalizeTitle(resource: FedoraObject): Promise<void> {
-        const title = this.job.dir.substring(1).split("/").reverse().join("_");
+        const title = this.config.jobNamePrefix + this.job.dir.substring(1).split("/").reverse().join("_");
         this.logger.info("Updating title to " + title);
         await resource.modifyObjectLabel(title);
 

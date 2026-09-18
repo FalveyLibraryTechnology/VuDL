@@ -3,7 +3,6 @@ import { createWriteStream, openSync, closeSync, existsSync as fileExists, statS
 import PDFDocument = require("pdfkit");
 
 import path = require("path");
-
 import Config from "./Config";
 import { execSync } from "child_process";
 import JobMetadata from "./JobMetadata";
@@ -18,7 +17,7 @@ class Job {
     queue: QueueManager;
 
     constructor(dir: string, config: Config, queue: QueueManager) {
-        this.dir = dir;
+        this.dir = dir.replace(/\/+$/, "");
         this.name = path.basename(dir);
         this.config = config;
         this.queue = queue;
