@@ -129,7 +129,7 @@ edit.post("/object/new", requireToken, bodyParser.json(), async function (req, r
             return;
         }
     } else if (childModels.includes("vudl-system:DataModel")) {
-        res.status(400).send("DataModel objects must be contained by a ListCollection; they cannot be top-level.");
+        res.status(400).send("DataModel objects must be contained by a CollectionModel; they cannot be top-level.");
         return;
     }
     const factory = FedoraObjectFactory.getInstance();
