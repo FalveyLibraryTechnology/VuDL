@@ -290,6 +290,16 @@ describe("edit", () => {
             expect(dataSpy).toHaveBeenCalledTimes(1);
             expect(dataSpy).toHaveBeenCalledWith("pid:123");
         });
+        it("prevents top-level DataModel objects", async () => {
+            const response = await request(app)
+                .post("/edit/object/new")
+                .send({ model: "vudl-system:PDFData", title: "bar", state: "Active" })
+                .set("Authorization", "Bearer test")
+                .expect(StatusCodes.BAD_REQUEST);
+            expect(response.text).toEqual(
+                "DataModel objects must be contained by a CollectionModel; they cannot be top-level.",
+            );
+        });
         it("handles data retrieval exceptions", async () => {
             const mockData = FedoraDataCollection.build("pid:123");
             mockData.fedoraDetails = {
