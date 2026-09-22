@@ -43,6 +43,6 @@
     "postinstall": "npm run setup"
   },
   "devDependencies": {
-    "concurrently": "^8"
+    "concurrently": "^10"
   }
 }
