@@ -12,7 +12,7 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
         class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <div
-          class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root agentRoleSelect css-5h82ro-MuiInputBase-root-MuiInput-root"
+          class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root agentRoleSelect css-nxdme1-MuiInputBase-root-MuiInput-root"
         >
           <select
             aria-invalid="false"
@@ -53,7 +53,7 @@ exports[`DatastreamAgentsContentRow renders 1`] = `
         class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <div
-          class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root agentTypeSelect css-5h82ro-MuiInputBase-root-MuiInput-root"
+          class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root agentTypeSelect css-nxdme1-MuiInputBase-root-MuiInput-root"
         >
           <select
             aria-invalid="false"

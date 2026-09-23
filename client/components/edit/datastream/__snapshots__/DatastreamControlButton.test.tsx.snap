@@ -9,7 +9,7 @@ exports[`DatastreamControlButton renders 1`] = `
   >
     <button
       aria-label="Upload"
-      class="MuiButtonBase-root MuiButton-root MuiLoadingButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiLoadingButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary datastreamControlButton css-kukt1f-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
+      class="MuiButtonBase-root MuiButton-root MuiLoadingButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary datastreamControlButton css-kukt1f-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
       id="_r_1_"
       tabindex="0"
       type="button"

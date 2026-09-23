@@ -4,7 +4,7 @@ exports[`DatastreamDublinCoreEditField renders a dropdown field 1`] = `
 <DocumentFragment>
   FormControl
   <div
-    class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiNativeSelect-root css-1cmet5c-MuiInputBase-root-MuiInput-root"
+    class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiNativeSelect-root css-19dnofg-MuiInputBase-root-MuiInput-root"
   >
     <select
       class="MuiNativeSelect-select MuiNativeSelect-standard MuiInputBase-input MuiInput-input css-1xaqj7c-MuiNativeSelect-root-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"
@@ -44,7 +44,7 @@ exports[`DatastreamDublinCoreEditField renders a dropdown field with an unexpect
 <DocumentFragment>
   FormControl
   <div
-    class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiNativeSelect-root css-1cmet5c-MuiInputBase-root-MuiInput-root"
+    class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiNativeSelect-root css-19dnofg-MuiInputBase-root-MuiInput-root"
   >
     <select
       class="MuiNativeSelect-select MuiNativeSelect-standard MuiInputBase-input MuiInput-input css-1xaqj7c-MuiNativeSelect-root-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input"

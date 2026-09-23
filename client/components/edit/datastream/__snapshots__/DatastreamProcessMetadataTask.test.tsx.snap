@@ -31,7 +31,7 @@ exports[`DatastreamProcessMetadataTask renders with tool presets 1`] = `
     <label>
       Select a preset tool:
       <div
-        class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root css-5h82ro-MuiInputBase-root-MuiInput-root"
+        class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root css-nxdme1-MuiInputBase-root-MuiInput-root"
       >
         <select
           aria-invalid="false"
