@@ -65,7 +65,7 @@
     "@typescript-eslint/parser": "^8.52",
     "eslint": "^10",
     "eslint-config-prettier": "^10",
-    "eslint-plugin-jsdoc": "^63",
+    "eslint-plugin-jsdoc": "^64",
     "eslint-plugin-prettier": "^5",
     "jest": "^30",
     "nodemon": "^3",
