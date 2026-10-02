@@ -104,8 +104,8 @@ describe("QueueManager", () => {
             jobs.push(job);
             const queue = new Queue("foo");
             const getJobsSpy = jest.spyOn(queue, "getJobs").mockResolvedValue(jobs);
-            expect(await queueManager.hasPendingIndexJob(queue, job.data)).toBeTruthy();
-            expect(await queueManager.hasPendingIndexJob(queue, { pid: "nope", action: "maybe" })).toBeFalsy();
+            expect(await queueManager.hasPendingIndexJob(() => queue, job.data)).toBeTruthy();
+            expect(await queueManager.hasPendingIndexJob(() => queue, { pid: "nope", action: "maybe" })).toBeFalsy();
             expect(getJobsSpy).toHaveBeenCalled();
         });
 
@@ -117,8 +117,8 @@ describe("QueueManager", () => {
             const queue = new Queue("foo");
             const getJobsSpy = jest.spyOn(queue, "getJobs").mockImplementation(jest.fn());
             const jobData = { pid: "foo", action: "bar" };
-            expect(await cachedManager.hasPendingIndexJob(queue, jobData)).toBeTruthy();
-            expect(await cachedManager.hasPendingIndexJob(queue, jobData)).toBeFalsy();
+            expect(await cachedManager.hasPendingIndexJob(() => queue, jobData)).toBeTruthy();
+            expect(await cachedManager.hasPendingIndexJob(() => queue, jobData)).toBeFalsy();
             expect(getJobsSpy).not.toHaveBeenCalled();
             expect(enabledSpy).toHaveBeenCalledTimes(2);
             expect(lockedSpy).toHaveBeenCalledTimes(2);
