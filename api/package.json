@@ -44,7 +44,7 @@
     "node-tesseract-ocr": "^2",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "pdfkit": "^0.19",
+    "pdfkit": "^0.20",
     "sharp": "^0.35",
     "sqlite3": "^6",
     "tmp": "^0.2.1",
