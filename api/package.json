@@ -23,7 +23,7 @@
     "@xmldom/xmldom": "^0.9",
     "body-parser": "^2.2.1",
     "bull-arena": "^4.9.2",
-    "bullmq": "^5.7",
+    "bullmq": "^6.3",
     "cookie-parser": "^1",
     "cors": "^2.8.5",
     "debug": "~4.4.3",
