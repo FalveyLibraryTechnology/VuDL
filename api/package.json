@@ -61,7 +61,7 @@
     "@types/pdfkit": "^0.17.6",
     "@types/jest": "^30",
     "@types/node": "^26",
-    "@typescript-eslint/eslint-plugin": "^8.52",
+    "@typescript-eslint/eslint-plugin": "^8.71",
     "@typescript-eslint/parser": "^8.52",
     "eslint": "^10",
     "eslint-config-prettier": "^10",
