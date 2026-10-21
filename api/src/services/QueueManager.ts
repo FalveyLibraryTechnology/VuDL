@@ -69,22 +69,34 @@ class QueueManager {
         return await this.addToQueue("reindex", { file });
     }
 
-    public async hasPendingIndexJob(q: Queue, queueJob: { pid: string; action: string }): Promise<boolean> {
+    /**
+     * Check whether an index job is currently pending in the queue
+     *
+     * @param overrideQueue Set to null to retrieve the index queue automatically; set explicitly for testing purposes
+     * @param queueJob      Job to search for in queue
+     */
+    public async hasPendingIndexJob(
+        overrideQueue: Queue | null,
+        queueJob: { pid: string; action: string },
+    ): Promise<boolean> {
         if (this.cache.isEnabled()) {
             return this.cache.isPidLocked(queueJob.pid, queueJob.action);
         }
+        const q = overrideQueue ?? this.getQueue(this.getQueueNameForJob("index"));
         const jobs = await q.getJobs("wait");
-        return this.isAlreadyAwaitingAction(jobs, "index", queueJob);
+        const result = this.isAlreadyAwaitingAction(jobs, "index", queueJob);
+        q.close();
+        return result;
     }
 
     public async performIndexOperation(pid: string, action: string, force = false): Promise<void> {
         // Fedora often fires many change events about the same object in rapid succession;
         // we don't want to index more times than we have to, so let's not re-queue anything
         // that is already awaiting indexing.
-        const q = this.getQueue(this.getQueueNameForJob("index"));
         const queueJob = { pid, action };
-        if (!force && (await this.hasPendingIndexJob(q, queueJob))) {
+        if (!force && (await this.hasPendingIndexJob(null, queueJob))) {
             console.log(`Skipping queue; ${pid} is already awaiting ${action}.`);
+            return;
         } else {
             // Clear the cache for the pid that needs to be reindexed; we don't want to read an
             // outdated version while updates are pending. Note that reindex_children is a
@@ -94,9 +106,10 @@ class QueueManager {
                 this.cache.purgeFromCacheIfEnabled(pid);
             }
             this.cache.lockPidIfEnabled(pid, action);
+            const q = this.getQueue(this.getQueueNameForJob("index"));
             await q.add("index", queueJob);
+            q.close();
         }
-        q.close();
     }
 
     protected isAlreadyAwaitingAction(
