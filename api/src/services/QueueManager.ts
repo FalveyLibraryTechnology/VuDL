@@ -69,6 +69,12 @@ class QueueManager {
         return await this.addToQueue("reindex", { file });
     }
 
+    /**
+     * Check whether an index job is currently pending in the queue
+     *
+     * @param overrideQueue Set to null to retrieve the index queue automatically; set explicitly for testing purposes
+     * @param queueJob      Job to search for in queue
+     */
     public async hasPendingIndexJob(
         overrideQueue: Queue | null,
         queueJob: { pid: string; action: string },
