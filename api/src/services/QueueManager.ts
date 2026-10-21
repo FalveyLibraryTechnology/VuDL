@@ -69,11 +69,14 @@ class QueueManager {
         return await this.addToQueue("reindex", { file });
     }
 
-    public async hasPendingIndexJob(getQ: () => Queue, queueJob: { pid: string; action: string }): Promise<boolean> {
+    public async hasPendingIndexJob(
+        overrideQueue: Queue | null,
+        queueJob: { pid: string; action: string },
+    ): Promise<boolean> {
         if (this.cache.isEnabled()) {
             return this.cache.isPidLocked(queueJob.pid, queueJob.action);
         }
-        const q = getQ();
+        const q = overrideQueue ?? this.getQueue(this.getQueueNameForJob("index"));
         const jobs = await q.getJobs("wait");
         const result = this.isAlreadyAwaitingAction(jobs, "index", queueJob);
         q.close();
@@ -84,10 +87,8 @@ class QueueManager {
         // Fedora often fires many change events about the same object in rapid succession;
         // we don't want to index more times than we have to, so let's not re-queue anything
         // that is already awaiting indexing.
-        let q = null;
-        const getQ = () => this.getQueue(this.getQueueNameForJob("index"));
         const queueJob = { pid, action };
-        if (!force && (await this.hasPendingIndexJob(getQ, queueJob))) {
+        if (!force && (await this.hasPendingIndexJob(null, queueJob))) {
             console.log(`Skipping queue; ${pid} is already awaiting ${action}.`);
             return;
         } else {
@@ -99,10 +100,8 @@ class QueueManager {
                 this.cache.purgeFromCacheIfEnabled(pid);
             }
             this.cache.lockPidIfEnabled(pid, action);
-            q = getQ();
+            const q = this.getQueue(this.getQueueNameForJob("index"));
             await q.add("index", queueJob);
-        }
-        if (q) {
             q.close();
         }
     }

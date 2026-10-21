@@ -104,8 +104,8 @@ describe("QueueManager", () => {
             jobs.push(job);
             const queue = new Queue("foo");
             const getJobsSpy = jest.spyOn(queue, "getJobs").mockResolvedValue(jobs);
-            expect(await queueManager.hasPendingIndexJob(() => queue, job.data)).toBeTruthy();
-            expect(await queueManager.hasPendingIndexJob(() => queue, { pid: "nope", action: "maybe" })).toBeFalsy();
+            expect(await queueManager.hasPendingIndexJob(queue, job.data)).toBeTruthy();
+            expect(await queueManager.hasPendingIndexJob(queue, { pid: "nope", action: "maybe" })).toBeFalsy();
             expect(getJobsSpy).toHaveBeenCalled();
         });
 
@@ -117,8 +117,8 @@ describe("QueueManager", () => {
             const queue = new Queue("foo");
             const getJobsSpy = jest.spyOn(queue, "getJobs").mockImplementation(jest.fn());
             const jobData = { pid: "foo", action: "bar" };
-            expect(await cachedManager.hasPendingIndexJob(() => queue, jobData)).toBeTruthy();
-            expect(await cachedManager.hasPendingIndexJob(() => queue, jobData)).toBeFalsy();
+            expect(await cachedManager.hasPendingIndexJob(queue, jobData)).toBeTruthy();
+            expect(await cachedManager.hasPendingIndexJob(queue, jobData)).toBeFalsy();
             expect(getJobsSpy).not.toHaveBeenCalled();
             expect(enabledSpy).toHaveBeenCalledTimes(2);
             expect(lockedSpy).toHaveBeenCalledTimes(2);
@@ -140,7 +140,7 @@ describe("QueueManager", () => {
             const consoleSpy = jest.spyOn(console, "log").mockImplementation(jest.fn());
             const pendingSpy = jest.spyOn(queueManager, "hasPendingIndexJob").mockReturnValue(true);
             await queueManager.performIndexOperation("123", "index");
-            expect(pendingSpy).toHaveBeenCalledWith(expect.anything(), { pid: "123", action: "index" });
+            expect(pendingSpy).toHaveBeenCalledWith(null, { pid: "123", action: "index" });
             expect(addSpy).not.toHaveBeenCalled();
             expect(consoleSpy).toHaveBeenCalledTimes(1);
             expect(consoleSpy).toHaveBeenCalledWith("Skipping queue; 123 is already awaiting index.");
@@ -160,7 +160,7 @@ describe("QueueManager", () => {
         it("will queue an index operation if it is not a duplicate", async () => {
             const pendingSpy = jest.spyOn(queueManager, "hasPendingIndexJob").mockReturnValue(false);
             await queueManager.performIndexOperation("123", "index");
-            expect(pendingSpy).toHaveBeenCalledWith(expect.anything(), { pid: "123", action: "index" });
+            expect(pendingSpy).toHaveBeenCalledWith(null, { pid: "123", action: "index" });
             expect(addSpy).toHaveBeenCalledWith("index", { pid: "123", action: "index" });
             expect(purgeSpy).toHaveBeenCalledWith("123");
             expect(lockSpy).toHaveBeenCalledWith("123", "index");
@@ -169,7 +169,7 @@ describe("QueueManager", () => {
         it("will not purge the queue for reindex_children operations", async () => {
             const pendingSpy = jest.spyOn(queueManager, "hasPendingIndexJob").mockReturnValue(false);
             await queueManager.performIndexOperation("123", "reindex_children");
-            expect(pendingSpy).toHaveBeenCalledWith(expect.anything(), { pid: "123", action: "reindex_children" });
+            expect(pendingSpy).toHaveBeenCalledWith(null, { pid: "123", action: "reindex_children" });
             expect(addSpy).toHaveBeenCalledWith("index", { pid: "123", action: "reindex_children" });
             expect(purgeSpy).not.toHaveBeenCalled();
             expect(lockSpy).toHaveBeenCalledWith("123", "reindex_children");
