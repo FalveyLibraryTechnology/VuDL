@@ -1,7 +1,8 @@
 .deleteBtn {
     &:hover,
     &:focus {
-        background-color: var(--red-11);
-        border-color: var(--red-11);
+        color: var(--danger-text);
+        background-color: var(--danger);
+        border-color: var(--danger-text);
     }
 }
