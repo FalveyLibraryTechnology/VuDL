@@ -14,8 +14,8 @@
     min-width: unset;
     padding-block: 0.5em 0.4em;
 
-    &:not(:hover,:focus) {
-        background-color: white;
-        border-color: black;
+    &:not(:hover, :focus) {
+        background-color: Canvas;
+        border-color: CanvasText;
     }
 }

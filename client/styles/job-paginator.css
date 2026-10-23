@@ -84,15 +84,15 @@ label input[type="radio"] {
 }
 .group button {
     width: 100%;
-    color: white;
+    color: Canvas;
     background-color: var(--slate-11);
-    border-color: black;
+    border-color: CanvasText;
     border-right-width: 0;
     border-radius: 0;
 
     &:hover,
     &:focus {
-        background-color: black;
+        background-color: CanvasText;
     }
 }
 .group button:first-child,
@@ -192,7 +192,7 @@ label input[type="radio"] {
 }
 
 .preview img {
-    border: 1px solid black;
+    border: 1px solid CanvasText;
 }
 
 .MuiTreeItem-root.Mui-selected,

@@ -1,7 +1,29 @@
-/* Radix colors imported in _app.tsx */
+/**
+ * Radix colors imported in _app.tsx
+ *
+ * The Radix number system:
+ * | Step | Use                                     | Accessible Text
+ * | ---: | --------------------------------------- | ---------------
+ * |  01  | App background                          | -11, -12 (AAA)
+ * |  02  | Subtle background                       | -11 (AA), -12 (AAA)
+ * |  03  | UI element background                   | -11, -12 (AA), CanvasText (AAA)
+ * |  04  | Hovered UI element background           | -11, -12 (AA), CanvasText (AAA)
+ * |  05  | Active / Selected UI element background | -11, -12 (AA), CanvasText (AAA)
+ * |  06  | Subtle borders and separators           | none
+ * |  07  | UI element border and focus rings       | none
+ * |  08  | Hovered UI element border               | none
+ * |  09  | Solid backgrounds                       | white, black for sky, mint, lime, yellow, and amber
+ * |  10  | Hovered solid backgrounds               | white, black for sky, mint, lime, yellow, and amber
+ * |  11  | Low-contrast text                       | -01 (AAA), -02 (AA)
+ * |  12  | High-contrast text                      | -01 (AAA), -02 (AA)
+ *
+ * system colors:
+ * - CanvasText: black in light mode, white in dark mode (text)
+ * - Canvas: white in light mode, dark gray in dark mode (background)
+ */
 
 :root {
-    --soft: var(--slate-02);
+    --soft: var(--slate-01);
     --edge: var(--slate-07);
     --mute: var(--slate-11);
     --text: var(--slate-12);
@@ -10,27 +32,29 @@
 :root {
     --text-muted: var(--mute);
 
-    --family-sans-serif: system-ui, ui-sans-serif, sans-serif;
-    --family-serif: ui-serif, serif;
+    --family-sans-serif: system-ui, sans-serif;
+    --family-serif: serif;
     --family-monospace: ui-monospace, monospace;
 
-    --primary: var(--sky-11);
-    --primary-text: white;
+    --primary: var(--sky-09);
+    --primary-text: black;
 
     --secondary: var(--mute);
-    --secondary-text: white;
+    --secondary-text: Canvas;
 
-    --button-face: white;
-    --button-text: black;
+    --button-face: var(--gray-03);
+    --button-border: var(--gray-07);
+    --button-text: CanvasText;
 
-    --button-hover: black;
-    --button-hover-text: white;
+    --button-hover: CanvasText;
+    --button-hover-border: CanvasText;
+    --button-hover-text: Canvas;
 
-    --active: var(--red-11);
+    --active: var(--red-09);
     --active-text: white;
 
-    --selected: var(--green-03);
-    --selected-text: black;
+    --selected: var(--green-05);
+    --selected-text: CanvasText;
     --selected-border: var(--green-07);
 
     --info: var(--sky-02);

@@ -25,7 +25,7 @@ div[role="group"] .datastreamControlButton {
 
     &:hover,
     &:focus {
-        color: white;
-        background-color: black;
+        color: Canvas;
+        background-color: CanvasText;
     }
 }

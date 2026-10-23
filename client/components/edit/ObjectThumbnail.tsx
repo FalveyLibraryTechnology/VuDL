@@ -15,7 +15,7 @@ const ObjectThumbnail = ({ pid }: ObjectThumbnailProps): React.ReactElement => {
     const thumbnailAvailable = vufindUrl.length > 0 && datastreams.includes("THUMBNAIL");
 
     return thumbnailAvailable ? (
-        <img alt="" style={{ border: "1px solid black" }} src={`${vufindUrl}/files/${pid}/THUMBNAIL`} />
+        <img alt="" style={{ border: "1px solid CanvasText" }} src={`${vufindUrl}/files/${pid}/THUMBNAIL`} />
     ) : (
         <span>No Thumbnail</span>
     );
