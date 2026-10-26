@@ -7,6 +7,7 @@
         padding: 0;
         font-family: var(--family-sans-serif);
         line-height: 1.5;
+        background-color: var(--back);
     }
 }
 
@@ -129,6 +130,12 @@
     .hidden {
         display: none;
     }
+}
+
+/* MUI: input backgrounds */
+
+.MuiInputBase-formControl {
+    background-color: Canvas;
 }
 
 /* MUI: better default icon size */

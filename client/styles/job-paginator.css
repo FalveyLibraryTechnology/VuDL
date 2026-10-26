@@ -1,10 +1,5 @@
 /* Layout */
-
-body:has(#paginator) {
-    background-color: var(--soft);
-}
-
-.controls {
+--back .controls {
     font-size: 14px;
 }
 
@@ -60,7 +55,7 @@ label {
     cursor: pointer;
 }
 label:hover {
-    background-color: var(--soft);
+    background-color: var(--back);
 }
 label input[type="text"],
 label input[type="number"],
@@ -139,7 +134,7 @@ label input[type="radio"] {
     font-weight: 400;
     text-align: center;
     word-break: break-all;
-    background-color: var(--soft);
+    background-color: var(--back);
     border: 1px solid var(--edge);
     cursor: pointer;
 }

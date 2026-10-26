@@ -2,7 +2,7 @@
     padding-inline: 1rem;
     padding-block: 1px;
     color: CanvasText;
-    background-color: var(--soft);
+    background-color: var(--back);
 }
 
 .childlist__list {

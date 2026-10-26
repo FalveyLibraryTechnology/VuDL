@@ -23,7 +23,7 @@
  */
 
 :root {
-    --soft: var(--slate-01);
+    --back: var(--slate-02);
     --edge: var(--slate-07);
     --mute: var(--slate-11);
     --text: var(--slate-12);
