@@ -37,8 +37,6 @@ function MyApp({ Component, pageProps }: { Component: React.ReactNode }): React.
                         <LogoutButton />
                         <Component {...pageProps} />
                     </ThemeProvider>
-                    <LogoutButton />
-                    <Component {...pageProps} />
                 </FetchContextProvider>
             </PaginatorContextProvider>
         </GlobalContextProvider>
