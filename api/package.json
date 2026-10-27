@@ -21,7 +21,7 @@
     "@node-saml/passport-saml": "^5",
     "@stomp/stompjs": "^7.2.1",
     "@xmldom/xmldom": "^0.9",
-    "body-parser": "^2.2.1",
+    "body-parser": "^2.4.0",
     "bull-arena": "^4.9.2",
     "bullmq": "^5.7",
     "cookie-parser": "^1",
