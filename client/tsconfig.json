@@ -21,6 +21,7 @@
   },
   "include": [
     "next-env.d.ts",
+    "client.d.ts",
     "**/*.ts",
     "**/*.tsx"
   ],
