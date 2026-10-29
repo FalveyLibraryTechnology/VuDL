@@ -10,8 +10,14 @@ Object.values(config.redisQueueJobMap).forEach((queue) => {
     queueNames.add(queue);
 });
 
+class ArenaQueue extends Queue {
+    get client() {
+        return this.getBackend().client;
+    }
+}
+
 const queue = Arena({
-    BullMQ: Queue,
+    BullMQ: ArenaQueue,
     FlowBullMQ: FlowProducer,
     queues: Array.from(queueNames).map((name) => {
         return {
