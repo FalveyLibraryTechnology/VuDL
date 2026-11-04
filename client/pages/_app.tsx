@@ -1,4 +1,5 @@
-import React from "react";
+import type { AppProps } from "next/app";
+
 import { GlobalContextProvider } from "../context/GlobalContext";
 import { PaginatorContextProvider } from "../context/PaginatorContext";
 import { FetchContextProvider } from "../context/FetchContext";
@@ -13,7 +14,7 @@ import "../styles/variables.css";
 import "../styles/global.css";
 import "../styles/job-paginator.css";
 
-function MyApp({ Component, pageProps }: { Component: React.ReactNode }): React.ReactElement {
+function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     return (
         <GlobalContextProvider>
             <PaginatorContextProvider>
