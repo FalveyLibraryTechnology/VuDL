@@ -12,6 +12,7 @@ Object.values(config.redisQueueJobMap).forEach((queue) => {
 
 class ArenaQueue extends Queue {
     get client() {
+        // BullMQ 6 removed the public client method, but Arena still expects it; this shim works around the issue:
         return this.getBackend().client;
     }
 }
