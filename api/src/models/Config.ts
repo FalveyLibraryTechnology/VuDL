@@ -311,10 +311,13 @@ class Config {
     }
 
     get sharpOptions(): Record<string, unknown> {
-        const pixelLimit = ((this.ini["sharp"] as ConfigRecord | undefined)?.["limitInputPixels"] ??
-            "268402689") as string;
+        const sharpConfig = this.ini["sharp"] as ConfigRecord | undefined;
+        const pixelLimit = (sharpConfig?.["limitInputPixels"] ?? "268402689") as string;
+        // The ini parser may return either a boolean or a string, depending on formatting:
+        const unlimited = String(sharpConfig?.["unlimited"] ?? "false").toLowerCase() === "true";
         return {
             limitInputPixels: parseInt(pixelLimit),
+            unlimited,
         };
     }
 
