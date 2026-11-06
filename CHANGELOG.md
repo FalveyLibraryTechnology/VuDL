@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Added
 
 - Expanded Bulk Editor functionality to include replacing text in DC fields.
+- The "unlimited" setting in the [sharp] section of vudl.ini can be used to disable memory safety restrictions on image processing.
 
 ### Changed
 
